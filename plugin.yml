@@ -1,0 +1,19 @@
+name: Sclat
+version: 0.1
+description: Sclat
+author: Be4rJP
+api-version: 1.13
+#--------------------------------------
+main: be4rjp.sclat.Main
+depend: [NoteBlockAPI, ProtocolLib, WorldChef, DADADAChecker, BlockStudio]
+#--------------------------------------
+commands:
+  sclat:
+    description: Type /sclat help
+    usage: Type /sclat help
+#--------------------------------------
+permissions:
+  sclat.admin:
+    description: admin command.
+  sclat.lobbyfly:
+    description: for admin.
