@@ -91,7 +91,11 @@ public class Shooter {
             Player p = player;
             Location loc = player.getLocation();
             Location before = player.getLocation();
-            int sl = 0;
+            //int sl = 0;
+            //スライドの仕様改変
+            boolean sl_recharge_1=true;
+            boolean sl_recharge_2=true;
+            //スライドに使う変数の定義Trueの時は使用可能Falseの時は使用不可能を表している
             boolean check = true;
 
             @Override
@@ -117,7 +121,7 @@ public class Shooter {
                 //マニューバー系
                 if(data.getWeaponClass().getMainWeapon().getIsManeuver()){
                     if(p.getExp() >= ink) {
-                        if (data.getIsSneaking() && sl < 3 && !data.getIsSliding() && p.getInventory().getItemInMainHand().getType().equals(data.getWeaponClass().getMainWeapon().getWeaponIteamStack().getType())) {
+                        if (data.getIsSneaking() && sl_recharge_2 == true && !data.getIsSliding() && p.getInventory().getItemInMainHand().getType().equals(data.getWeaponClass().getMainWeapon().getWeaponIteamStack().getType())) {//slをsl_recharge_2に変更することで優先順位が低い方のスライドが残っている時のみ使えるようにしました
                             Vector jvec = (new Vector(vec.getX(), 0, vec.getZ())).normalize().multiply(3);
                             Vector ev = jvec.clone().normalize().multiply(-2);
 
@@ -149,7 +153,13 @@ public class Shooter {
                             data.setIsSneaking(false);
                             data.setIsSliding(true);
                             data.setCanShoot(false);
-                            sl++;
+                            //優先順位が高い方のスライドがFalseだった場合に低い方をFalseにするようにしました高い方がtrueであった場合は高い方がFalseになります
+                            if(!sl_recharge_1){
+                                sl_recharge_2=false;
+                            }else{
+                                sl_recharge_1=false;
+                            }
+                            //sl++;
                             BukkitRunnable task = new BukkitRunnable() {
                                 int i = 1;
 
@@ -178,16 +188,33 @@ public class Shooter {
                                 }
                             };
                             task1.runTaskLater(Main.getPlugin(), 10);
-
-                            BukkitRunnable task2 = new BukkitRunnable() {
+//                            BukkitRunnable task2 = new BukkitRunnable() {
+//                                @Override
+//                                public void run() {
+//                                    sl = 0;
+//                                    check = true;
+//                                }
+//                            };
+                            BukkitRunnable task2 = new BukkitRunnable() {//二つのtaskの追加でそれぞれのスライドを管理しています
                                 @Override
                                 public void run() {
-                                    sl = 0;
+                                    sl_recharge_1 = true;
                                     check = true;
                                 }
                             };
-                            if (check)
-                                task2.runTaskLater(Main.getPlugin(), 60);
+                            BukkitRunnable task3 = new BukkitRunnable() {
+                                @Override
+                                public void run() {
+                                    sl_recharge_2 = true;
+                                    check = true;
+                                }
+                            };
+                            //スライド仕様変更の改変
+                            if (check) {
+                                if( sl_recharge_2 == true){task2.runTaskLater(Main.getPlugin(), 40);}
+                                else{task3.runTaskLater(Main.getPlugin(), 44);}
+                            }
+                            //booleam型の変数で二つのスライドをそれぞれ表現している、優先順位が低い方がTrueのときは高い方が使われた後のため高い方のリチャージをする（優先順位が高い方は2秒、低い方は2.2秒）
                             check = false;
                         }
                     }else{
@@ -267,7 +294,15 @@ public class Shooter {
         vec.add(new Vector(Math.random() * random - random/2, 0, Math.random() * random - random/2));
         ball.setVelocity(vec);
         ball.setShooter(player);
-        String name = String.valueOf(Main.getNotDuplicateNumber());
+        //スライド時かどうかをSnowballListenerに渡すためのnameの改変
+        String originName = String.valueOf(Main.getNotDuplicateNumber());
+        StringBuilder buf = new StringBuilder();
+        buf.append(originName);
+        if(slided) {
+            buf.append("#slided");
+        }
+        String name = buf.toString();
+        //String name = String.valueOf(Main.getNotDuplicateNumber());//ここで改変終わり
         DataMgr.mws.add(name);
         if(sound)
             DataMgr.tsl.add(name);

@@ -102,6 +102,7 @@ public class SnowballListener implements Listener {
                             }
                     
                             if(DataMgr.mws.contains(projectile.getCustomName())){
+                                boolean dmgDouble = false;
                                 if(DataMgr.tsl.contains(projectile.getCustomName())) {
                                     if(!projectile.getCustomName().contains(":")) {
                                         shooter.playSound(shooter.getLocation(), Sound.ENTITY_ARROW_HIT_PLAYER, 1.2F, 1.3F);
@@ -124,10 +125,21 @@ public class SnowballListener implements Listener {
                                             shooter.spawnParticle(Particle.FLASH, projectile.getLocation(), 1, 0.1, 0.1, 0.1, 0.1);
                                         }
                                     }
+                                    if(projectile.getCustomName().contains("#")) {
+                                        String args[] = projectile.getCustomName().split("#");
+                                        switch(args[1]){
+                                            case "slided": {
+                                                dmgDouble = true;
+                                            }
+                                        }
+                                    }
                                 }
                                 shooter.playSound(shooter.getLocation(), Sound.ENTITY_PLAYER_HURT, 0.5F, 1F);
                                 
                                 double damage = DataMgr.getPlayerData(shooter).getWeaponClass().getMainWeapon().getDamage();
+                                if (dmgDouble){
+                                    damage = damage*2;
+                                }
                                 String type = DataMgr.getPlayerData(shooter).getWeaponClass().getMainWeapon().getWeaponType();
     
                                 if(!type.equals("Blaster")) {
