@@ -125,13 +125,8 @@ public class SnowballListener implements Listener {
                                             shooter.spawnParticle(Particle.FLASH, projectile.getLocation(), 1, 0.1, 0.1, 0.1, 0.1);
                                         }
                                     }
-                                    if(projectile.getCustomName().contains("#")) {
-                                        String args[] = projectile.getCustomName().split("#");
-                                        switch(args[1]){
-                                            case "slided": {
-                                                dmgDouble = true;
-                                            }
-                                        }
+                                    if(projectile.getCustomName().contains("#slided")) {
+                                        dmgDouble = true;
                                     }
                                 }
                                 shooter.playSound(shooter.getLocation(), Sound.ENTITY_PLAYER_HURT, 0.5F, 1F);
@@ -180,6 +175,7 @@ public class SnowballListener implements Listener {
                     }
                 }else if(event.getHitEntity() instanceof ArmorStand){
                     ArmorStand as = (ArmorStand) event.getHitEntity();
+                    boolean dmgDouble = false;
                     if(projectile.getCustomName() != null){
                         if(DataMgr.mws.contains(projectile.getCustomName())) {
                             if (DataMgr.tsl.contains(projectile.getCustomName())) {
@@ -222,14 +218,19 @@ public class SnowballListener implements Listener {
                             ArmorStandMgr.giveDamageArmorStand(as, 20, shooter);
                             return;
                         }
+                        if(projectile.getCustomName().contains("#slided")) {
+                            dmgDouble = true;
+                        }
                     }
                     if(as.getCustomName() != null) {
                         if (!as.getCustomName().equals("Path") && !as.getCustomName().equals("21") && !as.getCustomName().equals("100") && !as.getCustomName().equals("SplashShield") && !as.getCustomName().equals("Kasa")) {
                             shooter.playSound(shooter.getLocation(), Sound.ENTITY_PLAYER_HURT, 0.5F, 1F);
                         }
                     }
-                    
                     double damage = DataMgr.getPlayerData(shooter).getWeaponClass().getMainWeapon().getDamage();
+                    if (dmgDouble){
+                        damage = damage*2;
+                    }
                     String type = DataMgr.getPlayerData(shooter).getWeaponClass().getMainWeapon().getWeaponType();
     
                     if(!type.equals("Blaster")) {
@@ -494,6 +495,7 @@ public class SnowballListener implements Listener {
                     
                 }*/
             }else if(event.getEntity() instanceof ArmorStand){
+                boolean dmgDouble = false;
                 ArmorStand as = (ArmorStand) event.getEntity();
                 if(projectile.getCustomName() != null){
                     if(DataMgr.mws.contains(projectile.getCustomName())) {
@@ -537,6 +539,9 @@ public class SnowballListener implements Listener {
                         ArmorStandMgr.giveDamageArmorStand(as, 20, shooter);
                         return;
                     }
+                    if(projectile.getCustomName().contains("#slided")) {
+                        dmgDouble = true;
+                    }
                 }
                 if(as.getCustomName() != null) {
                     if (!as.getCustomName().equals("Path") && !as.getCustomName().equals("21") && !as.getCustomName().equals("100") && !as.getCustomName().equals("SplashShield") && !as.getCustomName().equals("Kasa")) {
@@ -545,6 +550,9 @@ public class SnowballListener implements Listener {
                 }
     
                 double damage = DataMgr.getPlayerData(shooter).getWeaponClass().getMainWeapon().getDamage();
+                if (dmgDouble){
+                    damage = damage*2;
+                }
                 String type = DataMgr.getPlayerData(shooter).getWeaponClass().getMainWeapon().getWeaponType();
     
                 if(!type.equals("Burst") && !type.equals("Blaster")) {

@@ -45,6 +45,8 @@ public class MainWeapon {
     private int maxRandomCount = 1;
     private int level = 0;
     private float slideNeedINK = 0.2F;
+    private double DecreaseRate = 1.0;//チャージャーの非適性射程でのダメージ減少率
+    private int AppDistance = 0;//非適性射程の距離
     
     
     
@@ -123,7 +125,10 @@ public class MainWeapon {
     public int getLevel(){return this.level;}
     
     public float getSlideNeedINK(){return this.slideNeedINK;}
-    
+
+    public double getDecreaseRate(){return this.DecreaseRate;}//チャージャーの非適性射程でのダメージ減少率の取得
+
+    public int getAppDistance(){return this.AppDistance;}//チャージャーの非適性射程の取得
     
     public void setWeaponType(String WT){this.WeaponType = WT;}
     
@@ -198,5 +203,8 @@ public class MainWeapon {
     public void setLevel(int level){this.level = level;}
     
     public void setSlideNeedINK(float ink){this.slideNeedINK = ink;}
-    
+
+    public void setDecreaseRate(double srDecRate){this.DecreaseRate = srDecRate;}//チャージャーの非適性射程でのダメージ減少率の設定
+
+    public void setAppDistance(int srAppDistance){this.AppDistance = srAppDistance;}//チャージャーの非適性射程の設定
 }

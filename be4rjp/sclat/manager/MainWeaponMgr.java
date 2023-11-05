@@ -121,7 +121,13 @@ public class MainWeaponMgr {
             
             if(conf.getWeaponConfig().contains("MainWeapon." + weaponname + ".Scope"))
                 mw.setScope(conf.getWeaponConfig().getBoolean("MainWeapon." + weaponname + ".Scope"));
-            
+
+            if(conf.getWeaponConfig().contains("MainWeapon." + weaponname + ".DecreaseRate"))//チャージャーの非適性ダメージ減少率
+                mw.setDecreaseRate(conf.getWeaponConfig().getDouble("MainWeapon." + weaponname + ".DecreaseRate"));
+
+            if(conf.getWeaponConfig().contains("MainWeapon." + weaponname + ".AppDistance"))//チャージャーの非適性距離
+                mw.setAppDistance(conf.getWeaponConfig().getInt("MainWeapon." + weaponname + ".AppDistance"));
+
             if(conf.getWeaponConfig().contains("MainWeapon." + weaponname + ".Money"))
                 mw.setMoney(conf.getWeaponConfig().getInt("MainWeapon." + weaponname + ".Money"));
             else

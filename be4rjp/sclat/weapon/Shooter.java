@@ -199,23 +199,21 @@ public class Shooter {
                                 @Override
                                 public void run() {
                                     sl_recharge_1 = true;
-                                    check = true;
+                                    //check = true;
                                 }
                             };
                             BukkitRunnable task3 = new BukkitRunnable() {
                                 @Override
                                 public void run() {
                                     sl_recharge_2 = true;
-                                    check = true;
+                                    //check = true;
                                 }
                             };
                             //スライド仕様変更の改変
-                            if (check) {
-                                if( sl_recharge_2 == true){task2.runTaskLater(Main.getPlugin(), 40);}
-                                else{task3.runTaskLater(Main.getPlugin(), 44);}
-                            }
+                            if( sl_recharge_2 == true){task2.runTaskLater(Main.getPlugin(), 40);}
+                            else{task3.runTaskLater(Main.getPlugin(), 44);}
                             //booleam型の変数で二つのスライドをそれぞれ表現している、優先順位が低い方がTrueのときは高い方が使われた後のため高い方のリチャージをする（優先順位が高い方は2秒、低い方は2.2秒）
-                            check = false;
+                            //check = false;
                         }
                     }else{
                         p.sendTitle("", ChatColor.RED + "インクが足りません", 0, 10, 2);
