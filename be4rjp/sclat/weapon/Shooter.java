@@ -302,7 +302,7 @@ public class Shooter {
         String name = buf.toString();
         //String name = String.valueOf(Main.getNotDuplicateNumber());//ここで改変終わり
         DataMgr.mws.add(name);
-        if(sound)
+        if(sound || slided)
             DataMgr.tsl.add(name);
         ball.setCustomName(name);
         DataMgr.getMainSnowballNameMap().put(name, ball);

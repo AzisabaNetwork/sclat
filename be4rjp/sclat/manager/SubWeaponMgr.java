@@ -5,6 +5,7 @@ import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.data.PlayerData;
 import be4rjp.sclat.weapon.spweapon.JetPack;
 import be4rjp.sclat.weapon.spweapon.SuperShot;
+import be4rjp.sclat.weapon.spweapon.QuadroArms;
 import be4rjp.sclat.weapon.subweapon.*;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -92,6 +93,22 @@ public class SubWeaponMgr {
                 break;
             case "右クリックで発射！":
                 SuperShot.Shot(player);
+                data.setCanUseSubWeapon(false);
+                break;
+            case "Quadro-BLUE":
+                QuadroArms.QuadroCooltime(player,1);
+                data.setCanUseSubWeapon(false);
+                break;
+            case "Quadro-GREEN":
+                QuadroArms.QuadroCooltime(player,2);
+                data.setCanUseSubWeapon(false);
+                break;
+            case "Quadro-RED":
+                QuadroArms.QuadroCooltime(player,3);
+                data.setCanUseSubWeapon(false);
+                break;
+            case "Quadro-WHITE":
+                QuadroArms.QuadroCooltime(player,4);
                 data.setCanUseSubWeapon(false);
                 break;
         }

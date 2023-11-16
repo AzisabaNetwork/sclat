@@ -17,6 +17,7 @@ import be4rjp.sclat.weapon.spweapon.MultiMissile;
 import be4rjp.sclat.weapon.spweapon.SuperArmor;
 import be4rjp.sclat.weapon.spweapon.SuperSensor;
 import be4rjp.sclat.weapon.spweapon.SuperShot;
+import be4rjp.sclat.weapon.spweapon.QuadroArms;
 import be4rjp.sclat.weapon.spweapon.SuperTyakuti;
 import be4rjp.sclat.weapon.subweapon.QuickBomb;
 import be4rjp.sclat.weapon.subweapon.SplashBomb;
@@ -105,7 +106,7 @@ public class SPWeaponMgr {
                     }
                     DataMgr.getPlayerData(p).setIsSP(true);
                 }else{
-                    if(!(data.getWeaponClass().getSPWeaponName().equals("インクストライク") || data.getWeaponClass().getSPWeaponName().equals("ジェットパック") || data.getWeaponClass().getSPWeaponName().equals("スーパーショット")))
+                    if(!(data.getWeaponClass().getSPWeaponName().equals("インクストライク") || data.getWeaponClass().getSPWeaponName().equals("ジェットパック") || data.getWeaponClass().getSPWeaponName().equals("スーパーショット") || data.getWeaponClass().getSPWeaponName().equals("クアドロアームズ")))
                         p.getInventory().setItem(4, new ItemStack(Material.AIR));
                     DataMgr.getPlayerData(p).setIsSP(false);
                 }
@@ -280,6 +281,13 @@ public class SPWeaponMgr {
                 is9.setItemMeta(ism9);
                 p.getInventory().setItem(4, is9);
                 break;
+            case "クアドロアームズ":
+                ItemStack is10 = new ItemStack(Material.SUGAR);
+                ItemMeta ism10 = is10.getItemMeta();
+                ism10.setDisplayName("クアドロアームズ");
+                is10.setItemMeta(ism10);
+                p.getInventory().setItem(4, is10);
+                break;
         }
     }
     
@@ -364,6 +372,13 @@ public class SPWeaponMgr {
                 player.getInventory().setItem(4, new ItemStack(Material.AIR));
                 SuperShot.setSuperShot(player);
                 //player.getInventory().setItem(1, new ItemStack(Material.AIR));
+                player.setExp(0.99F);
+                player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_USE, 1, 2);
+                player.sendTitle("", "右クリックで発射！", 5, 20, 5);
+                break;
+            case "クアドロアームズ":
+                player.getInventory().setItem(4, new ItemStack(Material.AIR));
+                QuadroArms.setQuadroArms(player);
                 player.setExp(0.99F);
                 player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_USE, 1, 2);
                 player.sendTitle("", "右クリックで発射！", 5, 20, 5);
