@@ -47,8 +47,9 @@ public class MainWeapon {
     private float slideNeedINK = 0.2F;
     private double DecreaseRate = 1.0;//チャージャーの非適性射程でのダメージ減少率
     private int AppDistance = 0;//非適性射程の距離
-    
-    
+    private boolean islootbox = false;//ガチャ武器かどうか
+
+    private double  lootpro= 0;//ガチャ排出率
     
     public MainWeapon(String weaponname){this.WeaponName = weaponname;}
     
@@ -129,6 +130,10 @@ public class MainWeapon {
     public double getDecreaseRate(){return this.DecreaseRate;}//チャージャーの非適性射程でのダメージ減少率の取得
 
     public int getAppDistance(){return this.AppDistance;}//チャージャーの非適性射程の取得
+
+    public boolean getIslootbox(){return this.islootbox;}//ガチャ武器かどうかを返す
+
+    public double getLootpro(){return this.lootpro;}//排出率を返す
     
     public void setWeaponType(String WT){this.WeaponType = WT;}
     
@@ -207,4 +212,8 @@ public class MainWeapon {
     public void setDecreaseRate(double srDecRate){this.DecreaseRate = srDecRate;}//チャージャーの非適性射程でのダメージ減少率の設定
 
     public void setAppDistance(int srAppDistance){this.AppDistance = srAppDistance;}//チャージャーの非適性射程の設定
+
+    public void setIslootbox(boolean isloot){this.islootbox = isloot;}//ガチャ武器かどうかを返す
+
+    public void setLootpro(double pro){this.lootpro = pro;}//排出率を返す
 }

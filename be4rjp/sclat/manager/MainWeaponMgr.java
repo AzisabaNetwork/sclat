@@ -142,8 +142,13 @@ public class MainWeaponMgr {
                 mw.setInHoldSpeed((float)conf.getWeaponConfig().getDouble("MainWeapon." + weaponname + ".InHoldWalkSpeed"));
             else
                 mw.setInHoldSpeed((float)conf.getConfig().getDouble("PlayerWalkSpeed"));
-            
-            DataMgr.setMainWeapon(weaponname, mw);
+
+            if(conf.getWeaponConfig().contains("MainWeapon." + weaponname + ".IsLootBox")) {//ガチャ武器用
+                mw.setIslootbox(conf.getWeaponConfig().getBoolean("MainWeapon." + weaponname + ".IsLootBox"));
+            }
+            if(conf.getWeaponConfig().contains("MainWeapon." + weaponname + ".LootPro")) {//ガチャ武器用排出率
+                mw.setLootpro(conf.getWeaponConfig().getDouble("MainWeapon." + weaponname + ".LootPro"));
+            }
         }
     }
     

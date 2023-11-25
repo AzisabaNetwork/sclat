@@ -2,6 +2,7 @@ package be4rjp.sclat.manager;
 
 import be4rjp.sclat.*;
 import be4rjp.sclat.GUI.OpenGUI;
+import be4rjp.sclat.GUI.LootBox;
 
 import static be4rjp.sclat.Main.conf;
 
@@ -587,6 +588,9 @@ public class GameMgr implements Listener{
                     case "[ Sclat ]":
                         BungeeCordMgr.PlayerSendServer(player, "sclat");
                         DataMgr.getPlayerData(player).setServerName("Sclat");
+                        break;
+                    case "[ LootBox ]":
+                        LootBox.turnLootBox(player);
                         break;
                     case "[ Tutorial ]":
                         List<String> list = Main.tutorialServers.getConfig().getStringList("server-list");

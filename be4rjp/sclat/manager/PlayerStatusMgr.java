@@ -58,6 +58,8 @@ public class PlayerStatusMgr {
         conf.getPlayerStatus().set("Status." + player.getUniqueId().toString() + ".Paint", 0);
         conf.getPlayerStatus().set("Status." + player.getUniqueId().toString() + ".EquiptClass", conf.getConfig().getString("DefaultClass"));
         conf.getPlayerStatus().set("Status." + player.getUniqueId().toString() + ".Tutorial", 0);
+        //ガチャチケ用
+        conf.getPlayerStatus().set("Status." + player.getUniqueId().toString() + ".Ticket", 0);
     }
     
     public static void sendHologram(Player player){

@@ -405,6 +405,12 @@ public class OpenGUI {
                                     gmeta.setDisplayName("§6レベル§c" + DataMgr.getWeaponClass(ClassName).getMainWeapon().getLevel() + "§6で解禁");
                                     glass.setItemMeta(gmeta);
                                     shooter.setItem(slotnum, glass);
+                                }else if (DataMgr.getWeaponClass(ClassName).getMainWeapon().getIslootbox()){
+                                    ItemStack glass = new ItemStack(Material.BLACK_STAINED_GLASS_PANE);
+                                    ItemMeta gmeta = glass.getItemMeta();
+                                    gmeta.setDisplayName("§6ガチャ武器です");
+                                    glass.setItemMeta(gmeta);
+                                    shooter.setItem(slotnum, item);
                                 }else{
                                     shooter.setItem(slotnum, item);
                                 }

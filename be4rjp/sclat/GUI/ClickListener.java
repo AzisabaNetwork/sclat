@@ -393,6 +393,11 @@ public class ClickListener implements Listener{
                 Sclat.playGameSound(player, SoundType.ERROR);
                 return;
             }
+            if(name.contains("§6ガチャ武器です")){
+                Sclat.sendMessage("§cガチャから手に入るよ", MessageType.PLAYER, player);
+                Sclat.playGameSound(player, SoundType.ERROR);
+                return;
+            }
             
             player.closeInventory();
             if(PlayerStatusMgr.getMoney(player) >= DataMgr.getWeaponClass(name).getMainWeapon().getMoney()){

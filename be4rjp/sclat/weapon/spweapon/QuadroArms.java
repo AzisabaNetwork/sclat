@@ -23,6 +23,10 @@ import be4rjp.sclat.weapon.Slosher;
 import net.minecraft.server.v1_14_R1.PacketPlayOutEntityDestroy;
 import net.minecraft.server.v1_14_R1.PlayerConnection;
 import org.bukkit.*;
+import org.bukkit.boss.BarColor;
+import org.bukkit.boss.BarFlag;
+import org.bukkit.boss.BarStyle;
+import org.bukkit.boss.BossBar;
 import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_14_R1.entity.CraftSnowball;
 import org.bukkit.craftbukkit.v1_14_R1.inventory.CraftItemStack;
@@ -39,16 +43,18 @@ import org.bukkit.util.Vector;
  * @author Be4rJP
  */
 public class QuadroArms {
-
+    private static int Quadro_overheat;
+    private static boolean useQuadro=false;
     public static void setQuadroArms(Player player){
         DataMgr.getPlayerData(player).setIsUsingSP(true);
         DataMgr.getPlayerData(player).setIsUsingSS(true);
         SPWeaponMgr.setSPCoolTimeAnimation(player, 120);
-
+        Quadro_overheat=0;
         BukkitRunnable it = new BukkitRunnable() {
             Player p = player;
             @Override
             public void run() {
+                useQuadro=true;
                 player.getInventory().clear();
                 player.updateInventory();
                 ItemStack item = new ItemStack(Material.SUGAR);
@@ -76,6 +82,7 @@ public class QuadroArms {
                 player.getInventory().setItem(4, item3);
                 player.getInventory().setItem(6, item4);
                 player.updateInventory();
+                overheat_bar(player);
             }
         };
         it.runTaskLater(Main.getPlugin(), 2);
@@ -89,12 +96,44 @@ public class QuadroArms {
                     DataMgr.getPlayerData(p).setIsUsingSS(false);
                     player.getInventory().clear();
                     WeaponClassMgr.setWeaponClass(p);
+                    useQuadro=false;
                 }
             }
         };
         task.runTaskLater(Main.getPlugin(), 120);
     }
 
+    public static void overheat_bar(Player player){
+        BossBar bar = Main.getPlugin().getServer().createBossBar(DataMgr.getPlayerData(player).getTeam().getTeamColor().getColorCode() + "§Quadro_overheat", BarColor.RED, BarStyle.SOLID, BarFlag.CREATE_FOG);
+        bar.setProgress(0);
+        bar.addPlayer(player);
+
+        BukkitRunnable overheat_anime = new BukkitRunnable(){
+            Player p = player;
+            @Override
+            public void run(){
+                PlayerData data = DataMgr.getPlayerData(p);
+                if(Quadro_overheat < 47) {
+                    bar.setProgress((double)Quadro_overheat / 47);
+                    if (!bar.getPlayers().contains(p))
+                        bar.addPlayer(p);
+                }else {
+                    bar.setProgress(1);
+                    if (!bar.getPlayers().contains(p))
+                        bar.addPlayer(p);
+                }
+                if(!DataMgr.getPlayerData(p).isInMatch() || !p.isOnline()){
+                    bar.removeAll();
+                    cancel();
+                }
+                if(!useQuadro){
+                    bar.removeAll();
+                    cancel();
+                }
+            }
+        };
+        overheat_anime.runTaskTimer(Main.getPlugin(), 0, 2);
+    }
     public static void QuadroCooltime(Player player,int i){
         PlayerData data = DataMgr.getPlayerData(player);
         BukkitRunnable delay1 = new BukkitRunnable(){
@@ -121,6 +160,14 @@ public class QuadroArms {
                     boolean is = ShootSG(player);
                     if(is) sound = true;
                 }
+                if(Quadro_overheat>47){
+                    Quadro_overheat -= 12;
+                }else {
+                    Quadro_overheat -= 9;
+                }
+                if(Quadro_overheat<0){
+                    Quadro_overheat=0;
+                }
                 player.getWorld().playSound(p.getLocation(), Sound.ITEM_ARMOR_EQUIP_GENERIC, 0.9F, 1.3F);
                 if(sound){
                     player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1F, 1.63F);
@@ -133,6 +180,10 @@ public class QuadroArms {
             @Override
             public void run(){
                 ShootQuadroSlosher(player);
+                Quadro_overheat -= 13;
+                if(Quadro_overheat<0){
+                    Quadro_overheat=0;
+                }
             }
         };
         BukkitRunnable delaySE = new BukkitRunnable(){
@@ -140,6 +191,10 @@ public class QuadroArms {
             @Override
             public void run(){
                 ShootSensor(player);
+                Quadro_overheat -= 10;
+                if(Quadro_overheat<0){
+                    Quadro_overheat=0;
+                }
             }
         };
         switch(i) {
@@ -149,7 +204,7 @@ public class QuadroArms {
                 break;
             case 2:
                 delaySG.runTaskLater(Main.getPlugin(), 1);
-                delay1.runTaskLater(Main.getPlugin(), 10);
+                delay1.runTaskLater(Main.getPlugin(), 9);
                 break;
             case 3:
                 delaySL.runTaskLater(Main.getPlugin(), 1);
@@ -168,6 +223,12 @@ public class QuadroArms {
             public void run(){
                 c++;
                 int q = 7;
+                if (Quadro_overheat>47){
+                    player.sendTitle("", ChatColor.RED + "オーバーヒート!!!", 0, 5, 2);
+                    cancel();
+                }else{
+                    Quadro_overheat+=1;
+                }
                 ShootSpinner(p);
                 if(c == q)
                     cancel();
@@ -213,7 +274,7 @@ public class QuadroArms {
         ((CraftSnowball)ball).getHandle().setItem(CraftItemStack.asNMSCopy(new ItemStack(DataMgr.getPlayerData(player).getTeam().getTeamColor().getWool())));
         player.getWorld().playSound(player.getLocation(), Sound.ENTITY_PIG_STEP, 0.3F, 1F);
         Vector vec = player.getLocation().getDirection().multiply(QuadroShootSpeed);
-        double random = 0.25;
+        double random = 0.32;
         int distick = QuadroDisTick;
         vec.add(new Vector(Math.random() * random - random/2, 0, Math.random() * random - random/2));
         ball.setVelocity(vec);
@@ -236,6 +297,7 @@ public class QuadroArms {
             boolean addedFallVec = false;
             Player p = player;
             Vector fallvec = new Vector(inkball.getVelocity().getX(), inkball.getVelocity().getY()  , inkball.getVelocity().getZ()).multiply(QuadroShootSpeed/17);
+
             @Override
             public void run(){
                 inkball = DataMgr.getMainSnowballNameMap().get(name);
@@ -272,10 +334,10 @@ public class QuadroArms {
         };
         SpinnerTask.runTaskTimer(Main.getPlugin(), 0,1);
     }
-    public static  boolean  ShootSG(Player player) {
+    public static  boolean ShootSG(Player player) {
 
         if(player.getGameMode() == GameMode.SPECTATOR) return false;
-        double ShootSpeed = 2.6;
+        double ShootSpeed = 2.8;
         PlayerData data = DataMgr.getPlayerData(player);
         Snowball ball = player.launchProjectile(Snowball.class);
         ((CraftSnowball)ball).getHandle().setItem(CraftItemStack.asNMSCopy(new ItemStack(DataMgr.getPlayerData(player).getTeam().getTeamColor().getWool())));
@@ -345,7 +407,7 @@ public class QuadroArms {
 
         if(player.getGameMode() == GameMode.SPECTATOR) return;
 
-        double ShootSpeed = 3.6;
+        double ShootSpeed = 3.9;
         PlayerData data = DataMgr.getPlayerData(player);
         Snowball ball = player.launchProjectile(Snowball.class);
         ((CraftSnowball)ball).getHandle().setItem(CraftItemStack.asNMSCopy(new ItemStack(DataMgr.getPlayerData(player).getTeam().getTeamColor().getWool())));
@@ -368,7 +430,7 @@ public class QuadroArms {
             Snowball inkball = ball;
             Player p = player;
             boolean addedFallVec = false;
-            double BlasterExDamage =3.6;
+            double BlasterExDamage =3.1;
             double BlasterExHankei=5;
             Vector fallvec = new Vector(inkball.getVelocity().getX(), inkball.getVelocity().getY()  , inkball.getVelocity().getZ()).multiply(ShootSpeed/17);
             @Override
@@ -503,7 +565,7 @@ public class QuadroArms {
                     if(DataMgr.getSnowballIsHit(ball) || drop.isOnGround()){
 
                         //半径
-                        double maxDist = 8.0;
+                        double maxDist = 9.0;
 
                         //爆発音
                         player.getWorld().playSound(drop.getLocation(), Sound.ENTITY_ARROW_SHOOT, 1, 2);
