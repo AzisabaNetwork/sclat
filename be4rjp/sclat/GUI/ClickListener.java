@@ -400,7 +400,10 @@ public class ClickListener implements Listener{
             }
             
             player.closeInventory();
-            if(PlayerStatusMgr.getMoney(player) >= DataMgr.getWeaponClass(name).getMainWeapon().getMoney()){
+            if(DataMgr.getWeaponClass(name).getMainWeapon().getIslootbox()){
+
+            }
+            else if(PlayerStatusMgr.getMoney(player) >= DataMgr.getWeaponClass(name).getMainWeapon().getMoney()){
                 PlayerStatusMgr.addWeapon(player, name);
                 PlayerStatusMgr.subMoney(player, DataMgr.getWeaponClass(name).getMainWeapon().getMoney());
                 Sclat.sendMessage(ChatColor.GREEN + "購入に成功しました", MessageType.PLAYER, player);

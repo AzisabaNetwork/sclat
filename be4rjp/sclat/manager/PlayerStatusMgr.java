@@ -316,4 +316,33 @@ public class PlayerStatusMgr {
     public static int getTutorialState(String uuid){
         return conf.getPlayerStatus().getInt("Status." + uuid + ".Tutorial");
     }
+    public static void addTicket(Player player, int m){
+        String uuid = player.getUniqueId().toString();
+        if(!conf.getPlayerStatus().contains("Status." + uuid + ".Ticket")) {
+            conf.getPlayerStatus().set("Status." + uuid + ".Ticket", 0);
+        }
+        conf.getPlayerStatus().set("Status." + uuid + ".Ticket", conf.getPlayerStatus().getInt("Status." + uuid + ".Ticket") + m);
+    }
+
+    public static void addTicketUuid(String uuid, int m){
+        if(!conf.getPlayerStatus().contains("Status." + uuid + ".Ticket")) {
+            conf.getPlayerStatus().set("Status." + uuid + ".Ticket", 0);
+        }
+        conf.getPlayerStatus().set("Status." + uuid + ".Ticket", conf.getPlayerStatus().getInt("Status." + uuid + ".Ticket") + m);
+    }
+
+    public static void subTicket(Player player, int m){
+        if(!conf.getPlayerStatus().contains("Status." + player.getUniqueId().toString() + ".Ticket")) {
+            conf.getPlayerStatus().set("Status." + player.getUniqueId().toString() + ".Ticket", 0);
+        }
+        String uuid = player.getUniqueId().toString();
+        conf.getPlayerStatus().set("Status." + uuid + ".Ticket", conf.getPlayerStatus().getInt("Status." + uuid + ".Ticket") - m);
+    }
+    public static int getTicket(Player player){
+        if(!conf.getPlayerStatus().contains("Status." + player.getUniqueId().toString() + ".Ticket")) {
+            conf.getPlayerStatus().set("Status." + player.getUniqueId().toString() + ".Ticket", 0);
+        }
+        String uuid = player.getUniqueId().toString();
+        return conf.getPlayerStatus().getInt("Status." + uuid + ".Ticket");
+    }
 }

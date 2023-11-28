@@ -55,6 +55,7 @@ public class LobbyScoreboardRunnable extends BukkitRunnable {
         lines.add("");
         lines.add("§6§lステータス »");
         lines.add("§e COIN: §r" + PlayerStatusMgr.getMoney(player));
+        lines.add("§e TICKET: §r" + PlayerStatusMgr.getTicket(player));
         lines.add("§b RANK: §r" + RankMgr.toABCRank(PlayerStatusMgr.getRank(player)) + " [" + PlayerStatusMgr.getRank(player) + "]");
         lines.add(" ");
         lines.add("§9§lサーバー »");

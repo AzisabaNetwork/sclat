@@ -410,7 +410,7 @@ public class OpenGUI {
                                     ItemMeta gmeta = glass.getItemMeta();
                                     gmeta.setDisplayName("§6ガチャ武器です");
                                     glass.setItemMeta(gmeta);
-                                    shooter.setItem(slotnum, item);
+                                    shooter.setItem(slotnum, glass);
                                 }else{
                                     shooter.setItem(slotnum, item);
                                 }

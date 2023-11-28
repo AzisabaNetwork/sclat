@@ -149,6 +149,7 @@ public class MainWeaponMgr {
             if(conf.getWeaponConfig().contains("MainWeapon." + weaponname + ".LootPro")) {//ガチャ武器用排出率
                 mw.setLootpro(conf.getWeaponConfig().getDouble("MainWeapon." + weaponname + ".LootPro"));
             }
+            DataMgr.setMainWeapon(weaponname, mw);
         }
     }
     

@@ -127,6 +127,9 @@ class EchoThread extends Thread {
                                         case "paint":
                                             PlayerStatusMgr.addPaint(args[3], Integer.parseInt(args[2]));
                                             break;
+                                        case "ticket":
+                                            PlayerStatusMgr.addTicketUuid(args[3], Integer.parseInt(args[2]));
+                                            break;
                                     }
                                 }
                             }

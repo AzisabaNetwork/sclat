@@ -592,6 +592,26 @@ public class GameMgr implements Listener{
                     case "[ LootBox ]":
                         LootBox.turnLootBox(player);
                         break;
+                    case "[ LootBoxInfo ]":
+                        LootBox.LootBoxInfo(player);
+                        break;
+                    case "[ give chest ]":
+                        PlayerStatusMgr.setTutorialState(player.getUniqueId().toString(),2);
+                        ItemStack chest = new ItemStack(Material.CHEST);
+                        ItemMeta chestmeta = chest.getItemMeta();
+                        chestmeta.setDisplayName("右クリックでメインメニューを開く");
+                        chest.setItemMeta(chestmeta);
+                        player.getInventory().setItem(0,chest);
+                        break;
+                    case "[ trade ticket ]":
+                        if (PlayerStatusMgr.getMoney(player)>500) {
+                            PlayerStatusMgr.subMoney(player,500);
+                            PlayerStatusMgr.addTicket(player, 1);
+                            Sclat.sendMessage("500coinを1ticketに交換しました", MessageType.PLAYER, player);
+                        }else{
+                            Sclat.sendMessage("coinが足りません", MessageType.PLAYER, player);
+                        }
+                        break;
                     case "[ Tutorial ]":
                         List<String> list = Main.tutorialServers.getConfig().getStringList("server-list");
                         BungeeCordMgr.PlayerSendServer(player, list.get(new Random().nextInt(list.size())));

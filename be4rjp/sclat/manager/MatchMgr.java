@@ -1315,9 +1315,12 @@ public class MatchMgr {
                     PlayerData data = DataMgr.getPlayerData(p);
                     
                     int pMoney = (int)((double)data.getKillCount() * 100D + (double)data.getPaintCount() / 5D);
+                    int pTicket = (int)((double)data.getKillCount() * 1 + 5 + (double)data.getPaintCount() / 1000D);
                     int pLv = 1;
-                    if(data.getTeam() == data.getMatch().getWinTeam() || data.getMatch().getIsHikiwake())
+                    if(data.getTeam() == data.getMatch().getWinTeam() || data.getMatch().getIsHikiwake()) {
                         pLv = 2;
+                        pTicket += 5;
+                    }
                     int pRank = -60 + (int)((double)data.getKillCount() * 2.7D + (double)data.getPaintCount() / 700D);
                     if(data.getTeam() == data.getMatch().getWinTeam() || data.getMatch().getIsHikiwake())
                         pRank = 80 + (int)((double)data.getKillCount() * 2.2D + (double)data.getPaintCount() / 700D);
@@ -1328,6 +1331,7 @@ public class MatchMgr {
                     
                     PlayerStatusMgr.addLv(p, pLv);
                     PlayerStatusMgr.addMoney(p, pMoney);
+                    PlayerStatusMgr.addTicket(p, pTicket);
                     
                     PlayerStatusMgr.addPaint(p, data.getPaintCount());
                     PlayerStatusMgr.addKill(p, data.getKillCount());
@@ -1336,6 +1340,7 @@ public class MatchMgr {
                         List<String> commands = new ArrayList<>();
                         commands.add("add money " + pMoney + " " + p.getUniqueId().toString());
                         commands.add("add level " + pLv + " " + p.getUniqueId().toString());
+                        commands.add("add ticket " + pTicket + " " + p.getUniqueId().toString());
                         commands.add("add rank " + pRank + " " + p.getUniqueId().toString());
                         commands.add("add kill " + data.getKillCount() + " " + p.getUniqueId().toString());
                         commands.add("add paint " + data.getPaintCount() + " " + p.getUniqueId().toString());
@@ -1349,7 +1354,7 @@ public class MatchMgr {
                     Sclat.sendMessage("§a----------<< Match bonus >>----------", MessageType.PLAYER, p);
                 
                     Sclat.sendMessage("", MessageType.PLAYER, p);
-                    Sclat.sendMessage(ChatColor.GREEN + " Money : " + ChatColor.RESET + "+" + String.valueOf(pMoney) + ChatColor.AQUA + "  Lv : " + ChatColor.RESET + "+" + String.valueOf(pLv), MessageType.PLAYER, p);
+                    Sclat.sendMessage(ChatColor.GREEN + " Money : " + ChatColor.RESET + "+" + String.valueOf(pMoney) + ChatColor.AQUA + "  Lv : " + ChatColor.RESET + "+" + String.valueOf(pLv) + ChatColor.GOLD + " Ticket : " + ChatColor.RESET + String.valueOf(pTicket), MessageType.PLAYER, p);
                     Sclat.sendMessage("", MessageType.PLAYER, p);
                     if(pRank < 0)
                         Sclat.sendMessage(ChatColor.GOLD + " RankPoint : " + ChatColor.RESET + String.valueOf(pRank) + (Main.type == ServerType.NORMAL ? "  [ §b" + RankMgr.toABCRank(getRank(player)) + " §r]" : ""), MessageType.PLAYER, p);
