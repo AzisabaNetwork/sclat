@@ -675,6 +675,10 @@ public class MatchMgr {
                         DataMgr.getPlayerData(p).setMainItemGlow(true);
                         WeaponClassMgr.setWeaponClass(p);
                     }
+                    if(DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getWeaponType().equals("Hound")){
+                        Hound.HoundRunnable(p);
+                        Hound.HoundEXRunnable(p);
+                    }
     
                     SquidMgr.SquidShowRunnable(p);
 

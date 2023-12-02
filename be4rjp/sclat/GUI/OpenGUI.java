@@ -500,6 +500,11 @@ public class OpenGUI {
                 mm.setDisplayName("マニューバー");
                 m.setItemMeta(mm);
 
+                ItemStack hd = new ItemStack(Material.GLOWSTONE_DUST);
+                ItemMeta hdm = hd.getItemMeta();
+                hdm.setDisplayName("ハウンド");
+                hd.setItemMeta(hdm);
+
                 wm.setItem(0, s);
                 wm.setItem(1, b);
                 wm.setItem(2, ba);
@@ -510,6 +515,7 @@ public class OpenGUI {
                 wm.setItem(7, c);
                 wm.setItem(8, sp);
                 wm.setItem(9, m);
+                wm.setItem(10, hd);
                 player.openInventory(wm);
     
                 ItemStack is = new ItemStack(Material.OAK_DOOR);

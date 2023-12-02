@@ -248,6 +248,10 @@ public class GameMgr implements Listener{
                                     DataMgr.getPlayerData(p).setMainItemGlow(true);
                                     WeaponClassMgr.setWeaponClass(p);
                                 }
+                                if(DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getWeaponType().equals("Hound")){
+                                    Hound.HoundRunnable(p);
+                                    Hound.HoundEXRunnable(p);
+                                }
                                 WeaponClassMgr.setWeaponClass(p);
                                 player.setExp(0.99F);
                                 
