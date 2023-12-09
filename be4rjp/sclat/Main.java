@@ -60,7 +60,7 @@ public class Main extends JavaPlugin implements PluginMessageListener{
     
     public static CustomConfig tutorialServers;
     
-    public static final String VERSION = "v1.1.2 - β";
+    public static final String VERSION = "v1.1.5 - β";
 
     public static CustomConfig news;
 

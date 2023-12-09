@@ -148,7 +148,7 @@ public class QuadroArms {
             Player p = player;
             @Override
             public void run(){
-                Burstshoot(player);
+                Burstshoot(player, false);
             }
         };
         BukkitRunnable delaySG = new BukkitRunnable(){
@@ -156,14 +156,11 @@ public class QuadroArms {
             @Override
             public void run(){
                 boolean sound = false;
-                for (int i = 0; i < 11; i++) {
-                    boolean is = ShootSG(player);
-                    if(is) sound = true;
-                }
+                Burstshoot(player, true);
                 if(Quadro_overheat>47){
-                    Quadro_overheat -= 12;
+                    Quadro_overheat -= 13;
                 }else {
-                    Quadro_overheat -= 9;
+                    Quadro_overheat -= 10;
                 }
                 if(Quadro_overheat<0){
                     Quadro_overheat=0;
@@ -204,7 +201,7 @@ public class QuadroArms {
                 break;
             case 2:
                 delaySG.runTaskLater(Main.getPlugin(), 1);
-                delay1.runTaskLater(Main.getPlugin(), 9);
+                delay1.runTaskLater(Main.getPlugin(), 10);
                 break;
             case 3:
                 delaySL.runTaskLater(Main.getPlugin(), 1);
@@ -215,7 +212,7 @@ public class QuadroArms {
                 delay1.runTaskLater(Main.getPlugin(), 15);
         }
     }
-    public static void Burstshoot(Player player){
+    public static void Burstshoot(Player player ,boolean IsSG ){
         BukkitRunnable Bursttask = new BukkitRunnable(){
             Player p = player;
             int c = 0;
@@ -234,7 +231,26 @@ public class QuadroArms {
                     cancel();
             }
         };
-        Bursttask.runTaskTimer(Main.getPlugin(), 0, 1);
+        BukkitRunnable BursttaskSG = new BukkitRunnable(){
+            Player p = player;
+            int c = 0;
+            @Override
+            public void run(){
+                c++;
+                int q = 3;
+                for (int i = 0; i < 5; i++) {
+                    ShootSG(p);
+                }
+                if(c == q) {
+                    cancel();
+                }
+            }
+        };
+        if(!IsSG) {
+            Bursttask.runTaskTimer(Main.getPlugin(), 0, 1);
+        }else{
+            BursttaskSG.runTaskTimer(Main.getPlugin(), 0, 1);
+        }
     }
     public static void ShootSpinner(Player player){
 
@@ -296,7 +312,7 @@ public class QuadroArms {
             Snowball inkball = ball;
             boolean addedFallVec = false;
             Player p = player;
-            Vector fallvec = new Vector(inkball.getVelocity().getX(), inkball.getVelocity().getY()  , inkball.getVelocity().getZ()).multiply(QuadroShootSpeed/17);
+            Vector fallvec = new Vector(inkball.getVelocity().getX(), inkball.getVelocity().getY()  , inkball.getVelocity().getZ()).multiply(QuadroShootSpeed/14);
 
             @Override
             public void run(){
@@ -337,12 +353,12 @@ public class QuadroArms {
     public static  boolean ShootSG(Player player) {
 
         if(player.getGameMode() == GameMode.SPECTATOR) return false;
-        double ShootSpeed = 2.8;
+        double ShootSpeed = 4.5;
         PlayerData data = DataMgr.getPlayerData(player);
         Snowball ball = player.launchProjectile(Snowball.class);
         ((CraftSnowball)ball).getHandle().setItem(CraftItemStack.asNMSCopy(new ItemStack(DataMgr.getPlayerData(player).getTeam().getTeamColor().getWool())));
         Vector vec = player.getLocation().getDirection().multiply(ShootSpeed);
-        double random = 1.3;
+        double random = 1.2;
         int distick = 2;
         vec.add(new Vector(Math.random() * random - random/2, Math.random() * random/1.5 - random/3, Math.random() * random - random/2));
         ball.setVelocity(vec);
@@ -352,7 +368,7 @@ public class QuadroArms {
         buf.append(originName);
         buf.append("#QuadroArmsShotgun");
         String name = buf.toString();
-        DataMgr.mws.add(name);//
+        DataMgr.mws.add(name);
         ball.setCustomName(name);
         DataMgr.getMainSnowballNameMap().put(name, ball);
         DataMgr.setSnowballHitCount(name, 0);
@@ -362,7 +378,7 @@ public class QuadroArms {
             Snowball inkball = ball;
             Player p = player;
             boolean addedFallVec = false;
-            Vector fallvec = new Vector(inkball.getVelocity().getX(), inkball.getVelocity().getY()  , inkball.getVelocity().getZ()).multiply(ShootSpeed/17);
+            Vector fallvec = new Vector(inkball.getVelocity().getX(), inkball.getVelocity().getY()  , inkball.getVelocity().getZ()).multiply(ShootSpeed/150);
             @Override
             public void run(){
                 inkball = DataMgr.getMainSnowballNameMap().get(name);

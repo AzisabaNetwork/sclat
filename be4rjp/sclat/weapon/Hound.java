@@ -89,14 +89,16 @@ public class Hound {
             Location bloc;
             int i = 0;
             ArmorStand as1;
-
+            double heightdiff = 0;
             //半径
-            double maxDist = data.getWeaponClass().getMainWeapon().getBlasterExHankei();
+            double maxDist = 1;
+            double saveY =0;
 
             @Override
             public void run() {
                 try {
                     if(i == 0){
+                        saveY =player.getLocation().getY();
                         numberinglist.add(number);
                         player.setExp(player.getExp() - (float)(data.getWeaponClass().getMainWeapon().getNeedInk() / Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)));
 
@@ -137,7 +139,7 @@ public class Hound {
 
                     bloc = as1l.clone();
 
-                    if(i >= 80 && i <= 90){
+                    if(i >= 40 && i <= 50){
                         if(i % 2 == 0)
                             player.getWorld().playSound(as1l, Sound.BLOCK_NOTE_BLOCK_PLING, 1F, 1.6F);
                     }
@@ -153,9 +155,27 @@ public class Hound {
                         }
                     }
 
-                    if(i == 100 || !player.isOnline() || !data.isInMatch() || (data.getIsSneaking() && numberinglist.get(0)==number && !data.getIsSliding())){
+                    if(i == 60 || !player.isOnline() || !data.isInMatch() || (data.getIsSneaking() && numberinglist.get(0)==number && !data.getIsSliding())){
                         if(data.getIsSneaking()){
                             data.setIsSliding(true);
+                        }
+                        heightdiff=as1.getLocation().getY()-saveY;
+                        if(heightdiff>7.9){
+                            maxDist=data.getWeaponClass().getMainWeapon().getBlasterExHankei()+2;
+                        }else if(1.8<heightdiff&&heightdiff<7.9){
+                            maxDist=data.getWeaponClass().getMainWeapon().getBlasterExHankei()+1;
+                        }else if(-2.5<=heightdiff&&heightdiff<=1.8){
+                            maxDist=data.getWeaponClass().getMainWeapon().getBlasterExHankei();
+                        }else if(-10<=heightdiff&&heightdiff<-2.5){
+                            maxDist=data.getWeaponClass().getMainWeapon().getBlasterExHankei()-1;
+                            if(maxDist<=0){
+                                maxDist=1;
+                            }
+                        }else if(heightdiff<-10){
+                            maxDist=data.getWeaponClass().getMainWeapon().getBlasterExHankei()-2;
+                            if(maxDist<=0){
+                                maxDist=1;
+                            }
                         }
 
                         numberinglist.remove(number);
@@ -209,7 +229,7 @@ public class Hound {
                             if(!DataMgr.getPlayerData(target).isInMatch() || target.getWorld() != player.getWorld())
                                 continue;
                             if (target.getLocation().distance(as1l) <= maxDist) {
-                                double damage = (maxDist - target.getLocation().distance(as1l)) * data.getWeaponClass().getMainWeapon().getBlasterExDamage() * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP);
+                                double damage = exdamage(heightdiff,maxDist - target.getLocation().distance(as1l),data.getWeaponClass().getMainWeapon().getBlasterExDamage() * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP));
                                 if(data.getTeam() != DataMgr.getPlayerData(target).getTeam() && target.getGameMode().equals(GameMode.ADVENTURE)){
                                     Sclat.giveDamage(player, target, damage, "killed");
 
@@ -229,7 +249,7 @@ public class Hound {
                         for(Entity as : player.getWorld().getEntities()){
                             if (as.getLocation().distance(as1l) <= maxDist){
                                 if(as instanceof ArmorStand){
-                                    double damage = (maxDist - as.getLocation().distance(as1l)) * data.getWeaponClass().getMainWeapon().getBlasterExDamage()* Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP);;
+                                    double damage = exdamage(heightdiff,maxDist - as.getLocation().distance(as1l),data.getWeaponClass().getMainWeapon().getBlasterExDamage() * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP));
                                     ArmorStandMgr.giveDamageArmorStand((ArmorStand)as, damage, player);
                                     if(as.getCustomName() != null){
                                         if(as.getCustomName().equals("SplashShield") || as.getCustomName().equals("Kasa"))
@@ -276,6 +296,25 @@ public class Hound {
         } else {
             // 壁に接触していない場合の処理
             return false;
+        }
+    }
+    private static double exdamage(double heightDiff,double mag,double dm){
+        if(7.9<heightDiff){
+            return mag * dm * 0.7 + dm*1.6;
+        }else if(3.9<heightDiff&&heightDiff<=7.9){
+            return mag * dm * 0.8 + dm*1.1;
+        }else if(1.8<heightDiff&&heightDiff<=3.9){
+            return mag * dm * 0.9 + dm*0.2;
+        }else if(-2.5<=heightDiff&&heightDiff<=1.8){
+            return mag * dm + dm*0.52;
+        }else if(-5<=heightDiff&&heightDiff<-2.5){
+            return mag * dm + dm*0.7;
+        }else if(-10<=heightDiff&&heightDiff<-5){
+            return mag * dm + dm*0.2;
+        }else if(heightDiff<-10){
+            return mag * dm;
+        }else {
+            return 0;
         }
     }
 }

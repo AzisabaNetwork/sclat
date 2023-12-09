@@ -608,13 +608,17 @@ public class GameMgr implements Listener{
                         player.getInventory().setItem(0,chest);
                         break;
                     case "[ trade ticket ]":
-                        if (PlayerStatusMgr.getMoney(player)>500) {
-                            PlayerStatusMgr.subMoney(player,500);
+                        if (PlayerStatusMgr.getMoney(player)>1000) {
+                            PlayerStatusMgr.subMoney(player,1000);
                             PlayerStatusMgr.addTicket(player, 1);
-                            Sclat.sendMessage("500coinを1ticketに交換しました", MessageType.PLAYER, player);
+                            Sclat.sendMessage("1000coinを1ticketに交換しました", MessageType.PLAYER, player);
                         }else{
                             Sclat.sendMessage("coinが足りません", MessageType.PLAYER, player);
                         }
+                        break;
+                    case "[ give ticket ]":
+                        PlayerStatusMgr.addTicket(player, 10);
+                        Sclat.sendMessage("10ticket付与しました", MessageType.PLAYER, player);
                         break;
                     case "[ Tutorial ]":
                         List<String> list = Main.tutorialServers.getConfig().getStringList("server-list");

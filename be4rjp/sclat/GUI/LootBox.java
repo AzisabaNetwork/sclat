@@ -42,7 +42,7 @@ public class LootBox {
                         Sclat.sendMessage(ChatColor.GREEN + ClassName + "が当たったよ、おめでとう！", MessageType.PLAYER, player);
                     }else{
                         Sclat.sendMessage(ChatColor.GREEN + ClassName +"が重複したよ +" + Firstprize + "coin", MessageType.PLAYER, player);
-                        PlayerStatusMgr.addMoney(player, Firstprize);
+                        PlayerStatusMgr.addMoney(player, Thirdprize);
                     }
                 }
                 nextLootSeed += lootpro;

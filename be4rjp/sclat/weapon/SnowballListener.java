@@ -113,11 +113,12 @@ public class SnowballListener implements Listener {
                             if(projectile.getCustomName().contains("#QuadroArmsShotgun")){
                                 shooter.playSound(shooter.getLocation(), Sound.ENTITY_PLAYER_HURT, 0.5F, 1F);
                                 double Quadrodamage =8;
-                                double QuadroticksLived = (double) projectile.getTicksLived()*15;
+                                double QuadroticksLived = (double) projectile.getTicksLived()*10;
                                 if(QuadroticksLived > 30)
                                     QuadroticksLived = 30;
                                 Quadrodamage -= Quadrodamage * (QuadroticksLived / 100);
                                 Sclat.giveDamage(shooter, target, Quadrodamage, "spWeapon");
+                                return;
                             }
                     
                             if(DataMgr.mws.contains(projectile.getCustomName())){
@@ -249,7 +250,7 @@ public class SnowballListener implements Listener {
                         }
                         if(projectile.getCustomName().contains("#QuadroArmsShotgun")){
                             double Quadrodamage =8;
-                            double QuadroticksLived = (double) projectile.getTicksLived()*15;
+                            double QuadroticksLived = (double) projectile.getTicksLived()*10;
                             if(QuadroticksLived > 30)
                                 QuadroticksLived = 30;
                             Quadrodamage -= Quadrodamage * (QuadroticksLived / 100);
@@ -599,7 +600,7 @@ public class SnowballListener implements Listener {
                     }
                     if(projectile.getCustomName().contains("#QuadroArmsShotgun")){
                         double Quadrodamage =8;
-                        double QuadroticksLived = (double) projectile.getTicksLived()*15;
+                        double QuadroticksLived = (double) projectile.getTicksLived()*10;
                         if(QuadroticksLived > 30)
                             QuadroticksLived = 30;
                         Quadrodamage -= Quadrodamage * (QuadroticksLived / 100);
