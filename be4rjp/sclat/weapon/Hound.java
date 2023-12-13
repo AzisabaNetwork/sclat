@@ -18,7 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Hound {
-    static ArrayList<String> numberinglist = new ArrayList<>();
     public static void HoundRunnable(Player player){
         BukkitRunnable delay = new BukkitRunnable(){
             Player p = player;
@@ -34,7 +33,7 @@ public class Hound {
                 if(!data.getIsUsingManeuver() && data.getCanShoot()){
                     ClickType clickType = Main.dadadaCheckerAPI.getPlayerClickType(player);
                     if((clickType == ClickType.FIRST_CLICK || clickType == ClickType.RENDA || clickType == ClickType.NAGAOSI) && data.isInMatch() && data.getCanRollerShoot()){
-                        Hound.Shoot(p, String.valueOf(Main.getNotDuplicateNumber()));
+                        Hound.Shoot(p);
                         data.setCanRollerShoot(false);
                         HoundCooltime(p);
                     }
@@ -78,7 +77,7 @@ public class Hound {
         };
         delay.runTaskTimer(Main.getPlugin(), 0, 1);
     }
-    public static void Shoot(Player player, String number){
+    public static void Shoot(Player player){
         if(player.getGameMode() == GameMode.SPECTATOR) return;
 
         PlayerData data = DataMgr.getPlayerData(player);
@@ -99,7 +98,6 @@ public class Hound {
                 try {
                     if(i == 0){
                         saveY =player.getLocation().getY();
-                        numberinglist.add(number);
                         player.setExp(player.getExp() - (float)(data.getWeaponClass().getMainWeapon().getNeedInk() / Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)));
 
                         as1 = player.getWorld().spawn(player.getLocation(), ArmorStand.class, armorStand -> {
@@ -107,6 +105,7 @@ public class Hound {
                             armorStand.setSmall(true);
                         });
                         GlowingAPI.setGlowing(as1, player, true);
+                        data.setArmorlist(as1);
                     }
 
                     Location aloc = as1.getLocation().add(0, -0.4, 0);
@@ -124,12 +123,12 @@ public class Hound {
                                 }
                             }
                             if(!EntityWallHit(as1,pVector)) {
-                                aVec = new Vector(vec.getX(), -0.8, vec.getZ());
+                                aVec = new Vector(vec.getX(), -0.4, vec.getZ());
                             }
                         }else if(aVec.getY()>0 && !EntityWallHit(as1,pVector)){
                             aVec = new Vector(vec.getX(), 0, vec.getZ());
                         }else if(!as1.isOnGround()){
-                            aVec = new Vector(vec.getX(), -0.8, vec.getZ());
+                            aVec = new Vector(vec.getX(), -0.4, vec.getZ());
                         }
                     }
 
@@ -155,7 +154,7 @@ public class Hound {
                         }
                     }
 
-                    if(i == 60 || !player.isOnline() || !data.isInMatch() || (data.getIsSneaking() && numberinglist.get(0)==number && !data.getIsSliding())){
+                    if(i == 60 || !player.isOnline() || !data.isInMatch() || (data.getIsSneaking() && data.getArmorlist(0)==as1 && !data.getIsSliding())){
                         if(data.getIsSneaking()){
                             data.setIsSliding(true);
                         }
@@ -178,7 +177,7 @@ public class Hound {
                             }
                         }
 
-                        numberinglist.remove(number);
+                        data.subArmorlist(as1);
 
                         //爆発音
                         player.getWorld().playSound(as1l, Sound.ENTITY_FIREWORK_ROCKET_BLAST, 1, 1);
@@ -266,7 +265,7 @@ public class Hound {
                     i++;
                 }catch(Exception e){
                     as1.remove();
-                    numberinglist.remove(number);
+                    data.subArmorlist(as1);
                     cancel();
                 }
             }

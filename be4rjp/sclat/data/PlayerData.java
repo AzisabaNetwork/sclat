@@ -2,8 +2,11 @@ package be4rjp.sclat.data;
 
 import net.minecraft.server.v1_14_R1.ItemStack;
 import org.bukkit.Location;
+import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
+
+import java.util.ArrayList;
 
 /**
  *
@@ -63,6 +66,7 @@ public class PlayerData {
     private Vector vehicleVector = new Vector(0, 0, 0);
     private double speed = 0;
     private float fov = 0.1F;
+    private ArrayList<ArmorStand> Armorlist = new ArrayList<>();
 
     
     public PlayerData(Player player){this.player = player;}
@@ -168,6 +172,7 @@ public class PlayerData {
     public double getSpeed(){return this.speed;}
     
     public float getFov() {return fov;}
+    public ArmorStand getArmorlist(int n) {return this.Armorlist.get(n);}
     
     
     public void setSettings(PlayerSettings settings){this.settings = settings;}
@@ -263,6 +268,8 @@ public class PlayerData {
     public void setSpeed(double speed){this.speed = speed;}
     
     public void setFov(float fov) {this.fov = fov;}
+    public void setArmorlist(ArmorStand n) {this.Armorlist.add(n);}
+    public void subArmorlist(ArmorStand n) {this.Armorlist.remove(n);}
     
     public void reflectionDoChargeKeep(){this.doChargeKeep = !this.doChargeKeep;}
     
@@ -313,6 +320,7 @@ public class PlayerData {
         this.isCanFly = false;
         this.speed = 0;
         this.fov = 0.1F;
+        this.Armorlist = new ArrayList<>();
     }
     
 }

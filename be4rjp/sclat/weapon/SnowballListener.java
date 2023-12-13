@@ -249,7 +249,7 @@ public class SnowballListener implements Listener {
                             return;
                         }
                         if(projectile.getCustomName().contains("#QuadroArmsShotgun")){
-                            double Quadrodamage =8;
+                            double Quadrodamage =9;
                             double QuadroticksLived = (double) projectile.getTicksLived()*10;
                             if(QuadroticksLived > 30)
                                 QuadroticksLived = 30;
@@ -599,7 +599,7 @@ public class SnowballListener implements Listener {
                         return;
                     }
                     if(projectile.getCustomName().contains("#QuadroArmsShotgun")){
-                        double Quadrodamage =8;
+                        double Quadrodamage =9;
                         double QuadroticksLived = (double) projectile.getTicksLived()*10;
                         if(QuadroticksLived > 30)
                             QuadroticksLived = 30;
