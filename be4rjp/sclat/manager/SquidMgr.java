@@ -218,7 +218,7 @@ public class SquidMgr {
                         if(!DataMgr.getPlayerData(p).getPoison())
                             p.setWalkSpeed((float)speed);
                         if(DataMgr.getPlayerData(p).getPoison())
-                            p.setWalkSpeed((float)(speed - speed / 3));
+                            p.setWalkSpeed((float)(speed * Gear.getGearInfluence(p, Gear.Type.PENA_DOWN) - speed / 3));
                     }
                     
 

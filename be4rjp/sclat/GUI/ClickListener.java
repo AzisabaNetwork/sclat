@@ -156,7 +156,7 @@ public class ClickListener implements Listener{
         if(name.equals("リソースパックをダウンロード / DOWNLOAD RESOURCEPACK"))
             player.setResourcePack(conf.getConfig().getString("ResourcePackURL"));
         if(event.getView().getTitle().equals("Gear")){
-            for(int i = 0; i <= 8;){
+            for(int i = 0; i <= 9;){
                 if(Gear.getGearName(i).equals(name)){
                     DataMgr.getPlayerData(player).setGearNumber(i);
                     PlayerStatusMgr.setGear(player, i);
@@ -166,7 +166,7 @@ public class ClickListener implements Listener{
                 i++;
             }
         }else if(event.getView().getTitle().equals("Gear shop")){
-            for(int i = 0; i <= 8;){
+            for(int i = 0; i <= 9;){
                 if(Gear.getGearName(i).equals(name)){
                     if(PlayerStatusMgr.getMoney(player) >= Gear.getGearPrice(i)){
                         PlayerStatusMgr.addGear(player, i);

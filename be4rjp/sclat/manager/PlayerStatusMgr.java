@@ -60,6 +60,8 @@ public class PlayerStatusMgr {
         conf.getPlayerStatus().set("Status." + player.getUniqueId().toString() + ".Tutorial", 0);
         //ガチャチケ用
         conf.getPlayerStatus().set("Status." + player.getUniqueId().toString() + ".Ticket", 0);
+        PlayerStatusMgr.addGear(player, 9);
+        PlayerStatusMgr.setGear(player, 9);
     }
     
     public static void sendHologram(Player player){

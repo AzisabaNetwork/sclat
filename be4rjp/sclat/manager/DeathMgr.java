@@ -23,6 +23,7 @@ import org.bukkit.craftbukkit.v1_14_R1.entity.CraftEntity;
 import org.bukkit.entity.Item;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
+import be4rjp.sclat.weapon.Gear;
 
 /**
  *
@@ -44,7 +45,7 @@ public class DeathMgr {
     
         Sclat.createInkExplosionEffect(target.getEyeLocation().add(0, -1, 0), 3, 30, shooter);
         
-        DataMgr.getPlayerData(target).setSPGauge((int)(DataMgr.getPlayerData(target).getSPGauge() * 0.7));
+        DataMgr.getPlayerData(target).setSPGauge((int)(DataMgr.getPlayerData(target).getSPGauge() * 0.7 * Gear.getGearInfluence(target, Gear.Type.PENA_DOWN)));
         
         //半径
         double maxDist = 3;

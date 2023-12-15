@@ -135,10 +135,10 @@ public class OpenGUI {
     }
     
     public static void gearGUI(Player player, boolean shop){
-        Inventory inv = Bukkit.createInventory(null, 9, shop ? "Gear shop" : "Gear");
+        Inventory inv = Bukkit.createInventory(null, 18, shop ? "Gear shop" : "Gear");
         
         if(shop) {
-            for (int i = 0; i <= 8; ) {
+            for (int i = 0; i <= 9; ) {
         
                 if (PlayerStatusMgr.haveGear(player, i)) {
                     ItemStack n = new ItemStack(Material.BLACK_STAINED_GLASS_PANE);
@@ -161,8 +161,16 @@ public class OpenGUI {
                 inv.setItem(i, n);
                 i++;
             }
+            for (int i = 10; i <= 17; ) {
+                ItemStack n = new ItemStack(Material.BLACK_STAINED_GLASS_PANE);
+                ItemMeta nmeta = n.getItemMeta();
+                nmeta.setDisplayName(".");
+                n.setItemMeta(nmeta);
+                inv.setItem(i, n);
+                i++;
+            }
         }else {
-            for (int i = 0; i <= 8; ) {
+            for (int i = 0; i <= 9; ) {
     
                 if (!(PlayerStatusMgr.haveGear(player, i) || conf.getConfig().getString("WorkMode").equals("Trial") ||
                         !Main.shop)) {
@@ -178,6 +186,14 @@ public class OpenGUI {
                 ItemStack n = new ItemStack(Gear.getGearMaterial(i));
                 ItemMeta nmeta = n.getItemMeta();
                 nmeta.setDisplayName(Gear.getGearName(i));
+                n.setItemMeta(nmeta);
+                inv.setItem(i, n);
+                i++;
+            }
+            for (int i = 10; i <= 17; ) {
+                ItemStack n = new ItemStack(Material.BLACK_STAINED_GLASS_PANE);
+                ItemMeta nmeta = n.getItemMeta();
+                nmeta.setDisplayName(".");
                 n.setItemMeta(nmeta);
                 inv.setItem(i, n);
                 i++;

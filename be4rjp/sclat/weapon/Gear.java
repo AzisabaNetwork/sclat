@@ -20,6 +20,7 @@ public class Gear {
         public static final int MAIN_INK_EFFICIENCY_UP = 6;
         public static final int SPECIAL_UP = 7;
         public static final int MAX_HEALTH_UP = 8;
+        public static final int PENA_DOWN = 9;
     }
     
     public static Material getGearMaterial(int gearN){
@@ -40,6 +41,8 @@ public class Gear {
                 return Material.PRISMARINE_SHARD;
             case 8:
                 return Material.GOLDEN_APPLE;
+            case 9:
+                return Material.APPLE;
             default:
                 return Material.IRON_BARS;
         }
@@ -63,6 +66,8 @@ public class Gear {
                 return "スペシャル増加量アップ";
             case 8:
                 return "最大体力アップ";
+            case 9:
+                return "ペナルティ軽減";
             default:
                 return "ギアなし";
         }
@@ -86,6 +91,8 @@ public class Gear {
                 return 200000;
             case 8:
                 return 110000;
+            case 9:
+                return 10;
             default:
                 return 0;
         }
@@ -110,6 +117,8 @@ public class Gear {
                     return 1.5;
                 case 8:
                     return 1.2;
+                case 9:
+                    return 1.1;
                 default:
                     return 1;
             }
