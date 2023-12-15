@@ -98,7 +98,7 @@ public class Hound {
                 try {
                     if(i == 0){
                         saveY =player.getLocation().getY();
-                        player.setExp(player.getExp() - (float)(data.getWeaponClass().getMainWeapon().getNeedInk() / Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)));
+                        player.setExp(player.getExp() - (float)(data.getWeaponClass().getMainWeapon().getNeedInk() * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) / Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)));
 
                         as1 = player.getWorld().spawn(player.getLocation(), ArmorStand.class, armorStand -> {
                             armorStand.setVisible(false);
@@ -270,7 +270,7 @@ public class Hound {
                 }
             }
         };
-        if(player.getExp() > (float)(data.getWeaponClass().getMainWeapon().getNeedInk() / Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)) )
+        if(player.getExp() > (float)(data.getWeaponClass().getMainWeapon().getNeedInk() * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) / Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)) )
             task.runTaskTimer(Main.getPlugin(), 0, 1);
         else{
             player.sendTitle("", ChatColor.RED + "インクが足りません", 0, 5, 2);
@@ -299,13 +299,13 @@ public class Hound {
     }
     private static double exdamage(double heightDiff,double mag,double dm){
         if(7.9<heightDiff){
-            return mag * dm * 0.7 + dm*1.6;
+            return mag * dm * 0.7 + dm*1.7;
         }else if(3.9<heightDiff&&heightDiff<=7.9){
             return mag * dm * 0.8 + dm*1.1;
         }else if(1.8<heightDiff&&heightDiff<=3.9){
             return mag * dm * 0.9 + dm*0.2;
         }else if(-2.5<=heightDiff&&heightDiff<=1.8){
-            return mag * dm + dm*0.52;
+            return mag * dm * 0.95 + dm*0.52;
         }else if(-5<=heightDiff&&heightDiff<-2.5){
             return mag * dm + dm*0.7;
         }else if(-10<=heightDiff&&heightDiff<-5){

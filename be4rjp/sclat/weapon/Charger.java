@@ -140,14 +140,14 @@ public class Charger {
                     }
                     if(charge<=min){
                         if(p.getExp() > data.getWeaponClass().getMainWeapon().getNeedInk() * charge/2){
-                            p.setExp(p.getExp() - (float)((data.getWeaponClass().getMainWeapon().getNeedInk()/2) / Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP) * charge));
+                            p.setExp(p.getExp() - (float)((data.getWeaponClass().getMainWeapon().getNeedInk()/2) * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) / Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP) * charge));
                             Charger.Shoot(p, (int)((double)charge * (double)data.getWeaponClass().getMainWeapon().getChargeRatio() * (double)data.getWeaponClass().getMainWeapon().getDistanceTick()), data.getWeaponClass().getMainWeapon().getDamage() * charge,data.getWeaponClass().getMainWeapon().getDecreaseRate(),data.getWeaponClass().getMainWeapon().getAppDistance());
                         }else {
                             int reach = (int) (p.getExp() / data.getWeaponClass().getMainWeapon().getNeedInk());
                             if (reach >= 2) {
                                 //p.sendMessage(String.valueOf(data.getWeaponClass().getMainWeapon().getChargeRatio()));
                                 Charger.Shoot(p, (int) ((double) reach * (double) data.getWeaponClass().getMainWeapon().getChargeRatio() * (double) data.getWeaponClass().getMainWeapon().getDistanceTick()), data.getWeaponClass().getMainWeapon().getDamage() * reach, data.getWeaponClass().getMainWeapon().getDecreaseRate(), data.getWeaponClass().getMainWeapon().getAppDistance());
-                                p.setExp(p.getExp() - (float) ((data.getWeaponClass().getMainWeapon().getNeedInk() * reach/2) / Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)));
+                                p.setExp(p.getExp() - (float) ((data.getWeaponClass().getMainWeapon().getNeedInk() * reach/2) * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) / Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)));
                             } else {
                                 p.sendTitle("", ChatColor.RED + "インクが足りません", 0, 10, 2);
                                 p.playSound(p.getLocation(), Sound.UI_BUTTON_CLICK, 1F, 1.63F);
@@ -155,14 +155,14 @@ public class Charger {
                         }
                     }
                     else if(p.getExp() > data.getWeaponClass().getMainWeapon().getNeedInk() * charge){
-                        p.setExp(p.getExp() - (float)(data.getWeaponClass().getMainWeapon().getNeedInk() / Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP) * charge));
+                        p.setExp(p.getExp() - (float)(data.getWeaponClass().getMainWeapon().getNeedInk() * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) / Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP) * charge));
                         Charger.Shoot(p, (int)((double)charge * (double)data.getWeaponClass().getMainWeapon().getChargeRatio() * (double)data.getWeaponClass().getMainWeapon().getDistanceTick()), data.getWeaponClass().getMainWeapon().getDamage() * charge,data.getWeaponClass().getMainWeapon().getDecreaseRate(),data.getWeaponClass().getMainWeapon().getAppDistance());
                     }else{
                         int reach = (int)(p.getExp() / data.getWeaponClass().getMainWeapon().getNeedInk());
                         if(reach >= 2){
                             //p.sendMessage(String.valueOf(data.getWeaponClass().getMainWeapon().getChargeRatio()));
                             Charger.Shoot(p, (int)((double)reach  * (double)data.getWeaponClass().getMainWeapon().getChargeRatio() * (double)data.getWeaponClass().getMainWeapon().getDistanceTick()), data.getWeaponClass().getMainWeapon().getDamage() * reach,data.getWeaponClass().getMainWeapon().getDecreaseRate(),data.getWeaponClass().getMainWeapon().getAppDistance());
-                            p.setExp(p.getExp() - (float)(data.getWeaponClass().getMainWeapon().getNeedInk() * reach / Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)));
+                            p.setExp(p.getExp() - (float)(data.getWeaponClass().getMainWeapon().getNeedInk() * reach * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) / Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)));
                         }else {
                             p.sendTitle("", ChatColor.RED + "インクが足りません", 0, 10, 2);
                             p.playSound(p.getLocation(), Sound.UI_BUTTON_CLICK, 1F, 1.63F);
