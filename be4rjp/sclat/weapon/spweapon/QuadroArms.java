@@ -447,7 +447,7 @@ public class QuadroArms {
             Player p = player;
             boolean addedFallVec = false;
             double BlasterExDamage =3.1;
-            double BlasterExHankei=5;
+            double BlasterExHankei=4;
             Vector fallvec = new Vector(inkball.getVelocity().getX(), inkball.getVelocity().getY()  , inkball.getVelocity().getZ()).multiply(ShootSpeed/17);
             @Override
             public void run(){
@@ -502,7 +502,7 @@ public class QuadroArms {
                             if(!DataMgr.getPlayerData(target).isInMatch())
                                 continue;
                             if (target.getLocation().distanceSquared(inkball.getLocation()) <= maxDist*maxDist) {
-                                double damage = (maxDist - target.getLocation().distance(inkball.getLocation())) * BlasterExDamage;
+                                double damage = (1 + maxDist - target.getLocation().distance(inkball.getLocation())) * BlasterExDamage;
                                 if(DataMgr.getPlayerData(player).getTeam() != DataMgr.getPlayerData(target).getTeam() && target.getGameMode().equals(GameMode.ADVENTURE)){
                                     Sclat.giveDamage(player, target, damage, "spWeapon");
 
@@ -525,7 +525,7 @@ public class QuadroArms {
                         for(Entity as : player.getWorld().getEntities()){
                             if(as instanceof ArmorStand){
                                 if (as.getLocation().distanceSquared(inkball.getLocation()) <= maxDist*maxDist) {
-                                    double damage = (maxDist - as.getLocation().distance(inkball.getLocation())) * BlasterExDamage;
+                                    double damage = ( 1 + maxDist - as.getLocation().distance(inkball.getLocation())) * BlasterExDamage;
                                     ArmorStandMgr.giveDamageArmorStand((ArmorStand)as, damage, p);
                                 }
                             }

@@ -1319,7 +1319,7 @@ public class MatchMgr {
                     PlayerData data = DataMgr.getPlayerData(p);
                     
                     int pMoney = (int)((double)data.getKillCount() * 100D + (double)data.getPaintCount() / 5D);
-                    int pTicket = (int)((double)data.getKillCount() * 1 + 5 + (double)data.getPaintCount() / 1000D);
+                    int pTicket = (int)((double)data.getKillCount() * 1 + 10 + (double)data.getPaintCount() / 750D);
                     int pLv = 1;
                     if(data.getTeam() == data.getMatch().getWinTeam() || data.getMatch().getIsHikiwake()) {
                         pLv = 2;

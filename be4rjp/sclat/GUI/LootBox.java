@@ -41,8 +41,8 @@ public class LootBox {
                         PlayerStatusMgr.addWeapon(player, ClassName);
                         Sclat.sendMessage(ChatColor.GREEN + ClassName + "が当たったよ、おめでとう！", MessageType.PLAYER, player);
                     }else{
-                        Sclat.sendMessage(ChatColor.GREEN + ClassName +"が重複したよ +" + Firstprize + "coin", MessageType.PLAYER, player);
-                        PlayerStatusMgr.addMoney(player, Firstprize);
+                        Sclat.sendMessage(ChatColor.GREEN + ClassName +"が重複したよ +" + Secondprize + "coin", MessageType.PLAYER, player);
+                        PlayerStatusMgr.addMoney(player, Secondprize);
                     }
                 }
                 nextLootSeed += lootpro;
