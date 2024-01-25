@@ -211,7 +211,7 @@ public class Shooter {
                             };
                             //スライド仕様変更の改変
                             if( sl_recharge_2 == true){task2.runTaskLater(Main.getPlugin(), 42);}
-                            else{task3.runTaskLater(Main.getPlugin(), 46);}
+                            else{task3.runTaskLater(Main.getPlugin(), 48);}
                             //booleam型の変数で二つのスライドをそれぞれ表現している、優先順位が低い方がTrueのときは高い方が使われた後のため高い方のリチャージをする（優先順位が高い方は2秒、低い方は2.2秒）
                             //check = false;
                         }
