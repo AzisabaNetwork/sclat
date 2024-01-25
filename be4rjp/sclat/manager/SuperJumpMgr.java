@@ -43,7 +43,7 @@ import org.bukkit.util.Vector;
  * @author Be4rJP
  */
 public class SuperJumpMgr {
-    public static void SuperJumpCollTime(Player player, Location loc){
+    public static void SuperJumpCollTime(Player player, Location loc, boolean nearspawnpoint){
         if(player.getWorld() != loc.getWorld())
             return;
         
@@ -67,7 +67,13 @@ public class SuperJumpMgr {
                 }
             }
         };
-        task.runTaskLater(Main.getPlugin(), 15);
+        if(nearspawnpoint) {
+            task.runTaskLater(Main.getPlugin(), 15);
+        }else {
+            if(!player.hasPotionEffect(PotionEffectType.GLOWING))
+                player.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 50, 1));
+            task.runTaskLater(Main.getPlugin(), 50);
+        }
     }
     
     public static void SuperJumpRunnable(Player player, Location toloc){

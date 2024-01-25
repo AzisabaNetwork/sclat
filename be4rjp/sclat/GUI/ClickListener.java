@@ -7,6 +7,7 @@ import static be4rjp.sclat.Main.conf;
 
 import be4rjp.sclat.data.*;
 import be4rjp.sclat.manager.*;
+import be4rjp.sclat.tutorial.Tutorial;
 import be4rjp.sclat.weapon.*;
 
 import java.util.ArrayList;
@@ -430,7 +431,7 @@ public class ClickListener implements Listener{
                 Location loc = Main.lobby.clone();
                 if(!conf.getConfig().getString("WorkMode").equals("Trial"))
                     loc = DataMgr.getPlayerData(player).getMatchLocation();
-                SuperJumpMgr.SuperJumpCollTime(player, loc);
+                SuperJumpMgr.SuperJumpCollTime(player, loc, false);
             }
             if(name.equals("§r§6ロビーへジャンプ")){
                 String WorldName = conf.getConfig().getString("LobbyJump.WorldName");
@@ -439,7 +440,17 @@ public class ClickListener implements Listener{
                 int iy = conf.getConfig().getInt("LobbyJump.Y");
                 int iz = conf.getConfig().getInt("LobbyJump.Z");
                 Location loc = new Location(w, ix + 0.5, iy, iz + 0.5);
-                SuperJumpMgr.SuperJumpCollTime(player, loc);
+                SuperJumpMgr.SuperJumpCollTime(player, loc, true);
+            }
+            boolean nearspwan =true;
+            Location spawnloc = Main.lobby.clone();
+            if(!conf.getConfig().getString("WorkMode").equals("Trial"))
+                spawnloc = DataMgr.getPlayerData(player).getMatchLocation();
+            if(spawnloc.getWorld() == player.getWorld()){
+                if(player.getLocation().distance(spawnloc) > 10 && !Tutorial.clearList.contains(player))
+                    if(!Main.tutorial){
+                        nearspwan = false;
+                    }
             }
             for(Player p : Main.getPlugin(Main.class).getServer().getOnlinePlayers()){
                 if (p.getName().equals(name)){
@@ -449,10 +460,10 @@ public class ClickListener implements Listener{
                             Sclat.playGameSound(player, SoundType.ERROR);
                             break;
                         }
-                        SuperJumpMgr.SuperJumpCollTime(player, DataMgr.getPlayerData(p).getPlayerGroundLocation());
+                        SuperJumpMgr.SuperJumpCollTime(player, DataMgr.getPlayerData(p).getPlayerGroundLocation(),nearspwan);
                     }
                     if(event.getCurrentItem().getType().equals(Material.IRON_TRAPDOOR))
-                        SuperJumpMgr.SuperJumpCollTime(player, DataMgr.getBeaconFromplayer(p).getLocation());
+                        SuperJumpMgr.SuperJumpCollTime(player, DataMgr.getBeaconFromplayer(p).getLocation(),nearspwan);
                 }
             }
         }
