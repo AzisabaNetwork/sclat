@@ -344,6 +344,7 @@ public class Sclat {
         PlayerData playerData = DataMgr.getPlayerData(player);
         
         if(target.getHealth() + targetData.getArmor() > damage){
+            targetData.setLastAttack(player);
             if(targetData.getArmor() > damage){
                 targetData.setArmor(targetData.getArmor() - damage);
             }else{

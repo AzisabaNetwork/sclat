@@ -79,6 +79,13 @@ public class DeathMgr {
             if(!DataMgr.getPlayerData(shooter).getIsUsingSP())
                 for(int i = 0; i < 10; i++)
                     SPWeaponMgr.addSPCharge(shooter);
+        }else if(DataMgr.getPlayerData(target).getLastAttack()!=target){
+            Player Lastattacker = DataMgr.getPlayerData(target).getLastAttack();
+            DataMgr.getPlayerData(Lastattacker).addKillCount();
+            DataMgr.getPlayerData(Lastattacker).getTeam().addKillCount();
+            if(!DataMgr.getPlayerData(Lastattacker).getIsUsingSP())
+                for(int i = 0; i < 10; i++)
+                    SPWeaponMgr.addSPCharge(Lastattacker);
         }
         
         BukkitRunnable task = new BukkitRunnable(){
@@ -134,6 +141,7 @@ public class DeathMgr {
                             t.getWorld().playSound(DataMgr.getPlayerData(t).getMatchLocation(), Sound.ENTITY_PLAYER_SWIM, 1, 1);
                             t.setExp(0.99F);
                             t.setHealth(20);
+                            DataMgr.getPlayerData(t).setLastAttack(t);
                             WeaponClassMgr.setWeaponClass(t);
                             SuperArmor.setArmor(t, Double.MAX_VALUE, 120, false);
                             if(DataMgr.getPlayerData(t).getSPGauge() == 100)
@@ -182,6 +190,7 @@ public class DeathMgr {
                             t.getWorld().playSound(DataMgr.getPlayerData(t).getMatchLocation(), Sound.ENTITY_PLAYER_SWIM, 1, 1);
                             t.setExp(0.99F);
                             t.setHealth(20);
+                            DataMgr.getPlayerData(t).setLastAttack(t);
                             WeaponClassMgr.setWeaponClass(t);
                             SuperArmor.setArmor(t, Double.MAX_VALUE, 120, false);
                             if(DataMgr.getPlayerData(t).getSPGauge() == 100)
@@ -230,6 +239,7 @@ public class DeathMgr {
                             t.getWorld().playSound(DataMgr.getPlayerData(t).getMatchLocation(), Sound.ENTITY_PLAYER_SWIM, 1, 1);
                             t.setExp(0.99F);
                             t.setHealth(20);
+                            DataMgr.getPlayerData(t).setLastAttack(t);
                             WeaponClassMgr.setWeaponClass(t);
                             SuperArmor.setArmor(t, Double.MAX_VALUE, 120, false);
                             if(DataMgr.getPlayerData(t).getSPGauge() == 100)
@@ -244,8 +254,16 @@ public class DeathMgr {
                         t.getInventory().clear();
                         if(i == 0){
                             loc = t.getLocation();
-                            for(Player player : Main.getPlugin(Main.class).getServer().getOnlinePlayers()){
-                                player.sendMessage(DataMgr.getPlayerData(t).getTeam().getTeamColor().getColorCode() + t.getDisplayName() + ChatColor.RESET + "は溺れてしまった！");
+                            if (DataMgr.getPlayerData(t).getLastAttack()==t) {
+                                for (Player player : Main.getPlugin(Main.class).getServer().getOnlinePlayers()) {
+                                    player.sendMessage(DataMgr.getPlayerData(t).getTeam().getTeamColor().getColorCode() + t.getDisplayName() + ChatColor.RESET + "は溺れてしまった！");
+                                }
+                            }else{
+                                Player splayer = DataMgr.getPlayerData(t).getLastAttack();
+                                PlayerData sdata = DataMgr.getPlayerData(splayer);
+                                for (Player player : Main.getPlugin(Main.class).getServer().getOnlinePlayers()) {
+                                    player.sendMessage( DataMgr.getPlayerData(t).getTeam().getTeamColor().getColorCode() + t.getDisplayName() + ChatColor.RESET + "は" + ChatColor.RESET +sdata.getTeam().getTeamColor().getColorCode() + splayer.getDisplayName() + ChatColor.RESET+ "に突き落とされてしまった！");
+                                }
                             }
                         }
                         t.teleport(loc);
@@ -271,6 +289,7 @@ public class DeathMgr {
                             t.getWorld().playSound(DataMgr.getPlayerData(t).getMatchLocation(), Sound.ENTITY_PLAYER_SWIM, 1, 1);
                             t.setExp(0.99F);
                             t.setHealth(20);
+                            DataMgr.getPlayerData(t).setLastAttack(t);
                             WeaponClassMgr.setWeaponClass(t);
                             SuperArmor.setArmor(t, Double.MAX_VALUE, 120, false);
                             if(DataMgr.getPlayerData(t).getSPGauge() == 100)
@@ -284,8 +303,16 @@ public class DeathMgr {
                         t.getInventory().clear();
                         if(i == 0){
                             loc = DataMgr.getPlayerData(t).getMatch().getMapData().getIntro();
-                            for(Player player : Main.getPlugin(Main.class).getServer().getOnlinePlayers()){
-                                player.sendMessage(DataMgr.getPlayerData(t).getTeam().getTeamColor().getColorCode() + t.getDisplayName() + ChatColor.RESET + "は奈落に落ちてしまった！");
+                            if(DataMgr.getPlayerData(t).getLastAttack()==t){
+                                for (Player player : Main.getPlugin(Main.class).getServer().getOnlinePlayers()) {
+                                    player.sendMessage(DataMgr.getPlayerData(t).getTeam().getTeamColor().getColorCode() + t.getDisplayName() + ChatColor.RESET + "は奈落に落ちてしまった！");
+                                }
+                            }else {
+                                Player splayer = DataMgr.getPlayerData(t).getLastAttack();
+                                PlayerData sdata = DataMgr.getPlayerData(splayer);
+                                for (Player player : Main.getPlugin(Main.class).getServer().getOnlinePlayers()) {
+                                    player.sendMessage(DataMgr.getPlayerData(t).getTeam().getTeamColor().getColorCode() + t.getDisplayName() + ChatColor.RESET + "は" + ChatColor.RESET + sdata.getTeam().getTeamColor().getColorCode() + splayer.getDisplayName() + ChatColor.RESET + "に突き落とされてしまった！");
+                                }
                             }
                         }
                         t.teleport(loc);
@@ -311,6 +338,7 @@ public class DeathMgr {
                             t.getWorld().playSound(DataMgr.getPlayerData(t).getMatchLocation(), Sound.ENTITY_PLAYER_SWIM, 1, 1);
                             t.setExp(0.99F);
                             t.setHealth(20);
+                            DataMgr.getPlayerData(t).setLastAttack(t);
                             WeaponClassMgr.setWeaponClass(t);
                             SuperArmor.setArmor(t, Double.MAX_VALUE, 120, false);
                             if(DataMgr.getPlayerData(t).getSPGauge() == 100)

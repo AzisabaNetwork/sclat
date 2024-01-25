@@ -785,6 +785,7 @@ public class MatchMgr {
             PlayerData data = DataMgr.getPlayerData(player);
             if(data.getMatch() == match){
                 MatchRunnable(player, match);
+                data.setLastAttack(player);
             }
         }
         /*
