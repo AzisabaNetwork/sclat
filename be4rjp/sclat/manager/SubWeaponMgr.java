@@ -35,6 +35,11 @@ public class SubWeaponMgr {
                 ism = is.getItemMeta();
                 ism.setDisplayName("クイックボム");
                 break;
+            case "フローターボム":
+                is = new ItemStack(data.getTeam().getTeamColor().getWool());
+                ism = is.getItemMeta();
+                ism.setDisplayName("フローターボム");
+                break;
             case "センサー":
                 is = new ItemStack(Material.DISPENSER);
                 ism = is.getItemMeta();
@@ -122,6 +127,10 @@ public class SubWeaponMgr {
                 break;
             case "クイックボム":
                 QuickBomb.QuickBomRunnable(player);
+                data.setCanUseSubWeapon(false);
+                break;
+            case "フローターボム":
+                FloaterBomb.FloaterBombRunnable(player);
                 data.setCanUseSubWeapon(false);
                 break;
             case "センサー":
