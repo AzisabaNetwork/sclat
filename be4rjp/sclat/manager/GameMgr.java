@@ -45,6 +45,7 @@ import org.bukkit.event.player.*;
 import org.bukkit.event.weather.WeatherChangeEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -377,6 +378,37 @@ public class GameMgr implements Listener{
         
         if(Main.type == ServerType.LOBBY){
             if(PlayerStatusMgr.getTutorialState(player.getUniqueId().toString()) == 0){
+                //操作説明本
+                ItemStack termsBook = new ItemStack(Material.WRITTEN_BOOK);
+                BookMeta bookMeta = (BookMeta) termsBook.getItemMeta();
+
+                // 本のタイトルと著者を設定
+                bookMeta.setTitle(ChatColor.DARK_GREEN + "操作説明");
+                bookMeta.setAuthor(ChatColor.GRAY + "Sclat運営");
+
+                // 利用規約の内容を追加
+                bookMeta.addPage(ChatColor.BOLD + "目次\n\n" +
+                        ChatColor.RESET + "目次:P1\n\n" +
+                        "試合に参加するには:P2\n\n" +
+                        "試合中の操作方法:P3\n\n" +
+                        "※テスト段階のためサーバー初参加のプレイヤーにのみこの本は付与されます");
+                bookMeta.addPage(ChatColor.BOLD + "試合に参加するには\n\n" +
+                        ChatColor.RESET + "正面にあるタワーの中にある\n" +
+                        "看板を右クリックすると試合ロビーに移動できます\n" +
+                        "※試合がすでに始まっている場合や再起動中の鯖には参加できません");
+                bookMeta.addPage(ChatColor.BOLD + "試合中の操作方法\n" +
+                        ChatColor.RESET + "試合が始まると武器が支給されます。\n" +
+                        "メイン武器を持って右クリックで射撃できます。\n" +
+                        "左クリックまたは、ボムを持って右クリックでボムを投げれます。ボムはイカのまま投げれます。\n" +
+                        "画面上部のゲージがたまったときにアイテムを持ってQキー、またはスペシャルを持って右クリックでスペシャルが使えます。");
+
+                // 作成したBookMetaを設定
+                termsBook.setItemMeta(bookMeta);
+
+                // プレイヤーのインベントリをクリアし、利用規約の本をアイテムスロットに追加
+                player.getInventory().clear();
+                player.getInventory().setItem(2, termsBook);
+                //操作説明本終
                 player.sendTitle("", "チュートリアルサーバーへ転送中...", 0, 20, 0);
                 Sclat.sendMessage("§bチュートリアルサーバーへ転送中...", MessageType.PLAYER, player);
                 BukkitRunnable run = new BukkitRunnable() {

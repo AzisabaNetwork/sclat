@@ -49,9 +49,11 @@ public class FloaterBomb {
                         p_vec = p.getEyeLocation().getDirection();
                         if(!onground){
                             p_vec =p_vec.normalize().multiply(1.1);
+                        }else{
+                            p_vec =p_vec.normalize().multiply(0.95);
                         }
                         if(!DataMgr.getPlayerData(player).getIsBombRush())
-                            p.setExp(p.getExp() - 0.42F);
+                            p.setExp(p.getExp() - 0.50F);
                         ItemStack bom = new ItemStack(DataMgr.getPlayerData(p).getTeam().getTeamColor().getWool()).clone();
                         ItemMeta bom_m = bom.getItemMeta();
                         bom_m.setLocalizedName(String.valueOf(Main.getNotDuplicateNumber()));
@@ -94,6 +96,11 @@ public class FloaterBomb {
                         if(!turn){
                             maxDist = 2;
                         }
+                        //爆発ダメージ
+                        double ExDamage = 4.0;
+                        //if(onground) {
+                        //    ExDamage = 4.0;
+                        //}
 
                         //爆発音
                         player.getWorld().playSound(drop.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_BLAST, 1, 1);
@@ -143,7 +150,7 @@ public class FloaterBomb {
                             if(!DataMgr.getPlayerData(target).isInMatch() || target.getWorld() != p.getWorld())
                                 continue;
                             if (target.getLocation().distance(drop.getLocation()) <= maxDist) {
-                                double damage = (maxDist - target.getLocation().distance(drop.getLocation())*0.7) * 4 * Gear.getGearInfluence(player, Gear.Type.SUB_SPEC_UP);
+                                double damage = (maxDist - target.getLocation().distance(drop.getLocation())*0.7) * ExDamage * Gear.getGearInfluence(player, Gear.Type.SUB_SPEC_UP);
                                 if(!turn){
                                     damage = damage * 0.3;
                                 }
@@ -168,7 +175,7 @@ public class FloaterBomb {
                         for(Entity as : player.getWorld().getEntities()){
                             if (as.getLocation().distance(drop.getLocation()) <= maxDist){
                                 if(as instanceof ArmorStand){
-                                    double damage = (maxDist - as.getLocation().distance(drop.getLocation())*0.7) * 4 * Gear.getGearInfluence(p, Gear.Type.SUB_SPEC_UP);
+                                    double damage = (maxDist - as.getLocation().distance(drop.getLocation())*0.7) * ExDamage * Gear.getGearInfluence(p, Gear.Type.SUB_SPEC_UP);
                                     if(!turn){
                                         damage = damage * 0.3;
                                     }
@@ -223,7 +230,7 @@ public class FloaterBomb {
         };
         cooltime.runTaskLater(Main.getPlugin(), 10);
                 
-        if(player.getExp() > 0.43 || DataMgr.getPlayerData(player).getIsBombRush())
+        if(player.getExp() > 0.51 || DataMgr.getPlayerData(player).getIsBombRush())
             task.runTaskTimer(Main.getPlugin(), 0, 1);
         else{
             player.sendTitle("", ChatColor.RED + "インクが足りません", 0, 5, 2);
