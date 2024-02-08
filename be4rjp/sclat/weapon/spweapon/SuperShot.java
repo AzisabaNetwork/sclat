@@ -22,6 +22,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.Snowball;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
@@ -53,6 +55,7 @@ public class SuperShot {
                         player.getInventory().setItem(count, new ItemStack(Material.AIR));
                 }
                 player.updateInventory();
+                player.addPotionEffect(new PotionEffect(PotionEffectType.LUCK, 101, 1));
             }
         };
         it.runTaskLater(Main.getPlugin(), 2);
@@ -74,32 +77,34 @@ public class SuperShot {
     
     
     public static void Shot(Player player){
-        player.getWorld().playSound(player.getLocation(), Sound.ENTITY_PLAYER_ATTACK_STRONG, 1.5F, 1.2F);
-        player.getWorld().playSound(player.getLocation(), Sound.ENTITY_WITHER_SHOOT, 0.3F, 2F);
-        
-        Location ploc = player.getEyeLocation().add(0, -1.5, 0);
-        Vector pvec = player.getEyeLocation().getDirection();
-        Vector vec = new Vector(pvec.getX(), 0, pvec.getZ());
-        Vector vv1 = new Vector(pvec.getZ() * -1, 0, pvec.getX()).normalize().multiply(0.3);
-        Vector vv2 = new Vector(pvec.getZ(), 0, pvec.getX() * -1).normalize().multiply(0.3);
-        Vector vec1 = new Vector(pvec.getX(), 0, pvec.getZ()).normalize().multiply(1);
-        Vector vec2 = new Vector(pvec.getX(), 0, pvec.getZ()).normalize().multiply(1.3);
-        Vector vec3 = new Vector(pvec.getX(), 0, pvec.getZ()).normalize().multiply(1.6);
-        Location loc1 = ploc.clone().add(vec1);
-        Location loc2 = ploc.clone().add(vec2);
-        Location loc3 = ploc.clone().add(vec3);
-        Location loc4 = loc2.clone().add(vv1);
-        Location loc5 = loc2.clone().add(vv2);
-        
-        player.setVelocity(vec.clone().multiply(-0.5));
-        
-        for(double y = 0; y <= 8.5; y+=0.5){
-            ShootSnowball(player, loc1.clone().add(0, y, 0), vec.clone().normalize().multiply(1.8));
-            ShootSnowball(player, loc3.clone().add(0, y, 0), vec.clone().normalize().multiply(1.8));
-            ShootSnowball(player, loc4.clone().add(0, y, 0), vec.clone().normalize().multiply(1.8));
-            ShootSnowball(player, loc5.clone().add(0, y, 0), vec.clone().normalize().multiply(1.8));
+        if(player.hasPotionEffect(PotionEffectType.LUCK)) {
+            player.getWorld().playSound(player.getLocation(), Sound.ENTITY_PLAYER_ATTACK_STRONG, 1.5F, 1.2F);
+            player.getWorld().playSound(player.getLocation(), Sound.ENTITY_WITHER_SHOOT, 0.3F, 2F);
+
+            Location ploc = player.getEyeLocation().add(0, -1.5, 0);
+            Vector pvec = player.getEyeLocation().getDirection();
+            Vector vec = new Vector(pvec.getX(), 0, pvec.getZ());
+            Vector vv1 = new Vector(pvec.getZ() * -1, 0, pvec.getX()).normalize().multiply(0.3);
+            Vector vv2 = new Vector(pvec.getZ(), 0, pvec.getX() * -1).normalize().multiply(0.3);
+            Vector vec1 = new Vector(pvec.getX(), 0, pvec.getZ()).normalize().multiply(1);
+            Vector vec2 = new Vector(pvec.getX(), 0, pvec.getZ()).normalize().multiply(1.3);
+            Vector vec3 = new Vector(pvec.getX(), 0, pvec.getZ()).normalize().multiply(1.6);
+            Location loc1 = ploc.clone().add(vec1);
+            Location loc2 = ploc.clone().add(vec2);
+            Location loc3 = ploc.clone().add(vec3);
+            Location loc4 = loc2.clone().add(vv1);
+            Location loc5 = loc2.clone().add(vv2);
+
+            player.setVelocity(vec.clone().multiply(-0.5));
+
+            for (double y = 0; y <= 8.5; y += 0.5) {
+                ShootSnowball(player, loc1.clone().add(0, y, 0), vec.clone().normalize().multiply(1.8));
+                ShootSnowball(player, loc3.clone().add(0, y, 0), vec.clone().normalize().multiply(1.8));
+                ShootSnowball(player, loc4.clone().add(0, y, 0), vec.clone().normalize().multiply(1.8));
+                ShootSnowball(player, loc5.clone().add(0, y, 0), vec.clone().normalize().multiply(1.8));
+            }
         }
-        
+
         BukkitRunnable task = new BukkitRunnable() {
             Player p = player;
             @Override

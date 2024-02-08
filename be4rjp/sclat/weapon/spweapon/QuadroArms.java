@@ -82,6 +82,7 @@ public class QuadroArms {
                 player.getInventory().setItem(4, item3);
                 player.getInventory().setItem(6, item4);
                 player.updateInventory();
+                player.addPotionEffect(new PotionEffect(PotionEffectType.LUCK, 121, 1));
                 overheat_bar(player);
             }
         };
@@ -246,10 +247,12 @@ public class QuadroArms {
                 }
             }
         };
-        if(!IsSG) {
-            Bursttask.runTaskTimer(Main.getPlugin(), 0, 1);
-        }else{
-            BursttaskSG.runTaskTimer(Main.getPlugin(), 0, 1);
+        if(player.hasPotionEffect(PotionEffectType.LUCK)) {
+            if (!IsSG) {
+                Bursttask.runTaskTimer(Main.getPlugin(), 0, 1);
+            } else {
+                BursttaskSG.runTaskTimer(Main.getPlugin(), 0, 1);
+            }
         }
     }
     public static void ShootSpinner(Player player){
@@ -423,6 +426,7 @@ public class QuadroArms {
 
         if(player.getGameMode() == GameMode.SPECTATOR) return;
 
+        if(!player.hasPotionEffect(PotionEffectType.LUCK)) {return;}
         double ShootSpeed = 3.9;
         PlayerData data = DataMgr.getPlayerData(player);
         Snowball ball = player.launchProjectile(Snowball.class);
@@ -542,6 +546,7 @@ public class QuadroArms {
         task.runTaskTimer(Main.getPlugin(), 0, 1);
     }
     public static void ShootSensor(Player player){
+        if(!player.hasPotionEffect(PotionEffectType.LUCK)) {return;}
         BukkitRunnable task = new BukkitRunnable(){
             Player p = player;
             Vector p_vec;

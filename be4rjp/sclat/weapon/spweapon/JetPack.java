@@ -44,6 +44,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.Snowball;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
@@ -210,7 +212,8 @@ public class JetPack {
                         player.getInventory().setItem(count, item);
                     }
                     player.updateInventory();
-                    
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.LUCK, 176, 1));
+
                     WorldServer nmsWorld = ((CraftWorld) p.getWorld()).getHandle();
                     EntityArmorStand as = new EntityArmorStand(nmsWorld, ol.getX(), ol.getY(), ol.getZ());
                     as.setPosition(ol.getX(), ol.getY(), ol.getZ());
@@ -429,7 +432,9 @@ public class JetPack {
                 }
             }
         };
-        task.runTaskTimer(Main.getPlugin(), 0, 1);
+        if (player.hasPotionEffect(PotionEffectType.LUCK)) {
+            task.runTaskTimer(Main.getPlugin(), 0, 1);
+        }
         
         BukkitRunnable cooltime = new BukkitRunnable(){
             @Override

@@ -170,6 +170,9 @@ public class Blaster {
                                 damage = data.getWeaponClass().getMainWeapon().getBlasterExDamage();
                             else
                                 damage = (maxDist + 1 - target.getLocation().distance(inkball.getLocation())) * data.getWeaponClass().getMainWeapon().getBlasterExDamage();
+                            if(damage >data.getWeaponClass().getMainWeapon().getDamage()){
+                                damage = data.getWeaponClass().getMainWeapon().getDamage();
+                            }
                             if(DataMgr.getPlayerData(player).getTeam() != DataMgr.getPlayerData(target).getTeam() && target.getGameMode().equals(GameMode.ADVENTURE)){
                                 Sclat.giveDamage(player, target, damage, "killed");
 
@@ -193,6 +196,9 @@ public class Blaster {
                         if(as instanceof ArmorStand){
                             if (as.getLocation().distanceSquared(inkball.getLocation()) <= (maxDist + 1)*(maxDist + 1)) {
                                 double damage = (maxDist + 1 - as.getLocation().distance(inkball.getLocation())) * data.getWeaponClass().getMainWeapon().getBlasterExDamage();
+                                if(damage >data.getWeaponClass().getMainWeapon().getDamage()){
+                                    damage = data.getWeaponClass().getMainWeapon().getDamage();
+                                }
                                 ArmorStandMgr.giveDamageArmorStand((ArmorStand)as, damage, p);
                             }
                         }

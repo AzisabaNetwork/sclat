@@ -631,6 +631,9 @@ public class GameMgr implements Listener{
                     case "[ LootBoxInfo ]":
                         LootBox.LootBoxInfo(player);
                         break;
+                    case "[ GiftForYou ]":
+                        LootBox.GiftWeapon(player);
+                        break;
                     case "[ give chest ]":
                         PlayerStatusMgr.setTutorialState(player.getUniqueId().toString(),2);
                         ItemStack chest = new ItemStack(Material.CHEST);

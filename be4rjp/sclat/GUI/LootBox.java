@@ -158,4 +158,13 @@ public class LootBox {
         shooter.setItem(slotnum, paper);
         player.openInventory(shooter);
     }
+    public static void GiftWeapon(Player player){
+        String ClassName = "バレンタインチョコ[義理]";
+        if(!PlayerStatusMgr.haveWeapon(player, ClassName)){
+            PlayerStatusMgr.addWeapon(player, ClassName);
+            Sclat.sendMessage(ChatColor.GREEN + ClassName + "が手に入ったよ", MessageType.PLAYER, player);
+        }else{
+            Sclat.sendMessage(ChatColor.GREEN + ClassName +"はすでに持っているよ", MessageType.PLAYER, player);
+        }
+    }
 }
