@@ -78,20 +78,22 @@ public class LootBox {
         double nextLootpro=0;
         for (String ClassName : conf.getClassConfig().getConfigurationSection("WeaponClass").getKeys(false)) {
             if(DataMgr.getWeaponClass(ClassName).getMainWeapon().getIslootbox()) {
-                ItemStack item = new ItemStack(DataMgr.getWeaponClass(ClassName).getMainWeapon().getWeaponIteamStack());
-                ItemMeta itemm = item.getItemMeta();
-                itemm.setDisplayName(ClassName);
                 double Lootpro=DataMgr.getWeaponClass(ClassName).getMainWeapon().getLootpro();
-                List lores = new ArrayList();
-                lores.add("§r§6SubWeapon : " + conf.getClassConfig().getString("WeaponClass." + ClassName + ".SubWeaponName"));
-                lores.add("§r§6SPWeapon  : " + conf.getClassConfig().getString("WeaponClass." + ClassName + ".SPWeaponName"));
-                lores.add("");
-                lores.add("§r§b : " + String.valueOf(Lootpro) + "％");
-                itemm.setLore(lores);
-                item.setItemMeta(itemm);
-                shooter.setItem(slotnum, item);
-                slotnum += 1;
-                nextLootpro += Lootpro;
+                if(Lootpro!=0) {
+                    ItemStack item = new ItemStack(DataMgr.getWeaponClass(ClassName).getMainWeapon().getWeaponIteamStack());
+                    ItemMeta itemm = item.getItemMeta();
+                    itemm.setDisplayName(ClassName);
+                    List lores = new ArrayList();
+                    lores.add("§r§6SubWeapon : " + conf.getClassConfig().getString("WeaponClass." + ClassName + ".SubWeaponName"));
+                    lores.add("§r§6SPWeapon  : " + conf.getClassConfig().getString("WeaponClass." + ClassName + ".SPWeaponName"));
+                    lores.add("");
+                    lores.add("§r§b : " + String.valueOf(Lootpro) + "％");
+                    itemm.setLore(lores);
+                    item.setItemMeta(itemm);
+                    shooter.setItem(slotnum, item);
+                    slotnum += 1;
+                    nextLootpro += Lootpro;
+                }
             }
         }
         for(int i=1;i<=5;i+=1){
