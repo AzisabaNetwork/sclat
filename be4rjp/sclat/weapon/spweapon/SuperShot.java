@@ -78,8 +78,18 @@ public class SuperShot {
     
     public static void Shot(Player player){
         if(player.hasPotionEffect(PotionEffectType.LUCK)) {
-            player.getWorld().playSound(player.getLocation(), Sound.ENTITY_PLAYER_ATTACK_STRONG, 1.5F, 1.2F);
-            player.getWorld().playSound(player.getLocation(), Sound.ENTITY_WITHER_SHOOT, 0.3F, 2F);
+            Vector direction = new Vector(0, 1, 0);
+            double headdis = 8.5;
+            Location playerLocation = player.getLocation();
+            while(headdis>3){
+                if(player.getWorld().rayTraceBlocks(playerLocation, direction, headdis)!=null){
+                    headdis -= 1;
+                }else{
+                    break;
+                }
+            }
+            player.getWorld().playSound(playerLocation, Sound.ENTITY_PLAYER_ATTACK_STRONG, 1.5F, 1.2F);
+            player.getWorld().playSound(playerLocation, Sound.ENTITY_WITHER_SHOOT, 0.3F, 2F);
 
             Location ploc = player.getEyeLocation().add(0, -1.5, 0);
             Vector pvec = player.getEyeLocation().getDirection();
@@ -97,7 +107,7 @@ public class SuperShot {
 
             player.setVelocity(vec.clone().multiply(-0.5));
 
-            for (double y = 0; y <= 8.5; y += 0.5) {
+            for (double y = 0; y <= headdis; y += 0.5) {
                 ShootSnowball(player, loc1.clone().add(0, y, 0), vec.clone().normalize().multiply(1.8));
                 ShootSnowball(player, loc3.clone().add(0, y, 0), vec.clone().normalize().multiply(1.8));
                 ShootSnowball(player, loc4.clone().add(0, y, 0), vec.clone().normalize().multiply(1.8));
