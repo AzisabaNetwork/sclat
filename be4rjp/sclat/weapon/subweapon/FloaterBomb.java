@@ -53,7 +53,7 @@ public class FloaterBomb {
                             p_vec =p_vec.normalize().multiply(0.95);
                         }
                         if(!DataMgr.getPlayerData(player).getIsBombRush())
-                            p.setExp(p.getExp() - 0.50F);
+                            p.setExp(p.getExp() - 0.47F);
                         ItemStack bom = new ItemStack(DataMgr.getPlayerData(p).getTeam().getTeamColor().getWool()).clone();
                         ItemMeta bom_m = bom.getItemMeta();
                         bom_m.setLocalizedName(String.valueOf(Main.getNotDuplicateNumber()));
@@ -152,7 +152,7 @@ public class FloaterBomb {
                             if (target.getLocation().distance(drop.getLocation()) <= maxDist) {
                                 double damage = (maxDist - target.getLocation().distance(drop.getLocation())*0.7) * ExDamage * Gear.getGearInfluence(player, Gear.Type.SUB_SPEC_UP);
                                 if(!turn){
-                                    damage = damage * 0.3;
+                                    damage = damage * 0.9;
                                 }
                                 if(DataMgr.getPlayerData(player).getTeam() != DataMgr.getPlayerData(target).getTeam() && target.getGameMode().equals(GameMode.ADVENTURE)){
                                     Sclat.giveDamage(player, target, damage, "subWeapon");
@@ -177,7 +177,7 @@ public class FloaterBomb {
                                 if(as instanceof ArmorStand){
                                     double damage = (maxDist - as.getLocation().distance(drop.getLocation())*0.7) * ExDamage * Gear.getGearInfluence(p, Gear.Type.SUB_SPEC_UP);
                                     if(!turn){
-                                        damage = damage * 0.3;
+                                        damage = damage * 0.9;
                                     }
                                     ArmorStandMgr.giveDamageArmorStand((ArmorStand)as, damage, p);
                                     if(as.getCustomName() != null){
@@ -230,7 +230,7 @@ public class FloaterBomb {
         };
         cooltime.runTaskLater(Main.getPlugin(), 10);
                 
-        if(player.getExp() > 0.51 || DataMgr.getPlayerData(player).getIsBombRush())
+        if(player.getExp() > 0.48 || DataMgr.getPlayerData(player).getIsBombRush())
             task.runTaskTimer(Main.getPlugin(), 0, 1);
         else{
             player.sendTitle("", ChatColor.RED + "インクが足りません", 0, 5, 2);

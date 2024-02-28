@@ -104,7 +104,7 @@ public class CurlingBomb {
                             ((CraftPlayer)o_player).getHandle().playerConnection.sendPacket(new PacketPlayOutEntityEquipment(as3.getEntityId(), EnumItemSlot.HEAD, CraftItemStack.asNMSCopy(new ItemStack(DataMgr.getPlayerData(player).getTeam().getTeamColor().getWool()))));
                     }
 
-                    if(i >= 80 && i <= 90){
+                    if(i >= 70 && i <= 80){
                         if(i % 2 == 0)
                             player.getWorld().playSound(as1l, Sound.BLOCK_NOTE_BLOCK_PLING, 1F, 1.6F);
                     }
@@ -156,9 +156,9 @@ public class CurlingBomb {
                         }
                     }
 
-                    if(i == 100 || !player.isOnline() || !DataMgr.getPlayerData(player).isInMatch()){
+                    if(i == 90 || !player.isOnline() || !DataMgr.getPlayerData(player).isInMatch()){
                         //半径
-                        double maxDist = 4;
+                        double maxDist = 3;
 
                         //爆発音
                         player.getWorld().playSound(as1l, Sound.ENTITY_FIREWORK_ROCKET_BLAST, 1, 1);
@@ -215,7 +215,7 @@ public class CurlingBomb {
                             if(!DataMgr.getPlayerData(target).isInMatch() || target.getWorld() != player.getWorld())
                                 continue;
                             if (target.getLocation().distance(as1l) <= maxDist) {
-                                double damage = (maxDist - target.getLocation().distance(as1l)) * 5 * Gear.getGearInfluence(player, Gear.Type.SUB_SPEC_UP);
+                                double damage = (maxDist - target.getLocation().distance(as1l)) * 4 * Gear.getGearInfluence(player, Gear.Type.SUB_SPEC_UP);
                                 if(DataMgr.getPlayerData(player).getTeam() != DataMgr.getPlayerData(target).getTeam() && target.getGameMode().equals(GameMode.ADVENTURE)){
                                     Sclat.giveDamage(player, target, damage, "subWeapon");
 

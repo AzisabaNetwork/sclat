@@ -34,6 +34,10 @@ public class SubWeaponMgr {
                 is = new ItemStack(data.getTeam().getTeamColor().getWool());
                 ism = is.getItemMeta();
                 ism.setDisplayName("クイックボム");
+            case "ブラインダー":
+                is = new ItemStack(Material.IRON_NUGGET);
+                ism = is.getItemMeta();
+                ism.setDisplayName("ブラインダー");
                 break;
             case "フローターボム":
                 is = new ItemStack(data.getTeam().getTeamColor().getWool());
@@ -127,6 +131,10 @@ public class SubWeaponMgr {
                 break;
             case "クイックボム":
                 QuickBomb.QuickBomRunnable(player);
+                data.setCanUseSubWeapon(false);
+                break;
+            case "ブラインダー":
+                Blinder.BlinderRunnable(player);
                 data.setCanUseSubWeapon(false);
                 break;
             case "フローターボム":

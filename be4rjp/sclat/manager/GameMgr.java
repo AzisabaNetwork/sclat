@@ -214,6 +214,9 @@ public class GameMgr implements Listener{
                                     ArmorStandMgr.BeaconArmorStandSetup(p);
                                 if(DataMgr.getPlayerData(p).getWeaponClass().getSubWeaponName().equals("スプリンクラー"))
                                     ArmorStandMgr.SprinklerArmorStandSetup(p);
+                                if(DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getIsSwap()){
+                                    Swapper.SwapperRunnable(p);
+                                }
                                 if(DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getWeaponType().equals("Shooter")){
                                     Shooter.ShooterRunnable(p);
                                     if(DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getIsManeuver()){

@@ -46,9 +46,10 @@ public class Slosher {
         BukkitRunnable delay = new BukkitRunnable(){
             Player p = player;
             @Override
-            public void run(){
-                //for (int i = 0; i < data.getWeaponClass().getMainWeapon().getRollerShootQuantity(); i++) 
+            public void run() {
+                for (int i = 0; i < data.getWeaponClass().getMainWeapon().getRollerShootQuantity(); i++){
                     Slosher.Shoot(player, null);
+                }
             }
         };
         if(data.getCanRollerShoot()){

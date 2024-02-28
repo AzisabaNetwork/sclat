@@ -170,7 +170,7 @@ public class Poison {
         };
         cooltime.runTaskLater(Main.getPlugin(), 8);
                 
-        if(player.getExp() > 0.3 || DataMgr.getPlayerData(player).getIsBombRush())
+        if(player.getExp() > 0.4 || DataMgr.getPlayerData(player).getIsBombRush())
             task.runTaskTimer(Main.getPlugin(), 0, 1);
         else{
             player.sendTitle("", ChatColor.RED + "インクが足りません", 0, 5, 2);
@@ -185,6 +185,6 @@ public class Poison {
                 DataMgr.getPlayerData(player).setPoison(false);
             }
         };
-        cooltime.runTaskLater(Main.getPlugin(), 180);
+        cooltime.runTaskLater(Main.getPlugin(), 80);
     }
 }

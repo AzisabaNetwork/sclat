@@ -640,6 +640,9 @@ public class MatchMgr {
 
 
 
+                    if(DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getIsSwap()){
+                        Swapper.SwapperRunnable(p);
+                    }
                     if(DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getWeaponType().equals("Shooter")){
                         Shooter.ShooterRunnable(p);
                         if(DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getIsManeuver()){

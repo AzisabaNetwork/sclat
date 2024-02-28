@@ -68,6 +68,7 @@ public class PlayerData {
     private float fov = 0.1F;
     private ArrayList<ArmorStand> Armorlist = new ArrayList<>();
     private Player lastAttack = player;
+    private boolean stoprun = false;
 
     
     public PlayerData(Player player){this.player = player;}
@@ -175,6 +176,7 @@ public class PlayerData {
     public float getFov() {return fov;}
     public ArmorStand getArmorlist(int n) {return this.Armorlist.get(n);}
     public Player getLastAttack() {return this.lastAttack;}
+    public boolean getStoprun() {return this.stoprun;}
     
     
     public void setSettings(PlayerSettings settings){this.settings = settings;}
@@ -273,6 +275,7 @@ public class PlayerData {
     public void setArmorlist(ArmorStand n) {this.Armorlist.add(n);}
     public void subArmorlist(ArmorStand n) {this.Armorlist.remove(n);}
     public void setLastAttack(Player p) {this.lastAttack = p;}
+    public void setStoprun(boolean b){this.stoprun = b;}
     
     public void reflectionDoChargeKeep(){this.doChargeKeep = !this.doChargeKeep;}
     
@@ -324,6 +327,7 @@ public class PlayerData {
         this.speed = 0;
         this.fov = 0.1F;
         this.Armorlist = new ArrayList<>();
+        this.stoprun = false;
     }
     
 }

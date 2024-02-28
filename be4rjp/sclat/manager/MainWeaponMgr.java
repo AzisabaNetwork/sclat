@@ -149,6 +149,12 @@ public class MainWeaponMgr {
             if(conf.getWeaponConfig().contains("MainWeapon." + weaponname + ".LootPro")) {//ガチャ武器用排出率
                 mw.setLootpro(conf.getWeaponConfig().getDouble("MainWeapon." + weaponname + ".LootPro"));
             }
+            if(conf.getWeaponConfig().contains("MainWeapon." + weaponname + ".IsSwapper")) {//スワッパ―判別
+                mw.setIsSwap(conf.getWeaponConfig().getBoolean("MainWeapon." + weaponname + ".IsSwapper"));
+            }
+            if(conf.getWeaponConfig().contains("MainWeapon." + weaponname + ".SwapWeapon")) {//スワッパ―スワップ先
+                mw.setSwap(conf.getWeaponConfig().getString("MainWeapon." + weaponname + ".SwapWeapon"));
+            }
             DataMgr.setMainWeapon(weaponname, mw);
         }
     }
