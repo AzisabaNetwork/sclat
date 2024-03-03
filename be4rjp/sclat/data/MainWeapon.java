@@ -52,14 +52,9 @@ public class MainWeapon {
     private double  lootpro= 0;//ガチャ排出率
 
 
-    //スワッパー試作
+    //スワッパー
     private String swap = "";
     private boolean isswaper = false;
-    public String getSwap(){return swap;}
-    public boolean getIsSwap(){return isswaper;}
-    public void setSwap(String swapweapon){this.swap = swapweapon;}
-    public void setIsSwap(boolean Isswap){this.isswaper = Isswap;}
-    //スワップ試作終了
     public MainWeapon(String weaponname){this.WeaponName = weaponname;}
     
     public String getWeaponType(){return this.WeaponType;}
@@ -143,6 +138,8 @@ public class MainWeapon {
     public boolean getIslootbox(){return this.islootbox;}//ガチャ武器かどうかを返す
 
     public double getLootpro(){return this.lootpro;}//排出率を返す
+    public String getSwap(){return swap;}
+    public boolean getIsSwap(){return isswaper;}
     
     public void setWeaponType(String WT){this.WeaponType = WT;}
     
@@ -225,4 +222,7 @@ public class MainWeapon {
     public void setIslootbox(boolean isloot){this.islootbox = isloot;}//ガチャ武器かどうかを返す
 
     public void setLootpro(double pro){this.lootpro = pro;}//排出率を返す
+
+    public void setSwap(String swapweapon){this.swap = swapweapon;}
+    public void setIsSwap(boolean Isswap){this.isswaper = Isswap;}
 }

@@ -186,7 +186,7 @@ public class Hound {
                         Sclat.createInkExplosionEffect(as1l, maxDist, 15, player);
 
                         //バリアをはじく
-                        Sclat.repelBarrier(as1l, maxDist, player);
+                        Sclat.repelBarrier(as1l, (int)(maxDist/2), player);
 
                         //塗る
                         for(int i = 0; i <= maxDist; i++){

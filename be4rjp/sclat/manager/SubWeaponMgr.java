@@ -34,6 +34,7 @@ public class SubWeaponMgr {
                 is = new ItemStack(data.getTeam().getTeamColor().getWool());
                 ism = is.getItemMeta();
                 ism.setDisplayName("クイックボム");
+                break;
             case "ブラインダー":
                 is = new ItemStack(Material.IRON_NUGGET);
                 ism = is.getItemMeta();
