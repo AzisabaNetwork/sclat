@@ -117,9 +117,9 @@ public class OpenGUI {
         }
         
         if(Main.type == ServerType.LOBBY){
-            ItemStack b = new ItemStack(Material.OAK_DOOR);
+            ItemStack b = new ItemStack(Material.EGG);
             ItemMeta bmeta = b.getItemMeta();
-            bmeta.setDisplayName("JGへ戻る / RETURN TO JG");
+            bmeta.setDisplayName("ガチャを引く / ROLL A GACHA");
             b.setItemMeta(bmeta);
             inv.setItem(34, b);
         }

@@ -143,6 +143,7 @@ public class DeathMgr {
                             t.setHealth(20);
                             DataMgr.getPlayerData(t).setLastAttack(t);
                             WeaponClassMgr.setWeaponClass(t);
+                            BarrierEffectRunnable(t,120);
                             SuperArmor.setArmor(t, Double.MAX_VALUE, 120, false);
                             if(DataMgr.getPlayerData(t).getSPGauge() == 100)
                                 SPWeaponMgr.setSPWeapon(t);
@@ -192,6 +193,7 @@ public class DeathMgr {
                             t.setHealth(20);
                             DataMgr.getPlayerData(t).setLastAttack(t);
                             WeaponClassMgr.setWeaponClass(t);
+                            BarrierEffectRunnable(t,120);
                             SuperArmor.setArmor(t, Double.MAX_VALUE, 120, false);
                             if(DataMgr.getPlayerData(t).getSPGauge() == 100)
                                 SPWeaponMgr.setSPWeapon(t);
@@ -241,6 +243,7 @@ public class DeathMgr {
                             t.setHealth(20);
                             DataMgr.getPlayerData(t).setLastAttack(t);
                             WeaponClassMgr.setWeaponClass(t);
+                            BarrierEffectRunnable(t,120);
                             SuperArmor.setArmor(t, Double.MAX_VALUE, 120, false);
                             if(DataMgr.getPlayerData(t).getSPGauge() == 100)
                                 SPWeaponMgr.setSPWeapon(t);
@@ -291,6 +294,7 @@ public class DeathMgr {
                             t.setHealth(20);
                             DataMgr.getPlayerData(t).setLastAttack(t);
                             WeaponClassMgr.setWeaponClass(t);
+                            BarrierEffectRunnable(t,120);
                             SuperArmor.setArmor(t, Double.MAX_VALUE, 120, false);
                             if(DataMgr.getPlayerData(t).getSPGauge() == 100)
                                 SPWeaponMgr.setSPWeapon(t);
@@ -340,6 +344,7 @@ public class DeathMgr {
                             t.setHealth(20);
                             DataMgr.getPlayerData(t).setLastAttack(t);
                             WeaponClassMgr.setWeaponClass(t);
+                            BarrierEffectRunnable(t,120);
                             SuperArmor.setArmor(t, Double.MAX_VALUE, 120, false);
                             if(DataMgr.getPlayerData(t).getSPGauge() == 100)
                                 SPWeaponMgr.setSPWeapon(t);
@@ -370,5 +375,40 @@ public class DeathMgr {
             }
         };
         task.runTaskTimer(Main.getPlugin(), 0, 1);
+    }
+    public static void BarrierEffectRunnable(Player player,int time){
+        int resettime = time/4;
+        PlayerData data = DataMgr.getPlayerData(player);
+
+        //エフェクト
+        BukkitRunnable task = new BukkitRunnable(){
+            Player p = player;
+            int c = 0;
+            @Override
+            public void run(){
+                if(!data.isInMatch() || !player.getGameMode().equals(GameMode.ADVENTURE) || !p.isOnline()){
+                    cancel();
+                }
+                Location loc = p.getLocation().add(0, 0.5, 0);
+
+
+                List<Location> s_locs = Sphere.getSphere(loc, 2, 23);
+                for (Player o_player : Main.getPlugin().getServer().getOnlinePlayers()) {
+                    if(DataMgr.getPlayerData(o_player).getSettings().ShowEffect_SPWeapon() && !o_player.equals(player)){
+                        Particle.DustOptions dustOptions = new Particle.DustOptions(data.getTeam().getTeamColor().getBukkitColor(), 1);
+                        org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).getTeam().getTeamColor().getWool().createBlockData();
+                        for(Location e_loc : s_locs)
+                            if(o_player.getWorld() == e_loc.getWorld())
+                                if(o_player.getLocation().distanceSquared(e_loc) < Main.PARTICLE_RENDER_DISTANCE_SQUARED)
+                                    o_player.spawnParticle(Particle.REDSTONE, e_loc, 0, 0, 0, 0, 70, dustOptions);
+                    }
+                }
+                if(c >= resettime){
+                    cancel();
+                }
+                c++;
+            }
+        };
+        task.runTaskTimer(Main.getPlugin(), 0, 4);
     }
 }

@@ -261,7 +261,7 @@ public class MegaLaser {
                                 if(playerData.getTeam() != targetData.getTeam() && target.getGameMode().equals(GameMode.ADVENTURE)){
                                     
                                     if(targetData.getArmor() > 10000.0 && target.getGameMode() != GameMode.SPECTATOR){
-                                        target.setVelocity(direction.clone().multiply(2.0));
+                                        target.setVelocity(new Vector(direction.getX(), 0, direction.getZ()).multiply(2.0));
                                         target.getWorld().playSound(target.getLocation(), Sound.ENTITY_SPLASH_POTION_BREAK, 1F, 1.5F);
                                     }
                                     

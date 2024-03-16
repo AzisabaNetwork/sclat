@@ -318,25 +318,49 @@ public class SPWeaponMgr {
                         SuperArmor.setArmor(op, 20, 80, true);
                     }
                 }
-                player.getInventory().setItem(4, new ItemStack(Material.AIR));
+                for(int inventnum = 0; inventnum<8; inventnum++) {
+                    if (player.getInventory().getItem(inventnum) != null) {
+                        if (player.getInventory().getItem(inventnum).getType() == Material.TOTEM_OF_UNDYING) {
+                            player.getInventory().setItem(inventnum, new ItemStack(Material.AIR));
+                        }
+                    }
+                }
                 player.setExp(0.99F);
                 player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_USE, 1, 2);
                 break;
             case "バリア":
                 Barrier.BarrierRunnable(player);
-                player.getInventory().setItem(4, new ItemStack(Material.AIR));
+                for(int inventnum = 0; inventnum<8; inventnum++) {
+                    if (player.getInventory().getItem(inventnum) != null) {
+                        if (player.getInventory().getItem(inventnum).getType() == Material.END_CRYSTAL) {
+                            player.getInventory().setItem(inventnum, new ItemStack(Material.AIR));
+                        }
+                    }
+                }
                 player.setExp(0.99F);
                 player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_USE, 1, 2);
                 break;
             case "ボムラッシュ":
                 BombRush.BombRushRunnable(player);
-                player.getInventory().setItem(4, new ItemStack(Material.AIR));
+                for(int inventnum = 0; inventnum<8; inventnum++) {
+                    if (player.getInventory().getItem(inventnum) != null) {
+                        if (player.getInventory().getItem(inventnum).getType() == Material.FEATHER) {
+                            player.getInventory().setItem(inventnum, new ItemStack(Material.AIR));
+                        }
+                    }
+                }
                 player.setExp(0.99F);
                 player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_USE, 1, 2);
                 break;
             case "スーパーセンサー":
                 SuperSensor.SuperSensorRunnable(player);
-                player.getInventory().setItem(4, new ItemStack(Material.AIR));
+                for(int inventnum = 0; inventnum<8; inventnum++) {
+                    if (player.getInventory().getItem(inventnum) != null) {
+                        if (player.getInventory().getItem(inventnum).getType() == Material.NETHER_STAR) {
+                            player.getInventory().setItem(inventnum, new ItemStack(Material.AIR));
+                        }
+                    }
+                }
                 player.setExp(0.99F);
                 player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_USE, 1, 2);
                 break;
@@ -348,7 +372,13 @@ public class SPWeaponMgr {
                 break;
             case "アメフラシ":
                 Amehurasi.AmehurasiDropRunnable(player);
-                player.getInventory().setItem(4, new ItemStack(Material.AIR));
+                for(int inventnum = 0; inventnum<8; inventnum++) {
+                    if (player.getInventory().getItem(inventnum) != null) {
+                        if (player.getInventory().getItem(inventnum).getType() == Material.BEACON) {
+                            player.getInventory().setItem(inventnum, new ItemStack(Material.AIR));
+                        }
+                    }
+                }
                 player.setExp(0.99F);
                 player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_USE, 1, 2);
                 break;

@@ -161,11 +161,11 @@ public class Hound {
                         heightdiff=as1.getLocation().getY()-saveY;
                         if(heightdiff>7.9){
                             maxDist=data.getWeaponClass().getMainWeapon().getBlasterExHankei()+2;
-                        }else if(1.8<heightdiff&&heightdiff<7.9){
+                        }else if(1.8<heightdiff&&heightdiff<=7.9){
                             maxDist=data.getWeaponClass().getMainWeapon().getBlasterExHankei()+1;
-                        }else if(-2.5<=heightdiff&&heightdiff<=1.8){
+                        }else if(-1.5<=heightdiff&&heightdiff<=1.8){
                             maxDist=data.getWeaponClass().getMainWeapon().getBlasterExHankei();
-                        }else if(-10<=heightdiff&&heightdiff<-2.5){
+                        }else if(-10<=heightdiff&&heightdiff<-1.5){
                             maxDist=data.getWeaponClass().getMainWeapon().getBlasterExHankei()-1;
                             if(maxDist<=0){
                                 maxDist=1;
@@ -301,17 +301,17 @@ public class Hound {
         if(7.9<heightDiff){
             return mag * dm * 0.7 + dm*1.7;
         }else if(3.9<heightDiff&&heightDiff<=7.9){
-            return mag * dm * 0.8 + dm*1.1;
+            return mag * dm * 0.8 + dm*0.9;
         }else if(1.8<heightDiff&&heightDiff<=3.9){
-            return mag * dm * 0.9 + dm*0.2;
-        }else if(-2.5<=heightDiff&&heightDiff<=1.8){
-            return mag * dm * 0.95 + dm*0.52;
-        }else if(-5<=heightDiff&&heightDiff<-2.5){
-            return mag * dm + dm*0.7;
+            return mag * dm * 0.8 + dm*0.1;
+        }else if(-1.5<=heightDiff&&heightDiff<=1.8){
+            return mag * dm * 0.9 + dm*0.15;
+        }else if(-5<=heightDiff&&heightDiff<-1.5){
+            return mag * dm * 0.5 + dm*0.1;
         }else if(-10<=heightDiff&&heightDiff<-5){
-            return mag * dm + dm*0.2;
+            return mag * dm * 0.3;
         }else if(heightDiff<-10){
-            return mag * dm;
+            return mag * dm * 0.2;
         }else {
             return 0;
         }

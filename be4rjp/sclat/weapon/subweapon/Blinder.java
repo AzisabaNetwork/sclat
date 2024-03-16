@@ -33,7 +33,9 @@ public class Blinder {
         };
         cooltime.runTaskLater(Main.getPlugin(), 8);
         if (p.getExp() > 0.36f || DataMgr.getPlayerData(player).getIsBombRush()) {
-            p.setExp(player.getExp()-0.35f);
+            if(!DataMgr.getPlayerData(player).getIsBombRush()) {
+                p.setExp(player.getExp() - 0.35f);
+            }
             Shootblind(p, reach);
         }
         else{
@@ -45,7 +47,6 @@ public class Blinder {
         if(player.getGameMode() == GameMode.SPECTATOR) return;
         RayTrace rayTrace = new RayTrace(player.getEyeLocation().toVector(),player.getEyeLocation().getDirection());
         ArrayList<Vector> positions = rayTrace.traverse(reach, 0.15);
-        player.sendMessage("最大射程は"+positions.size());
         loop : for(int i = 0; i < positions.size();i++){
 
             Location position = positions.get(i).toLocation(player.getLocation().getWorld());
@@ -79,7 +80,6 @@ public class Blinder {
                         if(rayTrace.intersects(new BoundingBox((Entity)target), reach, 0.2)){
                             String Weapontype =DataMgr.getPlayerData(target).getWeaponClass().getMainWeapon().getWeaponType();
                             int effecttime = 40;
-                            player.sendMessage("命中射程は"+i);
                             if(Weapontype.equals("Charger")||Weapontype.equals("Spinner")||DataMgr.getPlayerData(target).getWeaponClass().getMainWeapon().getIsManeuver()){
                                 effecttime += 25;
                             }else if(Weapontype.equals("Blaster")||Weapontype.equals("Hound")){

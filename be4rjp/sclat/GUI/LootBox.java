@@ -18,11 +18,11 @@ import java.util.List;
 import static be4rjp.sclat.Main.conf;
 
 public class LootBox {
-    private static int Firstprize =5000;
-    private static int Secondprize =1000;
-    private static int Thirdprize =500;
-    private static int Fourthprize =100;
-    private static int Fifthprize =10;
+    private static final int Firstprize =3000;
+    private static final int Secondprize =1000;
+    private static final int Thirdprize =500;
+    private static final int Fourthprize =200;
+    private static final int Fifthprize =50;
     public static void turnLootBox(Player player){
         if (PlayerStatusMgr.getTicket(player)<10){
             Sclat.sendMessage(ChatColor.RED + "ガチャを引くには1回10Ticket必要です", MessageType.PLAYER, player);
@@ -41,26 +41,26 @@ public class LootBox {
                         PlayerStatusMgr.addWeapon(player, ClassName);
                         Sclat.sendMessage(ChatColor.GREEN + ClassName + "が当たったよ、おめでとう！", MessageType.PLAYER, player);
                     }else{
-                        Sclat.sendMessage(ChatColor.GREEN + ClassName +"が重複したよ +" + Secondprize + "coin", MessageType.PLAYER, player);
-                        PlayerStatusMgr.addMoney(player, Secondprize);
+                        Sclat.sendMessage(ChatColor.GREEN + ClassName +"が重複したよ +" + Firstprize + "coin", MessageType.PLAYER, player);
+                        PlayerStatusMgr.addMoney(player, Firstprize);
                     }
                 }
                 nextLootSeed += lootpro;
             }
         }
-        if(nextLootSeed<0.5 && !isHit && LootSeed<0.5){
+        if(nextLootSeed<5 && !isHit && LootSeed<5){
             isHit=true;
             PlayerStatusMgr.addMoney(player, Firstprize);
             Sclat.sendMessage(ChatColor.GREEN + "「1等!」おめでとう! +" + Firstprize + "coin", MessageType.PLAYER, player);
-        }else if(nextLootSeed<5 && !isHit && LootSeed<5){
+        }else if(nextLootSeed<10 && !isHit && LootSeed<10){
             isHit=true;
             PlayerStatusMgr.addMoney(player, Secondprize);
             Sclat.sendMessage(ChatColor.GREEN + "「2等!」ラッキー! +" + Secondprize + "coin", MessageType.PLAYER, player);
-        }else if(nextLootSeed<20 && !isHit && LootSeed<20){
+        }else if(nextLootSeed<30 && !isHit && LootSeed<30){
             isHit=true;
             PlayerStatusMgr.addMoney(player, Thirdprize);
             Sclat.sendMessage(ChatColor.GREEN + "「3等」 +" + Thirdprize + "coin", MessageType.PLAYER, player);
-        }else if(nextLootSeed<50 && !isHit && LootSeed<50){
+        }else if(nextLootSeed<70 && !isHit && LootSeed<70){
             isHit=true;
             PlayerStatusMgr.addMoney(player, Fourthprize);
             Sclat.sendMessage(ChatColor.GREEN + "「4等」 +" + Fourthprize + "coin", MessageType.PLAYER, player);
@@ -103,15 +103,6 @@ public class LootBox {
             switch (i){
                 case 1:
                     pmeta.setDisplayName("1等 "+Firstprize+"coin");
-                    if(0.5 - nextLootpro>0) {
-                        paperlores.add((0.5 - nextLootpro) + "％");
-                        nextLootpro = 0.5;
-                    }else{
-                        paperlores.add("0％");
-                    }
-                    break;
-                case 2:
-                    pmeta.setDisplayName("2等 "+Secondprize+"coin");
                     if(5 - nextLootpro>0) {
                         paperlores.add((5 - nextLootpro) + "％");
                         nextLootpro = 5;
@@ -119,20 +110,29 @@ public class LootBox {
                         paperlores.add("0％");
                     }
                     break;
+                case 2:
+                    pmeta.setDisplayName("2等 "+Secondprize+"coin");
+                    if(10 - nextLootpro>0) {
+                        paperlores.add((10 - nextLootpro) + "％");
+                        nextLootpro = 10;
+                    }else{
+                        paperlores.add("0％");
+                    }
+                    break;
                 case 3:
                     pmeta.setDisplayName("3等 "+Thirdprize+"coin");
-                    if(20 - nextLootpro>0) {
-                        paperlores.add((20 - nextLootpro) + "％");
-                        nextLootpro = 20;
+                    if(30 - nextLootpro>0) {
+                        paperlores.add((30 - nextLootpro) + "％");
+                        nextLootpro = 30;
                     }else{
                         paperlores.add("0％");
                     }
                     break;
                 case 4:
                     pmeta.setDisplayName("4等 "+Fourthprize+"coin");
-                    if(50 - nextLootpro>0) {
-                        paperlores.add((50 - nextLootpro) + "％");
-                        nextLootpro = 50;
+                    if(70 - nextLootpro>0) {
+                        paperlores.add((70 - nextLootpro) + "％");
+                        nextLootpro = 70;
                     }else{
                         paperlores.add("0％");
                     }
