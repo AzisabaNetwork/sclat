@@ -602,7 +602,9 @@ public class GameMgr implements Listener{
                         OpenGUI.openMenu(player);
                         break;
                     case "Click to Download":
-                        player.setResourcePack(conf.getConfig().getString("ResourcePackURL"));
+                        //player.setResourcePack(conf.getConfig().getString("ResourcePackURL"));
+                        player.sendMessage("以下のURLからリソースパックをダウンロードしてください");
+                        player.sendMessage(conf.getConfig().getString("ResourcePackURL"));
                         break;
                     case "Click to Return":
                         BungeeCordMgr.PlayerSendServer(player, "lobby");

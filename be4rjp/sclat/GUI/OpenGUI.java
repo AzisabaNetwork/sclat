@@ -401,13 +401,21 @@ public class OpenGUI {
                         if(DataMgr.getWeaponClass(ClassName).getMainWeapon().getIsHude())
                             equals = false;
                     }
+                    if(weaponType.equals("Burst") && DataMgr.getWeaponClass(ClassName).getMainWeapon().getWeaponType().equals("Burst")){
+                        if(DataMgr.getWeaponClass(ClassName).getMainWeapon().getIsSwap())
+                            equals = false;
+                    }
     
                     if(weaponType.equals("Maneu") && DataMgr.getWeaponClass(ClassName).getMainWeapon().getWeaponType().equals("Shooter")){
                         if(DataMgr.getWeaponClass(ClassName).getMainWeapon().getIsManeuver())
                             equals = true;
                     }
+                    if(weaponType.equals("Swapper") && DataMgr.getWeaponClass(ClassName).getMainWeapon().getWeaponType().equals("Shooter")){
+                        if(DataMgr.getWeaponClass(ClassName).getMainWeapon().getIsSwap())
+                            equals = true;
+                    }
                     if(weaponType.equals("Shooter") && DataMgr.getWeaponClass(ClassName).getMainWeapon().getWeaponType().equals("Shooter")){
-                        if(DataMgr.getWeaponClass(ClassName).getMainWeapon().getIsManeuver())
+                        if(DataMgr.getWeaponClass(ClassName).getMainWeapon().getIsManeuver()||DataMgr.getWeaponClass(ClassName).getMainWeapon().getIsSwap())
                             equals = false;
                     }
     
@@ -521,6 +529,11 @@ public class OpenGUI {
                 hdm.setDisplayName("ハウンド");
                 hd.setItemMeta(hdm);
 
+                ItemStack swp = new ItemStack(Material.IRON_HORSE_ARMOR);
+                ItemMeta swpm = swp.getItemMeta();
+                swpm.setDisplayName("スワッパー");
+                swp.setItemMeta(swpm);
+
                 wm.setItem(0, s);
                 wm.setItem(1, b);
                 wm.setItem(2, ba);
@@ -532,6 +545,8 @@ public class OpenGUI {
                 wm.setItem(8, sp);
                 wm.setItem(9, m);
                 wm.setItem(10, hd);
+                wm.setItem(11, swp);
+
                 player.openInventory(wm);
     
                 ItemStack is = new ItemStack(Material.OAK_DOOR);

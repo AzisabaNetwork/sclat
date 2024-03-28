@@ -56,7 +56,7 @@ public class Swapper {
                                 }
                             };
                         swapset.runTaskLater(Main.getPlugin(), 5);
-                        task.runTaskLater(Main.getPlugin(), 45);
+                        task.runTaskLater(Main.getPlugin(), 80);
                     }
                 }
                 //loc = ploc;
