@@ -63,7 +63,7 @@ public class SnowballListener implements Listener {
                                 if (!DataMgr.getPlayerData(shooter).getIsUsingSP())
                                     SPWeaponMgr.addSPCharge(shooter);
                         
-                                Sclat.giveDamage(shooter, target, 30, "spWeapon");
+                                Sclat.giveDamage(shooter, target, 47, "spWeapon");
                             }
                         } else if (event.getHitEntity() instanceof ArmorStand) {
                             ArmorStand as = (ArmorStand) event.getHitEntity();
@@ -98,7 +98,7 @@ public class SnowballListener implements Listener {
                     
                             if(projectile.getCustomName().equals("SuperShot")){
                                 shooter.playSound(shooter.getLocation(), Sound.ENTITY_PLAYER_HURT, 0.5F, 1F);
-                                Sclat.giveDamage(shooter, target, 20, "spWeapon");
+                                Sclat.giveDamage(shooter, target, 47, "spWeapon");
                             }
                             if(projectile.getCustomName().contains("#QuadroArmsSpinner")){
                                 shooter.playSound(shooter.getLocation(), Sound.ENTITY_PLAYER_HURT, 0.5F, 1F);
@@ -450,7 +450,7 @@ public class SnowballListener implements Listener {
                             if (!DataMgr.getPlayerData(shooter).getIsUsingSP())
                                 SPWeaponMgr.addSPCharge(shooter);
             
-                            Sclat.giveDamage(shooter, target, 30, "spWeapon");
+                            Sclat.giveDamage(shooter, target, 47, "spWeapon");
                         }
                     } else if (event.getEntity() instanceof ArmorStand) {
                         ArmorStand as = (ArmorStand) event.getEntity();

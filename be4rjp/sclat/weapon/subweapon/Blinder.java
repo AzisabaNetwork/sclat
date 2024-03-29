@@ -84,7 +84,7 @@ public class Blinder {
                                 effecttime += 25;
                             }else if(Weapontype.equals("Blaster")||Weapontype.equals("Hound")){
                                 effecttime += 10;
-                            }else if(Weapontype.equals("Roller")||Weapontype.equals("Slosher")||Weapontype.equals("Bucket")||Weapontype.equals("Kasa")||Weapontype.equals("Camping")){
+                            }else if(Weapontype.equals("Roller")||Weapontype.equals("Slosher")||Weapontype.equals("Bucket")){
                                 effecttime -= 10;
                             }
                             if(DataMgr.getPlayerData(target).getIsUsingSP() || DataMgr.getPlayerData(target).getArmor()>0){

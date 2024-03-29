@@ -213,6 +213,7 @@ public class JetPack {
                     }
                     player.updateInventory();
                     player.addPotionEffect(new PotionEffect(PotionEffectType.LUCK, 176, 1));
+                    SuperArmor.setArmor(player, 1, 175, false);
 
                     WorldServer nmsWorld = ((CraftWorld) p.getWorld()).getHandle();
                     EntityArmorStand as = new EntityArmorStand(nmsWorld, ol.getX(), ol.getY(), ol.getZ());

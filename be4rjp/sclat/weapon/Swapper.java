@@ -30,7 +30,6 @@ public class Swapper {
                 //スワッパ―系
                 if(data.getWeaponClass().getMainWeapon().getIsSwap()){
                     if (data.getIsSneaking() && sw_recharge == true && p.getInventory().getItemInMainHand().getType().equals(data.getWeaponClass().getMainWeapon().getWeaponIteamStack().getType())) {
-                        player.sendMessage("スワップ起動");
                         data.setStoprun(true);
                         player.getInventory().clear();
                         p.getWorld().playSound(p.getLocation(), Sound.ITEM_ARMOR_EQUIP_GENERIC, 1.4F, 1.5F);
@@ -46,7 +45,6 @@ public class Swapper {
                                         Shooter.ShooterRunnable(p);
                                     }
                                     WeaponClassMgr.setWeaponClass(p);
-                                    player.sendMessage("スワップ完了");
                                 }
                         };
                         BukkitRunnable task = new BukkitRunnable() {//クールタイムを管理しています

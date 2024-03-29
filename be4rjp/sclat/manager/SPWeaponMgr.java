@@ -313,12 +313,12 @@ public class SPWeaponMgr {
         switch (name) {
             case "インクアーマー":
                 SuperArmor.setArmor(player, 30, 160, true);
-                for (Player op : Main.getPlugin().getServer().getOnlinePlayers()) {
-                    if(player != op && DataMgr.getPlayerData(player).getTeam() == DataMgr.getPlayerData(op).getTeam()){
-                        SuperArmor.setArmor(op, 20, 80, true);
-                    }
-                }
-                for(int inventnum = 0; inventnum<8; inventnum++) {
+                //for (Player op : Main.getPlugin().getServer().getOnlinePlayers()) {
+                //    if(player != op && DataMgr.getPlayerData(player).getTeam() == DataMgr.getPlayerData(op).getTeam()){
+                //        SuperArmor.setArmor(op, 20, 80, true);
+                //    }
+                //}
+                for(int inventnum = 0; inventnum<9; inventnum++) {
                     if (player.getInventory().getItem(inventnum) != null) {
                         if (player.getInventory().getItem(inventnum).getType() == Material.TOTEM_OF_UNDYING) {
                             player.getInventory().setItem(inventnum, new ItemStack(Material.AIR));
@@ -330,7 +330,7 @@ public class SPWeaponMgr {
                 break;
             case "バリア":
                 Barrier.BarrierRunnable(player);
-                for(int inventnum = 0; inventnum<8; inventnum++) {
+                for(int inventnum = 0; inventnum<9; inventnum++) {
                     if (player.getInventory().getItem(inventnum) != null) {
                         if (player.getInventory().getItem(inventnum).getType() == Material.END_CRYSTAL) {
                             player.getInventory().setItem(inventnum, new ItemStack(Material.AIR));
@@ -342,7 +342,7 @@ public class SPWeaponMgr {
                 break;
             case "ボムラッシュ":
                 BombRush.BombRushRunnable(player);
-                for(int inventnum = 0; inventnum<8; inventnum++) {
+                for(int inventnum = 0; inventnum<9; inventnum++) {
                     if (player.getInventory().getItem(inventnum) != null) {
                         if (player.getInventory().getItem(inventnum).getType() == Material.FEATHER) {
                             player.getInventory().setItem(inventnum, new ItemStack(Material.AIR));
@@ -354,7 +354,7 @@ public class SPWeaponMgr {
                 break;
             case "スーパーセンサー":
                 SuperSensor.SuperSensorRunnable(player);
-                for(int inventnum = 0; inventnum<8; inventnum++) {
+                for(int inventnum = 0; inventnum<9; inventnum++) {
                     if (player.getInventory().getItem(inventnum) != null) {
                         if (player.getInventory().getItem(inventnum).getType() == Material.NETHER_STAR) {
                             player.getInventory().setItem(inventnum, new ItemStack(Material.AIR));
@@ -372,7 +372,7 @@ public class SPWeaponMgr {
                 break;
             case "アメフラシ":
                 Amehurasi.AmehurasiDropRunnable(player);
-                for(int inventnum = 0; inventnum<8; inventnum++) {
+                for(int inventnum = 0; inventnum<9; inventnum++) {
                     if (player.getInventory().getItem(inventnum) != null) {
                         if (player.getInventory().getItem(inventnum).getType() == Material.BEACON) {
                             player.getInventory().setItem(inventnum, new ItemStack(Material.AIR));

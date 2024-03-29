@@ -342,13 +342,17 @@ public class Sclat {
     public static boolean giveDamage(Player player, Player target, double damage, String damageType){
         PlayerData targetData = DataMgr.getPlayerData(target);
         PlayerData playerData = DataMgr.getPlayerData(player);
-        
-        if(target.getHealth() + targetData.getArmor() > damage){
+        double armorHealth = targetData.getArmor();
+        if((target.getHealth()*2 + armorHealth*2 + target.getAbsorptionAmount() > damage && armorHealth>=0.01 )||(target.getHealth() + armorHealth + target.getAbsorptionAmount() > damage) && armorHealth<0.01){
             targetData.setLastAttack(player);
-            if(targetData.getArmor() > damage){
-                targetData.setArmor(targetData.getArmor() - damage);
+            if(armorHealth > damage){
+                targetData.setArmor(armorHealth - damage);
             }else{
-                target.damage(damage - targetData.getArmor());
+                if(armorHealth>0.01){
+                    target.damage((damage - armorHealth)/2);
+                }else {
+                    target.damage(damage - armorHealth);
+                }
                 targetData.setArmor(0.0);
             }
         }else{

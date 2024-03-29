@@ -55,6 +55,7 @@ public class SuperJumpMgr {
         
         player.getInventory().clear();
         player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 40000, 10));
+        DataMgr.getPlayerData(player).setArmor(0.0);
         BukkitRunnable task = new BukkitRunnable(){
             Player p = player;
             @Override

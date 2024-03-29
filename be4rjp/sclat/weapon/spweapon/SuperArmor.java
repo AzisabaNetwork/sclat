@@ -10,6 +10,8 @@ import org.bukkit.GameMode;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 /**
@@ -20,9 +22,12 @@ public class SuperArmor {
     public static void setArmor(Player player, double armor, long delay, boolean effect){
         
         if(effect){
-            if(armor != 20){
+            if(armor != 40){
                 DataMgr.getPlayerData(player).setIsUsingSP(true);
                 SPWeaponMgr.setSPCoolTimeAnimation(player, (int)delay);
+                if (armor == 30) {
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 100, 1));
+                }
             }
         }
         
@@ -35,7 +40,7 @@ public class SuperArmor {
             @Override
             public void run(){
                 if(!data.isInMatch() || !player.getGameMode().equals(GameMode.ADVENTURE)){
-                    if(armor != 20)
+                    if(armor != 40 || armor != 1 )
                         DataMgr.getPlayerData(player).setIsUsingSP(false);
                     cancel();
                 }

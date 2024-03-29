@@ -172,7 +172,7 @@ public class MegaLaser {
                 
                 //動作処理
                 Set<Player> damageTargets = new HashSet<>();
-                double damage = 7.5;
+                double damage = 9.5;
                 for(int i = 1; i < positions.size();i++){
                     
                     if(c % 2 == 0)
