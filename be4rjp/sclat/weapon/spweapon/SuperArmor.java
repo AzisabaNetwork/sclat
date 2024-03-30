@@ -26,7 +26,7 @@ public class SuperArmor {
                 DataMgr.getPlayerData(player).setIsUsingSP(true);
                 SPWeaponMgr.setSPCoolTimeAnimation(player, (int)delay);
                 if (armor == 30) {
-                    player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 100, 1));
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 100, 0));
                 }
             }
         }

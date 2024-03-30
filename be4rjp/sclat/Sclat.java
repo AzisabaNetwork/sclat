@@ -343,7 +343,8 @@ public class Sclat {
         PlayerData targetData = DataMgr.getPlayerData(target);
         PlayerData playerData = DataMgr.getPlayerData(player);
         double armorHealth = targetData.getArmor();
-        if((target.getHealth()*2 + armorHealth*2 + target.getAbsorptionAmount() > damage && armorHealth>=0.01 )||(target.getHealth() + armorHealth + target.getAbsorptionAmount() > damage) && armorHealth<0.01){
+        //if((target.getHealth()*2 + armorHealth*2 + target.getAbsorptionAmount() > damage && armorHealth>=0.01 )||(target.getHealth() + armorHealth + target.getAbsorptionAmount() > damage) && armorHealth<0.01){
+        if((target.getHealth() + target.getAbsorptionAmount() > (damage - armorHealth)/2 && armorHealth>0.01 )||(target.getHealth() + target.getAbsorptionAmount() > damage) && armorHealth <= 0.01){
             targetData.setLastAttack(player);
             if(armorHealth > damage){
                 targetData.setArmor(armorHealth - damage);

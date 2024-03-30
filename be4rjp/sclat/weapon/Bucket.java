@@ -149,7 +149,7 @@ public class Bucket {
     }
 
     public static void BucketHealRunnable(Player player,int level){
-        BukkitRunnable delay = new BukkitRunnable(){
+        BukkitRunnable delay3 = new BukkitRunnable(){
             Player p = player;
             boolean bh_recharge=true;
 
@@ -175,6 +175,6 @@ public class Bucket {
                 }
             }
         };
-        delay.runTaskTimer(Main.getPlugin(), 0, 1);
+        delay3.runTaskTimer(Main.getPlugin(), 0, 1);
     }
 }
