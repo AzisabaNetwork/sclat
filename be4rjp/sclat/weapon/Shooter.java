@@ -120,12 +120,12 @@ public class Shooter {
 
                 //マニューバー系
                 if(data.getWeaponClass().getMainWeapon().getIsManeuver()){
-                    if(p.getExp() >= ink) {
+                    //if(p.getExp() >= ink) {
                         if (data.getIsSneaking() && sl_recharge_2 == true && !data.getIsSliding() && p.getInventory().getItemInMainHand().getType().equals(data.getWeaponClass().getMainWeapon().getWeaponIteamStack().getType())) {//slをsl_recharge_2に変更することで優先順位が低い方のスライドが残っている時のみ使えるようにしました
                             Vector jvec = (new Vector(vec.getX(), 0, vec.getZ())).normalize().multiply(3);
                             Vector ev = jvec.clone().normalize().multiply(-2);
 
-                            p.setExp(p.getExp() - ink);
+                            //p.setExp(p.getExp() - ink);
 
                             //エフェクト
                             org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(player).getTeam().getTeamColor().getWool().createBlockData();
@@ -215,10 +215,10 @@ public class Shooter {
                             //booleam型の変数で二つのスライドをそれぞれ表現している、優先順位が低い方がTrueのときは高い方が使われた後のため高い方のリチャージをする（優先順位が高い方は2秒、低い方は2.2秒）
                             //check = false;
                         }
-                    }else{
-                        p.sendTitle("", ChatColor.RED + "インクが足りません", 0, 10, 2);
-                        player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1F, 1.63F);
-                    }
+                    //}else{
+                        //p.sendTitle("", ChatColor.RED + "インクが足りません", 0, 10, 2);
+                        //player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1F, 1.63F);
+                    //}
                 }
 
                 if(!data.getIsSliding()) {

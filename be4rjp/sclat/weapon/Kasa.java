@@ -537,7 +537,7 @@ public class Kasa {
                         if(i % 3 == 0){
                             for(ArmorStand as : dl){
                                 RayTrace rayTrace = new RayTrace(as.getLocation().toVector(), new Vector(0, 1, 0));
-                                double damage = 3;
+                                double damage = 0.5;
                                 for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
                                     if(!DataMgr.getPlayerData(target).isInMatch())
                                         continue;

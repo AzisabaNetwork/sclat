@@ -303,9 +303,9 @@ public class Hound {
         }else if(3.9<heightDiff&&heightDiff<=7.9){
             return mag * dm * 0.8 + dm*0.9;
         }else if(1.8<heightDiff&&heightDiff<=3.9){
-            return mag * dm * 0.8 + dm*0.1;
+            return mag * dm * 0.9 + dm*0.1;
         }else if(-1.5<=heightDiff&&heightDiff<=1.8){
-            return mag * dm * 0.9 + dm*0.15;
+            return mag * dm * 0.9 + dm*0.25;
         }else if(-5<=heightDiff&&heightDiff<-1.5){
             return mag * dm * 0.5 + dm*0.1;
         }else if(-10<=heightDiff&&heightDiff<-5){

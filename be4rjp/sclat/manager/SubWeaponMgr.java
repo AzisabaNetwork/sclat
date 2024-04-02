@@ -36,7 +36,7 @@ public class SubWeaponMgr {
                 ism.setDisplayName("クイックボム");
                 break;
             case "ブラインダー":
-                is = new ItemStack(Material.IRON_NUGGET);
+                is = new ItemStack(Material.MUSIC_DISC_11);
                 ism = is.getItemMeta();
                 ism.setDisplayName("ブラインダー");
                 break;
@@ -44,6 +44,11 @@ public class SubWeaponMgr {
                 is = new ItemStack(data.getTeam().getTeamColor().getWool());
                 ism = is.getItemMeta();
                 ism.setDisplayName("フローターボム");
+                break;
+            case "ブーメランボム":
+                is = new ItemStack(Material.IRON_NUGGET);
+                ism = is.getItemMeta();
+                ism.setDisplayName("ブーメランボム");
                 break;
             case "センサー":
                 is = new ItemStack(Material.DISPENSER);
@@ -168,6 +173,10 @@ public class SubWeaponMgr {
                 break;
             case "カーリングボム":
                 CurlingBomb.CurlingBombRunnable(player);
+                data.setCanUseSubWeapon(false);
+                break;
+            case "ブーメランボム":
+                Boomerang.BoomerangRunnable(player);
                 data.setCanUseSubWeapon(false);
                 break;
             case "トラップ":

@@ -659,8 +659,10 @@ public class MatchMgr {
                         Bucket.BucketHealRunnable(p,1);
                     if(DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getWeaponType().equals("Slosher"))
                         Bucket.BucketHealRunnable(p,0);
-                    if(DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getWeaponType().equals("Charger"))
+                    if(DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getWeaponType().equals("Charger")) {
                         Charger.ChargerRunnable(p);
+                        Decoy.DecoyRunnable(p);
+                    }
                     if(DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getWeaponType().equals("Spinner"))
                         Spinner.SpinnerRunnable(p);
                     if(DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getWeaponType().equals("Roller")){

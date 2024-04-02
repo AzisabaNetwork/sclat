@@ -97,18 +97,18 @@ public class Charger {
                             //if(rayTrace.intersects(new BoundingBox(block), (int)(charge / 2 * data.getWeaponClass().getMainWeapon().getDistanceTick()), 0.1))
                                 break check;
                         }
-                        if(i % 2 == 0){
-                            for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
-                                if(target.equals(p) || !DataMgr.getPlayerData(target).getSettings().ShowEffect_ChargerLine())
-                                    continue;
-                                if(target.getWorld() == p.getWorld()){
-                                    if(target.getLocation().distanceSquared(position) < Main.PARTICLE_RENDER_DISTANCE_SQUARED){
-                                        Particle.DustOptions dustOptions = new Particle.DustOptions(data.getTeam().getTeamColor().getBukkitColor(), 1);
-                                        target.spawnParticle(Particle.REDSTONE, position, 1, 0, 0, 0, 50, dustOptions);
-                                    }
-                                }
-                            }
-                        }
+//                        if(i % 2 == 0){
+//                                for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
+//                                    if (target.equals(p) || !DataMgr.getPlayerData(target).getSettings().ShowEffect_ChargerLine())
+//                                        continue;
+//                                    if (target.getWorld() == p.getWorld()) {
+//                                        if (target.getLocation().distanceSquared(position) < Main.PARTICLE_RENDER_DISTANCE_SQUARED) {
+//                                            Particle.DustOptions dustOptions = new Particle.DustOptions(data.getTeam().getTeamColor().getBukkitColor(), 1);
+//                                            target.spawnParticle(Particle.REDSTONE, position, 1, 0, 0, 0, 50, dustOptions);
+//                                        }
+//                                    }
+//                                }
+//                        }
                     }
                 }
                 
@@ -139,30 +139,34 @@ public class Charger {
                         Sclat.setPlayerFOV(player, 0.06F);
                     }
                     if(charge<=min){
-                        if(p.getExp() > data.getWeaponClass().getMainWeapon().getNeedInk() * charge/2){
+                        if(p.getExp() > data.getWeaponClass().getMainWeapon().getNeedInk() * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) * charge/2){
                             p.setExp(p.getExp() - (float)((data.getWeaponClass().getMainWeapon().getNeedInk()/2) * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) / Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP) * charge));
-                            Charger.Shoot(p, (int)((double)charge * (double)data.getWeaponClass().getMainWeapon().getChargeRatio() * (double)data.getWeaponClass().getMainWeapon().getDistanceTick()), data.getWeaponClass().getMainWeapon().getDamage() * charge,data.getWeaponClass().getMainWeapon().getDecreaseRate(),data.getWeaponClass().getMainWeapon().getAppDistance());
+                            Charger.Shoot(p, (int)((double)charge * (double)data.getWeaponClass().getMainWeapon().getChargeRatio() * (double)data.getWeaponClass().getMainWeapon().getDistanceTick()), data.getWeaponClass().getMainWeapon().getDamage() * charge,data.getWeaponClass().getMainWeapon().getDecreaseRate());
                         }else {
                             int reach = (int) (p.getExp() / data.getWeaponClass().getMainWeapon().getNeedInk());
                             if (reach >= 2) {
+                                charge = 0;
                                 //p.sendMessage(String.valueOf(data.getWeaponClass().getMainWeapon().getChargeRatio()));
-                                Charger.Shoot(p, (int) ((double) reach * (double) data.getWeaponClass().getMainWeapon().getChargeRatio() * (double) data.getWeaponClass().getMainWeapon().getDistanceTick()), data.getWeaponClass().getMainWeapon().getDamage() * reach, data.getWeaponClass().getMainWeapon().getDecreaseRate(), data.getWeaponClass().getMainWeapon().getAppDistance());
-                                p.setExp(p.getExp() - (float) ((data.getWeaponClass().getMainWeapon().getNeedInk() * reach/2) * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) / Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)));
+                                //p.setExp(p.getExp() - (float) ((data.getWeaponClass().getMainWeapon().getNeedInk() * reach/2) * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) / Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)));
+                                p.setExp(0.0F);
+                                Charger.Shoot(p, (int) ((double) reach * (double) data.getWeaponClass().getMainWeapon().getChargeRatio() * (double) data.getWeaponClass().getMainWeapon().getDistanceTick()), data.getWeaponClass().getMainWeapon().getDamage() * reach, data.getWeaponClass().getMainWeapon().getDecreaseRate());
                             } else {
                                 p.sendTitle("", ChatColor.RED + "インクが足りません", 0, 10, 2);
                                 p.playSound(p.getLocation(), Sound.UI_BUTTON_CLICK, 1F, 1.63F);
                             }
                         }
                     }
-                    else if(p.getExp() > data.getWeaponClass().getMainWeapon().getNeedInk() * charge){
+                    else if(p.getExp() > data.getWeaponClass().getMainWeapon().getNeedInk() * charge * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP)){
                         p.setExp(p.getExp() - (float)(data.getWeaponClass().getMainWeapon().getNeedInk() * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) / Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP) * charge));
-                        Charger.Shoot(p, (int)((double)charge * (double)data.getWeaponClass().getMainWeapon().getChargeRatio() * (double)data.getWeaponClass().getMainWeapon().getDistanceTick()), data.getWeaponClass().getMainWeapon().getDamage() * charge,data.getWeaponClass().getMainWeapon().getDecreaseRate(),data.getWeaponClass().getMainWeapon().getAppDistance());
+                        Charger.Shoot(p, (int)((double)charge * (double)data.getWeaponClass().getMainWeapon().getChargeRatio() * (double)data.getWeaponClass().getMainWeapon().getDistanceTick()), data.getWeaponClass().getMainWeapon().getDamage() * charge,data.getWeaponClass().getMainWeapon().getDecreaseRate());
                     }else{
                         int reach = (int)(p.getExp() / data.getWeaponClass().getMainWeapon().getNeedInk());
                         if(reach >= 2){
+                            charge = 0;
                             //p.sendMessage(String.valueOf(data.getWeaponClass().getMainWeapon().getChargeRatio()));
-                            Charger.Shoot(p, (int)((double)reach  * (double)data.getWeaponClass().getMainWeapon().getChargeRatio() * (double)data.getWeaponClass().getMainWeapon().getDistanceTick()), data.getWeaponClass().getMainWeapon().getDamage() * reach,data.getWeaponClass().getMainWeapon().getDecreaseRate(),data.getWeaponClass().getMainWeapon().getAppDistance());
-                            p.setExp(p.getExp() - (float)(data.getWeaponClass().getMainWeapon().getNeedInk() * reach * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) / Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)));
+                            //p.setExp(p.getExp() - (float)(data.getWeaponClass().getMainWeapon().getNeedInk() * reach * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) / Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)));
+                            p.setExp(0.0F);
+                            Charger.Shoot(p, (int)((double)reach  * (double)data.getWeaponClass().getMainWeapon().getChargeRatio() * (double)data.getWeaponClass().getMainWeapon().getDistanceTick()), data.getWeaponClass().getMainWeapon().getDamage() * reach,data.getWeaponClass().getMainWeapon().getDecreaseRate());
                         }else {
                             p.sendTitle("", ChatColor.RED + "インクが足りません", 0, 10, 2);
                             p.playSound(p.getLocation(), Sound.UI_BUTTON_CLICK, 1F, 1.63F);
@@ -182,14 +186,13 @@ public class Charger {
         task.runTaskTimer(Main.getPlugin(), 0, 1);
     }
     
-    public static void Shoot(Player player, int reach, double damage,double decRate,int appDistance){
+    public static void Shoot(Player player, int reach, double damage,double decRate){
     
         if(player.getGameMode() == GameMode.SPECTATOR) return;
         //player.sendMessage(String.valueOf(reach));
         player.getWorld().playSound(player.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_BLAST, 1, 5);
         RayTrace rayTrace = new RayTrace(player.getEyeLocation().toVector(),player.getEyeLocation().getDirection());
         ArrayList<Vector> positions = rayTrace.traverse((int)(reach * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP)), 0.2);
-        ArrayList<Vector> appPositions = rayTrace.traverse((int)(appDistance * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP)), 0.2);
 
         
         loop : for(int i = 0; i < positions.size();i++){
@@ -204,18 +207,24 @@ public class Charger {
                 //}
             }
             PaintMgr.PaintHightestBlock(position, player, false, true);
-            
-            for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
-                if(!DataMgr.getPlayerData(target).getSettings().ShowEffect_MainWeaponInk())
-                    continue;
-                if(target.getWorld() == position.getWorld()){
-                    if(target.getLocation().distanceSquared(position) < Main.PARTICLE_RENDER_DISTANCE_SQUARED){
-                        org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(player).getTeam().getTeamColor().getWool().createBlockData();
-                        target.spawnParticle(org.bukkit.Particle.BLOCK_DUST, position, 1, 0, 0, 0, 1, bd);
-                    }
+//                for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
+//                    if (!DataMgr.getPlayerData(target).getSettings().ShowEffect_MainWeaponInk())
+//                        continue;
+//                    if (target.getWorld() == position.getWorld()) {
+//                        if (target.getLocation().distanceSquared(position) < Main.PARTICLE_RENDER_DISTANCE_SQUARED) {
+//                            org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(player).getTeam().getTeamColor().getWool().createBlockData();
+//                            target.spawnParticle(org.bukkit.Particle.BLOCK_DUST, position, 1, 0, 0, 0, 1, bd);
+//                        }
+//                    }
+//                }
+            if (!DataMgr.getPlayerData(player).getSettings().ShowEffect_MainWeaponInk())
+                continue;
+            if (player.getWorld() == position.getWorld()) {
+                if (player.getLocation().distanceSquared(position) < Main.PARTICLE_RENDER_DISTANCE_SQUARED) {
+                    org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(player).getTeam().getTeamColor().getWool().createBlockData();
+                    player.spawnParticle(org.bukkit.Particle.BLOCK_DUST, position, 1, 0, 0, 0, 1, bd);
                 }
             }
-            
             
             
             double maxDistSquad = 4 /* 2*2 */;
@@ -226,11 +235,11 @@ public class Charger {
                     if(target.getLocation().distanceSquared(position) <= maxDistSquad){
                         if(rayTrace.intersects(new BoundingBox((Entity)target), (int)(reach * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP)), 0.05)){
                             boolean death;
-                            if(i>appPositions.size()) {
-                                death = Sclat.giveDamage(player, target, damage, "killed");
-                            }else{
-                                death = Sclat.giveDamage(player, target, damage*decRate, "killed");
+                            double hitDamage = damage;
+                            if(Isbackstab(player,target)){
+                                hitDamage = damage*decRate;
                             }
+                            death = Sclat.giveDamage(player, target, hitDamage, "killed");
                             if(death)
                                 player.playSound(player.getLocation(), Sound.ENTITY_ARROW_HIT_PLAYER, 1.2F, 1.3F);
                             else
@@ -275,18 +284,18 @@ public class Charger {
                                         if(!as.getCustomName().equals("21") && !as.getCustomName().equals("100"))
                                             if(((ArmorStand) as).isVisible())
                                                 player.playSound(player.getLocation(), Sound.ENTITY_ARROW_HIT_PLAYER, 1.2F, 1.3F);
-                                    if(i>appPositions.size()) {
-                                        ArmorStandMgr.giveDamageArmorStand((ArmorStand)as, damage, player);
-                                    }else{
-                                        ArmorStandMgr.giveDamageArmorStand((ArmorStand)as, damage*decRate, player);
+                                    if(IsbackstabStand(player,(ArmorStand)as)){
+                                        ArmorStandMgr.giveDamageArmorStand((ArmorStand) as, damage*decRate, player);
+                                    }else {
+                                        ArmorStandMgr.giveDamageArmorStand((ArmorStand) as, damage, player);
                                     }
                                     break loop;
                                 }
                             }
-                            if(i>appPositions.size()) {
-                                ArmorStandMgr.giveDamageArmorStand((ArmorStand)as, damage, player);
-                            }else{
-                                ArmorStandMgr.giveDamageArmorStand((ArmorStand)as, damage*decRate, player);
+                            if(IsbackstabStand(player,(ArmorStand)as)){
+                                ArmorStandMgr.giveDamageArmorStand((ArmorStand) as, damage*decRate, player);
+                            }else {
+                                ArmorStandMgr.giveDamageArmorStand((ArmorStand) as, damage, player);
                             }
                         }
                     }          
@@ -297,6 +306,44 @@ public class Charger {
         }
        
         
+    }
+    public static boolean Isbackstab(Player p,Player target){
+        double pyaw=0.0;
+        double tyaw=0.0;
+        if(p.getEyeLocation().getYaw()<0){
+            pyaw = p.getEyeLocation().getYaw()+360;
+        }else {
+            pyaw = p.getEyeLocation().getYaw();
+        }
+        if(target.getEyeLocation().getYaw()<0){
+            tyaw = target.getEyeLocation().getYaw()+360;
+        }else {
+            tyaw = target.getEyeLocation().getYaw();
+        }
+        if((pyaw-tyaw<125 && pyaw-tyaw>-125)||pyaw-tyaw>235||pyaw-tyaw<-235) {
+            return true;
+        }else{
+            return false;
+        }
+    }
+    public static boolean IsbackstabStand(Player p,ArmorStand target){
+        double pyaw=0.0;
+        double tyaw=0.0;
+        if(p.getEyeLocation().getYaw()<0){
+            pyaw = p.getEyeLocation().getYaw()+360;
+        }else {
+            pyaw = p.getEyeLocation().getYaw();
+        }
+        if(target.getEyeLocation().getYaw()<0){
+            tyaw = target.getEyeLocation().getYaw()+360;
+        }else {
+            tyaw = target.getEyeLocation().getYaw();
+        }
+        if((pyaw-tyaw<125 && pyaw-tyaw>-125)||pyaw-tyaw>235||pyaw-tyaw<-235) {
+            return true;
+        }else{
+            return false;
+        }
     }
             
 }
