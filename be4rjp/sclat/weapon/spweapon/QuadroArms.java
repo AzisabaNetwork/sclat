@@ -14,6 +14,7 @@ import be4rjp.sclat.manager.SPWeaponMgr;
 import be4rjp.sclat.manager.WeaponClassMgr;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
@@ -43,18 +44,20 @@ import org.bukkit.util.Vector;
  * @author Be4rJP
  */
 public class QuadroArms {
-    private static int Quadro_overheat;
-    private static boolean useQuadro=false;
+    private static HashMap<Player, Integer> Hash_Quadro_overheat = new HashMap<>();
     public static void setQuadroArms(Player player){
         DataMgr.getPlayerData(player).setIsUsingSP(true);
         DataMgr.getPlayerData(player).setIsUsingSS(true);
         SPWeaponMgr.setSPCoolTimeAnimation(player, 120);
-        Quadro_overheat=0;
+        if(Hash_Quadro_overheat.containsKey(player)) {
+            Hash_Quadro_overheat.replace(player,0);
+        }else{
+            Hash_Quadro_overheat.put(player,0);
+        }
         BukkitRunnable it = new BukkitRunnable() {
             Player p = player;
             @Override
             public void run() {
-                useQuadro=true;
                 player.getInventory().clear();
                 player.updateInventory();
                 ItemStack item = new ItemStack(Material.SUGAR);
@@ -97,7 +100,6 @@ public class QuadroArms {
                     DataMgr.getPlayerData(p).setIsUsingSS(false);
                     player.getInventory().clear();
                     WeaponClassMgr.setWeaponClass(p);
-                    useQuadro=false;
                 }
             }
         };
@@ -114,8 +116,8 @@ public class QuadroArms {
             @Override
             public void run(){
                 PlayerData data = DataMgr.getPlayerData(p);
-                if(Quadro_overheat < 47) {
-                    bar.setProgress((double)Quadro_overheat / 47);
+                if( Hash_Quadro_overheat.get(p)< 47) {
+                    bar.setProgress((double)Hash_Quadro_overheat.get(p) / 47);
                     if (!bar.getPlayers().contains(p))
                         bar.addPlayer(p);
                 }else {
@@ -127,7 +129,7 @@ public class QuadroArms {
                     bar.removeAll();
                     cancel();
                 }
-                if(!useQuadro){
+                if(!DataMgr.getPlayerData(p).getIsUsingSS()){
                     bar.removeAll();
                     cancel();
                 }
@@ -158,13 +160,13 @@ public class QuadroArms {
             public void run(){
                 boolean sound = false;
                 Burstshoot(player, true);
-                if(Quadro_overheat>47){
-                    Quadro_overheat -= 13;
-                }else {
-                    Quadro_overheat -= 10;
-                }
-                if(Quadro_overheat<0){
-                    Quadro_overheat=0;
+                int overheatgage = Hash_Quadro_overheat.get(p);
+                if(overheatgage>47){
+                    Hash_Quadro_overheat.replace(p,overheatgage-13);
+                }else if(overheatgage>10){
+                    Hash_Quadro_overheat.replace(p,overheatgage-10);
+                }else if(overheatgage<=10){
+                    Hash_Quadro_overheat.replace(p,0);
                 }
                 player.getWorld().playSound(p.getLocation(), Sound.ITEM_ARMOR_EQUIP_GENERIC, 0.9F, 1.3F);
                 if(sound){
@@ -178,9 +180,11 @@ public class QuadroArms {
             @Override
             public void run(){
                 ShootQuadroSlosher(player);
-                Quadro_overheat -= 13;
-                if(Quadro_overheat<0){
-                    Quadro_overheat=0;
+                int overheatgage = Hash_Quadro_overheat.get(p);
+                if(overheatgage<= 13){
+                    Hash_Quadro_overheat.replace(p,0);
+                }else{
+                    Hash_Quadro_overheat.replace(p,overheatgage-13);
                 }
             }
         };
@@ -189,9 +193,11 @@ public class QuadroArms {
             @Override
             public void run(){
                 ShootSensor(player);
-                Quadro_overheat -= 10;
-                if(Quadro_overheat<0){
-                    Quadro_overheat=0;
+                int overheatgage = Hash_Quadro_overheat.get(p);
+                if(overheatgage<= 10){
+                    Hash_Quadro_overheat.replace(p,0);
+                }else{
+                    Hash_Quadro_overheat.replace(p,overheatgage-10);
                 }
             }
         };
@@ -221,11 +227,12 @@ public class QuadroArms {
             public void run(){
                 c++;
                 int q = 7;
-                if (Quadro_overheat>47){
+                int overheatgage =Hash_Quadro_overheat.get(p);
+                if (overheatgage>47){
                     player.sendTitle("", ChatColor.RED + "オーバーヒート!!!", 0, 5, 2);
                     cancel();
                 }else{
-                    Quadro_overheat+=1;
+                    Hash_Quadro_overheat.replace(p,overheatgage+1);
                 }
                 ShootSpinner(p);
                 if(c == q)

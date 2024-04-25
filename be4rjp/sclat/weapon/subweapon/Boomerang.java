@@ -28,7 +28,7 @@ import java.util.List;
 public class Boomerang {
     public static void BoomerangRunnable(Player player){
         Vector pVector = player.getEyeLocation().getDirection();
-        Vector vec = new Vector(pVector.getX(), pVector.getY(), pVector.getZ()).normalize().multiply(0.7);
+        Vector vec = new Vector(pVector.getX(), pVector.getY(), pVector.getZ()).normalize().multiply(0.6);
         BukkitRunnable task = new BukkitRunnable() {
             Vector aVec = vec.clone();
             Location bloc;
@@ -56,6 +56,8 @@ public class Boomerang {
                             armorStand.setVisible(false);
                             armorStand.setGravity(false);
                             armorStand.setMarker(true);
+
+                            armorStand.setSmall(true);
                         });
                         Location loc = player.getLocation().add(0, 0.8, 0);
                         loc.setYaw(90);
@@ -80,11 +82,17 @@ public class Boomerang {
                     as3.teleport(aloc);
                     fb.setTicksLived(1);
 
-                    if(i >= 10 && !cumbackBoomeran){
+                    if(i >= 5 && !cumbackBoomeran){
                         if(bloc.getX() == as1l.getX() && bloc.getZ() != as1l.getZ() || bloc.getZ() == as1l.getZ() && bloc.getX() != as1l.getX()) {
                             aVec = new Vector(player.getLocation().getX()-bloc.getX(), (player.getLocation().getY()+1.6)-bloc.getY(), player.getLocation().getZ()-bloc.getZ()).normalize().multiply(1.0);
                             cumbackBoomeran = true;
                             cumbacktime = i;
+                            for(int painti = 0; painti <= 2; painti++){
+                                List<Location> p_locs = Sphere.getSphere(as1l, painti, 20);
+                                for(Location loc : p_locs){
+                                    PaintMgr.Paint(loc, player, false);
+                                }
+                            }
                         }else if(as1.isOnGround()){
                             aVec = new Vector(player.getLocation().getX()-bloc.getX(), (player.getLocation().getY()+1.6)-bloc.getY(), player.getLocation().getZ()-bloc.getZ()).normalize().multiply(1.0);
                             cumbackBoomeran = true;
@@ -93,7 +101,7 @@ public class Boomerang {
                         else if(i == 30 ) {
                             aVec = new Vector(player.getLocation().getX()-bloc.getX(), (player.getLocation().getY()+1.6)-bloc.getY(), player.getLocation().getZ()-bloc.getZ()).normalize().multiply(1.0);
                             cumbackBoomeran = true;
-                            cumbacktime = 40;
+                            cumbacktime = 35;
                         }
                     }
                     if(i >= cumbacktime + 5){

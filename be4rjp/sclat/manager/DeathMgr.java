@@ -44,8 +44,10 @@ public class DeathMgr {
         drop2.setVelocity(new Vector(Math.random() * random - random/2, random * 2/3, Math.random() * random - random/2));
     
         Sclat.createInkExplosionEffect(target.getEyeLocation().add(0, -1, 0), 3, 30, shooter);
-        
-        DataMgr.getPlayerData(target).setSPGauge((int)(DataMgr.getPlayerData(target).getSPGauge() * 0.7 * Gear.getGearInfluence(target, Gear.Type.PENA_DOWN)));
+
+        if(Gear.getGearInfluence(target, Gear.Type.PENA_DOWN)==1.0) {
+            DataMgr.getPlayerData(target).setSPGauge((int) (DataMgr.getPlayerData(target).getSPGauge() * 0.7));
+        }
         
         //半径
         double maxDist = 3;

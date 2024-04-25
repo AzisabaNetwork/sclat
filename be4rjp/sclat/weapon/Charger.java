@@ -190,7 +190,7 @@ public class Charger {
     
         if(player.getGameMode() == GameMode.SPECTATOR) return;
         //player.sendMessage(String.valueOf(reach));
-        player.getWorld().playSound(player.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_BLAST, 1, 5);
+        player.getWorld().playSound(player.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_BLAST, 0.4f, 5);
         RayTrace rayTrace = new RayTrace(player.getEyeLocation().toVector(),player.getEyeLocation().getDirection());
         ArrayList<Vector> positions = rayTrace.traverse((int)(reach * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP)), 0.2);
 
@@ -320,7 +320,7 @@ public class Charger {
         }else {
             tyaw = target.getEyeLocation().getYaw();
         }
-        if((pyaw-tyaw<125 && pyaw-tyaw>-125)||pyaw-tyaw>235||pyaw-tyaw<-235) {
+        if((pyaw-tyaw<130 && pyaw-tyaw>-130)||pyaw-tyaw>230||pyaw-tyaw<-230) {
             return true;
         }else{
             return false;
@@ -339,7 +339,7 @@ public class Charger {
         }else {
             tyaw = target.getEyeLocation().getYaw();
         }
-        if((pyaw-tyaw<125 && pyaw-tyaw>-125)||pyaw-tyaw>235||pyaw-tyaw<-235) {
+        if((pyaw-tyaw<130 && pyaw-tyaw>-130)||pyaw-tyaw>230||pyaw-tyaw<-230) {
             return true;
         }else{
             return false;
