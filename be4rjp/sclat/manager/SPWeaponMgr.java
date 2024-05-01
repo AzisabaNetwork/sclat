@@ -19,6 +19,7 @@ import be4rjp.sclat.weapon.spweapon.SuperSensor;
 import be4rjp.sclat.weapon.spweapon.SuperShot;
 import be4rjp.sclat.weapon.spweapon.QuadroArms;
 import be4rjp.sclat.weapon.spweapon.SuperTyakuti;
+import be4rjp.sclat.weapon.spweapon.SwordMord;
 import be4rjp.sclat.weapon.subweapon.QuickBomb;
 import be4rjp.sclat.weapon.subweapon.SplashBomb;
 import net.md_5.bungee.api.ChatColor;
@@ -106,7 +107,7 @@ public class SPWeaponMgr {
                     }
                     DataMgr.getPlayerData(p).setIsSP(true);
                 }else{
-                    if(!(data.getWeaponClass().getSPWeaponName().equals("インクストライク") || data.getWeaponClass().getSPWeaponName().equals("ジェットパック") || data.getWeaponClass().getSPWeaponName().equals("スーパーショット") || data.getWeaponClass().getSPWeaponName().equals("クアドロアームズ")))
+                    if(!(data.getWeaponClass().getSPWeaponName().equals("インクストライク") || data.getWeaponClass().getSPWeaponName().equals("ジェットパック") || data.getWeaponClass().getSPWeaponName().equals("スーパーショット") || data.getWeaponClass().getSPWeaponName().equals("クアドロアームズ") || data.getWeaponClass().getSPWeaponName().equals("セイバーモード")))
                         p.getInventory().setItem(4, new ItemStack(Material.AIR));
                     DataMgr.getPlayerData(p).setIsSP(false);
                 }
@@ -288,6 +289,13 @@ public class SPWeaponMgr {
                 is10.setItemMeta(ism10);
                 p.getInventory().setItem(4, is10);
                 break;
+            case "セイバーモード":
+                ItemStack is11 = new ItemStack(Material.WHEAT);
+                ItemMeta ism11 = is11.getItemMeta();
+                ism11.setDisplayName("セイバーモード");
+                is11.setItemMeta(ism11);
+                p.getInventory().setItem(4, is11);
+                break;
         }
     }
     
@@ -405,6 +413,13 @@ public class SPWeaponMgr {
                 player.setExp(0.99F);
                 player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_USE, 1, 2);
                 player.sendTitle("", "右クリックで発射！", 5, 20, 5);
+                break;
+            case "セイバーモード":
+                player.getInventory().setItem(4, new ItemStack(Material.AIR));
+                SwordMord.setSwordMord(player);
+                player.setExp(0.99F);
+                player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_USE, 1, 2);
+                player.sendTitle("", "右クリックで斬撃！", 5, 20, 5);
                 break;
             case "クアドロアームズ":
                 player.getInventory().setItem(4, new ItemStack(Material.AIR));

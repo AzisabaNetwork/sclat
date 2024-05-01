@@ -6,6 +6,7 @@ import be4rjp.sclat.data.PlayerData;
 import be4rjp.sclat.weapon.spweapon.JetPack;
 import be4rjp.sclat.weapon.spweapon.SuperShot;
 import be4rjp.sclat.weapon.spweapon.QuadroArms;
+import be4rjp.sclat.weapon.spweapon.SwordMord;
 import be4rjp.sclat.weapon.subweapon.*;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -108,6 +109,10 @@ public class SubWeaponMgr {
                 break;
             case "右クリックで発射！":
                 SuperShot.Shot(player);
+                data.setCanUseSubWeapon(false);
+                break;
+            case "右クリックで斬撃、シフトで防御":
+                SwordMord.AttackSword(player);
                 data.setCanUseSubWeapon(false);
                 break;
             case "Quadro-BLUE":

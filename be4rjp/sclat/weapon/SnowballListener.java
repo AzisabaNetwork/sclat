@@ -112,11 +112,14 @@ public class SnowballListener implements Listener {
                             }
                             if(projectile.getCustomName().contains("#QuadroArmsShotgun")){
                                 shooter.playSound(shooter.getLocation(), Sound.ENTITY_PLAYER_HURT, 0.5F, 1F);
-                                double Quadrodamage =8;
+                                double Quadrodamage =9;
                                 double QuadroticksLived = (double) projectile.getTicksLived()*10;
                                 if(QuadroticksLived > 30)
                                     QuadroticksLived = 30;
                                 Quadrodamage -= Quadrodamage * (QuadroticksLived / 100);
+                                if(projectile.getCustomName().contains("CounterShot")){
+                                    Quadrodamage=6.5;
+                                }
                                 Sclat.giveDamage(shooter, target, Quadrodamage, "spWeapon");
                                 return;
                             }
@@ -198,7 +201,7 @@ public class SnowballListener implements Listener {
                     }
                 }else if(event.getHitEntity() instanceof ArmorStand){
                     ArmorStand as = (ArmorStand) event.getHitEntity();
-                    boolean dmgDouble = false;
+                    double dmgDouble = 1.0;
                     if(projectile.getCustomName() != null){
                         if(DataMgr.mws.contains(projectile.getCustomName())) {
                             if (DataMgr.tsl.contains(projectile.getCustomName())) {
@@ -206,7 +209,7 @@ public class SnowballListener implements Listener {
                                     if (!as.getCustomName().equals("21") && !as.getCustomName().equals("100")) {
                                         if (as.isVisible()) {
                                             if(projectile.getCustomName().contains("#slided")) {
-                                                dmgDouble = true;
+                                                dmgDouble = 2.0;
                                             }else if(!projectile.getCustomName().contains(":")) {
                                                 shooter.playSound(shooter.getLocation(), Sound.ENTITY_ARROW_HIT_PLAYER, 1.2F, 1.3F);
                                                 shooter.spawnParticle(Particle.FLASH, projectile.getLocation(), 1, 0.1, 0.1, 0.1, 0.1);
@@ -246,7 +249,7 @@ public class SnowballListener implements Listener {
                                 QuadroticksLived = 60;
                             Quadrodamage += Quadrodamage * (QuadroticksLived / 30);
                             ArmorStandMgr.giveDamageArmorStand(as, Quadrodamage, shooter);
-                            return;
+                            dmgDouble = 0.0;
                         }
                         if(projectile.getCustomName().contains("#QuadroArmsShotgun")){
                             double Quadrodamage =9;
@@ -254,8 +257,11 @@ public class SnowballListener implements Listener {
                             if(QuadroticksLived > 30)
                                 QuadroticksLived = 30;
                             Quadrodamage -= Quadrodamage * (QuadroticksLived / 100);
+                            if(projectile.getCustomName().contains("CounterShot")){
+                                Quadrodamage=6.5;
+                            }
                             ArmorStandMgr.giveDamageArmorStand(as, Quadrodamage, shooter);
-                            return;
+                            dmgDouble = 0.0;
                         }
                         if(projectile.getCustomName().equals("JetPack")){
                             ArmorStandMgr.giveDamageArmorStand(as, 20, shooter);
@@ -268,8 +274,8 @@ public class SnowballListener implements Listener {
                         }
                     }
                     double damage = DataMgr.getPlayerData(shooter).getWeaponClass().getMainWeapon().getDamage();
-                    if (dmgDouble){
-                        damage = damage*2;
+                    if (dmgDouble!=1.0){
+                        damage = damage*dmgDouble;
                     }
                     String type = DataMgr.getPlayerData(shooter).getWeaponClass().getMainWeapon().getWeaponType();
     
@@ -604,6 +610,9 @@ public class SnowballListener implements Listener {
                         if(QuadroticksLived > 30)
                             QuadroticksLived = 30;
                         Quadrodamage -= Quadrodamage * (QuadroticksLived / 100);
+                        if(projectile.getCustomName().contains("CounterShot")){
+                            Quadrodamage=6.5;
+                        }
                         ArmorStandMgr.giveDamageArmorStand(as, Quadrodamage, shooter);
                         return;
                     }

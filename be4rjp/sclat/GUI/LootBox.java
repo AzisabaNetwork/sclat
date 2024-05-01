@@ -3,6 +3,7 @@ package be4rjp.sclat.GUI;
 import be4rjp.sclat.MessageType;
 import be4rjp.sclat.Sclat;
 import be4rjp.sclat.data.DataMgr;
+import be4rjp.sclat.data.PlayerData;
 import be4rjp.sclat.manager.PlayerStatusMgr;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -161,7 +162,7 @@ public class LootBox {
         player.openInventory(shooter);
     }
     public static void GiftWeapon(Player player){
-        String ClassName = "バレンタインチョコ[義理]";
+        String ClassName = "カープシェルター[端午]";
         if(!PlayerStatusMgr.haveWeapon(player, ClassName)){
             PlayerStatusMgr.addWeapon(player, ClassName);
             Sclat.sendMessage(ChatColor.GREEN + ClassName + "が手に入ったよ", MessageType.PLAYER, player);

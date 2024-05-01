@@ -116,7 +116,7 @@ public class Shooter {
                     vec = new Vector(x, 0, z);
                 before = location.clone();
 
-                float ink = data.getWeaponClass().getMainWeapon().getSlideNeedINK();
+                //float ink = data.getWeaponClass().getMainWeapon().getSlideNeedINK();
 
                 //マニューバー系
                 if(data.getWeaponClass().getMainWeapon().getIsManeuver()){

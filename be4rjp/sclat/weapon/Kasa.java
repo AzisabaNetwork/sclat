@@ -474,6 +474,7 @@ public class Kasa {
                         List<ArmorStand> aslist = new ArrayList<ArmorStand>();
                         aslist.addAll(list);
                         kdata.setArmorStandList(aslist);
+                        kdata.setDamage(DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getSlideNeedINK());
 
                         for(ArmorStand as : list){
                             //as.setHeadPose(new EulerAngle(Math.toRadians(90), 0, 0));
@@ -537,7 +538,7 @@ public class Kasa {
                         if(i % 3 == 0){
                             for(ArmorStand as : dl){
                                 RayTrace rayTrace = new RayTrace(as.getLocation().toVector(), new Vector(0, 1, 0));
-                                double damage = 0.5;
+                                double damage = 1.0;
                                 for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
                                     if(!DataMgr.getPlayerData(target).isInMatch())
                                         continue;
