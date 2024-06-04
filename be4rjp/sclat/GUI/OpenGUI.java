@@ -418,6 +418,9 @@ public class OpenGUI {
                         if(DataMgr.getWeaponClass(ClassName).getMainWeapon().getIsManeuver()||DataMgr.getWeaponClass(ClassName).getMainWeapon().getIsSwap())
                             equals = false;
                     }
+                    if(weaponType.equals("Shooter") && DataMgr.getWeaponClass(ClassName).getMainWeapon().getWeaponType().equals("Funnel")){
+                        equals = true;
+                    }
     
     
                     if (slotnum <= 52 && equals){

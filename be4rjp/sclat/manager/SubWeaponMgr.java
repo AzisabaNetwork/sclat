@@ -36,11 +36,6 @@ public class SubWeaponMgr {
                 ism = is.getItemMeta();
                 ism.setDisplayName("クイックボム");
                 break;
-            case "ブラインダー":
-                is = new ItemStack(Material.MUSIC_DISC_11);
-                ism = is.getItemMeta();
-                ism.setDisplayName("ブラインダー");
-                break;
             case "フローターボム":
                 is = new ItemStack(data.getTeam().getTeamColor().getWool());
                 ism = is.getItemMeta();
@@ -142,10 +137,6 @@ public class SubWeaponMgr {
                 break;
             case "クイックボム":
                 QuickBomb.QuickBomRunnable(player);
-                data.setCanUseSubWeapon(false);
-                break;
-            case "ブラインダー":
-                Blinder.BlinderRunnable(player);
                 data.setCanUseSubWeapon(false);
                 break;
             case "フローターボム":

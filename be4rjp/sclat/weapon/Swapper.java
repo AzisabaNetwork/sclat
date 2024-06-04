@@ -4,12 +4,9 @@ import be4rjp.sclat.Main;
 import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.data.PlayerData;
 import be4rjp.sclat.manager.WeaponClassMgr;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.util.Vector;
 
 public class Swapper {
     public static void SwapperRunnable(Player player){
@@ -25,8 +22,6 @@ public class Swapper {
                     cancel();
                     return;
                 }
-
-                float ink = 0.0f;
                 //スワッパ―系
                 if(data.getWeaponClass().getMainWeapon().getIsSwap()){
                     if (data.getIsSneaking() && sw_recharge == true && p.getInventory().getItemInMainHand().getType().equals(data.getWeaponClass().getMainWeapon().getWeaponIteamStack().getType())) {

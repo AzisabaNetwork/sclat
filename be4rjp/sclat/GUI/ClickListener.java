@@ -350,6 +350,10 @@ public class ClickListener implements Listener{
                             Hound.HoundRunnable(p);
                             Hound.HoundEXRunnable(p);
                         }
+                        if(DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getWeaponType().equals("Funnel")){
+                            Shooter.ShooterRunnable(p);
+                            Funnel.FunnelFloat(p);
+                        }
                         WeaponClassMgr.setWeaponClass(p);
                         player.setExp(0.99F);
                         

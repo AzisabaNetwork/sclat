@@ -125,10 +125,10 @@ public class SnowballListener implements Listener {
                             }
                     
                             if(DataMgr.mws.contains(projectile.getCustomName())){
-                                boolean dmgDouble = false;
+                                double dmgDouble = 1.0;
                                 if(DataMgr.tsl.contains(projectile.getCustomName())) {
                                     if(projectile.getCustomName().contains("#slided")) {
-                                        dmgDouble = true;
+                                        dmgDouble = DataMgr.getPlayerData(shooter).getWeaponClass().getMainWeapon().getDecreaseRate();
                                     }
                                     else if(!projectile.getCustomName().contains(":")) {
                                         shooter.playSound(shooter.getLocation(), Sound.ENTITY_ARROW_HIT_PLAYER, 1.2F, 1.3F);
@@ -155,11 +155,13 @@ public class SnowballListener implements Listener {
                                 }
                                 shooter.playSound(shooter.getLocation(), Sound.ENTITY_PLAYER_HURT, 0.5F, 1F);
                                 if(projectile.getCustomName().contains("#slided")) {
-                                    dmgDouble = true;
+                                    dmgDouble = DataMgr.getPlayerData(shooter).getWeaponClass().getMainWeapon().getDecreaseRate();
                                 }
                                 double damage = DataMgr.getPlayerData(shooter).getWeaponClass().getMainWeapon().getDamage();
-                                if (dmgDouble){
-                                    damage += damage;
+                                if (dmgDouble != 1.0){
+                                    damage = damage * dmgDouble;
+                                }else{
+                                    damage = damage * Gear.getGearInfluence(shooter, Gear.Type.MAIN_SPEC_UP);
                                 }
                                 String type = DataMgr.getPlayerData(shooter).getWeaponClass().getMainWeapon().getWeaponType();
     
@@ -168,9 +170,11 @@ public class SnowballListener implements Listener {
                                     if(ticksLived > 20.0)
                                         ticksLived = 20.0;
                                     damage -= damage * (ticksLived / 100);
+                                }if(type.equals("Funnel")) {
+                                    damage = damage + Funnel.FunnelPursuitPlayer(shooter, target);
                                 }
                                 
-                                Sclat.giveDamage(shooter, target, damage * Gear.getGearInfluence(shooter, Gear.Type.MAIN_SPEC_UP), "killed");
+                                Sclat.giveDamage(shooter, target, damage, "killed");
                             }
                         }
                         //AntiNoDamageTime
@@ -209,7 +213,7 @@ public class SnowballListener implements Listener {
                                     if (!as.getCustomName().equals("21") && !as.getCustomName().equals("100")) {
                                         if (as.isVisible()) {
                                             if(projectile.getCustomName().contains("#slided")) {
-                                                dmgDouble = 2.0;
+                                                dmgDouble = DataMgr.getPlayerData(shooter).getWeaponClass().getMainWeapon().getDecreaseRate();
                                             }else if(!projectile.getCustomName().contains(":")) {
                                                 shooter.playSound(shooter.getLocation(), Sound.ENTITY_ARROW_HIT_PLAYER, 1.2F, 1.3F);
                                                 shooter.spawnParticle(Particle.FLASH, projectile.getLocation(), 1, 0.1, 0.1, 0.1, 0.1);
@@ -275,7 +279,9 @@ public class SnowballListener implements Listener {
                     }
                     double damage = DataMgr.getPlayerData(shooter).getWeaponClass().getMainWeapon().getDamage();
                     if (dmgDouble!=1.0){
-                        damage = damage*dmgDouble;
+                        damage = damage * dmgDouble;
+                    }else{
+                        damage = damage * Gear.getGearInfluence(shooter, Gear.Type.MAIN_SPEC_UP);
                     }
                     String type = DataMgr.getPlayerData(shooter).getWeaponClass().getMainWeapon().getWeaponType();
     
@@ -284,8 +290,12 @@ public class SnowballListener implements Listener {
                         if(ticksLived > 20.0)
                             ticksLived = 20.0;
                         damage -= damage * (ticksLived / 100);
+                    }if(type.equals("Funnel")) {
+                        if (as.getCustomName() != null && !as.getCustomName().equals("Path") && !as.getCustomName().equals("21") && !as.getCustomName().equals("100") && !as.getCustomName().equals("SplashShield") && !as.getCustomName().equals("Kasa")){
+                            damage = damage + Funnel.FunnelPursuit(shooter, as);
+                        }
                     }
-                    ArmorStandMgr.giveDamageArmorStand(as, damage * Gear.getGearInfluence(shooter, Gear.Type.MAIN_SPEC_UP), shooter);
+                    ArmorStandMgr.giveDamageArmorStand(as, damage, shooter);
                 }
             }
         }
@@ -549,7 +559,7 @@ public class SnowballListener implements Listener {
                     
                 }*/
             }else if(event.getEntity() instanceof ArmorStand){
-                boolean dmgDouble = false;
+                double dmgDouble = 1.0;
                 ArmorStand as = (ArmorStand) event.getEntity();
                 if(projectile.getCustomName() != null){
                     if(DataMgr.mws.contains(projectile.getCustomName())) {
@@ -558,7 +568,7 @@ public class SnowballListener implements Listener {
                                 if (!as.getCustomName().equals("21") && !as.getCustomName().equals("100")) {
                                     if (as.isVisible()) {
                                         if(projectile.getCustomName().contains("#slided")) {
-                                            dmgDouble = true;
+                                            dmgDouble = DataMgr.getPlayerData(shooter).getWeaponClass().getMainWeapon().getDecreaseRate();
                                         }else if(!projectile.getCustomName().contains(":")) {
                                             shooter.playSound(shooter.getLocation(), Sound.ENTITY_ARROW_HIT_PLAYER, 1.2F, 1.3F);
                                             shooter.spawnParticle(Particle.FLASH, projectile.getLocation(), 1, 0.1, 0.1, 0.1, 0.1);
@@ -624,8 +634,10 @@ public class SnowballListener implements Listener {
                 }
     
                 double damage = DataMgr.getPlayerData(shooter).getWeaponClass().getMainWeapon().getDamage();
-                if (dmgDouble){
-                    damage = damage*2;
+                if (dmgDouble != 1.0){
+                    damage = damage*dmgDouble;
+                }else{
+                    damage = damage * Gear.getGearInfluence(shooter, Gear.Type.MAIN_SPEC_UP);
                 }
                 String type = DataMgr.getPlayerData(shooter).getWeaponClass().getMainWeapon().getWeaponType();
     
@@ -634,8 +646,12 @@ public class SnowballListener implements Listener {
                     if(ticksLived > 20.0)
                         ticksLived = 20.0;
                     damage -= damage * (ticksLived / 100);
+                }if(type.equals("Funnel")) {
+                    if (as.getCustomName() != null && !as.getCustomName().equals("Path") && !as.getCustomName().equals("21") && !as.getCustomName().equals("100") && !as.getCustomName().equals("SplashShield") && !as.getCustomName().equals("Kasa")){
+                        damage = damage + Funnel.FunnelPursuit(shooter, as);
+                    }
                 }
-                ArmorStandMgr.giveDamageArmorStand(as, damage * Gear.getGearInfluence(shooter, Gear.Type.MAIN_SPEC_UP), shooter);
+                ArmorStandMgr.giveDamageArmorStand(as, damage, shooter);
             }
         }
         

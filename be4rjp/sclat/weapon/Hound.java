@@ -92,6 +92,7 @@ public class Hound {
             //半径
             double maxDist = 1;
             double saveY =0;
+            int explodetick = data.getWeaponClass().getMainWeapon().getRollerShootQuantity();
 
             @Override
             public void run() {
@@ -138,7 +139,7 @@ public class Hound {
 
                     bloc = as1l.clone();
 
-                    if(i >= 40 && i <= 50){
+                    if(i >= explodetick-20 && i <= explodetick-10){
                         if(i % 2 == 0)
                             player.getWorld().playSound(as1l, Sound.BLOCK_NOTE_BLOCK_PLING, 1F, 1.6F);
                     }
@@ -154,7 +155,7 @@ public class Hound {
                         }
                     }
 
-                    if(i == 60 || !player.isOnline() || !data.isInMatch() || (data.getIsSneaking() && data.getArmorlist(0)==as1 && !data.getIsSliding())){
+                    if(i == explodetick || !player.isOnline() || !data.isInMatch() || (data.getIsSneaking() && data.getArmorlist(0)==as1 && !data.getIsSliding())){
                         if(data.getIsSneaking()){
                             data.setIsSliding(true);
                         }

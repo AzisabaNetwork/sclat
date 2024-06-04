@@ -56,7 +56,7 @@ public class SwordMord {
                 }
                 player.updateInventory();
                 player.addPotionEffect(new PotionEffect(PotionEffectType.LUCK, 161, 1));
-                player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 161, 0));
+                //player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 161, 0));
                 //SwordPaintRunnable(p);
                 SwordGurdRunnable(p);
             }
@@ -81,7 +81,7 @@ public class SwordMord {
         if(player.hasPotionEffect(PotionEffectType.LUCK)) {
             if(!player.isSneaking()) {
                 player.getWorld().playSound(player.getLocation(), Sound.ENTITY_PLAYER_ATTACK_SWEEP, 1.4F, 1.5F);
-                Location vec = player.getLocation().add(player.getEyeLocation().getDirection().normalize().multiply(3.0));
+                Location vec = player.getLocation().add(player.getEyeLocation().getDirection().normalize().multiply(2.4));
                 for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
                     if(DataMgr.getPlayerData(target).getSettings().ShowEffect_Bomb())
                         if(target.getWorld() == player.getWorld())
@@ -104,7 +104,7 @@ public class SwordMord {
                 for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
                     if (!DataMgr.getPlayerData(target).isInMatch())
                         continue;
-                    if (target.getLocation().distance(vec) <= maxDist + 1) {
+                    if (target.getLocation().distance(vec) <= maxDist) {
                         double damage = 15.1;
                         if (DataMgr.getPlayerData(player).getTeam() != DataMgr.getPlayerData(target).getTeam() && target.getGameMode().equals(GameMode.ADVENTURE)) {
                             Sclat.giveDamage(player, target, damage, "spWeapon");
@@ -143,7 +143,7 @@ public class SwordMord {
                     DataMgr.getPlayerData(p).setCanUseSubWeapon(true);
                 }
             };
-            task2.runTaskLater(Main.getPlugin(), 5);
+            task2.runTaskLater(Main.getPlugin(), 7);
         }
     }
     public static void SwordPaintRunnable(Player player){
@@ -203,7 +203,7 @@ public class SwordMord {
                         //防具立て召喚
                         if (p.hasPotionEffect(PotionEffectType.LUCK) && p.getGameMode() != GameMode.SPECTATOR && p.isSneaking()) {
                             eloc = p.getEyeLocation();
-                            pv = p.getEyeLocation().getDirection().normalize();
+                            pv = eloc.getDirection().normalize();
                             vec3 = new Vector(pv.getX(), 0, pv.getZ()).normalize();
                             vec1 = new Vector(vec3.getZ() * -1, 0, vec3.getX());
                             vec2 = new Vector(vec3.getZ(), 0, vec3.getX() * -1);

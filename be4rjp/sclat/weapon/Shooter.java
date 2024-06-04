@@ -91,6 +91,7 @@ public class Shooter {
             Player p = player;
             Location loc = player.getLocation();
             Location before = player.getLocation();
+            Location before_2 = player.getLocation();
             //int sl = 0;
             //スライドの仕様改変
             boolean sl_recharge_1=true;
@@ -109,11 +110,20 @@ public class Shooter {
                 }
 
                 Location location = p.getLocation();
+
                 double x = location.getX() - before.getX();
                 double z = location.getZ() - before.getZ();
                 Vector vec = p.getEyeLocation().getDirection();
-                if(x != 0 && z != 0)
+                if(x != 0 || z != 0) {
                     vec = new Vector(x, 0, z);
+                }else{
+                    x = location.getX() - before_2.getX();
+                    z = location.getZ() - before_2.getZ();
+                    if(x != 0 || z != 0){
+                        vec = new Vector(x, 0, z);
+                    }
+                }
+                before_2 = before.clone();
                 before = location.clone();
 
                 //float ink = data.getWeaponClass().getMainWeapon().getSlideNeedINK();

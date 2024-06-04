@@ -162,12 +162,19 @@ public class LootBox {
         player.openInventory(shooter);
     }
     public static void GiftWeapon(Player player){
-        String ClassName = "カープシェルター[端午]";
+        String ClassName = "テストシューター";
         if(!PlayerStatusMgr.haveWeapon(player, ClassName)){
             PlayerStatusMgr.addWeapon(player, ClassName);
             Sclat.sendMessage(ChatColor.GREEN + ClassName + "が手に入ったよ", MessageType.PLAYER, player);
         }else{
             Sclat.sendMessage(ChatColor.GREEN + ClassName +"はすでに持っているよ", MessageType.PLAYER, player);
+        }
+    }
+    public static void changeteam(Player player){
+        if(DataMgr.getPlayerData(player).getTeam()==DataMgr.getPlayerData(player).getMatch().getTeam1()){
+            DataMgr.getPlayerData(player).setTeam(DataMgr.getPlayerData(player).getMatch().getTeam0());
+        }else{
+            DataMgr.getPlayerData(player).setTeam(DataMgr.getPlayerData(player).getMatch().getTeam1());
         }
     }
 }

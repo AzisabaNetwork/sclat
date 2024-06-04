@@ -262,6 +262,10 @@ public class GameMgr implements Listener{
                                     Hound.HoundRunnable(p);
                                     Hound.HoundEXRunnable(p);
                                 }
+                                if(DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getWeaponType().equals("Funnel")){
+                                    Shooter.ShooterRunnable(p);
+                                    Funnel.FunnelFloat(p);
+                                }
                                 WeaponClassMgr.setWeaponClass(p);
                                 player.setExp(0.99F);
                                 
@@ -644,6 +648,9 @@ public class GameMgr implements Listener{
                         break;
                     case "[ GiftForYou ]":
                         LootBox.GiftWeapon(player);
+                        break;
+                    case "[ ChangeTeam ]":
+                        LootBox.changeteam(player);
                         break;
                     case "[ give chest ]":
                         PlayerStatusMgr.setTutorialState(player.getUniqueId().toString(),2);

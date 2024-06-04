@@ -688,6 +688,10 @@ public class MatchMgr {
                         Hound.HoundRunnable(p);
                         Hound.HoundEXRunnable(p);
                     }
+                    if(DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getWeaponType().equals("Funnel")){
+                        Shooter.ShooterRunnable(p);
+                        Funnel.FunnelFloat(p);
+                    }
     
                     SquidMgr.SquidShowRunnable(p);
 
