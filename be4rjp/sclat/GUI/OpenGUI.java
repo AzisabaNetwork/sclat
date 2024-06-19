@@ -418,9 +418,6 @@ public class OpenGUI {
                         if(DataMgr.getWeaponClass(ClassName).getMainWeapon().getIsManeuver()||DataMgr.getWeaponClass(ClassName).getMainWeapon().getIsSwap())
                             equals = false;
                     }
-                    if(weaponType.equals("Shooter") && DataMgr.getWeaponClass(ClassName).getMainWeapon().getWeaponType().equals("Funnel")){
-                        equals = true;
-                    }
     
     
                     if (slotnum <= 52 && equals){
@@ -537,6 +534,11 @@ public class OpenGUI {
                 swpm.setDisplayName("スワッパー");
                 swp.setItemMeta(swpm);
 
+                ItemStack fnl = new ItemStack(Material.LEATHER);
+                ItemMeta fnlm = fnl.getItemMeta();
+                fnlm.setDisplayName("ドラグーン");
+                fnl.setItemMeta(fnlm);
+
                 wm.setItem(0, s);
                 wm.setItem(1, b);
                 wm.setItem(2, ba);
@@ -549,6 +551,7 @@ public class OpenGUI {
                 wm.setItem(9, m);
                 wm.setItem(10, hd);
                 wm.setItem(11, swp);
+                wm.setItem(12, fnl);
 
                 player.openInventory(wm);
     

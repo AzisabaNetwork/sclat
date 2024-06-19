@@ -22,20 +22,21 @@ import org.bukkit.util.Vector;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Funnel {
 
     static HashMap<ArmorStand,Player> HashPlayer = new HashMap<>();
     static HashMap<ArmorStand,ArmorStand> HashArmorstand = new HashMap<>();
-    static int FunnelMaxHP = 30;
-    static int FunnelMaxHP2 = 22;
+    static int FunnelMaxHP = 15;
+    static int FunnelMaxHP2 = 8;
     public static void FunnelShot(Player player, ArmorStand funnel, Location taegetloc) {
-        double damage = 2.0;
+        double damage = 3.3;
         Location funloc = funnel.getEyeLocation();
         if(player.getGameMode() == GameMode.SPECTATOR) return;
         player.getWorld().playSound(player.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_BLAST, 0.4f, 5);
         RayTrace rayTrace = new RayTrace(funloc.toVector(),new Vector(taegetloc.getX()-funloc.getX(),taegetloc.getY()-funloc.getY(),taegetloc.getZ()-funloc.getZ()).normalize());
-        ArrayList<Vector> positions = rayTrace.traverse((int)3, 0.2);
+        ArrayList<Vector> positions = rayTrace.traverse((int)4, 0.2);
 
 
         loop : for(int i = 0; i < positions.size();i++) {
@@ -63,7 +64,7 @@ public class Funnel {
                     continue;
                 if (DataMgr.getPlayerData(player).getTeam() != DataMgr.getPlayerData(target).getTeam() && target.getGameMode().equals(GameMode.ADVENTURE)) {
                     if (target.getLocation().distanceSquared(position) <= maxDistSquad) {
-                        if (rayTrace.intersects(new BoundingBox((Entity) target), 3, 0.05)) {
+                        if (rayTrace.intersects(new BoundingBox((Entity) target), 4, 0.05)) {
                             Sclat.giveDamage(player, target, damage, "killed");
                             player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_HURT, 1.2F, 1.3F);
 
@@ -86,7 +87,7 @@ public class Funnel {
             for (Entity as : player.getWorld().getEntities()) {
                 if (as instanceof ArmorStand) {
                     if (as.getLocation().distanceSquared(position) <= maxDistSquad) {
-                        if (rayTrace.intersects(new BoundingBox((Entity) as), 3, 0.05)) {
+                        if (rayTrace.intersects(new BoundingBox((Entity) as), 4, 0.05)) {
                             if (as.getCustomName() != null) {
                                 if (as.getCustomName().equals("SplashShield")) {
                                     SplashShieldData ssdata = DataMgr.getSplashShieldDataFromArmorStand((ArmorStand) as);
@@ -383,13 +384,13 @@ public class Funnel {
                     if(i >= 0){
                         //ファンネル破壊時の復活処理
                         if(p.getGameMode() == GameMode.SPECTATOR){
-                            if(kdata.getDamage()<=5){
+                            if(kdata.getDamage()<=FunnelMaxHP){
                                 kdata.setDamage(1024);
                             }
-                            if(kdata1.getDamage()<=5){
+                            if(kdata1.getDamage()<=FunnelMaxHP){
                                 kdata1.setDamage(1024);
                             }
-                            if(kdata2.getDamage()<=5){
+                            if(kdata2.getDamage()<=FunnelMaxHP){
                                 kdata2.setDamage(1024);
                             }
                         }
@@ -488,7 +489,7 @@ public class Funnel {
                                             if (!aslistget0.hasGravity()) {
                                                 aslistget0.setGravity(true);
                                             }
-                                            aslistget0.setVelocity(pv.normalize().multiply(0.9));
+                                            aslistget0.setVelocity(pv.normalize().multiply(1.0));
                                         } else {
                                             if (aslistget0.hasGravity()) {
                                                 aslistget0.setGravity(false);
@@ -510,7 +511,7 @@ public class Funnel {
                                             if (!aslistget0.hasGravity()) {
                                                 aslistget0.setGravity(true);
                                             }
-                                            aslistget0.setVelocity(pv.normalize().multiply(0.9));
+                                            aslistget0.setVelocity(pv.normalize().multiply(1.0));
                                         } else {
                                             if (aslistget0.hasGravity()) {
                                                 aslistget0.setGravity(false);
@@ -549,7 +550,7 @@ public class Funnel {
                                             if (!aslistget0.hasGravity()) {
                                                 aslistget0.setGravity(true);
                                             }
-                                            aslistget0.setVelocity(pv.normalize().multiply(0.9));
+                                            aslistget0.setVelocity(pv.normalize().multiply(1.0));
                                         } else {
                                             if (aslistget0.hasGravity()) {
                                                 aslistget0.setGravity(false);
@@ -571,7 +572,7 @@ public class Funnel {
                                             if (!aslistget0.hasGravity()) {
                                                 aslistget0.setGravity(true);
                                             }
-                                            aslistget0.setVelocity(pv.normalize().multiply(0.9));
+                                            aslistget0.setVelocity(pv.normalize().multiply(1.0));
                                         } else {
                                             if (aslistget0.hasGravity()) {
                                                 aslistget0.setGravity(false);
@@ -610,7 +611,7 @@ public class Funnel {
                                             if (!aslistget0.hasGravity()) {
                                                 aslistget0.setGravity(true);
                                             }
-                                            aslistget0.setVelocity(pv.normalize().multiply(0.9));
+                                            aslistget0.setVelocity(pv.normalize().multiply(1.0));
                                         } else {
                                             if (aslistget0.hasGravity()) {
                                                 aslistget0.setGravity(false);
@@ -632,7 +633,7 @@ public class Funnel {
                                             if (!aslistget0.hasGravity()) {
                                                 aslistget0.setGravity(true);
                                             }
-                                            aslistget0.setVelocity(pv.normalize().multiply(0.9));
+                                            aslistget0.setVelocity(pv.normalize().multiply(1.0));
                                         } else {
                                             if (aslistget0.hasGravity()) {
                                                 aslistget0.setGravity(false);
@@ -681,10 +682,10 @@ public class Funnel {
                     }
                     if(check && p.isSneaking() && p.getGameMode() != GameMode.SPECTATOR){
                         check=false;
-                        taskcheck.runTaskLater(Main.getPlugin(), 12);
+                        taskcheck.runTaskLater(Main.getPlugin(), 18);
                         player.getWorld().playSound(player.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_BLAST, 0.4f, 5);
                         RayTrace rayTrace = new RayTrace(player.getEyeLocation().toVector(),player.getEyeLocation().getDirection());
-                        ArrayList<Vector> positions = rayTrace.traverse(40, 0.3);
+                        ArrayList<Vector> positions = rayTrace.traverse(55, 0.3);
 
                         loop : for(int it = 0; it < positions.size();it++){
 
@@ -706,7 +707,7 @@ public class Funnel {
                             }
 
 
-                            double maxDistSquad = 13 /* 2*2 */;
+                            double maxDistSquad = 20 /* 2*2 */;
                             for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
                                 if(!DataMgr.getPlayerData(target).isInMatch())
                                     continue;
@@ -715,34 +716,40 @@ public class Funnel {
                                         //if(rayTrace.intersects(new BoundingBox((Entity)target), (30), 0.2)){
                                         player.getWorld().playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BIT, 1.0f, 5);
                                             if(list6.size()>0) {
-                                                if (list6.get(list6.size() - 1).equals(as3)) {
+                                                if (list6.get(list6.size() - 1).equals(as3) && FunAmoP(target)) {
+                                                    player.getWorld().playSound(target.getLocation(), Sound.BLOCK_NOTE_BLOCK_DIDGERIDOO, 1.0f, 2);
                                                     HashPlayer.put(as3, target);
                                                     GlowingAPI.setGlowing(as3, player, true);
+                                                    GlowingAPI.setGlowing(as3, target, true);
                                                     if(kdata.getDamage()<FunnelMaxHP2){
                                                         kdata.setDamage(FunnelMaxHP2);
                                                     }
                                                     as3.setGravity(true);
-                                                    kdataReset=i+160;
+                                                    kdataReset=i+200;
                                                     //listremove.runTaskLater(Main.getPlugin(), 140);
                                                     list6.remove(list6.size() - 1);
-                                                } else if (list6.get(list6.size() - 1).equals(as13)) {
+                                                } else if (list6.get(list6.size() - 1).equals(as13) && FunAmoP(target)) {
+                                                    player.getWorld().playSound(target.getLocation(), Sound.BLOCK_NOTE_BLOCK_DIDGERIDOO, 1.0f, 2);
                                                     HashPlayer.put(as13, target);
                                                     GlowingAPI.setGlowing(as13, player, true);
+                                                    GlowingAPI.setGlowing(as13, target, true);
                                                     if(kdata1.getDamage()<FunnelMaxHP2){
                                                         kdata1.setDamage(FunnelMaxHP2);
                                                     }
                                                     as13.setGravity(true);
-                                                    kdataReset1=i+160;
+                                                    kdataReset1=i+200;
                                                     //listremove1.runTaskLater(Main.getPlugin(), 140);
                                                     list6.remove(list6.size() - 1);
-                                                } else if (list6.get(list6.size() - 1).equals(as23)) {
+                                                } else if (list6.get(list6.size() - 1).equals(as23) && FunAmoP(target)) {
+                                                    player.getWorld().playSound(target.getLocation(), Sound.BLOCK_NOTE_BLOCK_DIDGERIDOO, 1.0f, 2);
                                                     HashPlayer.put(as23, target);
                                                     GlowingAPI.setGlowing(as23, player, true);
+                                                    GlowingAPI.setGlowing(as23, target, true);
                                                     if(kdata2.getDamage()<FunnelMaxHP2){
                                                         kdata2.setDamage(FunnelMaxHP2);
                                                     }
                                                     as23.setGravity(true);
-                                                    kdataReset2=i+160;
+                                                    kdataReset2=i+200;
                                                     //listremove2.runTaskLater(Main.getPlugin(), 140);
                                                     list6.remove(list6.size() - 1);
                                                 }
@@ -775,34 +782,36 @@ public class Funnel {
                                                                 //player.playSound(player.getLocation(), Sound.ENTITY_ARROW_HIT_PLAYER, 1.2F, 1.3F);
                                                     player.getWorld().playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BIT, 1.0f, 5);
                                                         if(list6.size()>0) {
-                                                            if (list6.get(list6.size() - 1).equals(as3)) {
-                                                                HashArmorstand.put(as3, (ArmorStand) as);
+                                                            if (list6.get(list6.size() - 1).equals(as3) && FunAmoA((ArmorStand) as)) {
+                                                                player.getWorld().playSound(as.getLocation(), Sound.BLOCK_NOTE_BLOCK_DIDGERIDOO, 1.0f, 2);                                                                HashArmorstand.put(as3, (ArmorStand) as);
                                                                 GlowingAPI.setGlowing(as3, player, true);
                                                                 if(kdata.getDamage()<FunnelMaxHP2){
                                                                     kdata.setDamage(FunnelMaxHP2);
                                                                 }
                                                                 as3.setGravity(true);
-                                                                kdataReset=i+160;
+                                                                kdataReset=i+200;
                                                                 //listremove.runTaskLater(Main.getPlugin(), 140);
                                                                 list6.remove(list6.size() - 1);
-                                                            } else if (list6.get(list6.size() - 1).equals(as13)) {
+                                                            } else if (list6.get(list6.size() - 1).equals(as13) && FunAmoA((ArmorStand) as)) {
+                                                                player.getWorld().playSound(as.getLocation(), Sound.BLOCK_NOTE_BLOCK_DIDGERIDOO, 1.0f, 2);
                                                                 HashArmorstand.put(as13, (ArmorStand) as);
                                                                 GlowingAPI.setGlowing(as13, player, true);
                                                                 if(kdata1.getDamage()<FunnelMaxHP2){
                                                                     kdata1.setDamage(FunnelMaxHP2);
                                                                 }
                                                                 as13.setGravity(true);
-                                                                kdataReset1=i+160;
+                                                                kdataReset1=i+200;
                                                                 //listremove1.runTaskLater(Main.getPlugin(), 140);
                                                                 list6.remove(list6.size() - 1);
-                                                            } else if (list6.get(list6.size() - 1).equals(as23)) {
+                                                            } else if (list6.get(list6.size() - 1).equals(as23) && FunAmoA((ArmorStand) as)) {
+                                                                player.getWorld().playSound(as.getLocation(), Sound.BLOCK_NOTE_BLOCK_DIDGERIDOO, 1.0f, 2);
                                                                 HashArmorstand.put(as23, (ArmorStand) as);
                                                                 GlowingAPI.setGlowing(as23, player, true);
                                                                 if(kdata2.getDamage()<FunnelMaxHP2){
                                                                     kdata2.setDamage(FunnelMaxHP2);
                                                                 }
                                                                 as23.setGravity(true);
-                                                                kdataReset2=i+160;
+                                                                kdataReset2=i+200;
                                                                 //listremove2.runTaskLater(Main.getPlugin(), 140);
                                                                 list6.remove(list6.size() - 1);
                                                             }
@@ -849,11 +858,11 @@ public class Funnel {
             try {
                 if(HashArmorstand.containsKey(DataMgr.getPlayerData(player).getArmorlist(ai))){
                     if(HashArmorstand.get(DataMgr.getPlayerData(player).getArmorlist(ai)).equals(target)){
-                        rate = rate + 1.8;
+                        rate = rate + 1.5;
                     }
                 }
             }catch (Exception e){
-                rate = rate - 1;
+                rate = rate - 0.7;
             }
         }
         BukkitRunnable task = new BukkitRunnable() {
@@ -907,11 +916,11 @@ public class Funnel {
             try {
                 if(HashPlayer.containsKey(DataMgr.getPlayerData(player).getArmorlist(ai))){
                     if(HashPlayer.get(DataMgr.getPlayerData(player).getArmorlist(ai)).equals(target)){
-                        rate = rate + 1.8;
+                        rate = rate + 1.5;
                     }
                 }
             }catch (Exception e){
-                rate = rate - 1;
+                rate = rate - 0.7;
             }
         }
         BukkitRunnable task = new BukkitRunnable() {
@@ -975,5 +984,31 @@ public class Funnel {
             }
         }
         return rate;
+    }
+    private static boolean FunAmoP(Player player){
+        int count = 0;
+        for(Map.Entry<ArmorStand,Player> entry: HashPlayer.entrySet()){
+            if(entry.getValue() == player){
+                count++;
+            }
+        }
+        if(count >=3){
+            return false;
+        }else {
+            return true;
+        }
+    }
+    private static boolean FunAmoA(ArmorStand stand){
+        int count = 0;
+        for(Map.Entry<ArmorStand,ArmorStand> entry: HashArmorstand.entrySet()){
+            if(entry.getValue() == stand){
+                count++;
+            }
+        }
+        if(count >=3){
+            return false;
+        }else {
+            return true;
+        }
     }
 }

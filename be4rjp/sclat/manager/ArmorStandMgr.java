@@ -320,7 +320,7 @@ public class ArmorStandMgr {
         if(as.getCustomName().equals("Kasa")){
             KasaData ssdata = DataMgr.getKasaDataFromArmorStand(as);
             if(DataMgr.getPlayerData(ssdata.getPlayer()).getTeam() != DataMgr.getPlayerData(shooter).getTeam()){
-                ssdata.setDamage(ssdata.getDamage() + DataMgr.getPlayerData(shooter).getWeaponClass().getMainWeapon().getDamage());
+                ssdata.setDamage(ssdata.getDamage() + damage);
                 if(ssdata.getDamage() > 200)
                     as.getWorld().playSound(as.getLocation(), Sound.ENTITY_ITEM_BREAK, 0.8F, 0.8F);
                 as.getWorld().playSound(as.getLocation(), Sound.ENTITY_PLAYER_HURT, 0.8F, 1.2F);
