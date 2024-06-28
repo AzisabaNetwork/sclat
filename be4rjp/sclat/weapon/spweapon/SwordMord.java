@@ -274,33 +274,6 @@ public class SwordMord {
 
         double QuadroShootSpeed = 5.9;
         if(player.getGameMode() == GameMode.SPECTATOR) return;
-
-//        PlayerData data = DataMgr.getPlayerData(player);
-//        RayTrace rayTrace = new RayTrace(player.getEyeLocation().toVector(),player.getEyeLocation().getDirection());
-//        ArrayList<Vector> positions = rayTrace.traverse(QuadroShootSpeed * QuadroDisTick,0.7);
-//        boolean isLockOnPlayer = false;
-//        check:
-//        for (int i = 0; i < positions.size(); i++) {
-//            Location position = positions.get(i).toLocation(player.getLocation().getWorld());
-//            for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
-//                if (player != target && player.getWorld() == target.getWorld()) {
-//                    if (target.getLocation().distance(position) < 2) {
-//                        isLockOnPlayer = true;
-//                        break check;
-//                    }
-//                }
-//            }
-//            for (Entity as : player.getWorld().getEntities()) {
-//                if (as instanceof ArmorStand) {
-//                    if (as.getCustomName() != null) {
-//                        if (as.getLocation().distanceSquared(position) <= 4 /* 2*2 */) {
-//                            isLockOnPlayer = true;
-//                            break check;
-//                        }
-//                    }
-//                }
-//            }
-//        }
         PaintMgr.PaintHightestBlock(player.getLocation(), player, true, true);
 
         Snowball ball = player.launchProjectile(Snowball.class);
@@ -324,7 +297,6 @@ public class SwordMord {
             int i = 0;
             int tick = 1;
             //Vector fallvec;
-            Vector origvec = vec;
             Snowball inkball = ball;
             boolean addedFallVec = false;
             Player p = player;

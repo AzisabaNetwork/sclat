@@ -36,8 +36,13 @@ public class Swapper {
                                     data.setStoprun(false);
                                     data.setWeaponClass(DataMgr.getWeaponClass(swapname));
                                     data.setCanRollerShoot(true);
+                                    DataMgr.getPlayerData(p).setIsUsingManeuver(false);
                                     if(DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getWeaponType().equals("Shooter")){
-                                        Shooter.ShooterRunnable(p);
+                                        if(DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getSlidingShootTick()>1) {
+                                            DataMgr.getPlayerData(p).setIsUsingManeuver(true);
+                                        }else{
+                                            Shooter.ShooterRunnable(p);
+                                        }
                                     }
                                     WeaponClassMgr.setWeaponClass(p);
                                 }
