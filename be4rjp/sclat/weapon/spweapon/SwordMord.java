@@ -12,6 +12,7 @@ import be4rjp.sclat.manager.ArmorStandMgr;
 import be4rjp.sclat.manager.PaintMgr;
 import be4rjp.sclat.manager.SPWeaponMgr;
 import be4rjp.sclat.manager.WeaponClassMgr;
+import be4rjp.sclat.raytrace.BoundingBox;
 import be4rjp.sclat.raytrace.RayTrace;
 import be4rjp.sclat.weapon.Gear;
 import org.bukkit.*;
@@ -252,6 +253,29 @@ public class SwordMord {
                                 as3.teleport(r1.clone().add(0, -1.2, 0));
                                 as4.teleport(l1.clone().add(0, -1.2, 0));
                             }
+                            if(kdata.getDamage()>0.1) {
+                                RayTrace rayTrace = new RayTrace(as1.getLocation().toVector(), new Vector(0, 1, 0));
+                                for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
+                                    if (!DataMgr.getPlayerData(target).isInMatch())
+                                        continue;
+                                    if (DataMgr.getPlayerData(player).getTeam() != DataMgr.getPlayerData(target).getTeam() && target.getGameMode().equals(GameMode.ADVENTURE)) {
+                                        if (rayTrace.intersects(new BoundingBox((Entity) target), 5, 0.05)) {
+                                            Sclat.giveDamage(player, target, 6, "spWeapon");
+
+                                            //AntiNoDamageTime
+                                            BukkitRunnable taskdamage = new BukkitRunnable() {
+                                                Player p = target;
+
+                                                @Override
+                                                public void run() {
+                                                    target.setNoDamageTicks(0);
+                                                }
+                                            };
+                                            taskdamage.runTaskLater(Main.getPlugin(), 1);
+                                        }
+                                    }
+                                }
+                            }
                         } else if (gurd) {
                             as1.remove();
                             as2.remove();
@@ -272,7 +296,7 @@ public class SwordMord {
     }
     public static void ShootCounter(Player player){
 
-        double QuadroShootSpeed = 5.9;
+        double QuadroShootSpeed = 1.0;
         if(player.getGameMode() == GameMode.SPECTATOR) return;
         PaintMgr.PaintHightestBlock(player.getLocation(), player, true, true);
 
@@ -295,11 +319,12 @@ public class SwordMord {
         DataMgr.setSnowballHitCount(name, 0);
         BukkitRunnable SpinnerTask = new BukkitRunnable(){
             int i = 0;
-            int tick = 1;
+            int tick = 4;
             //Vector fallvec;
             Snowball inkball = ball;
             boolean addedFallVec = false;
             Player p = player;
+            Vector speedvec = new Vector(inkball.getVelocity().getX(), inkball.getVelocity().getY()  , inkball.getVelocity().getZ()).multiply(5.0);
             Vector fallvec = new Vector(inkball.getVelocity().getX(), inkball.getVelocity().getY()  , inkball.getVelocity().getZ()).multiply(QuadroShootSpeed/35);
 
             @Override
@@ -320,7 +345,9 @@ public class SwordMord {
                                     o_player.spawnParticle(org.bukkit.Particle.BLOCK_DUST, inkball.getLocation(), 0, 0, -1, 0, 1, bd);
                     }
                 }
-
+                if(i < tick && !addedFallVec && i>=1){
+                    inkball.setVelocity(speedvec);
+                }
                 if(i >= tick && !addedFallVec){
                     inkball.setVelocity(fallvec);
                     addedFallVec = true;

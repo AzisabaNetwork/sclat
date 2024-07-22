@@ -122,7 +122,6 @@ public class MapDataMgr {
                 }
             }
             
-            
             boolean canpaintbblock = false;
             if(conf.getMapConfig().contains("Maps." + mapname + ".CanPaintBarrierBlock"))
                 canpaintbblock = conf.getMapConfig().getBoolean("Maps." + mapname + ".CanPaintBarrierBlock");

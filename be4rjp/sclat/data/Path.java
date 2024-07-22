@@ -72,7 +72,7 @@ public class Path {
                     setTeamed = false;
                 }
             };
-            task.runTaskLater(Main.getPlugin(), 400);
+            task.runTaskLater(Main.getPlugin(), 3600);
         }
     }
     

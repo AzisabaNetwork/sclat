@@ -48,6 +48,7 @@ public class MapData {
     private WiremeshListTask wmlTask;
     
     private int VoidY = 0;
+
     
     
     
@@ -92,8 +93,9 @@ public class MapData {
     public WiremeshListTask getWiremeshListTask(){return this.wmlTask;}
     
     public int getVoidY(){return this.VoidY;}
-    
-    
+
+
+
     
     public void setIntro(Location l){this.Intro = l;}
     

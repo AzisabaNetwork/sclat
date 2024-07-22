@@ -55,7 +55,6 @@ public class MatchMgr {
     public static int matchcount = 0;
     public static int mapcount = 0;
     public static byte volume = 20;
-    
     public static boolean canRollback = true;
     
     public static List<String> matchedPlayerList = new ArrayList<>();
@@ -1257,7 +1256,7 @@ public class MatchMgr {
                             winteam = match.getTeam1();
                             per--;
                         }
-                        
+
                         match.setWinTeam(winteam);
                         match.setIsHikiwake(hikiwake);
 
