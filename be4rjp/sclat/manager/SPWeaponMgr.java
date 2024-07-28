@@ -17,6 +17,7 @@ import be4rjp.sclat.weapon.spweapon.MultiMissile;
 import be4rjp.sclat.weapon.spweapon.SuperArmor;
 import be4rjp.sclat.weapon.spweapon.SuperSensor;
 import be4rjp.sclat.weapon.spweapon.SuperShot;
+import be4rjp.sclat.weapon.spweapon.LitterFiveG;
 import be4rjp.sclat.weapon.spweapon.QuadroArms;
 import be4rjp.sclat.weapon.spweapon.SuperTyakuti;
 import be4rjp.sclat.weapon.spweapon.SwordMord;
@@ -107,7 +108,7 @@ public class SPWeaponMgr {
                     }
                     DataMgr.getPlayerData(p).setIsSP(true);
                 }else{
-                    if(!(data.getWeaponClass().getSPWeaponName().equals("インクストライク") || data.getWeaponClass().getSPWeaponName().equals("ジェットパック") || data.getWeaponClass().getSPWeaponName().equals("スーパーショット") || data.getWeaponClass().getSPWeaponName().equals("クアドロアームズ") || data.getWeaponClass().getSPWeaponName().equals("セイバーモード")))
+                    if(!(data.getWeaponClass().getSPWeaponName().equals("インクストライク") || data.getWeaponClass().getSPWeaponName().equals("ジェットパック") || data.getWeaponClass().getSPWeaponName().equals("スーパーショット") || data.getWeaponClass().getSPWeaponName().equals("クアドロアームズ") || data.getWeaponClass().getSPWeaponName().equals("セイバーモード") || data.getWeaponClass().getSPWeaponName().equals("リッター5G")))
                         p.getInventory().setItem(4, new ItemStack(Material.AIR));
                     DataMgr.getPlayerData(p).setIsSP(false);
                 }
@@ -296,6 +297,13 @@ public class SPWeaponMgr {
                 is11.setItemMeta(ism11);
                 p.getInventory().setItem(4, is11);
                 break;
+            case "リッター5G":
+                ItemStack is12 = new ItemStack(Material.NAUTILUS_SHELL);
+                ItemMeta ism12 = is12.getItemMeta();
+                ism12.setDisplayName("リッター5G");
+                is12.setItemMeta(ism12);
+                p.getInventory().setItem(4, is12);
+                break;
         }
     }
     
@@ -427,6 +435,13 @@ public class SPWeaponMgr {
                 player.setExp(0.99F);
                 player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_USE, 1, 2);
                 player.sendTitle("", "右クリックで発射！", 5, 20, 5);
+                break;
+            case "リッター5G":
+                player.getInventory().setItem(4, new ItemStack(Material.AIR));
+                LitterFiveG.setLitterFiveG(player);
+                player.setExp(0.99F);
+                player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_USE, 1, 2);
+                player.sendTitle("", "右クリックで射撃！", 5, 20, 5);
                 break;
             case "スーパーチャクチ":
                 player.getInventory().setItem(4, new ItemStack(Material.AIR));

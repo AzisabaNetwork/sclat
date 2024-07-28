@@ -3,10 +3,7 @@ package be4rjp.sclat.manager;
 
 import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.data.PlayerData;
-import be4rjp.sclat.weapon.spweapon.JetPack;
-import be4rjp.sclat.weapon.spweapon.SuperShot;
-import be4rjp.sclat.weapon.spweapon.QuadroArms;
-import be4rjp.sclat.weapon.spweapon.SwordMord;
+import be4rjp.sclat.weapon.spweapon.*;
 import be4rjp.sclat.weapon.subweapon.*;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -124,6 +121,10 @@ public class SubWeaponMgr {
                 break;
             case "Quadro-WHITE":
                 QuadroArms.QuadroCooltime(player,4);
+                data.setCanUseSubWeapon(false);
+                break;
+            case "右クリックで射撃!":
+                LitterFiveG.Shoot_LitterFiveG(player);
                 data.setCanUseSubWeapon(false);
                 break;
         }
