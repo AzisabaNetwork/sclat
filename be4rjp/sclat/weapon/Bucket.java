@@ -151,18 +151,21 @@ public class Bucket {
     public static void BucketHealRunnable(Player player,int level){
         BukkitRunnable delay3 = new BukkitRunnable(){
             Player p = player;
+            int Ctime = 200;
             boolean bh_recharge=true;
 
             @Override
             public void run(){
                 PlayerData data = DataMgr.getPlayerData(p);
-
+                if(level>=1){
+                    Ctime = 100;
+                }
                 if(!data.isInMatch() || !p.isOnline()){
                     cancel();
                     return;
                 }
                 if (data.getIsSneaking() && bh_recharge == true && player.getGameMode().equals(GameMode.ADVENTURE)) {
-                    p.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION,200,level));
+                    p.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION,Ctime,level));
                     p.getWorld().playSound(p.getLocation(), Sound.ITEM_TRIDENT_RETURN, 1.4F, 1.5F);
                     bh_recharge=false;
                     BukkitRunnable healtask = new BukkitRunnable() {//クールタイムを管理しています
@@ -171,7 +174,7 @@ public class Bucket {
                                 bh_recharge = true;
                             }
                         };
-                    healtask.runTaskLater(Main.getPlugin(), 200);
+                    healtask.runTaskLater(Main.getPlugin(), Ctime);
                 }
             }
         };

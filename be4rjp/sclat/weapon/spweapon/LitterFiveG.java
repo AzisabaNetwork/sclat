@@ -1,5 +1,6 @@
 package be4rjp.sclat.weapon.spweapon;
 
+import be4rjp.dadadachecker.ClickType;
 import be4rjp.sclat.Main;
 import be4rjp.sclat.Sclat;
 import be4rjp.sclat.Sphere;
@@ -38,7 +39,7 @@ public class LitterFiveG {
     private static int max_charge = 44;
     public static void setLitterFiveG(Player player){
         DataMgr.getPlayerData(player).setIsUsingSP(true);
-        DataMgr.getPlayerData(player).setIsUsingSS(true);
+        DataMgr.getPlayerData(player).setIsUsingSS(false);
         SPWeaponMgr.setSPCoolTimeAnimation(player, 280);
         if(Hash_charge.containsKey(player)) {
             Hash_charge.replace(player,0);
@@ -78,7 +79,7 @@ public class LitterFiveG {
                 }
             }
         };
-        task.runTaskLater(Main.getPlugin(), 280);
+        task.runTaskLater(Main.getPlugin(), 281);
     }
     public static void charge_bar(Player player){
         BossBar bar = Main.getPlugin().getServer().createBossBar(DataMgr.getPlayerData(player).getTeam().getTeamColor().getColorCode() + "§cCharge", BarColor.RED, BarStyle.SOLID, BarFlag.CREATE_FOG);
@@ -110,16 +111,25 @@ public class LitterFiveG {
                             bell = true;
                         }
                     }
-                    if(!DataMgr.getPlayerData(p).isInMatch() || !p.isOnline()){
+                    if(!data.isInMatch() || !p.isOnline()){
                         bar.removeAll();
                         cancel();
                     }
-                    if(!DataMgr.getPlayerData(p).getIsUsingSS()){
+                    if(!data.getIsUsingSP()){
                         bar.removeAll();
                         cancel();
                     }
-                    if(Hash_charge.get(p) < max_charge) {
-                        Hash_charge.replace(p,Hash_charge.get(p)+Hash_cps.get(p));
+                    if(data.getSettings().ShowEffect_ChargerLine()) {
+                        if (Hash_charge.get(p) < max_charge) {
+                            Hash_charge.replace(p, Hash_charge.get(p) + Hash_cps.get(p));
+                        }
+                    }else{
+                        if (Hash_charge.get(p) < max_charge && data.getIsUsingSS()) {
+                            Hash_charge.replace(p, Hash_charge.get(p) + Hash_cps.get(p));
+                        }
+                        if (Hash_charge.get(p) !=0 && !data.getIsUsingSS()) {
+                            Shoot_LitterFiveG(p);
+                        }
                     }
                     if(player.getInventory().getItemInMainHand().getItemMeta() == null){
                         Hash_charge.replace(p,0);
@@ -138,7 +148,7 @@ public class LitterFiveG {
                         }
                         if(i % 5 == 0){
                             for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
-                                if (target.equals(p) || !DataMgr.getPlayerData(target).getSettings().ShowEffect_ChargerLine())
+                                if (target.equals(p))
                                     continue;
                                 if (target.getWorld() == p.getWorld()) {
                                     if (target.getLocation().distanceSquared(position) < Main.PARTICLE_RENDER_DISTANCE_SQUARED) {
@@ -288,6 +298,22 @@ public class LitterFiveG {
                 DataMgr.getPlayerData(p).setCanUseSubWeapon(true);
             }
         };
-        task2.runTaskLater(Main.getPlugin(), 8);
+        if(DataMgr.getPlayerData(player).getSettings().ShowEffect_ChargerLine()) {
+            task2.runTaskLater(Main.getPlugin(), 8);
+        }
+    }
+
+    public static void Charge_LitterFiveG(Player player){
+        DataMgr.getPlayerData(player).setIsUsingSS(true);
+
+        BukkitRunnable task3 = new BukkitRunnable() {
+            Player p = player;
+            @Override
+            public void run() {
+                DataMgr.getPlayerData(p).setIsUsingSS(false);
+            }
+        };
+        task3.runTaskLater(Main.getPlugin(), 8);
+        DataMgr.getPlayerData(player).setIsUsingSS(true);
     }
 }

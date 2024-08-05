@@ -124,8 +124,13 @@ public class SubWeaponMgr {
                 data.setCanUseSubWeapon(false);
                 break;
             case "右クリックで射撃!":
-                LitterFiveG.Shoot_LitterFiveG(player);
-                data.setCanUseSubWeapon(false);
+                if(data.getSettings().ShowEffect_ChargerLine()) {
+                    LitterFiveG.Shoot_LitterFiveG(player);
+                    data.setCanUseSubWeapon(false);
+                }else{
+                    LitterFiveG.Charge_LitterFiveG(player);
+                    data.setCanUseSubWeapon(true);
+                }
                 break;
         }
         
