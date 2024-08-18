@@ -539,6 +539,11 @@ public class OpenGUI {
                 fnlm.setDisplayName("ドラグーン");
                 fnl.setItemMeta(fnlm);
 
+                ItemStack grp = new ItemStack(Material.ORANGE_DYE);
+                ItemMeta grpm = fnl.getItemMeta();
+                grpm.setDisplayName("リーラー");
+                grp.setItemMeta(grpm);
+
                 wm.setItem(0, s);
                 wm.setItem(1, b);
                 wm.setItem(2, ba);
@@ -552,6 +557,7 @@ public class OpenGUI {
                 wm.setItem(10, hd);
                 wm.setItem(11, swp);
                 wm.setItem(12, fnl);
+                wm.setItem(13,grp);
 
                 player.openInventory(wm);
     

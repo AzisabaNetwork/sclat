@@ -399,12 +399,14 @@ public class Funnel {
                             ArmorStand kasaStand = kdata.getArmorStandList().get(0);
                             data.subArmorlist(kasaStand);
                             if(HashPlayer.containsKey(kasaStand)){
+                                if(HashPlayer.get(kasaStand).getGameMode() != GameMode.SPECTATOR){
+                                    kdataReset+=60;
+                                }
                                 HashPlayer.remove(kasaStand);
-                                kdataReset+=60;
                             }else
                             if(HashArmorstand.containsKey(kasaStand)) {
-                                HashArmorstand.remove(kasaStand);
                                 kdataReset+=60;
+                                HashArmorstand.remove(kasaStand);
                             }else{
                                 list6.remove(kasaStand);
                                 if(kdata.getDamage()==1024){
@@ -422,12 +424,14 @@ public class Funnel {
                             ArmorStand kasaStand1 = kdata1.getArmorStandList().get(0);
                             data.subArmorlist(kasaStand1);
                             if(HashPlayer.containsKey(kasaStand1)){
+                                if(HashPlayer.get(kasaStand1).getGameMode() != GameMode.SPECTATOR){
+                                    kdataReset1+=60;
+                                }
                                 HashPlayer.remove(kasaStand1);
-                                kdataReset1+=60;
                             }else
                             if(HashArmorstand.containsKey(kasaStand1)) {
-                                HashArmorstand.remove(kasaStand1);
                                 kdataReset1+=60;
+                                HashArmorstand.remove(kasaStand1);
                             }else{
                                 list6.remove(kasaStand1);
                                 if(kdata1.getDamage()==1024){
@@ -445,11 +449,13 @@ public class Funnel {
                             ArmorStand kasaStand2 = kdata2.getArmorStandList().get(0);
                             data.subArmorlist(kasaStand2);
                             if(HashPlayer.containsKey(kasaStand2)){
+                                if(HashPlayer.get(kasaStand2).getGameMode() != GameMode.SPECTATOR){
+                                    kdataReset2+=60;
+                                }
                                 HashPlayer.remove(kasaStand2);
-                                kdataReset2+=60;
                             }else if(HashArmorstand.containsKey(kasaStand2)) {
-                                HashArmorstand.remove(kasaStand2);
                                 kdataReset2+=60;
+                                HashArmorstand.remove(kasaStand2);
                             }else{
                                 list6.remove(kasaStand2);
                                 if(kdata2.getDamage()==1024){

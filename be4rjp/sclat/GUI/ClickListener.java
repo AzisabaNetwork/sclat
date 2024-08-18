@@ -217,7 +217,7 @@ public class ClickListener implements Listener{
         }
         
         if(event.getView().getTitle().equals("武器選択")){
-            if(name.equals("装備選択へ戻る") || name.equals("戻る") || name.equals("シューター") || name.equals("ローラー") || name.equals("チャージャー") || name.equals("ブラスター") || name.equals("バーストシューター") || name.equals("スロッシャー") || name.equals("シェルター") || name.equals("ブラシ") || name.equals("スピナー") || name.equals("マニューバー") || name.equals("ハウンド") || name.equals("スワッパー") || name.equals("ドラグーン")){
+            if(name.equals("装備選択へ戻る") || name.equals("戻る") || name.equals("シューター") || name.equals("ローラー") || name.equals("チャージャー") || name.equals("ブラスター") || name.equals("バーストシューター") || name.equals("スロッシャー") || name.equals("シェルター") || name.equals("ブラシ") || name.equals("スピナー") || name.equals("マニューバー") || name.equals("ハウンド") || name.equals("スワッパー") || name.equals("ドラグーン") || name.equals("リーラー")){
                 switch(name){
                     case"シューター":
                         OpenGUI.openWeaponSelect(player, "Weapon", "Shooter", false);
@@ -257,6 +257,9 @@ public class ClickListener implements Listener{
                         break;
                     case"ドラグーン":
                         OpenGUI.openWeaponSelect(player, "Weapon", "Funnel", false);
+                        break;
+                    case"リーラー":
+                        OpenGUI.openWeaponSelect(player, "Weapon", "Reeler", false);
                         break;
                     case"戻る":
                         OpenGUI.openWeaponSelect(player, "Main", "null", false);
@@ -316,6 +319,11 @@ public class ClickListener implements Listener{
                                 Shooter.ManeuverRunnable(p);
                                 Shooter.ManeuverShootRunnable(p);
                             }
+                        }
+                        if(DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getWeaponType().equals("Reeler")){
+                            Shooter.ShooterRunnable(p);
+                            Reeler.ReelerRunnable(p);
+                            Reeler.ReelerShootRunnable(p);
                         }
                         if(DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getWeaponType().equals("Blaster")){
                             if(DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getIsManeuver()){
@@ -379,7 +387,7 @@ public class ClickListener implements Listener{
         }
         
         if(event.getView().getTitle().equals("Shop")){
-            if(name.equals("装備選択へ戻る") || name.equals("戻る") || name.equals("シューター") || name.equals("ローラー") || name.equals("チャージャー") || name.equals("ブラスター") || name.equals("バーストシューター") || name.equals("スロッシャー") || name.equals("シェルター") || name.equals("ブラシ") || name.equals("スピナー") || name.equals("マニューバー") || name.equals("ハウンド") || name.equals("スワッパー") || name.equals("ドラグーン")){
+            if(name.equals("装備選択へ戻る") || name.equals("戻る") || name.equals("シューター") || name.equals("ローラー") || name.equals("チャージャー") || name.equals("ブラスター") || name.equals("バーストシューター") || name.equals("スロッシャー") || name.equals("シェルター") || name.equals("ブラシ") || name.equals("スピナー") || name.equals("マニューバー") || name.equals("ハウンド") || name.equals("スワッパー") || name.equals("ドラグーン") || name.equals("リーラー")){
                 switch(name){
                     case"シューター":
                         OpenGUI.openWeaponSelect(player, "Weapon", "Shooter", true);
@@ -419,6 +427,9 @@ public class ClickListener implements Listener{
                         break;
                     case"ドラグーン":
                         OpenGUI.openWeaponSelect(player, "Weapon", "Funnel", true);
+                        break;
+                    case"リーラー":
+                        OpenGUI.openWeaponSelect(player, "Weapon", "Reeler", true);
                         break;
                     case"戻る":
                         OpenGUI.openWeaponSelect(player, "Main", "null", true);

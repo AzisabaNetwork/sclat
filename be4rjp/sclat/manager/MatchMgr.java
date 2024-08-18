@@ -653,6 +653,11 @@ public class MatchMgr {
                             Shooter.ManeuverShootRunnable(p);
                         }
                     }
+                    if(DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getWeaponType().equals("Reeler")){
+                        Shooter.ShooterRunnable(p);
+                        Reeler.ReelerRunnable(p);
+                        Reeler.ReelerShootRunnable(p);
+                    }
                     if(DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getWeaponType().equals("Blaster")){
                         if(DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getIsManeuver()){
                             Shooter.ManeuverRunnable(p);
