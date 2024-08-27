@@ -130,8 +130,7 @@ public class MapData {
     public void setWiremeshListTask(WiremeshListTask wmlListTask){this.wmlTask = wmlListTask;}
     
     public void setVoidY(int y){this.VoidY = y;}
-    
-    
+
     public void addPath(Path path){this.path.add(path);}
     
     public void addArea(Area area){this.areas.add(area);}

@@ -1049,6 +1049,18 @@ public class MatchMgr {
                             FinishMatch(p);
                             cancel();
                         }
+
+                        if(s <= -60){
+                            for(Player oplayer : Main.getPlugin(Main.class).getServer().getOnlinePlayers()){
+                                if(DataMgr.getPlayerData(oplayer).getIsJoined() && p != oplayer){
+                                    oplayer.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
+                                    oplayer.getInventory().clear();
+                                    FinishMatch(oplayer);
+                                }
+                            }
+                            FinishMatch(p);
+                            cancel();
+                        }
                         
                         if(s <= 5 && s > 0){
                             for(Player oplayer : Main.getPlugin(Main.class).getServer().getOnlinePlayers()){
