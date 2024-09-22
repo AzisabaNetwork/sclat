@@ -57,19 +57,19 @@ public class QuadroArms {
             public void run() {
                 player.getInventory().clear();
                 player.updateInventory();
-                ItemStack item = new ItemStack(Material.SUGAR);
+                ItemStack item = new ItemStack(Material.MUSIC_DISC_13);
                 ItemMeta meta = item.getItemMeta();
                 meta.setDisplayName("Quadro-BLUE");
                 item.setItemMeta(meta);
-                ItemStack item2 = new ItemStack(Material.SUGAR);
+                ItemStack item2 = new ItemStack(Material.MUSIC_DISC_CAT);
                 ItemMeta meta2 = item2.getItemMeta();
                 meta2.setDisplayName("Quadro-GREEN");
                 item2.setItemMeta(meta2);
-                ItemStack item3 = new ItemStack(Material.SUGAR);
+                ItemStack item3 = new ItemStack(Material.MUSIC_DISC_BLOCKS);
                 ItemMeta meta3 = item3.getItemMeta();
                 meta3.setDisplayName("Quadro-RED");
                 item3.setItemMeta(meta3);
-                ItemStack item4 = new ItemStack(Material.SUGAR);
+                ItemStack item4 = new ItemStack(Material.MUSIC_DISC_CHIRP);
                 ItemMeta meta4 = item4.getItemMeta();
                 meta4.setDisplayName("Quadro-WHITE");
                 item4.setItemMeta(meta4);

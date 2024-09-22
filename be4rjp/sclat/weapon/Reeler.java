@@ -230,8 +230,12 @@ public class Reeler {
                             shot.add(new Vector(0, 0.5, 0));
                         }
                         p.setVelocity(shot);
-                        DataMgr.getPlayerData(p).setIsSliding(true);
-                        DataMgr.getPlayerData(p).setIsUsingManeuver(true);
+                        PlayerData pdata = DataMgr.getPlayerData(p);
+                        pdata.setIsSliding(true);
+                        pdata.setIsUsingManeuver(true);
+                        if(pdata.getArmor()>9999) {
+                            pdata.setArmor(0);
+                        }
                     }
                     cancel();
                 }

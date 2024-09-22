@@ -408,6 +408,9 @@ public class DeathMgr {
                 if(c >= resettime){
                     cancel();
                 }
+                if(data.getArmor()<9999){
+                    cancel();
+                }
                 c++;
             }
         };
