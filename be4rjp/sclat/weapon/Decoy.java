@@ -7,11 +7,15 @@ import com.mojang.authlib.GameProfile;
 import net.minecraft.server.v1_14_R1.*;
 import org.bukkit.*;
 import org.bukkit.Particle;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.craftbukkit.v1_14_R1.CraftServer;
 import org.bukkit.craftbukkit.v1_14_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_14_R1.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_14_R1.util.CraftChatMessage;
 import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -51,16 +55,21 @@ public class Decoy {
     public static void createDecoy(Player player1, String npcName1, Location location1) {
         BukkitRunnable task = new BukkitRunnable(){
             EntityPlayer npc;
+            EntitySquid es;
 
             int s = 0;
 
             Player player = player1;
             String npcName = npcName1;
             Location location = location1;
-
+            Block block;
+            PlayerData data= DataMgr.getPlayerData(player);
+            float yaw =0;
+            boolean ika=false;//falseがヒト、trueがイカ
             @Override
             public void run(){
                 if(s == 0){
+                    ika=false;
                     location.setYaw(location1.getYaw());
 
                     MinecraftServer nmsServer = ((CraftServer) Bukkit.getServer()).getServer();
@@ -70,7 +79,8 @@ public class Decoy {
                     npc = new EntityPlayer(nmsServer, nmsWorld, gameProfile, new PlayerInteractManager(nmsWorld));
 
                     //見えないところにスポーンさせて、クライアントにスキンを先に読み込ませる
-                    npc.setLocation(location.getX(), location.getY() - 20, location.getZ(), player1.getEyeLocation().getYaw(), 0);
+                    yaw =player1.getEyeLocation().getYaw();
+                    npc.setLocation(location.getX(), location.getY() - 20, location.getZ(), yaw, 0);
                     npc.getDataWatcher().set(DataWatcherRegistry.a.a(15), (byte)127);
 
                     for(Player p : Main.getPlugin(Main.class).getServer().getOnlinePlayers()){
@@ -79,9 +89,35 @@ public class Decoy {
                         connection.sendPacket(new PacketPlayOutNamedEntitySpawn(npc));
                         connection.sendPacket(new PacketPlayOutEntityMetadata(npc.getId(), npc.getDataWatcher(), true));
                     }
+                    es = new EntitySquid(EntityTypes.SQUID, nmsWorld);
+                    es.setNoAI(true);
+                    es.setNoGravity(true);
+                    //es.setCustomName(CraftChatMessage.fromStringOrNull(player.getName()));
+                    //es.setCustomNameVisible(false);
+                    ((LivingEntity)es.getBukkitEntity()).setCollidable(false);
                 }
                 if(s == 0){
-                    npc.setLocation(location.getX(), location.getY(), location.getZ(), player1.getEyeLocation().getYaw(), 0);
+                    block = location.getBlock().getRelative(BlockFace.DOWN);
+                    if(DataMgr.getBlockDataMap().containsKey(block)){
+                        if(block.getType().toString().contains("WOOL")) {
+                            if (block.getType() != data.getTeam().getTeamColor().getWool()) {
+                                ika=true;
+                            }
+                        }
+                    }
+                    if(ika) {
+                        es.setLocation(location.getX(), location.getY(), location.getZ(), yaw, 0);
+                        npc.setLocation(location.getX(), location.getY() - 20 , location.getZ(), player1.getEyeLocation().getYaw(), 0);
+                    }else{
+                        npc.setLocation(location.getX(), location.getY() , location.getZ(), player1.getEyeLocation().getYaw(), 0);
+                        es.setLocation(location.getX(), location.getY() - 20 , location.getZ(), yaw, 0);
+                    }
+                    PacketPlayOutSpawnEntityLiving packet = new PacketPlayOutSpawnEntityLiving(es);
+                    for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
+                        if(player.getWorld() == target.getWorld()){
+                            ((CraftPlayer)target).getHandle().playerConnection.sendPacket(packet);
+                        }
+                    }
                     for(Player p : Main.getPlugin(Main.class).getServer().getOnlinePlayers()){
                         PlayerConnection connection = ((CraftPlayer) p).getHandle().playerConnection;
                         connection.sendPacket(new PacketPlayOutEntityTeleport(npc));
@@ -92,17 +128,59 @@ public class Decoy {
                     }
 
                 }
-                if(s == 5){
+                if(s!=0||s!=15){
+                    block = location.getBlock().getRelative(BlockFace.DOWN);
+                    if(DataMgr.getBlockDataMap().containsKey(block)){
+                        if(block.getType().toString().contains("WOOL")) {
+                            if (block.getType() != data.getTeam().getTeamColor().getWool()) {
+                                ika = true;
+                            }else{
+                                ika=false;
+                            }
+                        }else{
+                            ika=false;
+                        }
+                    }else{
+                        ika=false;
+                    }
+                    if(ika) {
+                        es.setLocation(location.getX(), location.getY(), location.getZ(), yaw, 0);
+                        npc.setLocation(location.getX(), location.getY()-20, location.getZ(), yaw, 0);
+                        if(s%2==0) {
+                            player.getWorld().playSound(location, Sound.ENTITY_PLAYER_HURT, 1, 1);
+                        }
+                    }else{
+                        es.setLocation(location.getX(), location.getY()-20, location.getZ(), yaw, 0);
+                        npc.setLocation(location.getX(), location.getY(), location.getZ(), yaw, 0);
+                    }
+                    PacketPlayOutEntityTeleport packet = new PacketPlayOutEntityTeleport(es);
+                    for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
+                        if(player.getWorld() == target.getWorld()){
+                            ((CraftPlayer)target).getHandle().playerConnection.sendPacket(packet);
+                        }
+                    }
+                    for(Player p : Main.getPlugin(Main.class).getServer().getOnlinePlayers()){
+                        PlayerConnection connection = ((CraftPlayer) p).getHandle().playerConnection;
+                        connection.sendPacket(new PacketPlayOutEntityTeleport(npc));
+                    }
+                }
+                if(s == 15){
                     for(Player p : Main.getPlugin(Main.class).getServer().getOnlinePlayers()){
                         PlayerConnection connection = ((CraftPlayer) p).getHandle().playerConnection;
                         connection.sendPacket(new PacketPlayOutEntityDestroy(npc.getBukkitEntity().getEntityId()));
+                    }
+                    PacketPlayOutEntityDestroy packet = new PacketPlayOutEntityDestroy(es.getBukkitEntity().getEntityId());
+                    for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
+                        if(player.getWorld() == target.getWorld()){
+                            ((CraftPlayer)target).getHandle().playerConnection.sendPacket(packet);
+                        }
                     }
                     cancel();
                 }
                 s++;
             }
         };
-        task.runTaskTimer(Main.getPlugin(), 0, 20);
+        task.runTaskTimer(Main.getPlugin(), 0, 7);
 
     }
     public static void DecoyShot(Player player){

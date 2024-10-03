@@ -574,7 +574,7 @@ public class GameMgr implements Listener{
                     for (ServerStatus ss : ServerStatusManager.serverList){
                         if(ss.getSign().equals(e.getClickedBlock())){
                             if(ss.getRestartingServer()){
-                                Sclat.sendMessage("§c§nこのサーバーは再起動中のため参加できません", MessageType.PLAYER, player);
+                                Sclat.sendMessage("§c§nこのサーバーは再起動中です1~2分程度お待ちください", MessageType.PLAYER, player);
                                 Sclat.playGameSound(player, SoundType.ERROR);
                                 return;
                             }
@@ -595,7 +595,7 @@ public class GameMgr implements Listener{
                                 if(ss.isMaintenance())
                                     Sclat.sendMessage("§c§nこのサーバーは現在メンテナンス中のため参加できません", MessageType.PLAYER, player);
                                 else
-                                    Sclat.sendMessage("§c§nこのサーバーは現在オフラインのため参加できません", MessageType.PLAYER, player);
+                                    Sclat.sendMessage("§c§nこのサーバーは現在再起動中です1~2分程度お待ちください。", MessageType.PLAYER, player);
                                 Sclat.playGameSound(player, SoundType.ERROR);
                             }
                             return;
