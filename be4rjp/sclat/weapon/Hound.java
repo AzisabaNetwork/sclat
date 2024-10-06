@@ -93,6 +93,7 @@ public class Hound {
             double maxDist = 1;
             double saveY =0;
             int explodetick = data.getWeaponClass().getMainWeapon().getRollerShootQuantity();
+            float climbSpeed = DataMgr.getPlayerData(player).getWeaponClass().getMainWeapon().getRollerNeedInk();
 
             @Override
             public void run() {
@@ -115,16 +116,17 @@ public class Hound {
 
                     if(i >= 5 ){
                         if((bloc.getX() == as1l.getX() || bloc.getZ() == as1l.getZ())) {
-                            aVec = new Vector(pVector.getX() * 0.03, 1, pVector.getZ() * 0.03);
+                            if(EntityWallHit(as1,pVector)) {
+                                aVec = new Vector(pVector.getX() * 0.03, climbSpeed, pVector.getZ() * 0.03);
+                            }else{
+                                aVec = new Vector(vec.getX(), -0.4, vec.getZ());
+                            }
                             //壁を塗る
                             for(int i = 0; i <= 1; i++){
                                 List<Location> p_locs = Sphere.getSphere(as1l, i, 30);
                                 for(Location loc : p_locs){
                                     PaintMgr.Paint(loc, player, false);
                                 }
-                            }
-                            if(!EntityWallHit(as1,pVector)) {
-                                aVec = new Vector(vec.getX(), -0.4, vec.getZ());
                             }
                         }else if(aVec.getY()>0 && !EntityWallHit(as1,pVector)){
                             aVec = new Vector(vec.getX(), 0, vec.getZ());
@@ -287,7 +289,7 @@ public class Hound {
 //        cooltime.runTaskLater(Main.getPlugin(), 10);
     }
     private static boolean EntityWallHit(ArmorStand stand, Vector direction){
-        Location entityLocation = stand.getLocation();
+        Location entityLocation = stand.getLocation().clone().add(new Vector(0,0.3,0));
         double distance = 0.7; // レイの長さ
         //if (result != null && result.getHitBlockFace() != null) {
         if (stand.getWorld().rayTraceBlocks(entityLocation, direction, distance) != null) {

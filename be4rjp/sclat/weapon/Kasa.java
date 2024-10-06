@@ -314,6 +314,7 @@ public class Kasa {
             int i = 0;
             int c = 0;
             boolean is = true;
+            int pageCooltime = DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getRollerWidth();
 
             @Override
             public void run() {
@@ -326,7 +327,7 @@ public class Kasa {
                 }
                 if(!is){
                     c++;
-                    if(c == 180){
+                    if(c == pageCooltime){
                         is = true;
                         c = 0;
                         DataMgr.getPlayerData(p).setMainItemGlow(true);
@@ -357,6 +358,8 @@ public class Kasa {
             int i = 0;
             boolean bp = false;
             boolean squid = true;
+            float kasaSpeed =DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getRollerNeedInk();
+            int pageCooltime = DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getRollerWidth();
 
             Vector dir = new Vector(1, 0, 0);
 
@@ -395,7 +398,7 @@ public class Kasa {
 
                     if(bp){
                         if(las.isOnGround())
-                            las.setVelocity(dir.clone().multiply(0.18));
+                            las.setVelocity(dir.clone().multiply(kasaSpeed));
                         loc = las.getLocation().add(0, -1.7, 0);
                     }
                     Vector pv = p.getEyeLocation().getDirection().normalize();
@@ -621,7 +624,7 @@ public class Kasa {
                         p.playSound(p.getLocation(), Sound.BLOCK_WOODEN_PRESSURE_PLATE_CLICK_ON, 1F, 1.2F);
                     }
 
-                    if(i == 200 || kdata.getDamage() > 200 || !p.isOnline() || !DataMgr.getPlayerData(p).isInMatch()){
+                    if(i == pageCooltime+20 || kdata.getDamage() > 200 || !p.isOnline() || !DataMgr.getPlayerData(p).isInMatch()){
                         if(kdata.getDamage() <= 200 && DataMgr.getPlayerData(p).isInMatch())
                             as1.getWorld().playSound(as1.getLocation(), Sound.ENTITY_ITEM_BREAK, 0.8F, 0.8F);
 
