@@ -156,6 +156,9 @@ public class Shooter {
                                 }
                             }
 
+                            if(DataMgr.getPlayerData(player).getArmor()>9999) {
+                                DataMgr.getPlayerData(player).setArmor(0);
+                            }
                             p.getWorld().playSound(p.getLocation(), Sound.ITEM_ARMOR_EQUIP_GENERIC, 1.4F, 1.5F);
 
 

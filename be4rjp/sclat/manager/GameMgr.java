@@ -399,50 +399,128 @@ public class GameMgr implements Listener{
             DataMgr.pul.add(uuid);
         
         if(Main.type == ServerType.LOBBY){
+            //if(PlayerStatusMgr.getTutorialState(player.getUniqueId().toString()) == 0){
             if(PlayerStatusMgr.getTutorialState(player.getUniqueId().toString()) == 0){
-                //操作説明本
-                ItemStack termsBook = new ItemStack(Material.WRITTEN_BOOK);
-                BookMeta bookMeta = (BookMeta) termsBook.getItemMeta();
+                e.setJoinMessage(ChatColor.GREEN + player.getName() + " が初めてこのサーバーにログインしました！");
+                PlayerStatusMgr.setTutorialState(player.getUniqueId().toString(),2);
 
-                // 本のタイトルと著者を設定
-                bookMeta.setTitle(ChatColor.DARK_GREEN + "操作説明");
-                bookMeta.setAuthor(ChatColor.GRAY + "Sclat運営");
-
-                // 利用規約の内容を追加
-                bookMeta.addPage(ChatColor.BOLD + "目次\n\n" +
-                        ChatColor.RESET + "目次:P1\n\n" +
-                        "試合に参加するには:P2\n\n" +
-                        "試合中の操作方法:P3\n\n" +
-                        "※テスト段階のためサーバー初参加のプレイヤーにのみこの本は付与されます");
-                bookMeta.addPage(ChatColor.BOLD + "試合に参加するには\n\n" +
-                        ChatColor.RESET + "正面にあるタワーの中にある\n" +
-                        "看板を右クリックすると試合ロビーに移動できます\n" +
-                        "※試合がすでに始まっている場合や再起動中の鯖には参加できません");
-                bookMeta.addPage(ChatColor.BOLD + "試合中の操作方法\n" +
-                        ChatColor.RESET + "試合が始まると武器が支給されます。\n" +
-                        "メイン武器を持って右クリックで射撃できます。\n" +
-                        "左クリックまたは、ボムを持って右クリックでボムを投げれます。ボムはイカのまま投げれます。\n" +
-                        "画面上部のゲージがたまったときにアイテムを持ってQキー、またはスペシャルを持って右クリックでスペシャルが使えます。");
-
-                // 作成したBookMetaを設定
-                termsBook.setItemMeta(bookMeta);
-
-                // プレイヤーのインベントリをクリアし、利用規約の本をアイテムスロットに追加
+                ItemStack join = new ItemStack(Material.CHEST);
+                ItemMeta joinmeta = join.getItemMeta();
+                joinmeta.setDisplayName(ChatColor.GOLD + "右クリックでメインメニューを開く");
+                join.setItemMeta(joinmeta);
                 player.getInventory().clear();
-                player.getInventory().setItem(2, termsBook);
-                //操作説明本終
-                player.sendTitle("", "チュートリアルサーバーへ転送中...", 0, 20, 0);
-                Sclat.sendMessage("§bチュートリアルサーバーへ転送中...", MessageType.PLAYER, player);
-                BukkitRunnable run = new BukkitRunnable() {
-                    @Override
-                    public void run() {
-                        List<String> list = Main.tutorialServers.getConfig().getStringList("server-list");
-                        BungeeCordMgr.PlayerSendServer(player, list.get(new Random().nextInt(list.size())));
-                        DataMgr.getPlayerData(player).setServerName(conf.getServers().getString("Tutorial.DisplayName"));
-                    }
-                };
-                run.runTaskLater(Main.getPlugin(), 20);
+                player.getInventory().setItem(0, join);
             }
+            //操作説明本
+            ItemStack termsBook = new ItemStack(Material.WRITTEN_BOOK);
+            BookMeta bookMeta = (BookMeta) termsBook.getItemMeta();
+
+            // 本のタイトルと著者を設定
+            bookMeta.setTitle(ChatColor.DARK_GREEN + "操作説明");
+            bookMeta.setAuthor(ChatColor.GRAY + "Sclat運営");
+
+            // 利用規約の内容を追加
+            bookMeta.addPage(ChatColor.BOLD + "目次\n\n" +
+                    ChatColor.RESET + "目次:P1\n\n" +
+                    "試合に参加するには:P2\n\n" +
+                    "試合中の操作方法:P3~5\n\n" +
+                    "武器種紹介:P6~19\n\n" +
+                    "その他コラム:P20~22");
+            bookMeta.addPage(ChatColor.BOLD + "試合に参加するには\n\n" +
+                    ChatColor.RESET + "正面にあるタワーの中にある\n" +
+                    "看板を右クリックすると試合ロビーに移動できます\n" +
+                    "※試合がすでに始まっている場合や再起動中の鯖には参加できません");
+            bookMeta.addPage(ChatColor.BOLD + "試合中の操作方法①\n\n" +
+                    ChatColor.RESET + "・試合が始まると武器が支給されます。\n\n" +
+                    "・一番左のアイテムがメイン武器で右クリックで射撃できます。\n\n" +
+                    "・経験値バーがインクゲージとなっていて、これを消費し、射撃します。");
+            bookMeta.addPage(ChatColor.BOLD + "試合中の操作方法②\n\n" +
+                    ChatColor.RESET + "・消費したインクゲージはイカになって自分のチームの色の床や壁に触れることで回復します。\n\n" +
+                    "・イカになるには手にアイテムを何も持たないとイカになります。\n\n" +
+                    "・イカの状態では自分のチーム色の壁や床を移動できます。");
+            bookMeta.addPage(ChatColor.BOLD + "試合中の操作方法③\n\n" +
+                    ChatColor.RESET + "・アイテムスロットの左から3番目のアイテムを右クリックでサブウェポンを使用できます。\n\n" +
+                    "・画面上部のゲージがMAXの状態でアイテムスロットの真ん中のアイテムを右クリックでスペシャルを使用できます。");
+            bookMeta.addPage(ChatColor.BOLD + "武器紹介「シューター」\n" +
+                    ChatColor.RESET + "右クリックで射撃\n" +
+                    "汎用性に長けていてクセもなく、使い勝手がよい。");
+            bookMeta.addPage(ChatColor.BOLD + "武器紹介「ブラスター」\n" +
+                    ChatColor.RESET + "右クリックで爆発する弾を発射する。\n" +
+                    "爆風でダメージを入れやすく、\n" +
+                    "弾を直撃させることで大ダメージを与えることができる。");
+            bookMeta.addPage(ChatColor.BOLD + "武器紹介「バーストシューター」\n" +
+                    ChatColor.RESET + "一度の右クリックで弾を数発射撃する。\n" +
+                    "射撃に間隔が開くため外すと隙ができるが、高い瞬間火力を誇る。");
+            bookMeta.addPage(ChatColor.BOLD + "武器紹介「ローラー」\n" +
+                    ChatColor.RESET + "右クリックで横広に弾をばら撒く。\n" +
+                    "射撃の瞬間に空中にいると縦に広く弾をばら撒く。\n" +
+                    "右クリックを長押しすることで足元を塗りながら移動できる。");
+            bookMeta.addPage(ChatColor.BOLD + "武器紹介「ブラシ」\n" +
+                    ChatColor.RESET + "右クリックで少量の弾をばら撒く。\n" +
+                    "右クリックを長押しすることで足元を塗りながら高速で移動できる。");
+            bookMeta.addPage(ChatColor.BOLD + "武器紹介「シェルター」\n" +
+                    ChatColor.RESET + "右クリックで大量の弾をばら撒く。\n" +
+                    "シフトで盾を作り、離すか一定時間経過で盾を前進させる。");
+            bookMeta.addPage(ChatColor.BOLD + "武器紹介「スロッシャー」\n" +
+                    ChatColor.RESET + "右クリックで弾をばら撒く。\n" +
+                    "シフトで一定時間追加HPを獲得する。");
+            bookMeta.addPage(ChatColor.BOLD + "武器紹介「チャージャー」\n" +
+                    ChatColor.RESET + "右クリック長押しでチャージし離すと射撃。\n" +
+                    "敵の背後から攻撃することでダメージが上昇する。\n" +
+                    "シフトでデコイを作ることができる。");
+            bookMeta.addPage(ChatColor.BOLD + "武器紹介「スピナー」\n" +
+                    ChatColor.RESET + "右クリック長押しでチャージし離すと射撃。\n" +
+                    "射程と射撃時間がチャージの量で変化する。");
+            bookMeta.addPage(ChatColor.BOLD + "武器紹介「マニューバ」\n" +
+                    ChatColor.RESET + "右クリックで射撃。\n" +
+                    "シフトで2回ブリンク可能、ブリンク後に移動するまで火力と連射力が上がる。\n" +
+                    "その代わり通常時の性能が著しく低い。");
+            bookMeta.addPage(ChatColor.BOLD + "武器紹介「ハウンド」\n" +
+                    ChatColor.RESET + "右クリックで壁を登る弾を発射。\n" +
+                    "シフトで起爆し、弾が射撃地点より高い場所であればあるほど火力と範囲が上がる。\n" +
+                    "逆に、低い場所で起爆させると火力と範囲が下がる");
+            bookMeta.addPage(ChatColor.BOLD + "武器紹介「スワッパー」\n" +
+                    ChatColor.RESET + "右クリックで射撃。\n" +
+                    "シフトで変形し、武器の性能が変化する。");
+            bookMeta.addPage(ChatColor.BOLD + "武器紹介「ドラグーン」\n" +
+                    ChatColor.RESET + "右クリックで射撃。\n" +
+                    "シフトでタレットに敵を追尾させ、自動で攻撃する。\n" +
+                    "射撃命中時にタレットが追撃する。\n" +
+                    "タレットが追尾中の敵は追撃の火力が上がる。");
+            bookMeta.addPage(ChatColor.BOLD + "武器紹介「リーラ―」\n" +
+                    ChatColor.RESET + "右クリックで射撃。\n" +
+                    "シフトで敵に向かって飛ぶ事ができる。\n" +
+                    "チャクチするまでの間武器の性能が変化する。\n" +
+                    "敵をキルすることでスキルがリチャージされる。");
+            bookMeta.addPage(ChatColor.BOLD + "その他コラム①\n\n" +
+                    ChatColor.RESET + "・武器によってはシフト(キーコンフィグを変更している場合はしゃがむ)で固有のスキルを使用することができます。\n\n" +
+                    "・試合中左クリックでもサブウェポンを使用でき、武器を持っていたりイカになっていても使用できます。");
+            bookMeta.addPage(ChatColor.BOLD + "その他コラム②\n\n" +
+                    ChatColor.RESET + "・てきとうなアイテムを持ってQキーでもスペシャルを使うことができます。\n\n" +
+                    "・爆風は壁を貫通してダメージを与える事ができます。");
+            bookMeta.addPage(ChatColor.BOLD + "その他コラム③\n\n" +
+                    ChatColor.RESET + "・チャージャーのバックスタブの判定はかなり広い。\n\n" +
+                    "・敵のドラグーンのタレットは破壊可能。");
+
+            // 作成したBookMetaを設定
+            termsBook.setItemMeta(bookMeta);
+
+            // プレイヤーのインベントリをクリアし、利用規約の本をアイテムスロットに追加
+            //player.getInventory().clear();
+            player.getInventory().setItem(2, termsBook);
+            //操作説明本終
+            //player.sendTitle("", "チュートリアルサーバーへ転送中...", 0, 20, 0);
+            //Sclat.sendMessage("§bチュートリアルサーバーへ転送中...", MessageType.PLAYER, player);
+//                BukkitRunnable run = new BukkitRunnable() {
+//                    @Override
+//                    public void run() {
+//                        List<String> list = Main.tutorialServers.getConfig().getStringList("server-list");
+//                        BungeeCordMgr.PlayerSendServer(player, list.get(new Random().nextInt(list.size())));
+//                        DataMgr.getPlayerData(player).setServerName(conf.getServers().getString("Tutorial.DisplayName"));
+//                    }
+//                };
+                //run.runTaskLater(Main.getPlugin(), 20);
+            //}
         }
         
         //player.getWorld().spawnEntity(player.getLocation(), EntityType.ARMOR_STAND);
@@ -624,6 +702,9 @@ public class GameMgr implements Listener{
                         //player.setResourcePack(conf.getConfig().getString("ResourcePackURL"));
                         player.sendMessage("以下のURLからリソースパックをダウンロードしてください");
                         player.sendMessage(conf.getConfig().getString("ResourcePackURL"));
+                        break;
+                    case "Click To Download":
+                        player.setResourcePack(conf.getConfig().getString("ResourcePackURL"));
                         break;
                     case "Click to Return":
                         BungeeCordMgr.PlayerSendServer(player, "lobby");
