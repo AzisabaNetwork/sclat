@@ -303,13 +303,13 @@ public class Reeler {
             if (!block.getType().equals(Material.AIR)) {
                 break loop;
             }
-            if (!DataMgr.getPlayerData(player).getSettings().ShowEffect_MainWeaponInk())
-                continue;
-            if (it < 10) {
-                if (player.getWorld() == position.getWorld()) {
-                    if (player.getLocation().distanceSquared(position) < Main.PARTICLE_RENDER_DISTANCE_SQUARED) {
-                        org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(player).getTeam().getTeamColor().getWool().createBlockData();
-                        player.spawnParticle(org.bukkit.Particle.BLOCK_DUST, position, 1, 0, 0, 0, 1, bd);
+            if (DataMgr.getPlayerData(player).getSettings().ShowEffect_MainWeaponInk()) {
+                if (it < 10) {
+                    if (player.getWorld() == position.getWorld()) {
+                        if (player.getLocation().distanceSquared(position) < Main.PARTICLE_RENDER_DISTANCE_SQUARED) {
+                            org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(player).getTeam().getTeamColor().getWool().createBlockData();
+                            player.spawnParticle(org.bukkit.Particle.BLOCK_DUST, position, 1, 0, 0, 0, 1, bd);
+                        }
                     }
                 }
             }
@@ -344,13 +344,13 @@ public class Reeler {
             if (!block.getType().equals(Material.AIR)) {
                 break loop2;
             }
-            if (!DataMgr.getPlayerData(player).getSettings().ShowEffect_MainWeaponInk())
-                continue;
-            if (it < 10) {
-                if (player.getWorld() == position.getWorld()) {
-                    if (player.getLocation().distanceSquared(position) < Main.PARTICLE_RENDER_DISTANCE_SQUARED) {
-                        org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(player).getTeam().getTeamColor().getWool().createBlockData();
-                        player.spawnParticle(org.bukkit.Particle.BLOCK_DUST, position, 1, 0, 0, 0, 1, bd);
+            if (DataMgr.getPlayerData(player).getSettings().ShowEffect_MainWeaponInk()) {
+                if (it < 10) {
+                    if (player.getWorld() == position.getWorld()) {
+                        if (player.getLocation().distanceSquared(position) < Main.PARTICLE_RENDER_DISTANCE_SQUARED) {
+                            org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(player).getTeam().getTeamColor().getWool().createBlockData();
+                            player.spawnParticle(org.bukkit.Particle.BLOCK_DUST, position, 1, 0, 0, 0, 1, bd);
+                        }
                     }
                 }
             }

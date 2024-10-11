@@ -150,10 +150,13 @@ public class Hound {
                     if(i % 2 == 0){
                         org.bukkit.block.data.BlockData bd = data.getTeam().getTeamColor().getWool().createBlockData();
                         for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
-                            if(DataMgr.getPlayerData(target).getSettings().ShowEffect_Bomb())
-                                if(target.getWorld() == player.getWorld())
-                                    if(target.getLocation().distanceSquared(as1l) < Main.PARTICLE_RENDER_DISTANCE_SQUARED)
-                                        target.spawnParticle(org.bukkit.Particle.BLOCK_DUST, as1l, 2, 0, 0, 0, 1, bd);
+                            //if (DataMgr.getPlayerData(target).getSettings().ShowEffect_Bomb()){
+                                if (target.getWorld() == player.getWorld()) {
+                                    if (target.getLocation().distanceSquared(as1l) < Main.PARTICLE_RENDER_DISTANCE_SQUARED) {
+                                        target.spawnParticle(org.bukkit.Particle.BLOCK_DUST, as1l, 1, 0, 0, 0, 1, bd);
+                                    }
+                                }
+                            //}
                         }
                     }
 

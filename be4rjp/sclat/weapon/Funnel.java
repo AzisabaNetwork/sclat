@@ -49,12 +49,12 @@ public class Funnel {
                 break loop;
             }
             for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
-                if (!DataMgr.getPlayerData(target).getSettings().ShowEffect_MainWeaponInk())
-                    continue;
-                if (target.getWorld() == position.getWorld()) {
-                    if (target.getLocation().distanceSquared(position) < Main.PARTICLE_RENDER_DISTANCE_SQUARED) {
-                        org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(player).getTeam().getTeamColor().getWool().createBlockData();
-                        target.spawnParticle(org.bukkit.Particle.BLOCK_DUST, position, 1, 0, 0, 0, 1, bd);
+                if (DataMgr.getPlayerData(target).getSettings().ShowEffect_MainWeaponInk()) {
+                    if (target.getWorld() == position.getWorld()) {
+                        if (target.getLocation().distanceSquared(position) < Main.PARTICLE_RENDER_DISTANCE_SQUARED) {
+                            org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(player).getTeam().getTeamColor().getWool().createBlockData();
+                            target.spawnParticle(org.bukkit.Particle.BLOCK_DUST, position, 1, 0, 0, 0, 1, bd);
+                        }
                     }
                 }
             }
@@ -713,13 +713,13 @@ public class Funnel {
                             if(!block.getType().equals(Material.AIR)){
                                 break loop;
                             }
-                            if (!DataMgr.getPlayerData(player).getSettings().ShowEffect_MainWeaponInk())
-                                continue;
-                            if(it<10) {
-                                if (player.getWorld() == position.getWorld()) {
-                                    if (player.getLocation().distanceSquared(position) < Main.PARTICLE_RENDER_DISTANCE_SQUARED) {
-                                        org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(player).getTeam().getTeamColor().getWool().createBlockData();
-                                        player.spawnParticle(org.bukkit.Particle.BLOCK_DUST, position, 1, 0, 0, 0, 1, bd);
+                            if (DataMgr.getPlayerData(player).getSettings().ShowEffect_MainWeaponInk()) {
+                                if (it < 10) {
+                                    if (player.getWorld() == position.getWorld()) {
+                                        if (player.getLocation().distanceSquared(position) < Main.PARTICLE_RENDER_DISTANCE_SQUARED) {
+                                            org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(player).getTeam().getTeamColor().getWool().createBlockData();
+                                            player.spawnParticle(org.bukkit.Particle.BLOCK_DUST, position, 1, 0, 0, 0, 1, bd);
+                                        }
                                     }
                                 }
                             }
@@ -910,12 +910,12 @@ public class Funnel {
                                 }
                             }
                             for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
-                                if (target.equals(p) || !DataMgr.getPlayerData(target).getSettings().ShowEffect_ChargerLine())
-                                    continue;
-                                if (target.getWorld() == p.getWorld()) {
-                                    if (target.getLocation().distanceSquared(position) < Main.PARTICLE_RENDER_DISTANCE_SQUARED) {
-                                        Particle.DustOptions dustOptions = new Particle.DustOptions(data.getTeam().getTeamColor().getBukkitColor(), 1);
-                                        target.spawnParticle(Particle.REDSTONE, position, 1, 0, 0, 0, 3, dustOptions);
+                                if (target.equals(p) || DataMgr.getPlayerData(target).getSettings().ShowEffect_ChargerLine()) {
+                                    if (target.getWorld() == p.getWorld()) {
+                                        if (target.getLocation().distanceSquared(position) < Main.PARTICLE_RENDER_DISTANCE_SQUARED) {
+                                            Particle.DustOptions dustOptions = new Particle.DustOptions(data.getTeam().getTeamColor().getBukkitColor(), 1);
+                                            target.spawnParticle(Particle.REDSTONE, position, 1, 0, 0, 0, 3, dustOptions);
+                                        }
                                     }
                                 }
                             }
@@ -968,12 +968,12 @@ public class Funnel {
                                 }
                             }
                             for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
-                                if (target.equals(p) || !DataMgr.getPlayerData(target).getSettings().ShowEffect_ChargerLine())
-                                    continue;
-                                if (target.getWorld() == p.getWorld()) {
-                                    if (target.getLocation().distanceSquared(position) < Main.PARTICLE_RENDER_DISTANCE_SQUARED) {
-                                        Particle.DustOptions dustOptions = new Particle.DustOptions(data.getTeam().getTeamColor().getBukkitColor(), 1);
-                                        target.spawnParticle(Particle.REDSTONE, position, 1, 0, 0, 0, 3, dustOptions);
+                                if (target.equals(p) || DataMgr.getPlayerData(target).getSettings().ShowEffect_ChargerLine()) {
+                                    if (target.getWorld() == p.getWorld()) {
+                                        if (target.getLocation().distanceSquared(position) < Main.PARTICLE_RENDER_DISTANCE_SQUARED) {
+                                            Particle.DustOptions dustOptions = new Particle.DustOptions(data.getTeam().getTeamColor().getBukkitColor(), 1);
+                                            target.spawnParticle(Particle.REDSTONE, position, 1, 0, 0, 0, 3, dustOptions);
+                                        }
                                     }
                                 }
                             }
