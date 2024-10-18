@@ -703,6 +703,11 @@ public class GameMgr implements Listener{
                         player.sendMessage("以下のURLからリソースパックをダウンロードしてください");
                         player.sendMessage(conf.getConfig().getString("ResourcePackURL"));
                         break;
+                    case "Click to Vote":
+                        //player.setResourcePack(conf.getConfig().getString("ResourcePackURL"));
+                        player.sendMessage("以下のURLから一番好きな武器を投票してね！");
+                        player.sendMessage("https://docs.google.com/forms/d/e/1FAIpQLSfuAFUuSoOuzlUKAOAjFlo2piMA1_MQCbnJTPahEo00VehFBw/viewform?usp=sf_link");
+                        break;
                     case "Click To Download":
                         player.setResourcePack(conf.getConfig().getString("ResourcePackURL"));
                         break;
