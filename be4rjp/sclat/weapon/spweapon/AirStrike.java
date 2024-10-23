@@ -37,7 +37,7 @@ import org.bukkit.util.Vector;
  * @author Be4rJP
  */
 public class AirStrike {
-    public static void AirStrikeRunnable(Player player){
+    public static void AirStrikeRunnable(Player player ,Boolean localized){
         Firework f = (Firework) player.getWorld().spawn(player.getLocation(), Firework.class);
         player.getInventory().clear();
         SPWeaponMgr.setSPCoolTimeAnimation(player, 200);
@@ -72,9 +72,14 @@ public class AirStrike {
             @Override
             public void run(){
                 if(c == 0) DataMgr.getPlayerData(player).setIsUsingSP(true);
-                final double random = 18;
+                double random = 18;
+                //集中砲火用
+                if(localized) {
+                    random = 7;
+                }
+                //
                 Location loc = new Location(ploc.getWorld(), ploc.getBlockX() + vec.getBlockX() + (Math.random() * random - random/2), y + 50, ploc.getBlockZ() + vec.getBlockZ() + (Math.random() * random - random/2));
-                StrikeRunnable(player, loc);
+                StrikeRunnable(player, localized, loc);
                 if(c == 15 || !DataMgr.getPlayerData(player).isInMatch()){
                     //player.playSound(player.getLocation(), Sound.BLOCK_CHEST_CLOSE, 1, 2);
                     cancel();
@@ -82,7 +87,11 @@ public class AirStrike {
                 c++;
             }
         };
-        task.runTaskTimer(Main.getPlugin(), 50, 10);
+        if(localized) {
+            task.runTaskTimer(Main.getPlugin(), 5, 5);
+        }else{
+            task.runTaskTimer(Main.getPlugin(), 50, 10);
+        }
         
         BukkitRunnable effect = new BukkitRunnable(){
             int c = 0;
@@ -106,7 +115,7 @@ public class AirStrike {
        
     }
     
-    public static void StrikeRunnable(Player player, Location loc){
+    public static void StrikeRunnable(Player player,boolean localized, Location loc){
         BukkitRunnable task = new BukkitRunnable(){
             Player p = player;
             Vector p_vec;
@@ -124,7 +133,11 @@ public class AirStrike {
                     bom_m.setLocalizedName(String.valueOf(Main.getNotDuplicateNumber()));
                     bom.setItemMeta(bom_m);
                     drop = p.getWorld().dropItem(loc, bom);
-                    drop.setVelocity(new Vector(0, -1, 0));
+                    if(localized) {
+                        drop.setVelocity(new Vector(0, -4, 0));
+                    }else{
+                        drop.setVelocity(new Vector(0, -1, 0));
+                    }
                 }
                 
                 if(drop.isOnGround()){
@@ -132,6 +145,10 @@ public class AirStrike {
                     //半径
                     double maxDist = 4;
                     double maxDistSquared = 16; /* 4^2 */
+                    if(localized){
+                        maxDist = 5;
+                        maxDistSquared = 25; /* 4^2 */
+                    }
                     
                     //爆発音
                     player.getWorld().playSound(drop.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_BLAST, 1, 1);
@@ -155,7 +172,12 @@ public class AirStrike {
                         if(!DataMgr.getPlayerData(target).isInMatch())
                             continue;
                         if (target.getLocation().distanceSquared(drop.getLocation()) <= maxDistSquared) {
-                            double damage = (maxDist - target.getLocation().distance(drop.getLocation())) * 7;
+                            double damage;
+                            if(localized){
+                                damage = (maxDist - target.getLocation().distance(drop.getLocation())) * 5;
+                            }else{
+                                damage = (maxDist - target.getLocation().distance(drop.getLocation())) * 7;
+                            }
                             if(DataMgr.getPlayerData(player).getTeam() != DataMgr.getPlayerData(target).getTeam() && target.getGameMode().equals(GameMode.ADVENTURE)){
                                 Sclat.giveDamage(player, target, damage, "spWeapon");
 

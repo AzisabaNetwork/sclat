@@ -314,7 +314,10 @@ public class SPWeaponMgr {
         
         switch (name) {
             case "カーソルを合わせて右クリックで発射":
-                AirStrike.AirStrikeRunnable(player);
+                AirStrike.AirStrikeRunnable(player,false);
+                break;
+            case "カーソルを合わせて右クリックで発射!":
+                AirStrike.AirStrikeRunnable(player,true);
                 break;
             case "プレイヤーを狙って右クリックで発射":
                 DataMgr.getPlayerData(player).setIsUsingMM(false);

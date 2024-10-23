@@ -39,9 +39,12 @@ public class MapKitMgr {
         meta.setDisplayName("カーソルを合わせて右クリックで発射");
         item.setItemMeta(meta);
         
-        for (int count = 0; count < 9; count++){
+        for (int count = 1; count < 9; count++){
             player.getInventory().setItem(count, item);
         }
+        meta.setDisplayName("カーソルを合わせて右クリックで発射!");
+        item.setItemMeta(meta);
+        player.getInventory().setItem(0, item);
 
         player.updateInventory();
         

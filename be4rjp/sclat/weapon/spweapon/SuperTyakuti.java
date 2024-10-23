@@ -86,8 +86,8 @@ public class SuperTyakuti {
                         }
                     }
                     
-                    if(i == 15)
-                        SuperArmor.setArmor(player, 40, 20, false);
+                    if(i == 4)
+                        SuperArmor.setArmor(player, 40, 33, false);
 
                     //範囲エフェクト
                     if(i % 5 == 0){
