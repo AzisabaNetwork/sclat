@@ -276,6 +276,7 @@ public class SplashShield {
                         list.add(as14);
 
                         ssdata.setArmorStandList(list);
+                        ssdata.setIsDeploy(false);
 
                         int i = 1;
                         for(ArmorStand a : list){
@@ -306,6 +307,7 @@ public class SplashShield {
                     }
                     
                     if(c == 15){
+                        ssdata.setIsDeploy(true);
                         for(ArmorStand a : list){
                             a.setMarker(false);
                         }

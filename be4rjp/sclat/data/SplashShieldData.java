@@ -16,6 +16,7 @@ public class SplashShieldData {
     private List<ArmorStand> list = new ArrayList<ArmorStand>();
     private Player player;
     private double damage;
+    private boolean IsDeploy=false;
     
     public SplashShieldData(Player player){this.player = player;};
     
@@ -26,6 +27,8 @@ public class SplashShieldData {
     public Player getPlayer(){return this.player;}
     
     public double getDamage(){return this.damage;}
+
+    public boolean getIsDeploy(){return this.IsDeploy;}
     
     
     public void setTask(BukkitRunnable task){this.task = task;}
@@ -33,4 +36,7 @@ public class SplashShieldData {
     public void setArmorStandList(List<ArmorStand> list){this.list = list;}
     
     public void setDamage(double damage){this.damage = damage;}
+
+    public void setIsDeploy(boolean isdep){this.IsDeploy = isdep;}
+
 }

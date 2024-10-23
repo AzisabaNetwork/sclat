@@ -3,7 +3,9 @@ package be4rjp.sclat.weapon;
 import be4rjp.dadadachecker.ClickType;
 import be4rjp.sclat.Main;
 import be4rjp.sclat.data.DataMgr;
+import be4rjp.sclat.data.KasaData;
 import be4rjp.sclat.data.PlayerData;
+import be4rjp.sclat.data.SplashShieldData;
 import be4rjp.sclat.manager.PaintMgr;
 import be4rjp.sclat.raytrace.RayTrace;
 import java.util.ArrayList;
@@ -12,13 +14,12 @@ import java.util.Random;
 import org.bukkit.*;
 import org.bukkit.craftbukkit.v1_14_R1.entity.CraftSnowball;
 import org.bukkit.craftbukkit.v1_14_R1.inventory.CraftItemStack;
-import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Snowball;
+import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.RayTraceResult;
 import org.bukkit.util.Vector;
+import java.util.function.Predicate;
 
 /**
  *
@@ -97,7 +98,11 @@ public class Shooter {
             boolean sl_recharge_1=true;
             boolean sl_recharge_2=true;
             //スライドに使う変数の定義Trueの時は使用可能Falseの時は使用不可能を表している
-            boolean check = true;
+            double distcheck = 0;
+            boolean check =false;//スライドの解除後判定用
+
+            //検証用
+            Location verif = loc;
 
             @Override
             public void run(){
@@ -132,24 +137,27 @@ public class Shooter {
                 if(data.getWeaponClass().getMainWeapon().getIsManeuver()){
                     //if(p.getExp() >= ink) {
                         if (data.getIsSneaking() && sl_recharge_2 == true && !data.getIsSliding() && p.getInventory().getItemInMainHand().getType().equals(data.getWeaponClass().getMainWeapon().getWeaponIteamStack().getType())) {//slをsl_recharge_2に変更することで優先順位が低い方のスライドが残っている時のみ使えるようにしました
-                            Vector jvec = (new Vector(vec.getX(), 0, vec.getZ())).normalize().multiply(3);
+                            Vector jvec = (new Vector(vec.getX(), 0, vec.getZ())).normalize();
                             Vector ev = jvec.clone().normalize().multiply(-2);
+                            check=true;
 
                             //p.setExp(p.getExp() - ink);
 
                             //エフェクト
                             org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(player).getTeam().getTeamColor().getWool().createBlockData();
                             double random = 1.0;
-                            for (int i = 0; i < 35; i++) {
-                                Vector randomVector = new Vector(Math.random() * random - random / 2, Math.random() * random - random / 2, Math.random() * random - random / 2);
-                                Vector erv = ev.clone().add(randomVector);
-                                for (Player o_player : Main.getPlugin().getServer().getOnlinePlayers()) {
-                                    if (DataMgr.getPlayerData(o_player).getSettings().ShowEffect_BombEx()) {
-                                        if (o_player.getWorld() == location.getWorld()) {
-                                            if (o_player.getLocation().distanceSquared(location) < Main.PARTICLE_RENDER_DISTANCE_SQUARED) {
-                                                o_player.spawnParticle(org.bukkit.Particle.BLOCK_DUST,
-                                                        location.clone().add(0, 0.7, 0).add(randomVector.getX(), randomVector.getY(), randomVector.getZ()),
-                                                        0, erv.getX(), erv.getY(), erv.getZ(), 1, bd);
+                            if(data.getSettings().doChargeKeep()) {
+                                for (int i = 0; i < 35; i++) {
+                                    Vector randomVector = new Vector(Math.random() * random - random / 2, Math.random() * random - random / 2, Math.random() * random - random / 2);
+                                    Vector erv = ev.clone().add(randomVector);
+                                    for (Player o_player : Main.getPlugin().getServer().getOnlinePlayers()) {
+                                        if (DataMgr.getPlayerData(o_player).getSettings().ShowEffect_BombEx()) {
+                                            if (o_player.getWorld() == location.getWorld()) {
+                                                if (o_player.getLocation().distanceSquared(location) < Main.PARTICLE_RENDER_DISTANCE_SQUARED) {
+                                                    o_player.spawnParticle(org.bukkit.Particle.BLOCK_DUST,
+                                                            location.clone().add(0, 0.7, 0).add(randomVector.getX(), randomVector.getY(), randomVector.getZ()),
+                                                            0, erv.getX(), erv.getY(), erv.getZ(), 1, bd);
+                                                }
                                             }
                                         }
                                     }
@@ -162,7 +170,32 @@ public class Shooter {
                             p.getWorld().playSound(p.getLocation(), Sound.ITEM_ARMOR_EQUIP_GENERIC, 1.4F, 1.5F);
 
 
-                            p.setVelocity(jvec.clone().setY(p.isOnGround() ? 0 : -0.4));
+                            verif=location.clone();
+                            if(!data.getSettings().doChargeKeep()) {
+                                distcheck=EntityWallHit(p,jvec.clone());
+                                p.teleport(location.clone().add(jvec.clone().multiply(EntityArmorstandHit(p,jvec.clone(),distcheck))));
+                                //effect
+
+                                for (int i = 0; i < 8; i++) {
+                                    Vector randomVector = new Vector(Math.random() * random - random / 2, Math.random() * random - random / 2, Math.random() * random - random / 2);
+                                    Vector erv = ev.clone().add(randomVector);
+                                    for (Player o_player : Main.getPlugin().getServer().getOnlinePlayers()) {
+                                        if (DataMgr.getPlayerData(o_player).getSettings().ShowEffect_BombEx()) {
+                                            if (o_player.getWorld() == location.getWorld()) {
+                                                if (o_player.getLocation().distanceSquared(location) < Main.PARTICLE_RENDER_DISTANCE_SQUARED) {
+                                                    for(int i2=0; i2<4;i2++) {
+                                                        o_player.spawnParticle(org.bukkit.Particle.BLOCK_DUST,
+                                                                location.clone().add(jvec.clone().multiply(i*distcheck/8.0f)).add(0, 1.1, 0).add(randomVector.getX(), randomVector.getY(), randomVector.getZ()),
+                                                                0, erv.getX(), erv.getY(), erv.getZ(), 1, bd);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }else {
+                                p.setVelocity(jvec.clone().multiply(3).setY(p.isOnGround() ? 0 : -0.4));
+                            }
                             data.setIsSneaking(false);
                             data.setIsSliding(true);
                             data.setCanShoot(false);
@@ -223,8 +256,10 @@ public class Shooter {
                                 }
                             };
                             //スライド仕様変更の改変
-                            if( sl_recharge_2 == true){task2.runTaskLater(Main.getPlugin(), 64);}
-                            else{task3.runTaskLater(Main.getPlugin(), 64);}
+                            if(data.getSettings().doChargeKeep()){
+                                if( sl_recharge_2 == true){task2.runTaskLater(Main.getPlugin(), 64);}
+                                else{task3.runTaskLater(Main.getPlugin(), 64);}
+                            }
                             //booleam型の変数で二つのスライドをそれぞれ表現している、優先順位が低い方がTrueのときは高い方が使われた後のため高い方のリチャージをする（優先順位が高い方は2秒、低い方は2.2秒）
                             //check = false;
                         }
@@ -235,10 +270,41 @@ public class Shooter {
                 }
 
                 if(!data.getIsSliding()) {
-                    if (loc.getX() == ploc.getX() && loc.getZ() == ploc.getZ())
+                    if (loc.getX() == ploc.getX() && loc.getZ() == ploc.getZ()) {
                         data.setIsUsingManeuver(true);
-                    else
+                    }else {
+
+                        if(!data.getSettings().doChargeKeep()){
+                            if(check) {
+                                BukkitRunnable task4 = new BukkitRunnable() {
+                                    @Override
+                                    public void run() {
+                                        sl_recharge_1 = true;
+                                        p.sendMessage("スライド１リチャージ完了です");
+                                        //check = true;
+                                    }
+                                };
+
+                                BukkitRunnable task5 = new BukkitRunnable() {
+                                    @Override
+                                    public void run() {
+                                        sl_recharge_1 = true;
+                                        sl_recharge_2 = true;
+                                        p.sendMessage("スライド2リチャージ完了です");
+                                        //check = true;
+                                    }
+                                };
+                                if (sl_recharge_2 == true) {
+                                    task4.runTaskLater(Main.getPlugin(), 64);
+                                    check = false;
+                                } else {
+                                    task5.runTaskLater(Main.getPlugin(), 64);
+                                    check = false;
+                                }
+                            }
+                        }
                         data.setIsUsingManeuver(false);
+                    }
                 }
 
                 //loc = ploc;
@@ -364,6 +430,56 @@ public class Shooter {
             }
         };
         task.runTaskTimer(Main.getPlugin(), 0, 1);
+    }
+    private static double EntityWallHit(Player p, Vector direction){
+        Location entityLocation = p.getLocation().clone();
+        double distance = 5.3; // レイの長さ
+        World world = p.getWorld();
+        RayTraceResult rayresult = world.rayTraceBlocks(entityLocation, direction, distance);
+        //if (result != null && result.getHitBlock() != null) {
+        if(rayresult !=null && rayresult.getHitBlock()!=null) {
+            Location hitlocation = rayresult.getHitPosition().toLocation(world);
+            double raydistance =entityLocation.distance(hitlocation);
+            if(raydistance -0.4 > 0 ) {
+                return raydistance - 0.4;
+            }else{
+                return 0;
+            }
+        }else{
+            return 5;
+        }
+    }
+
+    private static double EntityArmorstandHit(Player p, Vector direction,double dist){
+        Location entityLocation = p.getLocation().clone();
+        double distance = dist; // レイの長さ
+        double distance2 =dist;
+        World world = p.getWorld();
+        //if (result != null && result.getHitBlock() != null) {
+        Predicate<Entity> isArmorStand = entity -> entity.getType() == EntityType.ARMOR_STAND;
+
+        // rayTraceEntitiesでエンティティとの衝突を判定
+        RayTraceResult result = world.rayTraceEntities(entityLocation, direction, distance, 0.5, isArmorStand);
+
+        if (result != null && result.getHitEntity() != null) {
+            // 衝突までの距離を計算
+            Entity hitEntity = result.getHitEntity();
+            ArmorStand armorStand = (ArmorStand) hitEntity;
+            if(armorStand.getCustomName() != null){
+                if(armorStand.getCustomName().equals("SplashShield")){
+                    SplashShieldData ssdata = DataMgr.getSplashShieldDataFromArmorStand(armorStand);
+                    if(DataMgr.getPlayerData(p).getTeam() != DataMgr.getPlayerData(ssdata.getPlayer()).getTeam() && ssdata.getIsDeploy()){
+                        Location hitLocation = result.getHitPosition().toLocation(world);
+                        distance2 = entityLocation.distance(hitLocation);
+                        if(dist-distance2>0.7){
+                            distance2=distance2+0.4;
+                        }
+                        return distance2;
+                    }
+                }
+            }
+        }
+        return dist;
     }
 
 
