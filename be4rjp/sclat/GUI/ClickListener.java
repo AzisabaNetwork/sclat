@@ -316,7 +316,11 @@ public class ClickListener implements Listener{
                         if(DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getWeaponType().equals("Shooter")){
                             Shooter.ShooterRunnable(p);
                             if(DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getIsManeuver()){
-                                Shooter.ManeuverRunnable(p);
+                                if(DataMgr.getPlayerData(p).getSettings().doChargeKeep()) {
+                                    Shooter.ManeuverRunnable(p);
+                                }else{
+                                    Manuber.ManeuverRunnable(p);
+                                }
                                 Shooter.ManeuverShootRunnable(p);
                             }
                         }

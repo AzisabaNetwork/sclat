@@ -16,12 +16,7 @@ import java.util.ArrayList;
 
 import net.minecraft.server.v1_14_R1.PacketPlayOutAbilities;
 import net.minecraft.server.v1_14_R1.PlayerAbilities;
-import org.bukkit.ChatColor;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Particle;
-import org.bukkit.Sound;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
 import org.bukkit.entity.ArmorStand;
@@ -32,6 +27,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.RayTraceResult;
 import org.bukkit.util.Vector;
 
 /**
@@ -194,17 +190,36 @@ public class Charger {
         RayTrace rayTrace = new RayTrace(player.getEyeLocation().toVector(),player.getEyeLocation().getDirection());
         ArrayList<Vector> positions = rayTrace.traverse((int)(reach * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP)), 0.2);
 
-        
-        loop : for(int i = 0; i < positions.size();i++){
+
+
+        Location entityLocation = player.getEyeLocation();
+        double distance = reach; // レイの長さ
+        World world = player.getWorld();
+        double raydistance = distance;
+        RayTraceResult rayresult = world.rayTraceBlocks(entityLocation, player.getEyeLocation().getDirection(), distance);
+        //if (result != null && result.getHitBlock() != null) {
+        if(rayresult !=null && rayresult.getHitBlock()!=null) {
+            Location hitlocation = rayresult.getHitPosition().toLocation(world);
+            raydistance =entityLocation.distance(hitlocation);
+        }
+        float loopsize =positions.size();
+        loop : for(int i = 0; i < loopsize;i++){
 
             Location position = positions.get(i).toLocation(player.getLocation().getWorld());
             Block block = player.getLocation().getWorld().getBlockAt(position);
             
             if(!block.getType().equals(Material.AIR)){
-                //if(rayTrace.intersects(new BoundingBox(block), reach, 0.01)){
+                if(block.getType().equals(Material.WHITE_STAINED_GLASS_PANE) || block.getType().equals(Material.IRON_BARS)){
+                    float raydis = (float) (raydistance / 0.195);
+                    if(loopsize > raydis ) {
+                        loopsize = raydis;
+                    }
+                }else {
+                    //if(rayTrace.intersects(new BoundingBox(block), reach, 0.01)){
                     PaintMgr.Paint(position, player, true);
                     break loop;
-                //}
+                    //}
+                }
             }
             PaintMgr.PaintHightestBlock(position, player, false, true);
 //                for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
