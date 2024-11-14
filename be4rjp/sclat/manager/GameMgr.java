@@ -428,8 +428,9 @@ public class GameMgr implements Listener{
                     ChatColor.RESET + "目次:P1\n\n" +
                     "試合に参加するには:P2\n\n" +
                     "試合中の操作方法:P3~5\n\n" +
-                    "武器種紹介:P6~19\n\n" +
-                    "その他コラム:P20~22");
+                    "ロビーでの操作方法:P6~7\n\n" +
+                    "武器種紹介:P8~21\n\n" +
+                    "その他コラム:P22~25");
             bookMeta.addPage(ChatColor.BOLD + "試合に参加するには\n\n" +
                     ChatColor.RESET + "正面にあるタワーの中にある\n" +
                     "看板を右クリックすると試合ロビーに移動できます\n" +
@@ -445,6 +446,12 @@ public class GameMgr implements Listener{
             bookMeta.addPage(ChatColor.BOLD + "試合中の操作方法③\n\n" +
                     ChatColor.RESET + "・アイテムスロットの左から3番目のアイテムを右クリックでサブウェポンを使用できます。\n\n" +
                     "・画面上部のゲージがMAXの状態でアイテムスロットの真ん中のアイテムを右クリックでスペシャルを使用できます。");
+            bookMeta.addPage(ChatColor.BOLD + "ロビーでの操作方法①\n\n" +
+                    ChatColor.RESET + "・アイテムスロットのチェストを右クリックでメニューを開けます。\n\n" +
+                    "・カーソルを合わせて左クリックで各項目を選択できます。");
+            bookMeta.addPage(ChatColor.BOLD + "ロビーでの操作方法②\n\n" +
+                    ChatColor.RESET + "・メニューからは装備の購入・変更、テクスチャのインストールなどが可能です。\n\n" +
+                    "・インベントリを閉じることでメニューを閉じることができます");
             bookMeta.addPage(ChatColor.BOLD + "武器紹介「シューター」\n" +
                     ChatColor.RESET + "右クリックで射撃\n" +
                     "汎用性に長けていてクセもなく、使い勝手がよい。");
@@ -505,6 +512,9 @@ public class GameMgr implements Listener{
             bookMeta.addPage(ChatColor.BOLD + "その他コラム③\n\n" +
                     ChatColor.RESET + "・チャージャーのバックスタブの判定はかなり広い。\n\n" +
                     "・敵のドラグーンのタレットは破壊可能。");
+            bookMeta.addPage(ChatColor.BOLD + "その他コラム④\n\n" +
+                    ChatColor.RESET + "・マニューバはSclatメニューの設定のチャージキープをDisableにすることで飛距離が変化しにくい方式に変わります。\n\n" +
+                    "・Optifineを導入することでバリエーション違いの武器の見た目が変化する");
 
             // 作成したBookMetaを設定
             termsBook.setItemMeta(bookMeta);
@@ -709,8 +719,8 @@ public class GameMgr implements Listener{
                         break;
                     case "Click to Vote":
                         //player.setResourcePack(conf.getConfig().getString("ResourcePackURL"));
-                        player.sendMessage("以下のURLから一番好きな武器を投票してね！");
-                        player.sendMessage("https://docs.google.com/forms/d/e/1FAIpQLSfuAFUuSoOuzlUKAOAjFlo2piMA1_MQCbnJTPahEo00VehFBw/viewform?usp=sf_link");
+                        player.sendMessage("以下のURLから投票してね！");
+                        player.sendMessage("https://minecraft.jp/servers/azisaba.net");
                         break;
                     case "Click To Download":
                         player.setResourcePack(conf.getConfig().getString("ResourcePackURL"));
@@ -746,7 +756,13 @@ public class GameMgr implements Listener{
                         LootBox.LootBoxInfo(player);
                         break;
                     case "[ GiftForYou ]":
-                        LootBox.GiftWeapon(player);
+                        LootBox.GiftWeapon(player,"ボールドマーカー[カスタム]");
+                        LootBox.GiftWeapon(player,"スプラマニューバー[カスタム]");
+                        LootBox.GiftWeapon(player,"スクイックリン[カスタム]");
+                        LootBox.GiftWeapon(player,"ノヴァブラスター[カスタム]");
+                        break;
+                    case "[ EasterEgg ]":
+                        LootBox.Giftbook(player);
                         break;
                     case "[ ChangeTeam ]":
                         LootBox.changeteam(player);

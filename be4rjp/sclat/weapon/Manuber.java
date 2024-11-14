@@ -37,8 +37,6 @@ public class Manuber {
             double distcheck = 0;
             boolean check =false;//スライドの解除後判定用
 
-            //検証用
-            Location verif = loc;
 
             @Override
             public void run(){
@@ -88,19 +86,16 @@ public class Manuber {
                         }
                         p.getWorld().playSound(p.getLocation(), Sound.ITEM_ARMOR_EQUIP_GENERIC, 1.4F, 1.5F);
 
-
-                        verif=location.clone();
                             distcheck=EntityWallHit(p,jvec.clone());
                             while(distcheck>0 && !isSafeLocation(p,location.clone().add(jvec.clone().multiply(distcheck)))){
                                 distcheck=distcheck-0.2;
-                                p.sendMessage("テレポート位置に障害物があります");
+                                //p.sendMessage("テレポート位置に障害物があります");
                                 if(distcheck<=0){
-                                    p.sendMessage("テレポート距離が０になりました");
+                                    //p.sendMessage("テレポート距離が０になりました");
                                     distcheck=0;
                                 }
                             }
-                            verif=location.clone().add(jvec.clone().multiply(distcheck));
-                            p.sendMessage("X "+verif.getX()+"Y "+verif.getY()+"Z "+verif.getZ());
+                            //p.sendMessage("X "+verif.getX()+"Y "+verif.getY()+"Z "+verif.getZ());
                             p.teleport(location.clone().add(jvec.clone().multiply(EntityArmorstandHit(p,jvec.clone(),distcheck))));
                             //effect
 
@@ -144,6 +139,7 @@ public class Manuber {
 
                                     if(i==9){
                                         loc = p.getLocation();
+                                        data.setIsUsingManeuver(true);
                                     }
 
                                     if (i == 10) {
@@ -169,6 +165,7 @@ public class Manuber {
 
                                     if(i==9){
                                         loc2 = p.getLocation();
+                                        data.setIsUsingManeuver(true);
                                     }
 
                                     if (i == 10) {
@@ -206,7 +203,7 @@ public class Manuber {
                         data.setIsUsingManeuver(true);
                     }else {
                             if(check) {
-                                p.sendMessage("現在地はX＝"+p.getLocation().getX()+" Y="+p.getLocation().getY()+" Z="+p.getLocation().getZ());
+                                //p.sendMessage("現在地はX＝"+p.getLocation().getX()+" Y="+p.getLocation().getY()+" Z="+p.getLocation().getZ());
                                 //p.sendMessage("LOC1はX＝"+loc.getX()+" Y="+loc.getY()+" Z="+loc.getZ());
                                 //p.sendMessage("LOC2はX＝"+loc2.getX()+" Y="+loc2.getY()+" Z="+loc2.getZ());
                                 BukkitRunnable task4 = new BukkitRunnable() {
@@ -228,10 +225,10 @@ public class Manuber {
                                     }
                                 };
                                 if (sl_recharge_2 == true) {
-                                    task4.runTaskLater(Main.getPlugin(), 15);
+                                    task4.runTaskLater(Main.getPlugin(), 64);
                                     check = false;
                                 } else {
-                                    task5.runTaskLater(Main.getPlugin(), 15);
+                                    task5.runTaskLater(Main.getPlugin(), 64);
                                     check = false;
                                 }
                             }
@@ -300,10 +297,7 @@ public class Manuber {
         World world = location.getWorld();
         boolean contact=true;
         if (world == null) return false;
-        double LX = location.clone().getX();
-        double LY = location.clone().getY();
-        double LZ = location.clone().getZ();
-        player.sendMessage("テレポートの位置はX"+LX+"Y"+LY+"Z"+LZ);
+        //player.sendMessage("テレポートの位置はX"+LX+"Y"+LY+"Z"+LZ);
 
         // プレイヤーの体が占める範囲 (高さ2ブロック、幅1ブロック)
         BoundingBox playerBoundingBox = new BoundingBox(
@@ -332,13 +326,13 @@ public class Manuber {
         blocks.add(location.getWorld().getBlockAt(location.clone().add(-0.4, 0, -0.4)));
         blocks.add(location.getWorld().getBlockAt(location.clone().add(0, 1.0, 0)));
         for (Block pblock :blocks ){
-            player.sendMessage("ブロックの位置はX"+pblock.getLocation().getX()+"Y"+pblock.getLocation().getY()+"Z"+pblock.getLocation().getZ());
+            //player.sendMessage("ブロックの位置はX"+pblock.getLocation().getX()+"Y"+pblock.getLocation().getY()+"Z"+pblock.getLocation().getZ());
             if(hasCollision(pblock, playerBoundingBox)){
                 contact=false;
             }
         }
 
-        player.sendMessage("検証の結果"+contact);
+        //player.sendMessage("検証の結果"+contact);
         // どちらかのブロックが危険なコライダーを持っていないか確認
         return contact;
     }

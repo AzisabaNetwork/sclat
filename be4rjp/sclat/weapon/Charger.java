@@ -209,7 +209,7 @@ public class Charger {
             Block block = player.getLocation().getWorld().getBlockAt(position);
             
             if(!block.getType().equals(Material.AIR)){
-                if(block.getType().equals(Material.WHITE_STAINED_GLASS_PANE) || block.getType().equals(Material.IRON_BARS)){
+                if(block.getType().equals(Material.WHITE_STAINED_GLASS_PANE) || block.getType().equals(Material.GLASS_PANE) || block.getType().equals(Material.ORANGE_STAINED_GLASS_PANE) || block.getType().equals(Material.LIGHT_BLUE_STAINED_GLASS_PANE) || block.getType().equals(Material.RED_STAINED_GLASS_PANE) || block.getType().equals(Material.LIME_STAINED_GLASS_PANE) || block.getType().equals(Material.BLACK_STAINED_GLASS_PANE) || block.getType().equals(Material.GRAY_STAINED_GLASS_PANE) || block.getType().equals(Material.CYAN_STAINED_GLASS_PANE)  || block.getType().equals(Material.BLUE_STAINED_GLASS_PANE) || block.getType().equals(Material.IRON_BARS)){
                     float raydis = (float) (raydistance / 0.195);
                     if(loopsize > raydis ) {
                         loopsize = raydis;
