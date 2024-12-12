@@ -89,9 +89,13 @@ public class LitterFiveG {
         BukkitRunnable overheat_anime = new BukkitRunnable(){
             Player p = player;
             boolean bell = false;
+            boolean visible = true;
             @Override
             public void run(){
                 PlayerData data = DataMgr.getPlayerData(p);
+                if(p.getGameMode().equals(GameMode.SPECTATOR)){
+                    visible=false;
+                }
                 if(Hash_charge.containsKey(p)){
                     if( Hash_charge.get(p)< max_charge) {
                         bar.setProgress((double)Hash_charge.get(p) / max_charge);
@@ -141,19 +145,22 @@ public class LitterFiveG {
                         range=max_charge;
                     }
                     ArrayList<Vector> positions = rayTrace.traverse((int)(range * 1.8),0.7);
-                    check : for(int i = 0; i < positions.size();i++){
-                        Location position = positions.get(i).toLocation(p.getLocation().getWorld());
-                        if(!position.getBlock().getType().equals(Material.AIR)){
-                            break check;
-                        }
-                        if(i % 5 == 0){
-                            for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
-                                if (target.equals(p))
-                                    continue;
-                                if (target.getWorld() == p.getWorld()) {
-                                    if (target.getLocation().distanceSquared(position) < Main.PARTICLE_RENDER_DISTANCE_SQUARED) {
-                                        Particle.DustOptions dustOptions = new Particle.DustOptions(data.getTeam().getTeamColor().getBukkitColor(), 1);
-                                        target.spawnParticle(Particle.REDSTONE, position, 1, 0, 0, 0, 10, dustOptions);
+                    if(visible){
+                        check:
+                        for (int i = 0; i < positions.size(); i++) {
+                            Location position = positions.get(i).toLocation(p.getLocation().getWorld());
+                            if (!position.getBlock().getType().equals(Material.AIR)) {
+                                break check;
+                            }
+                            if (i % 5 == 0) {
+                                for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
+                                    if (target.equals(p))
+                                        continue;
+                                    if (target.getWorld() == p.getWorld()) {
+                                        if (target.getLocation().distanceSquared(position) < Main.PARTICLE_RENDER_DISTANCE_SQUARED) {
+                                            Particle.DustOptions dustOptions = new Particle.DustOptions(data.getTeam().getTeamColor().getBukkitColor(), 1);
+                                            target.spawnParticle(Particle.REDSTONE, position, 1, 0, 0, 0, 10, dustOptions);
+                                        }
                                     }
                                 }
                             }

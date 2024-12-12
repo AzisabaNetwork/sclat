@@ -1089,6 +1089,8 @@ public class MatchMgr {
             Location loc;
             Team winteam = DataMgr.getPlayerData(player).getMatch().getTeam0();
             int i = 0;
+            int bestkills = 0;
+            int bestpaint = 0;
             @Override
             public void run(){
                 try{
@@ -1335,6 +1337,12 @@ public class MatchMgr {
                                 //p.sendMessage(odata.getTeam().getTeamColor().getColorCode() + "[ " + op.getDisplayName() + " ]" + ChatColor.RESET + "Kills : " + ChatColor.YELLOW + odata.getKillCount() + "   " + ChatColor.RESET + "Points : " + ChatColor.YELLOW + odata.getPaintCount());
                             }
                         }
+                        if(bestkills < odata.getKillCount()){
+                            bestkills = odata.getKillCount();
+                        }
+                        if(bestpaint < odata.getPaintCount()){
+                            bestpaint = odata.getPaintCount();
+                        }
                     }
                     
                     for(Player op : Main.getPlugin(Main.class).getServer().getOnlinePlayers()){
@@ -1363,12 +1371,22 @@ public class MatchMgr {
                         pLv = 2;
                         pTicket += 5;
                     }
-                    int pRank = -60 + (int)((double)data.getKillCount() * 2.7D + (double)data.getPaintCount() / 700D);
-                    if(data.getTeam() == data.getMatch().getWinTeam() || data.getMatch().getIsHikiwake())
-                        pRank = 80 + (int)((double)data.getKillCount() * 2.2D + (double)data.getPaintCount() / 700D);
+                    int pRank = data.getKillCount() * 3;
+                    if(data.getTeam() == data.getMatch().getWinTeam())
+                        pRank = pRank + 25;
+                    if(data.getKillCount() == bestkills) {
+                        pRank = pRank + 20;
+                    }
+                    if(data.getPaintCount() == bestpaint) {
+                        pRank = pRank + 10;
+                    }
+//                    int pRank = -60 + (int)((double)data.getKillCount() * 2.7D + (double)data.getPaintCount() / 700D);
+//                    if(data.getTeam() == data.getMatch().getWinTeam() || data.getMatch().getIsHikiwake())
+//                        pRank = 80 + (int)((double)data.getKillCount() * 2.2D + (double)data.getPaintCount() / 700D);
                     if(data.getMatch().getJoinedPlayerCount() == 1 || !conf.getConfig().getBoolean("RateMatch"))
                         pRank = 0;
-                    
+
+                    int pMoveRank = RankMgr.IndicateRankPointmove(p, pRank);
                     PlayerStatusMgr.addRank(p, pRank);
                     
                     PlayerStatusMgr.addLv(p, pLv);
@@ -1401,7 +1419,7 @@ public class MatchMgr {
                     if(pRank < 0)
                         Sclat.sendMessage(ChatColor.GOLD + " RankPoint : " + ChatColor.RESET + String.valueOf(pRank) + (Main.type == ServerType.NORMAL ? "  [ §b" + RankMgr.toABCRank(getRank(player)) + " §r]" : ""), MessageType.PLAYER, p);
                     else
-                        Sclat.sendMessage(ChatColor.GOLD + " RankPoint : " + ChatColor.RESET + "+" + String.valueOf(pRank) + (Main.type == ServerType.NORMAL ? "  [ §b" + RankMgr.toABCRank(getRank(player)) + " §r]" : ""), MessageType.PLAYER, p);
+                        Sclat.sendMessage(ChatColor.GOLD + " RankPoint : " + ChatColor.RESET + "+" + String.valueOf(pMoveRank) + (Main.type == ServerType.NORMAL ? "  [ §b" + RankMgr.toABCRank(getRank(player)) + " §r]" : ""), MessageType.PLAYER, p);
                     Sclat.sendMessage("", MessageType.PLAYER, p);
                     Sclat.sendMessage("§a-----------------------------------", MessageType.PLAYER, p);
                     /*

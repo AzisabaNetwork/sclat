@@ -127,6 +127,7 @@ public class DeathMgr {
                         }
                         if(i == 20)
                             t.sendTitle(ChatColor.GREEN + "復活まであと: 4秒", msg, 0, 21, 0);
+                            DataMgr.getPlayerData(t).setLastAttack(t);
                         if(i == 40)
                             t.sendTitle(ChatColor.GREEN + "復活まであと: 3秒", msg, 0, 21, 0);
                         if(i == 60)
@@ -143,7 +144,7 @@ public class DeathMgr {
                             t.getWorld().playSound(DataMgr.getPlayerData(t).getMatchLocation(), Sound.ENTITY_PLAYER_SWIM, 1, 1);
                             t.setExp(0.99F);
                             t.setHealth(20);
-                            DataMgr.getPlayerData(t).setLastAttack(t);
+                            //DataMgr.getPlayerData(t).setLastAttack(t);
                             WeaponClassMgr.setWeaponClass(t);
                             BarrierEffectRunnable(t,120);
                             SuperArmor.setArmor(t, Double.MAX_VALUE, 120, false);
@@ -177,6 +178,7 @@ public class DeathMgr {
                         }
                         if(i == 20)
                             t.sendTitle(ChatColor.GREEN + "復活まであと: 4秒", msg, 0, 21, 0);
+                            DataMgr.getPlayerData(t).setLastAttack(t);
                         if(i == 40)
                             t.sendTitle(ChatColor.GREEN + "復活まであと: 3秒", msg, 0, 21, 0);
                         if(i == 60)
@@ -193,7 +195,7 @@ public class DeathMgr {
                             t.getWorld().playSound(DataMgr.getPlayerData(t).getMatchLocation(), Sound.ENTITY_PLAYER_SWIM, 1, 1);
                             t.setExp(0.99F);
                             t.setHealth(20);
-                            DataMgr.getPlayerData(t).setLastAttack(t);
+                            //DataMgr.getPlayerData(t).setLastAttack(t);
                             WeaponClassMgr.setWeaponClass(t);
                             BarrierEffectRunnable(t,120);
                             SuperArmor.setArmor(t, Double.MAX_VALUE, 120, false);
@@ -227,6 +229,7 @@ public class DeathMgr {
                         }
                         if(i == 20)
                             t.sendTitle(ChatColor.GREEN + "復活まであと: 4秒", msg, 0, 21, 0);
+                            DataMgr.getPlayerData(t).setLastAttack(t);
                         if(i == 40)
                             t.sendTitle(ChatColor.GREEN + "復活まであと: 3秒", msg, 0, 21, 0);
                         if(i == 60)
@@ -243,7 +246,7 @@ public class DeathMgr {
                             t.getWorld().playSound(DataMgr.getPlayerData(t).getMatchLocation(), Sound.ENTITY_PLAYER_SWIM, 1, 1);
                             t.setExp(0.99F);
                             t.setHealth(20);
-                            DataMgr.getPlayerData(t).setLastAttack(t);
+                            //DataMgr.getPlayerData(t).setLastAttack(t);
                             WeaponClassMgr.setWeaponClass(t);
                             BarrierEffectRunnable(t,120);
                             SuperArmor.setArmor(t, Double.MAX_VALUE, 120, false);
@@ -267,7 +270,8 @@ public class DeathMgr {
                                 Player splayer = DataMgr.getPlayerData(t).getLastAttack();
                                 PlayerData sdata = DataMgr.getPlayerData(splayer);
                                 for (Player player : Main.getPlugin(Main.class).getServer().getOnlinePlayers()) {
-                                    player.sendMessage( DataMgr.getPlayerData(t).getTeam().getTeamColor().getColorCode() + t.getDisplayName() + ChatColor.RESET + "は" + ChatColor.RESET +sdata.getTeam().getTeamColor().getColorCode() + splayer.getDisplayName() + ChatColor.RESET+ "に突き落とされてしまった！");
+                                    //player.sendMessage( DataMgr.getPlayerData(t).getTeam().getTeamColor().getColorCode() + t.getDisplayName() + ChatColor.RESET + "は" + ChatColor.RESET +sdata.getTeam().getTeamColor().getColorCode() + splayer.getDisplayName() + ChatColor.RESET+ "に突き落とされてしまった！");
+                                    player.sendMessage( sdata.getTeam().getTeamColor().getColorCode() + splayer.getDisplayName() + ChatColor.RESET + "は" + ChatColor.RESET +DataMgr.getPlayerData(t).getTeam().getTeamColor().getColorCode() + t.getDisplayName()+ ChatColor.RESET+ "を水中に落とした！");
                                 }
                             }
                         }
@@ -279,6 +283,7 @@ public class DeathMgr {
                             t.sendTitle(ChatColor.GREEN + "復活まであと: 5秒", "溺れてしまった！", 0, 21, 0);
                         if(i == 20)
                             t.sendTitle(ChatColor.GREEN + "復活まであと: 4秒", "溺れてしまった！", 0, 21, 0);
+                            DataMgr.getPlayerData(t).setLastAttack(t);
                         if(i == 40)
                             t.sendTitle(ChatColor.GREEN + "復活まであと: 3秒", "溺れてしまった！", 0, 21, 0);
                         if(i == 60)
@@ -294,7 +299,7 @@ public class DeathMgr {
                             t.getWorld().playSound(DataMgr.getPlayerData(t).getMatchLocation(), Sound.ENTITY_PLAYER_SWIM, 1, 1);
                             t.setExp(0.99F);
                             t.setHealth(20);
-                            DataMgr.getPlayerData(t).setLastAttack(t);
+                            //DataMgr.getPlayerData(t).setLastAttack(t);
                             WeaponClassMgr.setWeaponClass(t);
                             BarrierEffectRunnable(t,120);
                             SuperArmor.setArmor(t, Double.MAX_VALUE, 120, false);
@@ -317,7 +322,8 @@ public class DeathMgr {
                                 Player splayer = DataMgr.getPlayerData(t).getLastAttack();
                                 PlayerData sdata = DataMgr.getPlayerData(splayer);
                                 for (Player player : Main.getPlugin(Main.class).getServer().getOnlinePlayers()) {
-                                    player.sendMessage(DataMgr.getPlayerData(t).getTeam().getTeamColor().getColorCode() + t.getDisplayName() + ChatColor.RESET + "は" + ChatColor.RESET + sdata.getTeam().getTeamColor().getColorCode() + splayer.getDisplayName() + ChatColor.RESET + "に突き落とされてしまった！");
+                                    //player.sendMessage(DataMgr.getPlayerData(t).getTeam().getTeamColor().getColorCode() + t.getDisplayName() + ChatColor.RESET + "は" + ChatColor.RESET + sdata.getTeam().getTeamColor().getColorCode() + splayer.getDisplayName() + ChatColor.RESET + "に突き落とされてしまった！");
+                                    player.sendMessage(sdata.getTeam().getTeamColor().getColorCode() + splayer.getDisplayName() + ChatColor.RESET + "は" + ChatColor.RESET + DataMgr.getPlayerData(t).getTeam().getTeamColor().getColorCode() + t.getDisplayName() + ChatColor.RESET + "を奈落に落とした！");
                                 }
                             }
                         }
@@ -329,6 +335,7 @@ public class DeathMgr {
                             t.sendTitle(ChatColor.GREEN + "復活まであと: 5秒", "マップの外に落ちてしまった！", 0, 21, 0);
                         if(i == 20)
                             t.sendTitle(ChatColor.GREEN + "復活まであと: 4秒", "マップの外に落ちてしまった！", 0, 21, 0);
+                            DataMgr.getPlayerData(t).setLastAttack(t);
                         if(i == 40)
                             t.sendTitle(ChatColor.GREEN + "復活まであと: 3秒", "マップの外に落ちてしまった！", 0, 21, 0);
                         if(i == 60)
@@ -344,7 +351,7 @@ public class DeathMgr {
                             t.getWorld().playSound(DataMgr.getPlayerData(t).getMatchLocation(), Sound.ENTITY_PLAYER_SWIM, 1, 1);
                             t.setExp(0.99F);
                             t.setHealth(20);
-                            DataMgr.getPlayerData(t).setLastAttack(t);
+                            //DataMgr.getPlayerData(t).setLastAttack(t);
                             WeaponClassMgr.setWeaponClass(t);
                             BarrierEffectRunnable(t,120);
                             SuperArmor.setArmor(t, Double.MAX_VALUE, 120, false);
