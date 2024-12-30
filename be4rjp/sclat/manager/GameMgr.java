@@ -756,10 +756,7 @@ public class GameMgr implements Listener{
                         LootBox.LootBoxInfo(player);
                         break;
                     case "[ GiftForYou ]":
-                        LootBox.GiftWeapon(player,"ボールドマーカー[カスタム]");
-                        LootBox.GiftWeapon(player,"スプラマニューバー[カスタム]");
-                        LootBox.GiftWeapon(player,"スクイックリン[カスタム]");
-                        LootBox.GiftWeapon(player,"ノヴァブラスター[カスタム]");
+                        LootBox.GiftWeapon(player,"お年玉[巳]");
                         break;
                     case "[ EasterEgg ]":
                         LootBox.Giftbook(player);

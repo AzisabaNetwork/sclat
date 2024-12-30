@@ -172,6 +172,9 @@ public class SnowballListener implements Listener {
                                     damage -= damage * (ticksLived / 100);
                                 }if(type.equals("Funnel")) {
                                     damage = damage + Funnel.FunnelPursuitPlayer(shooter, target);
+                                    if(damage<0.1){
+                                        damage=0.1;
+                                    }
                                 }
                                 
                                 Sclat.giveDamage(shooter, target, damage, "killed");
@@ -290,9 +293,28 @@ public class SnowballListener implements Listener {
                         if(ticksLived > 20.0)
                             ticksLived = 20.0;
                         damage -= damage * (ticksLived / 100);
+                    }if(type.equals("Blaster")) {
+                        try {
+                            if(as.getCustomName() != null) {
+                                if (as.getCustomName().equals("Kasa")) {
+                                    KasaData kasaData = DataMgr.getKasaDataFromArmorStand((ArmorStand) as);
+                                    if (DataMgr.getPlayerData(kasaData.getPlayer()).getTeam() != DataMgr.getPlayerData(shooter).getTeam()) {
+                                        Blaster.Explode(shooter, as.getLocation().add(new Vector(0, 1.0, 0)));
+                                    }
+                                } else if (as.getCustomName().equals("SplashShield")) {
+                                    SplashShieldData splashShieldData = DataMgr.getSplashShieldDataFromArmorStand((ArmorStand) as);
+                                    if (DataMgr.getPlayerData(splashShieldData.getPlayer()).getTeam() != DataMgr.getPlayerData(shooter).getTeam()) {
+                                        Blaster.Explode(shooter, as.getLocation().add(new Vector(0, 1.0, 0)));
+                                    }
+                                }
+                            }
+                        }catch (Exception e){}
                     }if(type.equals("Funnel")) {
                         if (as.getCustomName() != null && !as.getCustomName().equals("Path") && !as.getCustomName().equals("21") && !as.getCustomName().equals("100") && !as.getCustomName().equals("SplashShield") && !as.getCustomName().equals("Kasa")){
                             damage = damage + Funnel.FunnelPursuit(shooter, as);
+                            if(damage<0.1){
+                                damage=0.1;
+                            }
                         }
                     }
                     ArmorStandMgr.giveDamageArmorStand(as, damage, shooter);
@@ -649,6 +671,9 @@ public class SnowballListener implements Listener {
                 }if(type.equals("Funnel")) {
                     if (as.getCustomName() != null && !as.getCustomName().equals("Path") && !as.getCustomName().equals("21") && !as.getCustomName().equals("100") && !as.getCustomName().equals("SplashShield") && !as.getCustomName().equals("Kasa")){
                         damage = damage + Funnel.FunnelPursuit(shooter, as);
+                        if(damage <0.1){
+                            damage=0.1;
+                        }
                     }
                 }
                 ArmorStandMgr.giveDamageArmorStand(as, damage, shooter);
