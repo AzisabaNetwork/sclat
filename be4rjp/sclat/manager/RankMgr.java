@@ -47,8 +47,10 @@ public class RankMgr {
             rank_Rate=1.0;
         }else if(rank<8000){
             rank_Rate=0.75;
-        }else{
+        }else if(rank<20000){
             rank_Rate=0.5;
+        }else{
+            rank_Rate=0.2;
         }
         int plus = (int) ((double) rankPoint * rank_Rate);
         return plus;
@@ -73,8 +75,10 @@ public class RankMgr {
             rank_Rate=1.0;
         }else if(rank<8000){
             rank_Rate=0.75;
-        }else{
+        }else if(rank<20000){
             rank_Rate=0.5;
+        }else{
+            rank_Rate=0.2;
         }
         
 //        if(rank >= MAX_RATE) {

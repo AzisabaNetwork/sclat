@@ -667,6 +667,10 @@ public class MatchMgr {
                             Shooter.ManeuverRunnable(p);
                         }
                     }
+                    if(DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getWeaponType().equals("Buckler")) {
+                        Shooter.ShooterRunnable(p);
+                        Buckler.BucklerRunnable(p);
+                    }
                     if(DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getWeaponType().equals("Bucket"))
                         Bucket.BucketHealRunnable(p,1);
                     if(DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getWeaponType().equals("Slosher"))

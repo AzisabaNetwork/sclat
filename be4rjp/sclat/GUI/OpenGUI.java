@@ -540,9 +540,14 @@ public class OpenGUI {
                 fnl.setItemMeta(fnlm);
 
                 ItemStack grp = new ItemStack(Material.ORANGE_DYE);
-                ItemMeta grpm = fnl.getItemMeta();
+                ItemMeta grpm = grp.getItemMeta();
                 grpm.setDisplayName("リーラー");
                 grp.setItemMeta(grpm);
+
+                ItemStack bck = new ItemStack(Material.SLIME_BALL);
+                ItemMeta bckm = bck.getItemMeta();
+                bckm.setDisplayName("バックラー");
+                bck.setItemMeta(bckm);
 
                 wm.setItem(0, s);
                 wm.setItem(1, b);
@@ -557,7 +562,8 @@ public class OpenGUI {
                 wm.setItem(10, hd);
                 wm.setItem(11, swp);
                 wm.setItem(12, fnl);
-                wm.setItem(13,grp);
+                wm.setItem(13, grp);
+                wm.setItem(14, bck);
 
                 player.openInventory(wm);
     

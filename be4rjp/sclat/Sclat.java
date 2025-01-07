@@ -22,6 +22,7 @@ import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
@@ -342,9 +343,12 @@ public class Sclat {
     public static boolean giveDamage(Player player, Player target, double damage, String damageType){
         PlayerData targetData = DataMgr.getPlayerData(target);
         PlayerData playerData = DataMgr.getPlayerData(player);
+        if(target.hasPotionEffect(PotionEffectType.FIRE_RESISTANCE)){
+            damage=damage*0.6;
+        }
         double armorHealth = targetData.getArmor();
         //if((target.getHealth()*2 + armorHealth*2 + target.getAbsorptionAmount() > damage && armorHealth>=0.01 )||(target.getHealth() + armorHealth + target.getAbsorptionAmount() > damage) && armorHealth<0.01){
-        if((target.getHealth() + target.getAbsorptionAmount() > (damage - armorHealth)/2 && armorHealth>0.01 )||(target.getHealth() + target.getAbsorptionAmount() > damage) && armorHealth <= 0.01){
+        if((target.getHealth() + target.getAbsorptionAmount() > (damage - armorHealth)/2 && armorHealth>0.01 )||((target.getHealth() + target.getAbsorptionAmount() > damage) && armorHealth <= 0.01)){
             targetData.setLastAttack(player);
             if(armorHealth > damage){
                 targetData.setArmor(armorHealth - damage);

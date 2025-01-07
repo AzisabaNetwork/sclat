@@ -364,6 +364,9 @@ public class SquidMgr {
                     if(!is3){
                         is3 = true;
                         p.getEquipment().setHelmet(new ItemStack(Material.AIR));
+                        if(data.getWeaponClass().getMainWeapon().getWeaponType().equals("Buckler")){
+                            p.getInventory().setItem(40, new ItemStack(Material.AIR));
+                        }
                         if(data.getWeaponClass().getMainWeapon().getIsManeuver())
                             p.getInventory().setItem(40, new ItemStack(Material.AIR));
                     }
@@ -373,6 +376,9 @@ public class SquidMgr {
                     if(!is4){ 
                         is4 = true;
                         p.getEquipment().setHelmet(DataMgr.getPlayerData(p).getTeam().getTeamColor().getBougu());
+                        if(data.getWeaponClass().getMainWeapon().getWeaponType().equals("Buckler")){
+                            p.getInventory().setItem(40, new ItemStack(Material.SLIME_BALL));
+                        }
                         if(data.getWeaponClass().getMainWeapon().getIsManeuver())
                             p.getInventory().setItem(40, DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getWeaponIteamStack().clone());
                     }
