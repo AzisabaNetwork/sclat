@@ -86,8 +86,8 @@ public class SuperTyakuti {
                         }
                     }
                     
-                    if(i == 4)
-                        SuperArmor.setArmor(player, 40, 33, false);
+                    if(i == 2)
+                        SuperArmor.setArmor(player, 60, 38, false);
 
                     //範囲エフェクト
                     if(i % 5 == 0){
@@ -174,7 +174,10 @@ public class SuperTyakuti {
                     }
 
 
-                    if(i == 200 || player.getGameMode().equals(GameMode.SPECTATOR) || !DataMgr.getPlayerData(player).isInMatch()){
+                    if(i == 500 || player.getGameMode().equals(GameMode.SPECTATOR) || !DataMgr.getPlayerData(player).isInMatch()){
+                        if(i==500 && player.getGameMode().equals(GameMode.ADVENTURE) && DataMgr.getPlayerData(player).isInMatch()){
+                            WeaponClassMgr.setWeaponClass(player);
+                        }
                         DataMgr.getPlayerData(player).setIsUsingSP(false);
                         DataMgr.getPlayerData(player).setIsUsingTyakuti(false);
                         cancel();
