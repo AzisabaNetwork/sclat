@@ -134,6 +134,7 @@ public class Shooter {
                     if (data.getIsSneaking() && sl_recharge_2 == true && !data.getIsSliding() && p.getInventory().getItemInMainHand().getType().equals(data.getWeaponClass().getMainWeapon().getWeaponIteamStack().getType())) {//slをsl_recharge_2に変更することで優先順位が低い方のスライドが残っている時のみ使えるようにしました
                         Vector jvec = (new Vector(vec.getX(), 0, vec.getZ())).normalize().multiply(3);
                         Vector ev = jvec.clone().normalize().multiply(-2);
+                        check = true;
 
                         //p.setExp(p.getExp() - ink);
 
@@ -208,23 +209,23 @@ public class Shooter {
 //                                    check = true;
 //                                }
 //                            };
-                        BukkitRunnable task2 = new BukkitRunnable() {//二つのtaskの追加でそれぞれのスライドを管理しています
-                            @Override
-                            public void run() {
-                                sl_recharge_1 = true;
-                                //check = true;
-                            }
-                        };
-                        BukkitRunnable task3 = new BukkitRunnable() {
-                            @Override
-                            public void run() {
-                                sl_recharge_2 = true;
-                                //check = true;
-                            }
-                        };
+//                        BukkitRunnable task2 = new BukkitRunnable() {//二つのtaskの追加でそれぞれのスライドを管理しています
+//                            @Override
+//                            public void run() {
+//                                sl_recharge_1 = true;
+//                                //check = true;
+//                            }
+//                        };
+//                        BukkitRunnable task3 = new BukkitRunnable() {
+//                            @Override
+//                            public void run() {
+//                                sl_recharge_2 = true;
+//                                //check = true;
+//                            }
+//                        };
                         //スライド仕様変更の改変
-                        if( sl_recharge_2 == true){task2.runTaskLater(Main.getPlugin(), 64);}
-                        else{task3.runTaskLater(Main.getPlugin(), 64);}
+//                        if( sl_recharge_2 == true){task2.runTaskLater(Main.getPlugin(), 64);}
+//                        else{task3.runTaskLater(Main.getPlugin(), 64);}
                         //booleam型の変数で二つのスライドをそれぞれ表現している、優先順位が低い方がTrueのときは高い方が使われた後のため高い方のリチャージをする（優先順位が高い方は2秒、低い方は2.2秒）
                         //check = false;
                     }
@@ -237,8 +238,34 @@ public class Shooter {
                 if(!data.getIsSliding()) {
                     if (loc.getX() == ploc.getX() && loc.getZ() == ploc.getZ())
                         data.setIsUsingManeuver(true);
-                    else
+                    else {
+                        if(check) {
+                            BukkitRunnable task4 = new BukkitRunnable() {
+                                @Override
+                                public void run() {
+                                    sl_recharge_1 = true;
+                                    //check = true;
+                                }
+                            };
+
+                            BukkitRunnable task5 = new BukkitRunnable() {
+                                @Override
+                                public void run() {
+                                    sl_recharge_1 = true;
+                                    sl_recharge_2 = true;
+                                    //check = true;
+                                }
+                            };
+                            if (sl_recharge_2 == true) {
+                                task4.runTaskLater(Main.getPlugin(), 64);
+                                check = false;
+                            } else {
+                                task5.runTaskLater(Main.getPlugin(), 64);
+                                check = false;
+                            }
+                        }
                         data.setIsUsingManeuver(false);
+                    }
                 }
 
                 //loc = ploc;
