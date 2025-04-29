@@ -114,7 +114,7 @@ public class Gear {
                 case 6:
                     return 1.1;
                 case 7:
-                    return 1.4;
+                    return 1.3;
                 case 8:
                     return 1.2;
                 case 9:
