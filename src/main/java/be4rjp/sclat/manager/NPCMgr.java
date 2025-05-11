@@ -46,7 +46,7 @@ public class NPCMgr {
                     npc.setLocation(location.getX(), location.getY() - 20, location.getZ(), location.getYaw(), 0);
                     npc.getDataWatcher().set(DataWatcherRegistry.a.a(15), (byte)127);
         
-                    for(Player p : Main.getPlugin(Main.class).getServer().getOnlinePlayers()){
+                    for(Player p : Bukkit.getServer().getOnlinePlayers()){
                         PlayerConnection connection = ((CraftPlayer) p).getHandle().playerConnection;
                         connection.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, npc));
                         connection.sendPacket(new PacketPlayOutNamedEntitySpawn(npc));
@@ -55,7 +55,7 @@ public class NPCMgr {
                 }
                 if(s == 1){
                     npc.setLocation(location.getX(), location.getY(), location.getZ(), location.getYaw(), 0);
-                    for(Player p : Main.getPlugin(Main.class).getServer().getOnlinePlayers()){
+                    for(Player p : Bukkit.getServer().getOnlinePlayers()){
                         PlayerConnection connection = ((CraftPlayer) p).getHandle().playerConnection;
                         connection.sendPacket(new PacketPlayOutEntityTeleport(npc));
                         connection.sendPacket(new PacketPlayOutEntityHeadRotation(npc, (byte) ((location.getYaw() * 256.0F) / 360.0F)));
@@ -67,7 +67,7 @@ public class NPCMgr {
                     
                 }
                 if(s == 3){
-                    for(Player p : Main.getPlugin(Main.class).getServer().getOnlinePlayers()){
+                    for(Player p : Bukkit.getServer().getOnlinePlayers()){
                         PlayerConnection connection = ((CraftPlayer) p).getHandle().playerConnection;
                         connection.sendPacket(new PacketPlayOutEntityDestroy(npc.getBukkitEntity().getEntityId()));
                     }

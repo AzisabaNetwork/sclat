@@ -11,6 +11,7 @@ import java.util.List;
 import net.minecraft.server.v1_14_R1.EntityShulker;
 import net.minecraft.server.v1_14_R1.PacketPlayOutEntityDestroy;
 import net.minecraft.server.v1_14_R1.PacketPlayOutSpawnEntityLiving;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -77,7 +78,7 @@ public class Area {
                     BukkitRunnable task = new BukkitRunnable() {
                         @Override
                         public void run() {
-                            for(Player oplayer : Main.getPlugin(Main.class).getServer().getOnlinePlayers()){
+                            for(Player oplayer : Bukkit.getServer().getOnlinePlayers()){
                                 if(!DataMgr.getPlayerData(oplayer).getSettings().ShowAreaRegion()) {
                                     ((CraftPlayer) oplayer).getHandle().playerConnection.sendPacket(new PacketPlayOutEntityDestroy(sl.getEntityId()));
                                 }
@@ -107,7 +108,7 @@ public class Area {
                 //エリアの発光表示
                 /*
                 for(Shulker sl : slist) {
-                    for (Player oplayer : Main.getPlugin(Main.class).getServer().getOnlinePlayers()) {
+                    for (Player oplayer : Bukkit.getServer().getOnlinePlayers()) {
                         if (DataMgr.getPlayerData(oplayer).getSettings().ShowAreaRegion()) {
                             GlowingAPI.setGlowing(sl, oplayer, true);
                         }
@@ -129,7 +130,7 @@ public class Area {
                     if(team == match.getTeam0()){
                         if((blist.size() * 0.5) < (double)t1c){
                             Sclat.sendMessage("§3§lカウントストップ!", MessageType.ALL_PLAYER);
-                            for(Player oplayer : Main.getPlugin(Main.class).getServer().getOnlinePlayers()){
+                            for(Player oplayer : Bukkit.getServer().getOnlinePlayers()){
                                 if(DataMgr.getPlayerData(oplayer).isInMatch()){
                                     oplayer.playSound(oplayer.getLocation(), Sound.BLOCK_ANVIL_PLACE, 1F, 2F);
                                 }
@@ -141,7 +142,7 @@ public class Area {
                     if(team == match.getTeam1()){
                         if((blist.size() * 0.5) < (double)t0c){
                             Sclat.sendMessage("§3§lカウントストップ!", MessageType.ALL_PLAYER);
-                            for(Player oplayer : Main.getPlugin(Main.class).getServer().getOnlinePlayers()){
+                            for(Player oplayer : Bukkit.getServer().getOnlinePlayers()){
                                 if(DataMgr.getPlayerData(oplayer).isInMatch()){
                                     oplayer.playSound(oplayer.getLocation(), Sound.BLOCK_ANVIL_PLACE, 1F, 2F);
                                 }
@@ -153,7 +154,7 @@ public class Area {
                 }else{
                     if((blist.size() * 0.6) < (double)t0c){
                         team = match.getTeam0();
-                        for(Player oplayer : Main.getPlugin(Main.class).getServer().getOnlinePlayers()){
+                        for(Player oplayer : Bukkit.getServer().getOnlinePlayers()){
                             if(DataMgr.getPlayerData(oplayer).isInMatch()){
                                 if(team == DataMgr.getPlayerData(oplayer).getTeam()){
                                     Sclat.sendMessage("§fエリアを確保した!", MessageType.PLAYER, oplayer);
@@ -169,7 +170,7 @@ public class Area {
                         updateBlocks();
                     }else if((blist.size() * 0.6) < (double)t1c){
                         team = match.getTeam1();
-                        for(Player oplayer : Main.getPlugin(Main.class).getServer().getOnlinePlayers()){
+                        for(Player oplayer : Bukkit.getServer().getOnlinePlayers()){
                             if(DataMgr.getPlayerData(oplayer).isInMatch()){
                                 if(team == DataMgr.getPlayerData(oplayer).getTeam()){
                                     Sclat.sendMessage("§fエリアを確保した!", MessageType.PLAYER, oplayer);

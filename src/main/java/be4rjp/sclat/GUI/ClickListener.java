@@ -508,7 +508,7 @@ public class ClickListener implements Listener{
                         nearspwan = false;
                     }
             }
-            for(Player p : Main.getPlugin(Main.class).getServer().getOnlinePlayers()){
+            for(Player p : Bukkit.getServer().getOnlinePlayers()){
                 if (p.getName().equals(name)){
                     if(event.getCurrentItem().getType().equals(Material.PLAYER_HEAD)) {
                         if(p.getGameMode() == GameMode.SPECTATOR){

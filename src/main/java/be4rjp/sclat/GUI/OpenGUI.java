@@ -291,7 +291,7 @@ public class OpenGUI {
         
         int slotnum = 1;
         
-        for(Player p : Main.getPlugin(Main.class).getServer().getOnlinePlayers()){
+        for(Player p : Bukkit.getServer().getOnlinePlayers()){
             if(p.getGameMode() == GameMode.SPECTATOR) continue;
             if(DataMgr.getPlayerData(p).getTeam().getID() == DataMgr.getPlayerData(player).getTeam().getID() && p.getWorld() == player.getWorld() && p != player){
                 if(DataMgr.getPlayerData(p).getPlayerGroundLocation().distance(player.getLocation()) > 10 && DataMgr.getPlayerData(p).getPlayerHead() != null){

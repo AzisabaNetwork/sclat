@@ -83,7 +83,7 @@ public class Decoy {
                     npc.setLocation(location.getX(), location.getY() - 20, location.getZ(), yaw, 0);
                     npc.getDataWatcher().set(DataWatcherRegistry.a.a(15), (byte)127);
 
-                    for(Player p : Main.getPlugin(Main.class).getServer().getOnlinePlayers()){
+                    for(Player p : Bukkit.getServer().getOnlinePlayers()){
                         PlayerConnection connection = ((CraftPlayer) p).getHandle().playerConnection;
                         connection.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, npc));
                         connection.sendPacket(new PacketPlayOutNamedEntitySpawn(npc));
@@ -118,7 +118,7 @@ public class Decoy {
                             ((CraftPlayer)target).getHandle().playerConnection.sendPacket(packet);
                         }
                     }
-                    for(Player p : Main.getPlugin(Main.class).getServer().getOnlinePlayers()){
+                    for(Player p : Bukkit.getServer().getOnlinePlayers()){
                         PlayerConnection connection = ((CraftPlayer) p).getHandle().playerConnection;
                         connection.sendPacket(new PacketPlayOutEntityTeleport(npc));
                         connection.sendPacket(new PacketPlayOutEntityHeadRotation(npc, (byte) ((player1.getEyeLocation().getYaw() * 256.0F) / 360.0F)));
@@ -159,13 +159,13 @@ public class Decoy {
                             ((CraftPlayer)target).getHandle().playerConnection.sendPacket(packet);
                         }
                     }
-                    for(Player p : Main.getPlugin(Main.class).getServer().getOnlinePlayers()){
+                    for(Player p : Bukkit.getServer().getOnlinePlayers()){
                         PlayerConnection connection = ((CraftPlayer) p).getHandle().playerConnection;
                         connection.sendPacket(new PacketPlayOutEntityTeleport(npc));
                     }
                 }
                 if(s == 15){
-                    for(Player p : Main.getPlugin(Main.class).getServer().getOnlinePlayers()){
+                    for(Player p : Bukkit.getServer().getOnlinePlayers()){
                         PlayerConnection connection = ((CraftPlayer) p).getHandle().playerConnection;
                         connection.sendPacket(new PacketPlayOutEntityDestroy(npc.getBukkitEntity().getEntityId()));
                     }

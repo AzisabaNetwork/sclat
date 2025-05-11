@@ -11,6 +11,7 @@ import java.util.List;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
+import org.bukkit.Bukkit;
 import org.bukkit.Effect;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -118,7 +119,7 @@ public class DeathMgr {
                         String msg = sdata.getTeam().getTeamColor().getColorCode() + s.getDisplayName() + ChatColor.RESET + "に" + ChatColor.BOLD + sdata.getWeaponClass().getMainWeapon().getWeaponIteamStack().getItemMeta().getDisplayName() + ChatColor.RESET + "でやられた！";
                         if(i == 0){
                             t.sendTitle(ChatColor.GREEN + "復活まであと: 5秒", msg, 0, 21, 0);
-                            for(Player player : Main.getPlugin(Main.class).getServer().getOnlinePlayers()){
+                            for(Player player : Bukkit.getServer().getOnlinePlayers()){
                                 player.sendMessage(sdata.getTeam().getTeamColor().getColorCode() + s.getDisplayName() + ChatColor.RESET + "が" + DataMgr.getPlayerData(t).getTeam().getTeamColor().getColorCode() + t.getDisplayName() + ChatColor.RESET + "を" + ChatColor.BOLD + sdata.getWeaponClass().getMainWeapon().getWeaponIteamStack().getItemMeta().getDisplayName() + ChatColor.RESET + "で倒した！");
                                 s.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(DataMgr.getPlayerData(t).getTeam().getTeamColor().getColorCode() + t.getDisplayName() + ChatColor.RESET + "を倒した！"));
                                 s.playSound(s.getLocation(), Sound.ENTITY_ARROW_HIT_PLAYER, 1, 10);
@@ -169,7 +170,7 @@ public class DeathMgr {
                         String msg = sdata.getTeam().getTeamColor().getColorCode() + s.getDisplayName() + ChatColor.RESET + "に" + ChatColor.BOLD + sdata.getWeaponClass().getSubWeaponName() + ChatColor.RESET + "でやられた！";
                         if(i == 0){
                             t.sendTitle(ChatColor.GREEN + "復活まであと: 5秒", msg, 0, 21, 0);
-                            for(Player player : Main.getPlugin(Main.class).getServer().getOnlinePlayers()){
+                            for(Player player : Bukkit.getServer().getOnlinePlayers()){
                                 player.sendMessage(sdata.getTeam().getTeamColor().getColorCode() + s.getDisplayName() + ChatColor.RESET + "が" + DataMgr.getPlayerData(t).getTeam().getTeamColor().getColorCode() + t.getDisplayName() + ChatColor.RESET + "を" + ChatColor.BOLD + sdata.getWeaponClass().getSubWeaponName() + ChatColor.RESET + "で倒した！");
                                 s.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(DataMgr.getPlayerData(t).getTeam().getTeamColor().getColorCode() + t.getDisplayName() + ChatColor.RESET + "を倒した！"));
                                 s.playSound(s.getLocation(), Sound.ENTITY_ARROW_HIT_PLAYER, 1, 10);
@@ -220,7 +221,7 @@ public class DeathMgr {
                         String msg = sdata.getTeam().getTeamColor().getColorCode() + s.getDisplayName() + ChatColor.RESET + "に" + ChatColor.BOLD + sdata.getWeaponClass().getSPWeaponName() + ChatColor.RESET + "でやられた！";
                         if(i == 0){
                             t.sendTitle(ChatColor.GREEN + "復活まであと: 5秒", msg, 0, 21, 0);
-                            for(Player player : Main.getPlugin(Main.class).getServer().getOnlinePlayers()){
+                            for(Player player : Bukkit.getServer().getOnlinePlayers()){
                                 player.sendMessage(sdata.getTeam().getTeamColor().getColorCode() + s.getDisplayName() + ChatColor.RESET + "が" + DataMgr.getPlayerData(t).getTeam().getTeamColor().getColorCode() + t.getDisplayName() + ChatColor.RESET + "を" + ChatColor.BOLD + sdata.getWeaponClass().getSPWeaponName() + ChatColor.RESET + "で倒した！");
                                 s.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(DataMgr.getPlayerData(t).getTeam().getTeamColor().getColorCode() + t.getDisplayName() + ChatColor.RESET + "を倒した！"));
                                 s.playSound(s.getLocation(), Sound.ENTITY_ARROW_HIT_PLAYER, 1, 10);
@@ -263,13 +264,13 @@ public class DeathMgr {
                         if(i == 0){
                             loc = t.getLocation();
                             if (DataMgr.getPlayerData(t).getLastAttack()==t) {
-                                for (Player player : Main.getPlugin(Main.class).getServer().getOnlinePlayers()) {
+                                for (Player player : Bukkit.getServer().getOnlinePlayers()) {
                                     player.sendMessage(DataMgr.getPlayerData(t).getTeam().getTeamColor().getColorCode() + t.getDisplayName() + ChatColor.RESET + "は溺れてしまった！");
                                 }
                             }else{
                                 Player splayer = DataMgr.getPlayerData(t).getLastAttack();
                                 PlayerData sdata = DataMgr.getPlayerData(splayer);
-                                for (Player player : Main.getPlugin(Main.class).getServer().getOnlinePlayers()) {
+                                for (Player player : Bukkit.getServer().getOnlinePlayers()) {
                                     //player.sendMessage( DataMgr.getPlayerData(t).getTeam().getTeamColor().getColorCode() + t.getDisplayName() + ChatColor.RESET + "は" + ChatColor.RESET +sdata.getTeam().getTeamColor().getColorCode() + splayer.getDisplayName() + ChatColor.RESET+ "に突き落とされてしまった！");
                                     player.sendMessage( sdata.getTeam().getTeamColor().getColorCode() + splayer.getDisplayName() + ChatColor.RESET + "は" + ChatColor.RESET +DataMgr.getPlayerData(t).getTeam().getTeamColor().getColorCode() + t.getDisplayName()+ ChatColor.RESET+ "を水中に落とした！");
                                 }
@@ -315,13 +316,13 @@ public class DeathMgr {
                         if(i == 0){
                             loc = DataMgr.getPlayerData(t).getMatch().getMapData().getIntro();
                             if(DataMgr.getPlayerData(t).getLastAttack()==t){
-                                for (Player player : Main.getPlugin(Main.class).getServer().getOnlinePlayers()) {
+                                for (Player player : Bukkit.getServer().getOnlinePlayers()) {
                                     player.sendMessage(DataMgr.getPlayerData(t).getTeam().getTeamColor().getColorCode() + t.getDisplayName() + ChatColor.RESET + "は奈落に落ちてしまった！");
                                 }
                             }else {
                                 Player splayer = DataMgr.getPlayerData(t).getLastAttack();
                                 PlayerData sdata = DataMgr.getPlayerData(splayer);
-                                for (Player player : Main.getPlugin(Main.class).getServer().getOnlinePlayers()) {
+                                for (Player player : Bukkit.getServer().getOnlinePlayers()) {
                                     //player.sendMessage(DataMgr.getPlayerData(t).getTeam().getTeamColor().getColorCode() + t.getDisplayName() + ChatColor.RESET + "は" + ChatColor.RESET + sdata.getTeam().getTeamColor().getColorCode() + splayer.getDisplayName() + ChatColor.RESET + "に突き落とされてしまった！");
                                     player.sendMessage(sdata.getTeam().getTeamColor().getColorCode() + splayer.getDisplayName() + ChatColor.RESET + "は" + ChatColor.RESET + DataMgr.getPlayerData(t).getTeam().getTeamColor().getColorCode() + t.getDisplayName() + ChatColor.RESET + "を奈落に落とした！");
                                 }

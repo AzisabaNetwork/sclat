@@ -554,7 +554,7 @@ public class MatchMgr {
 
                     p.setScoreboard(scoreboard);
 
-                    for(Player player : Main.getPlugin(Main.class).getServer().getOnlinePlayers()){
+                    for(Player player : Bukkit.getServer().getOnlinePlayers()){
                         p.hidePlayer(Main.getPlugin(), player);
                     }
 
@@ -612,7 +612,7 @@ public class MatchMgr {
                 }
 
                 if(s == 221){
-                    for(Player player : Main.getPlugin(Main.class).getServer().getOnlinePlayers()){
+                    for(Player player : Bukkit.getServer().getOnlinePlayers()){
                         p.showPlayer(Main.getPlugin(), player);
                     }
                 }
@@ -748,7 +748,7 @@ public class MatchMgr {
                         Song song = nbs.getSong();
                         RadioSongPlayer radio = new RadioSongPlayer(song);
                         radio.setVolume(volume);
-                        for(Player oplayer : Main.getPlugin(Main.class).getServer().getOnlinePlayers()){
+                        for(Player oplayer : Bukkit.getServer().getOnlinePlayers()){
                             if(DataMgr.getPlayerData(oplayer).getSettings().PlayBGM() && DataMgr.getPlayerData(oplayer).getIsJoined()){
                                 radio.addPlayer(oplayer);
                                 oplayer.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText("§7Now playing : §6" + nbs.getSongName() + ""));
@@ -810,7 +810,7 @@ public class MatchMgr {
     }
     
     public static void StartMatch(Match match){
-        for(Player player : Main.getPlugin(Main.class).getServer().getOnlinePlayers()){
+        for(Player player : Bukkit.getServer().getOnlinePlayers()){
             PlayerData data = DataMgr.getPlayerData(player);
             if(data.getMatch() == match){
                 MatchRunnable(player, match);
@@ -988,7 +988,7 @@ public class MatchMgr {
                             }
                             
                             if(s == 0 && entyo){
-                                for(Player oplayer : Main.getPlugin(Main.class).getServer().getOnlinePlayers()){
+                                for(Player oplayer : Bukkit.getServer().getOnlinePlayers()){
                                     if(DataMgr.getPlayerData(oplayer).isInMatch()){
                                         oplayer.sendTitle("", "§7延長戦！", 10, 20, 10);
                                         Sclat.sendMessage("§7延長戦！", MessageType.PLAYER, oplayer);
@@ -997,7 +997,7 @@ public class MatchMgr {
                             }
                             
                             if(match.getTeam0().getGatiCount() == 100 || match.getTeam1().getGatiCount() == 100){
-                                for(Player oplayer : Main.getPlugin(Main.class).getServer().getOnlinePlayers()){
+                                for(Player oplayer : Bukkit.getServer().getOnlinePlayers()){
                                     if(DataMgr.getPlayerData(oplayer).getIsJoined() && p != oplayer){
                                         oplayer.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
                                         oplayer.getInventory().clear();
@@ -1012,7 +1012,7 @@ public class MatchMgr {
                                 if(match.getTeam0().getGatiCount() == 95) team0nokori = true;
                                 if(match.getTeam1().getGatiCount() == 95) team1nokori = true;
                                 
-                                for(Player oplayer : Main.getPlugin(Main.class).getServer().getOnlinePlayers()){
+                                for(Player oplayer : Bukkit.getServer().getOnlinePlayers()){
                                     if(DataMgr.getPlayerData(oplayer).isInMatch()){
                                         oplayer.sendTitle("", "§7残りカウントあとわずか！", 10, 20, 10);
                                         Sclat.sendMessage("§7残りカウントあとわずか！", MessageType.PLAYER, oplayer);
@@ -1026,7 +1026,7 @@ public class MatchMgr {
                         
                         
                         if(s == 60 && !conf.getConfig().getString("WorkMode").equals("Area")){
-                            for(Player oplayer : Main.getPlugin(Main.class).getServer().getOnlinePlayers()){
+                            for(Player oplayer : Bukkit.getServer().getOnlinePlayers()){
                                 if(DataMgr.getPlayerData(oplayer).getIsJoined()){
                                     Sclat.sendMessage("§6§n残り1分！", MessageType.PLAYER, oplayer);
                                 }
@@ -1036,7 +1036,7 @@ public class MatchMgr {
                                 Song song = nbs.getSong();
                                 RadioSongPlayer radio = new RadioSongPlayer(song);
                                 radio.setVolume(volume);
-                                for(Player oplayer : Main.getPlugin(Main.class).getServer().getOnlinePlayers()){
+                                for(Player oplayer : Bukkit.getServer().getOnlinePlayers()){
                                     if(DataMgr.getPlayerData(oplayer).getSettings().PlayBGM() && DataMgr.getPlayerData(oplayer).getIsJoined()){
                                         radio.addPlayer(oplayer);
                                         oplayer.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText("§7Now playing : §6" + nbs.getSongName() + ""));
@@ -1047,7 +1047,7 @@ public class MatchMgr {
                             }
                         }
                         if(s <= 0 && !entyo){
-                            for(Player oplayer : Main.getPlugin(Main.class).getServer().getOnlinePlayers()){
+                            for(Player oplayer : Bukkit.getServer().getOnlinePlayers()){
                                 if(DataMgr.getPlayerData(oplayer).getIsJoined() && p != oplayer){
                                     oplayer.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
                                     oplayer.getInventory().clear();
@@ -1059,7 +1059,7 @@ public class MatchMgr {
                         }
 
                         if(s <= -60){
-                            for(Player oplayer : Main.getPlugin(Main.class).getServer().getOnlinePlayers()){
+                            for(Player oplayer : Bukkit.getServer().getOnlinePlayers()){
                                 if(DataMgr.getPlayerData(oplayer).getIsJoined() && p != oplayer){
                                     oplayer.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
                                     oplayer.getInventory().clear();
@@ -1071,7 +1071,7 @@ public class MatchMgr {
                         }
                         
                         if(s <= 5 && s > 0){
-                            for(Player oplayer : Main.getPlugin(Main.class).getServer().getOnlinePlayers()){
+                            for(Player oplayer : Bukkit.getServer().getOnlinePlayers()){
                                 if(DataMgr.getPlayerData(oplayer).isInMatch())
                                     oplayer.sendTitle(ChatColor.GRAY + String.valueOf(s), "", 0, 30, 4);
                             }
@@ -1113,7 +1113,7 @@ public class MatchMgr {
                                 area.stop();
                             }
                         }
-                        for(Player oplayer : Main.getPlugin(Main.class).getServer().getOnlinePlayers()){
+                        for(Player oplayer : Bukkit.getServer().getOnlinePlayers()){
                             oplayer.setMaxHealth(20);
                         }
                         
@@ -1174,7 +1174,7 @@ public class MatchMgr {
                         p.removePotionEffect(PotionEffectType.POISON);
                 }
                 if(i == 46){
-                    for(Player player : Main.getPlugin(Main.class).getServer().getOnlinePlayers()){
+                    for(Player player : Bukkit.getServer().getOnlinePlayers()){
                         p.hidePlayer(Main.getPlugin(), player);
                     }
                 }
@@ -1201,7 +1201,7 @@ public class MatchMgr {
                         match.setWinTeam(winteam);
                         match.setIsHikiwake(hikiwake);
                         
-                        for(Player oplayer : Main.getPlugin(Main.class).getServer().getOnlinePlayers()){
+                        for(Player oplayer : Bukkit.getServer().getOnlinePlayers()){
                             if(DataMgr.getPlayerData(oplayer).getIsJoined())
                                 Animation.TDMResultAnimation(oplayer, team0c, team1c, team0code, team1code, winteam, hikiwake);
                         }
@@ -1242,7 +1242,7 @@ public class MatchMgr {
                         if(per < 0)
                             per = 0;
                         
-                        for(Player oplayer : Main.getPlugin(Main.class).getServer().getOnlinePlayers()){
+                        for(Player oplayer : Bukkit.getServer().getOnlinePlayers()){
                             if(DataMgr.getPlayerData(oplayer).getIsJoined()){
                                 if((per == 100 || per == 0) && !hikiwake)
                                     Animation.AreaResultAnimation(oplayer, per, 100 - per, team0code, team1code, winteam);
@@ -1293,7 +1293,7 @@ public class MatchMgr {
                             per = 0;
 
 
-                        for(Player oplayer : Main.getPlugin(Main.class).getServer().getOnlinePlayers()){
+                        for(Player oplayer : Bukkit.getServer().getOnlinePlayers()){
                             if(DataMgr.getPlayerData(oplayer).getIsJoined()){
                                 Animation.ResultAnimation(oplayer, per, 100 - per, team0code, team1code, winteam, hikiwake);
                             }
@@ -1328,7 +1328,7 @@ public class MatchMgr {
                     Sclat.sendMessage("§a----------<< Match result >>----------", MessageType.PLAYER, p);
                     Sclat.sendMessage("", MessageType.PLAYER, p);
                     
-                    for(Player op : Main.getPlugin(Main.class).getServer().getOnlinePlayers()){
+                    for(Player op : Bukkit.getServer().getOnlinePlayers()){
                         PlayerData odata = DataMgr.getPlayerData(op);
                         if(!odata.getIsJoined())
                             continue;
@@ -1349,7 +1349,7 @@ public class MatchMgr {
                         }
                     }
                     
-                    for(Player op : Main.getPlugin(Main.class).getServer().getOnlinePlayers()){
+                    for(Player op : Bukkit.getServer().getOnlinePlayers()){
                         PlayerData odata = DataMgr.getPlayerData(op);
                         if(!odata.getIsJoined())
                             continue;
@@ -1495,7 +1495,7 @@ public class MatchMgr {
                     //PlayerData data = new PlayerData(p);
                     //data.setWeaponClass(wc);
                     //DataMgr.setPlayerData(p, data);
-                    for(Player player : Main.getPlugin(Main.class).getServer().getOnlinePlayers()){
+                    for(Player player : Bukkit.getServer().getOnlinePlayers()){
                         p.showPlayer(Main.getPlugin(), player);
                     }
                     

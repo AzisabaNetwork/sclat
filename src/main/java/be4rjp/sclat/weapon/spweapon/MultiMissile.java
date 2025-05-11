@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.minecraft.server.v1_14_R1.*;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -67,7 +68,7 @@ public class MultiMissile {
 
                         DataMgr.getPlayerData(p).setIsUsingMM(true);
                         WorldServer nmsWorld = ((CraftWorld) p.getWorld()).getHandle();
-                        for(Player op : Main.getPlugin(Main.class).getServer().getOnlinePlayers()){
+                        for(Player op : Bukkit.getServer().getOnlinePlayers()){
                             if(DataMgr.getPlayerData(op).isInMatch() && op.getWorld() == p.getWorld() && !op.getName().equals(p.getName()) && DataMgr.getPlayerData(p).getTeam() != DataMgr.getPlayerData(op).getTeam()){
                                 Location loc = op.getLocation();
                                 EntitySquid es = new EntitySquid(EntityTypes.SQUID, nmsWorld);
@@ -98,7 +99,7 @@ public class MultiMissile {
                         }
                     }
                     if(c != 0){
-                        for(Player op : Main.getPlugin(Main.class).getServer().getOnlinePlayers()){
+                        for(Player op : Bukkit.getServer().getOnlinePlayers()){
                             if(DataMgr.getPlayerData(op).isInMatch() && op.getWorld() == p.getWorld() && !op.getName().equals(p.getName()) && DataMgr.getPlayerData(p).getTeam() != DataMgr.getPlayerData(op).getTeam()){
                                 EntitySquid es = ps.get(op);
                                 Location loc = op.getLocation();
@@ -130,7 +131,7 @@ public class MultiMissile {
                     if(!DataMgr.getPlayerData(p).getIsUsingMM() || c == 200){
                         List<Entity> targetList = new ArrayList<>();
                         int count = 0;
-                        for(Player op : Main.getPlugin(Main.class).getServer().getOnlinePlayers()){
+                        for(Player op : Bukkit.getServer().getOnlinePlayers()){
                             if(DataMgr.getPlayerData(op).isInMatch() && op.getWorld() == p.getWorld() && !op.getName().equals(p.getName()) && DataMgr.getPlayerData(p).getTeam() != DataMgr.getPlayerData(op).getTeam()){
                                 EntitySquid es = ps.get(op);
                                 ((CraftPlayer)p).getHandle().playerConnection.sendPacket(new PacketPlayOutEntityDestroy(es.getBukkitEntity().getEntityId()));

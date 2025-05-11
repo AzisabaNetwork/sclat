@@ -5,6 +5,7 @@ import be4rjp.sclat.Main;
 import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.manager.ArmorStandMgr;
 import be4rjp.sclat.manager.SPWeaponMgr;
+import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
@@ -21,7 +22,7 @@ public class SuperSensor {
     public static void SuperSensorRunnable(Player player){
         DataMgr.getPlayerData(player).setIsUsingSP(true);
         SPWeaponMgr.setSPCoolTimeAnimation(player, 200);
-        for(Player o_player : Main.getPlugin(Main.class).getServer().getOnlinePlayers()){
+        for(Player o_player : Bukkit.getServer().getOnlinePlayers()){
             if(DataMgr.getPlayerData(player).getTeam() != DataMgr.getPlayerData(o_player).getTeam() && DataMgr.getPlayerData(o_player).isInMatch())
                 o_player.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 200, 1));
         }
