@@ -1,6 +1,8 @@
 package be4rjp.sclat;
 
 import java.io.File;
+import java.io.IOException;
+
 import static org.bukkit.Bukkit.getLogger;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -19,15 +21,20 @@ public class Config {
     private FileConfiguration s;
     private FileConfiguration servers;
     private FileConfiguration idCash;
-    private File psf = new File("plugins/Sclat", "class.yml");
-    private File weaponf = new File("plugins/Sclat", "mainnweapon.yml");
-    private File mapf = new File("plugins/Sclat", "maps.yml");
-    private File conff = new File("plugins/Sclat", "config.yml");
-    private File playersettings_f = new File("plugins/Sclat", "settings.yml");
-    private File asf = new File("plugins/Sclat", "armorstand.yml");
-    private File sf = new File("plugins/Sclat", "status.yml");
-    private File serverFile = new File("plugins/Sclat", "servers.yml");
-    private File idCashFile = new File("plugins/Sclat", "UUIDCash.yml");
+    private FileConfiguration emblems;
+    private FileConfiguration emblemItems;
+    private File parent = new File("plugins/Sclat");
+    private File psf = new File(parent, "class.yml");
+    private File weaponf = new File(parent, "mainnweapon.yml");
+    private File mapf = new File(parent, "maps.yml");
+    private File conff = new File(parent, "config.yml");
+    private File playersettings_f = new File(parent, "settings.yml");
+    private File asf = new File(parent, "armorstand.yml");
+    private File sf = new File(parent, "status.yml");
+    private File serverFile = new File(parent, "servers.yml");
+    private File idCashFile = new File(parent, "UUIDCash.yml");
+    private File emblemsFile = new File(parent, "emblems.yml");
+    private File emblemItemsFile = new File(parent, "emblem_items.yml");
     
     public synchronized void LoadConfig(){
         ps = YamlConfiguration.loadConfiguration(psf);
@@ -39,8 +46,20 @@ public class Config {
         s = YamlConfiguration.loadConfiguration(sf);
         servers = YamlConfiguration.loadConfiguration(serverFile);
         idCash = YamlConfiguration.loadConfiguration(idCashFile);
+        tryCreateFile(emblemsFile);
+        tryCreateFile(emblemItemsFile);
+        emblems = YamlConfiguration.loadConfiguration(emblemsFile);
+        emblemItems = YamlConfiguration.loadConfiguration(emblemItemsFile);
     }
-    
+
+    private void tryCreateFile(File targetFile) {
+        try {
+            if(!targetFile.exists()) targetFile.createNewFile();
+        } catch (IOException e) {
+            getLogger().warning("Failed to create file: " + e);
+        }
+    }
+
     public synchronized void SaveConfig(){
         try{
             playersettings.save(playersettings_f);
@@ -85,5 +104,13 @@ public class Config {
     
     public FileConfiguration getUUIDCash(){
         return idCash;
+    }
+
+    public FileConfiguration getEmblems() {
+        return emblems;
+    }
+
+    public FileConfiguration getEmblemItems() {
+        return emblemItems;
     }
 }

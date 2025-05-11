@@ -36,10 +36,16 @@ public class PlayerStatusMgr {
     public static Map<Player, EntityArmorStand> list2 = new HashMap<>();
     
     public static void setupPlayerStatus(Player player){
-        if(!conf.getPlayerStatus().contains("Status." + player.getUniqueId().toString())){
+        String playerUuid = player.getUniqueId().toString();
+
+        if(!conf.getPlayerStatus().contains("Status." + playerUuid)){
             setDefaultStatus(player);
-        }else if(!conf.getPlayerStatus().contains("Status." + player.getUniqueId().toString() + ".Money")){
+        }else if(!conf.getPlayerStatus().contains("Status." + playerUuid + ".Money")){
             setDefaultStatus(player);
+        }
+
+        if(!conf.getEmblems().contains(playerUuid)) {
+            conf.getEmblems().set(playerUuid, new ArrayList<>());
         }
     }
     

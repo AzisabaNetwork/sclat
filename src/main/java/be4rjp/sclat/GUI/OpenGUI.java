@@ -8,6 +8,7 @@ import be4rjp.sclat.ServerType;
 import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.data.Match;
 import be4rjp.sclat.data.PlayerData;
+import be4rjp.sclat.emblem.EmblemManager;
 import be4rjp.sclat.manager.MatchMgr;
 import be4rjp.sclat.manager.PlayerStatusMgr;
 import be4rjp.sclat.manager.RankMgr;
@@ -32,8 +33,8 @@ import org.bukkit.inventory.meta.ItemMeta;
  * @author Be4rJP
  */
 public class OpenGUI {
-    
-    
+
+
     public static void openMenu(Player player){
         Inventory inv = Bukkit.createInventory(null, 45, "メインメニュー");
     
@@ -119,7 +120,7 @@ public class OpenGUI {
         if(Main.type == ServerType.LOBBY){
             ItemStack b = new ItemStack(Material.EGG);
             ItemMeta bmeta = b.getItemMeta();
-            bmeta.setDisplayName("ガチャを引く / ROLL A GACHA");
+            bmeta.setDisplayName("称号 / EMBLEM");
             b.setItemMeta(bmeta);
             inv.setItem(34, b);
         }
@@ -330,6 +331,12 @@ public class OpenGUI {
             }
         }
         player.openInventory(inv);
+    }
+
+    public static void openEmblemMenu(Player player) {
+        Inventory emblemInv = Bukkit.createInventory(null, 54, "称号");
+        EmblemManager.handleInv(emblemInv, player);
+        player.openInventory(emblemInv);
     }
     
     public static void openShop(Player player){

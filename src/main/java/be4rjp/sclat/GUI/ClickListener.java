@@ -16,6 +16,7 @@ import java.util.List;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -125,8 +126,8 @@ public class ClickListener implements Listener{
                     DataMgr.getPlayerData(player).setServerName("Lobby");
                 }
                 break;
-            case"ガチャを引く / ROLL A GACHA":
-                LootBox.turnLootBox(player);
+            case"称号 / EMBLEM":
+                OpenGUI.openEmblemMenu(player);
                 break;
             case"試し打ちサーバーへ接続 / TRAINING FIELD":
                 BungeeCordMgr.PlayerSendServer(player, "sclattest");
