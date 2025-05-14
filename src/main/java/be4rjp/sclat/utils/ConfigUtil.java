@@ -8,9 +8,9 @@ public class ConfigUtil {
     public static Location getLocation(ConfigurationSection section, World world, String path) {
         return new Location(
                 world,
-                section.getInt(path + ".X"),
-                section.getInt(path + ".Y"),
-                section.getInt(path + ".Z")
+                section.getDouble(path + ".X"),
+                section.getDouble(path + ".Y"),
+                section.getDouble(path + ".Z")
         );
     }
 
