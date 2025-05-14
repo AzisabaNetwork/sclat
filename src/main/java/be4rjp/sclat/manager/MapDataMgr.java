@@ -58,65 +58,51 @@ public class MapDataMgr {
             Location noBlockLocation = ConfigUtil.getLocation(mapsSection, world, mapName + ".NoBlockLoc");
             
             if(conf.getMapConfig().contains("Maps." + mapName + ".Path")){
-                for (String pathname : conf.getMapConfig().getConfigurationSection("Maps." + mapName + ".Path").getKeys(false)){
-                    String pathPrefix = mapName + ".Path.";
-                    double flocx = conf.getMapConfig().getDouble("Maps." + mapName + ".Path." + pathname + ".From.X") + 0.5;
-                    double flocy = conf.getMapConfig().getDouble("Maps." + mapName + ".Path." + pathname + ".From.Y") + 0.5;
-                    double flocz = conf.getMapConfig().getDouble("Maps." + mapName + ".Path." + pathname + ".From.Z") + 0.5;
-                    Location from = new Location(world, flocx, flocy, flocz);
-                    ConfigUtil.getLocation(mapsSection, world, pathPrefix + pathname);
+                ConfigurationSection pathSection = conf.getMapConfig().getConfigurationSection("Maps." + mapName + ".Path");
+                assert pathSection != null;
+                for (String pathname : pathSection.getKeys(false)){
+                    Location from = ConfigUtil.getLocation(pathSection, world, pathname + ".From");
+                    Location to = ConfigUtil.getLocation(pathSection, world, pathname + ".To");
 
-                    double tolocx = conf.getMapConfig().getDouble("Maps." + mapName + ".Path." + pathname + ".To.X") + 0.5;
-                    double tolocy = conf.getMapConfig().getDouble("Maps." + mapName + ".Path." + pathname + ".To.Y") + 0.5;
-                    double tolocz = conf.getMapConfig().getDouble("Maps." + mapName + ".Path." + pathname + ".To.Z") + 0.5;
-                    Location to = new Location(world, tolocx, tolocy, tolocz);
                     Path path = new Path(from, to);
                     map.addPath(path);
                 }
             }
             
             if(conf.getMapConfig().contains("Maps." + mapName + ".Area")){
-                for (String Areaname : conf.getMapConfig().getConfigurationSection("Maps." + mapName + ".Area").getKeys(false)){
+                ConfigurationSection areaSection = conf.getMapConfig().getConfigurationSection("Maps." + mapName + ".Area");
+                assert areaSection != null;
+                for (String Areaname : areaSection.getKeys(false)){
                     map.setCanAreaBattle(true);
-                    double flocx = conf.getMapConfig().getDouble("Maps." + mapName + ".Area." + Areaname + ".From.X") + 0.5;
-                    double flocy = conf.getMapConfig().getDouble("Maps." + mapName + ".Area." + Areaname + ".From.Y") + 0.5;
-                    double flocz = conf.getMapConfig().getDouble("Maps." + mapName + ".Area." + Areaname + ".From.Z") + 0.5;
-                    Location from = new Location(world, flocx, flocy, flocz);
 
-                    double tolocx = conf.getMapConfig().getDouble("Maps." + mapName + ".Area." + Areaname + ".To.X") + 0.5;
-                    double tolocy = conf.getMapConfig().getDouble("Maps." + mapName + ".Area." + Areaname + ".To.Y") + 0.5;
-                    double tolocz = conf.getMapConfig().getDouble("Maps." + mapName + ".Area." + Areaname + ".To.Z") + 0.5;
-                    Location to = new Location(world, tolocx, tolocy, tolocz);
+                    Location from = ConfigUtil.getLocation(areaSection, world, Areaname + ".From");
+                    from.add(0.5, 0.5, 0.5);
+
+                    Location to = ConfigUtil.getLocation(areaSection, world, Areaname + ".To");
+                    to.add(0.5,0.5,0.5);
+
                     Area area = new Area(from, to);
                     map.addArea(area);
                 }
             }
             
-            boolean canpaintbblock = false;
-            if(conf.getMapConfig().contains("Maps." + mapName + ".CanPaintBarrierBlock"))
-                canpaintbblock = conf.getMapConfig().getBoolean("Maps." + mapName + ".CanPaintBarrierBlock");
+            boolean canpaintbblock = conf.getMapConfig().getBoolean("Maps." + mapName + ".CanPaintBarrierBlock", false);
             
             
             if(conf.getMapConfig().contains("Maps." + mapName + ".Wiremesh")){
-                boolean trapDoor = false;
-                if(conf.getMapConfig().contains("Maps." + mapName + ".Wiremesh.TrapDoor"))
-                    trapDoor = conf.getMapConfig().getBoolean("Maps." + mapName + ".Wiremesh.TrapDoor");
-                boolean ironBars = false;
-                if(conf.getMapConfig().contains("Maps." + mapName + ".Wiremesh.IronBars"))
-                    ironBars = conf.getMapConfig().getBoolean("Maps." + mapName + ".Wiremesh.IronBars");
-                boolean fence = false;
-                if(conf.getMapConfig().contains("Maps." + mapName + ".Wiremesh.Fence"))
-                    fence = conf.getMapConfig().getBoolean("Maps." + mapName + ".Wiremesh.Fence");
-                
-                double flocx = conf.getMapConfig().getDouble("Maps." + mapName + ".Wiremesh.From.X") + 0.5;
-                double flocy = conf.getMapConfig().getDouble("Maps." + mapName + ".Wiremesh.From.Y");
-                double flocz = conf.getMapConfig().getDouble("Maps." + mapName + ".Wiremesh.From.Z") + 0.5;
-                Location from = new Location(world, flocx, flocy, flocz);
-                
-                double tolocx = conf.getMapConfig().getDouble("Maps." + mapName + ".Wiremesh.To.X") + 0.5;
-                double tolocy = conf.getMapConfig().getDouble("Maps." + mapName + ".Wiremesh.To.Y");
-                double tolocz = conf.getMapConfig().getDouble("Maps." + mapName + ".Wiremesh.To.Z") + 0.5;
-                Location to = new Location(world, tolocx, tolocy, tolocz);
+                ConfigurationSection wiremeshSection = conf.getMapConfig().getConfigurationSection("Maps." + mapName + ".Wiremesh");
+                assert wiremeshSection != null;
+
+                boolean trapDoor = wiremeshSection.getBoolean("TrapDoor", false);
+                boolean ironBars = wiremeshSection.getBoolean("IronBars", false);
+                boolean fence = wiremeshSection.getBoolean("Fence", false);
+
+                Location from = ConfigUtil.getLocation(wiremeshSection, world, "From");
+                from.add(0.5, 0.0, 0.5);
+
+                Location to = ConfigUtil.getLocation(wiremeshSection, world, "To");
+                to.add(0.5,0.0,0.5);
+
                 
                 WiremeshListTask wmListTask = new WiremeshListTask(from, to, trapDoor, ironBars, fence);
                 map.setWiremeshListTask(wmListTask);
