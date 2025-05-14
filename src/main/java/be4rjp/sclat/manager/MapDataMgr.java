@@ -16,7 +16,7 @@ import org.bukkit.configuration.ConfigurationSection;
 
 /**
  *
- * @author Be4rJP
+ * @author Be4rJP, sysnote8
  */
 public class MapDataMgr {
     
