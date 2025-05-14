@@ -59,7 +59,9 @@ public class MapDataMgr {
             Location waitLocation = ConfigUtil.getLocation(eachMapSection, world, "WaitLoc");
 
             Location noBlockLocation = ConfigUtil.getLocation(eachMapSection, world, "NoBlockLoc");
-            
+
+            boolean canPaintBBlock = eachMapSection.getBoolean("CanPaintBarrierBlock", false);
+
             if(eachMapSection.contains("Path")){
                 ConfigurationSection pathSection = eachMapSection.getConfigurationSection("Path");
                 assert pathSection != null;
@@ -71,7 +73,7 @@ public class MapDataMgr {
                     map.addPath(path);
                 }
             }
-            
+
             if(eachMapSection.contains("Area")){
                 ConfigurationSection areaSection = eachMapSection.getConfigurationSection("Area");
                 assert areaSection != null;
@@ -88,10 +90,7 @@ public class MapDataMgr {
                     map.addArea(area);
                 }
             }
-            
-            boolean canPaintBBlock = eachMapSection.getBoolean("CanPaintBarrierBlock", false);
-            
-            
+
             if(eachMapSection.contains("Wiremesh")){
                 ConfigurationSection wiremeshSection = eachMapSection.getConfigurationSection("Wiremesh");
                 assert wiremeshSection != null;
@@ -114,8 +113,9 @@ public class MapDataMgr {
             if(eachMapSection.contains("VoidY")){
                 map.setVoidY(eachMapSection.getInt("VoidY"));
             }
-            
-            
+
+            // set data
+            map.setWorldName(WorldName);
             map.setIntro(introLocation);
             map.setTeam0Loc(team0Location);
             map.setTeam1Loc(team1Location);
@@ -124,20 +124,20 @@ public class MapDataMgr {
             map.setResultLoc(resultLocation);
             map.setTaikibasyo(waitLocation);
             map.setNoBlockLocation(noBlockLocation);
-            
+
+            // set intro move x,y,z
             map.setIntroMoveX(intromovex);
             map.setIntroMoveY(intromovey);
             map.setIntroMoveZ(intromovez);
-            
-            
-            map.setCanPaintBBlock(canPaintBBlock);
-            
-            Main.getPlugin().getLogger().info(mapName);
-            
-            map.setWorldName(WorldName);
-            
-            allMapCount++;
 
+            // set barrier block paint mode
+            map.setCanPaintBBlock(canPaintBBlock);
+
+            // logging map name
+            Main.getPlugin().getLogger().info(mapName);
+
+            // add a new map to the list
+            allMapCount++;
             DataMgr.addMapList(map);
         }
     }
