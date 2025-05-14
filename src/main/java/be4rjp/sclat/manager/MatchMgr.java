@@ -310,7 +310,7 @@ public class MatchMgr {
         
         mapcount++;
         
-        if(mapcount == MapDataMgr.allmapcount){
+        if(mapcount == MapDataMgr.allMapCount){
             mapcount = 0;
             //DataMgr.MapDataShuffle();
         }
