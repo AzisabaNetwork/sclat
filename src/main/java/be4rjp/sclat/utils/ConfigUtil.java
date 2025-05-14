@@ -5,7 +5,7 @@ import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 
 public class ConfigUtil {
-    public static Location getLocation(ConfigurationSection section, String path, World world) {
+    public static Location getLocation(ConfigurationSection section, World world, String path) {
         return new Location(
                 world,
                 section.getInt(path + ".X"),
@@ -14,8 +14,8 @@ public class ConfigUtil {
         );
     }
 
-    public static Location getLocationWithYaw(ConfigurationSection section, String path, World world) {
-        Location loc = getLocation(section, path, world);
+    public static Location getLocationWithYaw(ConfigurationSection section, World world, String path) {
+        Location loc = getLocation(section, world, path);
         loc.setYaw(section.getInt(path + ".Yaw"));
         return loc;
     }

@@ -33,36 +33,38 @@ public class MapDataMgr {
 
             World world = getServer().getWorld(WorldName);
 
-            Location introLocation = ConfigUtil.getLocationWithYaw(mapsSection, mapName + ".Intro", world);
+            Location introLocation = ConfigUtil.getLocationWithYaw(mapsSection, world, mapName + ".Intro");
             
             double intromovex = conf.getMapConfig().getDouble("Maps." + mapName + ".Intro.MoveX");
             double intromovey = conf.getMapConfig().getDouble("Maps." + mapName + ".Intro.MoveY");
             double intromovez = conf.getMapConfig().getDouble("Maps." + mapName + ".Intro.MoveZ");
 
-            Location team0Location = ConfigUtil.getLocationWithYaw(mapsSection, mapName + ".Team0", world);
+            Location team0Location = ConfigUtil.getLocationWithYaw(mapsSection, world, mapName + ".Team0");
             team0Location.setX(team0Location.getX() + 0.5);
             team0Location.setZ(team0Location.getZ() + 0.5);
 
-            Location team1Location = ConfigUtil.getLocationWithYaw(mapsSection, mapName + ".Team1", world);
+            Location team1Location = ConfigUtil.getLocationWithYaw(mapsSection, world, mapName + ".Team1");
             team1Location.setX(team1Location.getX() + 0.5);
             team1Location.setZ(team1Location.getZ() + 0.5);
 
-            Location team0IntroLocation = ConfigUtil.getLocationWithYaw(mapsSection, mapName + ".Team0IntroLoc", world);
-            Location team1IntroLocation = ConfigUtil.getLocationWithYaw(mapsSection, mapName + ".Team1IntroLoc", world);
+            Location team0IntroLocation = ConfigUtil.getLocationWithYaw(mapsSection, world, mapName + ".Team0IntroLoc");
+            Location team1IntroLocation = ConfigUtil.getLocationWithYaw(mapsSection, world, mapName + ".Team1IntroLoc");
 
-            Location resultLocation = ConfigUtil.getLocationWithYaw(mapsSection, mapName + ".ResultLoc", world);
+            Location resultLocation = ConfigUtil.getLocationWithYaw(mapsSection, world, mapName + ".ResultLoc");
             resultLocation.setPitch(90);
 
-            Location waitLocation = ConfigUtil.getLocation(mapsSection, mapName + ".WaitLoc", world);
+            Location waitLocation = ConfigUtil.getLocation(mapsSection, world, mapName + ".WaitLoc");
 
-            Location noBlockLocation = ConfigUtil.getLocation(mapsSection, mapName + ".NoBlockLoc", world);
+            Location noBlockLocation = ConfigUtil.getLocation(mapsSection, world, mapName + ".NoBlockLoc");
             
             if(conf.getMapConfig().contains("Maps." + mapName + ".Path")){
                 for (String pathname : conf.getMapConfig().getConfigurationSection("Maps." + mapName + ".Path").getKeys(false)){
+                    String pathPrefix = mapName + ".Path.";
                     double flocx = conf.getMapConfig().getDouble("Maps." + mapName + ".Path." + pathname + ".From.X") + 0.5;
                     double flocy = conf.getMapConfig().getDouble("Maps." + mapName + ".Path." + pathname + ".From.Y") + 0.5;
                     double flocz = conf.getMapConfig().getDouble("Maps." + mapName + ".Path." + pathname + ".From.Z") + 0.5;
                     Location from = new Location(world, flocx, flocy, flocz);
+                    ConfigUtil.getLocation(mapsSection, world, pathPrefix + pathname);
 
                     double tolocx = conf.getMapConfig().getDouble("Maps." + mapName + ".Path." + pathname + ".To.X") + 0.5;
                     double tolocy = conf.getMapConfig().getDouble("Maps." + mapName + ".Path." + pathname + ".To.Y") + 0.5;
