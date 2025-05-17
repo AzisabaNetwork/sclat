@@ -26,7 +26,7 @@ public class ColorMgr {
                 bh.setItemMeta(bhm);
             blue.setBougu(bh);
             blue.setChatColor(ChatColor.BLUE);
-        if(Main.colors.size() == 0 || Main.colors.contains("Blue")) {
+        if(Main.colors.isEmpty() || Main.colors.contains("Blue")) {
             DataMgr.setColor("Blue", blue);
             DataMgr.addColorList(blue);
         }
@@ -43,7 +43,7 @@ public class ColorMgr {
                 ah.setItemMeta(ahm);
             aqua.setBougu(ah);
             aqua.setChatColor(ChatColor.AQUA);
-        if(Main.colors.size() == 0 || Main.colors.contains("Aqua")) {
+        if(Main.colors.isEmpty() || Main.colors.contains("Aqua")) {
             DataMgr.setColor("Aqua", aqua);
             DataMgr.addColorList(aqua);
         }
@@ -60,7 +60,7 @@ public class ColorMgr {
                 oh.setItemMeta(ohm);
             orange.setBougu(oh);
             orange.setChatColor(ChatColor.GOLD);
-        if(Main.colors.size() == 0 || Main.colors.contains("Orange")) {
+        if(Main.colors.isEmpty() || Main.colors.contains("Orange")) {
             DataMgr.setColor("Orange", orange);
             DataMgr.addColorList(orange);
         }
@@ -77,7 +77,7 @@ public class ColorMgr {
                 lh.setItemMeta(lhm);
             lime.setBougu(lh);
             lime.setChatColor(ChatColor.GREEN);
-        if(Main.colors.size() == 0 || Main.colors.contains("Lime")) {
+        if(Main.colors.isEmpty() || Main.colors.contains("Lime")) {
             DataMgr.setColor("Lime", lime);
             DataMgr.addColorList(lime);
         }
@@ -94,7 +94,7 @@ public class ColorMgr {
                 yh.setItemMeta(yhm);
             y.setBougu(yh);
             y.setChatColor(ChatColor.YELLOW);
-        if(Main.colors.size() == 0 || Main.colors.contains("Yellow")) {
+        if(Main.colors.isEmpty() || Main.colors.contains("Yellow")) {
             DataMgr.setColor("Yellow", y);
             DataMgr.addColorList(y);
         }

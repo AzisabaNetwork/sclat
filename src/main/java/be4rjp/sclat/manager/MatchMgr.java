@@ -1503,7 +1503,7 @@ public class MatchMgr {
                         try {
                             BungeeCordMgr.PlayerSendServer(p, "sclat");
                             DataMgr.getPlayerData(p).setServerName("Sclat");
-                        }catch (Exception e){}
+                        }catch (Exception ignored){}
                     }
                     
                     cancel();
