@@ -1,4 +1,3 @@
-
 package be4rjp.sclat.weapon;
 
 import be4rjp.sclat.Main;
@@ -25,57 +24,58 @@ import org.bukkit.util.Vector;
 import java.util.List;
 
 /**
- *
  * @author Be4rJP
  */
 public class Slosher {
-    public static void ShootSlosher(Player player){
+    public static void ShootSlosher(Player player) {
         PlayerData data = DataMgr.getPlayerData(player);
-        BukkitRunnable delay1 = new BukkitRunnable(){
-            Player p = player;
+        BukkitRunnable delay1 = new BukkitRunnable() {
+            final Player p = player;
+
             @Override
-            public void run(){
+            public void run() {
                 PlayerData data = DataMgr.getPlayerData(player);
                 data.setCanRollerShoot(true);
             }
         };
-        if(data.getCanRollerShoot())
+        if (data.getCanRollerShoot())
             delay1.runTaskLater(Main.getPlugin(), data.getWeaponClass().getMainWeapon().getCoolTime());
-        
-        BukkitRunnable delay = new BukkitRunnable(){
-            Player p = player;
+
+        BukkitRunnable delay = new BukkitRunnable() {
+            final Player p = player;
+
             @Override
             public void run() {
-                for (int i = 0; i < data.getWeaponClass().getMainWeapon().getRollerShootQuantity(); i++){
+                for (int i = 0; i < data.getWeaponClass().getMainWeapon().getRollerShootQuantity(); i++) {
                     Slosher.Shoot(player, null);
                 }
             }
         };
-        if(data.getCanRollerShoot()){
+        if (data.getCanRollerShoot()) {
             delay.runTaskLater(Main.getPlugin(), data.getWeaponClass().getMainWeapon().getDelay());
             data.setCanRollerShoot(false);
         }
     }
-    
-    public static void Shoot(Player player, Vector v){
-    
-        if(player.getGameMode() == GameMode.SPECTATOR) return;
-        
+
+    public static void Shoot(Player player, Vector v) {
+
+        if (player.getGameMode() == GameMode.SPECTATOR) return;
+
         PlayerData data = DataMgr.getPlayerData(player);
-        if(player.getExp() <= (float)(data.getWeaponClass().getMainWeapon().getNeedInk() * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) / Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP))){
+        if (player.getExp() <= (float) (data.getWeaponClass().getMainWeapon().getNeedInk() * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) / Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP))) {
             player.sendTitle("", ChatColor.RED + "インクが足りません", 0, 13, 2);
             player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1F, 1.63F);
             return;
         }
-        player.setExp(player.getExp() - (float)(data.getWeaponClass().getMainWeapon().getNeedInk() * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) / Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)));
+        player.setExp(player.getExp() - (float) (data.getWeaponClass().getMainWeapon().getNeedInk() * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) / Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)));
         Snowball ball = player.launchProjectile(Snowball.class);
-        ((CraftSnowball)ball).getHandle().setItem(CraftItemStack.asNMSCopy(new ItemStack(DataMgr.getPlayerData(player).getTeam().getTeamColor().getWool())));
+        ((CraftSnowball) ball).getHandle().setItem(CraftItemStack.asNMSCopy(new ItemStack(DataMgr.getPlayerData(player).getTeam().getTeamColor().getWool())));
         Vector vec = player.getLocation().getDirection().multiply(DataMgr.getPlayerData(player).getWeaponClass().getMainWeapon().getShootSpeed());
-        if(v != null)
+        if (v != null)
             vec = v;
         double random = DataMgr.getPlayerData(player).getWeaponClass().getMainWeapon().getRandom();
         int distick = DataMgr.getPlayerData(player).getWeaponClass().getMainWeapon().getDistanceTick();
-        vec.add(new Vector(Math.random() * random - random/2, Math.random() * random/1.5 - random/3, Math.random() * random - random/2));
+        vec.add(new Vector(Math.random() * random - random / 2, Math.random() * random / 1.5 - random / 3, Math.random() * random - random / 2));
         ball.setVelocity(vec);
         ball.setShooter(player);
         String name = String.valueOf(Main.getNotDuplicateNumber());
@@ -83,43 +83,44 @@ public class Slosher {
         ball.setCustomName(name);
         DataMgr.getMainSnowballNameMap().put(name, ball);
         DataMgr.setSnowballHitCount(name, 0);
-        BukkitRunnable task = new BukkitRunnable(){
+        BukkitRunnable task = new BukkitRunnable() {
             int i = 0;
-            int tick = distick;
+            final int tick = distick;
             Snowball inkball = ball;
-            Player p = player;
+            final Player p = player;
             boolean addedFallVec = false;
-            Vector fallvec = new Vector(inkball.getVelocity().getX(), inkball.getVelocity().getY()  , inkball.getVelocity().getZ()).multiply(DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getShootSpeed()/17);
+            final Vector fallvec = new Vector(inkball.getVelocity().getX(), inkball.getVelocity().getY(), inkball.getVelocity().getZ()).multiply(DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getShootSpeed() / 17);
+
             @Override
-            public void run(){
-                try{
+            public void run() {
+                try {
                     inkball = DataMgr.getMainSnowballNameMap().get(name);
-                        
-                        if(!inkball.equals(ball)){
-                            i+=DataMgr.getSnowballHitCount(name) - 1;
-                            DataMgr.setSnowballHitCount(name, 0);
-                        }
-                    for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
-                        if(!DataMgr.getPlayerData(target).getSettings().ShowEffect_MainWeaponInk())
-                            continue;
-                            if(target.getWorld() == inkball.getWorld()){
-                                if(target.getLocation().distanceSquared(inkball.getLocation()) < Main.PARTICLE_RENDER_DISTANCE_SQUARED){
-                                    org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).getTeam().getTeamColor().getWool().createBlockData();
-                                    target.spawnParticle(org.bukkit.Particle.BLOCK_DUST, inkball.getLocation(), 3, 0, 0, 0, 1, bd);
-                                }
-                            }
+
+                    if (!inkball.equals(ball)) {
+                        i += DataMgr.getSnowballHitCount(name) - 1;
+                        DataMgr.setSnowballHitCount(name, 0);
                     }
-                    
-                    
+                    for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
+                        if (!DataMgr.getPlayerData(target).getSettings().ShowEffect_MainWeaponInk())
+                            continue;
+                        if (target.getWorld() == inkball.getWorld()) {
+                            if (target.getLocation().distanceSquared(inkball.getLocation()) < Main.PARTICLE_RENDER_DISTANCE_SQUARED) {
+                                org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).getTeam().getTeamColor().getWool().createBlockData();
+                                target.spawnParticle(org.bukkit.Particle.BLOCK_DUST, inkball.getLocation(), 3, 0, 0, 0, 1, bd);
+                            }
+                        }
+                    }
+
+
                     PaintMgr.PaintHightestBlock(inkball.getLocation(), p, false, true);
 
-                    if(i >= tick && !addedFallVec){
+                    if (i >= tick && !addedFallVec) {
                         inkball.setVelocity(fallvec);
                         addedFallVec = true;
                     }
-                    if(i >= tick && i <= tick + 15)
+                    if (i >= tick && i <= tick + 15)
                         inkball.setVelocity(inkball.getVelocity().add(new Vector(0, -0.1, 0)));
-                    if(inkball.isDead()){
+                    if (inkball.isDead()) {
                         //半径
                         double maxDist = data.getWeaponClass().getMainWeapon().getBlasterExHankei();
 
@@ -130,31 +131,31 @@ public class Slosher {
                         Sclat.createInkExplosionEffect(inkball.getLocation(), maxDist, 25, player);
 
                         //塗る
-                        for(int i = 0; i <= maxDist; i++){
+                        for (int i = 0; i <= maxDist; i++) {
                             List<Location> p_locs = Sphere.getSphere(inkball.getLocation(), i, 20);
-                            for(Location loc : p_locs){
+                            for (Location loc : p_locs) {
                                 PaintMgr.Paint(loc, p, false);
                                 PaintMgr.PaintHightestBlock(loc, p, false, false);
                             }
                         }
 
 
-
                         //攻撃判定の処理
 
                         for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
-                            if(!DataMgr.getPlayerData(target).isInMatch())
+                            if (!DataMgr.getPlayerData(target).isInMatch())
                                 continue;
-                            if (target.getLocation().distanceSquared(inkball.getLocation()) <= maxDist*maxDist) {
+                            if (target.getLocation().distanceSquared(inkball.getLocation()) <= maxDist * maxDist) {
                                 double damage = (maxDist - target.getLocation().distance(inkball.getLocation())) * data.getWeaponClass().getMainWeapon().getBlasterExDamage();
-                                if(DataMgr.getPlayerData(player).getTeam() != DataMgr.getPlayerData(target).getTeam() && target.getGameMode().equals(GameMode.ADVENTURE)){
+                                if (DataMgr.getPlayerData(player).getTeam() != DataMgr.getPlayerData(target).getTeam() && target.getGameMode().equals(GameMode.ADVENTURE)) {
                                     Sclat.giveDamage(player, target, damage, "killed");
 
                                     //AntiNoDamageTime
-                                    BukkitRunnable task = new BukkitRunnable(){
-                                        Player p = target;
+                                    BukkitRunnable task = new BukkitRunnable() {
+                                        final Player p = target;
+
                                         @Override
-                                        public void run(){
+                                        public void run() {
                                             target.setNoDamageTicks(0);
                                         }
                                     };
@@ -166,11 +167,11 @@ public class Slosher {
                         }
 
 
-                        for(Entity as : player.getWorld().getEntities()){
-                            if(as instanceof ArmorStand){
-                                if (as.getLocation().distanceSquared(inkball.getLocation()) <= maxDist*maxDist) {
+                        for (Entity as : player.getWorld().getEntities()) {
+                            if (as instanceof ArmorStand) {
+                                if (as.getLocation().distanceSquared(inkball.getLocation()) <= maxDist * maxDist) {
                                     double damage = (maxDist - as.getLocation().distance(inkball.getLocation())) * data.getWeaponClass().getMainWeapon().getBlasterExDamage();
-                                    ArmorStandMgr.giveDamageArmorStand((ArmorStand)as, damage, p);
+                                    ArmorStandMgr.giveDamageArmorStand((ArmorStand) as, damage, p);
                                 }
                             }
                         }
@@ -178,7 +179,7 @@ public class Slosher {
                     }
 
                     i++;
-                }catch(Exception e){
+                } catch (Exception e) {
                     cancel();
                 }
             }

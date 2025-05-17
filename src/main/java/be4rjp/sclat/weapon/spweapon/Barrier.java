@@ -1,4 +1,3 @@
-
 package be4rjp.sclat.weapon.spweapon;
 
 import be4rjp.sclat.Main;
@@ -17,45 +16,45 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
  * @author Be4rJP
  */
 public class Barrier {
-    public static void BarrierRunnable(Player player){
+    public static void BarrierRunnable(Player player) {
         DataMgr.getPlayerData(player).setIsUsingSP(true);
         PlayerData data = DataMgr.getPlayerData(player);
         //data.setArmor(Double.MAX_VALUE);
         SPWeaponMgr.setSPCoolTimeAnimation(player, 100);
-        
+
         //エフェクトとアーマー解除
-        BukkitRunnable task = new BukkitRunnable(){
-            Player p = player;
-            List<EntityArmorStand> list = new ArrayList<>();
+        BukkitRunnable task = new BukkitRunnable() {
+            final Player p = player;
+            final List<EntityArmorStand> list = new ArrayList<>();
             int c = 0;
+
             @Override
-            public void run(){
-                if(!data.isInMatch() || !player.getGameMode().equals(GameMode.ADVENTURE) || !p.isOnline()){
+            public void run() {
+                if (!data.isInMatch() || !player.getGameMode().equals(GameMode.ADVENTURE) || !p.isOnline()) {
                     data.setArmor(0);
                     DataMgr.getPlayerData(player).setIsUsingSP(false);
                     cancel();
                 }
-                if(c == 0)
+                if (c == 0)
                     data.setArmor(Double.MAX_VALUE);
                 Location loc = p.getLocation().add(0, 0.5, 0);
-                
-                
+
+
                 List<Location> s_locs = Sphere.getSphere(loc, 2, 23);
                 for (Player o_player : Main.getPlugin().getServer().getOnlinePlayers()) {
-                    if(DataMgr.getPlayerData(o_player).getSettings().ShowEffect_SPWeapon() && !o_player.equals(player)){
+                    if (DataMgr.getPlayerData(o_player).getSettings().ShowEffect_SPWeapon() && !o_player.equals(player)) {
                         Particle.DustOptions dustOptions = new Particle.DustOptions(data.getTeam().getTeamColor().getBukkitColor(), 1);
                         org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).getTeam().getTeamColor().getWool().createBlockData();
-                        for(Location e_loc : s_locs)
-                            if(o_player.getWorld() == e_loc.getWorld())
-                                if(o_player.getLocation().distanceSquared(e_loc) < Main.PARTICLE_RENDER_DISTANCE_SQUARED)
+                        for (Location e_loc : s_locs)
+                            if (o_player.getWorld() == e_loc.getWorld())
+                                if (o_player.getLocation().distanceSquared(e_loc) < Main.PARTICLE_RENDER_DISTANCE_SQUARED)
                                     o_player.spawnParticle(Particle.REDSTONE, e_loc, 0, 0, 0, 0, 70, dustOptions);
                     }
                 }
-                if(c == 25){
+                if (c == 25) {
                     data.setArmor(0);
                     //p.playSound(p.getLocation(), Sound.BLOCK_CHEST_CLOSE, 1, 2);
                     DataMgr.getPlayerData(player).setIsUsingSP(false);

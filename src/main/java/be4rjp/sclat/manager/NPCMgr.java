@@ -31,52 +31,52 @@ public class NPCMgr {
 
 
     public static void createNPC(Player player1, String npcName1, Location location1) {
-        BukkitRunnable task = new BukkitRunnable(){
+        BukkitRunnable task = new BukkitRunnable() {
             EntityPlayer npc;
-            
+
             int s = 0;
-            
-            Player player = player1;
-            String npcName = npcName1;
-            Location location = location1;
-            
+
+            final Player player = player1;
+            final String npcName = npcName1;
+            final Location location = location1;
+
             @Override
-            public void run(){
-                if(s == 0){
+            public void run() {
+                if (s == 0) {
                     location.setYaw(location1.getYaw());
-                    
+
                     MinecraftServer nmsServer = ((CraftServer) Bukkit.getServer()).getServer();
                     WorldServer nmsWorld = ((CraftWorld) location.getWorld()).getHandle();
                     GameProfile gameProfile = new GameProfile(player.getUniqueId(), npcName);
 
                     npc = new EntityPlayer(nmsServer, nmsWorld, gameProfile, new PlayerInteractManager(nmsWorld));
-        
+
                     //見えないところにスポーンさせて、クライアントにスキンを先に読み込ませる
                     npc.setLocation(location.getX(), location.getY() - 20, location.getZ(), location.getYaw(), 0);
-                    npc.getDataWatcher().set(DataWatcherRegistry.a.a(15), (byte)127);
-        
-                    for(Player p : Bukkit.getServer().getOnlinePlayers()){
+                    npc.getDataWatcher().set(DataWatcherRegistry.a.a(15), (byte) 127);
+
+                    for (Player p : Bukkit.getServer().getOnlinePlayers()) {
                         PlayerConnection connection = ((CraftPlayer) p).getHandle().playerConnection;
                         connection.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, npc));
                         connection.sendPacket(new PacketPlayOutNamedEntitySpawn(npc));
                         connection.sendPacket(new PacketPlayOutEntityMetadata(npc.getId(), npc.getDataWatcher(), true));
                     }
                 }
-                if(s == 1){
+                if (s == 1) {
                     npc.setLocation(location.getX(), location.getY(), location.getZ(), location.getYaw(), 0);
-                    for(Player p : Bukkit.getServer().getOnlinePlayers()){
+                    for (Player p : Bukkit.getServer().getOnlinePlayers()) {
                         PlayerConnection connection = ((CraftPlayer) p).getHandle().playerConnection;
                         connection.sendPacket(new PacketPlayOutEntityTeleport(npc));
                         connection.sendPacket(new PacketPlayOutEntityHeadRotation(npc, (byte) ((location.getYaw() * 256.0F) / 360.0F)));
                         connection.sendPacket(new PacketPlayOutEntityEquipment(npc.getBukkitEntity().getEntityId(), EnumItemSlot.MAINHAND, CraftItemStack.asNMSCopy(DataMgr.getPlayerData(player).getWeaponClass().getMainWeapon().getWeaponIteamStack())));
-                        if(DataMgr.getPlayerData(player).getWeaponClass().getMainWeapon().getIsManeuver())
+                        if (DataMgr.getPlayerData(player).getWeaponClass().getMainWeapon().getIsManeuver())
                             connection.sendPacket(new PacketPlayOutEntityEquipment(npc.getBukkitEntity().getEntityId(), EnumItemSlot.OFFHAND, CraftItemStack.asNMSCopy(DataMgr.getPlayerData(player).getWeaponClass().getMainWeapon().getWeaponIteamStack())));
                         connection.sendPacket(new PacketPlayOutAnimation(npc, 0));
                     }
-                    
+
                 }
-                if(s == 3){
-                    for(Player p : Bukkit.getServer().getOnlinePlayers()){
+                if (s == 3) {
+                    for (Player p : Bukkit.getServer().getOnlinePlayers()) {
                         PlayerConnection connection = ((CraftPlayer) p).getHandle().playerConnection;
                         connection.sendPacket(new PacketPlayOutEntityDestroy(npc.getBukkitEntity().getEntityId()));
                     }

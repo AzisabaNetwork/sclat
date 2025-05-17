@@ -1,4 +1,3 @@
-
 package be4rjp.sclat.weapon.spweapon;
 
 import be4rjp.sclat.Main;
@@ -26,18 +25,18 @@ import org.bukkit.util.Vector;
 import java.util.Random;
 
 /**
- *
  * @author Be4rJP
  */
 public class SuperShot {
-    
-    public static void setSuperShot(Player player){
+
+    public static void setSuperShot(Player player) {
         DataMgr.getPlayerData(player).setIsUsingSP(true);
         DataMgr.getPlayerData(player).setIsUsingSS(true);
         SPWeaponMgr.setSPCoolTimeAnimation(player, 100);
-        
+
         BukkitRunnable it = new BukkitRunnable() {
-            Player p = player;
+            final Player p = player;
+
             @Override
             public void run() {
                 player.getInventory().clear();
@@ -47,9 +46,9 @@ public class SuperShot {
                 ItemMeta meta = item.getItemMeta();
                 meta.setDisplayName("右クリックで発射！");
                 item.setItemMeta(meta);
-                for (int count = 0; count < 9; count++){
+                for (int count = 0; count < 9; count++) {
                     player.getInventory().setItem(count, item);
-                    if(count % 2 != 0)
+                    if (count % 2 != 0)
                         player.getInventory().setItem(count, new ItemStack(Material.AIR));
                 }
                 player.updateInventory();
@@ -57,12 +56,13 @@ public class SuperShot {
             }
         };
         it.runTaskLater(Main.getPlugin(), 2);
-        
+
         BukkitRunnable task = new BukkitRunnable() {
-            Player p = player;
+            final Player p = player;
+
             @Override
             public void run() {
-                if(DataMgr.getPlayerData(p).isInMatch()){
+                if (DataMgr.getPlayerData(p).isInMatch()) {
                     DataMgr.getPlayerData(p).setIsUsingSP(false);
                     DataMgr.getPlayerData(p).setIsUsingSS(false);
                     player.getInventory().clear();
@@ -72,17 +72,17 @@ public class SuperShot {
         };
         task.runTaskLater(Main.getPlugin(), 100);
     }
-    
-    
-    public static void Shot(Player player){
-        if(player.hasPotionEffect(PotionEffectType.LUCK)) {
+
+
+    public static void Shot(Player player) {
+        if (player.hasPotionEffect(PotionEffectType.LUCK)) {
             Vector direction = new Vector(0, 1, 0);
             double headdis = 8.5;
             Location playerLocation = player.getLocation();
-            while(headdis>3){
-                if(player.getWorld().rayTraceBlocks(playerLocation, direction, headdis)!=null){
+            while (headdis > 3) {
+                if (player.getWorld().rayTraceBlocks(playerLocation, direction, headdis) != null) {
                     headdis -= 1;
-                }else{
+                } else {
                     break;
                 }
             }
@@ -114,7 +114,8 @@ public class SuperShot {
         }
 
         BukkitRunnable task = new BukkitRunnable() {
-            Player p = player;
+            final Player p = player;
+
             @Override
             public void run() {
                 DataMgr.getPlayerData(p).setCanUseSubWeapon(true);
@@ -122,18 +123,19 @@ public class SuperShot {
         };
         task.runTaskLater(Main.getPlugin(), 20);
     }
-    
-    public static void ShootSnowball(Player player, Location loc, Vector vec){
-        BukkitRunnable task = new BukkitRunnable(){
-            Player p = player;
-            boolean block_check = false;
+
+    public static void ShootSnowball(Player player, Location loc, Vector vec) {
+        BukkitRunnable task = new BukkitRunnable() {
+            final Player p = player;
+            final boolean block_check = false;
             int c = 0;
             Item drop;
             Snowball ball;
+
             @Override
-            public void run(){
-                try{
-                    if(c == 0){
+            public void run() {
+                try {
+                    if (c == 0) {
                         ItemStack i = new ItemStack(DataMgr.getPlayerData(p).getTeam().getTeamColor().getWool()).clone();
                         ItemMeta i_m = i.getItemMeta();
                         i_m.setLocalizedName(String.valueOf(Main.getNotDuplicateNumber()));
@@ -141,7 +143,7 @@ public class SuperShot {
                         drop = p.getWorld().dropItem(loc, i);
                         drop.setVelocity(vec);
                         //雪玉をスポーンさせた瞬間にプレイヤーに雪玉がデスポーンした偽のパケットを送信する
-                        ball = (Snowball)player.getWorld().spawnEntity(loc, EntityType.SNOWBALL);
+                        ball = (Snowball) player.getWorld().spawnEntity(loc, EntityType.SNOWBALL);
                         ball.setShooter(p);
                         ball.setVelocity(vec);
                         ball.setCustomName("SuperShot");
@@ -152,28 +154,28 @@ public class SuperShot {
                         }
                     }
                     drop.setVelocity(ball.getVelocity());
-                    
+
                     PaintMgr.PaintHightestBlock(ball.getLocation(), p, false, false);
-                    
-                    
-                    if(new Random().nextInt(20) == 0){
+
+
+                    if (new Random().nextInt(20) == 0) {
                         org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).getTeam().getTeamColor().getWool().createBlockData();
                         for (Player o_player : Main.getPlugin().getServer().getOnlinePlayers()) {
-                            if(DataMgr.getPlayerData(o_player).getSettings().ShowEffect_SPWeapon())
-                                if(o_player.getWorld() == ball.getWorld())
-                                    if(o_player.getLocation().distanceSquared(ball.getLocation()) < Main.PARTICLE_RENDER_DISTANCE_SQUARED)
+                            if (DataMgr.getPlayerData(o_player).getSettings().ShowEffect_SPWeapon())
+                                if (o_player.getWorld() == ball.getWorld())
+                                    if (o_player.getLocation().distanceSquared(ball.getLocation()) < Main.PARTICLE_RENDER_DISTANCE_SQUARED)
                                         o_player.spawnParticle(org.bukkit.Particle.BLOCK_DUST, ball.getLocation(), 1, 0, 0, 0, 1, bd);
                         }
                     }
-                    
-                    if(ball.isDead() || drop.isDead() || !p.isOnline() || !DataMgr.getPlayerData(p).isInMatch()){
+
+                    if (ball.isDead() || drop.isDead() || !p.isOnline() || !DataMgr.getPlayerData(p).isInMatch()) {
                         ball.remove();
                         drop.remove();
                         cancel();
                     }
-                    
+
                     c++;
-                }catch(Exception e){
+                } catch (Exception e) {
                     drop.remove();
                     cancel();
                     Main.getPlugin().getLogger().warning(e.getMessage());

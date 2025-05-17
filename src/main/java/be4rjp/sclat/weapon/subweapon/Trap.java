@@ -12,33 +12,32 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
-public class Trap{
-    public static void useTrap(Player player){
+public class Trap {
+    public static void useTrap(Player player) {
         PlayerData data = DataMgr.getPlayerData(player);
         Block block = player.getLocation().add(0, -1, 0).getBlock();
-        if(data.getTeam() != null && PaintMgr.canPaint(block)) {
+        if (data.getTeam() != null && PaintMgr.canPaint(block)) {
             PaintMgr.Paint(block.getLocation(), player, true);
             if (player.isOnGround() && DataMgr.getPlayerData(player).isInMatch() && player.getExp() >= 0.4 / Gear.getGearInfluence(player, Gear.Type.SUB_SPEC_UP)) {
                 TrapData trapData = new TrapData(player.getLocation().add(0, -1, 0), player, data.getTeam(), data.getTrapCount());
                 data.addTrapCount();
-                player.setExp(player.getExp() - (float)(0.39 / Gear.getGearInfluence(player, Gear.Type.SUB_SPEC_UP)));
+                player.setExp(player.getExp() - (float) (0.39 / Gear.getGearInfluence(player, Gear.Type.SUB_SPEC_UP)));
                 player.playSound(player.getLocation(), Sound.BLOCK_WOODEN_PRESSURE_PLATE_CLICK_ON, 1F, 1.2F);
-            }else if (player.getExp() < (float) (0.4 / Gear.getGearInfluence(player, Gear.Type.SUB_SPEC_UP))){
+            } else if (player.getExp() < (float) (0.4 / Gear.getGearInfluence(player, Gear.Type.SUB_SPEC_UP))) {
                 player.sendTitle("", ChatColor.RED + "インクが足りません", 0, 5, 2);
                 player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1F, 1.63F);
-            }
-            else if(!player.isOnGround()){
+            } else if (!player.isOnGround()) {
                 player.sendTitle("", ChatColor.RED + "空中では使用できません", 0, 5, 2);
                 player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1F, 1.63F);
             }
-        }else if (!PaintMgr.canPaint(block)){
+        } else if (!PaintMgr.canPaint(block)) {
             player.sendTitle("", ChatColor.RED + "ここでは使用できません", 0, 5, 2);
             player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1F, 1.63F);
         }
-    
-        BukkitRunnable delay = new BukkitRunnable(){
+
+        BukkitRunnable delay = new BukkitRunnable() {
             @Override
-            public void run(){
+            public void run() {
                 PlayerData data = DataMgr.getPlayerData(player);
                 data.setCanUseSubWeapon(true);
             }

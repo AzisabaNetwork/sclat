@@ -1,4 +1,3 @@
-
 package be4rjp.sclat.manager;
 
 import be4rjp.dadadachecker.ClickType;
@@ -21,12 +20,11 @@ import org.bukkit.inventory.meta.ItemMeta;
 import static be4rjp.sclat.Main.conf;
 
 /**
- *
  * @author Be4rJP
  */
 public class MainWeaponMgr {
-    public synchronized static void SetupMainWeapon(){
-        for (String weaponname : conf.getWeaponConfig().getConfigurationSection("MainWeapon").getKeys(false)){
+    public synchronized static void SetupMainWeapon() {
+        for (String weaponname : conf.getWeaponConfig().getConfigurationSection("MainWeapon").getKeys(false)) {
             String WeaponType = conf.getWeaponConfig().getString("MainWeapon." + weaponname + ".WeaponType");
             Material WeaponMaterial = Material.getMaterial(conf.getWeaponConfig().getString("MainWeapon." + weaponname + ".WeaponMaterial"));
             double random = conf.getWeaponConfig().getDouble("MainWeapon." + weaponname + ".ShootRandom");
@@ -35,51 +33,51 @@ public class MainWeaponMgr {
             int shoottick = conf.getWeaponConfig().getInt("MainWeapon." + weaponname + ".ShootTick");
             int paintrandom = conf.getWeaponConfig().getInt("MainWeapon." + weaponname + ".PaintRandom");
             double maxpaintdis = conf.getWeaponConfig().getInt("MainWeapon." + weaponname + ".MaxPaintDistance");
-            float needink = (float)conf.getWeaponConfig().getDouble("MainWeapon." + weaponname + ".NeedInk");
+            float needink = (float) conf.getWeaponConfig().getDouble("MainWeapon." + weaponname + ".NeedInk");
             double damage = conf.getWeaponConfig().getDouble("MainWeapon." + weaponname + ".Damage");
             int maxcharge = conf.getWeaponConfig().getInt("MainWeapon." + weaponname + ".MaxCharge");
             int rollershootQuantity = conf.getWeaponConfig().getInt("MainWeapon." + weaponname + ".RollerShootQuantity");
-            float usinwalkspeed = (float)conf.getWeaponConfig().getDouble("MainWeapon." + weaponname + ".UsingWalkSpeed");
+            float usinwalkspeed = (float) conf.getWeaponConfig().getDouble("MainWeapon." + weaponname + ".UsingWalkSpeed");
             int rollerWidth = conf.getWeaponConfig().getInt("MainWeapon." + weaponname + ".RollerWidth");
             boolean tatehuri = conf.getWeaponConfig().getBoolean("MainWeapon." + weaponname + ".RollerTatehuri");
             double rollerdamage = conf.getWeaponConfig().getDouble("MainWeapon." + weaponname + ".RollerDamage");
-            float rollerneedink = (float)conf.getWeaponConfig().getDouble("MainWeapon." + weaponname + ".RollerNeedInk");
+            float rollerneedink = (float) conf.getWeaponConfig().getDouble("MainWeapon." + weaponname + ".RollerNeedInk");
             double exh = 0;
-            if(conf.getWeaponConfig().contains("MainWeapon." + weaponname + ".BlasterExHankei"))
-                exh = (double)conf.getWeaponConfig().getInt("MainWeapon." + weaponname + ".BlasterExHankei");
+            if (conf.getWeaponConfig().contains("MainWeapon." + weaponname + ".BlasterExHankei"))
+                exh = conf.getWeaponConfig().getInt("MainWeapon." + weaponname + ".BlasterExHankei");
             int delay = conf.getWeaponConfig().getInt("MainWeapon." + weaponname + ".Delay");
             int cooltime = conf.getWeaponConfig().getInt("MainWeapon." + weaponname + ".Cooltime");
             double exd = conf.getWeaponConfig().getDouble("MainWeapon." + weaponname + ".BlasterExDamage");
             boolean hude = conf.getWeaponConfig().getBoolean("MainWeapon." + weaponname + ".IsBrush");
             double huder = conf.getWeaponConfig().getDouble("MainWeapon." + weaponname + ".BrushRandom");
             boolean man = false;
-            if(conf.getWeaponConfig().contains("MainWeapon." + weaponname + ".IsManeuver"))
+            if (conf.getWeaponConfig().contains("MainWeapon." + weaponname + ".IsManeuver"))
                 man = conf.getWeaponConfig().getBoolean("MainWeapon." + weaponname + ".IsManeuver");
             int slST = 1;
-            if(conf.getWeaponConfig().contains("MainWeapon." + weaponname + ".SlidingShootTick"))
+            if (conf.getWeaponConfig().contains("MainWeapon." + weaponname + ".SlidingShootTick"))
                 slST = conf.getWeaponConfig().getInt("MainWeapon." + weaponname + ".SlidingShootTick");
-            
+
             double cr = 1.0;
-            if(conf.getWeaponConfig().contains("MainWeapon." + weaponname + ".ChargeRatio"))
+            if (conf.getWeaponConfig().contains("MainWeapon." + weaponname + ".ChargeRatio"))
                 cr = conf.getWeaponConfig().getDouble("MainWeapon." + weaponname + ".ChargeRatio");
-            
+
             boolean ck = false;
-            if(conf.getWeaponConfig().contains("MainWeapon." + weaponname + ".CanChargeKeep"))
+            if (conf.getWeaponConfig().contains("MainWeapon." + weaponname + ".CanChargeKeep"))
                 ck = conf.getWeaponConfig().getBoolean("MainWeapon." + weaponname + ".CanChargeKeep");
-            
+
             int ckt = 0;
-            if(conf.getWeaponConfig().contains("MainWeapon." + weaponname + ".ChargeKeepingTime"))
+            if (conf.getWeaponConfig().contains("MainWeapon." + weaponname + ".ChargeKeepingTime"))
                 ckt = conf.getWeaponConfig().getInt("MainWeapon." + weaponname + ".ChargeKeepingTime");
-            
+
             boolean hc = false;
-            if(conf.getWeaponConfig().contains("MainWeapon." + weaponname + ".HanbunChargeKeep"))
+            if (conf.getWeaponConfig().contains("MainWeapon." + weaponname + ".HanbunChargeKeep"))
                 hc = conf.getWeaponConfig().getBoolean("MainWeapon." + weaponname + ".HanbunChargeKeep");
-    
+
             float sn = 0.2F;
-            if(conf.getWeaponConfig().contains("MainWeapon." + weaponname + ".SlideNeedInk"))
-                sn = (float)(conf.getWeaponConfig().getDouble("MainWeapon." + weaponname + ".SlideNeedInk"));
-            
-            
+            if (conf.getWeaponConfig().contains("MainWeapon." + weaponname + ".SlideNeedInk"))
+                sn = (float) (conf.getWeaponConfig().getDouble("MainWeapon." + weaponname + ".SlideNeedInk"));
+
+
             MainWeapon mw = new MainWeapon(weaponname);
             mw.setWeaponType(WeaponType);
             ItemStack is = new ItemStack(WeaponMaterial);
@@ -115,57 +113,57 @@ public class MainWeaponMgr {
             mw.setChargeKeepingTime(ckt);
             mw.setHanbunCharge(hc);
             mw.setSlideNeedINK(sn);
-    
-            if(conf.getWeaponConfig().contains("MainWeapon." + weaponname + ".SPRate"))
+
+            if (conf.getWeaponConfig().contains("MainWeapon." + weaponname + ".SPRate"))
                 mw.setSPRate(conf.getWeaponConfig().getDouble("MainWeapon." + weaponname + ".SPRate"));
-    
-            if(conf.getWeaponConfig().contains("MainWeapon." + weaponname + ".MaxRandom"))
+
+            if (conf.getWeaponConfig().contains("MainWeapon." + weaponname + ".MaxRandom"))
                 mw.setMaxRandom(conf.getWeaponConfig().getDouble("MainWeapon." + weaponname + ".MaxRandom"));
-    
-            if(conf.getWeaponConfig().contains("MainWeapon." + weaponname + ".MaxRandomCount"))
+
+            if (conf.getWeaponConfig().contains("MainWeapon." + weaponname + ".MaxRandomCount"))
                 mw.setMaxRandomCount(conf.getWeaponConfig().getInt("MainWeapon." + weaponname + ".MaxRandomCount"));
-            
-            if(conf.getWeaponConfig().contains("MainWeapon." + weaponname + ".Scope"))
+
+            if (conf.getWeaponConfig().contains("MainWeapon." + weaponname + ".Scope"))
                 mw.setScope(conf.getWeaponConfig().getBoolean("MainWeapon." + weaponname + ".Scope"));
 
-            if(conf.getWeaponConfig().contains("MainWeapon." + weaponname + ".DecreaseRate"))//チャージャーの非適性ダメージ減少率
+            if (conf.getWeaponConfig().contains("MainWeapon." + weaponname + ".DecreaseRate"))//チャージャーの非適性ダメージ減少率
                 mw.setDecreaseRate(conf.getWeaponConfig().getDouble("MainWeapon." + weaponname + ".DecreaseRate"));
 
-            if(conf.getWeaponConfig().contains("MainWeapon." + weaponname + ".AppDistance"))//チャージャーの非適性距離
+            if (conf.getWeaponConfig().contains("MainWeapon." + weaponname + ".AppDistance"))//チャージャーの非適性距離
                 mw.setAppDistance(conf.getWeaponConfig().getInt("MainWeapon." + weaponname + ".AppDistance"));
 
-            if(conf.getWeaponConfig().contains("MainWeapon." + weaponname + ".Money"))
+            if (conf.getWeaponConfig().contains("MainWeapon." + weaponname + ".Money"))
                 mw.setMoney(conf.getWeaponConfig().getInt("MainWeapon." + weaponname + ".Money"));
             else
                 mw.setMoney(0);
-    
-            if(conf.getWeaponConfig().contains("MainWeapon." + weaponname + ".Level"))
+
+            if (conf.getWeaponConfig().contains("MainWeapon." + weaponname + ".Level"))
                 mw.setLevel(conf.getWeaponConfig().getInt("MainWeapon." + weaponname + ".Level"));
             else
                 mw.setLevel(0);
-            
-            if(conf.getWeaponConfig().contains("MainWeapon." + weaponname + ".InHoldWalkSpeed"))
-                mw.setInHoldSpeed((float)conf.getWeaponConfig().getDouble("MainWeapon." + weaponname + ".InHoldWalkSpeed"));
-            else
-                mw.setInHoldSpeed((float)conf.getConfig().getDouble("PlayerWalkSpeed"));
 
-            if(conf.getWeaponConfig().contains("MainWeapon." + weaponname + ".IsLootBox")) {//ガチャ武器用
+            if (conf.getWeaponConfig().contains("MainWeapon." + weaponname + ".InHoldWalkSpeed"))
+                mw.setInHoldSpeed((float) conf.getWeaponConfig().getDouble("MainWeapon." + weaponname + ".InHoldWalkSpeed"));
+            else
+                mw.setInHoldSpeed((float) conf.getConfig().getDouble("PlayerWalkSpeed"));
+
+            if (conf.getWeaponConfig().contains("MainWeapon." + weaponname + ".IsLootBox")) {//ガチャ武器用
                 mw.setIslootbox(conf.getWeaponConfig().getBoolean("MainWeapon." + weaponname + ".IsLootBox"));
             }
-            if(conf.getWeaponConfig().contains("MainWeapon." + weaponname + ".LootPro")) {//ガチャ武器用排出率
+            if (conf.getWeaponConfig().contains("MainWeapon." + weaponname + ".LootPro")) {//ガチャ武器用排出率
                 mw.setLootpro(conf.getWeaponConfig().getDouble("MainWeapon." + weaponname + ".LootPro"));
             }
-            if(conf.getWeaponConfig().contains("MainWeapon." + weaponname + ".IsSwapper")) {//スワッパ―判別
+            if (conf.getWeaponConfig().contains("MainWeapon." + weaponname + ".IsSwapper")) {//スワッパ―判別
                 mw.setIsSwap(conf.getWeaponConfig().getBoolean("MainWeapon." + weaponname + ".IsSwapper"));
             }
-            if(conf.getWeaponConfig().contains("MainWeapon." + weaponname + ".SwapWeapon")) {//スワッパ―スワップ先
+            if (conf.getWeaponConfig().contains("MainWeapon." + weaponname + ".SwapWeapon")) {//スワッパ―スワップ先
                 mw.setSwap(conf.getWeaponConfig().getString("MainWeapon." + weaponname + ".SwapWeapon"));
             }
             DataMgr.setMainWeapon(weaponname, mw);
         }
     }
-    
-    public static boolean equalWeapon(Player player){
+
+    public static boolean equalWeapon(Player player) {
         try {
             PlayerData data = DataMgr.getPlayerData(player);
             String wname = data.getWeaponClass().getMainWeapon().getWeaponIteamStack().getItemMeta().getDisplayName();
@@ -173,46 +171,47 @@ public class MainWeaponMgr {
                 return false;
             String itemname = player.getInventory().getItemInMainHand().getItemMeta().getDisplayName();
             if (itemname.length() >= wname.length())
-                if (wname.equals(itemname.substring(0, wname.length())))
-                    return true;
+                return wname.equals(itemname.substring(0, wname.length()));
             return false;
-        }catch (Exception e){return false;}
+        } catch (Exception e) {
+            return false;
+        }
     }
-    
-    public static void UseMainWeapon(Player player){
-        if(equalWeapon(player)){
-    
+
+    public static void UseMainWeapon(Player player) {
+        if (equalWeapon(player)) {
+
             Main.dadadaCheckerAPI.fireClickEvent(player);
-    
+
             ClickType clickType = Main.dadadaCheckerAPI.getPlayerClickType(player);
-            
+
             PlayerData data = DataMgr.getPlayerData(player);
-            if(data.getCanCharge())
+            if (data.getCanCharge())
                 data.setTick(0);
-            if(!data.getWeaponClass().getMainWeapon().getWeaponType().equals("Shooter") && !data.getWeaponClass().getMainWeapon().getWeaponType().equals("Blaster"))
+            if (!data.getWeaponClass().getMainWeapon().getWeaponType().equals("Shooter") && !data.getWeaponClass().getMainWeapon().getWeaponType().equals("Blaster"))
                 data.setIsHolding(true);
-            if(data.getWeaponClass().getMainWeapon().getWeaponType().equals("Blaster"))
+            if (data.getWeaponClass().getMainWeapon().getWeaponType().equals("Blaster"))
                 Blaster.ShootBlaster(player);
-            if(data.getWeaponClass().getMainWeapon().getWeaponType().equals("Burst"))
+            if (data.getWeaponClass().getMainWeapon().getWeaponType().equals("Burst"))
                 Burst.BurstCooltime(player);
-            if(data.getWeaponClass().getMainWeapon().getWeaponType().equals("Roller")){
-                if(data.getWeaponClass().getMainWeapon().getIsHude()){
-                    if(data.getCanShoot() || clickType == ClickType.RENDA){
+            if (data.getWeaponClass().getMainWeapon().getWeaponType().equals("Roller")) {
+                if (data.getWeaponClass().getMainWeapon().getIsHude()) {
+                    if (data.getCanShoot() || clickType == ClickType.RENDA) {
                         data.setCanShoot(false);
                         Brush.ShootPaintRunnable(player);
                     }
-                }else {
-                    if(data.getCanShoot()) {
+                } else {
+                    if (data.getCanShoot()) {
                         data.setCanShoot(false);
                         Roller.ShootPaintRunnable(player);
                     }
                 }
             }
-            if(data.getWeaponClass().getMainWeapon().getWeaponType().equals("Bucket"))
+            if (data.getWeaponClass().getMainWeapon().getWeaponType().equals("Bucket"))
                 Bucket.ShootBucket(player);
-            if(data.getWeaponClass().getMainWeapon().getWeaponType().equals("Slosher"))
+            if (data.getWeaponClass().getMainWeapon().getWeaponType().equals("Slosher"))
                 Slosher.ShootSlosher(player);
-            if(data.getWeaponClass().getMainWeapon().getWeaponType().equals("Kasa") || data.getWeaponClass().getMainWeapon().getWeaponType().equals("Camping"))
+            if (data.getWeaponClass().getMainWeapon().getWeaponType().equals("Kasa") || data.getWeaponClass().getMainWeapon().getWeaponType().equals("Camping"))
                 Kasa.ShootKasa(player);
         }
     }

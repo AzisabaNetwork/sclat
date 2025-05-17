@@ -1,4 +1,3 @@
-
 package be4rjp.sclat.listener;
 
 import be4rjp.sclat.data.DataMgr;
@@ -11,30 +10,29 @@ import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 
 /**
- *
  * @author Be4rJP
  */
-public class SquidListener implements Listener{
+public class SquidListener implements Listener {
     @EventHandler
-    public void onPlayerMove(PlayerMoveEvent event){
+    public void onPlayerMove(PlayerMoveEvent event) {
         Player player = event.getPlayer();
         SquidListenerMgr.CheckOnInk(player);
     }
-    
+
     @EventHandler
-    public void onPlayerSwitchSlot(PlayerItemHeldEvent event){
+    public void onPlayerSwitchSlot(PlayerItemHeldEvent event) {
         Player player = event.getPlayer();
         PlayerData data = DataMgr.getPlayerData(player);
         SquidListenerMgr.CheckOnInk(player);
-        if(player.getInventory().getItem(event.getNewSlot()) == null){
+        if (player.getInventory().getItem(event.getNewSlot()) == null) {
             data.setIsSquid(true);
             return;
         }
-            data.setIsSquid(false);
+        data.setIsSquid(false);
     }
-    
+
     @EventHandler
-    public void onFoodLevelChange(FoodLevelChangeEvent event){
+    public void onFoodLevelChange(FoodLevelChangeEvent event) {
         event.setCancelled(true);
     }
 }

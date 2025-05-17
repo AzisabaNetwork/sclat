@@ -15,6 +15,15 @@ import java.util.function.Function;
 import static be4rjp.sclat.Main.conf;
 
 public class EmblemManager {
+    public static List<EmblemData> emblems = new ArrayList<>();
+
+    static {
+        addEmblem(
+                "撃墜王",
+                p -> PlayerStatusMgr.getKill(p) >= 10000
+        );
+    }
+
     private static ItemStack newEmblemStack(String displayName, List<String> lore) {
         ItemStack stack = new ItemStack(Material.EGG);
         ItemMeta meta = stack.getItemMeta();
@@ -24,8 +33,6 @@ public class EmblemManager {
         return stack;
     }
 
-    public static List<EmblemData> emblems = new ArrayList<>();
-
     public static void addEmblem(String itemName, Function<Player, Boolean> condition) {
         emblems.add(new EmblemData(itemName, condition));
     }
@@ -33,11 +40,11 @@ public class EmblemManager {
     public static void handleInv(Inventory inventory, Player player) {
         List<String> cache = conf.getEmblems().getStringList(player.getUniqueId().toString());
         List<String> newEmblems = new ArrayList<>();
-        for(EmblemData emblem: emblems) {
+        for (EmblemData emblem : emblems) {
             // === Condition check
-            if(!cache.contains(emblem.itemName)) {
+            if (!cache.contains(emblem.itemName)) {
                 // non-cached
-                if(!emblem.condition.apply(player)) {
+                if (!emblem.condition.apply(player)) {
                     // non-matched
                     continue;
                 }
@@ -53,7 +60,7 @@ public class EmblemManager {
         }
 
         // On new emblem
-        if(!newEmblems.isEmpty()) {
+        if (!newEmblems.isEmpty()) {
             // update cache
             ArrayList<String> newEmblemCache = new ArrayList<>(cache);
             newEmblemCache.addAll(newEmblems);
@@ -64,12 +71,5 @@ public class EmblemManager {
             newEmblems.forEach(sj::add);
             player.sendMessage(sj + " の称号を手に入れました！");
         }
-    }
-
-    static {
-        addEmblem(
-                "撃墜王",
-                p -> PlayerStatusMgr.getKill(p) >= 10000
-        );
     }
 }

@@ -1,4 +1,3 @@
-
 package be4rjp.sclat.weapon;
 
 
@@ -22,62 +21,61 @@ import java.util.ArrayList;
 
 
 /**
- *
  * @author Be4rJP
  */
-public class SubWeapon implements Listener{
+public class SubWeapon implements Listener {
     //サブウエポンのリスナー部分
     @EventHandler
-    public void onClickSubWeapon(PlayerInteractEvent event){
+    public void onClickSubWeapon(PlayerInteractEvent event) {
         Player player = event.getPlayer();
         Action action = event.getAction();
         PlayerData data = DataMgr.getPlayerData(player);
-        
-        if(player.getInventory().getItemInMainHand() == null || player.getInventory().getItemInMainHand().getItemMeta() == null || player.getInventory().getItemInMainHand().getItemMeta().getDisplayName() == null)
+
+        if (player.getInventory().getItemInMainHand() == null || player.getInventory().getItemInMainHand().getItemMeta() == null || player.getInventory().getItemInMainHand().getItemMeta().getDisplayName() == null)
             return;
-        
-        if(action.equals(Action.RIGHT_CLICK_AIR) || action.equals(Action.RIGHT_CLICK_BLOCK)){
+
+        if (action.equals(Action.RIGHT_CLICK_AIR) || action.equals(Action.RIGHT_CLICK_BLOCK)) {
             SubWeaponMgr.UseSubWeapon(player, player.getInventory().getItemInMainHand().getItemMeta().getDisplayName());
         }
     }
-    
+
     @EventHandler
-    public void onPlayerClick(PlayerAnimationEvent event){
+    public void onPlayerClick(PlayerAnimationEvent event) {
         Player player = event.getPlayer();
-        
+
         RayTrace rayTrace = new RayTrace(player.getEyeLocation().toVector(), player.getEyeLocation().getDirection());
         ArrayList<Vector> positions = rayTrace.traverse(4, 0.5);
-        check : for(int i = 0; i < positions.size();i++){
+        for (int i = 0; i < positions.size(); i++) {
             Location position = positions.get(i).toLocation(player.getLocation().getWorld());
-            if(position.getBlock().getType().toString().contains("SIGN")){
+            if (position.getBlock().getType().toString().contains("SIGN")) {
                 return;
             }
         }
-        
-        if(event.getAnimationType() == PlayerAnimationType.ARM_SWING){
-            if(DataMgr.getPlayerData(player).isInMatch())
+
+        if (event.getAnimationType() == PlayerAnimationType.ARM_SWING) {
+            if (DataMgr.getPlayerData(player).isInMatch())
                 SubWeaponMgr.UseSubWeapon(player, DataMgr.getPlayerData(player).getWeaponClass().getSubWeaponName());
         }
     }
-    
+
     @EventHandler
     public void PlayerRightClick(PlayerInteractEntityEvent event) {
         Player player = event.getPlayer();
-        if(player.getInventory().getItemInMainHand() == null || player.getInventory().getItemInMainHand().getItemMeta() == null || player.getInventory().getItemInMainHand().getItemMeta().getDisplayName() == null)
+        if (player.getInventory().getItemInMainHand() == null || player.getInventory().getItemInMainHand().getItemMeta() == null || player.getInventory().getItemInMainHand().getItemMeta().getDisplayName() == null)
             return;
-        
-        if(!DataMgr.getPlayerData(player).isInMatch()) return;
-        
+
+        if (!DataMgr.getPlayerData(player).isInMatch()) return;
+
         SubWeaponMgr.UseSubWeapon(player, player.getInventory().getItemInMainHand().getItemMeta().getDisplayName());
     }
-    
+
     @EventHandler
-    public void onPlayerInteractAtEntity(PlayerInteractAtEntityEvent event){
+    public void onPlayerInteractAtEntity(PlayerInteractAtEntityEvent event) {
         Player player = event.getPlayer();
-        if(player.getInventory().getItemInMainHand() == null || player.getInventory().getItemInMainHand().getItemMeta() == null || player.getInventory().getItemInMainHand().getItemMeta().getDisplayName() == null)
+        if (player.getInventory().getItemInMainHand() == null || player.getInventory().getItemInMainHand().getItemMeta() == null || player.getInventory().getItemInMainHand().getItemMeta().getDisplayName() == null)
             return;
-        if(!DataMgr.getPlayerData(player).isInMatch()) return;
-    
+        if (!DataMgr.getPlayerData(player).isInMatch()) return;
+
         SubWeaponMgr.UseSubWeapon(player, player.getInventory().getItemInMainHand().getItemMeta().getDisplayName());
     }
 }

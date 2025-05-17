@@ -10,17 +10,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EquipmentServerManager {
-    
+
     public static List<String> commands = new ArrayList<>();
-    
-    public static void addEquipmentCommand(String command){
+
+    public static void addEquipmentCommand(String command) {
         commands.add(command);
     }
-    
-    public static void doCommands(){
-        for(String cmd : commands) {
-            String args[] = cmd.split(" ");
-    
+
+    public static void doCommands() {
+        for (String cmd : commands) {
+            String[] args = cmd.split(" ");
+
             switch (args[0]) {
                 case "set": { //add [statusName] [number or name] [uuid]
                     if (args.length == 4) {
@@ -51,5 +51,5 @@ public class EquipmentServerManager {
         }
         commands.clear();
     }
-    
+
 }

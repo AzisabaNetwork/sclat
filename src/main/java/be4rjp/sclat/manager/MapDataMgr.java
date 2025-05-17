@@ -15,18 +15,17 @@ import static be4rjp.sclat.Main.conf;
 import static org.bukkit.Bukkit.getServer;
 
 /**
- *
  * @author Be4rJP, sysnote8
  */
 public class MapDataMgr {
-    
+
     public static int allMapCount = 0;
-    
-    public synchronized static void SetupMap(){
+
+    public synchronized static void SetupMap() {
         ConfigurationSection mapsSection = conf.getMapConfig().getConfigurationSection("Maps");
         assert mapsSection != null;
 
-        for (String mapName : mapsSection.getKeys(false)){
+        for (String mapName : mapsSection.getKeys(false)) {
             ConfigurationSection eachMapSection = mapsSection.getConfigurationSection(mapName);
             assert eachMapSection != null;
 
@@ -62,10 +61,10 @@ public class MapDataMgr {
 
             boolean canPaintBBlock = eachMapSection.getBoolean("CanPaintBarrierBlock", false);
 
-            if(eachMapSection.contains("Path")){
+            if (eachMapSection.contains("Path")) {
                 ConfigurationSection pathSection = eachMapSection.getConfigurationSection("Path");
                 assert pathSection != null;
-                for (String pathname : pathSection.getKeys(false)){
+                for (String pathname : pathSection.getKeys(false)) {
                     Location from = ConfigUtil.getLocation(pathSection, world, pathname + ".From");
                     Location to = ConfigUtil.getLocation(pathSection, world, pathname + ".To");
 
@@ -74,24 +73,24 @@ public class MapDataMgr {
                 }
             }
 
-            if(eachMapSection.contains("Area")){
+            if (eachMapSection.contains("Area")) {
                 ConfigurationSection areaSection = eachMapSection.getConfigurationSection("Area");
                 assert areaSection != null;
-                for (String Areaname : areaSection.getKeys(false)){
+                for (String Areaname : areaSection.getKeys(false)) {
                     map.setCanAreaBattle(true);
 
                     Location from = ConfigUtil.getLocation(areaSection, world, Areaname + ".From");
                     from.add(0.5, 0.5, 0.5);
 
                     Location to = ConfigUtil.getLocation(areaSection, world, Areaname + ".To");
-                    to.add(0.5,0.5,0.5);
+                    to.add(0.5, 0.5, 0.5);
 
                     Area area = new Area(from, to);
                     map.addArea(area);
                 }
             }
 
-            if(eachMapSection.contains("Wiremesh")){
+            if (eachMapSection.contains("Wiremesh")) {
                 ConfigurationSection wiremeshSection = eachMapSection.getConfigurationSection("Wiremesh");
                 assert wiremeshSection != null;
 
@@ -103,14 +102,14 @@ public class MapDataMgr {
                 from.add(0.5, 0.0, 0.5);
 
                 Location to = ConfigUtil.getLocation(wiremeshSection, world, "To");
-                to.add(0.5,0.0,0.5);
+                to.add(0.5, 0.0, 0.5);
 
-                
+
                 WiremeshListTask wmListTask = new WiremeshListTask(from, to, trapDoor, ironBars, fence);
                 map.setWiremeshListTask(wmListTask);
             }
-    
-            if(eachMapSection.contains("VoidY")){
+
+            if (eachMapSection.contains("VoidY")) {
                 map.setVoidY(eachMapSection.getInt("VoidY"));
             }
 

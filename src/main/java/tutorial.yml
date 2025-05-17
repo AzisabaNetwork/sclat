@@ -1,4 +1,4 @@
 server-list:
-- sclattutorial1
-- sclattutorial2
-- sclattutorial3
+  - sclattutorial1
+  - sclattutorial2
+  - sclattutorial3

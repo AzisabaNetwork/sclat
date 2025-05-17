@@ -9,50 +9,50 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class Swapper {
-    public static void SwapperRunnable(Player player){
-        BukkitRunnable delay = new BukkitRunnable(){
-            Player p = player;
-            boolean sw_recharge=true;
+    public static void SwapperRunnable(Player player) {
+        BukkitRunnable delay = new BukkitRunnable() {
+            final Player p = player;
+            boolean sw_recharge = true;
 
             @Override
-            public void run(){
+            public void run() {
                 PlayerData data = DataMgr.getPlayerData(p);
 
-                if(!data.isInMatch() || !p.isOnline()){
+                if (!data.isInMatch() || !p.isOnline()) {
                     cancel();
                     return;
                 }
                 //スワッパ―系
-                if(data.getWeaponClass().getMainWeapon().getIsSwap()){
-                    if (data.getIsSneaking() && sw_recharge == true && p.getInventory().getItemInMainHand().getType().equals(data.getWeaponClass().getMainWeapon().getWeaponIteamStack().getType())) {
+                if (data.getWeaponClass().getMainWeapon().getIsSwap()) {
+                    if (data.getIsSneaking() && sw_recharge && p.getInventory().getItemInMainHand().getType().equals(data.getWeaponClass().getMainWeapon().getWeaponIteamStack().getType())) {
                         data.setStoprun(true);
                         player.getInventory().clear();
                         p.getWorld().playSound(p.getLocation(), Sound.ITEM_ARMOR_EQUIP_GENERIC, 1.4F, 1.5F);
-                        sw_recharge=false;
+                        sw_recharge = false;
                         BukkitRunnable swapset = new BukkitRunnable() {//チャージャーとローラーのみ対応
-                                @Override
-                                public void run() {
-                                    String swapname = data.getWeaponClass().getMainWeapon().getSwap();
-                                    data.setStoprun(false);
-                                    data.setWeaponClass(DataMgr.getWeaponClass(swapname));
-                                    data.setCanRollerShoot(true);
-                                    DataMgr.getPlayerData(p).setIsUsingManeuver(false);
-                                    if(DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getWeaponType().equals("Shooter")){
-                                        if(DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getSlidingShootTick()>1) {
-                                            DataMgr.getPlayerData(p).setIsUsingManeuver(true);
-                                        }else{
-                                            Shooter.ShooterRunnable(p);
-                                        }
+                            @Override
+                            public void run() {
+                                String swapname = data.getWeaponClass().getMainWeapon().getSwap();
+                                data.setStoprun(false);
+                                data.setWeaponClass(DataMgr.getWeaponClass(swapname));
+                                data.setCanRollerShoot(true);
+                                DataMgr.getPlayerData(p).setIsUsingManeuver(false);
+                                if (DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getWeaponType().equals("Shooter")) {
+                                    if (DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getSlidingShootTick() > 1) {
+                                        DataMgr.getPlayerData(p).setIsUsingManeuver(true);
+                                    } else {
+                                        Shooter.ShooterRunnable(p);
                                     }
-                                    WeaponClassMgr.setWeaponClass(p);
                                 }
+                                WeaponClassMgr.setWeaponClass(p);
+                            }
                         };
                         BukkitRunnable task = new BukkitRunnable() {//クールタイムを管理しています
-                                @Override
-                                public void run() {
-                                    sw_recharge = true;
-                                }
-                            };
+                            @Override
+                            public void run() {
+                                sw_recharge = true;
+                            }
+                        };
                         swapset.runTaskLater(Main.getPlugin(), 5);
                         task.runTaskLater(Main.getPlugin(), 30);
                     }

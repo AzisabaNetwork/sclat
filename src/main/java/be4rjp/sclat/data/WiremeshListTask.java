@@ -11,27 +11,25 @@ import java.util.List;
 import java.util.Map;
 
 /**
- *
  * @author Be4rJP
  */
 public class WiremeshListTask {
-    private List<Block> blockList = new ArrayList<>();
-    private List<Wiremesh> wiremeshsList = new ArrayList<>();
-    private Map<Block, BlockData> blockDataMap = new HashMap<>();
-    
     private final Location firstPoint;
     private final Location secondPoint;
-    
-    public WiremeshListTask(Location firstLocation, Location secondLocation, boolean trapDoor, boolean ironBars, boolean fence){
+    private final List<Block> blockList = new ArrayList<>();
+    private final List<Wiremesh> wiremeshsList = new ArrayList<>();
+    private final Map<Block, BlockData> blockDataMap = new HashMap<>();
+
+    public WiremeshListTask(Location firstLocation, Location secondLocation, boolean trapDoor, boolean ironBars, boolean fence) {
         this.firstPoint = firstLocation;
         this.secondPoint = secondLocation;
-        
-        
+
+
         //先に対象のブロックとそのBlockDataを取得して保存しておく
         List<Block> list = new RegionBlocks(firstPoint, secondPoint).getBlocks();
-        
-        for(Block block : list){
-            if(!blockList.contains(block) && ((block.getType().equals(Material.IRON_TRAPDOOR) && trapDoor) || (block.getType().equals(Material.IRON_BARS) && ironBars) || (block.getType().toString().contains("FENCE") && fence))){
+
+        for (Block block : list) {
+            if (!blockList.contains(block) && ((block.getType().equals(Material.IRON_TRAPDOOR) && trapDoor) || (block.getType().equals(Material.IRON_BARS) && ironBars) || (block.getType().toString().contains("FENCE") && fence))) {
                 BlockData bData = block.getBlockData();
                 blockDataMap.put(block, bData);
                 blockList.add(block);
@@ -39,14 +37,20 @@ public class WiremeshListTask {
         }
 
         //Wiremeshを作成してタスクを実行
-        for(Block block : blockList){
+        for (Block block : blockList) {
             BlockData bData = blockDataMap.get(block);
             Wiremesh wm = new Wiremesh(block, block.getType(), bData);
             wiremeshsList.add(wm);
         }
     }
-    
-    public List<Wiremesh> getWiremeshsList(){return this.wiremeshsList;}
-    
-    public void stopTask(){wiremeshsList.forEach((wm) -> {wm.stopTask();});}
+
+    public List<Wiremesh> getWiremeshsList() {
+        return this.wiremeshsList;
+    }
+
+    public void stopTask() {
+        wiremeshsList.forEach((wm) -> {
+            wm.stopTask();
+        });
+    }
 }

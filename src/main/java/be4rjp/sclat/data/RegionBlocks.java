@@ -27,11 +27,11 @@ public class RegionBlocks {
 
     public List<Block> getBlocks() {
         List<Block> blocks = new ArrayList<>();
-        for (int y = minimum.getBlockY(); y <= maximum.getBlockY(); y++) 
+        for (int y = minimum.getBlockY(); y <= maximum.getBlockY(); y++)
             for (int x = minimum.getBlockX(); x <= maximum.getBlockX(); x++)
                 for (int z = minimum.getBlockZ(); z <= maximum.getBlockZ(); z++)
                     blocks.add(world.getBlockAt(x, y, z));
-        
+
         return blocks;
     }
 }
