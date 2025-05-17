@@ -10,6 +10,7 @@ import be4rjp.sclat.manager.MatchMgr;
 import be4rjp.sclat.manager.PlayerStatusMgr;
 import be4rjp.sclat.manager.RankMgr;
 import be4rjp.sclat.tutorial.Tutorial;
+import be4rjp.sclat.utils.ItemUtil;
 import be4rjp.sclat.weapon.Gear;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -37,38 +38,37 @@ public class OpenGUI {
         Inventory inv = Bukkit.createInventory(null, 45, "メインメニュー");
 
         for (int i = 0; i <= 44; ) {
-            ItemStack is = new ItemStack(Material.BLACK_STAINED_GLASS_PANE);
-            ItemMeta ism = is.getItemMeta();
-            ism.setDisplayName(".");
-            is.setItemMeta(ism);
-            inv.setItem(i, is);
+            inv.setItem(i, ItemUtil.getUIBlank());
             i++;
         }
 
-        ItemStack join = new ItemStack(Material.LIME_STAINED_GLASS_PANE);
-        ItemMeta joinmeta = join.getItemMeta();
-        joinmeta.setDisplayName("試合に参加 / JOIN THE MATCH");
-        join.setItemMeta(joinmeta);
-        if (!conf.getConfig().getString("WorkMode").equals("Trial"))
+        // if isn't in trial mode
+        if (!conf.getConfig().getString("WorkMode").equals("Trial")) {
+            ItemStack join = ItemUtil.getStack(
+                    Material.LIME_STAINED_GLASS_PANE,
+                    "試合に参加 / JOIN THE MATCH"
+            );
             inv.setItem(10, join);
+        }
 
-        ItemStack setting = new ItemStack(Material.COMPARATOR);
-        ItemMeta setting_m = setting.getItemMeta();
-        setting_m.setDisplayName("設定 / SETTINGS");
-        setting.setItemMeta(setting_m);
+        ItemStack setting = ItemUtil.getStack(
+                Material.COMPARATOR,
+                "設定 / SETTINGS"
+        );
         inv.setItem(14, setting);
 
-        ItemStack w = new ItemStack(Material.LEATHER_CHESTPLATE);
-        ItemMeta wmeta = w.getItemMeta();
-        wmeta.setDisplayName("装備変更 / EQUIPMENT");
-        w.setItemMeta(wmeta);
+        ItemStack w = ItemUtil.getStack(
+                Material.LEATHER_CHESTPLATE,
+                "装備変更 / EQUIPMENT"
+        );
         inv.setItem(12, w);
-        player.openInventory(inv);
 
-        ItemStack t = new ItemStack(Material.GRASS_BLOCK);
-        ItemMeta tmeta = t.getItemMeta();
-        tmeta.setDisplayName("リソースパックをダウンロード / DOWNLOAD RESOURCEPACK");
-        t.setItemMeta(tmeta);
+//        player.openInventory(inv); Todo: check it works.
+
+        ItemStack t = ItemUtil.getStack(
+                Material.GRASS_BLOCK,
+                "リソースパックをダウンロード / DOWNLOAD RESOURCEPACK"
+        );
         inv.setItem(28, t);
 
         ItemStack r = new ItemStack(Material.MILK_BUCKET);
@@ -104,7 +104,7 @@ public class OpenGUI {
                 status = CraftItemStack.asBukkitCopy(data.getPlayerHead()).clone();
             ItemMeta statusMeta = status.getItemMeta();
             statusMeta.setDisplayName("§r§e" + player.getName() + " のステータス");
-            List lores = new ArrayList();
+            List<String> lores = new ArrayList<>();
             lores.add("§r§6Rank : §r" + PlayerStatusMgr.getRank(player) + " [ §b" + RankMgr.toABCRank(PlayerStatusMgr.getRank(player)) + " §r]");
             lores.add("§r§6Lv : §r" + PlayerStatusMgr.getLv(player));
             lores.add("§r§bKill(s) : §r" + PlayerStatusMgr.getKill(player));
@@ -140,11 +140,7 @@ public class OpenGUI {
             for (int i = 0; i <= 9; ) {
 
                 if (PlayerStatusMgr.haveGear(player, i)) {
-                    ItemStack n = new ItemStack(Material.BLACK_STAINED_GLASS_PANE);
-                    ItemMeta nmeta = n.getItemMeta();
-                    nmeta.setDisplayName(".");
-                    n.setItemMeta(nmeta);
-                    inv.setItem(i, n);
+                    inv.setItem(i, ItemUtil.getUIBlank());
                     i++;
                     continue;
                 }
@@ -161,11 +157,7 @@ public class OpenGUI {
                 i++;
             }
             for (int i = 10; i <= 17; ) {
-                ItemStack n = new ItemStack(Material.BLACK_STAINED_GLASS_PANE);
-                ItemMeta nmeta = n.getItemMeta();
-                nmeta.setDisplayName(".");
-                n.setItemMeta(nmeta);
-                inv.setItem(i, n);
+                inv.setItem(i, ItemUtil.getUIBlank());
                 i++;
             }
         } else {
@@ -173,11 +165,7 @@ public class OpenGUI {
 
                 if (!(PlayerStatusMgr.haveGear(player, i) || conf.getConfig().getString("WorkMode").equals("Trial") ||
                         !Main.shop)) {
-                    ItemStack n = new ItemStack(Material.BLACK_STAINED_GLASS_PANE);
-                    ItemMeta nmeta = n.getItemMeta();
-                    nmeta.setDisplayName(".");
-                    n.setItemMeta(nmeta);
-                    inv.setItem(i, n);
+                    inv.setItem(i, ItemUtil.getUIBlank());
                     i++;
                     continue;
                 }
@@ -190,11 +178,7 @@ public class OpenGUI {
                 i++;
             }
             for (int i = 10; i <= 17; ) {
-                ItemStack n = new ItemStack(Material.BLACK_STAINED_GLASS_PANE);
-                ItemMeta nmeta = n.getItemMeta();
-                nmeta.setDisplayName(".");
-                n.setItemMeta(nmeta);
-                inv.setItem(i, n);
+                inv.setItem(i, ItemUtil.getUIBlank());
                 i++;
             }
         }
@@ -205,12 +189,9 @@ public class OpenGUI {
     public static void equipmentGUI(Player player, boolean shop) {
         Inventory inv = Bukkit.createInventory(null, 27, shop ? "Equipment shop" : "Equipment");
 
+        Material blankFillMaterial = shop ? Material.WHITE_STAINED_GLASS_PANE : Material.BLACK_STAINED_GLASS_PANE;
         for (int i = 0; i <= 26; ) {
-            ItemStack is = new ItemStack(shop ? Material.WHITE_STAINED_GLASS_PANE : Material.BLACK_STAINED_GLASS_PANE);
-            ItemMeta ism = is.getItemMeta();
-            ism.setDisplayName(".");
-            is.setItemMeta(ism);
-            inv.setItem(i, is);
+            inv.setItem(i, ItemUtil.getUIBlank(blankFillMaterial));
             i++;
         }
 
@@ -240,11 +221,7 @@ public class OpenGUI {
         Inventory inv = Bukkit.createInventory(null, 18, "Chose a Gamemode");
 
         for (int i = 0; i <= 17; ) {
-            ItemStack is = new ItemStack(Material.BLACK_STAINED_GLASS_PANE);
-            ItemMeta ism = is.getItemMeta();
-            ism.setDisplayName(".");
-            is.setItemMeta(ism);
-            inv.setItem(i, is);
+            inv.setItem(i, ItemUtil.getUIBlank());
             i++;
         }
 
@@ -295,11 +272,10 @@ public class OpenGUI {
                 if (DataMgr.getPlayerData(p).getPlayerGroundLocation().distance(player.getLocation()) > 10 && DataMgr.getPlayerData(p).getPlayerHead() != null) {
                     if (slotnum <= 17) {
                         ItemStack head = CraftItemStack.asBukkitCopy(DataMgr.getPlayerData(p).getPlayerHead()).clone();
-                        ItemMeta headM = head.getItemMeta();
-                        List lores = new ArrayList();
-                        lores.add("§r§aプレイヤーへジャンプ");
-                        headM.setLore(lores);
-                        head.setItemMeta(headM);
+                        ItemUtil.setLore(
+                                head,
+                                "§r§aプレイヤーへジャンプ"
+                        );
                         inv.setItem(slotnum, head);
                     }
                     slotnum++;
@@ -312,13 +288,11 @@ public class OpenGUI {
                 if (DataMgr.getPlayerData(player).getTeam() == DataMgr.getPlayerData(p).getTeam()) {
                     if (as.getWorld() == player.getWorld()) {
                         if (as.getLocation().distance(player.getLocation()) > 10) {
-                            ItemStack item = new ItemStack(Material.IRON_TRAPDOOR);
-                            ItemMeta im = item.getItemMeta();
-                            im.setDisplayName(p.getName());
-                            List lores = new ArrayList();
-                            lores.add("§r§6プレイヤーのビーコンへジャンプ");
-                            im.setLore(lores);
-                            item.setItemMeta(im);
+                            ItemStack item = ItemUtil.getStack(
+                                    Material.IRON_TRAPDOOR,
+                                    p.getName(),
+                                    "§r§6プレイヤーのビーコンへジャンプ"
+                            );
                             if (slotnum <= 17) {
                                 inv.setItem(slotnum, item);
                             }
