@@ -5,7 +5,8 @@ author: Be4rJP
 api-version: 1.13
 #--------------------------------------
 main: be4rjp.sclat.Main
-depend: [NoteBlockAPI, ProtocolLib, WorldChef, DADADAChecker, BlockStudio]
+depend: [ProtocolLib, WorldChef, DADADAChecker, BlockStudio]
+softdepend: [NoteBlockAPI]
 #--------------------------------------
 commands:
   sclat:
