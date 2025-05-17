@@ -4,13 +4,10 @@ import be4rjp.sclat.Main;
 import be4rjp.sclat.Sclat;
 import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.manager.PlayerStatusMgr;
-import be4rjp.sclat.manager.SettingMgr;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static be4rjp.sclat.Main.conf;
 
 public class EquipmentServerManager {
     

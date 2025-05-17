@@ -5,7 +5,6 @@ import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.data.PlayerData;
 import com.github.ucchyocean.lc3.bukkit.event.LunaChatBukkitPreChatEvent;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
 /**

@@ -2,12 +2,9 @@
 package be4rjp.sclat.weapon.subweapon;
 
 import be4rjp.sclat.Main;
-import static be4rjp.sclat.Main.conf;
 import be4rjp.sclat.Sphere;
 import be4rjp.sclat.data.DataMgr;
-import be4rjp.sclat.manager.ArmorStandMgr;
 import be4rjp.sclat.weapon.Gear;
-import java.util.List;
 import net.minecraft.server.v1_14_R1.PacketPlayOutEntityDestroy;
 import net.minecraft.server.v1_14_R1.PlayerConnection;
 import org.bukkit.ChatColor;
@@ -16,8 +13,6 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
-import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
 import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
@@ -30,6 +25,8 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
+
+import java.util.List;
 
 /**
  *

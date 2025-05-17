@@ -2,17 +2,12 @@
 package be4rjp.sclat.weapon.subweapon;
 
 import be4rjp.sclat.Main;
-import static be4rjp.sclat.Main.conf;
-
 import be4rjp.sclat.Sclat;
 import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.data.SplashShieldData;
 import be4rjp.sclat.manager.PaintMgr;
 import be4rjp.sclat.raytrace.BoundingBox;
 import be4rjp.sclat.raytrace.RayTrace;
-
-import java.util.ArrayList;
-import java.util.List;
 import net.minecraft.server.v1_14_R1.EnumItemSlot;
 import net.minecraft.server.v1_14_R1.PacketPlayOutEntityEquipment;
 import org.bukkit.ChatColor;
@@ -32,6 +27,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.EulerAngle;
 import org.bukkit.util.Vector;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *

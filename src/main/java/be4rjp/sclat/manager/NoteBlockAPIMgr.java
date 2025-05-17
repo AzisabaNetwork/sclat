@@ -1,18 +1,16 @@
 
 package be4rjp.sclat.manager;
 
-import static be4rjp.sclat.Main.conf;
 import be4rjp.sclat.data.NoteBlockSong;
-import be4rjp.sclat.data.PlayerData;
 import com.xxmicloxx.NoteBlockAPI.model.Song;
 import com.xxmicloxx.NoteBlockAPI.utils.NBSDecoder;
+
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
-import org.bukkit.entity.Player;
+
+import static be4rjp.sclat.Main.conf;
 
 /**
  *

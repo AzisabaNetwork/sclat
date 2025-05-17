@@ -2,8 +2,6 @@
 package be4rjp.sclat.manager;
 
 import be4rjp.sclat.data.DataMgr;
-import be4rjp.sclat.data.PlayerData;
-import static org.bukkit.Bukkit.getServer;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -14,10 +12,11 @@ import org.bukkit.map.MapCursor;
 import org.bukkit.map.MapCursorCollection;
 import org.bukkit.map.MapRenderer;
 import org.bukkit.map.MapView;
-import org.bukkit.map.MinecraftFont;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
+
+import static org.bukkit.Bukkit.getServer;
 
 /**
  *

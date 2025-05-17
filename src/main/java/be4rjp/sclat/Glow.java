@@ -1,10 +1,12 @@
 package be4rjp.sclat;
-import java.lang.reflect.Field;
-import java.util.Map;
+
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.enchantments.EnchantmentTarget;
 import org.bukkit.enchantments.EnchantmentWrapper;
 import org.bukkit.inventory.ItemStack;
+
+import java.lang.reflect.Field;
+import java.util.Map;
 
 public class Glow extends EnchantmentWrapper{
 

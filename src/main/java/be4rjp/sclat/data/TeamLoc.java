@@ -1,8 +1,9 @@
 package be4rjp.sclat.data;
 
+import org.bukkit.Location;
+
 import java.util.Collections;
 import java.util.List;
-import org.bukkit.Location;
 
 /**
  *

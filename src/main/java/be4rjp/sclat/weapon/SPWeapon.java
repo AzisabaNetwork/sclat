@@ -4,19 +4,11 @@ package be4rjp.sclat.weapon;
 import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.data.PlayerData;
 import be4rjp.sclat.manager.SPWeaponMgr;
-import be4rjp.sclat.weapon.spweapon.BombRush;
-import be4rjp.sclat.weapon.spweapon.SuperArmor;
-import be4rjp.sclat.weapon.spweapon.SuperSensor;
-import be4rjp.sclat.weapon.subweapon.QuickBomb;
-import be4rjp.sclat.weapon.subweapon.SplashBomb;
-import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.ItemStack;
 
 /**
  *

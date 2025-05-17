@@ -3,28 +3,37 @@ package be4rjp.sclat;
 import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.data.PlayerData;
 import be4rjp.sclat.data.Team;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import be4rjp.sclat.enums.SclatDamageType;
-import be4rjp.sclat.manager.*;
+import be4rjp.sclat.manager.BungeeCordMgr;
+import be4rjp.sclat.manager.DeathMgr;
+import be4rjp.sclat.manager.MatchMgr;
 import be4rjp.sclat.server.StatusClient;
-import be4rjp.sclat.weapon.Gear;
+import net.minecraft.server.v1_14_R1.Block;
+import net.minecraft.server.v1_14_R1.BlockPosition;
+import net.minecraft.server.v1_14_R1.EntityPlayer;
+import net.minecraft.server.v1_14_R1.IBlockAccess;
+import net.minecraft.server.v1_14_R1.IBlockData;
+import net.minecraft.server.v1_14_R1.PacketPlayOutAbilities;
+import net.minecraft.server.v1_14_R1.PacketPlayOutBlockChange;
+import net.minecraft.server.v1_14_R1.PacketPlayOutNamedEntitySpawn;
+import net.minecraft.server.v1_14_R1.PacketPlayOutWorldBorder;
+import net.minecraft.server.v1_14_R1.PlayerAbilities;
 import net.minecraft.server.v1_14_R1.WorldBorder;
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
+import org.bukkit.Instrument;
+import org.bukkit.Location;
+import org.bukkit.Note;
+import org.bukkit.Sound;
 import org.bukkit.craftbukkit.v1_14_R1.CraftWorld;
-import net.minecraft.server.v1_14_R1.*;
 import org.bukkit.craftbukkit.v1_14_R1.block.data.CraftBlockData;
 import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
-import net.minecraft.server.v1_14_R1.PacketPlayOutBlockChange;
-import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static be4rjp.sclat.Main.conf;
 

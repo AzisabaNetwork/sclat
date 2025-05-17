@@ -1,10 +1,13 @@
 package be4rjp.sclat.commands;
 
-import be4rjp.sclat.*;
+import be4rjp.sclat.Main;
+import be4rjp.sclat.MessageType;
+import be4rjp.sclat.Sclat;
+import be4rjp.sclat.ServerType;
+import be4rjp.sclat.SoundType;
 import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.data.ServerStatus;
 import be4rjp.sclat.manager.BungeeCordMgr;
-import be4rjp.sclat.manager.PlayerStatusMgr;
 import be4rjp.sclat.manager.ServerStatusManager;
 import be4rjp.sclat.server.EquipmentClient;
 import org.bukkit.ChatColor;

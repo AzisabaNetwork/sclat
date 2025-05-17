@@ -2,8 +2,6 @@
 package be4rjp.sclat.GUI;
 
 import be4rjp.sclat.Main;
-import static be4rjp.sclat.Main.conf;
-
 import be4rjp.sclat.ServerType;
 import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.data.Match;
@@ -14,9 +12,6 @@ import be4rjp.sclat.manager.PlayerStatusMgr;
 import be4rjp.sclat.manager.RankMgr;
 import be4rjp.sclat.tutorial.Tutorial;
 import be4rjp.sclat.weapon.Gear;
-import java.util.ArrayList;
-import java.util.List;
-
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -27,6 +22,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static be4rjp.sclat.Main.conf;
 
 /**
  *

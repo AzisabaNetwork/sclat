@@ -2,8 +2,6 @@
 package be4rjp.sclat.weapon.subweapon;
 
 import be4rjp.sclat.Main;
-import static be4rjp.sclat.Main.conf;
-
 import be4rjp.sclat.Sclat;
 import be4rjp.sclat.Sphere;
 import be4rjp.sclat.data.DataMgr;
@@ -12,7 +10,6 @@ import be4rjp.sclat.data.SplashShieldData;
 import be4rjp.sclat.manager.ArmorStandMgr;
 import be4rjp.sclat.manager.PaintMgr;
 import be4rjp.sclat.weapon.Gear;
-import java.util.List;
 import net.minecraft.server.v1_14_R1.PacketPlayOutEntityDestroy;
 import net.minecraft.server.v1_14_R1.PlayerConnection;
 import org.bukkit.ChatColor;
@@ -30,6 +27,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
+
+import java.util.List;
 
 /**
  *

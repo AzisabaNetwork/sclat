@@ -7,7 +7,6 @@ import be4rjp.sclat.data.Match;
 import be4rjp.sclat.data.Path;
 import be4rjp.sclat.data.Team;
 import be4rjp.sclat.raytrace.RayTrace;
-import java.util.ArrayList;
 import net.minecraft.server.v1_14_R1.EnumItemSlot;
 import net.minecraft.server.v1_14_R1.PacketPlayOutEntityEquipment;
 import org.bukkit.Location;
@@ -22,6 +21,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
+
+import java.util.ArrayList;
 
 /**
  *

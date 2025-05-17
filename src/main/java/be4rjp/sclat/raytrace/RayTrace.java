@@ -1,8 +1,6 @@
 
 package be4rjp.sclat.raytrace;
 
-import org.bukkit.Effect;
-import org.bukkit.World;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;

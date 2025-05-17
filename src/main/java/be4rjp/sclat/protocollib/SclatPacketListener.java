@@ -1,8 +1,6 @@
 package be4rjp.sclat.protocollib;
 
 import be4rjp.sclat.Main;
-import be4rjp.sclat.ServerType;
-import be4rjp.sclat.SoundType;
 import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.data.RankingHolograms;
 import com.comphenix.protocol.PacketType;
@@ -12,7 +10,6 @@ import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
 import net.minecraft.server.v1_14_R1.EntityArmorStand;
 import org.bukkit.Sound;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 

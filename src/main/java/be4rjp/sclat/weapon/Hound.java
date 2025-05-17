@@ -1,20 +1,26 @@
 package be4rjp.sclat.weapon;
 
 import be4rjp.dadadachecker.ClickType;
-import be4rjp.sclat.*;
+import be4rjp.sclat.GlowingAPI;
+import be4rjp.sclat.Main;
+import be4rjp.sclat.Sclat;
+import be4rjp.sclat.Sphere;
 import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.data.KasaData;
 import be4rjp.sclat.data.PlayerData;
 import be4rjp.sclat.data.SplashShieldData;
 import be4rjp.sclat.manager.ArmorStandMgr;
 import be4rjp.sclat.manager.PaintMgr;
-import org.bukkit.*;
+import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
+import org.bukkit.Location;
+import org.bukkit.Sound;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
-import java.util.ArrayList;
+
 import java.util.List;
 
 public class Hound {

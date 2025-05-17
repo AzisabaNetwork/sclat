@@ -3,14 +3,17 @@ package be4rjp.sclat.manager;
 
 import be4rjp.sclat.Main;
 import be4rjp.sclat.data.DataMgr;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import static be4rjp.sclat.Main.conf;
-import static be4rjp.sclat.Main.type;
 
 /**
  *

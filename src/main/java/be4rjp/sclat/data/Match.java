@@ -1,8 +1,6 @@
 
 package be4rjp.sclat.data;
 
-import java.util.ArrayList;
-import java.util.List;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Scoreboard;

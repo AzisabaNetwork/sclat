@@ -1,10 +1,11 @@
 
 package be4rjp.sclat.data;
 
-import java.util.ArrayList;
-import java.util.List;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *

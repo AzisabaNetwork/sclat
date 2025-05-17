@@ -2,7 +2,6 @@
 package be4rjp.sclat.weapon.spweapon;
 
 import be4rjp.sclat.Main;
-import static be4rjp.sclat.Main.conf;
 import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.data.PlayerData;
 import be4rjp.sclat.manager.SPWeaponMgr;

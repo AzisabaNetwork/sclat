@@ -21,8 +21,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.List;
 
-import static be4rjp.sclat.Main.conf;
-
 public class TrapData {
     
     private final Location location;

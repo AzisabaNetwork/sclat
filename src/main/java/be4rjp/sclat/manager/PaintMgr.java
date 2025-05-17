@@ -2,27 +2,26 @@
 package be4rjp.sclat.manager;
 
 import be4rjp.sclat.Main;
-import static be4rjp.sclat.Main.conf;
 import be4rjp.sclat.Sclat;
 import be4rjp.sclat.ServerType;
 import be4rjp.sclat.data.DataMgr;
-import be4rjp.sclat.data.MainWeapon;
 import be4rjp.sclat.data.Match;
 import be4rjp.sclat.data.PaintData;
 import be4rjp.sclat.data.PlayerData;
 import be4rjp.sclat.data.Sponge;
 import be4rjp.sclat.data.Team;
 import be4rjp.sclat.weapon.Gear;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
+import static be4rjp.sclat.Main.conf;
 
 /**
  *

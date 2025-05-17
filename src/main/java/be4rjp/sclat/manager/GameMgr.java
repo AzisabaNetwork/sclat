@@ -1,27 +1,50 @@
 package be4rjp.sclat.manager;
 
-import be4rjp.sclat.*;
-import be4rjp.sclat.GUI.OpenGUI;
 import be4rjp.sclat.GUI.LootBox;
-
-import static be4rjp.sclat.Main.conf;
-
-import be4rjp.sclat.data.*;
+import be4rjp.sclat.GUI.OpenGUI;
+import be4rjp.sclat.Main;
+import be4rjp.sclat.MessageType;
+import be4rjp.sclat.Sclat;
+import be4rjp.sclat.ServerType;
+import be4rjp.sclat.SoundType;
+import be4rjp.sclat.data.DataMgr;
+import be4rjp.sclat.data.Match;
+import be4rjp.sclat.data.PaintData;
+import be4rjp.sclat.data.PlayerData;
+import be4rjp.sclat.data.PlayerSettings;
+import be4rjp.sclat.data.RankingHolograms;
+import be4rjp.sclat.data.ServerStatus;
+import be4rjp.sclat.data.Team;
+import be4rjp.sclat.data.WeaponClass;
 import be4rjp.sclat.lobby.LobbyScoreboardRunnable;
 import be4rjp.sclat.packet.PacketHandler;
 import be4rjp.sclat.server.EquipmentClient;
 import be4rjp.sclat.server.EquipmentServerManager;
 import be4rjp.sclat.tutorial.Tutorial;
-import be4rjp.sclat.weapon.*;
-
-import java.util.*;
-
+import be4rjp.sclat.weapon.Brush;
+import be4rjp.sclat.weapon.Bucket;
+import be4rjp.sclat.weapon.Buckler;
+import be4rjp.sclat.weapon.Charger;
+import be4rjp.sclat.weapon.Decoy;
+import be4rjp.sclat.weapon.Funnel;
+import be4rjp.sclat.weapon.Hound;
+import be4rjp.sclat.weapon.Kasa;
+import be4rjp.sclat.weapon.Manuber;
+import be4rjp.sclat.weapon.Reeler;
+import be4rjp.sclat.weapon.Roller;
+import be4rjp.sclat.weapon.Shooter;
+import be4rjp.sclat.weapon.Spinner;
+import be4rjp.sclat.weapon.Swapper;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelPipeline;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
-import org.bukkit.*;
-
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
@@ -41,13 +64,24 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
-import org.bukkit.event.player.*;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.event.weather.WeatherChangeEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.BookMeta;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.scheduler.BukkitRunnable;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
+import static be4rjp.sclat.Main.conf;
 
 
 

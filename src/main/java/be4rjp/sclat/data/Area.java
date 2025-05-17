@@ -1,30 +1,24 @@
 
 package be4rjp.sclat.data;
 
-import be4rjp.sclat.GlowingAPI;
 import be4rjp.sclat.Main;
 import be4rjp.sclat.MessageType;
 import be4rjp.sclat.Sclat;
 import be4rjp.sclat.manager.PaintMgr;
-import java.util.ArrayList;
-import java.util.List;
-import net.minecraft.server.v1_14_R1.EntityShulker;
-import net.minecraft.server.v1_14_R1.PacketPlayOutEntityDestroy;
-import net.minecraft.server.v1_14_R1.PacketPlayOutSpawnEntityLiving;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
-import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
-import org.bukkit.craftbukkit.v1_14_R1.entity.CraftShulker;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Shulker;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *

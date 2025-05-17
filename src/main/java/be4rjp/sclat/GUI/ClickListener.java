@@ -1,22 +1,52 @@
 
 package be4rjp.sclat.GUI;
 
-import be4rjp.sclat.*;
-
-import static be4rjp.sclat.Main.conf;
-
-import be4rjp.sclat.data.*;
-import be4rjp.sclat.manager.*;
+import be4rjp.sclat.Main;
+import be4rjp.sclat.MessageType;
+import be4rjp.sclat.Sclat;
+import be4rjp.sclat.ServerType;
+import be4rjp.sclat.SoundType;
+import be4rjp.sclat.data.BlockUpdater;
+import be4rjp.sclat.data.DataMgr;
+import be4rjp.sclat.data.Match;
+import be4rjp.sclat.data.PaintData;
+import be4rjp.sclat.data.ServerStatus;
+import be4rjp.sclat.data.WeaponClass;
+import be4rjp.sclat.manager.ArmorStandMgr;
+import be4rjp.sclat.manager.BungeeCordMgr;
+import be4rjp.sclat.manager.MatchMgr;
+import be4rjp.sclat.manager.PlayerStatusMgr;
+import be4rjp.sclat.manager.SPWeaponMgr;
+import be4rjp.sclat.manager.ServerStatusManager;
+import be4rjp.sclat.manager.SquidMgr;
+import be4rjp.sclat.manager.SuperJumpMgr;
+import be4rjp.sclat.manager.WeaponClassMgr;
 import be4rjp.sclat.tutorial.Tutorial;
-import be4rjp.sclat.weapon.*;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import org.bukkit.*;
+import be4rjp.sclat.weapon.Brush;
+import be4rjp.sclat.weapon.Bucket;
+import be4rjp.sclat.weapon.Buckler;
+import be4rjp.sclat.weapon.Charger;
+import be4rjp.sclat.weapon.Decoy;
+import be4rjp.sclat.weapon.Funnel;
+import be4rjp.sclat.weapon.Gear;
+import be4rjp.sclat.weapon.Hound;
+import be4rjp.sclat.weapon.Kasa;
+import be4rjp.sclat.weapon.Manuber;
+import be4rjp.sclat.weapon.Reeler;
+import be4rjp.sclat.weapon.Roller;
+import be4rjp.sclat.weapon.Shooter;
+import be4rjp.sclat.weapon.Spinner;
+import be4rjp.sclat.weapon.Swapper;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
+import org.bukkit.Instrument;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.Note;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -25,6 +55,11 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.scheduler.BukkitRunnable;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static be4rjp.sclat.Main.conf;
 
 /**
  *

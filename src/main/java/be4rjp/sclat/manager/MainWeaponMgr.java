@@ -1,18 +1,24 @@
 
 package be4rjp.sclat.manager;
 
-import static be4rjp.sclat.Main.conf;
-
 import be4rjp.dadadachecker.ClickType;
 import be4rjp.sclat.Main;
 import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.data.MainWeapon;
 import be4rjp.sclat.data.PlayerData;
-import be4rjp.sclat.weapon.*;
+import be4rjp.sclat.weapon.Blaster;
+import be4rjp.sclat.weapon.Brush;
+import be4rjp.sclat.weapon.Bucket;
+import be4rjp.sclat.weapon.Burst;
+import be4rjp.sclat.weapon.Kasa;
+import be4rjp.sclat.weapon.Roller;
+import be4rjp.sclat.weapon.Slosher;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+
+import static be4rjp.sclat.Main.conf;
 
 /**
  *

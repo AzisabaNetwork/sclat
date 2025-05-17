@@ -13,12 +13,6 @@ import be4rjp.sclat.manager.ArmorStandMgr;
 import be4rjp.sclat.manager.SPWeaponMgr;
 import be4rjp.sclat.manager.WeaponClassMgr;
 import be4rjp.sclat.raytrace.RayTrace;
-
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import be4rjp.sclat.ticks.AsyncTask;
 import be4rjp.sclat.ticks.AsyncThreadManager;
 import org.bukkit.GameMode;
@@ -35,6 +29,11 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  *

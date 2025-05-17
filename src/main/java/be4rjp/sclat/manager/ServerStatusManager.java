@@ -2,7 +2,10 @@ package be4rjp.sclat.manager;
 
 import be4rjp.sclat.Main;
 import be4rjp.sclat.data.ServerStatus;
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;

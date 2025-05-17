@@ -2,28 +2,23 @@
 package be4rjp.sclat.weapon;
 
 
-import be4rjp.sclat.Main;
-import static be4rjp.sclat.Main.conf;
 import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.data.PlayerData;
-import be4rjp.sclat.manager.MainWeaponMgr;
-import be4rjp.sclat.manager.SPWeaponMgr;
 import be4rjp.sclat.manager.SubWeaponMgr;
 import be4rjp.sclat.raytrace.RayTrace;
-import be4rjp.sclat.weapon.subweapon.QuickBomb;
-import be4rjp.sclat.weapon.subweapon.SplashBomb;
-import java.util.ArrayList;
-import org.bukkit.GameMode;
 import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Particle;
-import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.player.*;
+import org.bukkit.event.player.PlayerAnimationEvent;
+import org.bukkit.event.player.PlayerAnimationType;
+import org.bukkit.event.player.PlayerInteractAtEntityEvent;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.util.Vector;
+
+import java.util.ArrayList;
 
 
 /**

@@ -4,11 +4,25 @@ import be4rjp.blockstudio.BlockStudio;
 import be4rjp.blockstudio.api.BlockStudioAPI;
 import be4rjp.dadadachecker.DADADACheckerAPI;
 import be4rjp.sclat.GUI.ClickListener;
-import be4rjp.sclat.data.*;
 import be4rjp.sclat.commands.sclatCommandExecutor;
+import be4rjp.sclat.data.DataMgr;
+import be4rjp.sclat.data.MapData;
+import be4rjp.sclat.data.Match;
+import be4rjp.sclat.data.PaintData;
+import be4rjp.sclat.data.Wiremesh;
 import be4rjp.sclat.listener.SquidListener;
 import be4rjp.sclat.lunachat.LunaChatListener;
-import be4rjp.sclat.manager.*;
+import be4rjp.sclat.manager.ArmorStandMgr;
+import be4rjp.sclat.manager.ColorMgr;
+import be4rjp.sclat.manager.GameMgr;
+import be4rjp.sclat.manager.MainWeaponMgr;
+import be4rjp.sclat.manager.MapDataMgr;
+import be4rjp.sclat.manager.MatchMgr;
+import be4rjp.sclat.manager.NoteBlockAPIMgr;
+import be4rjp.sclat.manager.PlayerReturnManager;
+import be4rjp.sclat.manager.RankMgr;
+import be4rjp.sclat.manager.ServerStatusManager;
+import be4rjp.sclat.manager.WeaponClassMgr;
 import be4rjp.sclat.protocollib.SclatPacketListener;
 import be4rjp.sclat.server.EquipmentServer;
 import be4rjp.sclat.server.StatusServer;
@@ -20,9 +34,6 @@ import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteStreams;
-import java.util.ArrayList;
-import java.util.List;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -32,7 +43,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.messaging.PluginMessageListener;
-import org.bukkit.scoreboard.*;
+import org.bukkit.scoreboard.NameTagVisibility;
+import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.ScoreboardManager;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
