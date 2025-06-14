@@ -1,6 +1,8 @@
 package be4rjp.sclat.emblem;
 
 import be4rjp.sclat.manager.PlayerStatusMgr;
+import net.md_5.bungee.chat.ComponentSerializer;
+import net.md_5.bungee.chat.TextComponentSerializer;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -84,17 +86,17 @@ public class EmblemManager {
 
         // マイクラスクエア2025関連
         addEmblem(
-                "マイクラスクエア2025 SupportMedal（iron）",
+                "§a§lマイクラスクエア§2§l2025 §7§lSupportMedal",
                 p -> false
         );
 
         addEmblem(
-                "マイクラスクエア2025 SupportMedal（gold）",
+                "§a§lマイクラスクエア§2§l2025 §e§lSupportMedal",
                 p -> false
         );
 
         addEmblem(
-                "マイクラスクエア2025 SupportMedal（diamond）",
+                "§a§lマイクラスクエア§2§l2025 §b§lSupportMedal",
                 p -> false
         );
     }

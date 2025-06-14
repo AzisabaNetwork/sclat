@@ -7,6 +7,7 @@ import be4rjp.sclat.manager.BungeeCordMgr;
 import be4rjp.sclat.manager.PlayerStatusMgr;
 import be4rjp.sclat.manager.ServerStatusManager;
 import be4rjp.sclat.server.EquipmentClient;
+import com.comphenix.protocol.PacketType;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -79,7 +80,36 @@ public class sclatCommandExecutor implements CommandExecutor , TabExecutor {
         }
         //-------------------------------------------------------------------------
     
-    
+
+        //----- /sclat refresh-config-----
+        if(args[0].equalsIgnoreCase("refresh-config")) {
+            if(args.length != 2) return false;
+
+            if(type == CommanderType.MEMBER){
+                sender.sendMessage(ChatColor.RED + "You don't have permission.");
+                Sclat.playGameSound((Player)sender, SoundType.ERROR);
+                return true;
+            }
+
+            if(sender instanceof Player) {
+                Player player = (Player) sender;
+                String targetConfig = args[1];
+                Sclat.sendMessage(String.format("%sの設定を再読み込み中...",targetConfig ), MessageType.PLAYER, player);
+                switch (targetConfig.toLowerCase()) {
+                    case "emblemuserdata":
+                        conf.loadEmblemUserData();
+                        break;
+                    case "emblemloredata":
+                        conf.loadEmblemLoreData();
+                        break;
+                    default:
+                        break;
+                }
+                Sclat.sendMessage("再読み込み完了", MessageType.PLAYER, player);
+            }
+        }
+        //--------------------------------
+
         //----------------------------/sclat mod-----------------------------------
         if(args[0].equalsIgnoreCase("mod")) {
             if(args.length != 2) return false;
@@ -127,7 +157,7 @@ public class sclatCommandExecutor implements CommandExecutor , TabExecutor {
         //------------------/sclat ss <status> <server> <flag>---------------------
         if(args[0].equalsIgnoreCase("ss")) {
             if(args.length < 4 || Main.type != ServerType.LOBBY) return false;
-        
+
             if(type == CommanderType.MEMBER){
                 sender.sendMessage(ChatColor.RED + "You don't have permission.");
                 Sclat.playGameSound((Player)sender, SoundType.ERROR);
@@ -206,12 +236,19 @@ public class sclatCommandExecutor implements CommandExecutor , TabExecutor {
                 list.add("fly");
                 list.add("ss");
                 list.add("tutorial");
+                list.add("refresh-config");
             }
 
             return list;
 
         }else if(args.length == 2){
             List<String> list = new ArrayList<>();
+            if(type != CommanderType.MEMBER) {
+                if(args[1].equalsIgnoreCase("refresh-config")) {
+                    list.add("emblemuserdata");
+                    list.add("emblemloredata");
+                }
+            }
             return list;
         }
         return null;

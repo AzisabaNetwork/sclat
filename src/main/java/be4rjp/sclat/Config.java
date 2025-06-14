@@ -48,7 +48,15 @@ public class Config {
         idCash = YamlConfiguration.loadConfiguration(idCashFile);
         tryCreateFile(emblemsFile);
         tryCreateFile(emblemItemsFile);
+        loadEmblemUserData();
+        loadEmblemLoreData();
+    }
+
+    public synchronized void loadEmblemUserData() {
         emblems = YamlConfiguration.loadConfiguration(emblemsFile);
+    }
+
+    public synchronized void loadEmblemLoreData() {
         emblemItems = YamlConfiguration.loadConfiguration(emblemItemsFile);
     }
 
