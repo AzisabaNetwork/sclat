@@ -81,5 +81,21 @@ public class EmblemManager {
                 "100人斬り",
                 p -> PlayerStatusMgr.getKill(p) >= 100
         );
+
+        // マイクラスクエア2025関連
+        addEmblem(
+                "マイクラスクエア2025 SupportMedal（iron）",
+                p -> false
+        );
+
+        addEmblem(
+                "マイクラスクエア2025 SupportMedal（gold）",
+                p -> false
+        );
+
+        addEmblem(
+                "マイクラスクエア2025 SupportMedal（diamond）",
+                p -> false
+        );
     }
 }
