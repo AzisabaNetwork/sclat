@@ -65,6 +65,7 @@ public class Config {
             playersettings.save(playersettings_f);
             s.save(sf);
             idCash.save(idCashFile);
+            emblems.save(emblemItemsFile);
         }catch(Exception e){
             getLogger().warning("Failed to save config files!");
         }
