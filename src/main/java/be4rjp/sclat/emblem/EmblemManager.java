@@ -71,5 +71,15 @@ public class EmblemManager {
                 "撃墜王",
                 p -> PlayerStatusMgr.getKill(p) >= 10000
         );
+
+        addEmblem(
+                "エース",
+                p -> PlayerStatusMgr.getKill(p) >= 1000
+        );
+
+        addEmblem(
+                "100人斬り",
+                p -> PlayerStatusMgr.getKill(p) >= 100
+        );
     }
 }
