@@ -1,9 +1,17 @@
 package be4rjp.sclat.data;
 
-import java.util.*;
-
 import be4rjp.sclat.Main;
-import net.minecraft.server.v1_14_R1.*;
+import net.minecraft.server.v1_14_R1.DataWatcher;
+import net.minecraft.server.v1_14_R1.EntityArmorStand;
+import net.minecraft.server.v1_14_R1.EntityFallingBlock;
+import net.minecraft.server.v1_14_R1.EntityPlayer;
+import net.minecraft.server.v1_14_R1.IBlockData;
+import net.minecraft.server.v1_14_R1.PacketPlayOutEntityDestroy;
+import net.minecraft.server.v1_14_R1.PacketPlayOutEntityMetadata;
+import net.minecraft.server.v1_14_R1.PacketPlayOutMount;
+import net.minecraft.server.v1_14_R1.PacketPlayOutSpawnEntity;
+import net.minecraft.server.v1_14_R1.PacketPlayOutSpawnEntityLiving;
+import net.minecraft.server.v1_14_R1.WorldServer;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -14,31 +22,34 @@ import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
 /**
- *
  * @author Be4rJP
  */
-public class Wiremesh extends BukkitRunnable{
+public class Wiremesh extends BukkitRunnable {
     private final Block block;
     private final Material originalType;
-    private EntityFallingBlock fb;
-    private EntityArmorStand as;
+    private final EntityFallingBlock fb;
+    private final EntityArmorStand as;
     private final BlockData blockData;
     private final IBlockData ibd;
-    
-    private List<Player> playerList = new ArrayList<>();
-    
-    private boolean despawn = true;
-    private boolean spawn = false;
-    
-    public Wiremesh(Block b, Material origType, BlockData bData){
+
+    private final List<Player> playerList = new ArrayList<>();
+
+    private final boolean despawn = true;
+    private final boolean spawn = false;
+
+    public Wiremesh(Block b, Material origType, BlockData bData) {
         this.block = b;
         this.originalType = origType;
         this.blockData = bData;
         this.ibd = ((CraftBlockData) bData).getState();
-        
+
         block.setType(Material.AIR);
-        
+
         WorldServer nmsWorld = ((CraftWorld) block.getWorld()).getHandle();
         Location loc = block.getLocation();
         BlockData blockData = block.getBlockData();
@@ -46,41 +57,41 @@ public class Wiremesh extends BukkitRunnable{
         fb = new EntityFallingBlock(nmsWorld, loc.getX() + 0.5, loc.getY() - 0.02, loc.getZ() + 0.5, ibd);
         fb.setNoGravity(true);
         fb.ticksLived = 1;
-        
+
         as = new EntityArmorStand(nmsWorld, loc.getX() + 0.5, loc.getY(), loc.getZ() + 0.5);
         as.setNoGravity(true);
         as.setMarker(true);
         as.setInvisible(true);
         fb.startRiding(as);
-        
-        for(Player player : Main.getPlugin().getServer().getOnlinePlayers()){
-            if(block.getWorld() != player.getWorld()) continue;
-            
+
+        for (Player player : Main.getPlugin().getServer().getOnlinePlayers()) {
+            if (block.getWorld() != player.getWorld()) continue;
+
             player.sendBlockChange(block.getLocation(), blockData);
         }
     }
-    
+
     @Override
     public void run() {
-        try{
+        try {
             playerList.removeIf(player -> !player.isOnline());
-            
+
             for (Player player : Main.getPlugin().getServer().getOnlinePlayers()) {
-                if(block.getWorld() != player.getWorld()) continue;
-                
+                if (block.getWorld() != player.getWorld()) continue;
+
                 //透過条件
                 boolean is = player.getInventory().getItemInMainHand().getType() == Material.AIR;
-                
-                EntityPlayer entityPlayer = ((CraftPlayer)player).getHandle();
-                
+
+                EntityPlayer entityPlayer = ((CraftPlayer) player).getHandle();
+
                 if (block.getLocation().distanceSquared(player.getLocation()) <= 25 /* 5*5 */) {
-                    
-                    if(is){
+
+                    if (is) {
                         player.sendBlockChange(block.getLocation(), Material.AIR.createBlockData());
-                    }else{
+                    } else {
                         player.sendBlockChange(block.getLocation(), blockData);
                     }
-                    
+
                     if (!playerList.contains(player)) {
                         PacketPlayOutSpawnEntity fbPacket = new PacketPlayOutSpawnEntity(fb, net.minecraft.server.v1_14_R1.Block.getCombinedId(ibd));
                         entityPlayer.playerConnection.sendPacket(fbPacket);
@@ -91,36 +102,36 @@ public class Wiremesh extends BukkitRunnable{
                         entityPlayer.playerConnection.sendPacket(metadata);
                         PacketPlayOutMount mount = new PacketPlayOutMount(as);
                         entityPlayer.playerConnection.sendPacket(mount);
-                        
+
                         playerList.add(player);
                     }
                 } else {
-                    
-                    if(new Random().nextInt(5) == 0){
+
+                    if (new Random().nextInt(5) == 0) {
                         player.sendBlockChange(block.getLocation(), blockData);
                     }
-                    
+
                     if (playerList.contains(player)) {
                         PacketPlayOutEntityDestroy fbPacket = new PacketPlayOutEntityDestroy(fb.getBukkitEntity().getEntityId());
                         entityPlayer.playerConnection.sendPacket(fbPacket);
                         PacketPlayOutEntityDestroy asPacket = new PacketPlayOutEntityDestroy(as.getBukkitEntity().getEntityId());
                         entityPlayer.playerConnection.sendPacket(asPacket);
                         player.sendBlockChange(block.getLocation(), blockData);
-                        
+
                         playerList.remove(player);
                     }
                 }
             }
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
-    
-    public void startTask(){
+
+    public void startTask() {
         this.runTaskTimerAsynchronously(Main.getPlugin(), 0, 5);
     }
-    
-    public void stopTask(){
+
+    public void stopTask() {
         this.cancel();
         this.block.setType(originalType);
         this.block.setBlockData(blockData);

@@ -1,12 +1,13 @@
 package be4rjp.sclat.data;
 
-import java.util.ArrayList;
-import java.util.List;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.util.Vector;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class RegionBlocks {
 
@@ -26,11 +27,11 @@ public class RegionBlocks {
 
     public List<Block> getBlocks() {
         List<Block> blocks = new ArrayList<>();
-        for (int y = minimum.getBlockY(); y <= maximum.getBlockY(); y++) 
+        for (int y = minimum.getBlockY(); y <= maximum.getBlockY(); y++)
             for (int x = minimum.getBlockX(); x <= maximum.getBlockX(); x++)
                 for (int z = minimum.getBlockZ(); z <= maximum.getBlockZ(); z++)
                     blocks.add(world.getBlockAt(x, y, z));
-        
+
         return blocks;
     }
 }
