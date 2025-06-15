@@ -156,7 +156,7 @@ public class PlayerStatusMgr {
                     connection.sendPacket(new PacketPlayOutEntityDestroy(as2.getBukkitEntity().getEntityId()));
                     as2.setCustomName(CraftChatMessage.fromStringOrNull("§aPaints : §r" + getPaint(player) + "  §aKills : §r" + getKill(player)));
                     connection.sendPacket(new PacketPlayOutSpawnEntityLiving(as2));
-                } catch (Exception e) {
+                } catch (Exception ignored) {
                 }
             }
         };

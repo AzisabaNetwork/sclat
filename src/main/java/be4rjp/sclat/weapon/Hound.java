@@ -235,7 +235,7 @@ public class Hound {
                                                     cancel();
                                                 }
                                             }
-                                        } catch (Exception e) {
+                                        } catch (Exception ignored) {
                                         }
                                     }
                                 }

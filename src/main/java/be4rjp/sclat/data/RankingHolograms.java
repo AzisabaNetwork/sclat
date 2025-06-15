@@ -247,7 +247,7 @@ public class RankingHolograms {
                             }
                         }
 
-                    } catch (Exception e) {
+                    } catch (Exception ignored) {
                     }
                     i++;
                 }
@@ -298,7 +298,7 @@ public class RankingHolograms {
                                 ("§aYou ->> §e" + (paint == 0 ? "-" : ranking) + "位 §f" + mcid + "  §6Paint(s) : §r" + paint));
                     }
                     list.add(you);
-                } catch (Exception e) {
+                } catch (Exception ignored) {
                 }
 
                 list.add(title);
@@ -311,14 +311,14 @@ public class RankingHolograms {
                             PacketPlayOutEntityDestroy destroyPacket = new PacketPlayOutEntityDestroy(armorStand.getBukkitEntity().getEntityId());
                             ((CraftPlayer) player).getHandle().playerConnection.sendPacket(destroyPacket);
                         }
-                    } catch (Exception e) {
+                    } catch (Exception ignored) {
                     }
                     try {
                         for (EntityArmorStand armorStand : list) {
                             PacketPlayOutSpawnEntityLiving spawnPacket = new PacketPlayOutSpawnEntityLiving(armorStand);
                             ((CraftPlayer) player).getHandle().playerConnection.sendPacket(spawnPacket);
                         }
-                    } catch (Exception e) {
+                    } catch (Exception ignored) {
                     }
                 }
             }

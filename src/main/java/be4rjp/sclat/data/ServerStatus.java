@@ -88,7 +88,7 @@ public class ServerStatus {
                         }
                         signState.update();
                     }
-                } catch (Exception e) {
+                } catch (Exception ignored) {
                 }
             }
         };

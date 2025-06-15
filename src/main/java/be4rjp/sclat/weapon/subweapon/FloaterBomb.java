@@ -146,7 +146,7 @@ public class FloaterBomb {
                                                     cancel();
                                                 }
                                             }
-                                        } catch (Exception e) {
+                                        } catch (Exception ignored) {
                                         }
                                     }
                                 }

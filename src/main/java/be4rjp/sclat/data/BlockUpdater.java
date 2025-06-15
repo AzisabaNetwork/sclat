@@ -66,7 +66,7 @@ public class BlockUpdater {
                                         continue check;
                                     }
                                 }
-                            } catch (Exception e) {
+                            } catch (Exception ignored) {
                             }
                         } else {
                         }
@@ -118,13 +118,13 @@ public class BlockUpdater {
             if (block.getLocation().getChunk().isLoaded()) {
                 try {
                     Sclat.setBlockByNMSChunk(block, blocklist.get(block), true);
-                } catch (Exception e) {
+                } catch (Exception ignored) {
                 }
             } else {
                 try {
                     Sclat.setBlockByNMS(block, blocklist.get(block), true);
                     //Main.getPlugin().getServer().broadcastMessage("ChangeBlockByNMS!!");
-                } catch (Exception e) {
+                } catch (Exception ignored) {
                 }
             }
 
@@ -137,13 +137,13 @@ public class BlockUpdater {
                 if (block.getLocation().getChunk().isLoaded()) {
                     try {
                         Sclat.setBlockByNMSChunk(block, blocklist.get(block), true);
-                    } catch (Exception e) {
+                    } catch (Exception ignored) {
                     }
                 } else {
                     try {
                         Sclat.setBlockByNMS(block, blocklist.get(block), true);
                         //Main.getPlugin().getServer().broadcastMessage("ChangeBlockByNMS!!");
-                    } catch (Exception e) {
+                    } catch (Exception ignored) {
                     }
                 }
 

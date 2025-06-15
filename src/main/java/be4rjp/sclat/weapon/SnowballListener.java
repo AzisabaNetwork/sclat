@@ -305,7 +305,7 @@ public class SnowballListener implements Listener {
                                     }
                                 }
                             }
-                        } catch (Exception e) {
+                        } catch (Exception ignored) {
                         }
                     }
                     if (type.equals("Funnel")) {

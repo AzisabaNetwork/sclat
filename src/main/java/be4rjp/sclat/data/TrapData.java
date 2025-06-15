@@ -191,7 +191,7 @@ public class TrapData {
                                                 cancel();
                                             }
                                         }
-                                    } catch (Exception e) {
+                                    } catch (Exception ignored) {
                                     }
                                 }
                             }

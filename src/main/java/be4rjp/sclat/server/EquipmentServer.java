@@ -124,7 +124,7 @@ class EquipEchoThread extends Thread {
                 if (socket != null) {
                     socket.close();
                 }
-            } catch (IOException e) {
+            } catch (IOException ignored) {
             }
             System.out.println("Disconnected " + socket.getRemoteSocketAddress());
         }

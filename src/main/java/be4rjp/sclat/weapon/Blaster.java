@@ -154,7 +154,7 @@ public class Blaster {
                                                 cancel();
                                             }
                                         }
-                                    } catch (Exception e) {
+                                    } catch (Exception ignored) {
                                     }
                                 }
                             }
@@ -318,7 +318,7 @@ public class Blaster {
                                 ArmorStandMgr.giveDamageArmorStand((ArmorStand) as, damage, player);
                             }
                         }
-                    } catch (Exception e) {
+                    } catch (Exception ignored) {
                     }
                 }
             }

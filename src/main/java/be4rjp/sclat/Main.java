@@ -429,7 +429,7 @@ public class Main extends JavaPlugin implements PluginMessageListener {
             for (MapData mData : DataMgr.maplist)
                 if (mData.getWiremeshListTask() != null)
                     mData.getWiremeshListTask().stopTask();
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
 
         //塗りリセット

@@ -38,7 +38,7 @@ public class SclatPacketListener {
                                 if (event.getPacket().getBooleans().readSafely(0)) {
                                     y = 1F;
                                 }
-                            } catch (Error | Exception e45) {
+                            } catch (Error | Exception ignored) {
                             }
 
                             Vector vec = new Vector(x, y, z);
@@ -68,7 +68,7 @@ public class SclatPacketListener {
                                         break;
                                     }
                                 }
-                            } catch (Exception e) {
+                            } catch (Exception ignored) {
                             }
                         }
                     }

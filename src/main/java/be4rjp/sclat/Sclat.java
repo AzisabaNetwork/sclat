@@ -249,7 +249,7 @@ public class Sclat {
                 try {
                     BungeeCordMgr.PlayerSendServer(player, "sclat");
                     DataMgr.getPlayerData(player).setServerName("Sclat");
-                } catch (Exception e) {
+                } catch (Exception ignored) {
                 }
             }
         };

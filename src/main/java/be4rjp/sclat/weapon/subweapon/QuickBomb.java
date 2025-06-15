@@ -115,7 +115,7 @@ public class QuickBomb {
                                                     cancel();
                                                 }
                                             }
-                                        } catch (Exception e) {
+                                        } catch (Exception ignored) {
                                         }
                                     }
                                 }

@@ -804,7 +804,7 @@ public class MatchMgr {
                                 for (Wiremesh wiremesh : match.getMapData().getWiremeshListTask().getWiremeshsList()) {
                                     wiremesh.startTask();
                                 }
-                            } catch (Exception e) {
+                            } catch (Exception ignored) {
                             }
                         }
 
@@ -1167,7 +1167,7 @@ public class MatchMgr {
                                 for (Wiremesh wiremesh : DataMgr.getPlayerData(p).getMatch().getMapData().getWiremeshListTask().getWiremeshsList()) {
                                     wiremesh.startTask();
                                 }
-                            } catch (Exception e) {
+                            } catch (Exception ignored) {
                             }
                         }
                         for (ArmorStand as : DataMgr.getBeaconMap().values())
@@ -1540,7 +1540,7 @@ public class MatchMgr {
                             try {
                                 BungeeCordMgr.PlayerSendServer(p, "sclat");
                                 DataMgr.getPlayerData(p).setServerName("Sclat");
-                            } catch (Exception e) {
+                            } catch (Exception ignored) {
                             }
                         }
 

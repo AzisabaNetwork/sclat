@@ -228,7 +228,7 @@ public class Boomerang {
                                                     cancel();
                                                 }
                                             }
-                                        } catch (Exception e) {
+                                        } catch (Exception ignored) {
                                         }
                                     }
                                 }

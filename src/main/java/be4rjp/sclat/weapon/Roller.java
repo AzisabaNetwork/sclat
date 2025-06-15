@@ -172,7 +172,7 @@ public class Roller {
                                                         break loop;
                                                     }
                                                 }
-                                            } catch (Exception e) {
+                                            } catch (Exception ignored) {
                                             }
                                         }
                                     }
@@ -253,7 +253,7 @@ public class Roller {
                                                         break loop;
                                                     }
                                                 }
-                                            } catch (Exception e) {
+                                            } catch (Exception ignored) {
                                             }
                                         }
                                     }

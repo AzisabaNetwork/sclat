@@ -128,7 +128,7 @@ public class RankMgr {
                     ranking = new ArrayList<>();
                     for (Integer key : treeMap.keySet())
                         ranking.add(treeMap.get(key));
-                } catch (Exception e) {
+                } catch (Exception ignored) {
                 }
             }
         };
@@ -187,7 +187,7 @@ public class RankMgr {
                     paintRanking = new ArrayList<>();
                     for (Integer key : treeMap.keySet())
                         paintRanking.add(treeMap.get(key));
-                } catch (Exception e) {
+                } catch (Exception ignored) {
                 }
             }
         };
@@ -204,7 +204,7 @@ public class RankMgr {
                 for (Player player : Main.getPlugin().getServer().getOnlinePlayers()) {
                     try {
                         DataMgr.getRankingHolograms(player).refreshRankingAsync();
-                    } catch (Exception e) {
+                    } catch (Exception ignored) {
                     }
                 }
             }

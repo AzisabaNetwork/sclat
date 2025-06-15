@@ -350,7 +350,7 @@ public class SquidMgr {
                         }
                     }
 
-                } catch (Exception e) {
+                } catch (Exception ignored) {
                 }
 
                 if (data.getIsSquid()) {
@@ -388,7 +388,7 @@ public class SquidMgr {
                                 ((CraftPlayer) target).getHandle().playerConnection.sendPacket(packet);
                             }
                         }
-                    } catch (Exception e) {
+                    } catch (Exception ignored) {
                     }
                 }
 
@@ -400,7 +400,7 @@ public class SquidMgr {
                                 ((CraftPlayer) target).getHandle().playerConnection.sendPacket(packet);
                             }
                         }
-                    } catch (Exception e) {
+                    } catch (Exception ignored) {
                     }
                     //squid.remove();
                     cancel();

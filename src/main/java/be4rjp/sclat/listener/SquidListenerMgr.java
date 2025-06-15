@@ -46,7 +46,7 @@ public class SquidListenerMgr {
                     DeathMgr.PlayerDeathRunnable(player, player, "fall");
                 }
             }
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
 
         //if(!DataMgr.getBlockDataMap().containsKey(b2) || !DataMgr.getBlockDataMap().containsKey(b3) || !DataMgr.getBlockDataMap().containsKey(b4) || !DataMgr.getBlockDataMap().containsKey(b5) || !DataMgr.getBlockDataMap().containsKey(b1))

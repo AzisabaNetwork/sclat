@@ -204,7 +204,7 @@ public class CurlingBomb {
                                                     cancel();
                                                 }
                                             }
-                                        } catch (Exception e) {
+                                        } catch (Exception ignored) {
                                         }
                                     }
                                 }

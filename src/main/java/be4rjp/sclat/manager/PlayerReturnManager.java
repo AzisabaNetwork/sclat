@@ -29,7 +29,7 @@ public class PlayerReturnManager {
                     for (PlayerReturn pr : list)
                         if (!pr.getFlag())
                             list.remove(pr);
-                } catch (Exception e) {
+                } catch (Exception ignored) {
                 }
             }
         };

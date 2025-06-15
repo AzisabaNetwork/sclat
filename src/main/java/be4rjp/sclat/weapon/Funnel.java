@@ -196,7 +196,7 @@ public class Funnel {
                                 for (ArmorStand as : list) {
                                     as.remove();
                                 }
-                            } catch (Exception e) {
+                            } catch (Exception ignored) {
                             }
                             list.clear();
                             as3 = (ArmorStand) p.getWorld().spawnEntity(locp.clone().add(0, 2.5, 0), EntityType.ARMOR_STAND);
@@ -239,7 +239,7 @@ public class Funnel {
                                 for (ArmorStand as : list1) {
                                     as.remove();
                                 }
-                            } catch (Exception e) {
+                            } catch (Exception ignored) {
                             }
                             list1.clear();
                             as13 = (ArmorStand) p.getWorld().spawnEntity(locp.clone().add(0, 1, 0).add(l1.clone().multiply(1.5)), EntityType.ARMOR_STAND);
@@ -282,7 +282,7 @@ public class Funnel {
                                 for (ArmorStand as : list2) {
                                     as.remove();
                                 }
-                            } catch (Exception e) {
+                            } catch (Exception ignored) {
                             }
                             list2.clear();
                             as23 = (ArmorStand) p.getWorld().spawnEntity(locp.clone().add(0, 1, 0).add(r1.clone().multiply(1.5)), EntityType.ARMOR_STAND);
@@ -921,7 +921,7 @@ public class Funnel {
                                 }
                             }
                         }
-                    } catch (Exception e) {
+                    } catch (Exception ignored) {
                     }
                 }
             }
@@ -980,7 +980,7 @@ public class Funnel {
                                 }
                             }
                         }
-                    } catch (Exception e) {
+                    } catch (Exception ignored) {
                     }
                 }
             }

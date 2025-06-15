@@ -46,7 +46,7 @@ public class PaintMgr {
                 if (block.getY() <= DataMgr.getPlayerData(player).getMatch().getMapData().getVoidY()) {
                     continue;
                 }
-            } catch (Exception e) {
+            } catch (Exception ignored) {
             }
 
             if (block.getType().equals(Material.WET_SPONGE) || block.getType().toString().contains("POWDER")) {

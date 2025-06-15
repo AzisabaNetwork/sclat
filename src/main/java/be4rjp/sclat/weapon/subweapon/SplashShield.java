@@ -84,7 +84,7 @@ public class SplashShield {
                                     ssdata.getTask().cancel();
                                 }
                             }
-                        } catch (Exception e) {
+                        } catch (Exception ignored) {
 
                         }
                         SplashShieldData ssdata = new SplashShieldData(p);
