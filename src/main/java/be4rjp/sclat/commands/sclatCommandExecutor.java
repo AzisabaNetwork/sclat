@@ -4,10 +4,8 @@ import be4rjp.sclat.*;
 import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.data.ServerStatus;
 import be4rjp.sclat.manager.BungeeCordMgr;
-import be4rjp.sclat.manager.PlayerStatusMgr;
 import be4rjp.sclat.manager.ServerStatusManager;
 import be4rjp.sclat.server.EquipmentClient;
-import com.comphenix.protocol.PacketType;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -15,6 +13,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +23,7 @@ import static be4rjp.sclat.Main.conf;
 //sclat Command
 public class sclatCommandExecutor implements CommandExecutor , TabExecutor {
     @Override
-    public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String commandLabel, String[] args) {
         if(args == null) return false;
         if(args.length == 0) return false;
 
