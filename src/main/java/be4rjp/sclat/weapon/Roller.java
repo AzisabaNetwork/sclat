@@ -139,8 +139,8 @@ public class Roller {
                         RayTrace rayTrace1 = new RayTrace(front.toVector(), vec1);
                         ArrayList<Vector> positions1 = rayTrace1.traverse(data.getWeaponClass().getMainWeapon().getRollerWidth(), 0.5);
                         loop:
-                        for (int i = 0; i < positions1.size(); i++) {
-                            Location position = positions1.get(i).toLocation(p.getLocation().getWorld());
+                        for (Vector vector : positions1) {
+                            Location position = vector.toLocation(p.getLocation().getWorld());
                             Block block = p.getLocation().getWorld().getBlockAt(position);
                             if (!block.getType().equals(Material.AIR))
                                 break;
@@ -222,8 +222,8 @@ public class Roller {
                         RayTrace rayTrace2 = new RayTrace(front.toVector(), vec2);
                         ArrayList<Vector> positions2 = rayTrace2.traverse(data.getWeaponClass().getMainWeapon().getRollerWidth(), 0.5);
                         loop:
-                        for (int i = 0; i < positions2.size(); i++) {
-                            Location position = positions2.get(i).toLocation(p.getLocation().getWorld());
+                        for (Vector vector : positions2) {
+                            Location position = vector.toLocation(p.getLocation().getWorld());
                             Block block = p.getLocation().getWorld().getBlockAt(position);
                             if (!block.getType().equals(Material.AIR))
                                 break;

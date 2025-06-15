@@ -45,8 +45,8 @@ public class SubWeapon implements Listener {
 
         RayTrace rayTrace = new RayTrace(player.getEyeLocation().toVector(), player.getEyeLocation().getDirection());
         ArrayList<Vector> positions = rayTrace.traverse(4, 0.5);
-        for (int i = 0; i < positions.size(); i++) {
-            Location position = positions.get(i).toLocation(player.getLocation().getWorld());
+        for (Vector vector : positions) {
+            Location position = vector.toLocation(player.getLocation().getWorld());
             if (position.getBlock().getType().toString().contains("SIGN")) {
                 return;
             }

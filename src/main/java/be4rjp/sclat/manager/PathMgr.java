@@ -104,8 +104,8 @@ public class PathMgr {
                     Team team = path1.getTeam();
                     RayTrace rayTrace = new RayTrace(from.toVector(), new Vector(to.getX() - from.getX(), to.getY() - from.getY(), to.getZ() - from.getZ()).normalize());
                     ArrayList<Vector> positions = rayTrace.traverse(from.distance(to), 0.5);
-                    for (int i = 0; i < positions.size(); i++) {
-                        Location position = positions.get(i).toLocation(from.getWorld());
+                    for (Vector vector : positions) {
+                        Location position = vector.toLocation(from.getWorld());
                         for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
                             if (!DataMgr.getPlayerData(target).getSettings().ShowEffect_ChargerLine())
                                 continue;

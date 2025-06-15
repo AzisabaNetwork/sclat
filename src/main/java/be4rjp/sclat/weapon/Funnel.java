@@ -53,9 +53,9 @@ public class Funnel {
 
 
         loop:
-        for (int i = 0; i < positions.size(); i++) {
+        for (Vector vector : positions) {
 
-            Location position = positions.get(i).toLocation(player.getLocation().getWorld());
+            Location position = vector.toLocation(player.getLocation().getWorld());
             Block block = player.getLocation().getWorld().getBlockAt(position);
 
             if (!block.getType().equals(Material.AIR)) {
@@ -66,7 +66,7 @@ public class Funnel {
                     if (target.getWorld() == position.getWorld()) {
                         if (target.getLocation().distanceSquared(position) < Main.PARTICLE_RENDER_DISTANCE_SQUARED) {
                             org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(player).getTeam().getTeamColor().getWool().createBlockData();
-                            target.spawnParticle(org.bukkit.Particle.BLOCK_DUST, position, 1, 0, 0, 0, 1, bd);
+                            target.spawnParticle(Particle.BLOCK_DUST, position, 1, 0, 0, 0, 1, bd);
                         }
                     }
                 }

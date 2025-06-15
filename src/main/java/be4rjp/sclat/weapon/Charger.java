@@ -85,8 +85,8 @@ public class Charger {
                     p.getInventory().setItem(0, w);
                     RayTrace rayTrace = new RayTrace(p.getEyeLocation().toVector(), p.getEyeLocation().getDirection());
                     ArrayList<Vector> positions = rayTrace.traverse((int) ((double) charge * data.getWeaponClass().getMainWeapon().getChargeRatio() * (double) data.getWeaponClass().getMainWeapon().getDistanceTick()), 0.7);
-                    for (int i = 0; i < positions.size(); i++) {
-                        Location position = positions.get(i).toLocation(p.getLocation().getWorld());
+                    for (Vector vector : positions) {
+                        Location position = vector.toLocation(p.getLocation().getWorld());
                         Block block = player.getWorld().getBlockAt(position);
                         if (!position.getBlock().getType().equals(Material.AIR)) {
                             //if(rayTrace.intersects(new BoundingBox(block), (int)(charge / 2 * data.getWeaponClass().getMainWeapon().getDistanceTick()), 0.1))

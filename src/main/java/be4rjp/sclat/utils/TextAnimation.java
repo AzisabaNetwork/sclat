@@ -24,10 +24,10 @@ public class TextAnimation {
         int hankaku = 0;
 
         char[] chars = line.toCharArray();
-        for (int i = 0; i < chars.length; i++) {
-            if (Objects.equals(smalls, chars[i])) {
+        for (char aChar : chars) {
+            if (Objects.equals(smalls, aChar)) {
                 plus++;
-            } else if (String.valueOf(chars[i]).getBytes().length < 2) {
+            } else if (String.valueOf(aChar).getBytes().length < 2) {
                 hankaku++;
             }
         }

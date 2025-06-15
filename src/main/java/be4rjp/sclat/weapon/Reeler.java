@@ -420,8 +420,8 @@ public class Reeler {
         boolean isLockOnPlayer = false;
         if (data.getWeaponClass().getMainWeapon().getMaxRandom() == 0) {
             check:
-            for (int i = 0; i < positions.size(); i++) {
-                Location position = positions.get(i).toLocation(player.getLocation().getWorld());
+            for (Vector vector : positions) {
+                Location position = vector.toLocation(player.getLocation().getWorld());
                 for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
                     if (player != target && player.getWorld() == target.getWorld()) {
                         if (target.getLocation().distance(position) < 2) {
