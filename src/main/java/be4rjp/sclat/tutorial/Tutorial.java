@@ -64,7 +64,7 @@ public class Tutorial {
                         if (as instanceof ArmorStand) {
                             if (as.getCustomName() == null)
                                 as.remove();
-                            else if (as.getCustomName().equals(""))
+                            else if (as.getCustomName().isEmpty())
                                 as.remove();
                         }
                     }

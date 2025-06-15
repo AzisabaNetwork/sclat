@@ -77,7 +77,7 @@ public class ClickListener implements Listener {
             return;
         }
 
-        if (name.equals(""))
+        if (name.isEmpty())
             return;
         else
             player.closeInventory();

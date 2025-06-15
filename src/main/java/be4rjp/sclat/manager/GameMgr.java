@@ -887,7 +887,7 @@ public class GameMgr implements Listener {
         }
 
         String server = DataMgr.getPlayerData(player).getServername();
-        if (!server.equals("")) {
+        if (!server.isEmpty()) {
             event.setQuitMessage("§6" + player.getName() + " switched to " + server);
 
             if (Main.type == ServerType.LOBBY) {

@@ -98,11 +98,11 @@ public class ServerStatusManager {
                             role.add("§r§7[Status]  §aONLINE");
                             role.add("");
                             role.add("§r§7[Match]  " + (ss.getRunningMatch() ? "§cACTIVE" : "§aINACTIVE"));
-                            if (!ss.getMapName().equals("")) {
+                            if (!ss.getMapName().isEmpty()) {
                                 role.add("");
                                 role.add("§r§7[Map]  §f§l" + ss.getMapName());
                             }
-                            if (!ss.getInfo().equals("")) {
+                            if (!ss.getInfo().isEmpty()) {
                                 role.add("");
                                 role.add("§r§7[Info]  §f§l" + ss.getInfo());
                             }
