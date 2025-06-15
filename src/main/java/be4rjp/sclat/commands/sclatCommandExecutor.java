@@ -30,7 +30,7 @@ public class sclatCommandExecutor implements CommandExecutor , TabExecutor {
         //------------------------Check sender type-----------------------------
         CommanderType type = CommanderType.CONSOLE;
         if(sender instanceof Player){
-            if(((Player)sender).hasPermission("sclat.admin"))
+            if(sender.hasPermission("sclat.admin"))
                 type = CommanderType.ADMIN;
             else
                 type = CommanderType.MEMBER;
@@ -124,7 +124,7 @@ public class sclatCommandExecutor implements CommandExecutor , TabExecutor {
                 for (ServerStatus ss : ServerStatusManager.serverList) {
                     if (ss.getServerName().equals(serverName)) {
                         List<String> commands = new ArrayList<>();
-                        commands.add("mod " + ((Player)sender).getName());
+                        commands.add("mod " + sender.getName());
                         commands.add("stop");
                         EquipmentClient sc = new EquipmentClient(conf.getConfig().getString("EquipShare." + serverName + ".Host"),
                                 conf.getConfig().getInt("EquipShare." + serverName + ".Port"), commands);
@@ -140,7 +140,7 @@ public class sclatCommandExecutor implements CommandExecutor , TabExecutor {
                                 try {
                                     BungeeCordMgr.PlayerSendServer((Player) sender, ss.getServerName());
                                     DataMgr.getPlayerData((Player) sender).setServerName(ss.getDisplayName());
-                                }catch (Exception e){}
+                                }catch (Exception ignored){}
                             }
                         };
                         task.runTaskLater(Main.getPlugin(), 40);
@@ -211,12 +211,12 @@ public class sclatCommandExecutor implements CommandExecutor , TabExecutor {
     }
 
     @Override
-    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, String[] args) {
 
         //------------------------Check sender type-----------------------------
         CommanderType type = CommanderType.CONSOLE;
         if(sender instanceof Player){
-            if(((Player)sender).hasPermission("sclat.admin"))
+            if(sender.hasPermission("sclat.admin"))
                 type = CommanderType.ADMIN;
             else
                 type = CommanderType.MEMBER;
