@@ -8,6 +8,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Shulker;
@@ -190,7 +191,7 @@ public class Area {
 
     public void stop() {
         this.task.cancel();
-        this.slist.forEach(sl -> sl.remove());
+        this.slist.forEach(Entity::remove);
         this.slist.clear();
     }
 
