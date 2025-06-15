@@ -1,14 +1,14 @@
 package be4rjp.sclat;
 
-/**
- * from https://github.com/ldilley/minestat/blob/master/Java/me/dilley/MineStat.java
- */
-
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.InputStreamReader;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+
+/**
+ * from <a href="https://github.com/ldilley/minestat/blob/master/Java/me/dilley/MineStat.java">Minestat.java</a>
+ */
 
 public class MineStat {
     public static final byte NUM_FIELDS = 6;     // expected number of fields returned from server after query
