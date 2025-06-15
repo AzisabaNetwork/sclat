@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
  * @author Be4rJP
  */
 public class BungeeCordMgr {
+    @SuppressWarnings("UnstableApiUsage")
     public static void PlayerSendServer(Player player, String servername) {
         ByteArrayDataOutput out = ByteStreams.newDataOutput();
         out.writeUTF("Connect");

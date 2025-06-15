@@ -396,6 +396,7 @@ public class Main extends JavaPlugin implements PluginMessageListener {
         //-------------------------------------------------------------------
     }
 
+    @SuppressWarnings("UnstableApiUsage")
     @Override
     public void onPluginMessageReceived(String channel, Player player, byte[] message) {
         if (!channel.equals("BungeeCord")) {
