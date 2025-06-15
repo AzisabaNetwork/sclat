@@ -26,9 +26,7 @@ public class PlayerReturnManager {
             @Override
             public void run() {
                 try {
-                    for (PlayerReturn pr : list)
-                        if (!pr.getFlag())
-                            list.remove(pr);
+                    list.removeIf(pr -> !pr.getFlag());
                 } catch (Exception ignored) {
                 }
             }
