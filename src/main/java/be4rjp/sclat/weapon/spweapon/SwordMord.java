@@ -225,7 +225,7 @@ public class SwordMord {
                             if (!gurd) {
                                 kdata = new KasaData(player);
                                 DataMgr.setKasaDataWithPlayer(player, kdata);
-                                List<ArmorStand> list = new ArrayList<ArmorStand>();
+                                List<ArmorStand> list = new ArrayList<>();
                                 as1 = player.getWorld().spawn(m1.clone().add(0, -1.8, 0), ArmorStand.class, armorStand -> {
                                     armorStand.setGravity(false);
                                     armorStand.setVisible(false);
@@ -247,7 +247,7 @@ public class SwordMord {
                                 list.add(as2);
                                 list.add(as3);
                                 list.add(as4);
-                                List<ArmorStand> aslist = new ArrayList<ArmorStand>();
+                                List<ArmorStand> aslist = new ArrayList<>();
                                 aslist.addAll(list);
                                 kdata.setArmorStandList(aslist);
                                 for (ArmorStand as : list) {

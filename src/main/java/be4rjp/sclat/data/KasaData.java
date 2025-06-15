@@ -13,7 +13,7 @@ public class KasaData {
 
     private final Player player;
     double damage = 0;
-    private List<ArmorStand> list = new ArrayList<ArmorStand>();
+    private List<ArmorStand> list = new ArrayList<>();
 
     public KasaData(Player player) {
         this.player = player;

@@ -71,7 +71,7 @@ public class JetPack {
                 armorStand.setBasePlate(false);
                 //armorStand.setMarker(true);
             });
-            final List<ArmorStand> list = new ArrayList<ArmorStand>();
+            final List<ArmorStand> list = new ArrayList<>();
             int i = 0;
             int id = 0;
             Location btl = player.getLocation();

@@ -13,7 +13,7 @@ import java.util.List;
 public class SplashShieldData {
     private final Player player;
     private BukkitRunnable task;
-    private List<ArmorStand> list = new ArrayList<ArmorStand>();
+    private List<ArmorStand> list = new ArrayList<>();
     private double damage;
     private boolean IsDeploy = false;
 

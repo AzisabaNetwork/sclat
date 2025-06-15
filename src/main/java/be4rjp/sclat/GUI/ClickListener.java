@@ -128,7 +128,7 @@ public class ClickListener implements Listener {
                     bur.setMaxBlockInOneTick(conf.getConfig().getInt("BlockUpdateRate"));
                 bur.start();
                 match.setBlockUpdater(bur);
-                List<Block> blocks = new ArrayList<Block>();
+                List<Block> blocks = new ArrayList<>();
                 Block b0 = Main.lobby.getBlock().getRelative(BlockFace.DOWN);
                 blocks.add(b0);
                 blocks.add(b0.getRelative(BlockFace.EAST));

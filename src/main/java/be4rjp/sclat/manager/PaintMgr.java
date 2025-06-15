@@ -31,7 +31,7 @@ public class PaintMgr {
         if (Main.type == ServerType.LOBBY) return;
 
         be4rjp.sclat.data.MainWeapon mw = DataMgr.getPlayerData(player).getWeaponClass().getMainWeapon();
-        List<Block> blocks = new ArrayList<Block>();
+        List<Block> blocks = new ArrayList<>();
         blocks.add(location.getBlock());
         if (sphere)
             blocks = generateSphere(location, mw.getMaxPaintDis(), 1, false, true, 0, mw.getPaintRandom());
@@ -145,7 +145,7 @@ public class PaintMgr {
 
 
     public static ArrayList<Block> getCubeBlocks(Block start, int radius) {
-        ArrayList<Block> blocks = new ArrayList<Block>();
+        ArrayList<Block> blocks = new ArrayList<>();
         for (double x = start.getLocation().getX() - radius; x <= start.getLocation().getX() + radius; x++) {
             for (double y = start.getLocation().getY() - radius; y <= start.getLocation().getY() + radius; y++) {
                 for (double z = start.getLocation().getZ() - radius; z <= start.getLocation().getZ() + radius; z++) {
@@ -168,7 +168,7 @@ public class PaintMgr {
         Block b5 = loc.add(0, 1, 0).getBlock();
         Block b6 = loc.add(0, -1, 0).getBlock();
 
-        List<Block> tempList = new ArrayList<Block>();
+        List<Block> tempList = new ArrayList<>();
 
         if (loopc == 0)
             tempList.add(b0);
@@ -202,7 +202,7 @@ public class PaintMgr {
     }
 
     public static synchronized List<Block> generateSphere(Location loc, double r, double h, boolean hollow, boolean sphere, double plus_y, int random) {
-        List<Block> circleblocks = new ArrayList<Block>();
+        List<Block> circleblocks = new ArrayList<>();
         double cx = loc.getX();
         double cy = loc.getY();
         double cz = loc.getZ();
@@ -276,7 +276,7 @@ public class PaintMgr {
 
     public static void PaintGlass(Match match) {
         //team0
-        List<Block> blocks = new ArrayList<Block>();
+        List<Block> blocks = new ArrayList<>();
         Block b0 = match.getMapData().getTeam0Loc().getBlock().getRelative(BlockFace.DOWN);
         blocks.add(b0);
         blocks.add(b0.getRelative(BlockFace.EAST));
@@ -301,7 +301,7 @@ public class PaintMgr {
         }
 
         //team1
-        List<Block> blocks1 = new ArrayList<Block>();
+        List<Block> blocks1 = new ArrayList<>();
         Block b1 = match.getMapData().getTeam1Loc().getBlock().getRelative(BlockFace.DOWN);
         blocks1.add(b1);
         blocks1.add(b1.getRelative(BlockFace.EAST));

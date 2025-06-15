@@ -159,7 +159,7 @@ public class Kasa {
 
         BukkitRunnable task = new BukkitRunnable() {
             final Player p = player;
-            final List<ArmorStand> list = new ArrayList<ArmorStand>();
+            final List<ArmorStand> list = new ArrayList<>();
             int i = 0;
             boolean weapon = false;
             boolean sound = true;
@@ -352,9 +352,9 @@ public class Kasa {
             final Player p = player;
             final float kasaSpeed = DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getRollerNeedInk();
             final int pageCooltime = DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getRollerWidth();
-            final List<ArmorStand> list = new ArrayList<ArmorStand>();
-            final List<ArmorStand> ul = new ArrayList<ArmorStand>();
-            final List<ArmorStand> dl = new ArrayList<ArmorStand>();
+            final List<ArmorStand> list = new ArrayList<>();
+            final List<ArmorStand> ul = new ArrayList<>();
+            final List<ArmorStand> dl = new ArrayList<>();
             int i = 0;
             boolean bp = false;
             boolean squid = true;
@@ -466,7 +466,7 @@ public class Kasa {
                         dl.add(as17);
                         ul.add(as20);
 
-                        List<ArmorStand> aslist = new ArrayList<ArmorStand>();
+                        List<ArmorStand> aslist = new ArrayList<>();
                         aslist.addAll(list);
                         kdata.setArmorStandList(aslist);
                         kdata.setDamage(DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getSlideNeedINK());

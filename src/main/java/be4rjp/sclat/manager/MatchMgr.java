@@ -194,7 +194,7 @@ public class MatchMgr {
                                     //ソート
                                     List<Player> sortedMember = new ArrayList<>();
                                     if (conf.getConfig().getBoolean("RateMatch")) {
-                                        Map<Integer, Player> treeMap = new TreeMap<Integer, Player>(playerMap);
+                                        Map<Integer, Player> treeMap = new TreeMap<>(playerMap);
                                 /*
                                 if(match.getJoinedPlayerCount() == 3){
                                     List<Player> list = new ArrayList<>();

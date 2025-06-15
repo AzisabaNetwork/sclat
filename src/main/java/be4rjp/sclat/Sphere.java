@@ -11,7 +11,7 @@ import java.util.List;
 public class Sphere {
 
     public static List<Location> getSphere(Location baseLoc, double r, int accuracy) {
-        List<Location> tempList = new ArrayList<Location>();
+        List<Location> tempList = new ArrayList<>();
         int count = 0;
         for (int i = 0; i < 180; i += accuracy) {
             for (int t = 0; t < 360; t += accuracy) {
@@ -30,7 +30,7 @@ public class Sphere {
     }
 
     public static List<Location> getXZCircle(Location baseLoc, double r, double r_accuracy, int accuracy) {
-        List<Location> tempList = new ArrayList<Location>();
+        List<Location> tempList = new ArrayList<>();
         for (int tr = 1; tr <= r; tr += r_accuracy) {
             for (int t = 0; t < 360; t += accuracy / tr) {
                 double x = tr * Math.sin(Math.toRadians(t));

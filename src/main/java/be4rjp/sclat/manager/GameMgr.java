@@ -338,7 +338,7 @@ public class GameMgr implements Listener {
             armor.runTaskLater(Main.getPlugin(), 50);
             ArmorStandMgr.setIsSpawned(true);
 
-            List<Block> blocks = new ArrayList<Block>();
+            List<Block> blocks = new ArrayList<>();
             Block b0 = Main.lobby.getBlock().getRelative(BlockFace.DOWN);
             blocks.add(b0);
             blocks.add(b0.getRelative(BlockFace.EAST));
