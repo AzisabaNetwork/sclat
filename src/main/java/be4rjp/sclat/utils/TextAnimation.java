@@ -1,6 +1,5 @@
 package be4rjp.sclat.utils;
 
-import java.util.Collections;
 import java.util.Objects;
 
 public class TextAnimation {
