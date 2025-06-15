@@ -11,7 +11,11 @@ import be4rjp.sclat.manager.PaintMgr;
 import be4rjp.sclat.weapon.Gear;
 import net.minecraft.server.v1_14_R1.EnumItemSlot;
 import net.minecraft.server.v1_14_R1.PacketPlayOutEntityEquipment;
-import org.bukkit.*;
+import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.craftbukkit.v1_14_R1.entity.CraftArmorStand;
 import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_14_R1.inventory.CraftItemStack;
@@ -26,7 +30,7 @@ import org.bukkit.util.Vector;
 import java.util.List;
 
 public class Boomerang {
-    public static void BoomerangRunnable(Player player){
+    public static void BoomerangRunnable(Player player) {
         Vector pVector = player.getEyeLocation().getDirection();
         Vector vec = new Vector(pVector.getX(), pVector.getY(), pVector.getZ()).normalize().multiply(0.6);
         BukkitRunnable task = new BukkitRunnable() {
@@ -40,12 +44,13 @@ public class Boomerang {
             boolean cumbackBoomeran = false;
             int cumbacktime = 90;
             boolean explode = false;
+
             @Override
             public void run() {
                 try {
-                    if(i == 0){
+                    if (i == 0) {
                         cumbackBoomeran = false;
-                        if(!DataMgr.getPlayerData(player).getIsBombRush())
+                        if (!DataMgr.getPlayerData(player).getIsBombRush())
                             player.setExp(player.getExp() - 0.59F);
 
                         as1 = player.getWorld().spawn(player.getLocation().add(0, 1.6, 0), ArmorStand.class, armorStand -> {
@@ -78,38 +83,37 @@ public class Boomerang {
                     Location aloc = as1.getLocation().add(0, -0.8, 0);
                     aloc.setYaw(90);
                     Location as1l = as1.getLocation();
-                    ((CraftArmorStand)as2).getHandle().setPositionRotation(as1l.getX(), as1l.getY(), as1l.getZ(), 0, 0);
+                    ((CraftArmorStand) as2).getHandle().setPositionRotation(as1l.getX(), as1l.getY(), as1l.getZ(), 0, 0);
                     as3.teleport(aloc);
                     fb.setTicksLived(1);
 
-                    if(i >= 5 && !cumbackBoomeran){
-                        if(bloc.getX() == as1l.getX() && bloc.getZ() != as1l.getZ() || bloc.getZ() == as1l.getZ() && bloc.getX() != as1l.getX()) {
-                            aVec = new Vector(player.getLocation().getX()-bloc.getX(), (player.getLocation().getY()+1.6)-bloc.getY(), player.getLocation().getZ()-bloc.getZ()).normalize().multiply(1.0);
+                    if (i >= 5 && !cumbackBoomeran) {
+                        if (bloc.getX() == as1l.getX() && bloc.getZ() != as1l.getZ() || bloc.getZ() == as1l.getZ() && bloc.getX() != as1l.getX()) {
+                            aVec = new Vector(player.getLocation().getX() - bloc.getX(), (player.getLocation().getY() + 1.6) - bloc.getY(), player.getLocation().getZ() - bloc.getZ()).normalize().multiply(1.0);
                             cumbackBoomeran = true;
                             cumbacktime = i;
-                            for(int painti = 0; painti <= 2; painti++){
+                            for (int painti = 0; painti <= 2; painti++) {
                                 List<Location> p_locs = Sphere.getSphere(as1l, painti, 20);
-                                for(Location loc : p_locs){
+                                for (Location loc : p_locs) {
                                     PaintMgr.Paint(loc, player, false);
                                 }
                             }
-                        }else if(as1.isOnGround()){
-                            aVec = new Vector(player.getLocation().getX()-bloc.getX(), (player.getLocation().getY()+1.6)-bloc.getY(), player.getLocation().getZ()-bloc.getZ()).normalize().multiply(1.0);
+                        } else if (as1.isOnGround()) {
+                            aVec = new Vector(player.getLocation().getX() - bloc.getX(), (player.getLocation().getY() + 1.6) - bloc.getY(), player.getLocation().getZ() - bloc.getZ()).normalize().multiply(1.0);
                             cumbackBoomeran = true;
                             cumbacktime = i;
-                        }
-                        else if(i == 30 ) {
-                            aVec = new Vector(player.getLocation().getX()-bloc.getX(), (player.getLocation().getY()+1.6)-bloc.getY(), player.getLocation().getZ()-bloc.getZ()).normalize().multiply(1.0);
+                        } else if (i == 30) {
+                            aVec = new Vector(player.getLocation().getX() - bloc.getX(), (player.getLocation().getY() + 1.6) - bloc.getY(), player.getLocation().getZ() - bloc.getZ()).normalize().multiply(1.0);
                             cumbackBoomeran = true;
                             cumbacktime = 35;
                         }
                     }
-                    if(i >= cumbacktime + 5){
-                        if(bloc.getX() == as1l.getX() && bloc.getZ() != as1l.getZ() || bloc.getZ() == as1l.getZ() && bloc.getX() != as1l.getX()) {
+                    if (i >= cumbacktime + 5) {
+                        if (bloc.getX() == as1l.getX() && bloc.getZ() != as1l.getZ() || bloc.getZ() == as1l.getZ() && bloc.getX() != as1l.getX()) {
                             explode = true;
                         }
                     }
-                    if(i >= cumbacktime + 15){
+                    if (i >= cumbacktime + 15) {
                         explode = true;
                     }
                     as1.setVelocity(aVec);
@@ -118,39 +122,40 @@ public class Boomerang {
 
                     bloc = as1l.clone();
 
-                    if(i % 10 == 0){
+                    if (i % 10 == 0) {
                         for (Player o_player : Main.getPlugin().getServer().getOnlinePlayers())
-                            ((CraftPlayer)o_player).getHandle().playerConnection.sendPacket(new PacketPlayOutEntityEquipment(as3.getEntityId(), EnumItemSlot.HEAD, CraftItemStack.asNMSCopy(new ItemStack(DataMgr.getPlayerData(player).getTeam().getTeamColor().getWool()))));
+                            ((CraftPlayer) o_player).getHandle().playerConnection.sendPacket(new PacketPlayOutEntityEquipment(as3.getEntityId(), EnumItemSlot.HEAD, CraftItemStack.asNMSCopy(new ItemStack(DataMgr.getPlayerData(player).getTeam().getTeamColor().getWool()))));
                     }
 
-                    if(i >= cumbacktime+3 && i <= cumbacktime+13){
-                        if(i % 2 == 0)
+                    if (i >= cumbacktime + 3 && i <= cumbacktime + 13) {
+                        if (i % 2 == 0)
                             player.getWorld().playSound(as1l, Sound.BLOCK_NOTE_BLOCK_PLING, 1F, 1.6F);
                     }
 
                     //エフェクト
-                    if(i % 2 == 0){
+                    if (i % 2 == 0) {
                         org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(player).getTeam().getTeamColor().getWool().createBlockData();
                         for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
-                            if(DataMgr.getPlayerData(target).getSettings().ShowEffect_Bomb())
-                                if(target.getWorld() == player.getWorld())
-                                    if(target.getLocation().distanceSquared(as1l) < Main.PARTICLE_RENDER_DISTANCE_SQUARED)
+                            if (DataMgr.getPlayerData(target).getSettings().ShowEffect_Bomb())
+                                if (target.getWorld() == player.getWorld())
+                                    if (target.getLocation().distanceSquared(as1l) < Main.PARTICLE_RENDER_DISTANCE_SQUARED)
                                         target.spawnParticle(org.bukkit.Particle.BLOCK_DUST, as1l, 2, 0, 0, 0, 1, bd);
                         }
                         //攻撃判定
                         for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
-                            if(DataMgr.getPlayerData(target).getSettings().ShowEffect_Bomb()){
-                                if(target.getWorld() == player.getWorld()){
-                                    if(target.getLocation().distance(as1l) <= 1.2){
+                            if (DataMgr.getPlayerData(target).getSettings().ShowEffect_Bomb()) {
+                                if (target.getWorld() == player.getWorld()) {
+                                    if (target.getLocation().distance(as1l) <= 1.2) {
                                         double damage = 0.2;
-                                        if(DataMgr.getPlayerData(player).getTeam() != DataMgr.getPlayerData(target).getTeam() && target.getGameMode().equals(GameMode.ADVENTURE)){
+                                        if (DataMgr.getPlayerData(player).getTeam() != DataMgr.getPlayerData(target).getTeam() && target.getGameMode().equals(GameMode.ADVENTURE)) {
                                             Sclat.giveDamage(player, target, damage, "subWeapon");
 
                                             //AntiNoDamageTime
-                                            BukkitRunnable task = new BukkitRunnable(){
-                                                Player p = target;
+                                            BukkitRunnable task = new BukkitRunnable() {
+                                                final Player p = target;
+
                                                 @Override
-                                                public void run(){
+                                                public void run() {
                                                     target.setNoDamageTicks(0);
                                                 }
                                             };
@@ -161,13 +166,13 @@ public class Boomerang {
                             }
                         }
 
-                        for(Entity as : player.getWorld().getEntities()){
-                            if (as.getLocation().distance(as1l) <= 1.2){
-                                if(as instanceof ArmorStand){
+                        for (Entity as : player.getWorld().getEntities()) {
+                            if (as.getLocation().distance(as1l) <= 1.2) {
+                                if (as instanceof ArmorStand) {
                                     double damage = 0.2;
-                                    ArmorStandMgr.giveDamageArmorStand((ArmorStand)as, damage, player);
-                                    if(as.getCustomName() != null){
-                                        if(as.getCustomName().equals("SplashShield") || as.getCustomName().equals("Kasa"))
+                                    ArmorStandMgr.giveDamageArmorStand((ArmorStand) as, damage, player);
+                                    if (as.getCustomName() != null) {
+                                        if (as.getCustomName().equals("SplashShield") || as.getCustomName().equals("Kasa"))
                                             break;
                                     }
                                 }
@@ -175,7 +180,7 @@ public class Boomerang {
                         }
                     }
 
-                    if(i == 90 || !player.isOnline() || !DataMgr.getPlayerData(player).isInMatch() || explode){
+                    if (i == 90 || !player.isOnline() || !DataMgr.getPlayerData(player).isInMatch() || explode) {
                         //半径
                         double maxDist = 3;
 
@@ -189,21 +194,20 @@ public class Boomerang {
                         Sclat.repelBarrier(as1l, maxDist, player);
 
                         //塗る
-                        for(int i = 0; i <= maxDist; i++){
+                        for (int i = 0; i <= maxDist; i++) {
                             List<Location> p_locs = Sphere.getSphere(as1l, i, 20);
-                            for(Location loc : p_locs){
+                            for (Location loc : p_locs) {
                                 PaintMgr.Paint(loc, player, false);
                             }
                         }
 
 
-
                         //攻撃判定の処理
 
-                        for(Entity as : player.getWorld().getEntities()){
-                            if (as.getLocation().distance(as1l) <= maxDist){
-                                if(as instanceof ArmorStand){
-                                    if(as.getCustomName() != null){
+                        for (Entity as : player.getWorld().getEntities()) {
+                            if (as.getLocation().distance(as1l) <= maxDist) {
+                                if (as instanceof ArmorStand) {
+                                    if (as.getCustomName() != null) {
                                         try {
                                             if (as.getCustomName().equals("Kasa")) {
                                                 KasaData kasaData = DataMgr.getKasaDataFromArmorStand((ArmorStand) as);
@@ -224,25 +228,27 @@ public class Boomerang {
                                                     cancel();
                                                 }
                                             }
-                                        }catch (Exception e){}
+                                        } catch (Exception ignored) {
+                                        }
                                     }
                                 }
                             }
                         }
 
                         for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
-                            if(!DataMgr.getPlayerData(target).isInMatch() || target.getWorld() != player.getWorld())
+                            if (!DataMgr.getPlayerData(target).isInMatch() || target.getWorld() != player.getWorld())
                                 continue;
                             if (target.getLocation().distance(as1l) <= maxDist) {
                                 double damage = (maxDist - target.getLocation().distance(as1l)) * 1 * Gear.getGearInfluence(player, Gear.Type.SUB_SPEC_UP);
-                                if(DataMgr.getPlayerData(player).getTeam() != DataMgr.getPlayerData(target).getTeam() && target.getGameMode().equals(GameMode.ADVENTURE)){
+                                if (DataMgr.getPlayerData(player).getTeam() != DataMgr.getPlayerData(target).getTeam() && target.getGameMode().equals(GameMode.ADVENTURE)) {
                                     Sclat.giveDamage(player, target, damage, "subWeapon");
 
                                     //AntiNoDamageTime
-                                    BukkitRunnable task = new BukkitRunnable(){
-                                        Player p = target;
+                                    BukkitRunnable task = new BukkitRunnable() {
+                                        final Player p = target;
+
                                         @Override
-                                        public void run(){
+                                        public void run() {
                                             target.setNoDamageTicks(0);
                                         }
                                     };
@@ -251,13 +257,13 @@ public class Boomerang {
                             }
                         }
 
-                        for(Entity as : player.getWorld().getEntities()){
-                            if (as.getLocation().distance(as1l) <= maxDist){
-                                if(as instanceof ArmorStand){
+                        for (Entity as : player.getWorld().getEntities()) {
+                            if (as.getLocation().distance(as1l) <= maxDist) {
+                                if (as instanceof ArmorStand) {
                                     double damage = (maxDist - as.getLocation().distance(as1l)) * 1 * Gear.getGearInfluence(player, Gear.Type.SUB_SPEC_UP);
-                                    ArmorStandMgr.giveDamageArmorStand((ArmorStand)as, damage, player);
-                                    if(as.getCustomName() != null){
-                                        if(as.getCustomName().equals("SplashShield") || as.getCustomName().equals("Kasa"))
+                                    ArmorStandMgr.giveDamageArmorStand((ArmorStand) as, damage, player);
+                                    if (as.getCustomName() != null) {
+                                        if (as.getCustomName().equals("SplashShield") || as.getCustomName().equals("Kasa"))
                                             break;
                                     }
                                 }
@@ -272,7 +278,7 @@ public class Boomerang {
                     }
 
                     i++;
-                }catch(Exception e){
+                } catch (Exception e) {
                     as1.remove();
                     as2.remove();
                     as3.remove();
@@ -281,16 +287,16 @@ public class Boomerang {
                 }
             }
         };
-        if(player.getExp() > 0.6 || DataMgr.getPlayerData(player).getIsBombRush())
+        if (player.getExp() > 0.6 || DataMgr.getPlayerData(player).getIsBombRush())
             task.runTaskTimer(Main.getPlugin(), 0, 1);
-        else{
+        else {
             player.sendTitle("", ChatColor.RED + "インクが足りません", 0, 5, 2);
             player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1F, 1.63F);
         }
 
-        BukkitRunnable cooltime = new BukkitRunnable(){
+        BukkitRunnable cooltime = new BukkitRunnable() {
             @Override
-            public void run(){
+            public void run() {
                 DataMgr.getPlayerData(player).setCanUseSubWeapon(true);
             }
         };

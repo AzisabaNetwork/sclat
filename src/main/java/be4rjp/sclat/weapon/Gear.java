@@ -1,4 +1,3 @@
-
 package be4rjp.sclat.weapon;
 
 import be4rjp.sclat.data.DataMgr;
@@ -6,25 +5,11 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 /**
- *
  * @author Be4rJP
  */
 public class Gear {
-    public static class Type {
-        public static final int NO_GEAR = 0;
-        public static final int IKA_SPEED_UP = 1;
-        public static final int HITO_SPEED_UP = 2;
-        public static final int MAIN_SPEC_UP = 3;
-        public static final int SUB_SPEC_UP = 4;
-        public static final int INK_RECOVERY_UP = 5;
-        public static final int MAIN_INK_EFFICIENCY_UP = 6;
-        public static final int SPECIAL_UP = 7;
-        public static final int MAX_HEALTH_UP = 8;
-        public static final int PENA_DOWN = 9;
-    }
-    
-    public static Material getGearMaterial(int gearN){
-        switch(gearN){
+    public static Material getGearMaterial(int gearN) {
+        switch (gearN) {
             case 1:
                 return Material.INK_SAC;
             case 2:
@@ -47,9 +32,9 @@ public class Gear {
                 return Material.IRON_BARS;
         }
     }
-    
-    public static String getGearName(int gearN){
-        switch(gearN){
+
+    public static String getGearName(int gearN) {
+        switch (gearN) {
             case 1:
                 return "イカダッシュ速度アップ";
             case 2:
@@ -72,9 +57,9 @@ public class Gear {
                 return "ギアなし";
         }
     }
-    
-    public static int getGearPrice(int gearN){
-        switch(gearN){
+
+    public static int getGearPrice(int gearN) {
+        switch (gearN) {
             case 1:
                 return 65000;
             case 2:
@@ -97,10 +82,10 @@ public class Gear {
                 return 0;
         }
     }
-    
-    public static double getGearInfluence(Player player, int gearN){
-        if(DataMgr.getPlayerData(player).getGearNumber() == gearN){
-            switch(DataMgr.getPlayerData(player).getGearNumber()){
+
+    public static double getGearInfluence(Player player, int gearN) {
+        if (DataMgr.getPlayerData(player).getGearNumber() == gearN) {
+            switch (DataMgr.getPlayerData(player).getGearNumber()) {
                 case 1:
                     return 1.1;
                 case 2:
@@ -122,7 +107,20 @@ public class Gear {
                 default:
                     return 1;
             }
-        }else
+        } else
             return 1;
+    }
+
+    public static class Type {
+        public static final int NO_GEAR = 0;
+        public static final int IKA_SPEED_UP = 1;
+        public static final int HITO_SPEED_UP = 2;
+        public static final int MAIN_SPEC_UP = 3;
+        public static final int SUB_SPEC_UP = 4;
+        public static final int INK_RECOVERY_UP = 5;
+        public static final int MAIN_INK_EFFICIENCY_UP = 6;
+        public static final int SPECIAL_UP = 7;
+        public static final int MAX_HEALTH_UP = 8;
+        public static final int PENA_DOWN = 9;
     }
 }

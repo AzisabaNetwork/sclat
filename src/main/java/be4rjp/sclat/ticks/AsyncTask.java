@@ -4,17 +4,21 @@ import be4rjp.sclat.Main;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public abstract class AsyncTask implements Runnable {
-    
+
     private boolean canceled = false;
-    
-    public boolean isCanceled() {return canceled;}
-    
-    public void cancel() {this.canceled = true;}
-    
+
+    public boolean isCanceled() {
+        return canceled;
+    }
+
+    public void cancel() {
+        this.canceled = true;
+    }
+
     public void runTask() {
         AsyncThreadManager.getRandomTickThread().runTask(this);
     }
-    
+
     public void runTaskLater(long delay) {
         AsyncTask runnable = this;
         new BukkitRunnable() {
@@ -24,7 +28,7 @@ public abstract class AsyncTask implements Runnable {
             }
         }.runTaskLater(Main.getPlugin(), delay);
     }
-    
+
     public void runTaskTimer(long delay, long period) {
         AsyncTask runnable = this;
         AsyncTickThread thread = AsyncThreadManager.getRandomTickThread();
@@ -39,5 +43,5 @@ public abstract class AsyncTask implements Runnable {
             }
         }.runTaskTimer(Main.getPlugin(), delay, period);
     }
-    
+
 }

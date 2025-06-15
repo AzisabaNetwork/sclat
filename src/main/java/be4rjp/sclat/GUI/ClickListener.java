@@ -1,22 +1,51 @@
-
 package be4rjp.sclat.GUI;
 
-import be4rjp.sclat.*;
-
-import static be4rjp.sclat.Main.conf;
-
-import be4rjp.sclat.data.*;
-import be4rjp.sclat.manager.*;
+import be4rjp.sclat.Main;
+import be4rjp.sclat.MessageType;
+import be4rjp.sclat.Sclat;
+import be4rjp.sclat.ServerType;
+import be4rjp.sclat.SoundType;
+import be4rjp.sclat.data.BlockUpdater;
+import be4rjp.sclat.data.DataMgr;
+import be4rjp.sclat.data.Match;
+import be4rjp.sclat.data.PaintData;
+import be4rjp.sclat.data.ServerStatus;
+import be4rjp.sclat.data.WeaponClass;
+import be4rjp.sclat.manager.ArmorStandMgr;
+import be4rjp.sclat.manager.BungeeCordMgr;
+import be4rjp.sclat.manager.MatchMgr;
+import be4rjp.sclat.manager.PlayerStatusMgr;
+import be4rjp.sclat.manager.SPWeaponMgr;
+import be4rjp.sclat.manager.ServerStatusManager;
+import be4rjp.sclat.manager.SquidMgr;
+import be4rjp.sclat.manager.SuperJumpMgr;
+import be4rjp.sclat.manager.WeaponClassMgr;
 import be4rjp.sclat.tutorial.Tutorial;
-import be4rjp.sclat.weapon.*;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import org.bukkit.*;
+import be4rjp.sclat.weapon.Brush;
+import be4rjp.sclat.weapon.Bucket;
+import be4rjp.sclat.weapon.Buckler;
+import be4rjp.sclat.weapon.Charger;
+import be4rjp.sclat.weapon.Decoy;
+import be4rjp.sclat.weapon.Funnel;
+import be4rjp.sclat.weapon.Gear;
+import be4rjp.sclat.weapon.Hound;
+import be4rjp.sclat.weapon.Kasa;
+import be4rjp.sclat.weapon.Manuber;
+import be4rjp.sclat.weapon.Reeler;
+import be4rjp.sclat.weapon.Roller;
+import be4rjp.sclat.weapon.Shooter;
+import be4rjp.sclat.weapon.Spinner;
+import be4rjp.sclat.weapon.Swapper;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
+import org.bukkit.Instrument;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.Note;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -26,64 +55,68 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import static be4rjp.sclat.Main.conf;
+
 /**
- *
  * @author Be4rJP
  */
-public class ClickListener implements Listener{
+public class ClickListener implements Listener {
     @EventHandler
-    public void onGUIClick(InventoryClickEvent event){
-        if(event.getCurrentItem() == null || event.getCurrentItem().getItemMeta() == null || event.getCurrentItem().getItemMeta().getDisplayName() == null || event.getView().getTitle() == null)
+    public void onGUIClick(InventoryClickEvent event) {
+        if (event.getCurrentItem() == null || event.getCurrentItem().getItemMeta() == null || event.getCurrentItem().getItemMeta().getDisplayName() == null || event.getView().getTitle() == null)
             return;
-        
+
         String name = event.getCurrentItem().getItemMeta().getDisplayName();
-        Player player = (Player)event.getWhoClicked();
-    
-        if(name.equals(".")) {
+        Player player = (Player) event.getWhoClicked();
+
+        if (name.equals(".")) {
             event.setCancelled(true);
             return;
         }
-        
-        if(name.equals(""))
+
+        if (name.isEmpty())
             return;
         else
             player.closeInventory();
         //player.sendMessage(name);
-        
-        
-        switch(name){
-            case"試合に参加 / JOIN THE MATCH":
-                if(Main.type == ServerType.LOBBY)
+
+
+        switch (name) {
+            case "試合に参加 / JOIN THE MATCH":
+                if (Main.type == ServerType.LOBBY)
                     ServerStatusManager.openServerList(player);
                 else
                     MatchMgr.PlayerJoinMatch(player);
                 break;
-            case"装備変更 / EQUIPMENT":
+            case "装備変更 / EQUIPMENT":
                 OpenGUI.equipmentGUI(player, false);
                 break;
-            case"§bギア変更 / GEAR":
+            case "§bギア変更 / GEAR":
                 OpenGUI.gearGUI(player, false);
                 break;
-            case"§6武器変更 / WEAPON":
+            case "§6武器変更 / WEAPON":
                 OpenGUI.openWeaponSelect(player, "Main", "null", false);
                 break;
-            case"§bギア購入 / GEAR":
+            case "§bギア購入 / GEAR":
                 OpenGUI.gearGUI(player, true);
                 break;
-            case"§6武器購入 / WEAPON":
+            case "§6武器購入 / WEAPON":
                 OpenGUI.openWeaponSelect(player, "Main", "null", true);
                 break;
-            case"設定 / SETTINGS":
+            case "設定 / SETTINGS":
                 OpenGUI.openSettingsUI(player);
                 break;
-            case"ショップを開く / OPEN SHOP":
+            case "ショップを開く / OPEN SHOP":
                 OpenGUI.equipmentGUI(player, true);
                 break;
-            case"塗りをリセット / RESET INK":
-                if(MatchMgr.canRollback) {
+            case "塗りをリセット / RESET INK":
+                if (MatchMgr.canRollback) {
                     Sclat.sendMessage("§a§lインクがリセットされました！", MessageType.ALL_PLAYER);
                     Sclat.sendMessage("§a§l3分後に再リセットできるようになります", MessageType.ALL_PLAYER);
-                    for(Player op : Main.getPlugin().getServer().getOnlinePlayers())
+                    for (Player op : Main.getPlugin().getServer().getOnlinePlayers())
                         Sclat.playGameSound(op, SoundType.SUCCESS);
                 }
                 Match match = DataMgr.getPlayerData(player).getMatch();
@@ -91,11 +124,11 @@ public class ClickListener implements Listener{
                 MatchMgr.RollBack();
                 player.setExp(0.99F);
                 BlockUpdater bur = new BlockUpdater();
-                if(conf.getConfig().contains("BlockUpdateRate"))
+                if (conf.getConfig().contains("BlockUpdateRate"))
                     bur.setMaxBlockInOneTick(conf.getConfig().getInt("BlockUpdateRate"));
                 bur.start();
                 match.setBlockUpdater(bur);
-                List<Block> blocks = new ArrayList<Block>();
+                List<Block> blocks = new ArrayList<>();
                 Block b0 = Main.lobby.getBlock().getRelative(BlockFace.DOWN);
                 blocks.add(b0);
                 blocks.add(b0.getRelative(BlockFace.EAST));
@@ -106,8 +139,8 @@ public class ClickListener implements Listener{
                 blocks.add(b0.getRelative(BlockFace.NORTH_WEST));
                 blocks.add(b0.getRelative(BlockFace.SOUTH_EAST));
                 blocks.add(b0.getRelative(BlockFace.SOUTH_WEST));
-                for(Block block : blocks) {
-                    if(block.getType().equals(Material.WHITE_STAINED_GLASS)){
+                for (Block block : blocks) {
+                    if (block.getType().equals(Material.WHITE_STAINED_GLASS)) {
                         PaintData pdata = new PaintData(block);
                         pdata.setMatch(match);
                         pdata.setTeam(match.getTeam0());
@@ -117,48 +150,48 @@ public class ClickListener implements Listener{
                     }
                 }
                 break;
-            case"ロビーへ戻る / RETURN TO LOBBY":
-                if(Main.type != ServerType.LOBBY) {
+            case "ロビーへ戻る / RETURN TO LOBBY":
+                if (Main.type != ServerType.LOBBY) {
                     BungeeCordMgr.PlayerSendServer(player, "sclat");
                     DataMgr.getPlayerData(player).setServerName("Sclat");
-                }else{
+                } else {
                     BungeeCordMgr.PlayerSendServer(player, "lobby");
                     DataMgr.getPlayerData(player).setServerName("Lobby");
                 }
                 break;
-            case"称号 / EMBLEM":
+            case "称号 / EMBLEM":
                 OpenGUI.openEmblemMenu(player);
                 break;
-            case"試し打ちサーバーへ接続 / TRAINING FIELD":
+            case "試し打ちサーバーへ接続 / TRAINING FIELD":
                 BungeeCordMgr.PlayerSendServer(player, "sclattest");
                 DataMgr.getPlayerData(player).setServerName("sclattest");
                 break;
-            case"チームデスマッチサーバーへ接続 / CONNECT TO TDM SERVER":
+            case "チームデスマッチサーバーへ接続 / CONNECT TO TDM SERVER":
                 BungeeCordMgr.PlayerSendServer(player, "tdm");
                 DataMgr.getPlayerData(player).setServerName("TDM");
                 break;
-            case"ナワバリバトル":
+            case "ナワバリバトル":
                 Match ma = DataMgr.getMatchFromId(MatchMgr.matchcount);
                 ma.addNawabari_T_Count();
                 break;
-            case"チームデスマッチ":
+            case "チームデスマッチ":
                 Match m = DataMgr.getMatchFromId(MatchMgr.matchcount);
                 m.addTDM_T_Count();
                 break;
-            case"ガチエリア":
+            case "ガチエリア":
                 Match m2 = DataMgr.getMatchFromId(MatchMgr.matchcount);
                 m2.addGatiArea_T_Count();
                 break;
-            case"戻る":
-                if(!name.equals("武器選択") || !name.equals("Shop"))
+            case "戻る":
+                if (!name.equals("武器選択") || !name.equals("Shop"))
                     OpenGUI.openMenu(player);
                 break;
         }
-        if(name.equals("リソースパックをダウンロード / DOWNLOAD RESOURCEPACK"))
+        if (name.equals("リソースパックをダウンロード / DOWNLOAD RESOURCEPACK"))
             player.setResourcePack(conf.getConfig().getString("ResourcePackURL"));
-        if(event.getView().getTitle().equals("Gear")){
-            for(int i = 0; i <= 9;){
-                if(Gear.getGearName(i).equals(name)){
+        if (event.getView().getTitle().equals("Gear")) {
+            for (int i = 0; i <= 9; ) {
+                if (Gear.getGearName(i).equals(name)) {
                     DataMgr.getPlayerData(player).setGearNumber(i);
                     PlayerStatusMgr.setGear(player, i);
                     Sclat.sendMessage("ギア[" + ChatColor.AQUA + name + ChatColor.RESET + "]を選択しました", MessageType.PLAYER, player);
@@ -166,16 +199,16 @@ public class ClickListener implements Listener{
                 }
                 i++;
             }
-        }else if(event.getView().getTitle().equals("Gear shop")){
-            for(int i = 0; i <= 9;){
-                if(Gear.getGearName(i).equals(name)){
-                    if(PlayerStatusMgr.getMoney(player) >= Gear.getGearPrice(i)){
+        } else if (event.getView().getTitle().equals("Gear shop")) {
+            for (int i = 0; i <= 9; ) {
+                if (Gear.getGearName(i).equals(name)) {
+                    if (PlayerStatusMgr.getMoney(player) >= Gear.getGearPrice(i)) {
                         PlayerStatusMgr.addGear(player, i);
                         PlayerStatusMgr.subMoney(player, Gear.getGearPrice(i));
                         Sclat.sendMessage(ChatColor.GREEN + "購入に成功しました", MessageType.PLAYER, player);
                         Sclat.playGameSound(player, SoundType.SUCCESS);
                         PlayerStatusMgr.sendHologramUpdate(player);
-                    }else{
+                    } else {
                         Sclat.sendMessage(ChatColor.RED + "お金が足りません", MessageType.PLAYER, player);
                         Sclat.playGameSound(player, SoundType.ERROR);
                     }
@@ -184,29 +217,29 @@ public class ClickListener implements Listener{
                 i++;
             }
         }
-        if(event.getView().getTitle().equals("Server List")){
-            for (ServerStatus ss : ServerStatusManager.serverList){
-                if(ss.getDisplayName().equals(name)){
-                    if(ss.getRestartingServer()){
+        if (event.getView().getTitle().equals("Server List")) {
+            for (ServerStatus ss : ServerStatusManager.serverList) {
+                if (ss.getDisplayName().equals(name)) {
+                    if (ss.getRestartingServer()) {
                         Sclat.sendMessage("§c§nこのサーバーは再起動中です1~2分程度お待ちください", MessageType.PLAYER, player);
                         Sclat.playGameSound(player, SoundType.ERROR);
                         return;
                     }
-                    if(ss.isOnline()) {
-                        if(ss.getPlayerCount() < ss.getMaxPlayer()) {
-                            if(ss.getRunningMatch()) {
+                    if (ss.isOnline()) {
+                        if (ss.getPlayerCount() < ss.getMaxPlayer()) {
+                            if (ss.getRunningMatch()) {
                                 Sclat.sendMessage("§c§nこのサーバーは試合中のため参加できません", MessageType.PLAYER, player);
                                 Sclat.playGameSound(player, SoundType.ERROR);
                                 return;
                             }
                             BungeeCordMgr.PlayerSendServer(player, ss.getServerName());
                             DataMgr.getPlayerData(player).setServerName(ss.getDisplayName());
-                        }else{
+                        } else {
                             Sclat.sendMessage("§c§nこのサーバーは満員のため参加できません", MessageType.PLAYER, player);
                             Sclat.playGameSound(player, SoundType.ERROR);
                         }
-                    }else{
-                        if(ss.isMaintenance())
+                    } else {
+                        if (ss.isMaintenance())
                             Sclat.sendMessage("§c§nこのサーバーは現在メンテナンス中のため参加できません", MessageType.PLAYER, player);
                         else
                             Sclat.sendMessage("§c§nこのサーバーは現在再起動中です1~2分程度お待ちください。", MessageType.PLAYER, player);
@@ -216,280 +249,280 @@ public class ClickListener implements Listener{
                 }
             }
         }
-        
-        if(event.getView().getTitle().equals("武器選択")){
-            if(name.equals("装備選択へ戻る") || name.equals("戻る") || name.equals("シューター") || name.equals("ローラー") || name.equals("チャージャー") || name.equals("ブラスター") || name.equals("バーストシューター") || name.equals("スロッシャー") || name.equals("シェルター") || name.equals("ブラシ") || name.equals("スピナー") || name.equals("マニューバー") || name.equals("ハウンド") || name.equals("スワッパー") || name.equals("ドラグーン") || name.equals("リーラー") || name.equals("バックラー")){
-                switch(name){
-                    case"シューター":
+
+        if (event.getView().getTitle().equals("武器選択")) {
+            if (name.equals("装備選択へ戻る") || name.equals("戻る") || name.equals("シューター") || name.equals("ローラー") || name.equals("チャージャー") || name.equals("ブラスター") || name.equals("バーストシューター") || name.equals("スロッシャー") || name.equals("シェルター") || name.equals("ブラシ") || name.equals("スピナー") || name.equals("マニューバー") || name.equals("ハウンド") || name.equals("スワッパー") || name.equals("ドラグーン") || name.equals("リーラー") || name.equals("バックラー")) {
+                switch (name) {
+                    case "シューター":
                         OpenGUI.openWeaponSelect(player, "Weapon", "Shooter", false);
                         break;
-                    case"ブラスター":
+                    case "ブラスター":
                         OpenGUI.openWeaponSelect(player, "Weapon", "Blaster", false);
                         break;
-                    case"バーストシューター":
+                    case "バーストシューター":
                         OpenGUI.openWeaponSelect(player, "Weapon", "Burst", false);
                         break;
-                    case"ローラー":
+                    case "ローラー":
                         OpenGUI.openWeaponSelect(player, "Weapon", "Roller", false);
                         break;
-                    case"スロッシャー":
+                    case "スロッシャー":
                         OpenGUI.openWeaponSelect(player, "Weapon", "Slosher", false);
                         break;
-                    case"シェルター":
+                    case "シェルター":
                         OpenGUI.openWeaponSelect(player, "Weapon", "Kasa", false);
                         break;
-                    case"ブラシ":
+                    case "ブラシ":
                         OpenGUI.openWeaponSelect(player, "Weapon", "Hude", false);
                         break;
-                    case"スピナー":
+                    case "スピナー":
                         OpenGUI.openWeaponSelect(player, "Weapon", "Spinner", false);
                         break;
-                    case"チャージャー":
+                    case "チャージャー":
                         OpenGUI.openWeaponSelect(player, "Weapon", "Charger", false);
                         break;
-                    case"マニューバー":
+                    case "マニューバー":
                         OpenGUI.openWeaponSelect(player, "Weapon", "Maneu", false);
                         break;
-                    case"ハウンド":
+                    case "ハウンド":
                         OpenGUI.openWeaponSelect(player, "Weapon", "Hound", false);
                         break;
-                    case"スワッパー":
+                    case "スワッパー":
                         OpenGUI.openWeaponSelect(player, "Weapon", "Swapper", false);
                         break;
-                    case"ドラグーン":
+                    case "ドラグーン":
                         OpenGUI.openWeaponSelect(player, "Weapon", "Funnel", false);
                         break;
-                    case"リーラー":
+                    case "リーラー":
                         OpenGUI.openWeaponSelect(player, "Weapon", "Reeler", false);
                         break;
-                    case"バックラー":
+                    case "バックラー":
                         OpenGUI.openWeaponSelect(player, "Weapon", "Buckler", false);
                         break;
-                    case"戻る":
+                    case "戻る":
                         OpenGUI.openWeaponSelect(player, "Main", "null", false);
                         break;
-                    case"装備選択へ戻る":
+                    case "装備選択へ戻る":
                         OpenGUI.equipmentGUI(player, false);
                         break;
                 }
                 return;
             }
-            if(name.contains("§6レベル")){
+            if (name.contains("§6レベル")) {
                 Sclat.sendMessage("§cレベルが足りないため、まだ選択できません", MessageType.PLAYER, player);
                 Sclat.playGameSound(player, SoundType.ERROR);
                 return;
             }
             //試しうちモード
-            if(conf.getConfig().getString("WorkMode").equals("Trial")){
-                
+            if (conf.getConfig().getString("WorkMode").equals("Trial")) {
+
                 player.getInventory().clear();
                 DataMgr.getPlayerData(player).reset();
                 DataMgr.getPlayerData(player).setIsInMatch(false);
                 DataMgr.getPlayerData(player).setIsJoined(false);
-                
-                for(ArmorStand as : DataMgr.getBeaconMap().values()){
-                    if(DataMgr.getBeaconFromplayer(player) == as)
+
+                for (ArmorStand as : DataMgr.getBeaconMap().values()) {
+                    if (DataMgr.getBeaconFromplayer(player) == as)
                         as.remove();
                 }
-                for(ArmorStand as : DataMgr.getSprinklerMap().values()){
-                    if(DataMgr.getSprinklerFromplayer(player) == as)
+                for (ArmorStand as : DataMgr.getSprinklerMap().values()) {
+                    if (DataMgr.getSprinklerFromplayer(player) == as)
                         as.remove();
                 }
 
-                BukkitRunnable delay = new BukkitRunnable(){
-                    Player p = player;
+                BukkitRunnable delay = new BukkitRunnable() {
+                    final Player p = player;
+
                     @Override
-                    public void run(){
+                    public void run() {
                         DataMgr.getPlayerData(p).setIsInMatch(true);
                         DataMgr.getPlayerData(p).setIsJoined(true);
                         DataMgr.getPlayerData(p).setMainItemGlow(false);
                         DataMgr.getPlayerData(p).setTick(10);
                         WeaponClass wc = DataMgr.getWeaponClass(name);
                         DataMgr.getPlayerData(p).setWeaponClass(wc);
-                        if(DataMgr.getPlayerData(p).getWeaponClass().getSubWeaponName().equals("ビーコン"))
+                        if (DataMgr.getPlayerData(p).getWeaponClass().getSubWeaponName().equals("ビーコン"))
                             ArmorStandMgr.BeaconArmorStandSetup(p);
-                        if(DataMgr.getPlayerData(p).getWeaponClass().getSubWeaponName().equals("スプリンクラー"))
+                        if (DataMgr.getPlayerData(p).getWeaponClass().getSubWeaponName().equals("スプリンクラー"))
                             ArmorStandMgr.SprinklerArmorStandSetup(p);
-                        if(DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getIsSwap()){
+                        if (DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getIsSwap()) {
                             Swapper.SwapperRunnable(p);
-                            if(DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getSlidingShootTick()>1) {
+                            if (DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getSlidingShootTick() > 1) {
                                 Shooter.ManeuverShootRunnable(p);
                                 DataMgr.getPlayerData(p).setIsUsingManeuver(true);
                             }
                         }
-                        if(DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getWeaponType().equals("Shooter")){
+                        if (DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getWeaponType().equals("Shooter")) {
                             Shooter.ShooterRunnable(p);
-                            if(DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getIsManeuver()){
-                                if(DataMgr.getPlayerData(p).getSettings().doChargeKeep()) {
+                            if (DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getIsManeuver()) {
+                                if (DataMgr.getPlayerData(p).getSettings().doChargeKeep()) {
                                     Shooter.ManeuverRunnable(p);
-                                }else{
+                                } else {
                                     Manuber.ManeuverRunnable(p);
                                 }
                                 Shooter.ManeuverShootRunnable(p);
                             }
                         }
-                        if(DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getWeaponType().equals("Reeler")){
+                        if (DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getWeaponType().equals("Reeler")) {
                             Shooter.ShooterRunnable(p);
                             Reeler.ReelerRunnable(p);
                             Reeler.ReelerShootRunnable(p);
                         }
-                        if(DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getWeaponType().equals("Blaster")){
-                            if(DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getIsManeuver()){
+                        if (DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getWeaponType().equals("Blaster")) {
+                            if (DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getIsManeuver()) {
                                 Shooter.ManeuverRunnable(p);
                             }
                         }
-                        if(DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getWeaponType().equals("Charger")) {
+                        if (DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getWeaponType().equals("Charger")) {
                             Charger.ChargerRunnable(p);
                             Decoy.DecoyRunnable(p);
                         }
-                        if(DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getWeaponType().equals("Spinner"))
+                        if (DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getWeaponType().equals("Spinner"))
                             Spinner.SpinnerRunnable(p);
-                        if(DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getWeaponType().equals("Roller")){
-                            if(DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getIsHude()){
+                        if (DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getWeaponType().equals("Roller")) {
+                            if (DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getIsHude()) {
                                 Brush.HoldRunnable(p);
                                 Brush.RollPaintRunnable(p);
-                            }else {
+                            } else {
                                 Roller.HoldRunnable(p);
                                 Roller.RollPaintRunnable(p);
                             }
                         }
 
-                        if(DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getWeaponType().equals("Kasa")){
+                        if (DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getWeaponType().equals("Kasa")) {
                             Kasa.KasaRunnable(p, false);
                         }
 
-                        if(DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getWeaponType().equals("Camping")){
+                        if (DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getWeaponType().equals("Camping")) {
                             Kasa.KasaRunnable(p, true);
                             DataMgr.getPlayerData(p).setMainItemGlow(true);
                             WeaponClassMgr.setWeaponClass(p);
                         }
-                        if(DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getWeaponType().equals("Buckler")) {
+                        if (DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getWeaponType().equals("Buckler")) {
                             Shooter.ShooterRunnable(p);
                             Buckler.BucklerRunnable(p);
                         }
-                        if(DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getWeaponType().equals("Bucket")) {
+                        if (DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getWeaponType().equals("Bucket")) {
                             Bucket.BucketHealRunnable(p, 1);
                         }
-                        if(DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getWeaponType().equals("Slosher")){
-                            Bucket.BucketHealRunnable(p,0);
+                        if (DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getWeaponType().equals("Slosher")) {
+                            Bucket.BucketHealRunnable(p, 0);
                         }
-                        if(DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getWeaponType().equals("Hound")){
+                        if (DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getWeaponType().equals("Hound")) {
                             Hound.HoundRunnable(p);
                             Hound.HoundEXRunnable(p);
                         }
-                        if(DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getWeaponType().equals("Funnel")){
+                        if (DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getWeaponType().equals("Funnel")) {
                             Shooter.ShooterRunnable(p);
                             Funnel.FunnelFloat(p);
                         }
                         WeaponClassMgr.setWeaponClass(p);
                         player.setExp(0.99F);
-                        
+
                         //p.setScoreboard(DataMgr.getPlayerData(p).getMatch().getScoreboard());
                         //DataMgr.getPlayerData(p).getTeam().getTeam().addEntry(p.getName());
-                        
+
                         SPWeaponMgr.SPWeaponRunnable(player);
                         SquidMgr.SquidShowRunnable(player);
                     }
                 };
                 delay.runTaskLater(Main.getPlugin(), 15);
-            }else{
+            } else {
                 DataMgr.getPlayerData(player).setWeaponClass(DataMgr.getWeaponClass(name));
             }
             Sclat.sendMessage("ブキ[" + ChatColor.GOLD + name + ChatColor.RESET + "]を選択しました", MessageType.PLAYER, player);
         }
-        
-        if(event.getView().getTitle().equals("Shop")){
-            if(name.equals("装備選択へ戻る") || name.equals("戻る") || name.equals("シューター") || name.equals("ローラー") || name.equals("チャージャー") || name.equals("ブラスター") || name.equals("バーストシューター") || name.equals("スロッシャー") || name.equals("シェルター") || name.equals("ブラシ") || name.equals("スピナー") || name.equals("マニューバー") || name.equals("ハウンド") || name.equals("スワッパー") || name.equals("ドラグーン") || name.equals("リーラー") || name.equals("バックラー")){
-                switch(name){
-                    case"シューター":
+
+        if (event.getView().getTitle().equals("Shop")) {
+            if (name.equals("装備選択へ戻る") || name.equals("戻る") || name.equals("シューター") || name.equals("ローラー") || name.equals("チャージャー") || name.equals("ブラスター") || name.equals("バーストシューター") || name.equals("スロッシャー") || name.equals("シェルター") || name.equals("ブラシ") || name.equals("スピナー") || name.equals("マニューバー") || name.equals("ハウンド") || name.equals("スワッパー") || name.equals("ドラグーン") || name.equals("リーラー") || name.equals("バックラー")) {
+                switch (name) {
+                    case "シューター":
                         OpenGUI.openWeaponSelect(player, "Weapon", "Shooter", true);
                         break;
-                    case"ブラスター":
+                    case "ブラスター":
                         OpenGUI.openWeaponSelect(player, "Weapon", "Blaster", true);
                         break;
-                    case"バーストシューター":
+                    case "バーストシューター":
                         OpenGUI.openWeaponSelect(player, "Weapon", "Burst", true);
                         break;
-                    case"ローラー":
+                    case "ローラー":
                         OpenGUI.openWeaponSelect(player, "Weapon", "Roller", true);
                         break;
-                    case"スロッシャー":
+                    case "スロッシャー":
                         OpenGUI.openWeaponSelect(player, "Weapon", "Slosher", true);
                         break;
-                    case"シェルター":
+                    case "シェルター":
                         OpenGUI.openWeaponSelect(player, "Weapon", "Kasa", true);
                         break;
-                    case"ブラシ":
+                    case "ブラシ":
                         OpenGUI.openWeaponSelect(player, "Weapon", "Hude", true);
                         break;
-                    case"スピナー":
+                    case "スピナー":
                         OpenGUI.openWeaponSelect(player, "Weapon", "Spinner", true);
                         break;
-                    case"チャージャー":
+                    case "チャージャー":
                         OpenGUI.openWeaponSelect(player, "Weapon", "Charger", true);
                         break;
-                    case"マニューバー":
+                    case "マニューバー":
                         OpenGUI.openWeaponSelect(player, "Weapon", "Maneu", true);
                         break;
-                    case"ハウンド":
+                    case "ハウンド":
                         OpenGUI.openWeaponSelect(player, "Weapon", "Hound", true);
                         break;
-                    case"スワッパー":
+                    case "スワッパー":
                         OpenGUI.openWeaponSelect(player, "Weapon", "Swapper", true);
                         break;
-                    case"ドラグーン":
+                    case "ドラグーン":
                         OpenGUI.openWeaponSelect(player, "Weapon", "Funnel", true);
                         break;
-                    case"リーラー":
+                    case "リーラー":
                         OpenGUI.openWeaponSelect(player, "Weapon", "Reeler", true);
                         break;
-                    case"バックラー":
+                    case "バックラー":
                         OpenGUI.openWeaponSelect(player, "Weapon", "Buckler", true);
                         break;
-                    case"戻る":
+                    case "戻る":
                         OpenGUI.openWeaponSelect(player, "Main", "null", true);
                         break;
-                    case"装備選択へ戻る":
+                    case "装備選択へ戻る":
                         OpenGUI.equipmentGUI(player, true);
                         break;
                 }
                 return;
             }
-            if(name.contains("§6レベル")){
+            if (name.contains("§6レベル")) {
                 Sclat.sendMessage("§cレベルが足りないため、まだ購入できません", MessageType.PLAYER, player);
                 Sclat.playGameSound(player, SoundType.ERROR);
                 return;
             }
-            if(name.contains("§6ガチャ武器です")){
+            if (name.contains("§6ガチャ武器です")) {
                 Sclat.sendMessage("§cガチャから手に入るよ", MessageType.PLAYER, player);
                 Sclat.playGameSound(player, SoundType.ERROR);
                 return;
             }
-            
-            player.closeInventory();
-            if(DataMgr.getWeaponClass(name).getMainWeapon().getIslootbox()){
 
-            }
-            else if(PlayerStatusMgr.getMoney(player) >= DataMgr.getWeaponClass(name).getMainWeapon().getMoney()){
+            player.closeInventory();
+            if (DataMgr.getWeaponClass(name).getMainWeapon().getIslootbox()) {
+
+            } else if (PlayerStatusMgr.getMoney(player) >= DataMgr.getWeaponClass(name).getMainWeapon().getMoney()) {
                 PlayerStatusMgr.addWeapon(player, name);
                 PlayerStatusMgr.subMoney(player, DataMgr.getWeaponClass(name).getMainWeapon().getMoney());
                 Sclat.sendMessage(ChatColor.GREEN + "購入に成功しました", MessageType.PLAYER, player);
                 Sclat.playGameSound(player, SoundType.SUCCESS);
                 PlayerStatusMgr.sendHologramUpdate(player);
-            }else{
+            } else {
                 Sclat.sendMessage(ChatColor.RED + "お金が足りません", MessageType.PLAYER, player);
                 Sclat.playGameSound(player, SoundType.ERROR);
             }
         }
-        
-        if(event.getView().getTitle().equals("Chose Target")){
-            if(name.equals("§r§6リスポーン地点へジャンプ")){
+
+        if (event.getView().getTitle().equals("Chose Target")) {
+            if (name.equals("§r§6リスポーン地点へジャンプ")) {
                 Location loc = Main.lobby.clone();
-                if(!conf.getConfig().getString("WorkMode").equals("Trial"))
+                if (!conf.getConfig().getString("WorkMode").equals("Trial"))
                     loc = DataMgr.getPlayerData(player).getMatchLocation();
                 SuperJumpMgr.SuperJumpCollTime(player, loc, false);
             }
-            if(name.equals("§r§6ロビーへジャンプ")){
+            if (name.equals("§r§6ロビーへジャンプ")) {
                 String WorldName = conf.getConfig().getString("LobbyJump.WorldName");
                 World w = Bukkit.getWorld(WorldName);
                 int ix = conf.getConfig().getInt("LobbyJump.X");
@@ -498,40 +531,40 @@ public class ClickListener implements Listener{
                 Location loc = new Location(w, ix + 0.5, iy, iz + 0.5);
                 SuperJumpMgr.SuperJumpCollTime(player, loc, true);
             }
-            boolean nearspwan =true;
+            boolean nearspwan = true;
             Location spawnloc = Main.lobby.clone();
-            if(!conf.getConfig().getString("WorkMode").equals("Trial"))
+            if (!conf.getConfig().getString("WorkMode").equals("Trial"))
                 spawnloc = DataMgr.getPlayerData(player).getMatchLocation();
-            if(spawnloc.getWorld() == player.getWorld()){
-                if(player.getLocation().distance(spawnloc) > 10 && !Tutorial.clearList.contains(player))
-                    if(!Main.tutorial){
+            if (spawnloc.getWorld() == player.getWorld()) {
+                if (player.getLocation().distance(spawnloc) > 10 && !Tutorial.clearList.contains(player))
+                    if (!Main.tutorial) {
                         nearspwan = false;
                     }
             }
-            for(Player p : Main.getPlugin(Main.class).getServer().getOnlinePlayers()){
-                if (p.getName().equals(name)){
-                    if(event.getCurrentItem().getType().equals(Material.PLAYER_HEAD)) {
-                        if(p.getGameMode() == GameMode.SPECTATOR){
+            for (Player p : Main.getPlugin(Main.class).getServer().getOnlinePlayers()) {
+                if (p.getName().equals(name)) {
+                    if (event.getCurrentItem().getType().equals(Material.PLAYER_HEAD)) {
+                        if (p.getGameMode() == GameMode.SPECTATOR) {
                             Sclat.sendMessage("§c今そのプレイヤーにはジャンプできない！", MessageType.PLAYER, player);
                             Sclat.playGameSound(player, SoundType.ERROR);
                             break;
                         }
-                        SuperJumpMgr.SuperJumpCollTime(player, DataMgr.getPlayerData(p).getPlayerGroundLocation(),nearspwan);
+                        SuperJumpMgr.SuperJumpCollTime(player, DataMgr.getPlayerData(p).getPlayerGroundLocation(), nearspwan);
                     }
-                    if(event.getCurrentItem().getType().equals(Material.IRON_TRAPDOOR))
-                        SuperJumpMgr.SuperJumpCollTime(player, DataMgr.getBeaconFromplayer(p).getLocation(),nearspwan);
+                    if (event.getCurrentItem().getType().equals(Material.IRON_TRAPDOOR))
+                        SuperJumpMgr.SuperJumpCollTime(player, DataMgr.getBeaconFromplayer(p).getLocation(), nearspwan);
                 }
             }
         }
-        
-        
-        if(event.getView().getTitle().equals("設定")){
-            if(name.equals("戻る")){
+
+
+        if (event.getView().getTitle().equals("設定")) {
+            if (name.equals("戻る")) {
                 OpenGUI.openMenu(player);
                 return;
             }
-            
-            switch (name){
+
+            switch (name) {
                 case "メインウエポンのインクエフェクト":
                     DataMgr.getPlayerData(player).getSettings().S_ShowEffect_MainWeaponInk();
                     break;
@@ -560,11 +593,11 @@ public class ClickListener implements Listener{
                     DataMgr.getPlayerData(player).getSettings().S_doChargeKeep();
                     break;
             }
-            
+
             OpenGUI.openSettingsUI(player);
-            
+
             player.playNote(player.getLocation(), Instrument.STICKS, Note.flat(1, Note.Tone.C));
-            
+
             String B = DataMgr.getPlayerData(player).getSettings().PlayBGM() ? "1" : "0";
             String E_S = DataMgr.getPlayerData(player).getSettings().ShowEffect_MainWeaponInk() ? "1" : "0";
             String E_CL = DataMgr.getPlayerData(player).getSettings().ShowEffect_ChargerLine() ? "1" : "0";
@@ -575,29 +608,29 @@ public class ClickListener implements Listener{
             String E_B = DataMgr.getPlayerData(player).getSettings().ShowEffect_Bomb() ? "1" : "0";
             String E_BEx = DataMgr.getPlayerData(player).getSettings().ShowEffect_BombEx() ? "1" : "0";
             String ck = DataMgr.getPlayerData(player).getSettings().doChargeKeep() ? "1" : "0";
-            
+
             String s_data = B + E_S + E_CL + E_CS + E_RR + E_RS + E_B + E_BEx + ck;
-            
+
             String uuid = player.getUniqueId().toString();
             conf.getPlayerSettings().set("Settings." + uuid, s_data);
         }
-        
-        if(!player.getGameMode().equals(GameMode.CREATIVE))
+
+        if (!player.getGameMode().equals(GameMode.CREATIVE))
             event.setCancelled(true);
     }
-    
+
     @EventHandler
-    public void onOpenMainMenu(PlayerInteractEvent event){
-        Player player = (Player)event.getPlayer();
+    public void onOpenMainMenu(PlayerInteractEvent event) {
+        Player player = event.getPlayer();
         Action action = event.getAction();
-        
-        if(player.getInventory().getItemInMainHand() == null || player.getInventory().getItemInMainHand().getItemMeta() == null || player.getInventory().getItemInMainHand().getItemMeta().getDisplayName() == null)
+
+        if (player.getInventory().getItemInMainHand() == null || player.getInventory().getItemInMainHand().getItemMeta() == null || player.getInventory().getItemInMainHand().getItemMeta().getDisplayName() == null)
             return;
-        
-        if(action.equals(Action.RIGHT_CLICK_AIR) || action.equals(Action.RIGHT_CLICK_BLOCK) || action.equals(Action.LEFT_CLICK_AIR) || action.equals(Action.LEFT_CLICK_BLOCK)){
-            if(player.getInventory().getItemInMainHand().getType().equals(Material.CHEST))
+
+        if (action.equals(Action.RIGHT_CLICK_AIR) || action.equals(Action.RIGHT_CLICK_BLOCK) || action.equals(Action.LEFT_CLICK_AIR) || action.equals(Action.LEFT_CLICK_BLOCK)) {
+            if (player.getInventory().getItemInMainHand().getType().equals(Material.CHEST))
                 OpenGUI.openMenu(player);
-            switch (player.getInventory().getItemInMainHand().getItemMeta().getDisplayName()){
+            switch (player.getInventory().getItemInMainHand().getItemMeta().getDisplayName()) {
                 case "スーパージャンプ":
                     OpenGUI.SuperJumpGUI(player);
                     break;
@@ -609,9 +642,9 @@ public class ClickListener implements Listener{
                     MatchMgr.PlayerJoinMatch(player);
                     break;
             }
-            if(player.getInventory().getItemInMainHand().getItemMeta().getDisplayName().equals("スーパージャンプ"))
+            if (player.getInventory().getItemInMainHand().getItemMeta().getDisplayName().equals("スーパージャンプ"))
                 OpenGUI.SuperJumpGUI(player);
-            
+
         }
     }
 }

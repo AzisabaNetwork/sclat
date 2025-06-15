@@ -1,4 +1,3 @@
-
 package be4rjp.sclat.manager;
 
 import be4rjp.sclat.GaugeAPI;
@@ -12,19 +11,17 @@ import be4rjp.sclat.weapon.spweapon.Amehurasi;
 import be4rjp.sclat.weapon.spweapon.Barrier;
 import be4rjp.sclat.weapon.spweapon.BombRush;
 import be4rjp.sclat.weapon.spweapon.JetPack;
+import be4rjp.sclat.weapon.spweapon.LitterFiveG;
 import be4rjp.sclat.weapon.spweapon.MegaLaser;
 import be4rjp.sclat.weapon.spweapon.MultiMissile;
+import be4rjp.sclat.weapon.spweapon.QuadroArms;
 import be4rjp.sclat.weapon.spweapon.SuperArmor;
 import be4rjp.sclat.weapon.spweapon.SuperSensor;
 import be4rjp.sclat.weapon.spweapon.SuperShot;
-import be4rjp.sclat.weapon.spweapon.LitterFiveG;
-import be4rjp.sclat.weapon.spweapon.QuadroArms;
 import be4rjp.sclat.weapon.spweapon.SuperTyakuti;
 import be4rjp.sclat.weapon.spweapon.SwordMord;
-import be4rjp.sclat.weapon.subweapon.QuickBomb;
-import be4rjp.sclat.weapon.subweapon.SplashBomb;
-import net.md_5.bungee.api.ChatColor;
-import org.bukkit.*;
+import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarFlag;
 import org.bukkit.boss.BarStyle;
@@ -35,36 +32,35 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
 /**
- *
  * @author Be4rJP
  */
 public class SPWeaponMgr {
-    
-    public static void addSPCharge(Player player){
+
+    public static void addSPCharge(Player player) {
         PlayerData data = DataMgr.getPlayerData(player);
-        if(data.getSPGauge() < 100)
+        if (data.getSPGauge() < 100)
             data.addSPGauge();
     }
-    
-    public static void resetSPCharge(Player player){
+
+    public static void resetSPCharge(Player player) {
         PlayerData data = DataMgr.getPlayerData(player);
-        if(data.getSPGauge() > 20)
+        if (data.getSPGauge() > 20)
             data.setSPGauge(20);
     }
-    
-    public static String getSPGauge(Player player){
+
+    public static String getSPGauge(Player player) {
         PlayerData data = DataMgr.getPlayerData(player);
-        if(data.getSPGauge() == 100)
+        if (data.getSPGauge() == 100)
             return "§b§n! READY !";
         return GaugeAPI.toGauge(data.getSPGauge() / 5, 20, "§a", "§7");
     }
-    
-    public static void SPWeaponHuriRunnable(Player player){
+
+    public static void SPWeaponHuriRunnable(Player player) {
         PlayerData data = DataMgr.getPlayerData(player);
         BukkitRunnable task = new BukkitRunnable() {
             @Override
             public void run() {
-                if(!player.isOnline() || !data.isInMatch())
+                if (!player.isOnline() || !data.isInMatch())
                     cancel();
                 try {
                     int myTeam = 0;
@@ -81,59 +77,62 @@ public class SPWeaponMgr {
                             }
                         }
                     }
-    
+
                     if (myTeam < enemyTeam) {
                         addSPCharge(player);
                         addSPCharge(player);
                     }
-                }catch (Exception e){cancel();}
+                } catch (Exception e) {
+                    cancel();
+                }
             }
         };
         task.runTaskTimer(Main.getPlugin(), 0, 20);
     }
-    
-    public static void SPWeaponRunnable(Player player){
-        BukkitRunnable task = new BukkitRunnable(){
-            Player p = player;
-            
+
+    public static void SPWeaponRunnable(Player player) {
+        BukkitRunnable task = new BukkitRunnable() {
+            final Player p = player;
+
             @Override
-            public void run(){
+            public void run() {
                 PlayerData data = DataMgr.getPlayerData(p);
-                if(data.getSPGauge() == 100){
-                    if(!data.getIsSP()){
+                if (data.getSPGauge() == 100) {
+                    if (!data.getIsSP()) {
                         setSPWeapon(p);
                         p.playSound(p.getLocation(), Sound.BLOCK_CHEST_OPEN, 0.8F, 2);
                         Sclat.sendMessage("§6§l！ スペシャルウエポン使用可能 ！", MessageType.PLAYER, player);
                         data.setIsUsingSP(false);
                     }
                     DataMgr.getPlayerData(p).setIsSP(true);
-                }else{
-                    if(!(data.getWeaponClass().getSPWeaponName().equals("インクストライク") || data.getWeaponClass().getSPWeaponName().equals("ジェットパック") || data.getWeaponClass().getSPWeaponName().equals("スーパーショット") || data.getWeaponClass().getSPWeaponName().equals("クアドロアームズ") || data.getWeaponClass().getSPWeaponName().equals("セイバーモード") || data.getWeaponClass().getSPWeaponName().equals("リッター5G")))
+                } else {
+                    if (!(data.getWeaponClass().getSPWeaponName().equals("インクストライク") || data.getWeaponClass().getSPWeaponName().equals("ジェットパック") || data.getWeaponClass().getSPWeaponName().equals("スーパーショット") || data.getWeaponClass().getSPWeaponName().equals("クアドロアームズ") || data.getWeaponClass().getSPWeaponName().equals("セイバーモード") || data.getWeaponClass().getSPWeaponName().equals("リッター5G")))
                         p.getInventory().setItem(4, new ItemStack(Material.AIR));
                     DataMgr.getPlayerData(p).setIsSP(false);
                 }
-                if(!DataMgr.getPlayerData(p).isInMatch())
+                if (!DataMgr.getPlayerData(p).isInMatch())
                     cancel();
             }
         };
         task.runTaskTimer(Main.getPlugin(), 0, 5);
-        
+
         BossBar bar = Main.getPlugin().getServer().createBossBar("§6§lSpecial Weapon", BarColor.GREEN, BarStyle.SOLID, BarFlag.CREATE_FOG);
         bar.setProgress(0);
         bar.addPlayer(player);
-        
-        BukkitRunnable anime = new BukkitRunnable(){
-            Player p = player;
+
+        BukkitRunnable anime = new BukkitRunnable() {
+            final Player p = player;
+
             @Override
-            public void run(){
-                bar.setProgress((double)(DataMgr.getPlayerData(p).getSPGauge()) / 100D);
-                if(DataMgr.getPlayerData(p).getSPGauge() == 100)
+            public void run() {
+                bar.setProgress((double) (DataMgr.getPlayerData(p).getSPGauge()) / 100D);
+                if (DataMgr.getPlayerData(p).getSPGauge() == 100)
                     bar.setTitle("§b§lREADY");
-                else if(DataMgr.getPlayerData(p).getIsUsingSP())
+                else if (DataMgr.getPlayerData(p).getIsUsingSP())
                     bar.setTitle("§6§lIn Use : §r" + DataMgr.getPlayerData(p).getSPGauge() + "%");
                 else
                     bar.setTitle("§6§lSpecial Weapon : §r" + DataMgr.getPlayerData(p).getSPGauge() + "%");
-                if(!DataMgr.getPlayerData(p).isInMatch() || !p.isOnline()){
+                if (!DataMgr.getPlayerData(p).isInMatch() || !p.isOnline()) {
                     DataMgr.getPlayerData(p).setIsUsingSP(false);
                     bar.removeAll();
                     cancel();
@@ -142,25 +141,26 @@ public class SPWeaponMgr {
         };
         anime.runTaskTimer(Main.getPlugin(), 0, 2);
     }
-    
-    public static void ArmorRunnable(Player player){
+
+    public static void ArmorRunnable(Player player) {
         BossBar bar = Main.getPlugin().getServer().createBossBar(DataMgr.getPlayerData(player).getTeam().getTeamColor().getColorCode() + "§lInk Armor", BarColor.YELLOW, BarStyle.SOLID, BarFlag.CREATE_FOG);
         bar.setProgress(0);
         bar.addPlayer(player);
-    
-        BukkitRunnable anime = new BukkitRunnable(){
-            Player p = player;
+
+        BukkitRunnable anime = new BukkitRunnable() {
+            final Player p = player;
+
             @Override
-            public void run(){
+            public void run() {
                 PlayerData data = DataMgr.getPlayerData(p);
-                if(data.getArmor() > 0) {
+                if (data.getArmor() > 0) {
                     bar.setProgress(data.getArmor() >= 30 ? 1D : data.getArmor() / 30D);
                     if (!bar.getPlayers().contains(p))
                         bar.addPlayer(p);
-                }else {
+                } else {
                     bar.removeAll();
                 }
-                if(!DataMgr.getPlayerData(p).isInMatch() || !p.isOnline()){
+                if (!DataMgr.getPlayerData(p).isInMatch() || !p.isOnline()) {
                     bar.removeAll();
                     cancel();
                 }
@@ -168,25 +168,26 @@ public class SPWeaponMgr {
         };
         anime.runTaskTimer(Main.getPlugin(), 0, 5);
     }
-    
-    public static void setSPCoolTimeAnimation(Player player, int tick){
-        
+
+    public static void setSPCoolTimeAnimation(Player player, int tick) {
+
         PlayerData data = DataMgr.getPlayerData(player);
-        
-        BukkitRunnable task = new BukkitRunnable(){
-            Player p = player;
+
+        BukkitRunnable task = new BukkitRunnable() {
+            final Player p = player;
+            final double i = tick;
             double t = tick;
-            double i = tick;
+
             @Override
-            public void run(){
-                if(t == tick)
+            public void run() {
+                if (t == tick)
                     data.setIsUsingSP(true);
                 t--;
-                int sp = (int)(t / i * 100);
+                int sp = (int) (t / i * 100);
                 data.setSPGauge(sp);
-                if(t <= 0){
+                if (t <= 0) {
                     data.setIsUsingSP(false);
-                    if(data.isInMatch()){
+                    if (data.isInMatch()) {
                         BukkitRunnable sync = new BukkitRunnable() {
                             @Override
                             public void run() {
@@ -202,23 +203,23 @@ public class SPWeaponMgr {
         };
         task.runTaskTimerAsynchronously(Main.getPlugin(), 0, 1);
     }
-    
-    public static void setSPWeapon(Player p){
+
+    public static void setSPWeapon(Player p) {
         PlayerData data = DataMgr.getPlayerData(p);
-        switch (data.getWeaponClass().getSPWeaponName()){
+        switch (data.getWeaponClass().getSPWeaponName()) {
             case "インクアーマー":
                 ItemStack is = new ItemStack(Material.TOTEM_OF_UNDYING);
                 ItemMeta ism = is.getItemMeta();
                 ism.setDisplayName("インクアーマー");
                 is.setItemMeta(ism);
-                p.getInventory().setItem(4, is); 
+                p.getInventory().setItem(4, is);
                 break;
             case "バリア":
                 ItemStack b = new ItemStack(Material.END_CRYSTAL);
                 ItemMeta bm = b.getItemMeta();
                 bm.setDisplayName("バリア");
                 b.setItemMeta(bm);
-                p.getInventory().setItem(4, b); 
+                p.getInventory().setItem(4, b);
                 break;
             case "ボムラッシュ":
                 ItemStack is1 = new ItemStack(Material.FEATHER);
@@ -306,18 +307,18 @@ public class SPWeaponMgr {
                 break;
         }
     }
-    
-    public static void UseSPWeapon(Player player, String name){
+
+    public static void UseSPWeapon(Player player, String name) {
         PlayerData data = DataMgr.getPlayerData(player);
-        
-        if(data.getIsJumping() && !name.equals("スーパーチャクチ")) return;
-        
+
+        if (data.getIsJumping() && !name.equals("スーパーチャクチ")) return;
+
         switch (name) {
             case "カーソルを合わせて右クリックで発射":
-                AirStrike.AirStrikeRunnable(player,false);
+                AirStrike.AirStrikeRunnable(player, false);
                 break;
             case "カーソルを合わせて右クリックで発射!":
-                AirStrike.AirStrikeRunnable(player,true);
+                AirStrike.AirStrikeRunnable(player, true);
                 break;
             case "プレイヤーを狙って右クリックで発射":
                 DataMgr.getPlayerData(player).setIsUsingMM(false);
@@ -326,8 +327,8 @@ public class SPWeaponMgr {
                 DataMgr.getPlayerData(player).setIsUsingMM(false);
                 break;
         }
-        
-        if(data.getIsUsingSP())
+
+        if (data.getIsUsingSP())
             return;
         switch (name) {
             case "インクアーマー":
@@ -337,7 +338,7 @@ public class SPWeaponMgr {
                 //        SuperArmor.setArmor(op, 20, 80, true);
                 //    }
                 //}
-                for(int inventnum = 0; inventnum<9; inventnum++) {
+                for (int inventnum = 0; inventnum < 9; inventnum++) {
                     if (player.getInventory().getItem(inventnum) != null) {
                         if (player.getInventory().getItem(inventnum).getType() == Material.TOTEM_OF_UNDYING) {
                             player.getInventory().setItem(inventnum, new ItemStack(Material.AIR));
@@ -349,7 +350,7 @@ public class SPWeaponMgr {
                 break;
             case "バリア":
                 Barrier.BarrierRunnable(player);
-                for(int inventnum = 0; inventnum<9; inventnum++) {
+                for (int inventnum = 0; inventnum < 9; inventnum++) {
                     if (player.getInventory().getItem(inventnum) != null) {
                         if (player.getInventory().getItem(inventnum).getType() == Material.END_CRYSTAL) {
                             player.getInventory().setItem(inventnum, new ItemStack(Material.AIR));
@@ -361,7 +362,7 @@ public class SPWeaponMgr {
                 break;
             case "ボムラッシュ":
                 BombRush.BombRushRunnable(player);
-                for(int inventnum = 0; inventnum<9; inventnum++) {
+                for (int inventnum = 0; inventnum < 9; inventnum++) {
                     if (player.getInventory().getItem(inventnum) != null) {
                         if (player.getInventory().getItem(inventnum).getType() == Material.FEATHER) {
                             player.getInventory().setItem(inventnum, new ItemStack(Material.AIR));
@@ -373,7 +374,7 @@ public class SPWeaponMgr {
                 break;
             case "スーパーセンサー":
                 SuperSensor.SuperSensorRunnable(player);
-                for(int inventnum = 0; inventnum<9; inventnum++) {
+                for (int inventnum = 0; inventnum < 9; inventnum++) {
                     if (player.getInventory().getItem(inventnum) != null) {
                         if (player.getInventory().getItem(inventnum).getType() == Material.NETHER_STAR) {
                             player.getInventory().setItem(inventnum, new ItemStack(Material.AIR));
@@ -391,7 +392,7 @@ public class SPWeaponMgr {
                 break;
             case "アメフラシ":
                 Amehurasi.AmehurasiDropRunnable(player);
-                for(int inventnum = 0; inventnum<9; inventnum++) {
+                for (int inventnum = 0; inventnum < 9; inventnum++) {
                     if (player.getInventory().getItem(inventnum) != null) {
                         if (player.getInventory().getItem(inventnum).getType() == Material.BEACON) {
                             player.getInventory().setItem(inventnum, new ItemStack(Material.AIR));
@@ -458,7 +459,7 @@ public class SPWeaponMgr {
                 player.getInventory().setItem(4, new ItemStack(Material.AIR));
                 player.setExp(0.99F);
                 player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_USE, 1, 2);
-                
+
                 break;
         }
     }

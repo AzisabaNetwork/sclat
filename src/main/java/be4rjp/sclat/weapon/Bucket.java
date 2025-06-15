@@ -1,98 +1,94 @@
-
 package be4rjp.sclat.weapon;
 
 import be4rjp.sclat.Main;
-import static be4rjp.sclat.Main.conf;
 import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.data.PlayerData;
 import be4rjp.sclat.manager.PaintMgr;
-import be4rjp.sclat.manager.WeaponClassMgr;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
-import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.craftbukkit.v1_14_R1.entity.CraftSnowball;
 import org.bukkit.craftbukkit.v1_14_R1.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Snowball;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.potion.Potion;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 /**
- *
  * @author Be4rJP
  */
 public class Bucket {
-    public static void ShootBucket(Player player){
+    public static void ShootBucket(Player player) {
         PlayerData data = DataMgr.getPlayerData(player);
-        BukkitRunnable delay1 = new BukkitRunnable(){
-            Player p = player;
+        BukkitRunnable delay1 = new BukkitRunnable() {
+            final Player p = player;
+
             @Override
-            public void run(){
+            public void run() {
                 PlayerData data = DataMgr.getPlayerData(player);
                 data.setCanRollerShoot(true);
             }
         };
-        if(data.getCanRollerShoot())
+        if (data.getCanRollerShoot())
             delay1.runTaskLater(Main.getPlugin(), data.getWeaponClass().getMainWeapon().getCoolTime());
-        
-        BukkitRunnable delay = new BukkitRunnable(){
+
+        BukkitRunnable delay = new BukkitRunnable() {
             @Override
-            public void run(){
+            public void run() {
                 boolean sound = false;
                 for (int i = 0; i < data.getWeaponClass().getMainWeapon().getRollerShootQuantity(); i++) {
                     boolean is = Shoot(player, null);
-                    if(is) sound = true;
+                    if (is) sound = true;
                 }
-                if(sound) player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1F, 1.63F);
+                if (sound) player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1F, 1.63F);
             }
         };
-        BukkitRunnable delay2 = new BukkitRunnable(){
-            Player p = player;
+        BukkitRunnable delay2 = new BukkitRunnable() {
+            final Player p = player;
             int c = 0;
             boolean sound = false;
+
             @Override
-            public void run(){
+            public void run() {
                 c++;
                 int q = 2;
                 for (int i = 0; i < data.getWeaponClass().getMainWeapon().getRollerShootQuantity(); i++) {
                     boolean is = Shoot(player, null);
-                    if(is) sound = true;
+                    if (is) sound = true;
                 }
-                if(sound) player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1F, 1.63F);
-                if(c == q)
+                if (sound) player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1F, 1.63F);
+                if (c == q)
                     cancel();
             }
         };
-        if(data.getCanRollerShoot()){
+        if (data.getCanRollerShoot()) {
             //delay.runTaskLater(Main.getPlugin(), data.getWeaponClass().getMainWeapon().getDelay());
             delay2.runTaskTimer(Main.getPlugin(), 0, data.getWeaponClass().getMainWeapon().getDelay());
             data.setCanRollerShoot(false);
         }
     }
-    
-    public static boolean Shoot(Player player, Vector v){
 
-        if(player.getGameMode() == GameMode.SPECTATOR) return false;
+    public static boolean Shoot(Player player, Vector v) {
+
+        if (player.getGameMode() == GameMode.SPECTATOR) return false;
 
         PlayerData data = DataMgr.getPlayerData(player);
-        if(player.getExp() <= (float)(data.getWeaponClass().getMainWeapon().getNeedInk() * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) / Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP))){
+        if (player.getExp() <= (float) (data.getWeaponClass().getMainWeapon().getNeedInk() * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) / Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP))) {
             player.sendTitle("", ChatColor.RED + "インクが足りません", 0, 13, 2);
             return true;
         }
-        player.setExp(player.getExp() - (float)(data.getWeaponClass().getMainWeapon().getNeedInk() * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) / Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)));
+        player.setExp(player.getExp() - (float) (data.getWeaponClass().getMainWeapon().getNeedInk() * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) / Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)));
         Snowball ball = player.launchProjectile(Snowball.class);
-        ((CraftSnowball)ball).getHandle().setItem(CraftItemStack.asNMSCopy(new ItemStack(DataMgr.getPlayerData(player).getTeam().getTeamColor().getWool())));
+        ((CraftSnowball) ball).getHandle().setItem(CraftItemStack.asNMSCopy(new ItemStack(DataMgr.getPlayerData(player).getTeam().getTeamColor().getWool())));
         Vector vec = player.getLocation().getDirection().multiply(DataMgr.getPlayerData(player).getWeaponClass().getMainWeapon().getShootSpeed());
-        if(v != null)
+        if (v != null)
             vec = v;
         double random = DataMgr.getPlayerData(player).getWeaponClass().getMainWeapon().getRandom();
         int distick = DataMgr.getPlayerData(player).getWeaponClass().getMainWeapon().getDistanceTick();
-        vec.add(new Vector(Math.random() * random - random/2, Math.random() * random/1.5 - random/3, Math.random() * random - random/2));
+        vec.add(new Vector(Math.random() * random - random / 2, Math.random() * random / 1.5 - random / 3, Math.random() * random - random / 2));
         ball.setVelocity(vec);
         ball.setShooter(player);
         String name = String.valueOf(Main.getNotDuplicateNumber());
@@ -100,22 +96,23 @@ public class Bucket {
         ball.setCustomName(name);
         DataMgr.getMainSnowballNameMap().put(name, ball);
         DataMgr.setSnowballHitCount(name, 0);
-        BukkitRunnable task = new BukkitRunnable(){
+        BukkitRunnable task = new BukkitRunnable() {
+            final int tick = distick;
+            final Player p = player;
             int i = 0;
-            int tick = distick;
             Snowball inkball = ball;
-            Player p = player;
+            final Vector fallvec = new Vector(inkball.getVelocity().getX(), inkball.getVelocity().getY(), inkball.getVelocity().getZ()).multiply(DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getShootSpeed() / 17);
             boolean addedFallVec = false;
-            Vector fallvec = new Vector(inkball.getVelocity().getX(), inkball.getVelocity().getY()  , inkball.getVelocity().getZ()).multiply(DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getShootSpeed()/17);
+
             @Override
-            public void run(){
+            public void run() {
                 inkball = DataMgr.getMainSnowballNameMap().get(name);
-                        
-                if(!inkball.equals(ball)){
-                    i+=DataMgr.getSnowballHitCount(name) - 1;
+
+                if (!inkball.equals(ball)) {
+                    i += DataMgr.getSnowballHitCount(name) - 1;
                     DataMgr.setSnowballHitCount(name, 0);
                 }
-                if(i != 0) {
+                if (i != 0) {
                     for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
                         if (target.getWorld() != p.getWorld()) continue;
                         if (!DataMgr.getPlayerData(target).getSettings().ShowEffect_MainWeaponInk())
@@ -129,15 +126,15 @@ public class Bucket {
                     }
                 }
 
-                if(i >= tick && !addedFallVec){
+                if (i >= tick && !addedFallVec) {
                     inkball.setVelocity(fallvec);
                     addedFallVec = true;
                 }
-                if(i >= tick && i <= tick + 15)
+                if (i >= tick && i <= tick + 15)
                     inkball.setVelocity(inkball.getVelocity().add(new Vector(0, -0.1, 0)));
-                if(i != tick)
+                if (i != tick)
                     PaintMgr.PaintHightestBlock(inkball.getLocation(), p, true, true);
-                if(inkball.isDead())
+                if (inkball.isDead())
                     cancel();
 
                 i++;
@@ -148,32 +145,32 @@ public class Bucket {
         return false;
     }
 
-    public static void BucketHealRunnable(Player player,int level){
-        BukkitRunnable delay3 = new BukkitRunnable(){
-            Player p = player;
+    public static void BucketHealRunnable(Player player, int level) {
+        BukkitRunnable delay3 = new BukkitRunnable() {
+            final Player p = player;
             int Ctime = 200;
-            boolean bh_recharge=true;
+            boolean bh_recharge = true;
 
             @Override
-            public void run(){
+            public void run() {
                 PlayerData data = DataMgr.getPlayerData(p);
-                if(level>=1){
+                if (level >= 1) {
                     Ctime = 100;
                 }
-                if(!data.isInMatch() || !p.isOnline()){
+                if (!data.isInMatch() || !p.isOnline()) {
                     cancel();
                     return;
                 }
-                if (data.getIsSneaking() && bh_recharge == true && player.getGameMode().equals(GameMode.ADVENTURE)) {
-                    p.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION,Ctime,level));
+                if (data.getIsSneaking() && bh_recharge && player.getGameMode().equals(GameMode.ADVENTURE)) {
+                    p.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, Ctime, level));
                     p.getWorld().playSound(p.getLocation(), Sound.ITEM_TRIDENT_RETURN, 1.4F, 1.5F);
-                    bh_recharge=false;
+                    bh_recharge = false;
                     BukkitRunnable healtask = new BukkitRunnable() {//クールタイムを管理しています
-                            @Override
-                            public void run() {
-                                bh_recharge = true;
-                            }
-                        };
+                        @Override
+                        public void run() {
+                            bh_recharge = true;
+                        }
+                    };
                     healtask.runTaskLater(Main.getPlugin(), Ctime);
                 }
             }

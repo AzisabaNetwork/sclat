@@ -4,26 +4,23 @@ import be4rjp.sclat.Main;
 import be4rjp.sclat.Sclat;
 import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.manager.PlayerStatusMgr;
-import be4rjp.sclat.manager.SettingMgr;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static be4rjp.sclat.Main.conf;
-
 public class EquipmentServerManager {
-    
+
     public static List<String> commands = new ArrayList<>();
-    
-    public static void addEquipmentCommand(String command){
+
+    public static void addEquipmentCommand(String command) {
         commands.add(command);
     }
-    
-    public static void doCommands(){
-        for(String cmd : commands) {
-            String args[] = cmd.split(" ");
-    
+
+    public static void doCommands() {
+        for (String cmd : commands) {
+            String[] args = cmd.split(" ");
+
             switch (args[0]) {
                 case "set": { //add [statusName] [number or name] [uuid]
                     if (args.length == 4) {
@@ -54,5 +51,5 @@ public class EquipmentServerManager {
         }
         commands.clear();
     }
-    
+
 }

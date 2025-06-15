@@ -37,12 +37,6 @@
         </dependency>
         <dependency>
             <groupId>org.spigotmc</groupId>
-            <artifactId>spigot-api</artifactId>
-            <version>1.14.4-R0.1-SNAPSHOT</version>
-            <type>jar</type>
-        </dependency>
-        <dependency>
-            <groupId>org.spigotmc</groupId>
             <artifactId>spigot</artifactId>
             <version>1.14.4-R0.1-SNAPSHOT</version>
             <type>jar</type>
@@ -76,7 +70,7 @@
         <dependency>
             <groupId>com.github.Be4rJP</groupId>
             <artifactId>BlockStudio</artifactId>
-            <version>-SNAPSHOT</version>
+            <version>v1.0.4</version>
         </dependency>
     </dependencies>
     <build>

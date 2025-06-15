@@ -1,12 +1,14 @@
 package be4rjp.sclat;
-import java.lang.reflect.Field;
-import java.util.Map;
+
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.enchantments.EnchantmentTarget;
 import org.bukkit.enchantments.EnchantmentWrapper;
 import org.bukkit.inventory.ItemStack;
 
-public class Glow extends EnchantmentWrapper{
+import java.lang.reflect.Field;
+import java.util.Map;
+
+public class Glow extends EnchantmentWrapper {
 
     private static Glow glow = null;
 
@@ -54,7 +56,7 @@ public class Glow extends EnchantmentWrapper{
 
     public Boolean isGlowing(ItemStack is) {
         enableGlow();
-        return is.getEnchantments().keySet().contains(glow);
+        return is.getEnchantments().containsKey(glow);
     }
 
 
@@ -69,7 +71,7 @@ public class Glow extends EnchantmentWrapper{
                 Field hmapf = Enchantment.class.getDeclaredField("byName");
                 hmapf.setAccessible(true);
                 Map<String, Enchantment> hmap = (Map<String, Enchantment>) hmapf.get(hmapf);
-                if (!hmap.keySet().contains("sclatg")) {
+                if (!hmap.containsKey("sclatg")) {
                     Enchantment.registerEnchantment(glow);
                 }
             }

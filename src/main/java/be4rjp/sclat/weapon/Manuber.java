@@ -17,33 +17,33 @@ import org.bukkit.util.BoundingBox;
 import org.bukkit.util.RayTraceResult;
 import org.bukkit.util.Vector;
 
-import java.util.function.Predicate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 
 public class Manuber {
-    public static void ManeuverRunnable(Player player){
-        BukkitRunnable delay = new BukkitRunnable(){
-            Player p = player;
+    public static void ManeuverRunnable(Player player) {
+        BukkitRunnable delay = new BukkitRunnable() {
+            final Player p = player;
             Location loc = player.getLocation();
             Location loc2 = player.getLocation();
             Location before = player.getLocation();
             Location before_2 = player.getLocation();
             //int sl = 0;
             //スライドの仕様改変
-            boolean sl_recharge_1=true;
-            boolean sl_recharge_2=true;
+            boolean sl_recharge_1 = true;
+            boolean sl_recharge_2 = true;
             //スライドに使う変数の定義Trueの時は使用可能Falseの時は使用不可能を表している
             double distcheck = 0;
-            boolean check =false;//スライドの解除後判定用
+            boolean check = false;//スライドの解除後判定用
 
 
             @Override
-            public void run(){
+            public void run() {
                 PlayerData data = DataMgr.getPlayerData(p);
                 Location ploc = p.getLocation();
 
-                if(!data.isInMatch() || !p.isOnline()){
+                if (!data.isInMatch() || !p.isOnline()) {
                     cancel();
                     return;
                 }
@@ -53,12 +53,12 @@ public class Manuber {
                 double x = location.getX() - before.getX();
                 double z = location.getZ() - before.getZ();
                 Vector vec = p.getEyeLocation().getDirection();
-                if(x != 0 || z != 0) {
+                if (x != 0 || z != 0) {
                     vec = new Vector(x, 0, z);
-                }else{
+                } else {
                     x = location.getX() - before_2.getX();
                     z = location.getZ() - before_2.getZ();
-                    if(x != 0 || z != 0){
+                    if (x != 0 || z != 0) {
                         vec = new Vector(x, 0, z);
                     }
                 }
@@ -68,12 +68,12 @@ public class Manuber {
                 //float ink = data.getWeaponClass().getMainWeapon().getSlideNeedINK();
 
                 //マニューバー系
-                if(data.getWeaponClass().getMainWeapon().getIsManeuver()){
+                if (data.getWeaponClass().getMainWeapon().getIsManeuver()) {
                     //if(p.getExp() >= ink) {
-                    if (data.getIsSneaking() && sl_recharge_2 == true && !data.getIsSliding() && p.getInventory().getItemInMainHand().getType().equals(data.getWeaponClass().getMainWeapon().getWeaponIteamStack().getType())) {//slをsl_recharge_2に変更することで優先順位が低い方のスライドが残っている時のみ使えるようにしました
+                    if (data.getIsSneaking() && sl_recharge_2 && !data.getIsSliding() && p.getInventory().getItemInMainHand().getType().equals(data.getWeaponClass().getMainWeapon().getWeaponIteamStack().getType())) {//slをsl_recharge_2に変更することで優先順位が低い方のスライドが残っている時のみ使えるようにしました
                         Vector jvec = (new Vector(vec.getX(), 0, vec.getZ())).normalize();
                         Vector ev = jvec.clone().normalize().multiply(-2);
-                        check=true;
+                        check = true;
 
                         //p.setExp(p.getExp() - ink);
 
@@ -81,107 +81,107 @@ public class Manuber {
                         org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(player).getTeam().getTeamColor().getWool().createBlockData();
                         double random = 1.0;
 
-                        if(DataMgr.getPlayerData(player).getArmor()>9999) {
+                        if (DataMgr.getPlayerData(player).getArmor() > 9999) {
                             DataMgr.getPlayerData(player).setArmor(0);
                         }
                         p.getWorld().playSound(p.getLocation(), Sound.ITEM_ARMOR_EQUIP_GENERIC, 1.4F, 1.5F);
 
-                            distcheck=EntityWallHit(p,jvec.clone());
-                            while(distcheck>0 && !isSafeLocation(p,location.clone().add(jvec.clone().multiply(distcheck)))){
-                                distcheck=distcheck-0.2;
-                                //p.sendMessage("テレポート位置に障害物があります");
-                                if(distcheck<=0){
-                                    //p.sendMessage("テレポート距離が０になりました");
-                                    distcheck=0;
-                                }
+                        distcheck = EntityWallHit(p, jvec.clone());
+                        while (distcheck > 0 && !isSafeLocation(p, location.clone().add(jvec.clone().multiply(distcheck)))) {
+                            distcheck = distcheck - 0.2;
+                            //p.sendMessage("テレポート位置に障害物があります");
+                            if (distcheck <= 0) {
+                                //p.sendMessage("テレポート距離が０になりました");
+                                distcheck = 0;
                             }
-                            //p.sendMessage("X "+verif.getX()+"Y "+verif.getY()+"Z "+verif.getZ());
-                            p.teleport(location.clone().add(jvec.clone().multiply(EntityArmorstandHit(p,jvec.clone(),distcheck))));
-                            //effect
+                        }
+                        //p.sendMessage("X "+verif.getX()+"Y "+verif.getY()+"Z "+verif.getZ());
+                        p.teleport(location.clone().add(jvec.clone().multiply(EntityArmorstandHit(p, jvec.clone(), distcheck))));
+                        //effect
 
-                            for (int i = 0; i < 8; i++) {
-                                Vector randomVector = new Vector(Math.random() * random - random / 2, Math.random() * random - random / 2, Math.random() * random - random / 2);
-                                Vector erv = ev.clone().add(randomVector);
-                                for (Player o_player : Main.getPlugin().getServer().getOnlinePlayers()) {
-                                    if (DataMgr.getPlayerData(o_player).getSettings().ShowEffect_BombEx()) {
-                                        if (o_player.getWorld() == location.getWorld()) {
-                                            if (o_player.getLocation().distanceSquared(location) < Main.PARTICLE_RENDER_DISTANCE_SQUARED) {
-                                                for(int i2=0; i2<4;i2++) {
-                                                    o_player.spawnParticle(org.bukkit.Particle.BLOCK_DUST,
-                                                            location.clone().add(jvec.clone().multiply(i*distcheck/8.0f)).add(0, 1.1, 0).add(randomVector.getX(), randomVector.getY(), randomVector.getZ()),
-                                                            0, erv.getX(), erv.getY(), erv.getZ(), 1, bd);
-                                                }
+                        for (int i = 0; i < 8; i++) {
+                            Vector randomVector = new Vector(Math.random() * random - random / 2, Math.random() * random - random / 2, Math.random() * random - random / 2);
+                            Vector erv = ev.clone().add(randomVector);
+                            for (Player o_player : Main.getPlugin().getServer().getOnlinePlayers()) {
+                                if (DataMgr.getPlayerData(o_player).getSettings().ShowEffect_BombEx()) {
+                                    if (o_player.getWorld() == location.getWorld()) {
+                                        if (o_player.getLocation().distanceSquared(location) < Main.PARTICLE_RENDER_DISTANCE_SQUARED) {
+                                            for (int i2 = 0; i2 < 4; i2++) {
+                                                o_player.spawnParticle(org.bukkit.Particle.BLOCK_DUST,
+                                                        location.clone().add(jvec.clone().multiply(i * distcheck / 8.0f)).add(0, 1.1, 0).add(randomVector.getX(), randomVector.getY(), randomVector.getZ()),
+                                                        0, erv.getX(), erv.getY(), erv.getZ(), 1, bd);
                                             }
                                         }
                                     }
                                 }
                             }
+                        }
                         data.setIsSneaking(false);
                         data.setIsSliding(true);
                         data.setCanShoot(false);
                         //優先順位が高い方のスライドがFalseだった場合に低い方をFalseにするようにしました高い方がtrueであった場合は高い方がFalseになります
-                        if(!sl_recharge_1){
-                            sl_recharge_2=false;
-                        }else{
-                            sl_recharge_1=false;
+                        if (!sl_recharge_1) {
+                            sl_recharge_2 = false;
+                        } else {
+                            sl_recharge_1 = false;
                         }
                         //sl++;
-                            BukkitRunnable task0_1 = new BukkitRunnable() {
-                                int i = 1;
+                        BukkitRunnable task0_1 = new BukkitRunnable() {
+                            int i = 1;
 
-                                @Override
-                                public void run() {
-                                    if (i == 3) {
-                                        p.setVelocity(new Vector(0, 0, 0));
-                                        data.setIsUsingManeuver(true);
-                                        data.setCanShoot(true);
-                                    }
+                            @Override
+                            public void run() {
+                                if (i == 3) {
+                                    p.setVelocity(new Vector(0, 0, 0));
+                                    data.setIsUsingManeuver(true);
+                                    data.setCanShoot(true);
+                                }
 
-                                    if(i==9){
-                                        loc = p.getLocation();
-                                        data.setIsUsingManeuver(true);
-                                    }
+                                if (i == 9) {
+                                    loc = p.getLocation();
+                                    data.setIsUsingManeuver(true);
+                                }
 
-                                    if (i == 10) {
-                                        //data.setIsUsingManeuver(false);
+                                if (i == 10) {
+                                    //data.setIsUsingManeuver(false);
 //                                        if(sl_recharge_2) {
-                                            data.setIsSliding(false);
+                                    data.setIsSliding(false);
 //                                        }
-                                        cancel();
-                                    }
-                                    i++;
+                                    cancel();
                                 }
-                            };
-                            BukkitRunnable task0_0 = new BukkitRunnable() {
-                                int i = 1;
-
-                                @Override
-                                public void run() {
-                                    if (i == 3) {
-                                        p.setVelocity(new Vector(0, 0, 0));
-                                        data.setIsUsingManeuver(true);
-                                        data.setCanShoot(true);
-                                    }
-
-                                    if(i==9){
-                                        loc2 = p.getLocation();
-                                        data.setIsUsingManeuver(true);
-                                    }
-
-                                    if (i == 10) {
-                                        //data.setIsUsingManeuver(false);
-                                        data.setIsSliding(false);
-                                        cancel();
-                                    }
-                                    i++;
-                                }
-                            };
-                            if (sl_recharge_2) {
-                                //task0_1.runTaskTimer(Main.getPlugin(), 0, 1);
-                                task0_1.runTaskTimer(Main.getPlugin(), 0, 1);
-                            } else {
-                                task0_0.runTaskTimer(Main.getPlugin(), 0, 1);
+                                i++;
                             }
+                        };
+                        BukkitRunnable task0_0 = new BukkitRunnable() {
+                            int i = 1;
+
+                            @Override
+                            public void run() {
+                                if (i == 3) {
+                                    p.setVelocity(new Vector(0, 0, 0));
+                                    data.setIsUsingManeuver(true);
+                                    data.setCanShoot(true);
+                                }
+
+                                if (i == 9) {
+                                    loc2 = p.getLocation();
+                                    data.setIsUsingManeuver(true);
+                                }
+
+                                if (i == 10) {
+                                    //data.setIsUsingManeuver(false);
+                                    data.setIsSliding(false);
+                                    cancel();
+                                }
+                                i++;
+                            }
+                        };
+                        if (sl_recharge_2) {
+                            //task0_1.runTaskTimer(Main.getPlugin(), 0, 1);
+                            task0_1.runTaskTimer(Main.getPlugin(), 0, 1);
+                        } else {
+                            task0_0.runTaskTimer(Main.getPlugin(), 0, 1);
+                        }
 //                            BukkitRunnable task2 = new BukkitRunnable() {
 //                                @Override
 //                                public void run() {
@@ -198,40 +198,40 @@ public class Manuber {
                     //}
                 }
 
-                if(!data.getIsSliding()) {
-                    if ((loc.getX() == ploc.getX() && loc.getZ() == ploc.getZ())||(loc2.getX() == ploc.getX() && loc2.getZ() == ploc.getZ())) {
+                if (!data.getIsSliding()) {
+                    if ((loc.getX() == ploc.getX() && loc.getZ() == ploc.getZ()) || (loc2.getX() == ploc.getX() && loc2.getZ() == ploc.getZ())) {
                         data.setIsUsingManeuver(true);
-                    }else {
-                            if(check) {
-                                //p.sendMessage("現在地はX＝"+p.getLocation().getX()+" Y="+p.getLocation().getY()+" Z="+p.getLocation().getZ());
-                                //p.sendMessage("LOC1はX＝"+loc.getX()+" Y="+loc.getY()+" Z="+loc.getZ());
-                                //p.sendMessage("LOC2はX＝"+loc2.getX()+" Y="+loc2.getY()+" Z="+loc2.getZ());
-                                BukkitRunnable task4 = new BukkitRunnable() {
-                                    @Override
-                                    public void run() {
-                                        sl_recharge_1 = true;
-                                        //p.sendMessage("スライド１リチャージ完了です");
-                                        //check = true;
-                                    }
-                                };
-
-                                BukkitRunnable task5 = new BukkitRunnable() {
-                                    @Override
-                                    public void run() {
-                                        sl_recharge_1 = true;
-                                        sl_recharge_2 = true;
-                                        //p.sendMessage("スライド2リチャージ完了です");
-                                        //check = true;
-                                    }
-                                };
-                                if (sl_recharge_2 == true) {
-                                    task4.runTaskLater(Main.getPlugin(), 64);
-                                    check = false;
-                                } else {
-                                    task5.runTaskLater(Main.getPlugin(), 64);
-                                    check = false;
+                    } else {
+                        if (check) {
+                            //p.sendMessage("現在地はX＝"+p.getLocation().getX()+" Y="+p.getLocation().getY()+" Z="+p.getLocation().getZ());
+                            //p.sendMessage("LOC1はX＝"+loc.getX()+" Y="+loc.getY()+" Z="+loc.getZ());
+                            //p.sendMessage("LOC2はX＝"+loc2.getX()+" Y="+loc2.getY()+" Z="+loc2.getZ());
+                            BukkitRunnable task4 = new BukkitRunnable() {
+                                @Override
+                                public void run() {
+                                    sl_recharge_1 = true;
+                                    //p.sendMessage("スライド１リチャージ完了です");
+                                    //check = true;
                                 }
+                            };
+
+                            BukkitRunnable task5 = new BukkitRunnable() {
+                                @Override
+                                public void run() {
+                                    sl_recharge_1 = true;
+                                    sl_recharge_2 = true;
+                                    //p.sendMessage("スライド2リチャージ完了です");
+                                    //check = true;
+                                }
+                            };
+                            if (sl_recharge_2) {
+                                task4.runTaskLater(Main.getPlugin(), 64);
+                                check = false;
+                            } else {
+                                task5.runTaskLater(Main.getPlugin(), 64);
+                                check = false;
                             }
+                        }
                         data.setIsUsingManeuver(false);
                     }
                 }
@@ -242,29 +242,29 @@ public class Manuber {
         delay.runTaskTimer(Main.getPlugin(), 0, 1);
     }
 
-    private static double EntityWallHit(Player p, Vector direction){
+    private static double EntityWallHit(Player p, Vector direction) {
         Location entityLocation = p.getLocation().clone();
         double distance = 5.2; // レイの長さ
         World world = p.getWorld();
         RayTraceResult rayresult = world.rayTraceBlocks(entityLocation, direction, distance);
         //if (result != null && result.getHitBlock() != null) {
-        if(rayresult !=null && rayresult.getHitBlock()!=null) {
+        if (rayresult != null && rayresult.getHitBlock() != null) {
             Location hitlocation = rayresult.getHitPosition().toLocation(world);
-            double raydistance =entityLocation.distance(hitlocation);
-            if(raydistance -0.4 > 0 ) {
+            double raydistance = entityLocation.distance(hitlocation);
+            if (raydistance - 0.4 > 0) {
                 return raydistance - 0.4;
-            }else{
+            } else {
                 return 0;
             }
-        }else{
+        } else {
             return 4.9;
         }
     }
 
-    private static double EntityArmorstandHit(Player p, Vector direction,double dist){
+    private static double EntityArmorstandHit(Player p, Vector direction, double dist) {
         Location entityLocation = p.getLocation().clone();
         double distance = dist; // レイの長さ
-        double distance2 =dist;
+        double distance2 = dist;
         World world = p.getWorld();
         //if (result != null && result.getHitBlock() != null) {
         Predicate<Entity> isArmorStand = entity -> entity.getType() == EntityType.ARMOR_STAND;
@@ -276,14 +276,14 @@ public class Manuber {
             // 衝突までの距離を計算
             Entity hitEntity = result.getHitEntity();
             ArmorStand armorStand = (ArmorStand) hitEntity;
-            if(armorStand.getCustomName() != null){
-                if(armorStand.getCustomName().equals("SplashShield")){
+            if (armorStand.getCustomName() != null) {
+                if (armorStand.getCustomName().equals("SplashShield")) {
                     SplashShieldData ssdata = DataMgr.getSplashShieldDataFromArmorStand(armorStand);
-                    if(DataMgr.getPlayerData(p).getTeam() != DataMgr.getPlayerData(ssdata.getPlayer()).getTeam() && ssdata.getIsDeploy()){
+                    if (DataMgr.getPlayerData(p).getTeam() != DataMgr.getPlayerData(ssdata.getPlayer()).getTeam() && ssdata.getIsDeploy()) {
                         Location hitLocation = result.getHitPosition().toLocation(world);
                         distance2 = entityLocation.distance(hitLocation);
-                        if(dist-distance2>0.7){
-                            distance2=distance2+0.4;
+                        if (dist - distance2 > 0.7) {
+                            distance2 = distance2 + 0.4;
                         }
                         return distance2;
                     }
@@ -295,7 +295,7 @@ public class Manuber {
 
     public static boolean isSafeLocation(Player player, Location location) {
         World world = location.getWorld();
-        boolean contact=true;
+        boolean contact = true;
         if (world == null) return false;
         //player.sendMessage("テレポートの位置はX"+LX+"Y"+LY+"Z"+LZ);
 
@@ -325,10 +325,10 @@ public class Manuber {
         blocks.add(location.getWorld().getBlockAt(location.clone().add(0.4, 0, -0.4)));
         blocks.add(location.getWorld().getBlockAt(location.clone().add(-0.4, 0, -0.4)));
         blocks.add(location.getWorld().getBlockAt(location.clone().add(0, 1.0, 0)));
-        for (Block pblock :blocks ){
+        for (Block pblock : blocks) {
             //player.sendMessage("ブロックの位置はX"+pblock.getLocation().getX()+"Y"+pblock.getLocation().getY()+"Z"+pblock.getLocation().getZ());
-            if(hasCollision(pblock, playerBoundingBox)){
-                contact=false;
+            if (hasCollision(pblock, playerBoundingBox)) {
+                contact = false;
             }
         }
 

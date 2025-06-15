@@ -1,10 +1,24 @@
-
 package be4rjp.sclat.manager;
 
 import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.data.PlayerData;
-import be4rjp.sclat.weapon.spweapon.*;
-import be4rjp.sclat.weapon.subweapon.*;
+import be4rjp.sclat.weapon.spweapon.JetPack;
+import be4rjp.sclat.weapon.spweapon.LitterFiveG;
+import be4rjp.sclat.weapon.spweapon.QuadroArms;
+import be4rjp.sclat.weapon.spweapon.SuperShot;
+import be4rjp.sclat.weapon.spweapon.SwordMord;
+import be4rjp.sclat.weapon.subweapon.Beacon;
+import be4rjp.sclat.weapon.subweapon.Boomerang;
+import be4rjp.sclat.weapon.subweapon.CurlingBomb;
+import be4rjp.sclat.weapon.subweapon.FloaterBomb;
+import be4rjp.sclat.weapon.subweapon.KBomb;
+import be4rjp.sclat.weapon.subweapon.Poison;
+import be4rjp.sclat.weapon.subweapon.QuickBomb;
+import be4rjp.sclat.weapon.subweapon.Sensor;
+import be4rjp.sclat.weapon.subweapon.SplashBomb;
+import be4rjp.sclat.weapon.subweapon.SplashShield;
+import be4rjp.sclat.weapon.subweapon.Sprinkler;
+import be4rjp.sclat.weapon.subweapon.Trap;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -12,16 +26,15 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 /**
- *
  * @author Be4rJP
  */
 public class SubWeaponMgr {
-    public static ItemStack getSubWeapon(Player player){
+    public static ItemStack getSubWeapon(Player player) {
         PlayerData data = DataMgr.getPlayerData(player);
         //player.sendMessage(data.getWeaponClass().getSubWeaponName());
         ItemStack is = null;
         ItemMeta ism = null;
-        
+
         switch (data.getWeaponClass().getSubWeaponName()) {
             case "スプラッシュボム":
                 is = new ItemStack(data.getTeam().getTeamColor().getGlass());
@@ -88,12 +101,12 @@ public class SubWeaponMgr {
         //player.getInventory().setItem(2, is);  
         return is;
     }
-    
-    public static void UseSubWeapon(Player player, String name){
+
+    public static void UseSubWeapon(Player player, String name) {
         PlayerData data = DataMgr.getPlayerData(player);
-        if(!data.getCanUseSubWeapon()) return;
-        if(player.getGameMode().equals(GameMode.SPECTATOR)) return;
-        
+        if (!data.getCanUseSubWeapon()) return;
+        if (player.getGameMode().equals(GameMode.SPECTATOR)) return;
+
         switch (name) {
             case "右クリックで弾を発射":
                 JetPack.ShootJetPack(player);
@@ -108,34 +121,34 @@ public class SubWeaponMgr {
                 data.setCanUseSubWeapon(false);
                 break;
             case "Quadro-BLUE":
-                QuadroArms.QuadroCooltime(player,1);
+                QuadroArms.QuadroCooltime(player, 1);
                 data.setCanUseSubWeapon(false);
                 break;
             case "Quadro-GREEN":
-                QuadroArms.QuadroCooltime(player,2);
+                QuadroArms.QuadroCooltime(player, 2);
                 data.setCanUseSubWeapon(false);
                 break;
             case "Quadro-RED":
-                QuadroArms.QuadroCooltime(player,3);
+                QuadroArms.QuadroCooltime(player, 3);
                 data.setCanUseSubWeapon(false);
                 break;
             case "Quadro-WHITE":
-                QuadroArms.QuadroCooltime(player,4);
+                QuadroArms.QuadroCooltime(player, 4);
                 data.setCanUseSubWeapon(false);
                 break;
             case "右クリックで射撃!":
-                if(data.getSettings().ShowEffect_ChargerLine()) {
+                if (data.getSettings().ShowEffect_ChargerLine()) {
                     LitterFiveG.Shoot_LitterFiveG(player);
                     data.setCanUseSubWeapon(false);
-                }else{
+                } else {
                     LitterFiveG.Charge_LitterFiveG(player);
                     data.setCanUseSubWeapon(true);
                 }
                 break;
         }
-        
-        if(data.getIsUsingJetPack()) return;
-        
+
+        if (data.getIsUsingJetPack()) return;
+
         switch (name) {
             case "スプラッシュボム":
                 SplashBomb.SplashBomRunnable(player);

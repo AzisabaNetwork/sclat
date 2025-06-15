@@ -7,62 +7,59 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
 public class StatusClient {
-    
-    private List<String> commands = new ArrayList<>();
-    
+
     private final String host;
     private final int port;
-    
     private final BukkitRunnable task;
-    
+    private List<String> commands = new ArrayList<>();
+
     public StatusClient(String host, int port, List<String> commands) {
         this.host = host;
         this.port = port;
         this.commands = commands;
-        this.task = new BukkitRunnable(){
+        this.task = new BukkitRunnable() {
             @Override
             public void run() {
                 Socket cSocket = null;
                 PrintWriter writer = null;
                 BufferedReader reader = null;
-    
+
                 try {
                     //System.out.println("test");
                     //IPアドレスとポート番号を指定してクライアント側のソケットを作成
                     cSocket = new Socket(host, port);
-        
+
                     //クライアント側からサーバへの送信用
                     writer = new PrintWriter(cSocket.getOutputStream(), true);
-        
+
                     //サーバ側からの受取用
                     reader = new BufferedReader(new InputStreamReader(cSocket.getInputStream()));
-        
+
                     //命令送信ループ
                     String cmd = null;
                     while (true) {
                         if (commands.size() != 0) {
-                
+
                             cmd = commands.get(0);
-                
+
                             //送信用の文字を送信
                             writer.println(cmd);
-    
+
                             //stopの入力でループを抜ける
                             if (cmd.equals("stop")) {
                                 break;
                             }
-                
+
                             //サーバ側からの受取の結果を表示
                             //System.out.println("result：" + reader.readLine());
-                
+
                             commands.remove(0);
-                        }else{
+                        } else {
                             break;
                         }
                     }
@@ -84,10 +81,12 @@ public class StatusClient {
             }
         };
     }
-    
-    public void startClient(){this.task.runTaskAsynchronously(Main.getPlugin());}
-    
-    public void addCommand(String command){
+
+    public void startClient() {
+        this.task.runTaskAsynchronously(Main.getPlugin());
+    }
+
+    public void addCommand(String command) {
         commands.add(command);
     }
 }
