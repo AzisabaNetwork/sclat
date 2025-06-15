@@ -25,12 +25,12 @@ public class StatusServer extends Thread {
 
     private final int port;
 
-    public StatusServer(int port){
+    public StatusServer(int port) {
         this.port = port;
     }
 
-    public void run(){
-        try{
+    public void run() {
+        try {
             //ソケットを作成
             sSocket = new ServerSocket(port);
             System.out.println("Waiting for status client...");
@@ -39,18 +39,18 @@ public class StatusServer extends Thread {
             while (true) {
                 Socket socket = sSocket.accept();
                 new EchoThread(socket).start();
-    
+
                 try {
                     Thread.sleep(100);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             }
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-        }finally{
-            try{
-                if (sSocket!=null)
+        } finally {
+            try {
+                if (sSocket != null)
                     sSocket.close();
                 System.out.println("Status server is stopped!");
             } catch (IOException e) {
@@ -64,7 +64,7 @@ public class StatusServer extends Thread {
 //非同期スレッド
 class EchoThread extends Thread {
 
-    private Socket socket;
+    private final Socket socket;
 
     public EchoThread(Socket socket) {
         this.socket = socket;
@@ -83,20 +83,20 @@ class EchoThread extends Thread {
             String cmd = null;
             //命令受け取り用ループ
             while (true) {
-                if((cmd = reader.readLine()) != null) {
-                    
-                    if(cmd.equals("stop")){
+                if ((cmd = reader.readLine()) != null) {
+
+                    if (cmd.equals("stop")) {
                         socket.close();
                         System.out.println("Socket closed.");
                         break;
                     }
-                    
+
                     System.out.println(cmd);
 
-                    String args[] = cmd.split(" ");
-                    
-                    if(args[0].equals("return") && args.length == 2){
-                        if(args[1].length() == 36){
+                    String[] args = cmd.split(" ");
+
+                    if (args[0].equals("return") && args.length == 2) {
+                        if (args[1].length() == 36) {
                             PlayerReturnManager.addPlayerReturn(args[1]);
                         }
                     }
@@ -135,10 +135,10 @@ class EchoThread extends Thread {
                             }
                             break;
                         }
-                        case "started":{
+                        case "started": {
                             if (args.length == 3) {
-                                for(ServerStatus ss : ServerStatusManager.serverList){
-                                    if(ss.getServerName().equals(args[1])) {
+                                for (ServerStatus ss : ServerStatusManager.serverList) {
+                                    if (ss.getServerName().equals(args[1])) {
                                         ss.setRunningMatch(true);
                                         ss.setWaitingEndTime(0);
                                         ss.setMatchStartTime(Long.parseLong(args[2]));
@@ -147,10 +147,10 @@ class EchoThread extends Thread {
                             }
                             break;
                         }
-                        case "cd":{
+                        case "cd": {
                             if (args.length == 3) {
-                                for(ServerStatus ss : ServerStatusManager.serverList){
-                                    if(ss.getServerName().equals(args[1])) {
+                                for (ServerStatus ss : ServerStatusManager.serverList) {
+                                    if (ss.getServerName().equals(args[1])) {
                                         ss.setWaitingEndTime(Long.parseLong(args[2]));
                                         Sclat.sendMessage(ss.getDisplayName() + "§aの試合待機が開始されました！", MessageType.ALL_PLAYER);
                                         Sclat.sendMessage("§a§l" + (ss.getWaitingEndTime() - (System.currentTimeMillis() / 1000)) + "§b秒後に開始されます", MessageType.ALL_PLAYER);
@@ -160,20 +160,20 @@ class EchoThread extends Thread {
                             }
                             break;
                         }
-                        case "cdc":{
+                        case "cdc": {
                             if (args.length == 2) {
-                                for(ServerStatus ss : ServerStatusManager.serverList){
-                                    if(ss.getServerName().equals(args[1])) {
+                                for (ServerStatus ss : ServerStatusManager.serverList) {
+                                    if (ss.getServerName().equals(args[1])) {
                                         ss.setWaitingEndTime(0);
                                     }
                                 }
                             }
                             break;
                         }
-                        case "stopped":{
+                        case "stopped": {
                             if (args.length == 2) {
-                                for(ServerStatus ss : ServerStatusManager.serverList){
-                                    if(ss.getServerName().equals(args[1])) {
+                                for (ServerStatus ss : ServerStatusManager.serverList) {
+                                    if (ss.getServerName().equals(args[1])) {
                                         ss.setRunningMatch(false);
                                         ss.setMatchStartTime(0);
                                     }
@@ -181,44 +181,46 @@ class EchoThread extends Thread {
                             }
                             break;
                         }
-                        case "restart":{
+                        case "restart": {
                             if (args.length == 2) {
-                                for(ServerStatus ss : ServerStatusManager.serverList){
-                                    if(ss.getServerName().equals(args[1])) {
+                                for (ServerStatus ss : ServerStatusManager.serverList) {
+                                    if (ss.getServerName().equals(args[1])) {
                                         ss.setRestartingServer(true);
                                     }
                                 }
                             }
                             break;
                         }
-                        case "restarted":{
+                        case "restarted": {
                             if (args.length == 2) {
-                                for(ServerStatus ss : ServerStatusManager.serverList){
-                                    if(ss.getServerName().equals(args[1])) {
+                                for (ServerStatus ss : ServerStatusManager.serverList) {
+                                    if (ss.getServerName().equals(args[1])) {
                                         ss.setRestartingServer(false);
                                     }
                                 }
                             }
                             break;
                         }
-                        case "map":{
+                        case "map": {
                             if (args.length == 3) {
-                                for(ServerStatus ss : ServerStatusManager.serverList){
-                                    if(ss.getServerName().equals(args[1])) {
+                                for (ServerStatus ss : ServerStatusManager.serverList) {
+                                    if (ss.getServerName().equals(args[1])) {
                                         ss.setMapName(args[2]);
                                     }
                                 }
                             }
                             break;
                         }
-                        case "tutorial":{
+                        case "tutorial": {
                             if (args.length == 2) {
                                 PlayerStatusMgr.setTutorialState(args[1], 1);
                             }
                             break;
                         }
                     }
-                }else{break;}
+                } else {
+                    break;
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -227,7 +229,8 @@ class EchoThread extends Thread {
                 if (socket != null) {
                     socket.close();
                 }
-            } catch (IOException e) {}
+            } catch (IOException e) {
+            }
             System.out.println("Disconnected " + socket.getRemoteSocketAddress());
         }
     }

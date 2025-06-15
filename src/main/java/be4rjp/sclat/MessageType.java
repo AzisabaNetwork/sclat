@@ -1,7 +1,6 @@
 package be4rjp.sclat;
 
 /**
- *
  * @author Be4rJP
  */
 public enum MessageType {
@@ -9,5 +8,5 @@ public enum MessageType {
     TEAM,
     CONSOLE,
     BROADCAST,
-    PLAYER;
+    PLAYER
 }

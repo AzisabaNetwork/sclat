@@ -1,21 +1,22 @@
 package be4rjp.sclat.weapon.spweapon;
 
-import be4rjp.dadadachecker.ClickType;
 import be4rjp.sclat.Main;
 import be4rjp.sclat.Sclat;
 import be4rjp.sclat.Sphere;
 import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.data.KasaData;
 import be4rjp.sclat.data.PlayerData;
-import be4rjp.sclat.data.SplashShieldData;
 import be4rjp.sclat.manager.ArmorStandMgr;
 import be4rjp.sclat.manager.PaintMgr;
 import be4rjp.sclat.manager.SPWeaponMgr;
 import be4rjp.sclat.manager.WeaponClassMgr;
 import be4rjp.sclat.raytrace.BoundingBox;
 import be4rjp.sclat.raytrace.RayTrace;
-import be4rjp.sclat.weapon.Gear;
-import org.bukkit.*;
+import org.bukkit.GameMode;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.Particle;
+import org.bukkit.Sound;
 import org.bukkit.craftbukkit.v1_14_R1.entity.CraftSnowball;
 import org.bukkit.craftbukkit.v1_14_R1.inventory.CraftItemStack;
 import org.bukkit.entity.ArmorStand;
@@ -34,13 +35,14 @@ import java.util.List;
 import java.util.Random;
 
 public class SwordMord {
-    public static void setSwordMord(Player player){
+    public static void setSwordMord(Player player) {
         DataMgr.getPlayerData(player).setIsUsingSP(true);
         DataMgr.getPlayerData(player).setIsUsingSS(true);
         SPWeaponMgr.setSPCoolTimeAnimation(player, 160);
 
         BukkitRunnable it = new BukkitRunnable() {
-            Player p = player;
+            final Player p = player;
+
             @Override
             public void run() {
                 player.getInventory().clear();
@@ -50,9 +52,9 @@ public class SwordMord {
                 ItemMeta meta = item.getItemMeta();
                 meta.setDisplayName("右クリックで斬撃、シフトで防御");
                 item.setItemMeta(meta);
-                for (int count = 0; count < 9; count++){
+                for (int count = 0; count < 9; count++) {
                     player.getInventory().setItem(count, item);
-                    if(count % 2 != 0)
+                    if (count % 2 != 0)
                         player.getInventory().setItem(count, new ItemStack(Material.AIR));
                 }
                 player.updateInventory();
@@ -65,10 +67,11 @@ public class SwordMord {
         it.runTaskLater(Main.getPlugin(), 2);
 
         BukkitRunnable task = new BukkitRunnable() {
-            Player p = player;
+            final Player p = player;
+
             @Override
             public void run() {
-                if(DataMgr.getPlayerData(p).isInMatch()){
+                if (DataMgr.getPlayerData(p).isInMatch()) {
                     DataMgr.getPlayerData(p).setIsUsingSP(false);
                     DataMgr.getPlayerData(p).setIsUsingSS(false);
                     player.getInventory().clear();
@@ -78,25 +81,26 @@ public class SwordMord {
         };
         task.runTaskLater(Main.getPlugin(), 160);
     }
-    public static void AttackSword(Player player){
-        if(player.hasPotionEffect(PotionEffectType.LUCK)) {
-            if(!player.isSneaking()) {
+
+    public static void AttackSword(Player player) {
+        if (player.hasPotionEffect(PotionEffectType.LUCK)) {
+            if (!player.isSneaking()) {
                 player.getWorld().playSound(player.getLocation(), Sound.ENTITY_PLAYER_ATTACK_SWEEP, 1.4F, 1.5F);
                 Location vec = player.getLocation().add(player.getEyeLocation().getDirection().normalize().multiply(2.4));
                 for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
-                    if(DataMgr.getPlayerData(target).getSettings().ShowEffect_Bomb())
-                        if(target.getWorld() == player.getWorld())
-                            if(target.getLocation().distance(vec) < Main.PARTICLE_RENDER_DISTANCE)
-                                if(target.equals(player)) {
+                    if (DataMgr.getPlayerData(target).getSettings().ShowEffect_Bomb())
+                        if (target.getWorld() == player.getWorld())
+                            if (target.getLocation().distance(vec) < Main.PARTICLE_RENDER_DISTANCE)
+                                if (target.equals(player)) {
                                     target.spawnParticle(Particle.SWEEP_ATTACK, vec.add(0, 1.5, 0), 0, 10, 7, 10);
-                                }else{
+                                } else {
                                     target.spawnParticle(Particle.SWEEP_ATTACK, vec, 0, 8, 5, 8);
                                 }
                 }
                 int maxDist = 3;
-                for(int i = 0; i <= maxDist - 1; i++){
+                for (int i = 0; i <= maxDist - 1; i++) {
                     List<Location> p_locs = Sphere.getSphere(vec, i, 20);
-                    for(Location loc : p_locs){
+                    for (Location loc : p_locs) {
                         PaintMgr.Paint(loc, player, false);
                         PaintMgr.PaintHightestBlock(loc, player, false, false);
                     }
@@ -112,7 +116,7 @@ public class SwordMord {
 
                             //AntiNoDamageTime
                             BukkitRunnable task = new BukkitRunnable() {
-                                Player p = target;
+                                final Player p = target;
 
                                 @Override
                                 public void run() {
@@ -138,7 +142,8 @@ public class SwordMord {
             }
 
             BukkitRunnable task2 = new BukkitRunnable() {
-                Player p = player;
+                final Player p = player;
+
                 @Override
                 public void run() {
                     DataMgr.getPlayerData(p).setCanUseSubWeapon(true);
@@ -147,17 +152,19 @@ public class SwordMord {
             task2.runTaskLater(Main.getPlugin(), 7);
         }
     }
-    public static void SwordPaintRunnable(Player player){
-        BukkitRunnable task = new BukkitRunnable(){
-            Player p = player;
+
+    public static void SwordPaintRunnable(Player player) {
+        BukkitRunnable task = new BukkitRunnable() {
+            final Player p = player;
+
             @Override
-            public void run(){
-                try{
+            public void run() {
+                try {
                     PlayerData data = DataMgr.getPlayerData(p);
-                    if(!data.isInMatch() || !p.isOnline() || !DataMgr.getPlayerData(player).getIsUsingSP())
+                    if (!data.isInMatch() || !p.isOnline() || !DataMgr.getPlayerData(player).getIsUsingSP())
                         cancel();
 
-                    if(p.hasPotionEffect(PotionEffectType.LUCK) && p.getGameMode() != GameMode.SPECTATOR && !p.getInventory().getItemInMainHand().getType().equals(Material.AIR)){
+                    if (p.hasPotionEffect(PotionEffectType.LUCK) && p.getGameMode() != GameMode.SPECTATOR && !p.getInventory().getItemInMainHand().getType().equals(Material.AIR)) {
                         Vector locvec = p.getEyeLocation().getDirection();
                         Location eloc = p.getEyeLocation();
                         Vector vec = new Vector(locvec.getX(), 0, locvec.getZ()).normalize();
@@ -165,21 +172,24 @@ public class SwordMord {
                         PaintMgr.PaintHightestBlock(front, p, false, true);
                     }
 
-                }catch(Exception e){cancel();}
+                } catch (Exception e) {
+                    cancel();
+                }
             }
         };
         task.runTaskTimer(Main.getPlugin(), 0, 1);
     }
-    public static void SwordGurdRunnable(Player player){
-        BukkitRunnable task = new BukkitRunnable(){
+
+    public static void SwordGurdRunnable(Player player) {
+        BukkitRunnable task = new BukkitRunnable() {
             KasaData kdata = new KasaData(player);
             ArmorStand as1;
             ArmorStand as2;
             ArmorStand as3;
             ArmorStand as4;
             int c = 0;
-            boolean gurd =false;
-            Player p = player;
+            boolean gurd = false;
+            final Player p = player;
             Location eloc = p.getEyeLocation();
             Vector pv = p.getEyeLocation().getDirection().normalize();
             Vector vec3 = new Vector(pv.getX(), 0, pv.getZ()).normalize();
@@ -188,11 +198,12 @@ public class SwordMord {
             Location l1 = eloc.clone().add(vec1.clone().multiply(0.4)).add(vec3.clone().multiply(0.7));
             Location r1 = eloc.clone().add(vec2.clone().multiply(0.4)).add(vec3.clone().multiply(0.7));
             Location m1 = eloc.clone().add(vec3.clone().multiply(0.8));
+
             @Override
-            public void run(){
-                try{
+            public void run() {
+                try {
                     c++;
-                    if(c%2==0) {
+                    if (c % 2 == 0) {
                         PlayerData data = DataMgr.getPlayerData(p);
                         if (!data.isInMatch() || !p.isOnline() || !DataMgr.getPlayerData(player).getIsUsingSP()) {
                             as1.remove();
@@ -253,18 +264,18 @@ public class SwordMord {
                                 as3.teleport(r1.clone().add(0, -1.2, 0));
                                 as4.teleport(l1.clone().add(0, -1.2, 0));
                             }
-                            if(kdata.getDamage()>0.1) {
+                            if (kdata.getDamage() > 0.1) {
                                 RayTrace rayTrace = new RayTrace(as1.getLocation().toVector(), new Vector(0, 1, 0));
                                 for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
                                     if (!DataMgr.getPlayerData(target).isInMatch())
                                         continue;
                                     if (DataMgr.getPlayerData(player).getTeam() != DataMgr.getPlayerData(target).getTeam() && target.getGameMode().equals(GameMode.ADVENTURE)) {
-                                        if (rayTrace.intersects(new BoundingBox((Entity) target), 5, 0.05)) {
+                                        if (rayTrace.intersects(new BoundingBox(target), 5, 0.05)) {
                                             Sclat.giveDamage(player, target, 6, "spWeapon");
 
                                             //AntiNoDamageTime
                                             BukkitRunnable taskdamage = new BukkitRunnable() {
-                                                Player p = target;
+                                                final Player p = target;
 
                                                 @Override
                                                 public void run() {
@@ -289,54 +300,55 @@ public class SwordMord {
                         kdata.setDamage(0);
                     }
 
-                }catch(Exception e){cancel();}
+                } catch (Exception e) {
+                    cancel();
+                }
             }
         };
         task.runTaskTimer(Main.getPlugin(), 0, 1);
     }
-    public static void ShootCounter(Player player){
+
+    public static void ShootCounter(Player player) {
 
         double QuadroShootSpeed = 1.0;
-        if(player.getGameMode() == GameMode.SPECTATOR) return;
+        if (player.getGameMode() == GameMode.SPECTATOR) return;
         PaintMgr.PaintHightestBlock(player.getLocation(), player, true, true);
 
         Snowball ball = player.launchProjectile(Snowball.class);
-        ((CraftSnowball)ball).getHandle().setItem(CraftItemStack.asNMSCopy(new ItemStack(DataMgr.getPlayerData(player).getTeam().getTeamColor().getWool())));
+        ((CraftSnowball) ball).getHandle().setItem(CraftItemStack.asNMSCopy(new ItemStack(DataMgr.getPlayerData(player).getTeam().getTeamColor().getWool())));
         player.getWorld().playSound(player.getLocation(), Sound.ENTITY_PIG_STEP, 0.3F, 1F);
         Vector vec = player.getLocation().getDirection().multiply(QuadroShootSpeed);
         double random = 0.1;
-        vec.add(new Vector(Math.random() * random - random/2, 0, Math.random() * random - random/2));
+        vec.add(new Vector(Math.random() * random - random / 2, 0, Math.random() * random - random / 2));
         ball.setVelocity(vec);
         ball.setShooter(player);
         String originName = String.valueOf(Main.getNotDuplicateNumber());
-        StringBuilder buf = new StringBuilder();
-        buf.append(originName);
-        buf.append("#QuadroArmsShotgunCounterShot");
-        String name = buf.toString();
+        String name = originName +
+                "#QuadroArmsShotgunCounterShot";
         DataMgr.mws.add(name);//
         ball.setCustomName(name);
         DataMgr.getMainSnowballNameMap().put(name, ball);
         DataMgr.setSnowballHitCount(name, 0);
-        BukkitRunnable SpinnerTask = new BukkitRunnable(){
+        BukkitRunnable SpinnerTask = new BukkitRunnable() {
             int i = 0;
-            int tick = 4;
+            final int tick = 4;
             //Vector fallvec;
             Snowball inkball = ball;
             boolean addedFallVec = false;
-            Player p = player;
-            Vector speedvec = new Vector(inkball.getVelocity().getX(), inkball.getVelocity().getY()  , inkball.getVelocity().getZ()).multiply(5.0);
-            Vector fallvec = new Vector(inkball.getVelocity().getX(), inkball.getVelocity().getY()  , inkball.getVelocity().getZ()).multiply(QuadroShootSpeed/35);
+            final Player p = player;
+            final Vector speedvec = new Vector(inkball.getVelocity().getX(), inkball.getVelocity().getY(), inkball.getVelocity().getZ()).multiply(5.0);
+            final Vector fallvec = new Vector(inkball.getVelocity().getX(), inkball.getVelocity().getY(), inkball.getVelocity().getZ()).multiply(QuadroShootSpeed / 35);
 
             @Override
-            public void run(){
+            public void run() {
                 inkball = DataMgr.getMainSnowballNameMap().get(name);
 
-                if(!inkball.equals(ball)){
-                    i+=DataMgr.getSnowballHitCount(name) - 1;
+                if (!inkball.equals(ball)) {
+                    i += DataMgr.getSnowballHitCount(name) - 1;
                     DataMgr.setSnowballHitCount(name, 0);
                 }
 
-                if(i != 0) {
+                if (i != 0) {
                     org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).getTeam().getTeamColor().getWool().createBlockData();
                     for (Player o_player : Main.getPlugin().getServer().getOnlinePlayers()) {
                         if (DataMgr.getPlayerData(o_player).getSettings().ShowEffect_MainWeaponInk())
@@ -345,24 +357,24 @@ public class SwordMord {
                                     o_player.spawnParticle(org.bukkit.Particle.BLOCK_DUST, inkball.getLocation(), 0, 0, -1, 0, 1, bd);
                     }
                 }
-                if(i < tick && !addedFallVec && i>=1){
+                if (i < tick && !addedFallVec && i >= 1) {
                     inkball.setVelocity(speedvec);
                 }
-                if(i >= tick && !addedFallVec){
+                if (i >= tick && !addedFallVec) {
                     inkball.setVelocity(fallvec);
                     addedFallVec = true;
                 }
-                if(i >= tick && i <= tick + 15)
+                if (i >= tick && i <= tick + 15)
                     inkball.setVelocity(inkball.getVelocity().add(new Vector(0, -0.1, 0)));
                 //if(i != tick)
-                if((new Random().nextInt(7)) == 0)
+                if ((new Random().nextInt(7)) == 0)
                     PaintMgr.PaintHightestBlock(inkball.getLocation(), p, false, true);
-                if(inkball.isDead())
+                if (inkball.isDead())
                     cancel();
 
                 i++;
             }
         };
-        SpinnerTask.runTaskTimer(Main.getPlugin(), 0,1);
+        SpinnerTask.runTaskTimer(Main.getPlugin(), 0, 1);
     }
 }

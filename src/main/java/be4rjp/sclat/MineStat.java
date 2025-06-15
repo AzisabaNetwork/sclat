@@ -1,85 +1,83 @@
 package be4rjp.sclat;
 
 /**
- *
  * from https://github.com/ldilley/minestat/blob/master/Java/me/dilley/MineStat.java
  */
-import java.io.*;
-import java.net.*;
 
-public class MineStat
-{
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.InputStreamReader;
+import java.net.InetSocketAddress;
+import java.net.Socket;
+
+public class MineStat {
     public static final byte NUM_FIELDS = 6;     // expected number of fields returned from server after query
     public static final int DEFAULT_TIMEOUT = 5; // default TCP socket connection timeout in seconds
-    
+
     /**
      * Hostname or IP address of the Minecraft server
      */
     private String address;
-    
+
     /**
      * Port number the Minecraft server accepts connections on
      */
     private int port;
-    
+
     /**
      * TCP socket connection timeout in milliseconds
      */
     private int timeout;
-    
+
     /**
      * Is the server up? (true or false)
      */
     private boolean serverUp;
-    
+
     /**
      * Message of the day from the server
      */
     private String motd;
-    
+
     /**
      * Minecraft version the server is running
      */
     private String version;
-    
+
     /**
      * Current number of players on the server
      */
     private String currentPlayers;
-    
+
     /**
      * Maximum player capacity of the server
      */
     private String maximumPlayers;
-    
+
     /**
      * Ping time to server in milliseconds
      */
     private long latency;
-    
-    public MineStat(String address, int port)
-    {
+
+    public MineStat(String address, int port) {
         this(address, port, DEFAULT_TIMEOUT);
     }
-    
-    public MineStat(String address, int port, int timeout)
-    {
+
+    public MineStat(String address, int port, int timeout) {
         setAddress(address);
         setPort(port);
         setTimeout(timeout);
         refresh();
     }
-    
+
     /**
      * Refresh state of the server
      * @return <code>true</code>; <code>false</code> if the server is down
      */
-    public boolean refresh()
-    {
+    public boolean refresh() {
         String[] serverData;
         String rawServerData;
-        try
-        {
+        try {
             //Socket clientSocket = new Socket(getAddress(), getPort());
             Socket clientSocket = new Socket();
             long startTime = System.currentTimeMillis();
@@ -92,115 +90,93 @@ public class MineStat
             dos.write(payload, 0, payload.length);
             rawServerData = br.readLine();
             clientSocket.close();
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             serverUp = false;
             //e.printStackTrace();
             return serverUp;
         }
-        
-        if(rawServerData == null)
+
+        if (rawServerData == null)
             serverUp = false;
-        else
-        {
+        else {
             serverData = rawServerData.split("\u0000\u0000\u0000");
-            if(serverData != null && serverData.length >= NUM_FIELDS)
-            {
+            if (serverData != null && serverData.length >= NUM_FIELDS) {
                 serverUp = true;
                 setVersion(serverData[2].replace("\u0000", ""));
                 setMotd(serverData[3].replace("\u0000", ""));
                 setCurrentPlayers(serverData[4].replace("\u0000", ""));
                 setMaximumPlayers(serverData[5].replace("\u0000", ""));
-            }
-            else
+            } else
                 serverUp = false;
         }
         return serverUp;
     }
-    
-    public String getAddress()
-    {
+
+    public String getAddress() {
         return address;
     }
-    
-    public void setAddress(String address)
-    {
+
+    public void setAddress(String address) {
         this.address = address;
     }
-    
-    public int getPort()
-    {
+
+    public int getPort() {
         return port;
     }
-    
-    public void setPort(int port)
-    {
+
+    public void setPort(int port) {
         this.port = port;
     }
-    
-    public int getTimeout()
-    {
+
+    public int getTimeout() {
         return timeout * 1000;         // milliseconds
     }
-    
-    public void setTimeout(int timeout)
-    {
+
+    public void setTimeout(int timeout) {
         this.timeout = timeout * 1000; // milliseconds
     }
-    
-    public String getMotd()
-    {
+
+    public String getMotd() {
         return motd;
     }
-    
-    public String getVersion()
-    {
+
+    public String getVersion() {
         return version;
     }
-    
-    public String getCurrentPlayers()
-    {
+
+    public String getCurrentPlayers() {
         return currentPlayers;
     }
-    
-    public String getMaximumPlayers()
-    {
+
+    public String getMaximumPlayers() {
         return maximumPlayers;
     }
-    
-    public long getLatency()
-    {
+
+    public long getLatency() {
         return latency;
     }
-    
-    public void setLatency(long latency)
-    {
+
+    public void setLatency(long latency) {
         this.latency = latency;
     }
-    
-    public void setMaximumPlayers(String maximumPlayers)
-    {
+
+    public void setMaximumPlayers(String maximumPlayers) {
         this.maximumPlayers = maximumPlayers;
     }
-    
-    public void setCurrentPlayers(String currentPlayers)
-    {
+
+    public void setCurrentPlayers(String currentPlayers) {
         this.currentPlayers = currentPlayers;
     }
-    
-    public void setMotd(String motd)
-    {
+
+    public void setMotd(String motd) {
         this.motd = motd;
     }
-    
-    public void setVersion(String version)
-    {
+
+    public void setVersion(String version) {
         this.version = version;
     }
-    
-    public boolean isServerUp()
-    {
+
+    public boolean isServerUp() {
         return serverUp;
     }
 }

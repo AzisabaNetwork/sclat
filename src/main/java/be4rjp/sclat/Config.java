@@ -1,14 +1,14 @@
 package be4rjp.sclat;
 
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
+
 import java.io.File;
 import java.io.IOException;
 
 import static org.bukkit.Bukkit.getLogger;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 
 /**
- *
  * @author Be4rJP
  */
 public class Config {
@@ -23,20 +23,20 @@ public class Config {
     private FileConfiguration idCash;
     private FileConfiguration emblems;
     private FileConfiguration emblemItems;
-    private File parent = new File("plugins/Sclat");
-    private File psf = new File(parent, "class.yml");
-    private File weaponf = new File(parent, "mainnweapon.yml");
-    private File mapf = new File(parent, "maps.yml");
-    private File conff = new File(parent, "config.yml");
-    private File playersettings_f = new File(parent, "settings.yml");
-    private File asf = new File(parent, "armorstand.yml");
-    private File sf = new File(parent, "status.yml");
-    private File serverFile = new File(parent, "servers.yml");
-    private File idCashFile = new File(parent, "UUIDCash.yml");
-    private File emblemsFile = new File(parent, "emblems.yml");
-    private File emblemItemsFile = new File(parent, "emblem_items.yml");
-    
-    public synchronized void LoadConfig(){
+    private final File parent = new File("plugins/Sclat");
+    private final File psf = new File(parent, "class.yml");
+    private final File weaponf = new File(parent, "mainnweapon.yml");
+    private final File mapf = new File(parent, "maps.yml");
+    private final File conff = new File(parent, "config.yml");
+    private final File playersettings_f = new File(parent, "settings.yml");
+    private final File asf = new File(parent, "armorstand.yml");
+    private final File sf = new File(parent, "status.yml");
+    private final File serverFile = new File(parent, "servers.yml");
+    private final File idCashFile = new File(parent, "UUIDCash.yml");
+    private final File emblemsFile = new File(parent, "emblems.yml");
+    private final File emblemItemsFile = new File(parent, "emblem_items.yml");
+
+    public synchronized void LoadConfig() {
         ps = YamlConfiguration.loadConfiguration(psf);
         conf = YamlConfiguration.loadConfiguration(conff);
         weapon = YamlConfiguration.loadConfiguration(weaponf);
@@ -62,56 +62,56 @@ public class Config {
 
     private void tryCreateFile(File targetFile) {
         try {
-            if(!targetFile.exists()) targetFile.createNewFile();
+            if (!targetFile.exists()) targetFile.createNewFile();
         } catch (IOException e) {
             getLogger().warning("Failed to create file: " + e);
         }
     }
 
-    public synchronized void SaveConfig(){
-        try{
+    public synchronized void SaveConfig() {
+        try {
             playersettings.save(playersettings_f);
             s.save(sf);
             idCash.save(idCashFile);
             emblems.save(emblemsFile);
-        }catch(Exception e){
+        } catch (Exception e) {
             getLogger().warning("Failed to save config files!");
         }
     }
-    
-    public FileConfiguration getConfig(){
+
+    public FileConfiguration getConfig() {
         return conf;
     }
-    
-    public FileConfiguration getClassConfig(){
+
+    public FileConfiguration getClassConfig() {
         return ps;
     }
-    
-    public FileConfiguration getWeaponConfig(){
+
+    public FileConfiguration getWeaponConfig() {
         return weapon;
     }
-    
-    public FileConfiguration getMapConfig(){
+
+    public FileConfiguration getMapConfig() {
         return map;
     }
-    
-    public FileConfiguration getPlayerSettings(){
+
+    public FileConfiguration getPlayerSettings() {
         return playersettings;
     }
-    
-    public FileConfiguration getArmorStandSettings(){
+
+    public FileConfiguration getArmorStandSettings() {
         return as;
     }
-    
-    public FileConfiguration getPlayerStatus(){
+
+    public FileConfiguration getPlayerStatus() {
         return s;
     }
-    
-    public FileConfiguration getServers(){
+
+    public FileConfiguration getServers() {
         return servers;
     }
-    
-    public FileConfiguration getUUIDCash(){
+
+    public FileConfiguration getUUIDCash() {
         return idCash;
     }
 
