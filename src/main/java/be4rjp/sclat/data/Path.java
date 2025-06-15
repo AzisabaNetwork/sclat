@@ -33,6 +33,10 @@ public class Path {
         return this.as;
     }
 
+    public void setArmorStand(ArmorStand as) {
+        this.as = as;
+    }
+
     public Location getFromLocation() {
         return this.from;
     }
@@ -44,11 +48,6 @@ public class Path {
     public Team getTeam() {
         return this.team;
     }
-
-    public void setArmorStand(ArmorStand as) {
-        this.as = as;
-    }
-
 
     public void setTeam(Team t) {
         this.team = t;

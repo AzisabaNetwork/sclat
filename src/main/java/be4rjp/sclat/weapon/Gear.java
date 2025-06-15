@@ -8,19 +8,6 @@ import org.bukkit.entity.Player;
  * @author Be4rJP
  */
 public class Gear {
-    public static class Type {
-        public static final int NO_GEAR = 0;
-        public static final int IKA_SPEED_UP = 1;
-        public static final int HITO_SPEED_UP = 2;
-        public static final int MAIN_SPEC_UP = 3;
-        public static final int SUB_SPEC_UP = 4;
-        public static final int INK_RECOVERY_UP = 5;
-        public static final int MAIN_INK_EFFICIENCY_UP = 6;
-        public static final int SPECIAL_UP = 7;
-        public static final int MAX_HEALTH_UP = 8;
-        public static final int PENA_DOWN = 9;
-    }
-
     public static Material getGearMaterial(int gearN) {
         switch (gearN) {
             case 1:
@@ -122,5 +109,18 @@ public class Gear {
             }
         } else
             return 1;
+    }
+
+    public static class Type {
+        public static final int NO_GEAR = 0;
+        public static final int IKA_SPEED_UP = 1;
+        public static final int HITO_SPEED_UP = 2;
+        public static final int MAIN_SPEC_UP = 3;
+        public static final int SUB_SPEC_UP = 4;
+        public static final int INK_RECOVERY_UP = 5;
+        public static final int MAIN_INK_EFFICIENCY_UP = 6;
+        public static final int SPECIAL_UP = 7;
+        public static final int MAX_HEALTH_UP = 8;
+        public static final int PENA_DOWN = 9;
     }
 }

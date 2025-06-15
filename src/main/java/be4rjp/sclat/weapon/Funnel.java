@@ -146,14 +146,12 @@ public class Funnel {
             final Player p = player;
 
             final PlayerData data = DataMgr.getPlayerData(p);
-            int i = 0;
-
             final List<ArmorStand> list = new ArrayList<ArmorStand>();
             final List<ArmorStand> list1 = new ArrayList<ArmorStand>();
             final List<ArmorStand> list2 = new ArrayList<ArmorStand>();
             final List<List<ArmorStand>> list5 = new ArrayList<List<ArmorStand>>();
             final List<ArmorStand> list6 = new ArrayList<ArmorStand>();
-
+            int i = 0;
             ArmorStand as1;
             ArmorStand as2;
             ArmorStand as3;

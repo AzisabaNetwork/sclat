@@ -96,6 +96,8 @@ public class Hound {
         Vector pVector = player.getEyeLocation().getDirection();
         Vector vec = new Vector(pVector.getX(), 0, pVector.getZ()).normalize().multiply(data.getWeaponClass().getMainWeapon().getShootSpeed());
         BukkitRunnable task = new BukkitRunnable() {
+            final int explodetick = data.getWeaponClass().getMainWeapon().getRollerShootQuantity();
+            final float climbSpeed = DataMgr.getPlayerData(player).getWeaponClass().getMainWeapon().getRollerNeedInk();
             Vector aVec = vec.clone();
             Location bloc;
             int i = 0;
@@ -104,8 +106,6 @@ public class Hound {
             //半径
             double maxDist = 1;
             double saveY = 0;
-            final int explodetick = data.getWeaponClass().getMainWeapon().getRollerShootQuantity();
-            final float climbSpeed = DataMgr.getPlayerData(player).getWeaponClass().getMainWeapon().getRollerNeedInk();
 
             @Override
             public void run() {

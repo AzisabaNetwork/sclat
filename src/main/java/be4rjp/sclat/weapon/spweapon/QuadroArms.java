@@ -330,14 +330,14 @@ public class QuadroArms {
         DataMgr.getMainSnowballNameMap().put(name, ball);
         DataMgr.setSnowballHitCount(name, 0);
         BukkitRunnable SpinnerTask = new BukkitRunnable() {
-            int i = 0;
             final int tick = 3;
             //Vector fallvec;
             final Vector origvec = vec;
-            Snowball inkball = ball;
-            boolean addedFallVec = false;
             final Player p = player;
+            int i = 0;
+            Snowball inkball = ball;
             final Vector fallvec = new Vector(inkball.getVelocity().getX(), inkball.getVelocity().getY(), inkball.getVelocity().getZ()).multiply(QuadroShootSpeed / 14);
+            boolean addedFallVec = false;
 
             @Override
             public void run() {
@@ -397,12 +397,12 @@ public class QuadroArms {
         DataMgr.getMainSnowballNameMap().put(name, ball);
         DataMgr.setSnowballHitCount(name, 0);
         BukkitRunnable task = new BukkitRunnable() {
-            int i = 0;
             final int tick = distick;
-            Snowball inkball = ball;
             final Player p = player;
-            boolean addedFallVec = false;
+            int i = 0;
+            Snowball inkball = ball;
             final Vector fallvec = new Vector(inkball.getVelocity().getX(), inkball.getVelocity().getY(), inkball.getVelocity().getZ()).multiply(ShootSpeed / 150);
+            boolean addedFallVec = false;
 
             @Override
             public void run() {
@@ -468,14 +468,14 @@ public class QuadroArms {
         DataMgr.getMainSnowballNameMap().put(name, ball);
         DataMgr.setSnowballHitCount(name, 0);
         BukkitRunnable task = new BukkitRunnable() {
-            int i = 0;
             final int tick = distick;
-            Snowball inkball = ball;
             final Player p = player;
-            boolean addedFallVec = false;
             final double BlasterExDamage = 3.1;
             final double BlasterExHankei = 4;
+            int i = 0;
+            Snowball inkball = ball;
             final Vector fallvec = new Vector(inkball.getVelocity().getX(), inkball.getVelocity().getY(), inkball.getVelocity().getZ()).multiply(ShootSpeed / 17);
+            boolean addedFallVec = false;
 
             @Override
             public void run() {
@@ -577,11 +577,11 @@ public class QuadroArms {
         }
         BukkitRunnable task = new BukkitRunnable() {
             final Player p = player;
+            final boolean collision = false;
+            final boolean block_check = false;
             Vector p_vec;
             double x = 0;
             double z = 0;
-            final boolean collision = false;
-            final boolean block_check = false;
             int c = 0;
             Item drop;
             Snowball ball;

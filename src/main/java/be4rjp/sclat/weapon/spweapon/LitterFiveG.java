@@ -154,7 +154,6 @@ public class LitterFiveG {
                     }
                     ArrayList<Vector> positions = rayTrace.traverse((int) (range * 1.8), 0.7);
                     if (visible) {
-                        check:
                         for (int i = 0; i < positions.size(); i++) {
                             Location position = positions.get(i).toLocation(p.getLocation().getWorld());
                             if (!position.getBlock().getType().equals(Material.AIR)) {

@@ -182,6 +182,7 @@ public class SwordMord {
 
     public static void SwordGurdRunnable(Player player) {
         BukkitRunnable task = new BukkitRunnable() {
+            final Player p = player;
             KasaData kdata = new KasaData(player);
             ArmorStand as1;
             ArmorStand as2;
@@ -189,13 +190,12 @@ public class SwordMord {
             ArmorStand as4;
             int c = 0;
             boolean gurd = false;
-            final Player p = player;
             Location eloc = p.getEyeLocation();
             Vector pv = p.getEyeLocation().getDirection().normalize();
             Vector vec3 = new Vector(pv.getX(), 0, pv.getZ()).normalize();
             Vector vec1 = new Vector(vec3.getZ() * -1, 0, vec3.getX());
-            Vector vec2 = new Vector(vec3.getZ(), 0, vec3.getX() * -1);
             Location l1 = eloc.clone().add(vec1.clone().multiply(0.4)).add(vec3.clone().multiply(0.7));
+            Vector vec2 = new Vector(vec3.getZ(), 0, vec3.getX() * -1);
             Location r1 = eloc.clone().add(vec2.clone().multiply(0.4)).add(vec3.clone().multiply(0.7));
             Location m1 = eloc.clone().add(vec3.clone().multiply(0.8));
 
@@ -330,14 +330,14 @@ public class SwordMord {
         DataMgr.getMainSnowballNameMap().put(name, ball);
         DataMgr.setSnowballHitCount(name, 0);
         BukkitRunnable SpinnerTask = new BukkitRunnable() {
-            int i = 0;
             final int tick = 4;
+            final Player p = player;
+            int i = 0;
             //Vector fallvec;
             Snowball inkball = ball;
-            boolean addedFallVec = false;
-            final Player p = player;
             final Vector speedvec = new Vector(inkball.getVelocity().getX(), inkball.getVelocity().getY(), inkball.getVelocity().getZ()).multiply(5.0);
             final Vector fallvec = new Vector(inkball.getVelocity().getX(), inkball.getVelocity().getY(), inkball.getVelocity().getZ()).multiply(QuadroShootSpeed / 35);
+            boolean addedFallVec = false;
 
             @Override
             public void run() {

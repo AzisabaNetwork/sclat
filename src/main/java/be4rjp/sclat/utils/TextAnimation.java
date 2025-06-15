@@ -1,7 +1,7 @@
 package be4rjp.sclat.utils;
 
-import java.util.Arrays;
 import java.util.Collections;
+import java.util.Objects;
 
 public class TextAnimation {
 
@@ -26,7 +26,7 @@ public class TextAnimation {
 
         char[] chars = line.toCharArray();
         for (int i = 0; i < chars.length; i++) {
-            if (Collections.singletonList(smalls).contains(chars[i])) {
+            if (Objects.equals(smalls, chars[i])) {
                 plus++;
             } else if (String.valueOf(chars[i]).getBytes().length < 2) {
                 hankaku++;

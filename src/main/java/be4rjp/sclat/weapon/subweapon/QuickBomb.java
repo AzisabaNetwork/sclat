@@ -37,10 +37,10 @@ public class QuickBomb {
     public static void QuickBomRunnable(Player player) {
         BukkitRunnable task = new BukkitRunnable() {
             final Player p = player;
+            final boolean block_check = false;
             Vector p_vec;
             double x = 0;
             double z = 0;
-            final boolean block_check = false;
             int c = 0;
             Item drop;
             Snowball ball;

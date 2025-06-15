@@ -41,8 +41,16 @@ public class Match {
         return team0;
     }
 
+    public void setTeam0(Team team) {
+        team0 = team;
+    }
+
     public Team getTeam1() {
         return team1;
+    }
+
+    public void setTeam1(Team team) {
+        team1 = team;
     }
 
     public int getPlayerCount() {
@@ -53,12 +61,20 @@ public class Match {
         return this.map;
     }
 
+    public void setMapData(MapData map) {
+        this.map = map;
+    }
+
     public boolean canJoin() {
         return this.canjoin;
     }
 
     public Player getLeaderPlayer() {
         return this.leader;
+    }
+
+    public void setLeaderPlayer(Player player) {
+        this.leader = player;
     }
 
     public int getNawabari_T_Count() {
@@ -81,20 +97,40 @@ public class Match {
         return this.bur;
     }
 
+    public void setBlockUpdater(BlockUpdater bur) {
+        this.bur = bur;
+    }
+
     public Team getWinTeam() {
         return this.winteam;
+    }
+
+    public void setWinTeam(Team team) {
+        this.winteam = team;
     }
 
     public boolean getIsHikiwake() {
         return this.hikiwake;
     }
 
+    public void setIsHikiwake(boolean is) {
+        this.hikiwake = is;
+    }
+
     public Scoreboard getScoreboard() {
         return this.scoreboard;
     }
 
+    public void setScoreboard(Scoreboard sc) {
+        this.scoreboard = sc;
+    }
+
     public boolean getIsStarted() {
         return this.started;
+    }
+
+    public void setIsStarted(boolean is) {
+        this.started = is;
     }
 
     public int getJoinedPlayerCount() {
@@ -105,53 +141,16 @@ public class Match {
         return this.isStartedCount;
     }
 
-
-    public void setTeam0(Team team) {
-        team0 = team;
-    }
-
-    public void setTeam1(Team team) {
-        team1 = team;
-    }
-
     public void addPlayerCount() {
         playercount++;
-    }
-
-    public void setMapData(MapData map) {
-        this.map = map;
     }
 
     public void setCanJoin(boolean is) {
         this.canjoin = is;
     }
 
-    public void setLeaderPlayer(Player player) {
-        this.leader = player;
-    }
-
     public void setIsFinished(boolean is) {
         this.finished = is;
-    }
-
-    public void setBlockUpdater(BlockUpdater bur) {
-        this.bur = bur;
-    }
-
-    public void setWinTeam(Team team) {
-        this.winteam = team;
-    }
-
-    public void setIsHikiwake(boolean is) {
-        this.hikiwake = is;
-    }
-
-    public void setScoreboard(Scoreboard sc) {
-        this.scoreboard = sc;
-    }
-
-    public void setIsStarted(boolean is) {
-        this.started = is;
     }
 
     public void setIsStartedCount(boolean is) {

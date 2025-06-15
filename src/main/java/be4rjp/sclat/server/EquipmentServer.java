@@ -13,11 +13,10 @@ import static be4rjp.sclat.Main.conf;
 
 public class EquipmentServer extends Thread {
 
-    private ServerSocket sSocket = null;
+    private final int port;
 
     //private List<String> commands = new ArrayList<>();
-
-    private final int port;
+    private ServerSocket sSocket = null;
 
     public EquipmentServer(int port) {
         this.port = port;

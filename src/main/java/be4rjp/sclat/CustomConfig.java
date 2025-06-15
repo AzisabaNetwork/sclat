@@ -13,10 +13,10 @@ import java.util.logging.Level;
 
 public class CustomConfig {
 
-    private FileConfiguration config = null;
     private final File configFile;
     private final String file;
     private final Plugin plugin;
+    private FileConfiguration config = null;
 
     public CustomConfig(Plugin plugin, String fileName) {
         this.plugin = plugin;

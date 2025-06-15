@@ -58,9 +58,6 @@ public class JetPack {
         BukkitRunnable task = new BukkitRunnable() {
             final Player p = player;
             final Location ol = DataMgr.getPlayerData(player).getPlayerGroundLocation();
-            int i = 0;
-            int id = 0;
-            Location btl = player.getLocation();
             final ArmorStand as = player.getWorld().spawn(player.getLocation(), ArmorStand.class, armorStand -> {
                 armorStand.setSmall(true);
                 armorStand.setGravity(false);
@@ -75,7 +72,9 @@ public class JetPack {
                 //armorStand.setMarker(true);
             });
             final List<ArmorStand> list = new ArrayList<ArmorStand>();
-
+            int i = 0;
+            int id = 0;
+            Location btl = player.getLocation();
             Vector vehicleVector = new Vector(0, 0, 0);
 
             @Override
@@ -274,10 +273,10 @@ public class JetPack {
     public static void ShootJetPack(Player player) {
         BukkitRunnable task = new BukkitRunnable() {
             final Player p = player;
+            final boolean block_check = false;
             Vector p_vec;
             double x = 0;
             double z = 0;
-            final boolean block_check = false;
             int c = 0;
             Item drop;
             Snowball ball;

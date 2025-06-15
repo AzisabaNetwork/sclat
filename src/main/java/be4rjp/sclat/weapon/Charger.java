@@ -36,10 +36,10 @@ public class Charger {
     public static void ChargerRunnable(Player player) {
         BukkitRunnable task = new BukkitRunnable() {
             final Player p = player;
-            int charge = 0;
-            int keeping = 0;
             final int max = DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getMaxCharge();
             final int min = max * 2 / 3;//インク消費軽減チャージ
+            int charge = 0;
+            int keeping = 0;
 
             @Override
             public void run() {
@@ -85,7 +85,6 @@ public class Charger {
                     p.getInventory().setItem(0, w);
                     RayTrace rayTrace = new RayTrace(p.getEyeLocation().toVector(), p.getEyeLocation().getDirection());
                     ArrayList<Vector> positions = rayTrace.traverse((int) ((double) charge * data.getWeaponClass().getMainWeapon().getChargeRatio() * (double) data.getWeaponClass().getMainWeapon().getDistanceTick()), 0.7);
-                    check:
                     for (int i = 0; i < positions.size(); i++) {
                         Location position = positions.get(i).toLocation(p.getLocation().getWorld());
                         Block block = player.getWorld().getBlockAt(position);

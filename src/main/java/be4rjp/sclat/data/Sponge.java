@@ -30,29 +30,28 @@ public class Sponge {
         return this.block;
     }
 
-    public Team getTeam() {
-        return this.team;
-    }
-
-    public double getHealth() {
-        return this.hp;
-    }
-
-    public Match getMatch() {
-        return this.match;
-    }
-
-
     public void setBlock(Block block) {
         this.block = block;
+    }
+
+    public Team getTeam() {
+        return this.team;
     }
 
     public void setTeam(Team team) {
         this.team = team;
     }
 
+    public double getHealth() {
+        return this.hp;
+    }
+
     public void setHealth(double hp) {
         this.hp = hp;
+    }
+
+    public Match getMatch() {
+        return this.match;
     }
 
     public void setMatch(Match match) {

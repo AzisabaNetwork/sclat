@@ -11,9 +11,9 @@ import java.util.List;
  */
 public class KasaData {
 
-    private List<ArmorStand> list = new ArrayList<ArmorStand>();
     private final Player player;
     double damage = 0;
+    private List<ArmorStand> list = new ArrayList<ArmorStand>();
 
     public KasaData(Player player) {
         this.player = player;
@@ -23,20 +23,19 @@ public class KasaData {
         return this.damage;
     }
 
-    public List<ArmorStand> getArmorStandList() {
-        return this.list;
-    }
-
-    public Player getPlayer() {
-        return this.player;
-    }
-
-
     public void setDamage(double damage) {
         this.damage = damage;
     }
 
+    public List<ArmorStand> getArmorStandList() {
+        return this.list;
+    }
+
     public void setArmorStandList(List<ArmorStand> list) {
         this.list = list;
+    }
+
+    public Player getPlayer() {
+        return this.player;
     }
 }

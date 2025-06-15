@@ -31,6 +31,10 @@ public class PaintData {
         return this.match;
     }
 
+    public void setMatch(Match match) {
+        this.match = match;
+    }
+
     public Block getBlock() {
         return this.paintedblock;
     }
@@ -43,32 +47,27 @@ public class PaintData {
         return this.team;
     }
 
-    public BlockState getOriginalState() {
-        return this.bs;
-    }
-
-    public BlockData getBlockData() {
-        return this.blockData;
-    }
-
-
-    public void setMatch(Match match) {
-        this.match = match;
-    }
-
-    public void setOrigianlType(Material material) {
-        this.origtype = material;
-    }
-
     public void setTeam(Team team) {
         this.team = team;
+    }
+
+    public BlockState getOriginalState() {
+        return this.bs;
     }
 
     public void setOriginalState(BlockState bs) {
         this.bs = bs;
     }
 
+    public BlockData getBlockData() {
+        return this.blockData;
+    }
+
     public void setBlockData(BlockData blockData) {
         this.blockData = blockData;
+    }
+
+    public void setOrigianlType(Material material) {
+        this.origtype = material;
     }
 }

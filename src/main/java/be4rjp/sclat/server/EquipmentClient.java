@@ -12,12 +12,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EquipmentClient {
-    private List<String> commands = new ArrayList<>();
-
     private final String host;
     private final int port;
-
     private final BukkitRunnable task;
+    private List<String> commands = new ArrayList<>();
 
     public EquipmentClient(String host, int port, List<String> commands) {
         this.host = host;

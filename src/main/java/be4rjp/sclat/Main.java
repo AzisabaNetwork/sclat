@@ -55,10 +55,8 @@ import java.util.List;
  */
 public class Main extends JavaPlugin implements PluginMessageListener {
 
+    public static final String VERSION = "v2.0.0 - β";
     public static Config conf;
-
-    private static Main plugin;
-
     public static Location lobby;
 
     public static Glow glow;
@@ -74,41 +72,35 @@ public class Main extends JavaPlugin implements PluginMessageListener {
     public static boolean shop = true;
 
     public static CustomConfig tutorialServers;
-
-    public static final String VERSION = "v2.0.0 - β";
-
     public static CustomConfig news;
-
     //StatusShare
     public static StatusServer ss = null;
-
     //EquipmentShare
     public static EquipmentServer es = null;
-
     //API
     public static boolean NoteBlockAPI = true;
     public static boolean LunaChat = true;
-
+    //for ProtocolLib
+    public static ProtocolManager protocolManager;
+    //for DADADAChecker
+    public static DADADACheckerAPI dadadaCheckerAPI;
+    public static List<String> flyList = new ArrayList<>();
+    public static List<String> modList = new ArrayList<>();
+    public static double PARTICLE_RENDER_DISTANCE = 0;
+    public static double PARTICLE_RENDER_DISTANCE_SQUARED;
+    private static Main plugin;
     //重複しない数字
     //ボム等で使用
     private static int NDNumber = 0;
 
+    public static Main getPlugin() {
+        return plugin;
+    }
 
-    //for ProtocolLib
-    public static ProtocolManager protocolManager;
-
-    //for DADADAChecker
-    public static DADADACheckerAPI dadadaCheckerAPI;
-
-
-    public static List<String> flyList = new ArrayList<>();
-
-    public static List<String> modList = new ArrayList<>();
-
-
-    public static double PARTICLE_RENDER_DISTANCE = 0;
-    public static double PARTICLE_RENDER_DISTANCE_SQUARED;
-
+    public static int getNotDuplicateNumber() {
+        NDNumber++;
+        return NDNumber;
+    }
 
     @Override
     public void onEnable() {
@@ -416,7 +408,6 @@ public class Main extends JavaPlugin implements PluginMessageListener {
         }
     }
 
-
     @Override
     public void onDisable() {
 
@@ -448,7 +439,7 @@ public class Main extends JavaPlugin implements PluginMessageListener {
                 data.getBlock().setBlockData(data.getBlockData());
         }
         DataMgr.getBlockDataMap().clear();
-        
+
         /*
         for(Block block : DataMgr.rblist){
             block.setType(Material.AIR);
@@ -473,15 +464,6 @@ public class Main extends JavaPlugin implements PluginMessageListener {
         if (type == ServerType.LOBBY) {
             ServerStatusManager.stopTask();
         }
-    }
-
-    public static Main getPlugin() {
-        return plugin;
-    }
-
-    public static int getNotDuplicateNumber() {
-        NDNumber++;
-        return NDNumber;
     }
 
 }

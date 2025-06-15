@@ -13,12 +13,10 @@ import java.util.List;
 
 public class StatusClient {
 
-    private List<String> commands = new ArrayList<>();
-
     private final String host;
     private final int port;
-
     private final BukkitRunnable task;
+    private List<String> commands = new ArrayList<>();
 
     public StatusClient(String host, int port, List<String> commands) {
         this.host = host;

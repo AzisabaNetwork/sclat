@@ -29,12 +29,12 @@ public class SprinklerMgr {
         ball.setShooter(player);
         ball.setCustomName("Sprinkler");
         BukkitRunnable task = new BukkitRunnable() {
-            int i = 0;
             final int tick = 2;
             //Vector fallvec;
             final Vector origvec = vec;
             final Snowball inkball = ball;
             final Player p = player;
+            int i = 0;
 
             @Override
             public void run() {

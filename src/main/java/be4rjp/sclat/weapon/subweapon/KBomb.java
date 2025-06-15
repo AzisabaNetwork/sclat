@@ -34,11 +34,11 @@ public class KBomb {
     public static void KBomRunnable(Player player) {
         BukkitRunnable task = new BukkitRunnable() {
             final Player p = player;
+            final boolean collision = false;
+            final boolean block_check = false;
             Vector p_vec;
             double x = 0;
             double z = 0;
-            final boolean collision = false;
-            final boolean block_check = false;
             boolean cb = false;
             Location l = p.getLocation();
             int cc = 0;

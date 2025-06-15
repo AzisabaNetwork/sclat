@@ -19,11 +19,10 @@ import java.net.Socket;
 
 public class StatusServer extends Thread {
 
-    private ServerSocket sSocket = null;
+    private final int port;
 
     //private List<String> commands = new ArrayList<>();
-
-    private final int port;
+    private ServerSocket sSocket = null;
 
     public StatusServer(int port) {
         this.port = port;

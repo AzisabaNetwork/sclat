@@ -21,18 +21,16 @@ public class ServerStatus {
     private final BukkitRunnable task2;
     private final Block sign;
     private final String info;
-
+    private final List<String> uuidList;
+    private final MatchServerRunnable matchServerRunnable;
     private int playerCount = 0;
     private boolean online = false;
     private boolean runningMatch = false;
     private boolean restartingServer = false;
     private String mapName = "";
     private boolean maintenance = false;
-    private final List<String> uuidList;
     private long waitingEndTime = 0;
     private long matchStartTime = 0;
-
-    private final MatchServerRunnable matchServerRunnable;
 
     public ServerStatus(String serverName, String displayName, String host, int port, int maxPlayer, int period, Block sign, String info) {
         this.serverName = serverName;
@@ -117,12 +115,24 @@ public class ServerStatus {
         return this.runningMatch;
     }
 
+    public void setRunningMatch(boolean is) {
+        this.runningMatch = is;
+    }
+
     public boolean getRestartingServer() {
         return this.restartingServer;
     }
 
+    public void setRestartingServer(boolean is) {
+        this.restartingServer = is;
+    }
+
     public String getMapName() {
         return this.mapName;
+    }
+
+    public void setMapName(String name) {
+        this.mapName = name;
     }
 
     public Block getSign() {
@@ -141,40 +151,28 @@ public class ServerStatus {
         return matchStartTime;
     }
 
+    public void setMatchStartTime(long matchStartTime) {
+        this.matchStartTime = matchStartTime;
+    }
+
     public long getWaitingEndTime() {
         return waitingEndTime;
+    }
+
+    public void setWaitingEndTime(long waitingEndTime) {
+        this.waitingEndTime = waitingEndTime;
     }
 
     public boolean isMaintenance() {
         return this.maintenance;
     }
 
-    public boolean isOnline() {
-        return this.online;
-    }
-
-    public void setRunningMatch(boolean is) {
-        this.runningMatch = is;
-    }
-
-    public void setRestartingServer(boolean is) {
-        this.restartingServer = is;
-    }
-
-    public void setMapName(String name) {
-        this.mapName = name;
-    }
-
     public void setMaintenance(boolean is) {
         this.maintenance = is;
     }
 
-    public void setMatchStartTime(long matchStartTime) {
-        this.matchStartTime = matchStartTime;
-    }
-
-    public void setWaitingEndTime(long waitingEndTime) {
-        this.waitingEndTime = waitingEndTime;
+    public boolean isOnline() {
+        return this.online;
     }
 
     public void stopTask() {

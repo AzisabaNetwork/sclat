@@ -36,7 +36,6 @@ public class Amehurasi {
     public static void AmehurasiDropRunnable(Player player) {
         BukkitRunnable task = new BukkitRunnable() {
             final Player p = player;
-            Vector p_vec;
             final double x = 0;
             final double z = 0;
             final boolean collision = false;
@@ -44,6 +43,7 @@ public class Amehurasi {
             final boolean cb = false;
             final Location l = p.getLocation();
             final int cc = 0;
+            Vector p_vec;
             int c = 0;
             Item drop;
             Vector vec;
@@ -209,9 +209,9 @@ public class Amehurasi {
         ball.setShooter(player);
         ball.setCustomName("Amehurasi");
         BukkitRunnable task = new BukkitRunnable() {
-            int i = 0;
             final Snowball inkball = ball;
             final Player p = player;
+            int i = 0;
 
             @Override
             public void run() {

@@ -15,13 +15,13 @@ import static be4rjp.sclat.Main.conf;
  * @author Be4rJP
  */
 public class NoteBlockAPIMgr {
-    private static int nBgm_C = 0;
-    private static int fBgm_C = 0;
     //private static byte volume = 22;
     private static final List<Song> nsList = new ArrayList<>();
     private static final List<String> nsnList = new ArrayList<>();
     private static final List<Song> fsList = new ArrayList<>();
     private static final List<String> fsnList = new ArrayList<>();
+    private static int nBgm_C = 0;
+    private static int fBgm_C = 0;
 
     public static void LoadSongFiles() {
         for (String songname : conf.getConfig().getConfigurationSection("nBGM").getKeys(false)) {

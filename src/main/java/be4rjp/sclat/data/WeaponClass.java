@@ -22,20 +22,20 @@ public class WeaponClass {
         return this.mainweapon;
     }
 
-    public String getSubWeaponName() {
-        return this.subweaponname;
-    }
-
-    public String getSPWeaponName() {
-        return this.spweaponname;
-    }
-
     public void setMainWeapon(MainWeapon mw) {
         this.mainweapon = mw;
     }
 
+    public String getSubWeaponName() {
+        return this.subweaponname;
+    }
+
     public void setSubWeaponName(String name) {
         this.subweaponname = name;
+    }
+
+    public String getSPWeaponName() {
+        return this.spweaponname;
     }
 
     public void setSPWeaponName(String name) {

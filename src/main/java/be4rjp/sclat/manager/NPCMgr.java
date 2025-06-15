@@ -32,13 +32,11 @@ public class NPCMgr {
 
     public static void createNPC(Player player1, String npcName1, Location location1) {
         BukkitRunnable task = new BukkitRunnable() {
-            EntityPlayer npc;
-
-            int s = 0;
-
             final Player player = player1;
             final String npcName = npcName1;
             final Location location = location1;
+            EntityPlayer npc;
+            int s = 0;
 
             @Override
             public void run() {

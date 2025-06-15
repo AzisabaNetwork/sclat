@@ -30,14 +30,14 @@ public class Sprinkler {
     public static void SprinklerRunnable(Player player) {
         BukkitRunnable task = new BukkitRunnable() {
             final Player p = player;
-            Vector p_vec;
-            double x = 0;
-            double z = 0;
             final boolean collision = false;
             final boolean block_check = false;
             final boolean cb = false;
             final Location l = p.getLocation();
             final int cc = 0;
+            Vector p_vec;
+            double x = 0;
+            double z = 0;
             int c = 0;
             Item drop;
             Snowball ball;

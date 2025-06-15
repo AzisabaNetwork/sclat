@@ -154,12 +154,12 @@ public class RankingHolograms {
         return this.rankingType;
     }
 
-    public EntityArmorStand getClickHit1() {
-        return this.clickHit1;
-    }
-
     public void setRankingType(RankingType type) {
         this.rankingType = type;
+    }
+
+    public EntityArmorStand getClickHit1() {
+        return this.clickHit1;
     }
 
     public List<EntityArmorStand> getArmorStandList() {

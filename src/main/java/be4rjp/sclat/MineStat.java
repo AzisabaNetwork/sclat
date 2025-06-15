@@ -72,6 +72,7 @@ public class MineStat {
 
     /**
      * Refresh state of the server
+     *
      * @return <code>true</code>; <code>false</code> if the server is down
      */
     public boolean refresh() {
@@ -140,16 +141,32 @@ public class MineStat {
         return motd;
     }
 
+    public void setMotd(String motd) {
+        this.motd = motd;
+    }
+
     public String getVersion() {
         return version;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
     }
 
     public String getCurrentPlayers() {
         return currentPlayers;
     }
 
+    public void setCurrentPlayers(String currentPlayers) {
+        this.currentPlayers = currentPlayers;
+    }
+
     public String getMaximumPlayers() {
         return maximumPlayers;
+    }
+
+    public void setMaximumPlayers(String maximumPlayers) {
+        this.maximumPlayers = maximumPlayers;
     }
 
     public long getLatency() {
@@ -158,22 +175,6 @@ public class MineStat {
 
     public void setLatency(long latency) {
         this.latency = latency;
-    }
-
-    public void setMaximumPlayers(String maximumPlayers) {
-        this.maximumPlayers = maximumPlayers;
-    }
-
-    public void setCurrentPlayers(String currentPlayers) {
-        this.currentPlayers = currentPlayers;
-    }
-
-    public void setMotd(String motd) {
-        this.motd = motd;
-    }
-
-    public void setVersion(String version) {
-        this.version = version;
     }
 
     public boolean isServerUp() {

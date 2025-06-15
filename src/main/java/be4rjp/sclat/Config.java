@@ -12,17 +12,6 @@ import static org.bukkit.Bukkit.getLogger;
  * @author Be4rJP
  */
 public class Config {
-    private FileConfiguration ps;
-    private FileConfiguration conf;
-    private FileConfiguration weapon;
-    private FileConfiguration map;
-    private FileConfiguration playersettings;
-    private FileConfiguration as;
-    private FileConfiguration s;
-    private FileConfiguration servers;
-    private FileConfiguration idCash;
-    private FileConfiguration emblems;
-    private FileConfiguration emblemItems;
     private final File parent = new File("plugins/Sclat");
     private final File psf = new File(parent, "class.yml");
     private final File weaponf = new File(parent, "mainnweapon.yml");
@@ -35,6 +24,17 @@ public class Config {
     private final File idCashFile = new File(parent, "UUIDCash.yml");
     private final File emblemsFile = new File(parent, "emblems.yml");
     private final File emblemItemsFile = new File(parent, "emblem_items.yml");
+    private FileConfiguration ps;
+    private FileConfiguration conf;
+    private FileConfiguration weapon;
+    private FileConfiguration map;
+    private FileConfiguration playersettings;
+    private FileConfiguration as;
+    private FileConfiguration s;
+    private FileConfiguration servers;
+    private FileConfiguration idCash;
+    private FileConfiguration emblems;
+    private FileConfiguration emblemItems;
 
     public synchronized void LoadConfig() {
         ps = YamlConfiguration.loadConfiguration(psf);

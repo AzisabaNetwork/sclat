@@ -131,8 +131,8 @@ public class MatchMgr {
                         match.setIsStarted(true);
                         match.setIsStartedCount(true);
                         BukkitRunnable task = new BukkitRunnable() {
-                            int s = 0;
                             final Player p = player;
+                            int s = 0;
 
                             @Override
                             public void run() {
@@ -451,9 +451,9 @@ public class MatchMgr {
     public static void MatchRunnable(Player player, Match match) {
         BukkitRunnable task;
         task = new BukkitRunnable() {
-            int s = 0;
             final Player p = player;
             final World w = Main.getPlugin().getServer().getWorld(match.getMapData().getWorldName());
+            int s = 0;
             Location intromove;
             //EntitySquid squid;
 
@@ -895,10 +895,9 @@ public class MatchMgr {
 
         BukkitRunnable task = new BukkitRunnable() {
             final Scoreboard sb = scoreboard;
+            final Player p = player;
             Objective objective = sb.registerNewObjective("match", "run", "§6§lSclat§r " + Main.VERSION);
             int s = 180;
-            final Player p = player;
-
             boolean team0nokori = false;
             boolean team1nokori = false;
 

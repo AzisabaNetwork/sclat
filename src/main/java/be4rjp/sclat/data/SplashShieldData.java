@@ -11,9 +11,9 @@ import java.util.List;
  * @author Be4rJP
  */
 public class SplashShieldData {
+    private final Player player;
     private BukkitRunnable task;
     private List<ArmorStand> list = new ArrayList<ArmorStand>();
-    private final Player player;
     private double damage;
     private boolean IsDeploy = false;
 
@@ -25,8 +25,16 @@ public class SplashShieldData {
         return this.task;
     }
 
+    public void setTask(BukkitRunnable task) {
+        this.task = task;
+    }
+
     public List<ArmorStand> getArmorStandList() {
         return this.list;
+    }
+
+    public void setArmorStandList(List<ArmorStand> list) {
+        this.list = list;
     }
 
     public Player getPlayer() {
@@ -37,21 +45,12 @@ public class SplashShieldData {
         return this.damage;
     }
 
-    public boolean getIsDeploy() {
-        return this.IsDeploy;
-    }
-
-
-    public void setTask(BukkitRunnable task) {
-        this.task = task;
-    }
-
-    public void setArmorStandList(List<ArmorStand> list) {
-        this.list = list;
-    }
-
     public void setDamage(double damage) {
         this.damage = damage;
+    }
+
+    public boolean getIsDeploy() {
+        return this.IsDeploy;
     }
 
     public void setIsDeploy(boolean isdep) {

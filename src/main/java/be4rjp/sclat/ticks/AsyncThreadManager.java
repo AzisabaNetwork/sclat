@@ -13,6 +13,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class AsyncThreadManager {
 
     private static final List<AsyncTickThread> tickThreads = new CopyOnWriteArrayList<>();
+    public static Set<Player> onlinePlayers = ConcurrentHashMap.newKeySet();
 
     public static AsyncTickThread getRandomTickThread() {
         return tickThreads.get(new Random().nextInt(tickThreads.size()));
@@ -30,9 +31,6 @@ public class AsyncThreadManager {
             thread.shutdown();
         }
     }
-
-
-    public static Set<Player> onlinePlayers = ConcurrentHashMap.newKeySet();
 
     public static void toOnline(Player player) {
         onlinePlayers.add(player);

@@ -19,7 +19,6 @@ import org.bukkit.block.data.BlockData;
 import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_14_R1.inventory.CraftItemStack;
 import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -36,8 +35,8 @@ import java.util.List;
 public class SplashShield {
     public static void SplashShieldThrowRunnable(Player player) {
         BukkitRunnable task = new BukkitRunnable() {
-            int i = 0;
             final Player p = player;
+            int i = 0;
             Item drop;
             float yaw = 0;
             Vector vec;
@@ -121,9 +120,9 @@ public class SplashShield {
     public static void SplashShieldRunnable(Player player, Location loc, Vector vec, SplashShieldData ssdata) {
         List<ArmorStand> list = new ArrayList<ArmorStand>();
         BukkitRunnable task = new BukkitRunnable() {
-            int c = 0;
             final Player p = player;
             final Vector pv = vec.clone();
+            int c = 0;
 
             @Override
             public void run() {

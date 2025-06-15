@@ -175,8 +175,8 @@ public class SPWeaponMgr {
 
         BukkitRunnable task = new BukkitRunnable() {
             final Player p = player;
-            double t = tick;
             final double i = tick;
+            double t = tick;
 
             @Override
             public void run() {

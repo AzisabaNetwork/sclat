@@ -25,6 +25,10 @@ public class Team {
         return teamcolor;
     }
 
+    public void setTeamColor(Color color) {
+        teamcolor = color;
+    }
+
     public int getPoint() {
         return this.paintcount;
     }
@@ -37,6 +41,10 @@ public class Team {
         return this.bt;
     }
 
+    public void setTeam(org.bukkit.scoreboard.Team team) {
+        this.bt = team;
+    }
+
     public int getGatiCount() {
         return this.gaticount;
     }
@@ -44,7 +52,6 @@ public class Team {
     public int getRateTotal() {
         return this.rateTotal;
     }
-
 
     public void addPaintCount() {
         paintcount++;
@@ -60,14 +67,6 @@ public class Team {
 
     public void addKillCount() {
         killcount++;
-    }
-
-    public void setTeamColor(Color color) {
-        teamcolor = color;
-    }
-
-    public void setTeam(org.bukkit.scoreboard.Team team) {
-        this.bt = team;
     }
 
     public void addGatiCount() {

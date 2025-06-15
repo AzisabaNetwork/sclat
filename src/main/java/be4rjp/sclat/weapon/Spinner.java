@@ -25,9 +25,9 @@ public class Spinner {
     public static void SpinnerRunnable(Player player) {
         BukkitRunnable task = new BukkitRunnable() {
             final Player p = player;
+            final int max = DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getMaxCharge();
             int charge = 0;
             int keeping = 0;
-            final int max = DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getMaxCharge();
 
             @Override
             public void run() {
@@ -147,14 +147,14 @@ public class Spinner {
         DataMgr.getMainSnowballNameMap().put(name, ball);
         DataMgr.setSnowballHitCount(name, 0);
         BukkitRunnable task = new BukkitRunnable() {
-            int i = 0;
             final int tick = distick;
             //Vector fallvec;
             final Vector origvec = vec;
-            Snowball inkball = ball;
-            boolean addedFallVec = false;
             final Player p = player;
+            int i = 0;
+            Snowball inkball = ball;
             final Vector fallvec = new Vector(inkball.getVelocity().getX(), inkball.getVelocity().getY(), inkball.getVelocity().getZ()).multiply(DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getShootSpeed() / 17);
+            boolean addedFallVec = false;
 
             @Override
             public void run() {

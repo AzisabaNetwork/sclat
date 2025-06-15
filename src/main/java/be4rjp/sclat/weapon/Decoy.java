@@ -73,16 +73,14 @@ public class Decoy {
 
     public static void createDecoy(Player player1, String npcName1, Location location1) {
         BukkitRunnable task = new BukkitRunnable() {
-            EntityPlayer npc;
-            EntitySquid es;
-
-            int s = 0;
-
             final Player player = player1;
             final String npcName = npcName1;
             final Location location = location1;
-            Block block;
             final PlayerData data = DataMgr.getPlayerData(player);
+            EntityPlayer npc;
+            EntitySquid es;
+            int s = 0;
+            Block block;
             float yaw = 0;
             boolean ika = false;//falseがヒト、trueがイカ
 

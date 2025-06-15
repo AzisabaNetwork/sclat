@@ -24,7 +24,6 @@ import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_14_R1.entity.CraftSnowball;
 import org.bukkit.craftbukkit.v1_14_R1.inventory.CraftItemStack;
 import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Snowball;
@@ -106,12 +105,12 @@ public class Kasa {
         DataMgr.getMainSnowballNameMap().put(name, ball);
         DataMgr.setSnowballHitCount(name, 0);
         BukkitRunnable task = new BukkitRunnable() {
-            int i = 0;
             final int tick = distick;
-            Snowball inkball = ball;
             final Player p = player;
-            boolean addedFallVec = false;
+            int i = 0;
+            Snowball inkball = ball;
             final Vector fallvec = new Vector(inkball.getVelocity().getX(), inkball.getVelocity().getY(), inkball.getVelocity().getZ()).multiply(DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getShootSpeed() / 17);
+            boolean addedFallVec = false;
 
             @Override
             public void run() {
@@ -160,8 +159,8 @@ public class Kasa {
 
         BukkitRunnable task = new BukkitRunnable() {
             final Player p = player;
-            int i = 0;
             final List<ArmorStand> list = new ArrayList<ArmorStand>();
+            int i = 0;
             boolean weapon = false;
             boolean sound = true;
 
@@ -307,10 +306,10 @@ public class Kasa {
 
         BukkitRunnable bigktask = new BukkitRunnable() {
             final Player p = player;
+            final int pageCooltime = DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getRollerWidth();
             int i = 0;
             int c = 0;
             boolean is = true;
-            final int pageCooltime = DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getRollerWidth();
 
             @Override
             public void run() {
@@ -351,18 +350,15 @@ public class Kasa {
 
         BukkitRunnable task = new BukkitRunnable() {
             final Player p = player;
-            int i = 0;
-            boolean bp = false;
-            boolean squid = true;
             final float kasaSpeed = DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getRollerNeedInk();
             final int pageCooltime = DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getRollerWidth();
-
-            Vector dir = new Vector(1, 0, 0);
-
             final List<ArmorStand> list = new ArrayList<ArmorStand>();
             final List<ArmorStand> ul = new ArrayList<ArmorStand>();
             final List<ArmorStand> dl = new ArrayList<ArmorStand>();
-
+            int i = 0;
+            boolean bp = false;
+            boolean squid = true;
+            Vector dir = new Vector(1, 0, 0);
             ArmorStand as1;
             ArmorStand as2;
             ArmorStand as3;

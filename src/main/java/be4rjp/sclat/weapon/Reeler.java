@@ -62,13 +62,13 @@ public class Reeler {
         BukkitRunnable delay = new BukkitRunnable() {
             final Player p = player;
             final Location loc = player.getLocation();
+            //スライドに使う変数の定義Trueの時は使用可能Falseの時は使用不可能を表している
+            final boolean check = true;
             //int sl = 0;
             //スライドの仕様改変
             boolean sl_recharge_1 = true;
             int killcount = DataMgr.getPlayerData(p).getKillCount();
             int gr_recharge = 100;
-            //スライドに使う変数の定義Trueの時は使用可能Falseの時は使用不可能を表している
-            final boolean check = true;
 
             @Override
             public void run() {
@@ -466,15 +466,15 @@ public class Reeler {
         DataMgr.getMainSnowballNameMap().put(name, ball);
         DataMgr.setSnowballHitCount(name, 0);
         BukkitRunnable task = new BukkitRunnable() {
-            int i = 0;
             final int tick = distick;
             //Vector fallvec;
             final Vector origvec = vec;
-            Snowball inkball = ball;
-            boolean addedFallVec = false;
             final Player p = player;
+            int i = 0;
+            Snowball inkball = ball;
             //Vector fallvec = new Vector(inkball.getVelocity().getX(), inkball.getVelocity().getY()  , inkball.getVelocity().getZ()).multiply(DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getShootSpeed()/17);
             final Vector fallvec = new Vector(inkball.getVelocity().getX(), inkball.getVelocity().getY(), inkball.getVelocity().getZ()).multiply(0.01);
+            boolean addedFallVec = false;
 
             @Override
             public void run() {

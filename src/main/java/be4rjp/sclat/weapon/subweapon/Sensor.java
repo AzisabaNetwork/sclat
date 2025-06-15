@@ -34,11 +34,11 @@ public class Sensor {
     public static void SensorRunnable(Player player) {
         BukkitRunnable task = new BukkitRunnable() {
             final Player p = player;
+            final boolean collision = false;
+            final boolean block_check = false;
             Vector p_vec;
             double x = 0;
             double z = 0;
-            final boolean collision = false;
-            final boolean block_check = false;
             int c = 0;
             Item drop;
             Snowball ball;

@@ -87,12 +87,12 @@ public class Blaster {
         DataMgr.getMainSnowballNameMap().put(name, ball);
         DataMgr.setSnowballHitCount(name, 0);
         BukkitRunnable task = new BukkitRunnable() {
-            int i = 0;
             final int tick = distick;
             //Vector fallvec;
             final Vector origvec = vec;
-            Snowball inkball = ball;
             final Player p = player;
+            int i = 0;
+            Snowball inkball = ball;
             final Vector fallvec = new Vector(inkball.getVelocity().getX(), inkball.getVelocity().getY(), inkball.getVelocity().getZ()).multiply(DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getShootSpeed() / 17);
 
             @Override

@@ -15,6 +15,41 @@ import java.util.function.Function;
 import static be4rjp.sclat.Main.conf;
 
 public class EmblemManager {
+    public static List<EmblemData> emblems = new ArrayList<>();
+
+    static {
+        addEmblem(
+                "撃墜王",
+                p -> PlayerStatusMgr.getKill(p) >= 10000
+        );
+
+        addEmblem(
+                "エース",
+                p -> PlayerStatusMgr.getKill(p) >= 1000
+        );
+
+        addEmblem(
+                "100人斬り",
+                p -> PlayerStatusMgr.getKill(p) >= 100
+        );
+
+        // マイクラスクエア2025関連
+        addEmblem(
+                "§a§lマイクラスクエア§2§l2025 §7§lSupportMedal",
+                p -> false
+        );
+
+        addEmblem(
+                "§a§lマイクラスクエア§2§l2025 §e§lSupportMedal",
+                p -> false
+        );
+
+        addEmblem(
+                "§a§lマイクラスクエア§2§l2025 §b§lSupportMedal",
+                p -> false
+        );
+    }
+
     private static ItemStack newEmblemStack(String displayName, List<String> lore) {
         ItemStack stack = new ItemStack(Material.EGG);
         ItemMeta meta = stack.getItemMeta();
@@ -23,8 +58,6 @@ public class EmblemManager {
         stack.setItemMeta(meta);
         return stack;
     }
-
-    public static List<EmblemData> emblems = new ArrayList<>();
 
     public static void addEmblem(String itemName, Function<Player, Boolean> condition) {
         emblems.add(new EmblemData(itemName, condition));
@@ -64,38 +97,5 @@ public class EmblemManager {
             newEmblems.forEach(sj::add);
             player.sendMessage(sj + " の称号を手に入れました！");
         }
-    }
-
-    static {
-        addEmblem(
-                "撃墜王",
-                p -> PlayerStatusMgr.getKill(p) >= 10000
-        );
-
-        addEmblem(
-                "エース",
-                p -> PlayerStatusMgr.getKill(p) >= 1000
-        );
-
-        addEmblem(
-                "100人斬り",
-                p -> PlayerStatusMgr.getKill(p) >= 100
-        );
-
-        // マイクラスクエア2025関連
-        addEmblem(
-                "§a§lマイクラスクエア§2§l2025 §7§lSupportMedal",
-                p -> false
-        );
-
-        addEmblem(
-                "§a§lマイクラスクエア§2§l2025 §e§lSupportMedal",
-                p -> false
-        );
-
-        addEmblem(
-                "§a§lマイクラスクエア§2§l2025 §b§lSupportMedal",
-                p -> false
-        );
     }
 }
