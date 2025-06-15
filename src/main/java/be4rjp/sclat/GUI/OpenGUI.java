@@ -104,7 +104,7 @@ public class OpenGUI {
                 status = CraftItemStack.asBukkitCopy(data.getPlayerHead()).clone();
             ItemMeta statusMeta = status.getItemMeta();
             statusMeta.setDisplayName("§r§e" + player.getName() + " のステータス");
-            List lores = new ArrayList();
+            List<String> lores = new ArrayList<>();
             lores.add("§r§6Rank : §r" + PlayerStatusMgr.getRank(player) + " [ §b" + RankMgr.toABCRank(PlayerStatusMgr.getRank(player)) + " §r]");
             lores.add("§r§6Lv : §r" + PlayerStatusMgr.getLv(player));
             lores.add("§r§bKill(s) : §r" + PlayerStatusMgr.getKill(player));
@@ -296,7 +296,7 @@ public class OpenGUI {
                     if (slotnum <= 17) {
                         ItemStack head = CraftItemStack.asBukkitCopy(DataMgr.getPlayerData(p).getPlayerHead()).clone();
                         ItemMeta headM = head.getItemMeta();
-                        List lores = new ArrayList();
+                        List<String> lores = new ArrayList<>();
                         lores.add("§r§aプレイヤーへジャンプ");
                         headM.setLore(lores);
                         head.setItemMeta(headM);
@@ -315,7 +315,7 @@ public class OpenGUI {
                             ItemStack item = new ItemStack(Material.IRON_TRAPDOOR);
                             ItemMeta im = item.getItemMeta();
                             im.setDisplayName(p.getName());
-                            List lores = new ArrayList();
+                            List<String> lores = new ArrayList<>();
                             lores.add("§r§6プレイヤーのビーコンへジャンプ");
                             im.setLore(lores);
                             item.setItemMeta(im);
@@ -344,7 +344,7 @@ public class OpenGUI {
             ItemStack item = new ItemStack(DataMgr.getWeaponClass(ClassName).getMainWeapon().getWeaponIteamStack());
             ItemMeta itemm = item.getItemMeta();
             itemm.setDisplayName(ClassName);
-            List lores = new ArrayList();
+            List<String> lores = new ArrayList<>();
             lores.add("§r§6SubWeapon : " + conf.getClassConfig().getString("WeaponClass." + ClassName + ".SubWeaponName"));
             lores.add("§r§6SPWeapon  : " + conf.getClassConfig().getString("WeaponClass." + ClassName + ".SPWeaponName"));
             itemm.setLore(lores);
@@ -372,7 +372,7 @@ public class OpenGUI {
                     ItemStack item = new ItemStack(DataMgr.getWeaponClass(ClassName).getMainWeapon().getWeaponIteamStack());
                     ItemMeta itemm = item.getItemMeta();
                     itemm.setDisplayName(ClassName);
-                    List lores = new ArrayList();
+                    List<String> lores = new ArrayList<>();
                     lores.add("§r§6SubWeapon : " + conf.getClassConfig().getString("WeaponClass." + ClassName + ".SubWeaponName"));
                     lores.add("§r§6SPWeapon  : " + conf.getClassConfig().getString("WeaponClass." + ClassName + ".SPWeaponName"));
                     if (shop) {

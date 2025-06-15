@@ -85,7 +85,7 @@ public class LootBox {
                     ItemStack item = new ItemStack(DataMgr.getWeaponClass(ClassName).getMainWeapon().getWeaponIteamStack());
                     ItemMeta itemm = item.getItemMeta();
                     itemm.setDisplayName(ClassName);
-                    List lores = new ArrayList();
+                    List<String> lores = new ArrayList<>();
                     lores.add("§r§6SubWeapon : " + conf.getClassConfig().getString("WeaponClass." + ClassName + ".SubWeaponName"));
                     lores.add("§r§6SPWeapon  : " + conf.getClassConfig().getString("WeaponClass." + ClassName + ".SPWeaponName"));
                     lores.add("");
@@ -101,7 +101,7 @@ public class LootBox {
         for (int i = 1; i <= 5; i += 1) {
             ItemStack paper = new ItemStack(Material.PAPER);
             ItemMeta pmeta = paper.getItemMeta();
-            List paperlores = new ArrayList();
+            List<String> paperlores = new ArrayList<>();
             switch (i) {
                 case 1:
                     pmeta.setDisplayName("1等 " + Firstprize + "coin");
