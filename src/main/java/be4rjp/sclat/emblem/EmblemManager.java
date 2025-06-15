@@ -1,8 +1,6 @@
 package be4rjp.sclat.emblem;
 
 import be4rjp.sclat.manager.PlayerStatusMgr;
-import net.md_5.bungee.chat.ComponentSerializer;
-import net.md_5.bungee.chat.TextComponentSerializer;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -35,11 +33,11 @@ public class EmblemManager {
     public static void handleInv(Inventory inventory, Player player) {
         List<String> cache = conf.getEmblems().getStringList(player.getUniqueId().toString());
         List<String> newEmblems = new ArrayList<>();
-        for(EmblemData emblem: emblems) {
+        for (EmblemData emblem : emblems) {
             // === Condition check
-            if(!cache.contains(emblem.itemName)) {
+            if (!cache.contains(emblem.itemName)) {
                 // non-cached
-                if(!emblem.condition.apply(player)) {
+                if (!emblem.condition.apply(player)) {
                     // non-matched
                     continue;
                 }
@@ -55,7 +53,7 @@ public class EmblemManager {
         }
 
         // On new emblem
-        if(!newEmblems.isEmpty()) {
+        if (!newEmblems.isEmpty()) {
             // update cache
             ArrayList<String> newEmblemCache = new ArrayList<>(cache);
             newEmblemCache.addAll(newEmblems);
