@@ -7,6 +7,7 @@ import be4rjp.sclat.ServerType;
 import be4rjp.sclat.SoundType;
 import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.data.ServerStatus;
+import be4rjp.sclat.emblem.EmblemManager;
 import be4rjp.sclat.manager.BungeeCordMgr;
 import be4rjp.sclat.manager.ServerStatusManager;
 import be4rjp.sclat.server.EquipmentClient;
@@ -21,6 +22,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import static be4rjp.sclat.Main.conf;
 
@@ -112,6 +114,25 @@ public class sclatCommandExecutor implements CommandExecutor, TabExecutor {
             }
         }
         //--------------------------------
+
+        // ----------------/sclat check-emblems-------------------
+        if(args[0].equalsIgnoreCase("check-emblems")) {
+            if (args.length != 1) return false;
+
+            if (type == CommanderType.MEMBER) {
+                sender.sendMessage(ChatColor.RED + "You don't have permission.");
+                Sclat.playGameSound((Player) sender, SoundType.ERROR);
+                return true;
+            }
+
+            Map<String, List<String>> dataMap = EmblemManager.getDataMap();
+            for(String _key: dataMap.keySet()) {
+                sender.sendMessage(_key);
+                List<String> playerUuids = dataMap.getOrDefault(_key, new ArrayList<>());
+                playerUuids.forEach(s -> sender.sendMessage("- " + s));
+            }
+        }
+        // --------------------------------------------------------
 
         //----------------------------/sclat mod-----------------------------------
         if (args[0].equalsIgnoreCase("mod")) {

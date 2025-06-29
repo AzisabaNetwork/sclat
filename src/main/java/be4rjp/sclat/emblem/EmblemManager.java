@@ -1,8 +1,6 @@
 package be4rjp.sclat.emblem;
 
 import be4rjp.sclat.manager.PlayerStatusMgr;
-import net.md_5.bungee.chat.ComponentSerializer;
-import net.md_5.bungee.chat.TextComponentSerializer;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -10,7 +8,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.StringJoiner;
 import java.util.function.Function;
 
@@ -66,6 +66,20 @@ public class EmblemManager {
             newEmblems.forEach(sj::add);
             player.sendMessage(sj + " の称号を手に入れました！");
         }
+    }
+
+    public static Map<String, List<String>> getDataMap() {
+        HashMap<String, List<String>> dataMap = new HashMap<>();
+        for(String uuid: conf.getEmblems().getKeys(false)) {
+            List<String> emblems = conf.getEmblems().getStringList(uuid);
+            for(String _emblemName: emblems) {
+                if(!dataMap.containsKey(_emblemName)) {
+                    dataMap.put(_emblemName, new ArrayList<>());
+                }
+                dataMap.get(_emblemName).add(uuid);
+            }
+        }
+        return dataMap;
     }
 
     static {
