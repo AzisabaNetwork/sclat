@@ -1,5 +1,6 @@
 package be4rjp.sclat.commands;
 
+import be4rjp.sclat.Config;
 import be4rjp.sclat.Main;
 import be4rjp.sclat.MessageType;
 import be4rjp.sclat.Sclat;
@@ -16,13 +17,16 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import static be4rjp.sclat.Main.conf;
 
@@ -108,12 +112,70 @@ public class sclatCommandExecutor implements CommandExecutor, TabExecutor {
                         conf.loadEmblemLoreData();
                         break;
                     default:
-                        break;
+                        Sclat.sendMessage("そのオプションは存在しません！", MessageType.PLAYER, player);
+                        return true;
                 }
                 Sclat.sendMessage("再読み込み完了", MessageType.PLAYER, player);
             }
         }
         //--------------------------------
+
+        // ----------------/sclat migrate-emblems-----------------
+        if(args[0].equalsIgnoreCase("migrate-emblems")) {
+            if(args.length != 1) return false;
+
+            if (type == CommanderType.MEMBER) {
+                sender.sendMessage(ChatColor.RED + "You don't have permission.");
+                Sclat.playGameSound((Player) sender, SoundType.ERROR);
+                return true;
+            }
+
+            if(!conf.emblemsFile.exists()) {
+                sender.sendMessage(ChatColor.RED + "Old emblem userdata file isn't exists.");
+                return true;
+            }
+
+            YamlConfiguration oldData = YamlConfiguration.loadConfiguration(conf.emblemsFile);
+            Set<String> dataUuids = oldData.getKeys(false);
+            for (String _uuid : dataUuids) {
+                List<String> userEmblems = oldData.getStringList(_uuid);
+                for(String emblem: userEmblems) {
+                    conf.getEmblemUserdata().set(_uuid + "." + emblem, 1);
+                }
+            }
+            sender.sendMessage(ChatColor.GREEN + "Migration was succeeded!");
+
+            try {
+                conf.saveEmblemUserdata();
+                sender.sendMessage(ChatColor.GREEN + "Successfully to save emblem userdata");
+            } catch (IOException e) {
+                sender.sendMessage(ChatColor.RED + "Failed to save emblem userdata");
+                e.printStackTrace();
+            }
+            return true;
+        }
+        // -------------------------------------------------------
+
+        // ----------------/sclat save-emblems--------------------
+        if(args[0].equalsIgnoreCase("save-emblems")) {
+            if (args.length != 1) return false;
+
+            if (type == CommanderType.MEMBER) {
+                sender.sendMessage(ChatColor.RED + "You don't have permission.");
+                Sclat.playGameSound((Player) sender, SoundType.ERROR);
+                return true;
+            }
+
+            try {
+                conf.saveEmblemUserdata();
+                sender.sendMessage(ChatColor.GREEN + "Successfully to save emblem userdata");
+            } catch (IOException e) {
+                sender.sendMessage(ChatColor.RED + "Failed to save emblem userdata");
+                e.printStackTrace();
+            }
+            return true;
+        }
+        // -------------------------------------------------------
 
         // ----------------/sclat check-emblems-------------------
         if(args[0].equalsIgnoreCase("check-emblems")) {
@@ -264,6 +326,9 @@ public class sclatCommandExecutor implements CommandExecutor, TabExecutor {
                 list.add("ss");
                 list.add("tutorial");
                 list.add("refresh-config");
+                list.add("migrate-emblems");
+                list.add("save-emblems");
+                list.add("check-emblems");
             }
 
             return list;

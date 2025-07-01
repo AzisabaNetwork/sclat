@@ -21,8 +21,8 @@ public class Config {
     private FileConfiguration s;
     private FileConfiguration servers;
     private FileConfiguration idCash;
-    private FileConfiguration emblems;
     private FileConfiguration emblemItems;
+    private FileConfiguration emblemUserdata;
     private File parent = new File("plugins/Sclat");
     private File psf = new File(parent, "class.yml");
     private File weaponf = new File(parent, "mainnweapon.yml");
@@ -33,8 +33,9 @@ public class Config {
     private File sf = new File(parent, "status.yml");
     private File serverFile = new File(parent, "servers.yml");
     private File idCashFile = new File(parent, "UUIDCash.yml");
-    private File emblemsFile = new File(parent, "emblems.yml");
+    public File emblemsFile = new File(parent, "emblems.yml");
     private File emblemItemsFile = new File(parent, "emblem_items.yml");
+    private File emblemUserDataFile = new File(parent, "emblem_userdata.yml");
     
     public synchronized void LoadConfig(){
         ps = YamlConfiguration.loadConfiguration(psf);
@@ -46,14 +47,14 @@ public class Config {
         s = YamlConfiguration.loadConfiguration(sf);
         servers = YamlConfiguration.loadConfiguration(serverFile);
         idCash = YamlConfiguration.loadConfiguration(idCashFile);
-        tryCreateFile(emblemsFile);
         tryCreateFile(emblemItemsFile);
+        tryCreateFile(emblemUserDataFile);
         loadEmblemUserData();
         loadEmblemLoreData();
     }
 
     public synchronized void loadEmblemUserData() {
-        emblems = YamlConfiguration.loadConfiguration(emblemsFile);
+        emblemUserdata = YamlConfiguration.loadConfiguration(emblemUserDataFile);
     }
 
     public synchronized void loadEmblemLoreData() {
@@ -73,10 +74,14 @@ public class Config {
             playersettings.save(playersettings_f);
             s.save(sf);
             idCash.save(idCashFile);
-            emblems.save(emblemsFile);
+            saveEmblemUserdata();
         }catch(Exception e){
             getLogger().warning("Failed to save config files!");
         }
+    }
+
+    public synchronized void saveEmblemUserdata() throws IOException {
+        emblemUserdata.save(emblemUserDataFile);
     }
     
     public FileConfiguration getConfig(){
@@ -115,8 +120,8 @@ public class Config {
         return idCash;
     }
 
-    public FileConfiguration getEmblems() {
-        return emblems;
+    public FileConfiguration getEmblemUserdata() {
+        return emblemUserdata;
     }
 
     public FileConfiguration getEmblemItems() {

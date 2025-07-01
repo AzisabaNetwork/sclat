@@ -2,6 +2,7 @@ package be4rjp.sclat.emblem;
 
 import be4rjp.sclat.manager.PlayerStatusMgr;
 import org.bukkit.Material;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -9,16 +10,18 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.StringJoiner;
 import java.util.function.Function;
 
 import static be4rjp.sclat.Main.conf;
 
 public class EmblemManager {
-    private static ItemStack newEmblemStack(String displayName, List<String> lore) {
-        ItemStack stack = new ItemStack(Material.EGG);
+    private static ItemStack newEmblemStack(String displayName, List<String> lore, int amount) {
+        ItemStack stack = new ItemStack(Material.EGG, amount);
         ItemMeta meta = stack.getItemMeta();
         meta.setDisplayName(displayName);
         meta.setLore(lore);
@@ -33,7 +36,13 @@ public class EmblemManager {
     }
 
     public static void handleInv(Inventory inventory, Player player) {
-        List<String> cache = conf.getEmblems().getStringList(player.getUniqueId().toString());
+        String strUuid = player.getUniqueId().toString();
+        ConfigurationSection userSection = conf.getEmblemUserdata().getConfigurationSection(strUuid);
+        Set<String> cache = new HashSet<>();
+        if(userSection != null) {
+            cache = userSection.getKeys(false);
+        }
+
         List<String> newEmblems = new ArrayList<>();
         for(EmblemData emblem: emblems) {
             // === Condition check
@@ -50,16 +59,18 @@ public class EmblemManager {
             // get lore of item
             List<String> lore = conf.getEmblemItems().getStringList(emblem.itemName);
 
+            int amount = conf.getEmblemUserdata().getInt(strUuid + "." + emblem.itemName, 1);
+
             // add emblem to inventory
-            inventory.addItem(newEmblemStack(emblem.itemName, lore));
+            inventory.addItem(newEmblemStack(emblem.itemName, lore, amount));
         }
 
         // On new emblem
         if(!newEmblems.isEmpty()) {
             // update cache
-            ArrayList<String> newEmblemCache = new ArrayList<>(cache);
-            newEmblemCache.addAll(newEmblems);
-            conf.getEmblems().set(player.getUniqueId().toString(), newEmblemCache);
+            newEmblems.forEach(_emblem -> {
+                conf.getEmblemUserdata().set(strUuid + "." + _emblem, 1);
+            });
 
             // player feedback
             StringJoiner sj = new StringJoiner(", ");
@@ -70,8 +81,8 @@ public class EmblemManager {
 
     public static Map<String, List<String>> getDataMap() {
         HashMap<String, List<String>> dataMap = new HashMap<>();
-        for(String uuid: conf.getEmblems().getKeys(false)) {
-            List<String> emblems = conf.getEmblems().getStringList(uuid);
+        for(String uuid: conf.getEmblemUserdata().getKeys(false)) {
+            List<String> emblems = conf.getEmblemUserdata().getStringList(uuid);
             for(String _emblemName: emblems) {
                 if(!dataMap.containsKey(_emblemName)) {
                     dataMap.put(_emblemName, new ArrayList<>());

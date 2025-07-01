@@ -4,9 +4,6 @@ package be4rjp.sclat.manager;
 import static be4rjp.sclat.Main.conf;
 
 import be4rjp.sclat.Main;
-import be4rjp.sclat.ServerType;
-import be4rjp.sclat.data.Color;
-import be4rjp.sclat.data.DataMgr;
 import com.mojang.authlib.GameProfile;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,7 +18,6 @@ import org.bukkit.craftbukkit.v1_14_R1.CraftServer;
 import org.bukkit.craftbukkit.v1_14_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_14_R1.util.CraftChatMessage;
-import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -42,10 +38,6 @@ public class PlayerStatusMgr {
             setDefaultStatus(player);
         }else if(!conf.getPlayerStatus().contains("Status." + playerUuid + ".Money")){
             setDefaultStatus(player);
-        }
-
-        if(!conf.getEmblems().contains(playerUuid)) {
-            conf.getEmblems().set(playerUuid, new ArrayList<>());
         }
     }
     
