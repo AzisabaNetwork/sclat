@@ -88,7 +88,7 @@ public class EmblemManager {
                 if(!dataMap.containsKey(_emblemName)) {
                     dataMap.put(_emblemName, new HashMap<>());
                 }
-                dataMap.get(_emblemName).put(_emblemName, targetSection.getInt(_emblemName, 1));
+                dataMap.get(_emblemName).put(uuid, targetSection.getInt(_emblemName, 1));
             }
         }
         return dataMap;
