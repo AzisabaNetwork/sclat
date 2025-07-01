@@ -79,15 +79,16 @@ public class EmblemManager {
         }
     }
 
-    public static Map<String, List<String>> getDataMap() {
-        HashMap<String, List<String>> dataMap = new HashMap<>();
+    public static Map<String, Map<String, Integer>> getDataMap() {
+        HashMap<String, Map<String, Integer>> dataMap = new HashMap<>();
         for(String uuid: conf.getEmblemUserdata().getKeys(false)) {
-            List<String> emblems = conf.getEmblemUserdata().getStringList(uuid);
-            for(String _emblemName: emblems) {
+            ConfigurationSection targetSection = conf.getEmblemUserdata().getConfigurationSection(uuid);
+            if(targetSection == null) continue;
+            for(String _emblemName: targetSection.getKeys(false)) {
                 if(!dataMap.containsKey(_emblemName)) {
-                    dataMap.put(_emblemName, new ArrayList<>());
+                    dataMap.put(_emblemName, new HashMap<>());
                 }
-                dataMap.get(_emblemName).add(uuid);
+                dataMap.get(_emblemName).put(_emblemName, targetSection.getInt(_emblemName, 1));
             }
         }
         return dataMap;

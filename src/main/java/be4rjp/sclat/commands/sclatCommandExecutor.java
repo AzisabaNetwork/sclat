@@ -24,6 +24,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -187,11 +188,11 @@ public class sclatCommandExecutor implements CommandExecutor, TabExecutor {
                 return true;
             }
 
-            Map<String, List<String>> dataMap = EmblemManager.getDataMap();
+            Map<String, Map<String, Integer>> dataMap = EmblemManager.getDataMap();
             for(String _key: dataMap.keySet()) {
                 sender.sendMessage(_key);
-                List<String> playerUuids = dataMap.getOrDefault(_key, new ArrayList<>());
-                playerUuids.forEach(s -> sender.sendMessage("- " + s));
+                Map<String, Integer> playerUuids = dataMap.getOrDefault(_key, new HashMap<>());
+                playerUuids.forEach((k,v) -> sender.sendMessage("- " + k + ": " + v));
             }
         }
         // --------------------------------------------------------
