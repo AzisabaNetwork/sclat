@@ -2,7 +2,6 @@
 package be4rjp.sclat.manager;
 
 import be4rjp.sclat.Animation;
-import be4rjp.sclat.GUI.OpenGUI;
 import be4rjp.sclat.Main;
 import be4rjp.sclat.MessageType;
 import be4rjp.sclat.Sclat;
@@ -22,6 +21,7 @@ import be4rjp.sclat.data.PlayerSettings;
 import be4rjp.sclat.data.Team;
 import be4rjp.sclat.data.WeaponClass;
 import be4rjp.sclat.data.Wiremesh;
+import be4rjp.sclat.gui.OpenGUI;
 import be4rjp.sclat.server.EquipmentServerManager;
 import be4rjp.sclat.server.StatusClient;
 import be4rjp.sclat.utils.ObjectiveUtil;

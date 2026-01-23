@@ -1,5 +1,5 @@
 
-package be4rjp.sclat.GUI;
+package be4rjp.sclat.gui;
 
 import be4rjp.sclat.Main;
 import be4rjp.sclat.MessageType;
