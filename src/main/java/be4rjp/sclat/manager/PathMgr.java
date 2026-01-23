@@ -51,12 +51,10 @@ public class PathMgr {
 
 				drop.setVelocity(vec);
 
-				boolean is = false;
-				if (drop.getLocation().distanceSquared(from) > from.distanceSquared(to)
-						|| !drop.getPassengers().contains(p) || !DataMgr.getPlayerData(p).isInMatch()
-						|| !p.getInventory().getItemInMainHand().getType().equals(Material.AIR))
-					is = true;
-				if (path.getTeam() == null)
+				boolean is = drop.getLocation().distanceSquared(from) > from.distanceSquared(to)
+                        || !drop.getPassengers().contains(p) || !DataMgr.getPlayerData(p).isInMatch()
+                        || !p.getInventory().getItemInMainHand().getType().equals(Material.AIR);
+                if (path.getTeam() == null)
 					is = true;
 				else if (path.getTeam() != DataMgr.getPlayerData(p).getTeam())
 					is = true;
@@ -113,11 +111,11 @@ public class PathMgr {
 							new Vector(to.getX() - from.getX(), to.getY() - from.getY(), to.getZ() - from.getZ())
 									.normalize());
 					ArrayList<Vector> positions = rayTrace.traverse(from.distance(to), 0.5);
-					for (int i = 0; i < positions.size(); i++) {
-						Location position = positions.get(i).toLocation(from.getWorld());
-						for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
-							if (!DataMgr.getPlayerData(target).getSettings().ShowEffect_ChargerLine())
-								continue;
+                    for (Vector vector : positions) {
+                        Location position = vector.toLocation(from.getWorld());
+                        for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
+                            if (!DataMgr.getPlayerData(target).getSettings().ShowEffect_ChargerLine())
+                                continue;
                             Particle.DustOptions dustOptions;
                             if (team == null) {
                                 dustOptions = new Particle.DustOptions(org.bukkit.Color.WHITE, 1);
@@ -127,7 +125,7 @@ public class PathMgr {
                             }
                             target.spawnParticle(Particle.REDSTONE, position, 1, 0, 0, 0, 25, dustOptions);
                         }
-					}
+                    }
 					if (match.isFinished()) {
 						cancel();
 					}

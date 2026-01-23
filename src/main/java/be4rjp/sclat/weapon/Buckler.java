@@ -25,7 +25,7 @@ public class Buckler {
 					cancel();
 					return;
 				}
-				if (data.getIsSneaking() && bk_recharge == true && player.getGameMode().equals(GameMode.ADVENTURE)
+				if (data.getIsSneaking() && bk_recharge && player.getGameMode().equals(GameMode.ADVENTURE)
 						&& p.getInventory().getItemInMainHand().getType()
 								.equals(data.getWeaponClass().getMainWeapon().getWeaponIteamStack().getType())) {
 					p.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, Etime, 0));

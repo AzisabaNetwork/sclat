@@ -12,7 +12,11 @@ import be4rjp.sclat.manager.SPWeaponMgr;
 import be4rjp.sclat.manager.WeaponClassMgr;
 import be4rjp.sclat.raytrace.BoundingBox;
 import be4rjp.sclat.raytrace.RayTrace;
-import org.bukkit.*;
+import org.bukkit.GameMode;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.Particle;
+import org.bukkit.Sound;
 import org.bukkit.craftbukkit.v1_14_R1.entity.CraftSnowball;
 import org.bukkit.craftbukkit.v1_14_R1.inventory.CraftItemStack;
 import org.bukkit.entity.ArmorStand;
@@ -241,8 +245,7 @@ public class SwordMord {
 								list.add(as2);
 								list.add(as3);
 								list.add(as4);
-								List<ArmorStand> aslist = new ArrayList<ArmorStand>();
-								aslist.addAll(list);
+                                List<ArmorStand> aslist = new ArrayList<>(list);
 								kdata.setArmorStandList(aslist);
 								for (ArmorStand as : list) {
 									// as.setHeadPose(new EulerAngle(Math.toRadians(90), 0, 0));

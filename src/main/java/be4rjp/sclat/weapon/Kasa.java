@@ -2,7 +2,6 @@
 package be4rjp.sclat.weapon;
 
 import be4rjp.sclat.Main;
-
 import be4rjp.sclat.Sclat;
 import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.data.KasaData;
@@ -13,9 +12,6 @@ import be4rjp.sclat.manager.PaintMgr;
 import be4rjp.sclat.manager.WeaponClassMgr;
 import be4rjp.sclat.raytrace.BoundingBox;
 import be4rjp.sclat.raytrace.RayTrace;
-import java.util.ArrayList;
-import java.util.List;
-
 import net.minecraft.server.v1_14_R1.EnumItemSlot;
 import net.minecraft.server.v1_14_R1.PacketPlayOutEntityEquipment;
 import org.bukkit.ChatColor;
@@ -37,6 +33,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.EulerAngle;
 import org.bukkit.util.Vector;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -193,10 +192,7 @@ public class Kasa {
 					PlayerData data = DataMgr.getPlayerData(p);
 
 					try {
-						if (MainWeaponMgr.equalWeapon(p))
-							weapon = true;
-						else
-							weapon = false;
+                        weapon = MainWeaponMgr.equalWeapon(p);
 					} catch (Exception e) {
 						weapon = false;
 					}
@@ -509,8 +505,7 @@ public class Kasa {
 						dl.add(as17);
 						ul.add(as20);
 
-						List<ArmorStand> aslist = new ArrayList<ArmorStand>();
-						aslist.addAll(list);
+                        List<ArmorStand> aslist = new ArrayList<>(list);
 						kdata.setArmorStandList(aslist);
 						kdata.setDamage(DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getSlideNeedINK());
 

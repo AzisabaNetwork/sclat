@@ -69,7 +69,7 @@ public class Manuber {
 				// マニューバー系
 				if (data.getWeaponClass().getMainWeapon().getIsManeuver()) {
 					// if(p.getExp() >= ink) {
-					if (data.getIsSneaking() && sl_recharge_2 == true && !data.getIsSliding()
+					if (data.getIsSneaking() && sl_recharge_2 && !data.getIsSliding()
 							&& p.getInventory().getItemInMainHand().getType()
 									.equals(data.getWeaponClass().getMainWeapon().getWeaponIteamStack().getType())) {// slをsl_recharge_2に変更することで優先順位が低い方のスライドが残っている時のみ使えるようにしました
 						Vector jvec = (new Vector(vec.getX(), 0, vec.getZ())).normalize();
@@ -235,7 +235,7 @@ public class Manuber {
 									// check = true;
 								}
 							};
-							if (sl_recharge_2 == true) {
+							if (sl_recharge_2) {
 								task4.runTaskLater(Main.getPlugin(), 64);
                             } else {
 								task5.runTaskLater(Main.getPlugin(), 64);

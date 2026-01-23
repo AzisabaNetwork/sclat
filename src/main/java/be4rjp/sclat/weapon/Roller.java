@@ -1,7 +1,6 @@
 package be4rjp.sclat.weapon;
 
 import be4rjp.sclat.Main;
-
 import be4rjp.sclat.Sclat;
 import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.data.KasaData;
@@ -11,7 +10,6 @@ import be4rjp.sclat.manager.ArmorStandMgr;
 import be4rjp.sclat.manager.PaintMgr;
 import be4rjp.sclat.raytrace.BoundingBox;
 import be4rjp.sclat.raytrace.RayTrace;
-import java.util.ArrayList;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -27,6 +25,8 @@ import org.bukkit.entity.Snowball;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
+
+import java.util.ArrayList;
 
 /**
  *
@@ -153,182 +153,185 @@ public class Roller {
 						RayTrace rayTrace1 = new RayTrace(front.toVector(), vec1);
 						ArrayList<Vector> positions1 = rayTrace1
 								.traverse(data.getWeaponClass().getMainWeapon().getRollerWidth(), 0.5);
-						loop : for (int i = 0; i < positions1.size(); i++) {
-							Location position = positions1.get(i).toLocation(p.getLocation().getWorld());
-							Block block = p.getLocation().getWorld().getBlockAt(position);
-							if (!block.getType().equals(Material.AIR))
-								break loop;
-							PaintMgr.PaintHightestBlock(position, p, false, true);
-							p.getLocation().getWorld().spawnParticle(org.bukkit.Particle.BLOCK_DUST, position, 2, 0, 0,
-									0, 1, bd);
+						loop :
+                        for (Vector vector : positions1) {
+                            Location position = vector.toLocation(p.getLocation().getWorld());
+                            Block block = p.getLocation().getWorld().getBlockAt(position);
+                            if (!block.getType().equals(Material.AIR))
+                                break loop;
+                            PaintMgr.PaintHightestBlock(position, p, false, true);
+                            p.getLocation().getWorld().spawnParticle(org.bukkit.Particle.BLOCK_DUST, position, 2, 0, 0,
+                                    0, 1, bd);
 
-							for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
-								if (DataMgr.getPlayerData(target).getSettings().ShowEffect_MainWeaponInk())
-									if (target.getWorld() == p.getWorld())
-										if (target.getLocation()
-												.distanceSquared(position) < Main.PARTICLE_RENDER_DISTANCE_SQUARED)
-											target.spawnParticle(org.bukkit.Particle.BLOCK_DUST, position, 2, 0, 0, 0,
-													1, bd);
-							}
+                            for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
+                                if (DataMgr.getPlayerData(target).getSettings().ShowEffect_MainWeaponInk())
+                                    if (target.getWorld() == p.getWorld())
+                                        if (target.getLocation()
+                                                .distanceSquared(position) < Main.PARTICLE_RENDER_DISTANCE_SQUARED)
+                                            target.spawnParticle(org.bukkit.Particle.BLOCK_DUST, position, 2, 0, 0, 0,
+                                                    1, bd);
+                            }
 
-							double maxDistSquad = 4 /* 2*2 */;
+                            double maxDistSquad = 4 /* 2*2 */;
 
-							for (Entity as : p.getWorld().getEntities()) {
-								if (as instanceof ArmorStand) {
-									if (as.getCustomName() != null) {
-										if (as.getLocation().distanceSquared(position) <= maxDistSquad) {
-											try {
-												if (as.getCustomName().equals("Kasa")) {
-													KasaData kasaData = DataMgr
-															.getKasaDataFromArmorStand((ArmorStand) as);
-													if (DataMgr.getPlayerData(kasaData.getPlayer()).getTeam() != DataMgr
-															.getPlayerData(p).getTeam()) {
-														break loop;
-													}
-												} else if (as.getCustomName().equals("SplashShield")) {
-													SplashShieldData splashShieldData = DataMgr
-															.getSplashShieldDataFromArmorStand((ArmorStand) as);
-													if (DataMgr.getPlayerData(splashShieldData.getPlayer())
-															.getTeam() != DataMgr.getPlayerData(p).getTeam()) {
-														break loop;
-													}
-												}
-											} catch (Exception e) {
-											}
-										}
-									}
-								}
-							}
+                            for (Entity as : p.getWorld().getEntities()) {
+                                if (as instanceof ArmorStand) {
+                                    if (as.getCustomName() != null) {
+                                        if (as.getLocation().distanceSquared(position) <= maxDistSquad) {
+                                            try {
+                                                if (as.getCustomName().equals("Kasa")) {
+                                                    KasaData kasaData = DataMgr
+                                                            .getKasaDataFromArmorStand((ArmorStand) as);
+                                                    if (DataMgr.getPlayerData(kasaData.getPlayer()).getTeam() != DataMgr
+                                                            .getPlayerData(p).getTeam()) {
+                                                        break loop;
+                                                    }
+                                                } else if (as.getCustomName().equals("SplashShield")) {
+                                                    SplashShieldData splashShieldData = DataMgr
+                                                            .getSplashShieldDataFromArmorStand((ArmorStand) as);
+                                                    if (DataMgr.getPlayerData(splashShieldData.getPlayer())
+                                                            .getTeam() != DataMgr.getPlayerData(p).getTeam()) {
+                                                        break loop;
+                                                    }
+                                                }
+                                            } catch (Exception e) {
+                                            }
+                                        }
+                                    }
+                                }
+                            }
 
-							for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
-								if (!DataMgr.getPlayerData(target).isInMatch())
-									continue;
-								if (DataMgr.getPlayerData(p).getTeam() != DataMgr.getPlayerData(target).getTeam()
-										&& target.getGameMode().equals(GameMode.ADVENTURE)) {
-									if (target.getLocation().distanceSquared(position) <= maxDistSquad) {
-										if (rayTrace1.intersects(new BoundingBox((Entity) target),
-												data.getWeaponClass().getMainWeapon().getRollerWidth(), 0.05)) {
+                            for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
+                                if (!DataMgr.getPlayerData(target).isInMatch())
+                                    continue;
+                                if (DataMgr.getPlayerData(p).getTeam() != DataMgr.getPlayerData(target).getTeam()
+                                        && target.getGameMode().equals(GameMode.ADVENTURE)) {
+                                    if (target.getLocation().distanceSquared(position) <= maxDistSquad) {
+                                        if (rayTrace1.intersects(new BoundingBox((Entity) target),
+                                                data.getWeaponClass().getMainWeapon().getRollerWidth(), 0.05)) {
 
-											double damage = DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon()
-													.getRollerDamage();
+                                            double damage = DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon()
+                                                    .getRollerDamage();
 
-											Sclat.giveDamage(p, target, damage, "killed");
+                                            Sclat.giveDamage(p, target, damage, "killed");
 
-											// AntiNoDamageTime
-											BukkitRunnable task = new BukkitRunnable() {
-												Player p = target;
-												@Override
-												public void run() {
-													target.setNoDamageTicks(0);
-												}
-											};
-											task.runTaskLater(Main.getPlugin(), 1);
-											break loop;
-										}
-									}
-								}
-							}
+                                            // AntiNoDamageTime
+                                            BukkitRunnable task = new BukkitRunnable() {
+                                                Player p = target;
 
-							for (Entity as : player.getWorld().getEntities()) {
-								if (as instanceof ArmorStand) {
-									if (as.getCustomName() != null) {
-										if (as.getLocation().distanceSquared(position) <= maxDistSquad) {
-											double damage = DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon()
-													.getRollerDamage();
-											ArmorStandMgr.giveDamageArmorStand((ArmorStand) as, damage, player);
-										}
-									}
-								}
-							}
-						}
+                                                @Override
+                                                public void run() {
+                                                    target.setNoDamageTicks(0);
+                                                }
+                                            };
+                                            task.runTaskLater(Main.getPlugin(), 1);
+                                            break loop;
+                                        }
+                                    }
+                                }
+                            }
+
+                            for (Entity as : player.getWorld().getEntities()) {
+                                if (as instanceof ArmorStand) {
+                                    if (as.getCustomName() != null) {
+                                        if (as.getLocation().distanceSquared(position) <= maxDistSquad) {
+                                            double damage = DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon()
+                                                    .getRollerDamage();
+                                            ArmorStandMgr.giveDamageArmorStand((ArmorStand) as, damage, player);
+                                        }
+                                    }
+                                }
+                            }
+                        }
 
 						RayTrace rayTrace2 = new RayTrace(front.toVector(), vec2);
 						ArrayList<Vector> positions2 = rayTrace2
 								.traverse(data.getWeaponClass().getMainWeapon().getRollerWidth(), 0.5);
-						loop : for (int i = 0; i < positions2.size(); i++) {
-							Location position = positions2.get(i).toLocation(p.getLocation().getWorld());
-							Block block = p.getLocation().getWorld().getBlockAt(position);
-							if (!block.getType().equals(Material.AIR))
-								break loop;
-							PaintMgr.PaintHightestBlock(position, p, false, true);
-							for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
-								if (DataMgr.getPlayerData(target).getSettings().ShowEffect_MainWeaponInk())
-									if (target.getWorld() == p.getWorld())
-										if (target.getLocation()
-												.distanceSquared(position) < Main.PARTICLE_RENDER_DISTANCE_SQUARED)
-											target.spawnParticle(org.bukkit.Particle.BLOCK_DUST, position, 2, 0, 0, 0,
-													1, bd);
-							}
+						loop :
+                        for (Vector vector : positions2) {
+                            Location position = vector.toLocation(p.getLocation().getWorld());
+                            Block block = p.getLocation().getWorld().getBlockAt(position);
+                            if (!block.getType().equals(Material.AIR))
+                                break loop;
+                            PaintMgr.PaintHightestBlock(position, p, false, true);
+                            for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
+                                if (DataMgr.getPlayerData(target).getSettings().ShowEffect_MainWeaponInk())
+                                    if (target.getWorld() == p.getWorld())
+                                        if (target.getLocation()
+                                                .distanceSquared(position) < Main.PARTICLE_RENDER_DISTANCE_SQUARED)
+                                            target.spawnParticle(org.bukkit.Particle.BLOCK_DUST, position, 2, 0, 0, 0,
+                                                    1, bd);
+                            }
 
-							double maxDistSquad = 4 /* 2*2 */;
+                            double maxDistSquad = 4 /* 2*2 */;
 
-							for (Entity as : p.getWorld().getEntities()) {
-								if (as instanceof ArmorStand) {
-									if (as.getCustomName() != null) {
-										if (as.getLocation().distanceSquared(position) <= maxDistSquad) {
-											try {
-												if (as.getCustomName().equals("Kasa")) {
-													KasaData kasaData = DataMgr
-															.getKasaDataFromArmorStand((ArmorStand) as);
-													if (DataMgr.getPlayerData(kasaData.getPlayer()).getTeam() != DataMgr
-															.getPlayerData(p).getTeam()) {
-														break loop;
-													}
-												} else if (as.getCustomName().equals("SplashShield")) {
-													SplashShieldData splashShieldData = DataMgr
-															.getSplashShieldDataFromArmorStand((ArmorStand) as);
-													if (DataMgr.getPlayerData(splashShieldData.getPlayer())
-															.getTeam() != DataMgr.getPlayerData(p).getTeam()) {
-														break loop;
-													}
-												}
-											} catch (Exception e) {
-											}
-										}
-									}
-								}
-							}
+                            for (Entity as : p.getWorld().getEntities()) {
+                                if (as instanceof ArmorStand) {
+                                    if (as.getCustomName() != null) {
+                                        if (as.getLocation().distanceSquared(position) <= maxDistSquad) {
+                                            try {
+                                                if (as.getCustomName().equals("Kasa")) {
+                                                    KasaData kasaData = DataMgr
+                                                            .getKasaDataFromArmorStand((ArmorStand) as);
+                                                    if (DataMgr.getPlayerData(kasaData.getPlayer()).getTeam() != DataMgr
+                                                            .getPlayerData(p).getTeam()) {
+                                                        break loop;
+                                                    }
+                                                } else if (as.getCustomName().equals("SplashShield")) {
+                                                    SplashShieldData splashShieldData = DataMgr
+                                                            .getSplashShieldDataFromArmorStand((ArmorStand) as);
+                                                    if (DataMgr.getPlayerData(splashShieldData.getPlayer())
+                                                            .getTeam() != DataMgr.getPlayerData(p).getTeam()) {
+                                                        break loop;
+                                                    }
+                                                }
+                                            } catch (Exception e) {
+                                            }
+                                        }
+                                    }
+                                }
+                            }
 
-							for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
-								if (!DataMgr.getPlayerData(target).isInMatch())
-									continue;
-								if (DataMgr.getPlayerData(p).getTeam() != DataMgr.getPlayerData(target).getTeam()
-										&& target.getGameMode().equals(GameMode.ADVENTURE)) {
-									if (rayTrace1.intersects(new BoundingBox((Entity) target),
-											data.getWeaponClass().getMainWeapon().getRollerWidth(), 0.05)) {
-										if (target.getLocation().distanceSquared(position) <= maxDistSquad) {
+                            for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
+                                if (!DataMgr.getPlayerData(target).isInMatch())
+                                    continue;
+                                if (DataMgr.getPlayerData(p).getTeam() != DataMgr.getPlayerData(target).getTeam()
+                                        && target.getGameMode().equals(GameMode.ADVENTURE)) {
+                                    if (rayTrace1.intersects(new BoundingBox((Entity) target),
+                                            data.getWeaponClass().getMainWeapon().getRollerWidth(), 0.05)) {
+                                        if (target.getLocation().distanceSquared(position) <= maxDistSquad) {
 
-											double damage = DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon()
-													.getRollerDamage();
+                                            double damage = DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon()
+                                                    .getRollerDamage();
 
-											Sclat.giveDamage(p, target, damage, "killed");
+                                            Sclat.giveDamage(p, target, damage, "killed");
 
-											// AntiNoDamageTime
-											BukkitRunnable task = new BukkitRunnable() {
-												Player p = target;
+                                            // AntiNoDamageTime
+                                            BukkitRunnable task = new BukkitRunnable() {
+                                                Player p = target;
 
-												@Override
-												public void run() {
-													target.setNoDamageTicks(0);
-												}
-											};
-											task.runTaskLater(Main.getPlugin(), 1);
-											break loop;
-										}
-									}
-								}
-							}
+                                                @Override
+                                                public void run() {
+                                                    target.setNoDamageTicks(0);
+                                                }
+                                            };
+                                            task.runTaskLater(Main.getPlugin(), 1);
+                                            break loop;
+                                        }
+                                    }
+                                }
+                            }
 
-							for (Entity as : player.getWorld().getEntities()) {
-								if (as instanceof ArmorStand) {
-									if (as.getLocation().distance(position) <= maxDistSquad) {
-										double damage = DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon()
-												.getRollerDamage();
-										ArmorStandMgr.giveDamageArmorStand((ArmorStand) as, damage, p);
-									}
-								}
-							}
-						}
+                            for (Entity as : player.getWorld().getEntities()) {
+                                if (as instanceof ArmorStand) {
+                                    if (as.getLocation().distance(position) <= maxDistSquad) {
+                                        double damage = DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon()
+                                                .getRollerDamage();
+                                        ArmorStandMgr.giveDamageArmorStand((ArmorStand) as, damage, p);
+                                    }
+                                }
+                            }
+                        }
 						PaintMgr.PaintHightestBlock(eloc, p, false, true);
 						p.setWalkSpeed((float) (data.getWeaponClass().getMainWeapon().getUsingWalkSpeed()
 								* Gear.getGearInfluence(p, Gear.Type.MAIN_SPEC_UP)));

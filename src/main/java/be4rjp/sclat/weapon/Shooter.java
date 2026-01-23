@@ -141,7 +141,7 @@ public class Shooter {
 				// マニューバー系
 				if (data.getWeaponClass().getMainWeapon().getIsManeuver()) {
 					// if(p.getExp() >= ink) {
-					if (data.getIsSneaking() && sl_recharge_2 == true && !data.getIsSliding()
+					if (data.getIsSneaking() && sl_recharge_2 && !data.getIsSliding()
 							&& p.getInventory().getItemInMainHand().getType()
 									.equals(data.getWeaponClass().getMainWeapon().getWeaponIteamStack().getType())) {// slをsl_recharge_2に変更することで優先順位が低い方のスライドが残っている時のみ使えるようにしました
 						Vector jvec = (new Vector(vec.getX(), 0, vec.getZ())).normalize().multiply(3);
@@ -271,7 +271,7 @@ public class Shooter {
 									// check = true;
 								}
 							};
-							if (sl_recharge_2 == true) {
+							if (sl_recharge_2) {
 								task4.runTaskLater(Main.getPlugin(), 64);
                             } else {
 								task5.runTaskLater(Main.getPlugin(), 64);
@@ -309,28 +309,29 @@ public class Shooter {
 				* data.getWeaponClass().getMainWeapon().getDistanceTick(), 0.7);
 		boolean isLockOnPlayer = false;
 		if (data.getWeaponClass().getMainWeapon().getMaxRandom() == 0) {
-			check : for (int i = 0; i < positions.size(); i++) {
-				Location position = positions.get(i).toLocation(player.getLocation().getWorld());
-				for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
-					if (player != target && player.getWorld() == target.getWorld()) {
-						if (target.getLocation().distance(position) < 2) {
-							isLockOnPlayer = true;
-							break check;
-						}
-					}
-				}
+			check :
+            for (Vector vector : positions) {
+                Location position = vector.toLocation(player.getLocation().getWorld());
+                for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
+                    if (player != target && player.getWorld() == target.getWorld()) {
+                        if (target.getLocation().distance(position) < 2) {
+                            isLockOnPlayer = true;
+                            break check;
+                        }
+                    }
+                }
 
-				for (Entity as : player.getWorld().getEntities()) {
-					if (as instanceof ArmorStand) {
-						if (as.getCustomName() != null) {
-							if (as.getLocation().distanceSquared(position) <= 4 /* 2*2 */) {
-								isLockOnPlayer = true;
-								break check;
-							}
-						}
-					}
-				}
-			}
+                for (Entity as : player.getWorld().getEntities()) {
+                    if (as instanceof ArmorStand) {
+                        if (as.getCustomName() != null) {
+                            if (as.getLocation().distanceSquared(position) <= 4 /* 2*2 */) {
+                                isLockOnPlayer = true;
+                                break check;
+                            }
+                        }
+                    }
+                }
+            }
 		} else {
 			if (!player.isOnGround())
 				maxRandom = true;

@@ -10,12 +10,14 @@ import be4rjp.sclat.manager.ArmorStandMgr;
 import be4rjp.sclat.manager.PaintMgr;
 import be4rjp.sclat.manager.SPWeaponMgr;
 import be4rjp.sclat.manager.WeaponClassMgr;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import net.minecraft.server.v1_14_R1.*;
+import net.minecraft.server.v1_14_R1.EntityArmorStand;
+import net.minecraft.server.v1_14_R1.EntitySquid;
+import net.minecraft.server.v1_14_R1.EntityTypes;
+import net.minecraft.server.v1_14_R1.PacketPlayOutEntityDestroy;
+import net.minecraft.server.v1_14_R1.PacketPlayOutEntityTeleport;
+import net.minecraft.server.v1_14_R1.PacketPlayOutSpawnEntityLiving;
+import net.minecraft.server.v1_14_R1.PlayerConnection;
+import net.minecraft.server.v1_14_R1.WorldServer;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -36,6 +38,11 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -112,10 +119,7 @@ public class MultiMissile {
 								EntitySquid es = ps.get(op);
 								Location loc = op.getLocation();
 								es.setLocation(loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), loc.getPitch());
-								if (MMCheckCanLock(p, op))
-									GlowingAPI.setGlowing(es.getBukkitEntity(), p, true);
-								else
-									GlowingAPI.setGlowing(es.getBukkitEntity(), p, false);
+                                GlowingAPI.setGlowing(es.getBukkitEntity(), p, MMCheckCanLock(p, op));
 								((CraftPlayer) p).getHandle().playerConnection
 										.sendPacket(new PacketPlayOutEntityTeleport(es));
 							}
@@ -132,10 +136,7 @@ public class MultiMissile {
 									EntityArmorStand eas = asl.get(as);
 									Location loc = as.getLocation();
 									eas.setLocation(loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), loc.getPitch());
-									if (MMCheckCanLock(p, as))
-										GlowingAPI.setGlowing(eas.getBukkitEntity(), p, true);
-									else
-										GlowingAPI.setGlowing(eas.getBukkitEntity(), p, false);
+                                    GlowingAPI.setGlowing(eas.getBukkitEntity(), p, MMCheckCanLock(p, as));
 									((CraftPlayer) p).getHandle().playerConnection
 											.sendPacket(new PacketPlayOutEntityTeleport(eas));
 								}
