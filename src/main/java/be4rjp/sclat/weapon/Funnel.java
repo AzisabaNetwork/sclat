@@ -198,12 +198,8 @@ public class Funnel {
 						@Override
 						public void run() {
 							try {
-								if (HashPlayer.containsKey(list.get(0))) {
-									HashPlayer.remove(list.get(0));
-								}
-								if (HashArmorstand.containsKey(list.get(0))) {
-									HashArmorstand.remove(list.get(0));
-								}
+                                HashPlayer.remove(list.get(0));
+                                HashArmorstand.remove(list.get(0));
 								data.subArmorlist(list.get(0));
 								for (ArmorStand as : list) {
 									as.remove();
@@ -257,12 +253,8 @@ public class Funnel {
 						@Override
 						public void run() {
 							try {
-								if (HashPlayer.containsKey(list1.get(0))) {
-									HashPlayer.remove(list1.get(0));
-								}
-								if (HashArmorstand.containsKey(list1.get(0))) {
-									HashArmorstand.remove(list1.get(0));
-								}
+                                HashPlayer.remove(list1.get(0));
+                                HashArmorstand.remove(list1.get(0));
 								data.subArmorlist(list1.get(0));
 								for (ArmorStand as : list1) {
 									as.remove();
@@ -316,12 +308,8 @@ public class Funnel {
 						@Override
 						public void run() {
 							try {
-								if (HashPlayer.containsKey(list2.get(0))) {
-									HashPlayer.remove(list2.get(0));
-								}
-								if (HashArmorstand.containsKey(list2.get(0))) {
-									HashArmorstand.remove(list2.get(0));
-								}
+                                HashPlayer.remove(list2.get(0));
+                                HashArmorstand.remove(list2.get(0));
 								data.subArmorlist(list2.get(0));
 								for (ArmorStand as : list2) {
 									as.remove();
