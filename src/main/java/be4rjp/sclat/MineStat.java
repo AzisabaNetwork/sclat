@@ -1,12 +1,15 @@
 package be4rjp.sclat;
 
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.InputStreamReader;
+import java.net.InetSocketAddress;
+import java.net.Socket;
+
 /**
  *
- * from https://github.com/ldilley/minestat/blob/master/Java/me/dilley/MineStat.java
+ * from <a href="https://github.com/ldilley/minestat/blob/master/Java/me/dilley/MineStat.java">MineStat.java</a>
  */
-import java.io.*;
-import java.net.*;
-
 public class MineStat {
 	public static final byte NUM_FIELDS = 6; // expected number of fields returned from server after query
 	public static final int DEFAULT_TIMEOUT = 5; // default TCP socket connection timeout in seconds
@@ -98,7 +101,7 @@ public class MineStat {
 			serverUp = false;
 		else {
 			serverData = rawServerData.split("\u0000\u0000\u0000");
-			if (serverData != null && serverData.length >= NUM_FIELDS) {
+			if (serverData.length >= NUM_FIELDS) {
 				serverUp = true;
 				setVersion(serverData[2].replace("\u0000", ""));
 				setMotd(serverData[3].replace("\u0000", ""));
