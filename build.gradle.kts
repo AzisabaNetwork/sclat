@@ -79,6 +79,7 @@ tasks {
         mergeServiceFiles()
         isEnableRelocation = true
         relocationPrefix = "libs.be4rjp.sclat"
+        archiveFileName.set("Sclat.jar")
     }
 }
 
