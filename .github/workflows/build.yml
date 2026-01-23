@@ -2,11 +2,21 @@ name: Build
 
 on:
   push:
-    branches:
-      - master
+    branches: [ master ]
+    paths:
+      - '**/*.java'
+      - '**/*.kt'
+      - '**/*.gradle'
+      - 'gradle/**'
+      - 'resources/**'
   pull_request:
-    branches:
-      - master
+    branches: [ master ]
+    paths:
+      - '**/*.java'
+      - '**/*.kt'
+      - '**/*.gradle'
+      - 'gradle/**'
+      - 'resources/**'
   workflow_dispatch:
 
 concurrency:
