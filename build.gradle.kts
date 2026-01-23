@@ -33,15 +33,15 @@ repositories {
 }
 
 dependencies {
-    api(libs.org.spigotmc.spigot.api)
-    api(libs.org.spigotmc.spigot)
-    api(libs.org.bukkit.bukkit)
-    api(libs.com.github.koca2000.noteblockapi)
-    api(libs.com.github.ucchyocean.lunachat)
+    api(libs.spigotApi)
+    api(libs.spigot)
+    api(libs.bukkit)
+    api(libs.noteblockapi)
+    api(libs.lunachat)
     api(files("libs/ProtocolLib.jar"))
-    api(libs.com.github.be4rjp.dadadachecker)
-    api(libs.com.github.be4rjp.blockstudio)
-    compileOnly(libs.com.destroystokyo.paper.paper.api)
+    api(libs.dadadachecker)
+    api(libs.blockstudio)
+    compileOnly(libs.paperApi)
 }
 
 group = "be4rjp"
