@@ -4,6 +4,7 @@ plugins {
     `maven-publish`
     alias(libs.plugins.runPaper)
     alias(libs.plugins.spotless)
+    alias(libs.plugins.shadow)
 }
 
 group = "be4rjp"
@@ -25,15 +26,16 @@ repositories {
 }
 
 dependencies {
-    api(libs.spigotApi)
-    api(libs.spigot)
-    api(libs.bukkit)
-    api(libs.noteblockapi)
-    api(libs.lunachat)
-    api(files("libs/ProtocolLib.jar"))
-    api(libs.dadadachecker)
-    api(libs.blockstudio)
+    compileOnly(libs.spigotApi)
+    compileOnly(libs.spigot)
+    compileOnly(libs.bukkit)
+    compileOnly(libs.noteblockapi)
+    compileOnly(libs.lunachat)
+    compileOnly(files("libs/ProtocolLib.jar"))
+    compileOnly(libs.dadadachecker)
+    compileOnly(libs.blockstudio)
     compileOnly(libs.paperApi)
+    implementation(libs.cloudPaper)
 }
 
 // Project Settings
@@ -53,6 +55,11 @@ java {
 tasks {
     runServer {
         minecraftVersion("1.14.4")
+        downloadPlugins {
+            url("https://github.com/ucchyocean/LunaChat/releases/download/v3.0.16/LunaChat.jar") // LunaChat 3.0.16
+            url("https://github.com/koca2000/NoteBlockAPI/releases/download/1.6.3/NoteBlockAPI-1.6.3.jar") // NoteBlockAPI 1.6.3
+            url("https://github.com/dmulloy2/ProtocolLib/releases/download/4.6.0/ProtocolLib.jar") // ProtocolLib 4.6.0
+        }
     }
 
     compileJava {
@@ -65,6 +72,13 @@ tasks {
 
     javadoc {
         options.encoding = defaultEncoding
+    }
+
+    shadowJar {
+        minimize()
+        mergeServiceFiles()
+        isEnableRelocation = true
+        relocationPrefix = "libs.be4rjp.sclat"
     }
 }
 
