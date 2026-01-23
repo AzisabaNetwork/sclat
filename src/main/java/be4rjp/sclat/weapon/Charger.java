@@ -92,32 +92,31 @@ public class Charger {
 							(int) ((double) charge * (double) data.getWeaponClass().getMainWeapon().getChargeRatio()
 									* (double) data.getWeaponClass().getMainWeapon().getDistanceTick()),
 							0.7);
-					check :
-                    for (Vector vector : positions) {
-                        Location position = vector.toLocation(p.getLocation().getWorld());
-                        Block block = player.getWorld().getBlockAt(position);
-                        if (!position.getBlock().getType().equals(Material.AIR)) {
-                            // if(rayTrace.intersects(new BoundingBox(block), (int)(charge / 2 *
-                            // data.getWeaponClass().getMainWeapon().getDistanceTick()), 0.1))
-                            break check;
-                        }
-                        // if(i % 2 == 0){
-                        // for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
-                        // if (target.equals(p) ||
-                        // !DataMgr.getPlayerData(target).getSettings().ShowEffect_ChargerLine())
-                        // continue;
-                        // if (target.getWorld() == p.getWorld()) {
-                        // if (target.getLocation().distanceSquared(position) <
-                        // Main.PARTICLE_RENDER_DISTANCE_SQUARED) {
-                        // Particle.DustOptions dustOptions = new
-                        // Particle.DustOptions(data.getTeam().getTeamColor().getBukkitColor(), 1);
-                        // target.spawnParticle(Particle.REDSTONE, position, 1, 0, 0, 0, 50,
-                        // dustOptions);
-                        // }
-                        // }
-                        // }
-                        // }
-                    }
+					check : for (Vector vector : positions) {
+						Location position = vector.toLocation(p.getLocation().getWorld());
+						Block block = player.getWorld().getBlockAt(position);
+						if (!position.getBlock().getType().equals(Material.AIR)) {
+							// if(rayTrace.intersects(new BoundingBox(block), (int)(charge / 2 *
+							// data.getWeaponClass().getMainWeapon().getDistanceTick()), 0.1))
+							break check;
+						}
+						// if(i % 2 == 0){
+						// for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
+						// if (target.equals(p) ||
+						// !DataMgr.getPlayerData(target).getSettings().ShowEffect_ChargerLine())
+						// continue;
+						// if (target.getWorld() == p.getWorld()) {
+						// if (target.getLocation().distanceSquared(position) <
+						// Main.PARTICLE_RENDER_DISTANCE_SQUARED) {
+						// Particle.DustOptions dustOptions = new
+						// Particle.DustOptions(data.getTeam().getTeamColor().getBukkitColor(), 1);
+						// target.spawnParticle(Particle.REDSTONE, position, 1, 0, 0, 0, 50,
+						// dustOptions);
+						// }
+						// }
+						// }
+						// }
+					}
 				}
 
 				if (charge == max || data.getWeaponClass().getMainWeapon().getHanbunCharge())
@@ -412,7 +411,7 @@ public class Charger {
 		} else {
 			tyaw = target.getEyeLocation().getYaw();
 		}
-        return (pyaw - tyaw < 130 && pyaw - tyaw > -130) || pyaw - tyaw > 230 || pyaw - tyaw < -230;
+		return (pyaw - tyaw < 130 && pyaw - tyaw > -130) || pyaw - tyaw > 230 || pyaw - tyaw < -230;
 	}
 
 }

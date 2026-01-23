@@ -818,8 +818,8 @@ public class MatchMgr {
 								if (DataMgr.getPlayerData(oplayer).getSettings().PlayBGM()
 										&& DataMgr.getPlayerData(oplayer).getIsJoined()) {
 									radio.addPlayer(oplayer);
-									oplayer.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent
-											.fromLegacyText("§7Now playing : §6" + nbs.getSongName()));
+									oplayer.spigot().sendMessage(ChatMessageType.ACTION_BAR,
+											TextComponent.fromLegacyText("§7Now playing : §6" + nbs.getSongName()));
 								}
 							}
 							radio.setPlaying(true);
@@ -1120,8 +1120,8 @@ public class MatchMgr {
 								if (DataMgr.getPlayerData(oplayer).getSettings().PlayBGM()
 										&& DataMgr.getPlayerData(oplayer).getIsJoined()) {
 									radio.addPlayer(oplayer);
-									oplayer.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent
-											.fromLegacyText("§7Now playing : §6" + nbs.getSongName()));
+									oplayer.spigot().sendMessage(ChatMessageType.ACTION_BAR,
+											TextComponent.fromLegacyText("§7Now playing : §6" + nbs.getSongName()));
 								}
 							}
 							radio.setPlaying(true);

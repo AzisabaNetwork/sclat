@@ -177,7 +177,7 @@ public class MainWeaponMgr {
 				return false;
 			String itemname = player.getInventory().getItemInMainHand().getItemMeta().getDisplayName();
 			if (itemname.length() >= wname.length())
-                return wname.equals(itemname.substring(0, wname.length()));
+				return wname.equals(itemname.substring(0, wname.length()));
 			return false;
 		} catch (Exception e) {
 			return false;

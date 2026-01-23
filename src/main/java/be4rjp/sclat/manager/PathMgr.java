@@ -52,9 +52,9 @@ public class PathMgr {
 				drop.setVelocity(vec);
 
 				boolean is = drop.getLocation().distanceSquared(from) > from.distanceSquared(to)
-                        || !drop.getPassengers().contains(p) || !DataMgr.getPlayerData(p).isInMatch()
-                        || !p.getInventory().getItemInMainHand().getType().equals(Material.AIR);
-                if (path.getTeam() == null)
+						|| !drop.getPassengers().contains(p) || !DataMgr.getPlayerData(p).isInMatch()
+						|| !p.getInventory().getItemInMainHand().getType().equals(Material.AIR);
+				if (path.getTeam() == null)
 					is = true;
 				else if (path.getTeam() != DataMgr.getPlayerData(p).getTeam())
 					is = true;
@@ -111,21 +111,20 @@ public class PathMgr {
 							new Vector(to.getX() - from.getX(), to.getY() - from.getY(), to.getZ() - from.getZ())
 									.normalize());
 					ArrayList<Vector> positions = rayTrace.traverse(from.distance(to), 0.5);
-                    for (Vector vector : positions) {
-                        Location position = vector.toLocation(from.getWorld());
-                        for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
-                            if (!DataMgr.getPlayerData(target).getSettings().ShowEffect_ChargerLine())
-                                continue;
-                            Particle.DustOptions dustOptions;
-                            if (team == null) {
-                                dustOptions = new Particle.DustOptions(org.bukkit.Color.WHITE, 1);
-                            } else {
-                                dustOptions = new Particle.DustOptions(
-                                        team.getTeamColor().getBukkitColor(), 1);
-                            }
-                            target.spawnParticle(Particle.REDSTONE, position, 1, 0, 0, 0, 25, dustOptions);
-                        }
-                    }
+					for (Vector vector : positions) {
+						Location position = vector.toLocation(from.getWorld());
+						for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
+							if (!DataMgr.getPlayerData(target).getSettings().ShowEffect_ChargerLine())
+								continue;
+							Particle.DustOptions dustOptions;
+							if (team == null) {
+								dustOptions = new Particle.DustOptions(org.bukkit.Color.WHITE, 1);
+							} else {
+								dustOptions = new Particle.DustOptions(team.getTeamColor().getBukkitColor(), 1);
+							}
+							target.spawnParticle(Particle.REDSTONE, position, 1, 0, 0, 0, 25, dustOptions);
+						}
+					}
 					if (match.isFinished()) {
 						cancel();
 					}

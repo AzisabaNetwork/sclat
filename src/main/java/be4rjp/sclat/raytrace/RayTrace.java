@@ -77,7 +77,8 @@ public class RayTrace {
 			return false;
 		} else if (position.getY() < min.getY() || position.getY() > max.getY()) {
 			return false;
-		} else return !(position.getZ() < min.getZ()) && !(position.getZ() > max.getZ());
-    }
+		} else
+			return !(position.getZ() < min.getZ()) && !(position.getZ() > max.getZ());
+	}
 
 }

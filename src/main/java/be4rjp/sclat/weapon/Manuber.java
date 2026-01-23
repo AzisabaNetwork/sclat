@@ -237,11 +237,11 @@ public class Manuber {
 							};
 							if (sl_recharge_2) {
 								task4.runTaskLater(Main.getPlugin(), 64);
-                            } else {
+							} else {
 								task5.runTaskLater(Main.getPlugin(), 64);
-                            }
-                            check = false;
-                        }
+							}
+							check = false;
+						}
 						data.setIsUsingManeuver(false);
 					}
 				}

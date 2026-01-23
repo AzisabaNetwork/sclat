@@ -319,9 +319,9 @@ public class Hound {
 		Location entityLocation = stand.getLocation().clone().add(new Vector(0, 0.3, 0));
 		double distance = 0.7; // レイの長さ
 		// if (result != null && result.getHitBlockFace() != null) {
-        // 壁に接触している場合の処理
-        // 壁に接触していない場合の処理
-        return stand.getWorld().rayTraceBlocks(entityLocation, direction, distance) != null;
+		// 壁に接触している場合の処理
+		// 壁に接触していない場合の処理
+		return stand.getWorld().rayTraceBlocks(entityLocation, direction, distance) != null;
 	}
 	private static double exdamage(double heightDiff, double mag, double dm) {
 		if (7.9 < heightDiff) {

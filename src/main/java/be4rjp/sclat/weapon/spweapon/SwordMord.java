@@ -245,7 +245,7 @@ public class SwordMord {
 								list.add(as2);
 								list.add(as3);
 								list.add(as4);
-                                List<ArmorStand> aslist = new ArrayList<>(list);
+								List<ArmorStand> aslist = new ArrayList<>(list);
 								kdata.setArmorStandList(aslist);
 								for (ArmorStand as : list) {
 									// as.setHeadPose(new EulerAngle(Math.toRadians(90), 0, 0));

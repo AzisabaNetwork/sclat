@@ -280,28 +280,27 @@ public class QuadroArms {
 		RayTrace rayTrace = new RayTrace(player.getEyeLocation().toVector(), player.getEyeLocation().getDirection());
 		ArrayList<Vector> positions = rayTrace.traverse(QuadroShootSpeed * QuadroDisTick, 0.7);
 		boolean isLockOnPlayer = false;
-		check :
-        for (Vector vector : positions) {
-            Location position = vector.toLocation(player.getLocation().getWorld());
-            for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
-                if (player != target && player.getWorld() == target.getWorld()) {
-                    if (target.getLocation().distance(position) < 2) {
-                        isLockOnPlayer = true;
-                        break check;
-                    }
-                }
-            }
-            for (Entity as : player.getWorld().getEntities()) {
-                if (as instanceof ArmorStand) {
-                    if (as.getCustomName() != null) {
-                        if (as.getLocation().distanceSquared(position) <= 4 /* 2*2 */) {
-                            isLockOnPlayer = true;
-                            break check;
-                        }
-                    }
-                }
-            }
-        }
+		check : for (Vector vector : positions) {
+			Location position = vector.toLocation(player.getLocation().getWorld());
+			for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
+				if (player != target && player.getWorld() == target.getWorld()) {
+					if (target.getLocation().distance(position) < 2) {
+						isLockOnPlayer = true;
+						break check;
+					}
+				}
+			}
+			for (Entity as : player.getWorld().getEntities()) {
+				if (as instanceof ArmorStand) {
+					if (as.getCustomName() != null) {
+						if (as.getLocation().distanceSquared(position) <= 4 /* 2*2 */) {
+							isLockOnPlayer = true;
+							break check;
+						}
+					}
+				}
+			}
+		}
 		PaintMgr.PaintHightestBlock(player.getLocation(), player, true, true);
 
 		Snowball ball = player.launchProjectile(Snowball.class);

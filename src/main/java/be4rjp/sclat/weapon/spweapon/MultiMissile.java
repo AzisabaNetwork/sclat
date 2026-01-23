@@ -119,7 +119,7 @@ public class MultiMissile {
 								EntitySquid es = ps.get(op);
 								Location loc = op.getLocation();
 								es.setLocation(loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), loc.getPitch());
-                                GlowingAPI.setGlowing(es.getBukkitEntity(), p, MMCheckCanLock(p, op));
+								GlowingAPI.setGlowing(es.getBukkitEntity(), p, MMCheckCanLock(p, op));
 								((CraftPlayer) p).getHandle().playerConnection
 										.sendPacket(new PacketPlayOutEntityTeleport(es));
 							}
@@ -136,7 +136,7 @@ public class MultiMissile {
 									EntityArmorStand eas = asl.get(as);
 									Location loc = as.getLocation();
 									eas.setLocation(loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), loc.getPitch());
-                                    GlowingAPI.setGlowing(eas.getBukkitEntity(), p, MMCheckCanLock(p, as));
+									GlowingAPI.setGlowing(eas.getBukkitEntity(), p, MMCheckCanLock(p, as));
 									((CraftPlayer) p).getHandle().playerConnection
 											.sendPacket(new PacketPlayOutEntityTeleport(eas));
 								}

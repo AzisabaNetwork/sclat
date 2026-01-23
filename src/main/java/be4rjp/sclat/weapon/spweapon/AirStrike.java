@@ -104,13 +104,12 @@ public class AirStrike {
 			public void run() {
 				RayTrace rayTrace = new RayTrace(tloc.toVector(), new Vector(0, 1, 0));
 				ArrayList<Vector> positions = rayTrace.traverse(50, 0.8);
-				check :
-                for (Vector vector : positions) {
-                    Location position = vector.toLocation(player.getLocation().getWorld());
-                    Particle.DustOptions dustOptions = new Particle.DustOptions(
-                            DataMgr.getPlayerData(player).getTeam().getTeamColor().getBukkitColor(), 1);
-                    player.getWorld().spawnParticle(Particle.REDSTONE, position, 1, 0, 0, 0, 1, dustOptions);
-                }
+				check : for (Vector vector : positions) {
+					Location position = vector.toLocation(player.getLocation().getWorld());
+					Particle.DustOptions dustOptions = new Particle.DustOptions(
+							DataMgr.getPlayerData(player).getTeam().getTeamColor().getBukkitColor(), 1);
+					player.getWorld().spawnParticle(Particle.REDSTONE, position, 1, 0, 0, 0, 1, dustOptions);
+				}
 				if (c == 100 || !DataMgr.getPlayerData(player).isInMatch()) {
 					DataMgr.getPlayerData(player).setIsUsingSP(false);
 					cancel();

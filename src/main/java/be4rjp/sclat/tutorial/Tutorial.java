@@ -219,7 +219,7 @@ public class Tutorial {
 					if (player.getWorld() != w)
 						continue;
 					if (player.getLocation().distance(loc) < 5) {
-                        Tutorial.clearList.remove(player);
+						Tutorial.clearList.remove(player);
 						String WorldName = conf.getConfig().getString("LobbyJump.WorldName");
 						World w = Bukkit.getWorld(WorldName);
 						int ix = conf.getConfig().getInt("LobbyJump.X");

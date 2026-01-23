@@ -6,7 +6,8 @@ import java.util.Set;
 
 public class TextAnimation {
 
-	private static final Set<Character> SMALLS = new HashSet<>(Arrays.asList('.', '|', 'i', '!', '！', '/', '1', ' ', 'l'));
+	private static final Set<Character> SMALLS = new HashSet<>(
+			Arrays.asList('.', '|', 'i', '!', '！', '/', '1', ' ', 'l'));
 
 	private final String text;
 	private final int length;
@@ -26,13 +27,13 @@ public class TextAnimation {
 		int hankaku = 0;
 
 		char[] chars = line.toCharArray();
-        for (char aChar : chars) {
-            if (SMALLS.contains(aChar)) {
-                plus++;
-            } else if (String.valueOf(aChar).getBytes().length < 2) {
-                hankaku++;
-            }
-        }
+		for (char aChar : chars) {
+			if (SMALLS.contains(aChar)) {
+				plus++;
+			} else if (String.valueOf(aChar).getBytes().length < 2) {
+				hankaku++;
+			}
+		}
 
 		line = text.substring(index, index + length + plus + hankaku / 2);
 

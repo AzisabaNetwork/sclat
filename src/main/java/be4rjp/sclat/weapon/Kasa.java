@@ -192,7 +192,7 @@ public class Kasa {
 					PlayerData data = DataMgr.getPlayerData(p);
 
 					try {
-                        weapon = MainWeaponMgr.equalWeapon(p);
+						weapon = MainWeaponMgr.equalWeapon(p);
 					} catch (Exception e) {
 						weapon = false;
 					}
@@ -505,7 +505,7 @@ public class Kasa {
 						dl.add(as17);
 						ul.add(as20);
 
-                        List<ArmorStand> aslist = new ArrayList<>(list);
+						List<ArmorStand> aslist = new ArrayList<>(list);
 						kdata.setArmorStandList(aslist);
 						kdata.setDamage(DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getSlideNeedINK());
 

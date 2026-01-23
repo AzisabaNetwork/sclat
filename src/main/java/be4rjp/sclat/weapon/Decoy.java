@@ -159,7 +159,7 @@ public class Decoy {
 					block = location.getBlock().getRelative(BlockFace.DOWN);
 					if (DataMgr.getBlockDataMap().containsKey(block)) {
 						if (block.getType().toString().contains("WOOL")) {
-                            ika = block.getType() != data.getTeam().getTeamColor().getWool();
+							ika = block.getType() != data.getTeam().getTeamColor().getWool();
 						} else {
 							ika = false;
 						}

@@ -124,7 +124,7 @@ public class SquidMgr {
 
 				if (i > 2) {
 					i = 0;
-                    data.setIsSquid(player.getInventory().getItemInMainHand().getType() == Material.AIR);
+					data.setIsSquid(player.getInventory().getItemInMainHand().getType() == Material.AIR);
 				}
 				i++;
 				/*
