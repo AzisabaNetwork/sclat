@@ -1,8 +1,8 @@
 package be4rjp.sclat.server;
 
 import be4rjp.sclat.Main;
-import be4rjp.sclat.Sclat;
 import be4rjp.sclat.api.MessageType;
+import be4rjp.sclat.api.Sclat;
 import be4rjp.sclat.api.SoundType;
 import be4rjp.sclat.data.ServerStatus;
 import be4rjp.sclat.manager.PlayerReturnManager;

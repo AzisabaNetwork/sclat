@@ -1,7 +1,7 @@
 package be4rjp.sclat.weapon.spweapon;
 
 import be4rjp.sclat.Main;
-import be4rjp.sclat.Sclat;
+import be4rjp.sclat.api.Sclat;
 import be4rjp.sclat.api.Sphere;
 import be4rjp.sclat.api.raytrace.BoundingBox;
 import be4rjp.sclat.api.raytrace.RayTrace;

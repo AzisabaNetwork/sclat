@@ -2,8 +2,8 @@
 package be4rjp.sclat.data;
 
 import be4rjp.sclat.Main;
-import be4rjp.sclat.Sclat;
 import be4rjp.sclat.api.MessageType;
+import be4rjp.sclat.api.Sclat;
 import be4rjp.sclat.manager.PaintMgr;
 import org.bukkit.Location;
 import org.bukkit.Material;

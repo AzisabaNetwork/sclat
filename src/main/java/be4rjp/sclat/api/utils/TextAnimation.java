@@ -1,4 +1,4 @@
-package be4rjp.sclat.utils;
+package be4rjp.sclat.api.utils;
 
 import java.util.Arrays;
 import java.util.HashSet;

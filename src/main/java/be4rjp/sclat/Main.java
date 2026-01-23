@@ -3,6 +3,7 @@ package be4rjp.sclat;
 import be4rjp.blockstudio.BlockStudio;
 import be4rjp.blockstudio.api.BlockStudioAPI;
 import be4rjp.dadadachecker.DADADACheckerAPI;
+import be4rjp.sclat.api.Sclat;
 import be4rjp.sclat.api.ServerType;
 import be4rjp.sclat.api.async.AsyncPlayerListener;
 import be4rjp.sclat.api.async.AsyncThreadManager;

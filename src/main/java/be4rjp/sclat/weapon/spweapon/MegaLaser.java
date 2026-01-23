@@ -6,7 +6,7 @@ import be4rjp.blockstudio.api.BSObject;
 import be4rjp.blockstudio.api.BlockStudioAPI;
 import be4rjp.blockstudio.file.ObjectData;
 import be4rjp.sclat.Main;
-import be4rjp.sclat.Sclat;
+import be4rjp.sclat.api.Sclat;
 import be4rjp.sclat.api.async.AsyncTask;
 import be4rjp.sclat.api.async.AsyncThreadManager;
 import be4rjp.sclat.api.raytrace.RayTrace;
