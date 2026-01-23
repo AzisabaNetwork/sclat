@@ -2,7 +2,10 @@ package be4rjp.sclat.manager;
 
 import be4rjp.sclat.Main;
 import be4rjp.sclat.data.ServerStatus;
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -99,11 +102,11 @@ public class ServerStatusManager {
 							role.add("§r§7[Status]  §aONLINE");
 							role.add("");
 							role.add("§r§7[Match]  " + (ss.getRunningMatch() ? "§cACTIVE" : "§aINACTIVE"));
-							if (!ss.getMapName().equals("")) {
+							if (!ss.getMapName().isEmpty()) {
 								role.add("");
 								role.add("§r§7[Map]  §f§l" + ss.getMapName());
 							}
-							if (!ss.getInfo().equals("")) {
+							if (!ss.getInfo().isEmpty()) {
 								role.add("");
 								role.add("§r§7[Info]  §f§l" + ss.getInfo());
 							}

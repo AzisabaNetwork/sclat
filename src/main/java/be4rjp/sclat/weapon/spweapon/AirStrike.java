@@ -2,19 +2,15 @@
 package be4rjp.sclat.weapon.spweapon;
 
 import be4rjp.sclat.Main;
-
-import be4rjp.sclat.Sclat;
-import be4rjp.sclat.Sphere;
+import be4rjp.sclat.api.Sclat;
+import be4rjp.sclat.api.Sphere;
+import be4rjp.sclat.api.raytrace.RayTrace;
 import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.manager.ArmorStandMgr;
 import be4rjp.sclat.manager.MapKitMgr;
 import be4rjp.sclat.manager.PaintMgr;
 import be4rjp.sclat.manager.SPWeaponMgr;
 import be4rjp.sclat.manager.WeaponClassMgr;
-import be4rjp.sclat.raytrace.RayTrace;
-import java.util.ArrayList;
-import java.util.List;
-
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -31,6 +27,9 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -105,8 +104,8 @@ public class AirStrike {
 			public void run() {
 				RayTrace rayTrace = new RayTrace(tloc.toVector(), new Vector(0, 1, 0));
 				ArrayList<Vector> positions = rayTrace.traverse(50, 0.8);
-				check : for (int i = 0; i < positions.size(); i++) {
-					Location position = positions.get(i).toLocation(player.getLocation().getWorld());
+				check : for (Vector vector : positions) {
+					Location position = vector.toLocation(player.getLocation().getWorld());
 					Particle.DustOptions dustOptions = new Particle.DustOptions(
 							DataMgr.getPlayerData(player).getTeam().getTeamColor().getBukkitColor(), 1);
 					player.getWorld().spawnParticle(Particle.REDSTONE, position, 1, 0, 0, 0, 1, dustOptions);

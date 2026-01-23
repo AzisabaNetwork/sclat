@@ -1,9 +1,10 @@
 
-package be4rjp.sclat;
+package be4rjp.sclat.api;
+
+import org.bukkit.Location;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.bukkit.Location;
 
 /**
  *

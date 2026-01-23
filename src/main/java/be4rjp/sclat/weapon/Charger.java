@@ -1,19 +1,22 @@
 package be4rjp.sclat.weapon;
 
-import be4rjp.sclat.GaugeAPI;
 import be4rjp.sclat.Main;
-import be4rjp.sclat.Sclat;
+import be4rjp.sclat.api.GaugeAPI;
+import be4rjp.sclat.api.Sclat;
+import be4rjp.sclat.api.raytrace.BoundingBox;
+import be4rjp.sclat.api.raytrace.RayTrace;
 import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.data.KasaData;
 import be4rjp.sclat.data.PlayerData;
 import be4rjp.sclat.data.SplashShieldData;
 import be4rjp.sclat.manager.ArmorStandMgr;
 import be4rjp.sclat.manager.PaintMgr;
-import be4rjp.sclat.raytrace.BoundingBox;
-import be4rjp.sclat.raytrace.RayTrace;
-import java.util.ArrayList;
-
-import org.bukkit.*;
+import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.Sound;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
@@ -23,6 +26,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.RayTraceResult;
 import org.bukkit.util.Vector;
+
+import java.util.ArrayList;
 
 /**
  *
@@ -87,8 +92,8 @@ public class Charger {
 							(int) ((double) charge * (double) data.getWeaponClass().getMainWeapon().getChargeRatio()
 									* (double) data.getWeaponClass().getMainWeapon().getDistanceTick()),
 							0.7);
-					check : for (int i = 0; i < positions.size(); i++) {
-						Location position = positions.get(i).toLocation(p.getLocation().getWorld());
+					check : for (Vector vector : positions) {
+						Location position = vector.toLocation(p.getLocation().getWorld());
 						Block block = player.getWorld().getBlockAt(position);
 						if (!position.getBlock().getType().equals(Material.AIR)) {
 							// if(rayTrace.intersects(new BoundingBox(block), (int)(charge / 2 *
@@ -406,11 +411,7 @@ public class Charger {
 		} else {
 			tyaw = target.getEyeLocation().getYaw();
 		}
-		if ((pyaw - tyaw < 130 && pyaw - tyaw > -130) || pyaw - tyaw > 230 || pyaw - tyaw < -230) {
-			return true;
-		} else {
-			return false;
-		}
+		return (pyaw - tyaw < 130 && pyaw - tyaw > -130) || pyaw - tyaw > 230 || pyaw - tyaw < -230;
 	}
 
 }

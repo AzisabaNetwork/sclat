@@ -2,12 +2,11 @@
 package be4rjp.sclat.manager;
 
 import be4rjp.sclat.Main;
+import be4rjp.sclat.api.raytrace.RayTrace;
 import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.data.Match;
 import be4rjp.sclat.data.Path;
 import be4rjp.sclat.data.Team;
-import be4rjp.sclat.raytrace.RayTrace;
-import java.util.ArrayList;
 import net.minecraft.server.v1_14_R1.EnumItemSlot;
 import net.minecraft.server.v1_14_R1.PacketPlayOutEntityEquipment;
 import org.bukkit.Location;
@@ -22,6 +21,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
+
+import java.util.ArrayList;
 
 /**
  *
@@ -50,11 +51,9 @@ public class PathMgr {
 
 				drop.setVelocity(vec);
 
-				boolean is = false;
-				if (drop.getLocation().distanceSquared(from) > from.distanceSquared(to)
+				boolean is = drop.getLocation().distanceSquared(from) > from.distanceSquared(to)
 						|| !drop.getPassengers().contains(p) || !DataMgr.getPlayerData(p).isInMatch()
-						|| !p.getInventory().getItemInMainHand().getType().equals(Material.AIR))
-					is = true;
+						|| !p.getInventory().getItemInMainHand().getType().equals(Material.AIR);
 				if (path.getTeam() == null)
 					is = true;
 				else if (path.getTeam() != DataMgr.getPlayerData(p).getTeam())
@@ -112,19 +111,18 @@ public class PathMgr {
 							new Vector(to.getX() - from.getX(), to.getY() - from.getY(), to.getZ() - from.getZ())
 									.normalize());
 					ArrayList<Vector> positions = rayTrace.traverse(from.distance(to), 0.5);
-					for (int i = 0; i < positions.size(); i++) {
-						Location position = positions.get(i).toLocation(from.getWorld());
+					for (Vector vector : positions) {
+						Location position = vector.toLocation(from.getWorld());
 						for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
 							if (!DataMgr.getPlayerData(target).getSettings().ShowEffect_ChargerLine())
 								continue;
+							Particle.DustOptions dustOptions;
 							if (team == null) {
-								Particle.DustOptions dustOptions = new Particle.DustOptions(org.bukkit.Color.WHITE, 1);
-								target.spawnParticle(Particle.REDSTONE, position, 1, 0, 0, 0, 25, dustOptions);
+								dustOptions = new Particle.DustOptions(org.bukkit.Color.WHITE, 1);
 							} else {
-								Particle.DustOptions dustOptions = new Particle.DustOptions(
-										team.getTeamColor().getBukkitColor(), 1);
-								target.spawnParticle(Particle.REDSTONE, position, 1, 0, 0, 0, 25, dustOptions);
+								dustOptions = new Particle.DustOptions(team.getTeamColor().getBukkitColor(), 1);
 							}
+							target.spawnParticle(Particle.REDSTONE, position, 1, 0, 0, 0, 25, dustOptions);
 						}
 					}
 					if (match.isFinished()) {

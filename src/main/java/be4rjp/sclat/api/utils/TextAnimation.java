@@ -1,10 +1,13 @@
-package be4rjp.sclat.utils;
+package be4rjp.sclat.api.utils;
 
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 public class TextAnimation {
 
-	private static final char[] smalls = {'.', '|', 'i', '!', '！', '/', '1', ' ', 'l'};
+	private static final Set<Character> SMALLS = new HashSet<>(
+			Arrays.asList('.', '|', 'i', '!', '！', '/', '1', ' ', 'l'));
 
 	private final String text;
 	private final int length;
@@ -24,10 +27,10 @@ public class TextAnimation {
 		int hankaku = 0;
 
 		char[] chars = line.toCharArray();
-		for (int i = 0; i < chars.length; i++) {
-			if (Arrays.asList(smalls).contains(chars[i])) {
+		for (char aChar : chars) {
+			if (SMALLS.contains(aChar)) {
 				plus++;
-			} else if (String.valueOf(chars[i]).getBytes().length < 2) {
+			} else if (String.valueOf(aChar).getBytes().length < 2) {
 				hankaku++;
 			}
 		}

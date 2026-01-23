@@ -1,19 +1,30 @@
 package be4rjp.sclat.weapon;
 
-import be4rjp.sclat.GlowingAPI;
 import be4rjp.sclat.Main;
-import be4rjp.sclat.Sclat;
-import be4rjp.sclat.data.*;
+import be4rjp.sclat.api.GlowingAPI;
+import be4rjp.sclat.api.Sclat;
+import be4rjp.sclat.api.raytrace.BoundingBox;
+import be4rjp.sclat.api.raytrace.RayTrace;
+import be4rjp.sclat.data.DataMgr;
+import be4rjp.sclat.data.KasaData;
+import be4rjp.sclat.data.PlayerData;
+import be4rjp.sclat.data.SplashShieldData;
+import be4rjp.sclat.data.Team;
 import be4rjp.sclat.manager.ArmorStandMgr;
-import be4rjp.sclat.raytrace.BoundingBox;
-import be4rjp.sclat.raytrace.RayTrace;
 import net.minecraft.server.v1_14_R1.EnumItemSlot;
 import net.minecraft.server.v1_14_R1.PacketPlayOutEntityEquipment;
-import org.bukkit.*;
+import org.bukkit.GameMode;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.Particle;
+import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_14_R1.inventory.CraftItemStack;
-import org.bukkit.entity.*;
+import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.EulerAngle;
@@ -41,9 +52,9 @@ public class Funnel {
 				taegetloc.getY() - funloc.getY(), taegetloc.getZ() - funloc.getZ()).normalize());
 		ArrayList<Vector> positions = rayTrace.traverse(4, 0.2);
 
-		loop : for (int i = 0; i < positions.size(); i++) {
+		loop : for (Vector vector : positions) {
 
-			Location position = positions.get(i).toLocation(player.getLocation().getWorld());
+			Location position = vector.toLocation(player.getLocation().getWorld());
 			Block block = player.getLocation().getWorld().getBlockAt(position);
 
 			if (!block.getType().equals(Material.AIR)) {
@@ -55,7 +66,7 @@ public class Funnel {
 						if (target.getLocation().distanceSquared(position) < Main.PARTICLE_RENDER_DISTANCE_SQUARED) {
 							org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(player).getTeam().getTeamColor()
 									.getWool().createBlockData();
-							target.spawnParticle(org.bukkit.Particle.BLOCK_DUST, position, 1, 0, 0, 0, 1, bd);
+							target.spawnParticle(Particle.BLOCK_DUST, position, 1, 0, 0, 0, 1, bd);
 						}
 					}
 				}
@@ -186,12 +197,8 @@ public class Funnel {
 						@Override
 						public void run() {
 							try {
-								if (HashPlayer.containsKey(list.get(0))) {
-									HashPlayer.remove(list.get(0));
-								}
-								if (HashArmorstand.containsKey(list.get(0))) {
-									HashArmorstand.remove(list.get(0));
-								}
+								HashPlayer.remove(list.get(0));
+								HashArmorstand.remove(list.get(0));
 								data.subArmorlist(list.get(0));
 								for (ArmorStand as : list) {
 									as.remove();
@@ -245,12 +252,8 @@ public class Funnel {
 						@Override
 						public void run() {
 							try {
-								if (HashPlayer.containsKey(list1.get(0))) {
-									HashPlayer.remove(list1.get(0));
-								}
-								if (HashArmorstand.containsKey(list1.get(0))) {
-									HashArmorstand.remove(list1.get(0));
-								}
+								HashPlayer.remove(list1.get(0));
+								HashArmorstand.remove(list1.get(0));
 								data.subArmorlist(list1.get(0));
 								for (ArmorStand as : list1) {
 									as.remove();
@@ -304,12 +307,8 @@ public class Funnel {
 						@Override
 						public void run() {
 							try {
-								if (HashPlayer.containsKey(list2.get(0))) {
-									HashPlayer.remove(list2.get(0));
-								}
-								if (HashArmorstand.containsKey(list2.get(0))) {
-									HashArmorstand.remove(list2.get(0));
-								}
+								HashPlayer.remove(list2.get(0));
+								HashArmorstand.remove(list2.get(0));
 								data.subArmorlist(list2.get(0));
 								for (ArmorStand as : list2) {
 									as.remove();
@@ -873,7 +872,7 @@ public class Funnel {
 										// if(rayTrace.intersects(new BoundingBox((Entity)target), (30), 0.2)){
 										player.getWorld().playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BIT,
 												1.0f, 5);
-										if (list6.size() > 0) {
+										if (!list6.isEmpty()) {
 											if (list6.get(list6.size() - 1).equals(as3) && FunAmoP(target)) {
 												player.getWorld().playSound(target.getLocation(),
 														Sound.BLOCK_NOTE_BLOCK_DIDGERIDOO, 1.0f, 2);
@@ -948,7 +947,7 @@ public class Funnel {
 															// Sound.ENTITY_ARROW_HIT_PLAYER, 1.2F, 1.3F);
 															player.getWorld().playSound(player.getLocation(),
 																	Sound.BLOCK_NOTE_BLOCK_BIT, 1.0f, 5);
-												if (list6.size() > 0) {
+												if (!list6.isEmpty()) {
 													if (list6.get(list6.size() - 1).equals(as3)
 															&& FunAmoA((ArmorStand) as)) {
 														player.getWorld().playSound(as.getLocation(),
@@ -1178,11 +1177,7 @@ public class Funnel {
 				count++;
 			}
 		}
-		if (count >= 3) {
-			return false;
-		} else {
-			return true;
-		}
+		return count < 3;
 	}
 	private static boolean FunAmoA(ArmorStand stand) {
 		int count = 0;
@@ -1191,10 +1186,6 @@ public class Funnel {
 				count++;
 			}
 		}
-		if (count >= 3) {
-			return false;
-		} else {
-			return true;
-		}
+		return count < 3;
 	}
 }

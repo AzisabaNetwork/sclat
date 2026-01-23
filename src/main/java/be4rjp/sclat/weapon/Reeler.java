@@ -2,12 +2,16 @@ package be4rjp.sclat.weapon;
 
 import be4rjp.dadadachecker.ClickType;
 import be4rjp.sclat.Main;
-import be4rjp.sclat.Sclat;
+import be4rjp.sclat.api.Sclat;
+import be4rjp.sclat.api.raytrace.RayTrace;
 import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.data.PlayerData;
 import be4rjp.sclat.manager.PaintMgr;
-import be4rjp.sclat.raytrace.RayTrace;
-import org.bukkit.*;
+import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.v1_14_R1.entity.CraftSnowball;
 import org.bukkit.craftbukkit.v1_14_R1.inventory.CraftItemStack;
@@ -435,8 +439,8 @@ public class Reeler {
 				* data.getWeaponClass().getMainWeapon().getDistanceTick(), 0.7);
 		boolean isLockOnPlayer = false;
 		if (data.getWeaponClass().getMainWeapon().getMaxRandom() == 0) {
-			check : for (int i = 0; i < positions.size(); i++) {
-				Location position = positions.get(i).toLocation(player.getLocation().getWorld());
+			check : for (Vector vector : positions) {
+				Location position = vector.toLocation(player.getLocation().getWorld());
 				for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
 					if (player != target && player.getWorld() == target.getWorld()) {
 						if (target.getLocation().distance(position) < 2) {

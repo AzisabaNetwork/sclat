@@ -1,18 +1,23 @@
 
 package be4rjp.sclat.weapon;
 
+import be4rjp.sclat.api.raytrace.RayTrace;
 import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.data.PlayerData;
 import be4rjp.sclat.manager.SubWeaponMgr;
-import be4rjp.sclat.raytrace.RayTrace;
-import java.util.ArrayList;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.player.*;
+import org.bukkit.event.player.PlayerAnimationEvent;
+import org.bukkit.event.player.PlayerAnimationType;
+import org.bukkit.event.player.PlayerInteractAtEntityEvent;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.util.Vector;
+
+import java.util.ArrayList;
 
 /**
  *
@@ -42,8 +47,8 @@ public class SubWeapon implements Listener {
 
 		RayTrace rayTrace = new RayTrace(player.getEyeLocation().toVector(), player.getEyeLocation().getDirection());
 		ArrayList<Vector> positions = rayTrace.traverse(4, 0.5);
-		check : for (int i = 0; i < positions.size(); i++) {
-			Location position = positions.get(i).toLocation(player.getLocation().getWorld());
+		check : for (Vector vector : positions) {
+			Location position = vector.toLocation(player.getLocation().getWorld());
 			if (position.getBlock().getType().toString().contains("SIGN")) {
 				return;
 			}

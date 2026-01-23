@@ -2,14 +2,14 @@ package be4rjp.sclat.weapon;
 
 import be4rjp.dadadachecker.ClickType;
 import be4rjp.sclat.Main;
+import be4rjp.sclat.api.raytrace.RayTrace;
 import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.data.PlayerData;
 import be4rjp.sclat.manager.PaintMgr;
-import be4rjp.sclat.raytrace.RayTrace;
-import java.util.ArrayList;
-import java.util.Random;
-
-import org.bukkit.*;
+import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
+import org.bukkit.Location;
+import org.bukkit.Sound;
 import org.bukkit.craftbukkit.v1_14_R1.entity.CraftSnowball;
 import org.bukkit.craftbukkit.v1_14_R1.inventory.CraftItemStack;
 import org.bukkit.entity.ArmorStand;
@@ -19,6 +19,9 @@ import org.bukkit.entity.Snowball;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
+
+import java.util.ArrayList;
+import java.util.Random;
 
 /**
  *
@@ -138,7 +141,7 @@ public class Shooter {
 				// マニューバー系
 				if (data.getWeaponClass().getMainWeapon().getIsManeuver()) {
 					// if(p.getExp() >= ink) {
-					if (data.getIsSneaking() && sl_recharge_2 == true && !data.getIsSliding()
+					if (data.getIsSneaking() && sl_recharge_2 && !data.getIsSliding()
 							&& p.getInventory().getItemInMainHand().getType()
 									.equals(data.getWeaponClass().getMainWeapon().getWeaponIteamStack().getType())) {// slをsl_recharge_2に変更することで優先順位が低い方のスライドが残っている時のみ使えるようにしました
 						Vector jvec = (new Vector(vec.getX(), 0, vec.getZ())).normalize().multiply(3);
@@ -268,13 +271,12 @@ public class Shooter {
 									// check = true;
 								}
 							};
-							if (sl_recharge_2 == true) {
+							if (sl_recharge_2) {
 								task4.runTaskLater(Main.getPlugin(), 64);
-								check = false;
 							} else {
 								task5.runTaskLater(Main.getPlugin(), 64);
-								check = false;
 							}
+							check = false;
 						}
 						data.setIsUsingManeuver(false);
 					}
@@ -307,8 +309,8 @@ public class Shooter {
 				* data.getWeaponClass().getMainWeapon().getDistanceTick(), 0.7);
 		boolean isLockOnPlayer = false;
 		if (data.getWeaponClass().getMainWeapon().getMaxRandom() == 0) {
-			check : for (int i = 0; i < positions.size(); i++) {
-				Location position = positions.get(i).toLocation(player.getLocation().getWorld());
+			check : for (Vector vector : positions) {
+				Location position = vector.toLocation(player.getLocation().getWorld());
 				for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
 					if (player != target && player.getWorld() == target.getWorld()) {
 						if (target.getLocation().distance(position) < 2) {

@@ -44,7 +44,7 @@ public class EquipmentClient {
 					// 命令送信ループ
 					String cmd = null;
 					while (true) {
-						if (commands.size() != 0) {
+						if (!commands.isEmpty()) {
 
 							cmd = commands.get(0);
 

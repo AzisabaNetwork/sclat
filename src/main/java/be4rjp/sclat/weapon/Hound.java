@@ -1,19 +1,26 @@
 package be4rjp.sclat.weapon;
 
 import be4rjp.dadadachecker.ClickType;
-import be4rjp.sclat.*;
+import be4rjp.sclat.Main;
+import be4rjp.sclat.api.GlowingAPI;
+import be4rjp.sclat.api.Sclat;
+import be4rjp.sclat.api.Sphere;
 import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.data.KasaData;
 import be4rjp.sclat.data.PlayerData;
 import be4rjp.sclat.data.SplashShieldData;
 import be4rjp.sclat.manager.ArmorStandMgr;
 import be4rjp.sclat.manager.PaintMgr;
-import org.bukkit.*;
+import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
+import org.bukkit.Location;
+import org.bukkit.Sound;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
+
 import java.util.List;
 
 public class Hound {
@@ -312,13 +319,9 @@ public class Hound {
 		Location entityLocation = stand.getLocation().clone().add(new Vector(0, 0.3, 0));
 		double distance = 0.7; // レイの長さ
 		// if (result != null && result.getHitBlockFace() != null) {
-		if (stand.getWorld().rayTraceBlocks(entityLocation, direction, distance) != null) {
-			// 壁に接触している場合の処理
-			return true;
-		} else {
-			// 壁に接触していない場合の処理
-			return false;
-		}
+		// 壁に接触している場合の処理
+		// 壁に接触していない場合の処理
+		return stand.getWorld().rayTraceBlocks(entityLocation, direction, distance) != null;
 	}
 	private static double exdamage(double heightDiff, double mag, double dm) {
 		if (7.9 < heightDiff) {

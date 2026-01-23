@@ -1,5 +1,5 @@
 
-package be4rjp.sclat;
+package be4rjp.sclat.api;
 
 import org.bukkit.ChatColor;
 
@@ -11,7 +11,7 @@ public class GaugeAPI {
 	public static String toGauge(int value, int max, String color1, String color2) {
 		String m = "|";
 		StringBuilder ms = new StringBuilder();
-		ms.append(ChatColor.RESET + color1);
+		ms.append(ChatColor.RESET).append(color1);
 		for (int i = 1; i <= value; i++) {
 			ms.append(m);
 		}

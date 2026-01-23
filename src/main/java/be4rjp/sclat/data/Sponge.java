@@ -1,13 +1,14 @@
 package be4rjp.sclat.data;
 
 import be4rjp.sclat.Main;
-import be4rjp.sclat.Sclat;
+import be4rjp.sclat.api.Sclat;
 import be4rjp.sclat.manager.PaintMgr;
-import java.util.List;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.scheduler.BukkitRunnable;
+
+import java.util.List;
 
 /**
  *

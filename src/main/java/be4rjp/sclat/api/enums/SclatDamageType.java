@@ -1,4 +1,4 @@
-package be4rjp.sclat.enums;
+package be4rjp.sclat.api.enums;
 
 public enum SclatDamageType {
 

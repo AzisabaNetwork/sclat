@@ -1,10 +1,10 @@
 
 package be4rjp.sclat.manager;
 
-import be4rjp.sclat.GaugeAPI;
 import be4rjp.sclat.Main;
-import be4rjp.sclat.MessageType;
-import be4rjp.sclat.Sclat;
+import be4rjp.sclat.api.GaugeAPI;
+import be4rjp.sclat.api.MessageType;
+import be4rjp.sclat.api.Sclat;
 import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.data.PlayerData;
 import be4rjp.sclat.weapon.spweapon.AirStrike;
@@ -12,16 +12,17 @@ import be4rjp.sclat.weapon.spweapon.Amehurasi;
 import be4rjp.sclat.weapon.spweapon.Barrier;
 import be4rjp.sclat.weapon.spweapon.BombRush;
 import be4rjp.sclat.weapon.spweapon.JetPack;
+import be4rjp.sclat.weapon.spweapon.LitterFiveG;
 import be4rjp.sclat.weapon.spweapon.MegaLaser;
 import be4rjp.sclat.weapon.spweapon.MultiMissile;
+import be4rjp.sclat.weapon.spweapon.QuadroArms;
 import be4rjp.sclat.weapon.spweapon.SuperArmor;
 import be4rjp.sclat.weapon.spweapon.SuperSensor;
 import be4rjp.sclat.weapon.spweapon.SuperShot;
-import be4rjp.sclat.weapon.spweapon.LitterFiveG;
-import be4rjp.sclat.weapon.spweapon.QuadroArms;
 import be4rjp.sclat.weapon.spweapon.SuperTyakuti;
 import be4rjp.sclat.weapon.spweapon.SwordMord;
-import org.bukkit.*;
+import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarFlag;
 import org.bukkit.boss.BarStyle;

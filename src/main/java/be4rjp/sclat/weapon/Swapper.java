@@ -24,7 +24,7 @@ public class Swapper {
 				}
 				// スワッパ―系
 				if (data.getWeaponClass().getMainWeapon().getIsSwap()) {
-					if (data.getIsSneaking() && sw_recharge == true && p.getInventory().getItemInMainHand().getType()
+					if (data.getIsSneaking() && sw_recharge && p.getInventory().getItemInMainHand().getType()
 							.equals(data.getWeaponClass().getMainWeapon().getWeaponIteamStack().getType())) {
 						data.setStoprun(true);
 						player.getInventory().clear();

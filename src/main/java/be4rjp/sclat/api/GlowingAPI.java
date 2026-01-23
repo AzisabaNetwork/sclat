@@ -1,5 +1,6 @@
-package be4rjp.sclat;
+package be4rjp.sclat.api;
 
+import be4rjp.sclat.Main;
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.wrappers.WrappedDataWatcher;

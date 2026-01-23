@@ -4,9 +4,6 @@ package be4rjp.sclat.weapon;
 import be4rjp.sclat.Main;
 import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.data.PlayerData;
-
-import static be4rjp.sclat.weapon.Blaster.Shoot;
-
 import be4rjp.sclat.manager.PaintMgr;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;

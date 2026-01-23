@@ -1,15 +1,24 @@
 package be4rjp.sclat.tutorial;
 
 import be4rjp.sclat.Main;
-import be4rjp.sclat.MessageType;
-import be4rjp.sclat.Sclat;
-import be4rjp.sclat.SoundType;
-import be4rjp.sclat.data.*;
+import be4rjp.sclat.api.MessageType;
+import be4rjp.sclat.api.Sclat;
+import be4rjp.sclat.api.SoundType;
+import be4rjp.sclat.data.BlockUpdater;
+import be4rjp.sclat.data.DataMgr;
+import be4rjp.sclat.data.Match;
+import be4rjp.sclat.data.PaintData;
+import be4rjp.sclat.data.Path;
 import be4rjp.sclat.manager.BungeeCordMgr;
 import be4rjp.sclat.manager.PathMgr;
 import be4rjp.sclat.manager.PlayerStatusMgr;
 import be4rjp.sclat.server.StatusClient;
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.Sound;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.boss.BarColor;
@@ -55,7 +64,7 @@ public class Tutorial {
 						if (as instanceof ArmorStand) {
 							if (as.getCustomName() == null)
 								as.remove();
-							else if (as.getCustomName().equals(""))
+							else if (as.getCustomName().isEmpty())
 								as.remove();
 						}
 					}
@@ -210,8 +219,7 @@ public class Tutorial {
 					if (player.getWorld() != w)
 						continue;
 					if (player.getLocation().distance(loc) < 5) {
-						if (Tutorial.clearList.contains(player))
-							Tutorial.clearList.remove(player);
+						Tutorial.clearList.remove(player);
 						String WorldName = conf.getConfig().getString("LobbyJump.WorldName");
 						World w = Bukkit.getWorld(WorldName);
 						int ix = conf.getConfig().getInt("LobbyJump.X");

@@ -1,8 +1,10 @@
 package be4rjp.sclat.weapon.spweapon;
 
 import be4rjp.sclat.Main;
-import be4rjp.sclat.Sclat;
-import be4rjp.sclat.Sphere;
+import be4rjp.sclat.api.Sclat;
+import be4rjp.sclat.api.Sphere;
+import be4rjp.sclat.api.raytrace.BoundingBox;
+import be4rjp.sclat.api.raytrace.RayTrace;
 import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.data.KasaData;
 import be4rjp.sclat.data.PlayerData;
@@ -11,10 +13,12 @@ import be4rjp.sclat.manager.ArmorStandMgr;
 import be4rjp.sclat.manager.PaintMgr;
 import be4rjp.sclat.manager.SPWeaponMgr;
 import be4rjp.sclat.manager.WeaponClassMgr;
-import be4rjp.sclat.raytrace.BoundingBox;
-import be4rjp.sclat.raytrace.RayTrace;
 import be4rjp.sclat.weapon.Gear;
-import org.bukkit.*;
+import org.bukkit.GameMode;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.Particle;
+import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarFlag;
@@ -196,9 +200,9 @@ public class LitterFiveG {
 		ArrayList<Vector> positions = rayTrace.traverse((int) (reach), 0.2);
 		Hash_charge.replace(player, 0);
 
-		loop : for (int i = 0; i < positions.size(); i++) {
+		loop : for (Vector vector : positions) {
 
-			Location position = positions.get(i).toLocation(player.getLocation().getWorld());
+			Location position = vector.toLocation(player.getLocation().getWorld());
 			Block block = player.getLocation().getWorld().getBlockAt(position);
 
 			if (!block.getType().equals(Material.AIR)) {
@@ -230,7 +234,7 @@ public class LitterFiveG {
 					if (target.getLocation().distanceSquared(position) < Main.PARTICLE_RENDER_DISTANCE_SQUARED) {
 						org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(player).getTeam().getTeamColor()
 								.getWool().createBlockData();
-						target.spawnParticle(org.bukkit.Particle.BLOCK_DUST, position, 1, 0, 0, 0, 1, bd);
+						target.spawnParticle(Particle.BLOCK_DUST, position, 1, 0, 0, 0, 1, bd);
 					}
 				}
 			}
@@ -255,6 +259,7 @@ public class LitterFiveG {
 							// AntiNoDamageTime
 							BukkitRunnable task = new BukkitRunnable() {
 								Player p = target;
+
 								@Override
 								public void run() {
 									target.setNoDamageTicks(0);

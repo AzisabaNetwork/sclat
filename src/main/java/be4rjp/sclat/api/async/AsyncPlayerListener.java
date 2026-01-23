@@ -1,4 +1,4 @@
-package be4rjp.sclat.ticks;
+package be4rjp.sclat.api.async;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

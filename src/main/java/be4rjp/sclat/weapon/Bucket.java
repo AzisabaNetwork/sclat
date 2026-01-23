@@ -179,7 +179,7 @@ public class Bucket {
 					cancel();
 					return;
 				}
-				if (data.getIsSneaking() && bh_recharge == true && player.getGameMode().equals(GameMode.ADVENTURE)) {
+				if (data.getIsSneaking() && bh_recharge && player.getGameMode().equals(GameMode.ADVENTURE)) {
 					p.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, Ctime, level));
 					p.getWorld().playSound(p.getLocation(), Sound.ITEM_TRIDENT_RETURN, 1.4F, 1.5F);
 					bh_recharge = false;

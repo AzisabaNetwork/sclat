@@ -1,7 +1,7 @@
-package be4rjp.sclat.GUI;
+package be4rjp.sclat.gui;
 
-import be4rjp.sclat.MessageType;
-import be4rjp.sclat.Sclat;
+import be4rjp.sclat.api.MessageType;
+import be4rjp.sclat.api.Sclat;
 import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.manager.PlayerStatusMgr;
 import org.bukkit.Bukkit;

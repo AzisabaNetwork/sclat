@@ -1,7 +1,7 @@
 package be4rjp.sclat.data;
 
 import be4rjp.sclat.Main;
-import be4rjp.sclat.MineStat;
+import be4rjp.sclat.api.MineStat;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -55,6 +55,7 @@ public class ServerStatus {
 					online = false;
 				} else {
 					try {
+						// Todo: migrate to PluginMessaging
 						MineStat ms = new MineStat(host, port);
 						playerCount = Integer.parseInt(ms.getCurrentPlayers());
 						online = ms.isServerUp();

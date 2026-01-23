@@ -1,4 +1,4 @@
-package be4rjp.sclat.ticks;
+package be4rjp.sclat.api.async;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;

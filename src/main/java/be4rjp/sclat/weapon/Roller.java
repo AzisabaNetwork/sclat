@@ -1,17 +1,15 @@
 package be4rjp.sclat.weapon;
 
 import be4rjp.sclat.Main;
-
-import be4rjp.sclat.Sclat;
+import be4rjp.sclat.api.Sclat;
+import be4rjp.sclat.api.raytrace.BoundingBox;
+import be4rjp.sclat.api.raytrace.RayTrace;
 import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.data.KasaData;
 import be4rjp.sclat.data.PlayerData;
 import be4rjp.sclat.data.SplashShieldData;
 import be4rjp.sclat.manager.ArmorStandMgr;
 import be4rjp.sclat.manager.PaintMgr;
-import be4rjp.sclat.raytrace.BoundingBox;
-import be4rjp.sclat.raytrace.RayTrace;
-import java.util.ArrayList;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -27,6 +25,8 @@ import org.bukkit.entity.Snowball;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
+
+import java.util.ArrayList;
 
 /**
  *
@@ -153,8 +153,8 @@ public class Roller {
 						RayTrace rayTrace1 = new RayTrace(front.toVector(), vec1);
 						ArrayList<Vector> positions1 = rayTrace1
 								.traverse(data.getWeaponClass().getMainWeapon().getRollerWidth(), 0.5);
-						loop : for (int i = 0; i < positions1.size(); i++) {
-							Location position = positions1.get(i).toLocation(p.getLocation().getWorld());
+						loop : for (Vector vector : positions1) {
+							Location position = vector.toLocation(p.getLocation().getWorld());
 							Block block = p.getLocation().getWorld().getBlockAt(position);
 							if (!block.getType().equals(Material.AIR))
 								break loop;
@@ -217,6 +217,7 @@ public class Roller {
 											// AntiNoDamageTime
 											BukkitRunnable task = new BukkitRunnable() {
 												Player p = target;
+
 												@Override
 												public void run() {
 													target.setNoDamageTicks(0);
@@ -245,8 +246,8 @@ public class Roller {
 						RayTrace rayTrace2 = new RayTrace(front.toVector(), vec2);
 						ArrayList<Vector> positions2 = rayTrace2
 								.traverse(data.getWeaponClass().getMainWeapon().getRollerWidth(), 0.5);
-						loop : for (int i = 0; i < positions2.size(); i++) {
-							Location position = positions2.get(i).toLocation(p.getLocation().getWorld());
+						loop : for (Vector vector : positions2) {
+							Location position = vector.toLocation(p.getLocation().getWorld());
 							Block block = p.getLocation().getWorld().getBlockAt(position);
 							if (!block.getType().equals(Material.AIR))
 								break loop;
