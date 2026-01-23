@@ -6,10 +6,10 @@ import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.data.PlayerData;
 import be4rjp.sclat.manager.PaintMgr;
 import be4rjp.sclat.raytrace.RayTrace;
-import java.util.ArrayList;
-import java.util.Random;
-
-import org.bukkit.*;
+import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
+import org.bukkit.Location;
+import org.bukkit.Sound;
 import org.bukkit.craftbukkit.v1_14_R1.entity.CraftSnowball;
 import org.bukkit.craftbukkit.v1_14_R1.inventory.CraftItemStack;
 import org.bukkit.entity.ArmorStand;
@@ -19,6 +19,9 @@ import org.bukkit.entity.Snowball;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
+
+import java.util.ArrayList;
+import java.util.Random;
 
 /**
  *
@@ -270,12 +273,11 @@ public class Shooter {
 							};
 							if (sl_recharge_2 == true) {
 								task4.runTaskLater(Main.getPlugin(), 64);
-								check = false;
-							} else {
+                            } else {
 								task5.runTaskLater(Main.getPlugin(), 64);
-								check = false;
-							}
-						}
+                            }
+                            check = false;
+                        }
 						data.setIsUsingManeuver(false);
 					}
 				}

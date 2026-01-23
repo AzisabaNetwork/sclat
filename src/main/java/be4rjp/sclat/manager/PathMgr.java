@@ -7,7 +7,6 @@ import be4rjp.sclat.data.Match;
 import be4rjp.sclat.data.Path;
 import be4rjp.sclat.data.Team;
 import be4rjp.sclat.raytrace.RayTrace;
-import java.util.ArrayList;
 import net.minecraft.server.v1_14_R1.EnumItemSlot;
 import net.minecraft.server.v1_14_R1.PacketPlayOutEntityEquipment;
 import org.bukkit.Location;
@@ -22,6 +21,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
+
+import java.util.ArrayList;
 
 /**
  *
@@ -117,15 +118,15 @@ public class PathMgr {
 						for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
 							if (!DataMgr.getPlayerData(target).getSettings().ShowEffect_ChargerLine())
 								continue;
-							if (team == null) {
-								Particle.DustOptions dustOptions = new Particle.DustOptions(org.bukkit.Color.WHITE, 1);
-								target.spawnParticle(Particle.REDSTONE, position, 1, 0, 0, 0, 25, dustOptions);
-							} else {
-								Particle.DustOptions dustOptions = new Particle.DustOptions(
-										team.getTeamColor().getBukkitColor(), 1);
-								target.spawnParticle(Particle.REDSTONE, position, 1, 0, 0, 0, 25, dustOptions);
-							}
-						}
+                            Particle.DustOptions dustOptions;
+                            if (team == null) {
+                                dustOptions = new Particle.DustOptions(org.bukkit.Color.WHITE, 1);
+                            } else {
+                                dustOptions = new Particle.DustOptions(
+                                        team.getTeamColor().getBukkitColor(), 1);
+                            }
+                            target.spawnParticle(Particle.REDSTONE, position, 1, 0, 0, 0, 25, dustOptions);
+                        }
 					}
 					if (match.isFinished()) {
 						cancel();
