@@ -1,8 +1,8 @@
 package be4rjp.sclat.weapon;
 
-import be4rjp.sclat.GlowingAPI;
 import be4rjp.sclat.Main;
 import be4rjp.sclat.Sclat;
+import be4rjp.sclat.api.GlowingAPI;
 import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.data.KasaData;
 import be4rjp.sclat.data.PlayerData;
