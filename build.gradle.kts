@@ -31,7 +31,7 @@ dependencies {
     compileOnly(libs.bukkit)
     compileOnly(libs.noteblockapi)
     compileOnly(libs.lunachat)
-    compileOnly(files("libs/ProtocolLib.jar"))
+    compileOnly(libs.protocolLib)
     compileOnly(libs.dadadachecker)
     compileOnly(libs.blockstudio)
     compileOnly(libs.paperApi)
