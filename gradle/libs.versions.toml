@@ -1,4 +1,5 @@
 [versions]
+runPaper = "2.3.1" # 3.x.x can't run in Java8
 protocolLib = "4.5.0"
 paperApi = "1.14.4-R0.1-SNAPSHOT"
 blockstudio = "-SNAPSHOT"
@@ -8,6 +9,9 @@ lunachat = "3.0.16"
 bukkit = "1.14.4-R0.1-SNAPSHOT"
 spigot = "1.14.4-R0.1-SNAPSHOT"
 spigotApi = "1.14.4-R0.1-SNAPSHOT"
+
+[plugins]
+runPaper = { id = "xyz.jpenilla.run-paper", version.ref = "runPaper" }
 
 [libraries]
 protocolLib = { module = "com.comphenix.protocol:ProtocolLib", version.ref = "protocolLib" }
