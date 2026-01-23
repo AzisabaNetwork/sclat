@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "be4rjp"
-version = "1.0-SNAPSHOT"
+version = System.getenv("VERSION") ?: "1.0-SNAPSHOT"
 description = "Sclat"
 
 repositories {
@@ -67,29 +67,29 @@ tasks {
     }
 }
 
-// publishing {
-//    publications {
-//        create<MavenPublication>("maven") {
-//            groupId = project.group.toString()
-//            artifactId = project.name
-//            version = project.version.toString()
-//            artifact(tasks.jar)
-//        }
-//    }
-//
-//    repositories {
-//        maven {
-//            name = "azisaba-repo"
-//            credentials {
-//                username = System.getenv("REPO_USERNAME")
-//                password = System.getenv("REPO_PASSWORD")
-//            }
-//            url =
-//                if (project.version.toString().endsWith("-SNAPSHOT")) {
-//                    uri("https://repo.azisaba.net/repository/maven-snapshots/")
-//                } else {
-//                    uri("https://repo.azisaba.net/repository/maven-releases/")
-//                }
-//        }
-//    }
-// }
+publishing {
+    publications {
+        create<MavenPublication>("maven") {
+            groupId = project.group.toString()
+            artifactId = project.name
+            version = project.version.toString()
+            artifact(tasks.jar)
+        }
+    }
+
+    repositories {
+        maven {
+            name = "azisaba-repo"
+            credentials {
+                username = System.getenv("REPO_USERNAME")
+                password = System.getenv("REPO_PASSWORD")
+            }
+            url =
+                if (project.version.toString().endsWith("-SNAPSHOT")) {
+                    uri("https://repo.azisaba.net/repository/maven-snapshots/")
+                } else {
+                    uri("https://repo.azisaba.net/repository/maven-releases/")
+                }
+        }
+    }
+}
