@@ -8,7 +8,8 @@ import java.net.Socket;
 
 /**
  *
- * from <a href="https://github.com/ldilley/minestat/blob/master/Java/me/dilley/MineStat.java">MineStat.java</a>
+ * from <a href=
+ * "https://github.com/ldilley/minestat/blob/master/Java/me/dilley/MineStat.java">MineStat.java</a>
  */
 public class MineStat {
 	public static final byte NUM_FIELDS = 6; // expected number of fields returned from server after query
