@@ -1,9 +1,9 @@
 package be4rjp.sclat.data;
 
 import be4rjp.sclat.Main;
-import be4rjp.sclat.MessageType;
 import be4rjp.sclat.Sclat;
-import be4rjp.sclat.SoundType;
+import be4rjp.sclat.api.MessageType;
+import be4rjp.sclat.api.SoundType;
 import be4rjp.sclat.manager.BungeeCordMgr;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;

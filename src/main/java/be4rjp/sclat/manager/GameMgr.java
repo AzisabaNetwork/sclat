@@ -1,10 +1,10 @@
 package be4rjp.sclat.manager;
 
 import be4rjp.sclat.Main;
-import be4rjp.sclat.MessageType;
 import be4rjp.sclat.Sclat;
-import be4rjp.sclat.ServerType;
-import be4rjp.sclat.SoundType;
+import be4rjp.sclat.api.MessageType;
+import be4rjp.sclat.api.ServerType;
+import be4rjp.sclat.api.SoundType;
 import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.data.Match;
 import be4rjp.sclat.data.PaintData;

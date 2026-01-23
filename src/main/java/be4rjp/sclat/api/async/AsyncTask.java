@@ -1,4 +1,4 @@
-package be4rjp.sclat.ticks;
+package be4rjp.sclat.api.async;
 
 import be4rjp.sclat.Main;
 import org.bukkit.scheduler.BukkitRunnable;

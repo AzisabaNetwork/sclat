@@ -3,6 +3,8 @@ package be4rjp.sclat.weapon;
 
 import be4rjp.sclat.Main;
 import be4rjp.sclat.Sclat;
+import be4rjp.sclat.api.raytrace.BoundingBox;
+import be4rjp.sclat.api.raytrace.RayTrace;
 import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.data.KasaData;
 import be4rjp.sclat.data.PlayerData;
@@ -10,8 +12,6 @@ import be4rjp.sclat.data.Team;
 import be4rjp.sclat.manager.MainWeaponMgr;
 import be4rjp.sclat.manager.PaintMgr;
 import be4rjp.sclat.manager.WeaponClassMgr;
-import be4rjp.sclat.raytrace.BoundingBox;
-import be4rjp.sclat.raytrace.RayTrace;
 import net.minecraft.server.v1_14_R1.EnumItemSlot;
 import net.minecraft.server.v1_14_R1.PacketPlayOutEntityEquipment;
 import org.bukkit.ChatColor;

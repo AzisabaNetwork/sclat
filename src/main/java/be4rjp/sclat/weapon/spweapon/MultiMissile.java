@@ -3,8 +3,8 @@ package be4rjp.sclat.weapon.spweapon;
 
 import be4rjp.sclat.Main;
 import be4rjp.sclat.Sclat;
-import be4rjp.sclat.Sphere;
 import be4rjp.sclat.api.GlowingAPI;
+import be4rjp.sclat.api.Sphere;
 import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.manager.ArmorStandMgr;
 import be4rjp.sclat.manager.PaintMgr;

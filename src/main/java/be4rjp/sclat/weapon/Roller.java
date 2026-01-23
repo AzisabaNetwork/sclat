@@ -2,14 +2,14 @@ package be4rjp.sclat.weapon;
 
 import be4rjp.sclat.Main;
 import be4rjp.sclat.Sclat;
+import be4rjp.sclat.api.raytrace.BoundingBox;
+import be4rjp.sclat.api.raytrace.RayTrace;
 import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.data.KasaData;
 import be4rjp.sclat.data.PlayerData;
 import be4rjp.sclat.data.SplashShieldData;
 import be4rjp.sclat.manager.ArmorStandMgr;
 import be4rjp.sclat.manager.PaintMgr;
-import be4rjp.sclat.raytrace.BoundingBox;
-import be4rjp.sclat.raytrace.RayTrace;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;

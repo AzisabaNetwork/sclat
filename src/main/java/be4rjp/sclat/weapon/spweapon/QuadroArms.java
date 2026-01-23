@@ -3,14 +3,14 @@ package be4rjp.sclat.weapon.spweapon;
 
 import be4rjp.sclat.Main;
 import be4rjp.sclat.Sclat;
-import be4rjp.sclat.Sphere;
+import be4rjp.sclat.api.Sphere;
+import be4rjp.sclat.api.raytrace.RayTrace;
 import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.data.PlayerData;
 import be4rjp.sclat.manager.ArmorStandMgr;
 import be4rjp.sclat.manager.PaintMgr;
 import be4rjp.sclat.manager.SPWeaponMgr;
 import be4rjp.sclat.manager.WeaponClassMgr;
-import be4rjp.sclat.raytrace.RayTrace;
 import net.minecraft.server.v1_14_R1.PacketPlayOutEntityDestroy;
 import net.minecraft.server.v1_14_R1.PlayerConnection;
 import org.bukkit.ChatColor;

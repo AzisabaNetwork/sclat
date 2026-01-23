@@ -1,5 +1,5 @@
 
-package be4rjp.sclat.raytrace;
+package be4rjp.sclat.api.raytrace;
 
 import org.bukkit.util.Vector;
 

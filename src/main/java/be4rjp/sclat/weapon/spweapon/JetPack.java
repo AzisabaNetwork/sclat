@@ -6,18 +6,14 @@ import be4rjp.blockstudio.api.BSObject;
 import be4rjp.blockstudio.api.BlockStudioAPI;
 import be4rjp.blockstudio.file.ObjectData;
 import be4rjp.sclat.Main;
-
 import be4rjp.sclat.Sclat;
-import be4rjp.sclat.Sphere;
+import be4rjp.sclat.api.Sphere;
 import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.manager.ArmorStandMgr;
 import be4rjp.sclat.manager.PaintMgr;
 import be4rjp.sclat.manager.SPWeaponMgr;
 import be4rjp.sclat.manager.SuperJumpMgr;
 import be4rjp.sclat.manager.WeaponClassMgr;
-
-import java.util.ArrayList;
-import java.util.List;
 import net.minecraft.server.v1_14_R1.EntityArmorStand;
 import net.minecraft.server.v1_14_R1.PacketPlayOutEntityDestroy;
 import net.minecraft.server.v1_14_R1.PacketPlayOutSpawnEntityLiving;
@@ -44,6 +40,9 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *

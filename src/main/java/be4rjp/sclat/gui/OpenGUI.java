@@ -2,7 +2,7 @@
 package be4rjp.sclat.gui;
 
 import be4rjp.sclat.Main;
-import be4rjp.sclat.ServerType;
+import be4rjp.sclat.api.ServerType;
 import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.data.Match;
 import be4rjp.sclat.data.PlayerData;

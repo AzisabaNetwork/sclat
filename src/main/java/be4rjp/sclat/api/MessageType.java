@@ -1,4 +1,4 @@
-package be4rjp.sclat;
+package be4rjp.sclat.api;
 
 /**
  *

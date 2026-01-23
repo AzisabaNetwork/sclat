@@ -2,20 +2,19 @@
 package be4rjp.sclat.weapon.spweapon;
 
 import be4rjp.sclat.Main;
-import be4rjp.sclat.Sphere;
+import be4rjp.sclat.api.Sphere;
 import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.data.PlayerData;
 import be4rjp.sclat.manager.SPWeaponMgr;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import net.minecraft.server.v1_14_R1.EntityArmorStand;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *

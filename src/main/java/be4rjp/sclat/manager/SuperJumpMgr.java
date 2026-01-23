@@ -2,9 +2,8 @@
 package be4rjp.sclat.manager;
 
 import be4rjp.sclat.Main;
+import be4rjp.sclat.api.raytrace.RayTrace;
 import be4rjp.sclat.data.DataMgr;
-import be4rjp.sclat.raytrace.RayTrace;
-import java.util.ArrayList;
 import net.minecraft.server.v1_14_R1.EntityArmorStand;
 import net.minecraft.server.v1_14_R1.PacketPlayOutEntityDestroy;
 import net.minecraft.server.v1_14_R1.PacketPlayOutSpawnEntityLiving;
@@ -24,6 +23,8 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
+
+import java.util.ArrayList;
 
 /**
  *

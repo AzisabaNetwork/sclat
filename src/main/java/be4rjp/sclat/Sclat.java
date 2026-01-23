@@ -1,5 +1,8 @@
 package be4rjp.sclat;
 
+import be4rjp.sclat.api.MessageType;
+import be4rjp.sclat.api.SoundType;
+import be4rjp.sclat.api.Sphere;
 import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.data.PlayerData;
 import be4rjp.sclat.data.Team;

@@ -1,21 +1,16 @@
 package be4rjp.sclat.manager;
 
 import be4rjp.sclat.Main;
-import static be4rjp.sclat.Main.conf;
-
 import be4rjp.sclat.Sclat;
-import be4rjp.sclat.Sphere;
+import be4rjp.sclat.api.Sphere;
 import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.data.KasaData;
 import be4rjp.sclat.data.Path;
 import be4rjp.sclat.data.SplashShieldData;
-
-import java.util.*;
 import net.minecraft.server.v1_14_R1.EnumItemSlot;
-import net.minecraft.server.v1_14_R1.PacketPlayOutEntityEquipment;
 import net.minecraft.server.v1_14_R1.PacketPlayOutEntityDestroy;
+import net.minecraft.server.v1_14_R1.PacketPlayOutEntityEquipment;
 import net.minecraft.server.v1_14_R1.PacketPlayOutSpawnEntityLiving;
-import static org.bukkit.Bukkit.getServer;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
@@ -37,6 +32,11 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
+
+import java.util.List;
+
+import static be4rjp.sclat.Main.conf;
+import static org.bukkit.Bukkit.getServer;
 
 /**
  *

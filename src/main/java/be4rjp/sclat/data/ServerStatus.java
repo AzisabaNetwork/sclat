@@ -55,6 +55,7 @@ public class ServerStatus {
 					online = false;
 				} else {
 					try {
+						// Todo: migrate to PluginMessaging
 						MineStat ms = new MineStat(host, port);
 						playerCount = Integer.parseInt(ms.getCurrentPlayers());
 						online = ms.isServerUp();
