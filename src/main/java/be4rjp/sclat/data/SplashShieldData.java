@@ -1,11 +1,12 @@
 
 package be4rjp.sclat.data;
 
-import java.util.ArrayList;
-import java.util.List;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -20,7 +21,7 @@ public class SplashShieldData {
 
 	public SplashShieldData(Player player) {
 		this.player = player;
-	};
+	}
 
 	public BukkitRunnable getTask() {
 		return this.task;
