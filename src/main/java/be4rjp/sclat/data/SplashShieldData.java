@@ -12,31 +12,50 @@ import org.bukkit.scheduler.BukkitRunnable;
  * @author Be4rJP
  */
 public class SplashShieldData {
-    private BukkitRunnable task;
-    private List<ArmorStand> list = new ArrayList<ArmorStand>();
-    private Player player;
-    private double damage;
-    private boolean IsDeploy=false;
-    
-    public SplashShieldData(Player player){this.player = player;};
-    
-    public BukkitRunnable getTask(){return this.task;}
-    
-    public List<ArmorStand> getArmorStandList(){return this.list;}
-    
-    public Player getPlayer(){return this.player;}
-    
-    public double getDamage(){return this.damage;}
+	private BukkitRunnable task;
+	private List<ArmorStand> list = new ArrayList<ArmorStand>();
+	private Player player;
+	private double damage;
+	private boolean IsDeploy = false;
 
-    public boolean getIsDeploy(){return this.IsDeploy;}
-    
-    
-    public void setTask(BukkitRunnable task){this.task = task;}
-    
-    public void setArmorStandList(List<ArmorStand> list){this.list = list;}
-    
-    public void setDamage(double damage){this.damage = damage;}
+	public SplashShieldData(Player player) {
+		this.player = player;
+	};
 
-    public void setIsDeploy(boolean isdep){this.IsDeploy = isdep;}
+	public BukkitRunnable getTask() {
+		return this.task;
+	}
+
+	public List<ArmorStand> getArmorStandList() {
+		return this.list;
+	}
+
+	public Player getPlayer() {
+		return this.player;
+	}
+
+	public double getDamage() {
+		return this.damage;
+	}
+
+	public boolean getIsDeploy() {
+		return this.IsDeploy;
+	}
+
+	public void setTask(BukkitRunnable task) {
+		this.task = task;
+	}
+
+	public void setArmorStandList(List<ArmorStand> list) {
+		this.list = list;
+	}
+
+	public void setDamage(double damage) {
+		this.damage = damage;
+	}
+
+	public void setIsDeploy(boolean isdep) {
+		this.IsDeploy = isdep;
+	}
 
 }
