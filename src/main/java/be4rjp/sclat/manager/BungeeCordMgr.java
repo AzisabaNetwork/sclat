@@ -11,10 +11,10 @@ import org.bukkit.entity.Player;
  * @author Be4rJP
  */
 public class BungeeCordMgr {
-    public static void PlayerSendServer(Player player, String servername){
-        ByteArrayDataOutput out = ByteStreams.newDataOutput();
-        out.writeUTF("Connect");
-        out.writeUTF(servername);
-        player.sendPluginMessage(Main.getPlugin(), "BungeeCord", out.toByteArray());
-    }
+	public static void PlayerSendServer(Player player, String servername) {
+		ByteArrayDataOutput out = ByteStreams.newDataOutput();
+		out.writeUTF("Connect");
+		out.writeUTF(servername);
+		player.sendPluginMessage(Main.getPlugin(), "BungeeCord", out.toByteArray());
+	}
 }

@@ -3,6 +3,7 @@ plugins {
     `java-library`
     `maven-publish`
     alias(libs.plugins.runPaper)
+    alias(libs.plugins.spotless)
 }
 
 group = "be4rjp"
@@ -91,5 +92,21 @@ publishing {
                     uri("https://repo.azisaba.net/repository/maven-releases/")
                 }
         }
+    }
+}
+
+spotless {
+    format("misc") {
+        target(".gitignore")
+        trimTrailingWhitespace()
+        indentWithSpaces(4)
+        endWithNewline()
+    }
+    java {
+        target("src/main/java/**/*.java", "src/test/java/**/*.java")
+        toggleOffOn()
+        removeUnusedImports()
+        endWithNewline()
+        eclipse()
     }
 }
