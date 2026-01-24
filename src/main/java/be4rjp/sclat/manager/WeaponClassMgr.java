@@ -44,29 +44,47 @@ public class WeaponClassMgr {
 	}
 
 	public static void setWeaponClass(Player player) {
+		// Reset player inventory
 		player.getInventory().clear();
+
+		// Get player data
 		PlayerData data = DataMgr.getPlayerData(player);
+
+		// === Main weapon ===
 		ItemStack main = data.getWeaponClass().getMainWeapon().getWeaponIteamStack().clone();
 		if (data.getMainItemGlow()) {
 			Sclat.glow.enchantGlow(main);
 			main.addEnchantment(Sclat.glow, 1);
 		}
 		player.getInventory().setItem(0, main);
-		if (data.getWeaponClass().getMainWeapon().getIsManeuver())
+
+		// If maneuver is main weapon
+		if (data.getWeaponClass().getMainWeapon().getIsManeuver()) {
 			player.getInventory().setItem(40, data.getWeaponClass().getMainWeapon().getWeaponIteamStack().clone());
+		}
+
+		// === Sub weapon ===
 		ItemStack is = SubWeaponMgr.getSubWeapon(player);
 		player.getInventory().setItem(2, is);
+
+		// === Super jump ===
 		ItemStack co = new ItemStack(Material.BOOK);
 		ItemMeta meta = co.getItemMeta();
 		meta.setDisplayName("スーパージャンプ");
 		co.setItemMeta(meta);
 		player.getInventory().setItem(6, co);
-		if (!data.getIsSquid())
+
+		// If player isn't squid
+		if (!data.getIsSquid()) {
 			player.getEquipment().setHelmet(DataMgr.getPlayerData(player).getTeam().getTeamColor().getBougu());
+		}
 
-		if (data.getSPGauge() == 100)
+		// If special gauge is full
+		if (data.getSPGauge() == 100) {
 			SPWeaponMgr.setSPWeapon(player);
+		}
 
+		// Is trial mode and non-tutorial = Test Area
 		if (conf.getConfig().getString("WorkMode").equals("Trial") && !Sclat.tutorial) {
 			ItemStack join = new ItemStack(Material.CHEST);
 			ItemMeta joinmeta = join.getItemMeta();
