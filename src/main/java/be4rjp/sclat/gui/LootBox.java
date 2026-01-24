@@ -1,7 +1,7 @@
 package be4rjp.sclat.gui;
 
 import be4rjp.sclat.api.MessageType;
-import be4rjp.sclat.api.Sclat;
+import be4rjp.sclat.api.SclatUtil;
 import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.manager.PlayerStatusMgr;
 import org.bukkit.Bukkit;
@@ -26,7 +26,7 @@ public class LootBox {
 	private static final int Fifthprize = 50;
 	public static void turnLootBox(Player player) {
 		if (PlayerStatusMgr.getTicket(player) < 10) {
-			Sclat.sendMessage(ChatColor.RED + "ガチャを引くには1回10Ticket必要です", MessageType.PLAYER, player);
+			SclatUtil.sendMessage(ChatColor.RED + "ガチャを引くには1回10Ticket必要です", MessageType.PLAYER, player);
 			return;
 		}
 		boolean isHit = false;
@@ -40,9 +40,9 @@ public class LootBox {
 					isHit = true;
 					if (!PlayerStatusMgr.haveWeapon(player, ClassName)) {
 						PlayerStatusMgr.addWeapon(player, ClassName);
-						Sclat.sendMessage(ChatColor.GREEN + ClassName + "が当たったよ、おめでとう！", MessageType.PLAYER, player);
+						SclatUtil.sendMessage(ChatColor.GREEN + ClassName + "が当たったよ、おめでとう！", MessageType.PLAYER, player);
 					} else {
-						Sclat.sendMessage(ChatColor.GREEN + ClassName + "が重複したよ +" + Firstprize + "coin",
+						SclatUtil.sendMessage(ChatColor.GREEN + ClassName + "が重複したよ +" + Firstprize + "coin",
 								MessageType.PLAYER, player);
 						PlayerStatusMgr.addMoney(player, Firstprize);
 					}
@@ -53,23 +53,23 @@ public class LootBox {
 		if (nextLootSeed < 5 && !isHit && LootSeed < 5) {
 			isHit = true;
 			PlayerStatusMgr.addMoney(player, Firstprize);
-			Sclat.sendMessage(ChatColor.GREEN + "「1等!」おめでとう! +" + Firstprize + "coin", MessageType.PLAYER, player);
+			SclatUtil.sendMessage(ChatColor.GREEN + "「1等!」おめでとう! +" + Firstprize + "coin", MessageType.PLAYER, player);
 		} else if (nextLootSeed < 10 && !isHit && LootSeed < 10) {
 			isHit = true;
 			PlayerStatusMgr.addMoney(player, Secondprize);
-			Sclat.sendMessage(ChatColor.GREEN + "「2等!」ラッキー! +" + Secondprize + "coin", MessageType.PLAYER, player);
+			SclatUtil.sendMessage(ChatColor.GREEN + "「2等!」ラッキー! +" + Secondprize + "coin", MessageType.PLAYER, player);
 		} else if (nextLootSeed < 30 && !isHit && LootSeed < 30) {
 			isHit = true;
 			PlayerStatusMgr.addMoney(player, Thirdprize);
-			Sclat.sendMessage(ChatColor.GREEN + "「3等」 +" + Thirdprize + "coin", MessageType.PLAYER, player);
+			SclatUtil.sendMessage(ChatColor.GREEN + "「3等」 +" + Thirdprize + "coin", MessageType.PLAYER, player);
 		} else if (nextLootSeed < 70 && !isHit && LootSeed < 70) {
 			isHit = true;
 			PlayerStatusMgr.addMoney(player, Fourthprize);
-			Sclat.sendMessage(ChatColor.GREEN + "「4等」 +" + Fourthprize + "coin", MessageType.PLAYER, player);
+			SclatUtil.sendMessage(ChatColor.GREEN + "「4等」 +" + Fourthprize + "coin", MessageType.PLAYER, player);
 		} else {
 			isHit = true;
 			PlayerStatusMgr.addMoney(player, Fifthprize);
-			Sclat.sendMessage(ChatColor.GREEN + "「5等」 +" + Fifthprize + "coin", MessageType.PLAYER, player);
+			SclatUtil.sendMessage(ChatColor.GREEN + "「5等」 +" + Fifthprize + "coin", MessageType.PLAYER, player);
 		}
 		PlayerStatusMgr.subTicket(player, 10);
 	}
@@ -169,9 +169,9 @@ public class LootBox {
 		String ClassName = Weapon;
 		if (!PlayerStatusMgr.haveWeapon(player, ClassName)) {
 			PlayerStatusMgr.addWeapon(player, ClassName);
-			Sclat.sendMessage(ChatColor.GREEN + ClassName + "が手に入ったよ", MessageType.PLAYER, player);
+			SclatUtil.sendMessage(ChatColor.GREEN + ClassName + "が手に入ったよ", MessageType.PLAYER, player);
 		} else {
-			Sclat.sendMessage(ChatColor.GREEN + ClassName + "はすでに持っているよ", MessageType.PLAYER, player);
+			SclatUtil.sendMessage(ChatColor.GREEN + ClassName + "はすでに持っているよ", MessageType.PLAYER, player);
 		}
 	}
 	public static void changeteam(Player player) {

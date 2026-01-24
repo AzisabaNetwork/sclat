@@ -3,7 +3,7 @@ package be4rjp.sclat.weapon;
 import be4rjp.dadadachecker.ClickType;
 import be4rjp.sclat.Main;
 import be4rjp.sclat.api.GlowingAPI;
-import be4rjp.sclat.api.Sclat;
+import be4rjp.sclat.api.SclatUtil;
 import be4rjp.sclat.api.Sphere;
 import be4rjp.sclat.api.player.PlayerData;
 import be4rjp.sclat.data.DataMgr;
@@ -203,10 +203,10 @@ public class Hound {
 						player.getWorld().playSound(as1l, Sound.ENTITY_FIREWORK_ROCKET_BLAST, 1, 1);
 
 						// 爆発エフェクト
-						Sclat.createInkExplosionEffect(as1l, maxDist, 15, player);
+						SclatUtil.createInkExplosionEffect(as1l, maxDist, 15, player);
 
 						// バリアをはじく
-						Sclat.repelBarrier(as1l, (int) (maxDist / 2), player);
+						SclatUtil.repelBarrier(as1l, (int) (maxDist / 2), player);
 
 						// 塗る
 						for (int i = 0; i <= maxDist; i++) {
@@ -255,7 +255,7 @@ public class Hound {
 												* Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP));
 								if (data.getTeam() != DataMgr.getPlayerData(target).getTeam()
 										&& target.getGameMode().equals(GameMode.ADVENTURE)) {
-									Sclat.giveDamage(player, target, damage, "killed");
+									SclatUtil.giveDamage(player, target, damage, "killed");
 
 									// AntiNoDamageTime
 									BukkitRunnable task = new BukkitRunnable() {

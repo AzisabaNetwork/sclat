@@ -2,7 +2,7 @@ package be4rjp.sclat.tutorial;
 
 import be4rjp.sclat.Main;
 import be4rjp.sclat.api.MessageType;
-import be4rjp.sclat.api.Sclat;
+import be4rjp.sclat.api.SclatUtil;
 import be4rjp.sclat.api.SoundType;
 import be4rjp.sclat.data.BlockUpdater;
 import be4rjp.sclat.data.DataMgr;
@@ -284,12 +284,12 @@ public class Tutorial {
 							player.getInventory().clear();
 							player.getInventory().setItem(0, join);
 
-							Sclat.sendMessage("§6Sclatへようこそ！", MessageType.PLAYER, player);
+							SclatUtil.sendMessage("§6Sclatへようこそ！", MessageType.PLAYER, player);
 							player.sendMessage("§aチェストをもって右クリックするとメインメニューを開くことができます。");
 							player.sendMessage("§a初期から使える武器がいくつかあります。");
 							player.sendMessage("§aメインメニューの装備変更から武器を選んで、試合に参加してみましょう！");
-							Sclat.sendMessage("§6初回ログインボーナスを受け取りました！ §bMoney +10000", MessageType.PLAYER, player);
-							Sclat.playGameSound(player, SoundType.CONGRATULATIONS);
+							SclatUtil.sendMessage("§6初回ログインボーナスを受け取りました！ §bMoney +10000", MessageType.PLAYER, player);
+							SclatUtil.playGameSound(player, SoundType.CONGRATULATIONS);
 						}
 					}
 				}
@@ -383,9 +383,9 @@ public class Tutorial {
 						}
 					}
 
-					Sclat.sendMessage("§a§lインクがリセットされました！", MessageType.ALL_PLAYER);
+					SclatUtil.sendMessage("§a§lインクがリセットされました！", MessageType.ALL_PLAYER);
 					for (Player op : Main.getPlugin().getServer().getOnlinePlayers())
-						Sclat.playGameSound(op, SoundType.SUCCESS);
+						SclatUtil.playGameSound(op, SoundType.SUCCESS);
 					time = 0;
 				}
 				time++;

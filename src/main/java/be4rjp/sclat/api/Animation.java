@@ -59,7 +59,7 @@ public class Animation {
 				}
 				if (i == 40) {
 					if (winteam == DataMgr.getPlayerData(player).getTeam())
-						Sclat.playGameSound(player, SoundType.CONGRATULATIONS);
+						SclatUtil.playGameSound(player, SoundType.CONGRATULATIONS);
 					cancel();
 				}
 				i++;
@@ -101,7 +101,7 @@ public class Animation {
 				}
 				if (i == 40) {
 					if (winteam == DataMgr.getPlayerData(player).getTeam())
-						Sclat.playGameSound(player, SoundType.CONGRATULATIONS);
+						SclatUtil.playGameSound(player, SoundType.CONGRATULATIONS);
 					cancel();
 				}
 				i++;
@@ -171,7 +171,7 @@ public class Animation {
 				}
 				if (i == 40) {
 					if (winteam == DataMgr.getPlayerData(player).getTeam())
-						Sclat.playGameSound(player, SoundType.CONGRATULATIONS);
+						SclatUtil.playGameSound(player, SoundType.CONGRATULATIONS);
 					cancel();
 				}
 				i++;

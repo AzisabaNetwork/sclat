@@ -2,7 +2,7 @@
 package be4rjp.sclat.manager;
 
 import be4rjp.sclat.Main;
-import be4rjp.sclat.api.Sclat;
+import be4rjp.sclat.api.SclatUtil;
 import be4rjp.sclat.api.Sphere;
 import be4rjp.sclat.api.player.PlayerData;
 import be4rjp.sclat.data.DataMgr;
@@ -45,7 +45,7 @@ public class DeathMgr {
 		drop2.setVelocity(
 				new Vector(Math.random() * random - random / 2, random * 2 / 3, Math.random() * random - random / 2));
 
-		Sclat.createInkExplosionEffect(target.getEyeLocation().add(0, -1, 0), 3, 30, shooter);
+		SclatUtil.createInkExplosionEffect(target.getEyeLocation().add(0, -1, 0), 3, 30, shooter);
 
 		if (Gear.getGearInfluence(target, Gear.Type.PENA_DOWN) == 1.0) {
 			DataMgr.getPlayerData(target).setSPGauge((int) (DataMgr.getPlayerData(target).getSPGauge() * 0.7));

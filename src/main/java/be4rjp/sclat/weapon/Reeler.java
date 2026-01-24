@@ -2,7 +2,7 @@ package be4rjp.sclat.weapon;
 
 import be4rjp.dadadachecker.ClickType;
 import be4rjp.sclat.Main;
-import be4rjp.sclat.api.Sclat;
+import be4rjp.sclat.api.SclatUtil;
 import be4rjp.sclat.api.player.PlayerData;
 import be4rjp.sclat.api.raytrace.RayTrace;
 import be4rjp.sclat.data.DataMgr;
@@ -396,7 +396,7 @@ public class Reeler {
 									// break loop;
 									// }
 								} else {
-									if (Sclat.isNumber(as.getCustomName()))
+									if (SclatUtil.isNumber(as.getCustomName()))
 										if (!as.getCustomName().equals("21") && !as.getCustomName().equals("100")) {
 											if (((ArmorStand) as).isVisible()) {
 												dest = (ArmorStand) as;

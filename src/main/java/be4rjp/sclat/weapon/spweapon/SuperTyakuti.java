@@ -2,7 +2,7 @@
 package be4rjp.sclat.weapon.spweapon;
 
 import be4rjp.sclat.Main;
-import be4rjp.sclat.api.Sclat;
+import be4rjp.sclat.api.SclatUtil;
 import be4rjp.sclat.api.Sphere;
 import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.manager.ArmorStandMgr;
@@ -132,7 +132,7 @@ public class SuperTyakuti {
 								0.9F);
 
 						// 爆発エフェクト
-						Sclat.createInkExplosionEffect(player.getLocation(), 7, 10, player);
+						SclatUtil.createInkExplosionEffect(player.getLocation(), 7, 10, player);
 
 						double maxDist = 8;
 						double maxDistSquared = 64; /* 8^2 */
@@ -153,7 +153,7 @@ public class SuperTyakuti {
 								double damage = (maxDist - target.getLocation().distance(player.getLocation())) * 15;
 								if (DataMgr.getPlayerData(player).getTeam() != DataMgr.getPlayerData(target).getTeam()
 										&& target.getGameMode().equals(GameMode.ADVENTURE)) {
-									Sclat.giveDamage(player, target, damage, "spWeapon");
+									SclatUtil.giveDamage(player, target, damage, "spWeapon");
 
 									// AntiNoDamageTime
 									BukkitRunnable task = new BukkitRunnable() {

@@ -2,7 +2,7 @@ package be4rjp.sclat.weapon;
 
 import be4rjp.dadadachecker.ClickType;
 import be4rjp.sclat.Main;
-import be4rjp.sclat.api.Sclat;
+import be4rjp.sclat.api.SclatUtil;
 import be4rjp.sclat.api.player.PlayerData;
 import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.manager.ArmorStandMgr;
@@ -126,7 +126,7 @@ public class Brush {
 										double damage = DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon()
 												.getRollerDamage();
 
-										Sclat.giveDamage(p, target, damage, "killed");
+										SclatUtil.giveDamage(p, target, damage, "killed");
 									}
 								}
 							}

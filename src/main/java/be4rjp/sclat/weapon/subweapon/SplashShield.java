@@ -2,7 +2,7 @@
 package be4rjp.sclat.weapon.subweapon;
 
 import be4rjp.sclat.Main;
-import be4rjp.sclat.api.Sclat;
+import be4rjp.sclat.api.SclatUtil;
 import be4rjp.sclat.api.raytrace.BoundingBox;
 import be4rjp.sclat.api.raytrace.RayTrace;
 import be4rjp.sclat.data.DataMgr;
@@ -354,7 +354,7 @@ public class SplashShield {
 									if (rayTrace4.intersects(new BoundingBox((Entity) target), 3, 0.5) && DataMgr
 											.getPlayerData(target).getTeam() != DataMgr.getPlayerData(p).getTeam()
 											&& target.getGameMode().equals(GameMode.ADVENTURE)) {
-										Sclat.giveDamage(player, target, damage, "subWeapon");
+										SclatUtil.giveDamage(player, target, damage, "subWeapon");
 
 										// AntiNoDamageTime
 										BukkitRunnable task = new BukkitRunnable() {
@@ -386,7 +386,7 @@ public class SplashShield {
 									if (rayTrace4.intersects(new BoundingBox((Entity) target), 3, 0.5) && DataMgr
 											.getPlayerData(target).getTeam() != DataMgr.getPlayerData(p).getTeam()
 											&& target.getGameMode().equals(GameMode.ADVENTURE)) {
-										Sclat.giveDamage(player, target, damage, "subWeapon");
+										SclatUtil.giveDamage(player, target, damage, "subWeapon");
 
 										// AntiNoDamageTime
 										BukkitRunnable task = new BukkitRunnable() {

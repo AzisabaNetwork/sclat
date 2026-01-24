@@ -2,7 +2,7 @@
 package be4rjp.sclat.weapon;
 
 import be4rjp.sclat.Main;
-import be4rjp.sclat.api.Sclat;
+import be4rjp.sclat.api.SclatUtil;
 import be4rjp.sclat.api.Sphere;
 import be4rjp.sclat.api.player.PlayerData;
 import be4rjp.sclat.data.DataMgr;
@@ -139,7 +139,7 @@ public class Slosher {
 						player.getWorld().playSound(inkball.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_BLAST, 0.7F, 1);
 
 						// 爆発エフェクト
-						Sclat.createInkExplosionEffect(inkball.getLocation(), maxDist, 25, player);
+						SclatUtil.createInkExplosionEffect(inkball.getLocation(), maxDist, 25, player);
 
 						// 塗る
 						for (int i = 0; i <= maxDist; i++) {
@@ -160,7 +160,7 @@ public class Slosher {
 										* data.getWeaponClass().getMainWeapon().getBlasterExDamage();
 								if (DataMgr.getPlayerData(player).getTeam() != DataMgr.getPlayerData(target).getTeam()
 										&& target.getGameMode().equals(GameMode.ADVENTURE)) {
-									Sclat.giveDamage(player, target, damage, "killed");
+									SclatUtil.giveDamage(player, target, damage, "killed");
 
 									// AntiNoDamageTime
 									BukkitRunnable task = new BukkitRunnable() {

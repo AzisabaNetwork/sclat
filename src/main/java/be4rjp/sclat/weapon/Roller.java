@@ -1,7 +1,7 @@
 package be4rjp.sclat.weapon;
 
 import be4rjp.sclat.Main;
-import be4rjp.sclat.api.Sclat;
+import be4rjp.sclat.api.SclatUtil;
 import be4rjp.sclat.api.player.PlayerData;
 import be4rjp.sclat.api.raytrace.BoundingBox;
 import be4rjp.sclat.api.raytrace.RayTrace;
@@ -128,7 +128,7 @@ public class Roller {
 										double damage = DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon()
 												.getRollerDamage();
 
-										Sclat.giveDamage(p, target, damage, "killed");
+										SclatUtil.giveDamage(p, target, damage, "killed");
 									}
 								}
 							}
@@ -212,7 +212,7 @@ public class Roller {
 											double damage = DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon()
 													.getRollerDamage();
 
-											Sclat.giveDamage(p, target, damage, "killed");
+											SclatUtil.giveDamage(p, target, damage, "killed");
 
 											// AntiNoDamageTime
 											BukkitRunnable task = new BukkitRunnable() {
@@ -302,7 +302,7 @@ public class Roller {
 											double damage = DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon()
 													.getRollerDamage();
 
-											Sclat.giveDamage(p, target, damage, "killed");
+											SclatUtil.giveDamage(p, target, damage, "killed");
 
 											// AntiNoDamageTime
 											BukkitRunnable task = new BukkitRunnable() {

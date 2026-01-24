@@ -2,7 +2,7 @@
 package be4rjp.sclat.weapon.subweapon;
 
 import be4rjp.sclat.Main;
-import be4rjp.sclat.api.Sclat;
+import be4rjp.sclat.api.SclatUtil;
 import be4rjp.sclat.api.Sphere;
 import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.manager.ArmorStandMgr;
@@ -60,12 +60,12 @@ public class SplashBomb {
 						player.getWorld().playSound(drop.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_BLAST, 1, 1);
 
 						// 爆発エフェクト
-						Sclat.createInkExplosionEffect(drop.getLocation(), 5, 15, player);
+						SclatUtil.createInkExplosionEffect(drop.getLocation(), 5, 15, player);
 
 						double maxDist = 4;
 
 						// バリアをはじく
-						Sclat.repelBarrier(drop.getLocation(), maxDist, player);
+						SclatUtil.repelBarrier(drop.getLocation(), maxDist, player);
 
 						// 塗る
 						for (int i = 0; i <= maxDist; i++) {
@@ -85,7 +85,7 @@ public class SplashBomb {
 										* Gear.getGearInfluence(player, Gear.Type.SUB_SPEC_UP);
 								if (DataMgr.getPlayerData(player).getTeam() != DataMgr.getPlayerData(target).getTeam()
 										&& target.getGameMode().equals(GameMode.ADVENTURE)) {
-									Sclat.giveDamage(player, target, damage, "subWeapon");
+									SclatUtil.giveDamage(player, target, damage, "subWeapon");
 
 									// AntiNoDamageTime
 									BukkitRunnable task = new BukkitRunnable() {

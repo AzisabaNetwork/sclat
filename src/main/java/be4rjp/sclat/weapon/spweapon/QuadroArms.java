@@ -2,7 +2,7 @@
 package be4rjp.sclat.weapon.spweapon;
 
 import be4rjp.sclat.Main;
-import be4rjp.sclat.api.Sclat;
+import be4rjp.sclat.api.SclatUtil;
 import be4rjp.sclat.api.Sphere;
 import be4rjp.sclat.api.player.PlayerData;
 import be4rjp.sclat.api.raytrace.RayTrace;
@@ -523,7 +523,7 @@ public class QuadroArms {
 						player.getWorld().playSound(inkball.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_BLAST, 0.7F, 1);
 
 						// 爆発エフェクト
-						Sclat.createInkExplosionEffect(inkball.getLocation(), maxDist, 25, player);
+						SclatUtil.createInkExplosionEffect(inkball.getLocation(), maxDist, 25, player);
 
 						// 塗る
 						for (int i = 0; i <= maxDist; i++) {
@@ -543,7 +543,7 @@ public class QuadroArms {
 										* BlasterExDamage;
 								if (DataMgr.getPlayerData(player).getTeam() != DataMgr.getPlayerData(target).getTeam()
 										&& target.getGameMode().equals(GameMode.ADVENTURE)) {
-									Sclat.giveDamage(player, target, damage, "spWeapon");
+									SclatUtil.giveDamage(player, target, damage, "spWeapon");
 
 									// AntiNoDamageTime
 									BukkitRunnable task = new BukkitRunnable() {

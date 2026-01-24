@@ -2,7 +2,7 @@ package be4rjp.sclat.weapon;
 
 import be4rjp.sclat.Main;
 import be4rjp.sclat.api.GlowingAPI;
-import be4rjp.sclat.api.Sclat;
+import be4rjp.sclat.api.SclatUtil;
 import be4rjp.sclat.api.player.PlayerData;
 import be4rjp.sclat.api.raytrace.BoundingBox;
 import be4rjp.sclat.api.raytrace.RayTrace;
@@ -80,7 +80,7 @@ public class Funnel {
 						&& target.getGameMode().equals(GameMode.ADVENTURE)) {
 					if (target.getLocation().distanceSquared(position) <= maxDistSquad) {
 						if (rayTrace.intersects(new BoundingBox((Entity) target), 4, 0.05)) {
-							Sclat.giveDamage(player, target, damage, "killed");
+							SclatUtil.giveDamage(player, target, damage, "killed");
 							player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_HURT, 1.2F, 1.3F);
 
 							// AntiNoDamageTime
@@ -122,7 +122,7 @@ public class Funnel {
 										break loop;
 									}
 								} else {
-									if (Sclat.isNumber(as.getCustomName()))
+									if (SclatUtil.isNumber(as.getCustomName()))
 										if (!as.getCustomName().equals("21") && !as.getCustomName().equals("100"))
 											if (((ArmorStand) as).isVisible())
 												player.playSound(player.getLocation(), Sound.ENTITY_ARROW_HIT_PLAYER,
@@ -939,7 +939,7 @@ public class Funnel {
 												// break loop;
 												// }
 											} else {
-												if (Sclat.isNumber(as.getCustomName()))
+												if (SclatUtil.isNumber(as.getCustomName()))
 													if (!as.getCustomName().equals("21")
 															&& !as.getCustomName().equals("100"))
 														if (((ArmorStand) as).isVisible())

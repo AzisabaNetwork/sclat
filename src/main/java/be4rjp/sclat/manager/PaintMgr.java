@@ -2,7 +2,7 @@
 package be4rjp.sclat.manager;
 
 import be4rjp.sclat.Main;
-import be4rjp.sclat.api.Sclat;
+import be4rjp.sclat.api.SclatUtil;
 import be4rjp.sclat.api.ServerType;
 import be4rjp.sclat.api.player.PlayerData;
 import be4rjp.sclat.api.team.Team;
@@ -315,7 +315,7 @@ public class PaintMgr {
 				data.setTeam(match.getTeam0());
 				data.setOrigianlType(block.getType());
 				DataMgr.setPaintDataFromBlock(block, data);
-				Sclat.setBlockByNMS(block, match.getTeam0().getTeamColor().getGlass(), false);
+				SclatUtil.setBlockByNMS(block, match.getTeam0().getTeamColor().getGlass(), false);
 				// block.setType(match.getTeam0().getTeamColor().getGlass());
 				match.getTeam0().addPaintCount();
 			}
@@ -340,7 +340,7 @@ public class PaintMgr {
 				data.setTeam(match.getTeam1());
 				data.setOrigianlType(block.getType());
 				DataMgr.setPaintDataFromBlock(block, data);
-				Sclat.setBlockByNMS(block, match.getTeam1().getTeamColor().getGlass(), false);
+				SclatUtil.setBlockByNMS(block, match.getTeam1().getTeamColor().getGlass(), false);
 				// block.setType(match.getTeam1().getTeamColor().getGlass());
 				match.getTeam1().addPaintCount();
 			}

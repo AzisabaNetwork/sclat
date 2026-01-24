@@ -2,7 +2,7 @@
 package be4rjp.sclat.data;
 
 import be4rjp.sclat.Main;
-import be4rjp.sclat.api.Sclat;
+import be4rjp.sclat.api.SclatUtil;
 import net.minecraft.server.v1_14_R1.PacketPlayOutMultiBlockChange;
 import org.bukkit.Chunk;
 import org.bukkit.Material;
@@ -120,12 +120,12 @@ public class BlockUpdater {
 
 			if (block.getLocation().getChunk().isLoaded()) {
 				try {
-					Sclat.setBlockByNMSChunk(block, blocklist.get(block), true);
+					SclatUtil.setBlockByNMSChunk(block, blocklist.get(block), true);
 				} catch (Exception e) {
 				}
 			} else {
 				try {
-					Sclat.setBlockByNMS(block, blocklist.get(block), true);
+					SclatUtil.setBlockByNMS(block, blocklist.get(block), true);
 					// Main.getPlugin().getServer().broadcastMessage("ChangeBlockByNMS!!");
 				} catch (Exception e) {
 				}
@@ -139,12 +139,12 @@ public class BlockUpdater {
 
 				if (block.getLocation().getChunk().isLoaded()) {
 					try {
-						Sclat.setBlockByNMSChunk(block, blocklist.get(block), true);
+						SclatUtil.setBlockByNMSChunk(block, blocklist.get(block), true);
 					} catch (Exception e) {
 					}
 				} else {
 					try {
-						Sclat.setBlockByNMS(block, blocklist.get(block), true);
+						SclatUtil.setBlockByNMS(block, blocklist.get(block), true);
 						// Main.getPlugin().getServer().broadcastMessage("ChangeBlockByNMS!!");
 					} catch (Exception e) {
 					}

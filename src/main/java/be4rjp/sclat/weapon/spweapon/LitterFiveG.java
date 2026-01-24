@@ -1,7 +1,7 @@
 package be4rjp.sclat.weapon.spweapon;
 
 import be4rjp.sclat.Main;
-import be4rjp.sclat.api.Sclat;
+import be4rjp.sclat.api.SclatUtil;
 import be4rjp.sclat.api.Sphere;
 import be4rjp.sclat.api.player.PlayerData;
 import be4rjp.sclat.api.raytrace.BoundingBox;
@@ -212,7 +212,7 @@ public class LitterFiveG {
 						player.getWorld().playSound(position, Sound.ENTITY_GENERIC_EXPLODE, 1, 1);
 
 						// 爆発エフェクト
-						Sclat.createInkExplosionEffect(position, maxDist, 25, player);
+						SclatUtil.createInkExplosionEffect(position, maxDist, 25, player);
 
 						// 塗る
 						for (int in = 0; in <= maxDist - 1; in++) {
@@ -248,7 +248,7 @@ public class LitterFiveG {
 					if (target.getLocation().distanceSquared(position) <= maxDistSquad) {
 						if (rayTrace.intersects(new BoundingBox((Entity) target), (int) (reach), 0.05)) {
 							boolean death;
-							death = Sclat.giveDamage(player, target, damage, "spWeapon");
+							death = SclatUtil.giveDamage(player, target, damage, "spWeapon");
 							if (death) {
 								player.playSound(player.getLocation(), Sound.ENTITY_ARROW_HIT_PLAYER, 1.2F, 1.3F);
 								player.getWorld().playSound(target.getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 1, 1);
@@ -296,7 +296,7 @@ public class LitterFiveG {
 										break loop;
 									}
 								} else {
-									if (Sclat.isNumber(as.getCustomName()))
+									if (SclatUtil.isNumber(as.getCustomName()))
 										if (!as.getCustomName().equals("21") && !as.getCustomName().equals("100"))
 											if (((ArmorStand) as).isVisible())
 												player.playSound(player.getLocation(), Sound.ENTITY_ARROW_HIT_PLAYER,

@@ -2,7 +2,7 @@ package be4rjp.sclat.data;
 
 import be4rjp.sclat.Main;
 import be4rjp.sclat.api.MessageType;
-import be4rjp.sclat.api.Sclat;
+import be4rjp.sclat.api.SclatUtil;
 import be4rjp.sclat.api.SoundType;
 import be4rjp.sclat.manager.BungeeCordMgr;
 import org.bukkit.entity.Player;
@@ -17,10 +17,10 @@ public class MatchServerRunnable extends BukkitRunnable {
 	public MatchServerRunnable(ServerStatus serverStatus) {
 		this.serverStatus = serverStatus;
 
-		Sclat.sendMessage(serverStatus.getDisplayName() + "§rの試合待機カウントダウンが開始されました", MessageType.ALL_PLAYER);
-		Sclat.sendMessage("§a30秒後にマッチングを開始します", MessageType.ALL_PLAYER);
+		SclatUtil.sendMessage(serverStatus.getDisplayName() + "§rの試合待機カウントダウンが開始されました", MessageType.ALL_PLAYER);
+		SclatUtil.sendMessage("§a30秒後にマッチングを開始します", MessageType.ALL_PLAYER);
 		Main.getPlugin().getServer().getOnlinePlayers()
-				.forEach(player -> Sclat.playGameSound(player, SoundType.SUCCESS));
+				.forEach(player -> SclatUtil.playGameSound(player, SoundType.SUCCESS));
 	}
 
 	@Override

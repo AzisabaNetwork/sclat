@@ -6,7 +6,7 @@ import be4rjp.blockstudio.api.BSObject;
 import be4rjp.blockstudio.api.BlockStudioAPI;
 import be4rjp.blockstudio.file.ObjectData;
 import be4rjp.sclat.Main;
-import be4rjp.sclat.api.Sclat;
+import be4rjp.sclat.api.SclatUtil;
 import be4rjp.sclat.api.Sphere;
 import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.manager.ArmorStandMgr;
@@ -369,7 +369,7 @@ public class JetPack {
 						player.getWorld().playSound(drop.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_BLAST, 1, 1);
 
 						// 爆発エフェクト
-						Sclat.createInkExplosionEffect(drop.getLocation(), 3, 25, player);
+						SclatUtil.createInkExplosionEffect(drop.getLocation(), 3, 25, player);
 
 						// 塗る
 						for (int i = 0; i <= maxDist; i++) {
@@ -388,7 +388,7 @@ public class JetPack {
 								double damage = (3.5 - target.getLocation().distance(drop.getLocation())) * 10;
 								if (DataMgr.getPlayerData(player).getTeam() != DataMgr.getPlayerData(target).getTeam()
 										&& target.getGameMode().equals(GameMode.ADVENTURE)) {
-									Sclat.giveDamage(player, target, damage, "spWeapon");
+									SclatUtil.giveDamage(player, target, damage, "spWeapon");
 
 									// AntiNoDamageTime
 									BukkitRunnable task = new BukkitRunnable() {

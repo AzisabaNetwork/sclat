@@ -1,7 +1,7 @@
 package be4rjp.sclat.weapon.spweapon;
 
 import be4rjp.sclat.Main;
-import be4rjp.sclat.api.Sclat;
+import be4rjp.sclat.api.SclatUtil;
 import be4rjp.sclat.api.Sphere;
 import be4rjp.sclat.api.player.PlayerData;
 import be4rjp.sclat.api.raytrace.BoundingBox;
@@ -111,7 +111,7 @@ public class SwordMord {
 						double damage = 15.1;
 						if (DataMgr.getPlayerData(player).getTeam() != DataMgr.getPlayerData(target).getTeam()
 								&& target.getGameMode().equals(GameMode.ADVENTURE)) {
-							Sclat.giveDamage(player, target, damage, "spWeapon");
+							SclatUtil.giveDamage(player, target, damage, "spWeapon");
 
 							// AntiNoDamageTime
 							BukkitRunnable task = new BukkitRunnable() {
@@ -269,7 +269,7 @@ public class SwordMord {
 									if (DataMgr.getPlayerData(player).getTeam() != DataMgr.getPlayerData(target)
 											.getTeam() && target.getGameMode().equals(GameMode.ADVENTURE)) {
 										if (rayTrace.intersects(new BoundingBox((Entity) target), 5, 0.05)) {
-											Sclat.giveDamage(player, target, 6, "spWeapon");
+											SclatUtil.giveDamage(player, target, 6, "spWeapon");
 
 											// AntiNoDamageTime
 											BukkitRunnable taskdamage = new BukkitRunnable() {

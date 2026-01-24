@@ -2,7 +2,7 @@ package be4rjp.sclat.manager;
 
 import be4rjp.sclat.Main;
 import be4rjp.sclat.api.MessageType;
-import be4rjp.sclat.api.Sclat;
+import be4rjp.sclat.api.SclatUtil;
 import be4rjp.sclat.api.ServerType;
 import be4rjp.sclat.api.SoundType;
 import be4rjp.sclat.api.player.PlayerData;
@@ -662,29 +662,29 @@ public class GameMgr implements Listener {
 					for (ServerStatus ss : ServerStatusManager.serverList) {
 						if (ss.getSign().equals(e.getClickedBlock())) {
 							if (ss.getRestartingServer()) {
-								Sclat.sendMessage("§c§nこのサーバーは再起動中です1~2分程度お待ちください", MessageType.PLAYER, player);
-								Sclat.playGameSound(player, SoundType.ERROR);
+								SclatUtil.sendMessage("§c§nこのサーバーは再起動中です1~2分程度お待ちください", MessageType.PLAYER, player);
+								SclatUtil.playGameSound(player, SoundType.ERROR);
 								return;
 							}
 							if (ss.isOnline()) {
 								if (ss.getPlayerCount() < ss.getMaxPlayer()) {
 									if (ss.getRunningMatch()) {
-										Sclat.sendMessage("§c§nこのサーバーは試合中のため参加できません", MessageType.PLAYER, player);
-										Sclat.playGameSound(player, SoundType.ERROR);
+										SclatUtil.sendMessage("§c§nこのサーバーは試合中のため参加できません", MessageType.PLAYER, player);
+										SclatUtil.playGameSound(player, SoundType.ERROR);
 										return;
 									}
 									BungeeCordMgr.PlayerSendServer(player, ss.getServerName());
 									DataMgr.getPlayerData(player).setServerName(ss.getDisplayName());
 								} else {
-									Sclat.sendMessage("§c§nこのサーバーは満員のため参加できません", MessageType.PLAYER, player);
-									Sclat.playGameSound(player, SoundType.ERROR);
+									SclatUtil.sendMessage("§c§nこのサーバーは満員のため参加できません", MessageType.PLAYER, player);
+									SclatUtil.playGameSound(player, SoundType.ERROR);
 								}
 							} else {
 								if (ss.isMaintenance())
-									Sclat.sendMessage("§c§nこのサーバーは現在メンテナンス中のため参加できません", MessageType.PLAYER, player);
+									SclatUtil.sendMessage("§c§nこのサーバーは現在メンテナンス中のため参加できません", MessageType.PLAYER, player);
 								else
-									Sclat.sendMessage("§c§nこのサーバーは現在再起動中です1~2分程度お待ちください。", MessageType.PLAYER, player);
-								Sclat.playGameSound(player, SoundType.ERROR);
+									SclatUtil.sendMessage("§c§nこのサーバーは現在再起動中です1~2分程度お待ちください。", MessageType.PLAYER, player);
+								SclatUtil.playGameSound(player, SoundType.ERROR);
 							}
 							return;
 						}
@@ -772,14 +772,14 @@ public class GameMgr implements Listener {
 						if (PlayerStatusMgr.getMoney(player) > 1000) {
 							PlayerStatusMgr.subMoney(player, 1000);
 							PlayerStatusMgr.addTicket(player, 1);
-							Sclat.sendMessage("1000coinを1ticketに交換しました", MessageType.PLAYER, player);
+							SclatUtil.sendMessage("1000coinを1ticketに交換しました", MessageType.PLAYER, player);
 						} else {
-							Sclat.sendMessage("coinが足りません", MessageType.PLAYER, player);
+							SclatUtil.sendMessage("coinが足りません", MessageType.PLAYER, player);
 						}
 						break;
 					case "[ give ticket ]" :
 						PlayerStatusMgr.addTicket(player, 10);
-						Sclat.sendMessage("10ticket付与しました", MessageType.PLAYER, player);
+						SclatUtil.sendMessage("10ticket付与しました", MessageType.PLAYER, player);
 						break;
 					case "[ Tutorial ]" :
 						List<String> list = Main.tutorialServers.getConfig().getStringList("server-list");

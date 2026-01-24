@@ -2,7 +2,7 @@
 package be4rjp.sclat.weapon.spweapon;
 
 import be4rjp.sclat.Main;
-import be4rjp.sclat.api.Sclat;
+import be4rjp.sclat.api.SclatUtil;
 import be4rjp.sclat.api.Sphere;
 import be4rjp.sclat.api.raytrace.RayTrace;
 import be4rjp.sclat.data.DataMgr;
@@ -172,7 +172,7 @@ public class Amehurasi {
 										&& new Random().nextInt(100) == 0) {
 									if (DataMgr.getPlayerData(p).getTeam() != DataMgr.getPlayerData(target).getTeam()
 											&& target.getGameMode().equals(GameMode.ADVENTURE)) {
-										Sclat.giveDamage(p, target, damage, "spWeapon");
+										SclatUtil.giveDamage(p, target, damage, "spWeapon");
 
 										// AntiNoDamageTime
 										BukkitRunnable task = new BukkitRunnable() {

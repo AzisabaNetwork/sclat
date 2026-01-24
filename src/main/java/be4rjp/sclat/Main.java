@@ -4,7 +4,7 @@ import be4rjp.blockstudio.BlockStudio;
 import be4rjp.blockstudio.api.BlockStudioAPI;
 import be4rjp.dadadachecker.DADADACheckerAPI;
 import be4rjp.sclat.api.Plugins;
-import be4rjp.sclat.api.Sclat;
+import be4rjp.sclat.api.SclatUtil;
 import be4rjp.sclat.api.ServerType;
 import be4rjp.sclat.api.async.AsyncPlayerListener;
 import be4rjp.sclat.api.async.AsyncThreadManager;
@@ -306,7 +306,7 @@ public class Main extends JavaPlugin implements PluginMessageListener {
 
 		// --------------------Send restarted server info---------------------
 		if (conf.getConfig().contains("RestartMatchCount"))
-			Sclat.sendRestartedServerInfo();
+			SclatUtil.sendRestartedServerInfo();
 		// -------------------------------------------------------------------
 
 		// -----------------------------Shop----------------------------------

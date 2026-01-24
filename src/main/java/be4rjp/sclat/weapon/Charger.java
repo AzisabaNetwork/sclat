@@ -2,7 +2,7 @@ package be4rjp.sclat.weapon;
 
 import be4rjp.sclat.Main;
 import be4rjp.sclat.api.GaugeAPI;
-import be4rjp.sclat.api.Sclat;
+import be4rjp.sclat.api.SclatUtil;
 import be4rjp.sclat.api.player.PlayerData;
 import be4rjp.sclat.api.raytrace.BoundingBox;
 import be4rjp.sclat.api.raytrace.RayTrace;
@@ -78,7 +78,7 @@ public class Charger {
 						 * PotionEffect(PotionEffectType.SLOW, 40000, (int)charge / 3));
 						 */
 						if (charge < max) {
-							Sclat.setPlayerFOV(p, -0.1F / ((float) charge / 19.0F));
+							SclatUtil.setPlayerFOV(p, -0.1F / ((float) charge / 19.0F));
 						}
 
 					}
@@ -140,7 +140,7 @@ public class Charger {
 					 */
 					if (data.getWeaponClass().getMainWeapon().getScope()) {
 						data.setIsCharging(false);
-						Sclat.setPlayerFOV(player, 0.06F);
+						SclatUtil.setPlayerFOV(player, 0.06F);
 					}
 					if (charge <= min) {
 						if (p.getExp() > data.getWeaponClass().getMainWeapon().getNeedInk()
@@ -308,7 +308,7 @@ public class Charger {
 							if (Isbackstab(player, target)) {
 								hitDamage = damage * decRate;
 							}
-							death = Sclat.giveDamage(player, target, hitDamage, "killed");
+							death = SclatUtil.giveDamage(player, target, hitDamage, "killed");
 							if (death)
 								player.playSound(player.getLocation(), Sound.ENTITY_ARROW_HIT_PLAYER, 1.2F, 1.3F);
 							else
@@ -353,7 +353,7 @@ public class Charger {
 										break loop;
 									}
 								} else {
-									if (Sclat.isNumber(as.getCustomName()))
+									if (SclatUtil.isNumber(as.getCustomName()))
 										if (!as.getCustomName().equals("21") && !as.getCustomName().equals("100"))
 											if (((ArmorStand) as).isVisible())
 												player.playSound(player.getLocation(), Sound.ENTITY_ARROW_HIT_PLAYER,

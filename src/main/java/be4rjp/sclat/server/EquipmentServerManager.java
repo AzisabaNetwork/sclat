@@ -1,7 +1,7 @@
 package be4rjp.sclat.server;
 
 import be4rjp.sclat.Main;
-import be4rjp.sclat.api.Sclat;
+import be4rjp.sclat.api.SclatUtil;
 import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.manager.PlayerStatusMgr;
 import org.bukkit.entity.Player;
@@ -34,7 +34,7 @@ public class EquipmentServerManager {
 									break;
 								case "gear" :
 									for (Player player : Main.getPlugin().getServer().getOnlinePlayers())
-										if (player.getUniqueId().toString().equals(args[3]) && Sclat.isNumber(args[2]))
+										if (player.getUniqueId().toString().equals(args[3]) && SclatUtil.isNumber(args[2]))
 											DataMgr.getPlayerData(player).setGearNumber(Integer.parseInt(args[2]));
 									break;
 								case "rank" :

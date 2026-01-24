@@ -2,7 +2,7 @@ package be4rjp.sclat.commands;
 
 import be4rjp.sclat.Main;
 import be4rjp.sclat.api.MessageType;
-import be4rjp.sclat.api.Sclat;
+import be4rjp.sclat.api.SclatUtil;
 import be4rjp.sclat.api.ServerType;
 import be4rjp.sclat.api.SoundType;
 import be4rjp.sclat.data.DataMgr;
@@ -58,12 +58,12 @@ public class sclatCommandExecutor implements CommandExecutor, TabExecutor {
 
 			if (type == CommanderType.MEMBER) {
 				sender.sendMessage(ChatColor.RED + "You don't have permission.");
-				Sclat.playGameSound((Player) sender, SoundType.ERROR);
+				SclatUtil.playGameSound((Player) sender, SoundType.ERROR);
 				return true;
 			}
 
 			String num = args[1];
-			if (Sclat.isNumber(num)) {
+			if (SclatUtil.isNumber(num)) {
 				Main.conf.getConfig().set("BlockUpdateRate", Integer.valueOf(num));
 				sender.sendMessage("setConfig [BlockUpdateRate]  :  " + num);
 				return true;
@@ -81,7 +81,7 @@ public class sclatCommandExecutor implements CommandExecutor, TabExecutor {
 
 			if (type == CommanderType.MEMBER) {
 				sender.sendMessage(ChatColor.RED + "You don't have permission.");
-				Sclat.playGameSound((Player) sender, SoundType.ERROR);
+				SclatUtil.playGameSound((Player) sender, SoundType.ERROR);
 				return true;
 			}
 
@@ -102,14 +102,14 @@ public class sclatCommandExecutor implements CommandExecutor, TabExecutor {
 
 			if (type == CommanderType.MEMBER) {
 				sender.sendMessage(ChatColor.RED + "You don't have permission.");
-				Sclat.playGameSound((Player) sender, SoundType.ERROR);
+				SclatUtil.playGameSound((Player) sender, SoundType.ERROR);
 				return true;
 			}
 
 			if (sender instanceof Player) {
 				Player player = (Player) sender;
 				String targetConfig = args[1];
-				Sclat.sendMessage(String.format("%sの設定を再読み込み中...", targetConfig), MessageType.PLAYER, player);
+				SclatUtil.sendMessage(String.format("%sの設定を再読み込み中...", targetConfig), MessageType.PLAYER, player);
 				switch (targetConfig.toLowerCase()) {
 					case "emblemuserdata" :
 						conf.loadEmblemUserData();
@@ -118,10 +118,10 @@ public class sclatCommandExecutor implements CommandExecutor, TabExecutor {
 						conf.loadEmblemLoreData();
 						break;
 					default :
-						Sclat.sendMessage("そのオプションは存在しません！", MessageType.PLAYER, player);
+						SclatUtil.sendMessage("そのオプションは存在しません！", MessageType.PLAYER, player);
 						return true;
 				}
-				Sclat.sendMessage("再読み込み完了", MessageType.PLAYER, player);
+				SclatUtil.sendMessage("再読み込み完了", MessageType.PLAYER, player);
 			}
 		}
 		// --------------------------------
@@ -133,7 +133,7 @@ public class sclatCommandExecutor implements CommandExecutor, TabExecutor {
 
 			if (type == CommanderType.MEMBER) {
 				sender.sendMessage(ChatColor.RED + "You don't have permission.");
-				Sclat.playGameSound((Player) sender, SoundType.ERROR);
+				SclatUtil.playGameSound((Player) sender, SoundType.ERROR);
 				return true;
 			}
 
@@ -170,7 +170,7 @@ public class sclatCommandExecutor implements CommandExecutor, TabExecutor {
 
 			if (type == CommanderType.MEMBER) {
 				sender.sendMessage(ChatColor.RED + "You don't have permission.");
-				Sclat.playGameSound((Player) sender, SoundType.ERROR);
+				SclatUtil.playGameSound((Player) sender, SoundType.ERROR);
 				return true;
 			}
 
@@ -192,7 +192,7 @@ public class sclatCommandExecutor implements CommandExecutor, TabExecutor {
 
 			if (type == CommanderType.MEMBER) {
 				sender.sendMessage(ChatColor.RED + "You don't have permission.");
-				Sclat.playGameSound((Player) sender, SoundType.ERROR);
+				SclatUtil.playGameSound((Player) sender, SoundType.ERROR);
 				return true;
 			}
 
@@ -212,7 +212,7 @@ public class sclatCommandExecutor implements CommandExecutor, TabExecutor {
 
 			if (type == CommanderType.MEMBER) {
 				sender.sendMessage(ChatColor.RED + "You don't have permission.");
-				Sclat.playGameSound((Player) sender, SoundType.ERROR);
+				SclatUtil.playGameSound((Player) sender, SoundType.ERROR);
 				return true;
 			}
 
@@ -229,9 +229,9 @@ public class sclatCommandExecutor implements CommandExecutor, TabExecutor {
 								conf.getConfig().getInt("EquipShare." + serverName + ".Port"), commands);
 						sc.startClient();
 
-						Sclat.sendMessage("Moderatorとして転送中...", MessageType.PLAYER, (Player) sender);
-						Sclat.sendMessage("2秒後に転送されます", MessageType.PLAYER, (Player) sender);
-						Sclat.playGameSound((Player) sender, SoundType.SUCCESS);
+						SclatUtil.sendMessage("Moderatorとして転送中...", MessageType.PLAYER, (Player) sender);
+						SclatUtil.sendMessage("2秒後に転送されます", MessageType.PLAYER, (Player) sender);
+						SclatUtil.playGameSound((Player) sender, SoundType.SUCCESS);
 
 						BukkitRunnable task = new BukkitRunnable() {
 							@Override
@@ -261,7 +261,7 @@ public class sclatCommandExecutor implements CommandExecutor, TabExecutor {
 
 			if (type == CommanderType.MEMBER) {
 				sender.sendMessage(ChatColor.RED + "You don't have permission.");
-				Sclat.playGameSound((Player) sender, SoundType.ERROR);
+				SclatUtil.playGameSound((Player) sender, SoundType.ERROR);
 				return true;
 			}
 
@@ -286,7 +286,7 @@ public class sclatCommandExecutor implements CommandExecutor, TabExecutor {
 
 			if (type == CommanderType.MEMBER) {
 				sender.sendMessage(ChatColor.RED + "You don't have permission.");
-				Sclat.playGameSound((Player) sender, SoundType.ERROR);
+				SclatUtil.playGameSound((Player) sender, SoundType.ERROR);
 				return true;
 			}
 

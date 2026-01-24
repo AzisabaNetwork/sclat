@@ -2,7 +2,7 @@
 package be4rjp.sclat.weapon;
 
 import be4rjp.sclat.Main;
-import be4rjp.sclat.api.Sclat;
+import be4rjp.sclat.api.SclatUtil;
 import be4rjp.sclat.api.Sphere;
 import be4rjp.sclat.api.player.PlayerData;
 import be4rjp.sclat.data.DataMgr;
@@ -131,10 +131,10 @@ public class Blaster {
 					player.getWorld().playSound(inkball.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_BLAST, 1, 1);
 
 					// 爆発エフェクト
-					Sclat.createInkExplosionEffect(inkball.getLocation(), maxDist, 25, player);
+					SclatUtil.createInkExplosionEffect(inkball.getLocation(), maxDist, 25, player);
 
 					// バリアをはじく
-					Sclat.repelBarrier(inkball.getLocation(), maxDist, player);
+					SclatUtil.repelBarrier(inkball.getLocation(), maxDist, player);
 
 					// 塗る
 					for (int i = 0; i <= maxDist - 1; i++) {
@@ -189,7 +189,7 @@ public class Blaster {
 							}
 							if (DataMgr.getPlayerData(player).getTeam() != DataMgr.getPlayerData(target).getTeam()
 									&& target.getGameMode().equals(GameMode.ADVENTURE)) {
-								Sclat.giveDamage(player, target, damage, "killed");
+								SclatUtil.giveDamage(player, target, damage, "killed");
 
 								// AntiNoDamageTime
 								BukkitRunnable task = new BukkitRunnable() {
@@ -240,10 +240,10 @@ public class Blaster {
 		player.getWorld().playSound(blastcenter, Sound.ENTITY_FIREWORK_ROCKET_BLAST, 1, 1);
 
 		// 爆発エフェクト
-		Sclat.createInkExplosionEffect(blastcenter, maxDist, 25, player);
+		SclatUtil.createInkExplosionEffect(blastcenter, maxDist, 25, player);
 
 		// バリアをはじく
-		Sclat.repelBarrier(blastcenter, maxDist, player);
+		SclatUtil.repelBarrier(blastcenter, maxDist, player);
 
 		// 塗る
 		for (int i = 0; i <= maxDist - 1; i++) {
@@ -299,7 +299,7 @@ public class Blaster {
 				}
 				if (DataMgr.getPlayerData(player).getTeam() != DataMgr.getPlayerData(target).getTeam()
 						&& target.getGameMode().equals(GameMode.ADVENTURE)) {
-					Sclat.giveDamage(player, target, damage, "killed");
+					SclatUtil.giveDamage(player, target, damage, "killed");
 
 					// AntiNoDamageTime
 					BukkitRunnable task = new BukkitRunnable() {

@@ -6,7 +6,7 @@ import be4rjp.blockstudio.api.BSObject;
 import be4rjp.blockstudio.api.BlockStudioAPI;
 import be4rjp.blockstudio.file.ObjectData;
 import be4rjp.sclat.Main;
-import be4rjp.sclat.api.Sclat;
+import be4rjp.sclat.api.SclatUtil;
 import be4rjp.sclat.api.async.AsyncTask;
 import be4rjp.sclat.api.async.AsyncThreadManager;
 import be4rjp.sclat.api.player.PlayerData;
@@ -143,7 +143,7 @@ public class MegaLaser {
 				if (c == 13 || !playerData.isInMatch() || !p.isOnline()) {
 					playerData.setIsUsingSP(false);
 					for (Player target : AsyncThreadManager.onlinePlayers) {
-						Sclat.sendWorldBorderWarningClearPacket(target);
+						SclatUtil.sendWorldBorderWarningClearPacket(target);
 					}
 					bsObject.remove();
 					cancel();
@@ -232,9 +232,9 @@ public class MegaLaser {
 								continue;
 							if (target.getLocation().distanceSquared(position.clone().add(0, 1, 0)) <= maxDistSquared) {
 								// list.add(target);
-								Sclat.sendWorldBorderWarningPacket(target);
+								SclatUtil.sendWorldBorderWarningPacket(target);
 							} else {
-								Sclat.sendWorldBorderWarningClearPacket(target);
+								SclatUtil.sendWorldBorderWarningClearPacket(target);
 							}
 						}
 						// ここは上のループに含ませちゃってもいいのか...?
@@ -296,7 +296,7 @@ public class MegaLaser {
 
 				AsyncThreadManager.sync(() -> {
 					for (Player target : damageTargets) {
-						Sclat.giveDamage(p, target, damage, "spWeapon");
+						SclatUtil.giveDamage(p, target, damage, "spWeapon");
 					}
 				});
 

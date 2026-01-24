@@ -46,7 +46,7 @@ import static be4rjp.sclat.Main.conf;
  * 
  */
 
-public class Sclat {
+public class SclatUtil {
 
 	public static void setBlockByNMS(org.bukkit.block.Block b, org.bukkit.Material material, boolean applyPhysics) {
 		Location loc = b.getLocation();

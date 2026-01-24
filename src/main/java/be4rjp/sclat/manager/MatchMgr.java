@@ -5,7 +5,7 @@ import be4rjp.sclat.Main;
 import be4rjp.sclat.api.Animation;
 import be4rjp.sclat.api.MessageType;
 import be4rjp.sclat.api.Plugins;
-import be4rjp.sclat.api.Sclat;
+import be4rjp.sclat.api.SclatUtil;
 import be4rjp.sclat.api.ServerType;
 import be4rjp.sclat.api.SoundType;
 import be4rjp.sclat.api.player.PlayerData;
@@ -114,7 +114,7 @@ public class MatchMgr {
 
 					DataMgr.joinedList.add(player);
 
-					Sclat.sendMessage("§b§n" + player.getDisplayName() + " joined the match", MessageType.ALL_PLAYER);
+					SclatUtil.sendMessage("§b§n" + player.getDisplayName() + " joined the match", MessageType.ALL_PLAYER);
 
 					player.teleport(match.getMapData().getTaikibayso());
 					if (conf.getConfig().getBoolean("CanVoting")
@@ -124,8 +124,8 @@ public class MatchMgr {
 					int startPlayerCount = conf.getConfig().getInt("StartPlayerCount");
 
 					if (match.getJoinedPlayerCount() < startPlayerCount) {
-						Sclat.sendMessage("§a人数が足りないため試合を開始することができません", MessageType.ALL_PLAYER);
-						Sclat.sendMessage(
+						SclatUtil.sendMessage("§a人数が足りないため試合を開始することができません", MessageType.ALL_PLAYER);
+						SclatUtil.sendMessage(
 								"§aあと§c" + String.valueOf(startPlayerCount - match.getJoinedPlayerCount()) + "§a人必要です",
 								MessageType.ALL_PLAYER);
 					}
@@ -140,8 +140,8 @@ public class MatchMgr {
 							@Override
 							public void run() {
 								if (match.getJoinedPlayerCount() < startPlayerCount) {
-									Sclat.sendMessage("§a人数が足りないため試合を開始することができません", MessageType.ALL_PLAYER);
-									Sclat.sendMessage(
+									SclatUtil.sendMessage("§a人数が足りないため試合を開始することができません", MessageType.ALL_PLAYER);
+									SclatUtil.sendMessage(
 											"§aあと§c" + String.valueOf(startPlayerCount - match.getJoinedPlayerCount())
 													+ "§a人必要です",
 											MessageType.ALL_PLAYER);
@@ -171,22 +171,22 @@ public class MatchMgr {
 												conf.getConfig().getInt("StatusShare.Port"), commands);
 										sc.startClient();
 									}
-									Sclat.sendMessage("§a試合開始まで後§c30§a秒", MessageType.ALL_PLAYER);
+									SclatUtil.sendMessage("§a試合開始まで後§c30§a秒", MessageType.ALL_PLAYER);
 								}
 								if (s == 10)
-									Sclat.sendMessage("§a試合開始まで後§c20§a秒", MessageType.ALL_PLAYER);
+									SclatUtil.sendMessage("§a試合開始まで後§c20§a秒", MessageType.ALL_PLAYER);
 								if (s == 20)
-									Sclat.sendMessage("§a試合開始まで後§c10§a秒", MessageType.ALL_PLAYER);
+									SclatUtil.sendMessage("§a試合開始まで後§c10§a秒", MessageType.ALL_PLAYER);
 								if (s == 25)
-									Sclat.sendMessage("§a試合開始まで後§c5§a秒", MessageType.ALL_PLAYER);
+									SclatUtil.sendMessage("§a試合開始まで後§c5§a秒", MessageType.ALL_PLAYER);
 								if (s == 26)
-									Sclat.sendMessage("§a試合開始まで後§c4§a秒", MessageType.ALL_PLAYER);
+									SclatUtil.sendMessage("§a試合開始まで後§c4§a秒", MessageType.ALL_PLAYER);
 								if (s == 27)
-									Sclat.sendMessage("§a試合開始まで後§c3§a秒", MessageType.ALL_PLAYER);
+									SclatUtil.sendMessage("§a試合開始まで後§c3§a秒", MessageType.ALL_PLAYER);
 								if (s == 28)
-									Sclat.sendMessage("§a試合開始まで後§c2§a秒", MessageType.ALL_PLAYER);
+									SclatUtil.sendMessage("§a試合開始まで後§c2§a秒", MessageType.ALL_PLAYER);
 								if (s == 29)
-									Sclat.sendMessage("§a試合開始まで後§c1§a秒", MessageType.ALL_PLAYER);
+									SclatUtil.sendMessage("§a試合開始まで後§c1§a秒", MessageType.ALL_PLAYER);
 								if (s == 30) {
 									match.setCanJoin(false);
 
@@ -253,10 +253,10 @@ public class MatchMgr {
 										}
 									}
 
-									Sclat.sendMessage("§6試合が開始されました", MessageType.BROADCAST);
+									SclatUtil.sendMessage("§6試合が開始されました", MessageType.BROADCAST);
 									if (conf.getConfig().getBoolean("RateMatch")) {
-										Sclat.sendMessage("", MessageType.ALL_PLAYER);
-										Sclat.sendMessage("§b試合の総合レート : §r"
+										SclatUtil.sendMessage("", MessageType.ALL_PLAYER);
+										SclatUtil.sendMessage("§b試合の総合レート : §r"
 												+ (match.getTeam0().getRateTotal() + match.getTeam1().getRateTotal()),
 												MessageType.ALL_PLAYER);
 									}
@@ -298,16 +298,16 @@ public class MatchMgr {
 						task.runTaskTimer(Main.getPlugin(), 0, 20);
 					}
 				} else {
-					Sclat.sendMessage("§c§n上限人数を超えているため参加できません", MessageType.PLAYER, player);
-					Sclat.playGameSound(player, SoundType.ERROR);
+					SclatUtil.sendMessage("§c§n上限人数を超えているため参加できません", MessageType.PLAYER, player);
+					SclatUtil.playGameSound(player, SoundType.ERROR);
 				}
 			} else {
-				Sclat.sendMessage("§c§nこのマッチには既に開始しているため参加できません", MessageType.PLAYER, player);
-				Sclat.playGameSound(player, SoundType.ERROR);
+				SclatUtil.sendMessage("§c§nこのマッチには既に開始しているため参加できません", MessageType.PLAYER, player);
+				SclatUtil.playGameSound(player, SoundType.ERROR);
 			}
 		} else {
-			Sclat.sendMessage("§c§n既にチームに参加しています", MessageType.PLAYER, player);
-			Sclat.playGameSound(player, SoundType.ERROR);
+			SclatUtil.sendMessage("§c§n既にチームに参加しています", MessageType.PLAYER, player);
+			SclatUtil.playGameSound(player, SoundType.ERROR);
 		}
 
 	}
@@ -316,7 +316,7 @@ public class MatchMgr {
 		// 再起動オプション
 		if (conf.getConfig().contains("RestartMatchCount"))
 			if (conf.getConfig().getInt("RestartMatchCount") == matchcount)
-				Sclat.restartServer();
+				SclatUtil.restartServer();
 
 		final int id = matchcount;
 		Match match = new Match(id);
@@ -503,16 +503,16 @@ public class MatchMgr {
 
 						switch (conf.getConfig().getString("WorkMode")) {
 							case "Normal" :
-								Sclat.sendMessage("§6ゲームモード : §b§lナワバリバトル", MessageType.PLAYER, p);
-								Sclat.sendMessage("§f§l敵よりもたくさんナワバリを確保しろ！", MessageType.PLAYER, p);
+								SclatUtil.sendMessage("§6ゲームモード : §b§lナワバリバトル", MessageType.PLAYER, p);
+								SclatUtil.sendMessage("§f§l敵よりもたくさんナワバリを確保しろ！", MessageType.PLAYER, p);
 								break;
 							case "TDM" :
-								Sclat.sendMessage("§6ゲームモード : §b§lチームデスマッチ", MessageType.PLAYER, p);
-								Sclat.sendMessage("§f§l敵よりもキルをしろ！", MessageType.PLAYER, p);
+								SclatUtil.sendMessage("§6ゲームモード : §b§lチームデスマッチ", MessageType.PLAYER, p);
+								SclatUtil.sendMessage("§f§l敵よりもキルをしろ！", MessageType.PLAYER, p);
 								break;
 							case "Area" :
-								Sclat.sendMessage("§6ゲームモード : §b§lガチエリア", MessageType.PLAYER, p);
-								Sclat.sendMessage("§f§lエリアを確保して守り抜け！", MessageType.PLAYER, p);
+								SclatUtil.sendMessage("§6ゲームモード : §b§lガチエリア", MessageType.PLAYER, p);
+								SclatUtil.sendMessage("§f§lエリアを確保して守り抜け！", MessageType.PLAYER, p);
 								break;
 						}
 
@@ -1031,11 +1031,11 @@ public class MatchMgr {
 												continue;
 
 											if (data.getTeam() == wteam) {
-												Sclat.sendMessage("§b§lカウントリードした!", MessageType.PLAYER, player);
+												SclatUtil.sendMessage("§b§lカウントリードした!", MessageType.PLAYER, player);
 												player.sendTitle("", "§b§lカウントリードした!", 10, 20, 10);
-												Sclat.playGameSound(player, SoundType.CONGRATULATIONS);
+												SclatUtil.playGameSound(player, SoundType.CONGRATULATIONS);
 											} else {
-												Sclat.sendMessage("§c§lカウントリードされた!", MessageType.PLAYER, player);
+												SclatUtil.sendMessage("§c§lカウントリードされた!", MessageType.PLAYER, player);
 												player.sendTitle("", "§c§lカウントリードされた!", 10, 20, 10);
 												player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_PLACE, 1F, 3F);
 											}
@@ -1070,7 +1070,7 @@ public class MatchMgr {
 							for (Player oplayer : Main.getPlugin(Main.class).getServer().getOnlinePlayers()) {
 								if (DataMgr.getPlayerData(oplayer).isInMatch()) {
 									oplayer.sendTitle("", "§7延長戦！", 10, 20, 10);
-									Sclat.sendMessage("§7延長戦！", MessageType.PLAYER, oplayer);
+									SclatUtil.sendMessage("§7延長戦！", MessageType.PLAYER, oplayer);
 								}
 							}
 						}
@@ -1097,7 +1097,7 @@ public class MatchMgr {
 							for (Player oplayer : Main.getPlugin(Main.class).getServer().getOnlinePlayers()) {
 								if (DataMgr.getPlayerData(oplayer).isInMatch()) {
 									oplayer.sendTitle("", "§7残りカウントあとわずか！", 10, 20, 10);
-									Sclat.sendMessage("§7残りカウントあとわずか！", MessageType.PLAYER, oplayer);
+									SclatUtil.sendMessage("§7残りカウントあとわずか！", MessageType.PLAYER, oplayer);
 									p.playSound(p.getLocation(), Sound.ENTITY_ZOMBIE_INFECT, 8.0F, 2.0F);
 								}
 							}
@@ -1109,7 +1109,7 @@ public class MatchMgr {
 					if (s == 60 && !conf.getConfig().getString("WorkMode").equals("Area")) {
 						for (Player oplayer : Main.getPlugin(Main.class).getServer().getOnlinePlayers()) {
 							if (DataMgr.getPlayerData(oplayer).getIsJoined()) {
-								Sclat.sendMessage("§6§n残り1分！", MessageType.PLAYER, oplayer);
+								SclatUtil.sendMessage("§6§n残り1分！", MessageType.PLAYER, oplayer);
 							}
 						}
 						if (DataMgr.getPlayerData(p).getPlayerNumber() == 1 && Plugins.NOTEBLOCKAPI.isLoaded()) {
@@ -1209,7 +1209,7 @@ public class MatchMgr {
 							DataMgr.getPlayerData(p).getMatch().getBlockUpdater().stop();
 
 							for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
-								Sclat.sendWorldBorderWarningClearPacket(target);
+								SclatUtil.sendWorldBorderWarningClearPacket(target);
 							}
 
 							try {
@@ -1416,8 +1416,8 @@ public class MatchMgr {
 						// int paint = data.getPaintCount();
 						data.setCanFly(false);
 
-						Sclat.sendMessage("§a----------<< Match result >>----------", MessageType.PLAYER, p);
-						Sclat.sendMessage("", MessageType.PLAYER, p);
+						SclatUtil.sendMessage("§a----------<< Match result >>----------", MessageType.PLAYER, p);
+						SclatUtil.sendMessage("", MessageType.PLAYER, p);
 
 						for (Player op : Main.getPlugin(Main.class).getServer().getOnlinePlayers()) {
 							PlayerData odata = DataMgr.getPlayerData(op);
@@ -1425,7 +1425,7 @@ public class MatchMgr {
 								continue;
 							if (odata.getTeam().getID() == data.getTeam().getID()) {
 								if (op.equals(p)) {
-									Sclat.sendMessage(
+									SclatUtil.sendMessage(
 											odata.getTeam().getTeamColor().getColorCode() + "§l[ §l"
 													+ op.getDisplayName() + "§l ]" + ChatColor.RESET + "Kills : "
 													+ ChatColor.YELLOW + odata.getKillCount() + "   " + ChatColor.RESET
@@ -1436,7 +1436,7 @@ public class MatchMgr {
 									// ChatColor.YELLOW + odata.getKillCount() + " " + ChatColor.RESET + "Points : "
 									// + ChatColor.YELLOW + odata.getPaintCount());
 								} else {
-									Sclat.sendMessage(odata.getTeam().getTeamColor().getColorCode() + "[ "
+									SclatUtil.sendMessage(odata.getTeam().getTeamColor().getColorCode() + "[ "
 											+ op.getDisplayName() + " ]" + ChatColor.RESET + "Kills : "
 											+ ChatColor.YELLOW + odata.getKillCount() + "   " + ChatColor.RESET
 											+ "Points : " + ChatColor.YELLOW + odata.getPaintCount(),
@@ -1461,7 +1461,7 @@ public class MatchMgr {
 								continue;
 							if (odata.getTeam().getID() != data.getTeam().getID()) {
 								if (op.equals(p)) {
-									Sclat.sendMessage(
+									SclatUtil.sendMessage(
 											odata.getTeam().getTeamColor().getColorCode() + "§l[ §l"
 													+ op.getDisplayName() + "§l ]" + ChatColor.RESET + "Kills : "
 													+ ChatColor.YELLOW + odata.getKillCount() + "   " + ChatColor.RESET
@@ -1472,7 +1472,7 @@ public class MatchMgr {
 									// ChatColor.YELLOW + odata.getKillCount() + " " + ChatColor.RESET + "Points : "
 									// + ChatColor.YELLOW + odata.getPaintCount());
 								} else {
-									Sclat.sendMessage(odata.getTeam().getTeamColor().getColorCode() + "[ "
+									SclatUtil.sendMessage(odata.getTeam().getTeamColor().getColorCode() + "[ "
 											+ op.getDisplayName() + " ]" + ChatColor.RESET + "Kills : "
 											+ ChatColor.YELLOW + odata.getKillCount() + "   " + ChatColor.RESET
 											+ "Points : " + ChatColor.YELLOW + odata.getPaintCount(),
@@ -1539,31 +1539,31 @@ public class MatchMgr {
 							sc.startClient();
 						}
 
-						Sclat.sendMessage("", MessageType.PLAYER, p);
-						Sclat.sendMessage("§a----------<< Match bonus >>----------", MessageType.PLAYER, p);
+						SclatUtil.sendMessage("", MessageType.PLAYER, p);
+						SclatUtil.sendMessage("§a----------<< Match bonus >>----------", MessageType.PLAYER, p);
 
-						Sclat.sendMessage("", MessageType.PLAYER, p);
-						Sclat.sendMessage(
+						SclatUtil.sendMessage("", MessageType.PLAYER, p);
+						SclatUtil.sendMessage(
 								ChatColor.GREEN + " Money : " + ChatColor.RESET + "+" + String.valueOf(pMoney)
 										+ ChatColor.AQUA + "  Lv : " + ChatColor.RESET + "+" + String.valueOf(pLv)
 										+ ChatColor.GOLD + " Ticket : " + ChatColor.RESET + String.valueOf(pTicket),
 								MessageType.PLAYER, p);
-						Sclat.sendMessage("", MessageType.PLAYER, p);
+						SclatUtil.sendMessage("", MessageType.PLAYER, p);
 						if (pRank < 0)
-							Sclat.sendMessage(ChatColor.GOLD + " RankPoint : " + ChatColor.RESET + String.valueOf(pRank)
+							SclatUtil.sendMessage(ChatColor.GOLD + " RankPoint : " + ChatColor.RESET + String.valueOf(pRank)
 									+ (Main.type == ServerType.NORMAL
 											? "  [ §b" + RankMgr.toABCRank(getRank(player)) + " §r]"
 											: ""),
 									MessageType.PLAYER, p);
 						else
-							Sclat.sendMessage(
+							SclatUtil.sendMessage(
 									ChatColor.GOLD + " RankPoint : " + ChatColor.RESET + "+" + String.valueOf(pMoveRank)
 											+ (Main.type == ServerType.NORMAL
 													? "  [ §b" + RankMgr.toABCRank(getRank(player)) + " §r]"
 													: ""),
 									MessageType.PLAYER, p);
-						Sclat.sendMessage("", MessageType.PLAYER, p);
-						Sclat.sendMessage("§a-----------------------------------", MessageType.PLAYER, p);
+						SclatUtil.sendMessage("", MessageType.PLAYER, p);
+						SclatUtil.sendMessage("§a-----------------------------------", MessageType.PLAYER, p);
 						/*
 						 * p.sendMessage(ChatColor.GREEN + "##########################");
 						 * p.sendMessage(ChatColor.GREEN + "          試合結果");

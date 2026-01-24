@@ -1,7 +1,7 @@
 package be4rjp.sclat.weapon.subweapon;
 
 import be4rjp.sclat.Main;
-import be4rjp.sclat.api.Sclat;
+import be4rjp.sclat.api.SclatUtil;
 import be4rjp.sclat.api.Sphere;
 import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.data.KasaData;
@@ -165,7 +165,7 @@ public class Boomerang {
 										double damage = 0.2;
 										if (DataMgr.getPlayerData(player).getTeam() != DataMgr.getPlayerData(target)
 												.getTeam() && target.getGameMode().equals(GameMode.ADVENTURE)) {
-											Sclat.giveDamage(player, target, damage, "subWeapon");
+											SclatUtil.giveDamage(player, target, damage, "subWeapon");
 
 											// AntiNoDamageTime
 											BukkitRunnable task = new BukkitRunnable() {
@@ -205,10 +205,10 @@ public class Boomerang {
 						player.getWorld().playSound(as1l, Sound.ENTITY_FIREWORK_ROCKET_BLAST, 1, 1);
 
 						// 爆発エフェクト
-						Sclat.createInkExplosionEffect(as1l, maxDist, 15, player);
+						SclatUtil.createInkExplosionEffect(as1l, maxDist, 15, player);
 
 						// バリアをはじく
-						Sclat.repelBarrier(as1l, maxDist, player);
+						SclatUtil.repelBarrier(as1l, maxDist, player);
 
 						// 塗る
 						for (int i = 0; i <= maxDist; i++) {
@@ -262,7 +262,7 @@ public class Boomerang {
 										* Gear.getGearInfluence(player, Gear.Type.SUB_SPEC_UP);
 								if (DataMgr.getPlayerData(player).getTeam() != DataMgr.getPlayerData(target).getTeam()
 										&& target.getGameMode().equals(GameMode.ADVENTURE)) {
-									Sclat.giveDamage(player, target, damage, "subWeapon");
+									SclatUtil.giveDamage(player, target, damage, "subWeapon");
 
 									// AntiNoDamageTime
 									BukkitRunnable task = new BukkitRunnable() {

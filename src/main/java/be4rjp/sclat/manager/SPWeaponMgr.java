@@ -4,7 +4,7 @@ package be4rjp.sclat.manager;
 import be4rjp.sclat.Main;
 import be4rjp.sclat.api.GaugeAPI;
 import be4rjp.sclat.api.MessageType;
-import be4rjp.sclat.api.Sclat;
+import be4rjp.sclat.api.SclatUtil;
 import be4rjp.sclat.api.player.PlayerData;
 import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.weapon.spweapon.AirStrike;
@@ -103,7 +103,7 @@ public class SPWeaponMgr {
 					if (!data.getIsSP()) {
 						setSPWeapon(p);
 						p.playSound(p.getLocation(), Sound.BLOCK_CHEST_OPEN, 0.8F, 2);
-						Sclat.sendMessage("§6§l！ スペシャルウエポン使用可能 ！", MessageType.PLAYER, player);
+						SclatUtil.sendMessage("§6§l！ スペシャルウエポン使用可能 ！", MessageType.PLAYER, player);
 						data.setIsUsingSP(false);
 					}
 					DataMgr.getPlayerData(p).setIsSP(true);

@@ -1,7 +1,7 @@
 package be4rjp.sclat.manager;
 
 import be4rjp.sclat.Main;
-import be4rjp.sclat.api.Sclat;
+import be4rjp.sclat.api.SclatUtil;
 import be4rjp.sclat.api.Sphere;
 import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.data.KasaData;
@@ -376,7 +376,7 @@ public class ArmorStandMgr {
 					as.setCustomName(String.valueOf(rh));
 					as.getLocation().getWorld().playSound(as.getLocation(), Sound.ENTITY_PLAYER_HURT, 1, 1);
 				} else {
-					Sclat.createInkExplosionEffect(as.getEyeLocation().add(0, -1, 0), 3, 30, shooter);
+					SclatUtil.createInkExplosionEffect(as.getEyeLocation().add(0, -1, 0), 3, 30, shooter);
 					shooter.playSound(shooter.getLocation(), Sound.ENTITY_ARROW_HIT_PLAYER, 1, 10);
 					Item drop1 = as.getWorld().dropItem(as.getEyeLocation(), new ItemStack(Material.LEATHER_HELMET));
 					Item drop2 = as.getWorld().dropItem(as.getEyeLocation(),

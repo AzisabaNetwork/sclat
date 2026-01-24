@@ -2,7 +2,7 @@
 package be4rjp.sclat.weapon;
 
 import be4rjp.sclat.Main;
-import be4rjp.sclat.api.Sclat;
+import be4rjp.sclat.api.SclatUtil;
 import be4rjp.sclat.api.player.PlayerData;
 import be4rjp.sclat.api.raytrace.BoundingBox;
 import be4rjp.sclat.api.raytrace.RayTrace;
@@ -581,7 +581,7 @@ public class Kasa {
 									if (DataMgr.getPlayerData(player).getTeam() != DataMgr.getPlayerData(target)
 											.getTeam() && target.getGameMode().equals(GameMode.ADVENTURE)) {
 										if (rayTrace.intersects(new BoundingBox((Entity) target), 5, 0.05)) {
-											Sclat.giveDamage(player, target, damage, "killed");
+											SclatUtil.giveDamage(player, target, damage, "killed");
 
 											// AntiNoDamageTime
 											BukkitRunnable task = new BukkitRunnable() {
