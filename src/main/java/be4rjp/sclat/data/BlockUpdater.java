@@ -1,8 +1,8 @@
 
 package be4rjp.sclat.data;
 
-import be4rjp.sclat.Main;
-import be4rjp.sclat.api.Sclat;
+import be4rjp.sclat.Sclat;
+import be4rjp.sclat.api.SclatUtil;
 import net.minecraft.server.v1_14_R1.PacketPlayOutMultiBlockChange;
 import org.bukkit.Chunk;
 import org.bukkit.Material;
@@ -64,7 +64,7 @@ public class BlockUpdater {
 										// Sclat.sendBlockChangeForAllPlayer(block, blocklist.get(block));
 										chunkBlockMap.computeIfAbsent(block.getChunk(), chunk -> new ArrayList<>())
 												.add(block);
-										continue check;
+										continue;
 									}
 								}
 							} catch (Exception e) {
@@ -94,7 +94,7 @@ public class BlockUpdater {
 						}
 						PacketPlayOutMultiBlockChange packet = new PacketPlayOutMultiBlockChange(positionArray.length,
 								positionArray, ((CraftChunk) chunk).getHandle());
-						for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
+						for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 							if (target.getWorld() == chunk.getWorld()) {
 								((CraftPlayer) target).getHandle().playerConnection.sendPacket(packet);
 							}
@@ -120,12 +120,12 @@ public class BlockUpdater {
 
 			if (block.getLocation().getChunk().isLoaded()) {
 				try {
-					Sclat.setBlockByNMSChunk(block, blocklist.get(block), true);
+					SclatUtil.setBlockByNMSChunk(block, blocklist.get(block), true);
 				} catch (Exception e) {
 				}
 			} else {
 				try {
-					Sclat.setBlockByNMS(block, blocklist.get(block), true);
+					SclatUtil.setBlockByNMS(block, blocklist.get(block), true);
 					// Main.getPlugin().getServer().broadcastMessage("ChangeBlockByNMS!!");
 				} catch (Exception e) {
 				}
@@ -139,12 +139,12 @@ public class BlockUpdater {
 
 				if (block.getLocation().getChunk().isLoaded()) {
 					try {
-						Sclat.setBlockByNMSChunk(block, blocklist.get(block), true);
+						SclatUtil.setBlockByNMSChunk(block, blocklist.get(block), true);
 					} catch (Exception e) {
 					}
 				} else {
 					try {
-						Sclat.setBlockByNMS(block, blocklist.get(block), true);
+						SclatUtil.setBlockByNMS(block, blocklist.get(block), true);
 						// Main.getPlugin().getServer().broadcastMessage("ChangeBlockByNMS!!");
 					} catch (Exception e) {
 					}
@@ -155,7 +155,7 @@ public class BlockUpdater {
 	}
 
 	public void start() {
-		task.runTaskTimer(Main.getPlugin(), 0, 2);
+		task.runTaskTimer(Sclat.getPlugin(), 0, 2);
 	}
 
 	public void stop() {

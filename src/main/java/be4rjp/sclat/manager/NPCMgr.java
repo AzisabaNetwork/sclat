@@ -1,17 +1,30 @@
 package be4rjp.sclat.manager;
 
-import be4rjp.sclat.Main;
+import be4rjp.sclat.Sclat;
 import be4rjp.sclat.data.DataMgr;
 import com.mojang.authlib.GameProfile;
-import net.minecraft.server.v1_14_R1.*;
+import net.minecraft.server.v1_14_R1.DataWatcherRegistry;
+import net.minecraft.server.v1_14_R1.EntityPlayer;
+import net.minecraft.server.v1_14_R1.EnumItemSlot;
+import net.minecraft.server.v1_14_R1.MinecraftServer;
+import net.minecraft.server.v1_14_R1.PacketPlayOutAnimation;
+import net.minecraft.server.v1_14_R1.PacketPlayOutEntityDestroy;
+import net.minecraft.server.v1_14_R1.PacketPlayOutEntityEquipment;
+import net.minecraft.server.v1_14_R1.PacketPlayOutEntityHeadRotation;
+import net.minecraft.server.v1_14_R1.PacketPlayOutEntityMetadata;
+import net.minecraft.server.v1_14_R1.PacketPlayOutEntityTeleport;
+import net.minecraft.server.v1_14_R1.PacketPlayOutNamedEntitySpawn;
+import net.minecraft.server.v1_14_R1.PacketPlayOutPlayerInfo;
+import net.minecraft.server.v1_14_R1.PlayerConnection;
+import net.minecraft.server.v1_14_R1.PlayerInteractManager;
+import net.minecraft.server.v1_14_R1.WorldServer;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_14_R1.CraftServer;
 import org.bukkit.craftbukkit.v1_14_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_14_R1.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
-import org.bukkit.Location;
-
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class NPCMgr {
@@ -41,7 +54,7 @@ public class NPCMgr {
 					npc.setLocation(location.getX(), location.getY() - 20, location.getZ(), location.getYaw(), 0);
 					npc.getDataWatcher().set(DataWatcherRegistry.a.a(15), (byte) 127);
 
-					for (Player p : Main.getPlugin(Main.class).getServer().getOnlinePlayers()) {
+					for (Player p : Sclat.getPlugin(Sclat.class).getServer().getOnlinePlayers()) {
 						PlayerConnection connection = ((CraftPlayer) p).getHandle().playerConnection;
 						connection.sendPacket(new PacketPlayOutPlayerInfo(
 								PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, npc));
@@ -51,7 +64,7 @@ public class NPCMgr {
 				}
 				if (s == 1) {
 					npc.setLocation(location.getX(), location.getY(), location.getZ(), location.getYaw(), 0);
-					for (Player p : Main.getPlugin(Main.class).getServer().getOnlinePlayers()) {
+					for (Player p : Sclat.getPlugin(Sclat.class).getServer().getOnlinePlayers()) {
 						PlayerConnection connection = ((CraftPlayer) p).getHandle().playerConnection;
 						connection.sendPacket(new PacketPlayOutEntityTeleport(npc));
 						connection.sendPacket(new PacketPlayOutEntityHeadRotation(npc,
@@ -68,7 +81,7 @@ public class NPCMgr {
 
 				}
 				if (s == 3) {
-					for (Player p : Main.getPlugin(Main.class).getServer().getOnlinePlayers()) {
+					for (Player p : Sclat.getPlugin(Sclat.class).getServer().getOnlinePlayers()) {
 						PlayerConnection connection = ((CraftPlayer) p).getHandle().playerConnection;
 						connection.sendPacket(new PacketPlayOutEntityDestroy(npc.getBukkitEntity().getEntityId()));
 					}
@@ -77,7 +90,7 @@ public class NPCMgr {
 				s++;
 			}
 		};
-		task.runTaskTimer(Main.getPlugin(), 0, 20);
+		task.runTaskTimer(Sclat.getPlugin(), 0, 20);
 
 	}
 }

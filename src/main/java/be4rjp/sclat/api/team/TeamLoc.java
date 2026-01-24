@@ -1,8 +1,10 @@
-package be4rjp.sclat.data;
+package be4rjp.sclat.api.team;
+
+import be4rjp.sclat.data.MapData;
+import org.bukkit.Location;
 
 import java.util.Collections;
 import java.util.List;
-import org.bukkit.Location;
 
 /**
  *

@@ -1,11 +1,9 @@
 
-package be4rjp.sclat;
+package be4rjp.sclat.api;
 
-import be4rjp.sclat.api.GaugeAPI;
-import be4rjp.sclat.api.Sclat;
-import be4rjp.sclat.api.SoundType;
+import be4rjp.sclat.Sclat;
+import be4rjp.sclat.api.team.Team;
 import be4rjp.sclat.data.DataMgr;
-import be4rjp.sclat.data.Team;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -61,13 +59,13 @@ public class Animation {
 				}
 				if (i == 40) {
 					if (winteam == DataMgr.getPlayerData(player).getTeam())
-						Sclat.playGameSound(player, SoundType.CONGRATULATIONS);
+						SclatUtil.playGameSound(player, SoundType.CONGRATULATIONS);
 					cancel();
 				}
 				i++;
 			}
 		};
-		task.runTaskTimer(Main.getPlugin(), 0, 2);
+		task.runTaskTimer(Sclat.getPlugin(), 0, 2);
 	}
 
 	public static void AreaResultAnimation(Player p, int team0point, int team1point, String team0color,
@@ -103,13 +101,13 @@ public class Animation {
 				}
 				if (i == 40) {
 					if (winteam == DataMgr.getPlayerData(player).getTeam())
-						Sclat.playGameSound(player, SoundType.CONGRATULATIONS);
+						SclatUtil.playGameSound(player, SoundType.CONGRATULATIONS);
 					cancel();
 				}
 				i++;
 			}
 		};
-		task.runTaskTimer(Main.getPlugin(), 0, 2);
+		task.runTaskTimer(Sclat.getPlugin(), 0, 2);
 	}
 
 	public static void TDMResultAnimation(Player p, int team0point, int team1point, String team0color,
@@ -173,12 +171,12 @@ public class Animation {
 				}
 				if (i == 40) {
 					if (winteam == DataMgr.getPlayerData(player).getTeam())
-						Sclat.playGameSound(player, SoundType.CONGRATULATIONS);
+						SclatUtil.playGameSound(player, SoundType.CONGRATULATIONS);
 					cancel();
 				}
 				i++;
 			}
 		};
-		task.runTaskTimer(Main.getPlugin(), 0, 2);
+		task.runTaskTimer(Sclat.getPlugin(), 0, 2);
 	}
 }

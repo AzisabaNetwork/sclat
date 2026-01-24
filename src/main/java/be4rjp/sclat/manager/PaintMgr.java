@@ -1,15 +1,15 @@
 
 package be4rjp.sclat.manager;
 
-import be4rjp.sclat.Main;
-import be4rjp.sclat.api.Sclat;
+import be4rjp.sclat.Sclat;
+import be4rjp.sclat.api.SclatUtil;
 import be4rjp.sclat.api.ServerType;
+import be4rjp.sclat.api.player.PlayerData;
+import be4rjp.sclat.api.team.Team;
 import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.data.Match;
 import be4rjp.sclat.data.PaintData;
-import be4rjp.sclat.data.PlayerData;
 import be4rjp.sclat.data.Sponge;
-import be4rjp.sclat.data.Team;
 import be4rjp.sclat.weapon.Gear;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import static be4rjp.sclat.Main.conf;
+import static be4rjp.sclat.Sclat.conf;
 
 /**
  *
@@ -30,11 +30,11 @@ import static be4rjp.sclat.Main.conf;
 public class PaintMgr {
 	public static void Paint(Location location, Player player, boolean sphere) {
 
-		if (Main.type == ServerType.LOBBY)
+		if (Sclat.type == ServerType.LOBBY)
 			return;
 
 		be4rjp.sclat.data.MainWeapon mw = DataMgr.getPlayerData(player).getWeaponClass().getMainWeapon();
-		List<Block> blocks = new ArrayList<Block>();
+		List<Block> blocks = new ArrayList<>();
 		blocks.add(location.getBlock());
 		if (sphere)
 			blocks = generateSphere(location, mw.getMaxPaintDis(), 1, false, true, 0, mw.getPaintRandom());
@@ -166,7 +166,7 @@ public class PaintMgr {
 	}
 
 	public static ArrayList<Block> getCubeBlocks(Block start, int radius) {
-		ArrayList<Block> blocks = new ArrayList<Block>();
+		ArrayList<Block> blocks = new ArrayList<>();
 		for (double x = start.getLocation().getX() - radius; x <= start.getLocation().getX() + radius; x++) {
 			for (double y = start.getLocation().getY() - radius; y <= start.getLocation().getY() + radius; y++) {
 				for (double z = start.getLocation().getZ() - radius; z <= start.getLocation().getZ() + radius; z++) {
@@ -188,7 +188,7 @@ public class PaintMgr {
 		Block b5 = loc.add(0, 1, 0).getBlock();
 		Block b6 = loc.add(0, -1, 0).getBlock();
 
-		List<Block> tempList = new ArrayList<Block>();
+		List<Block> tempList = new ArrayList<>();
 
 		if (loopc == 0)
 			tempList.add(b0);
@@ -222,7 +222,7 @@ public class PaintMgr {
 
 	public static synchronized List<Block> generateSphere(Location loc, double r, double h, boolean hollow,
 			boolean sphere, double plus_y, int random) {
-		List<Block> circleblocks = new ArrayList<Block>();
+		List<Block> circleblocks = new ArrayList<>();
 		double cx = loc.getX();
 		double cy = loc.getY();
 		double cz = loc.getZ();
@@ -297,7 +297,7 @@ public class PaintMgr {
 
 	public static void PaintGlass(Match match) {
 		// team0
-		List<Block> blocks = new ArrayList<Block>();
+		List<Block> blocks = new ArrayList<>();
 		Block b0 = match.getMapData().getTeam0Loc().getBlock().getRelative(BlockFace.DOWN);
 		blocks.add(b0);
 		blocks.add(b0.getRelative(BlockFace.EAST));
@@ -315,14 +315,14 @@ public class PaintMgr {
 				data.setTeam(match.getTeam0());
 				data.setOrigianlType(block.getType());
 				DataMgr.setPaintDataFromBlock(block, data);
-				Sclat.setBlockByNMS(block, match.getTeam0().getTeamColor().getGlass(), false);
+				SclatUtil.setBlockByNMS(block, match.getTeam0().getTeamColor().getGlass(), false);
 				// block.setType(match.getTeam0().getTeamColor().getGlass());
 				match.getTeam0().addPaintCount();
 			}
 		}
 
 		// team1
-		List<Block> blocks1 = new ArrayList<Block>();
+		List<Block> blocks1 = new ArrayList<>();
 		Block b1 = match.getMapData().getTeam1Loc().getBlock().getRelative(BlockFace.DOWN);
 		blocks1.add(b1);
 		blocks1.add(b1.getRelative(BlockFace.EAST));
@@ -340,7 +340,7 @@ public class PaintMgr {
 				data.setTeam(match.getTeam1());
 				data.setOrigianlType(block.getType());
 				DataMgr.setPaintDataFromBlock(block, data);
-				Sclat.setBlockByNMS(block, match.getTeam1().getTeamColor().getGlass(), false);
+				SclatUtil.setBlockByNMS(block, match.getTeam1().getTeamColor().getGlass(), false);
 				// block.setType(match.getTeam1().getTeamColor().getGlass());
 				match.getTeam1().addPaintCount();
 			}

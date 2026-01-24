@@ -1,7 +1,7 @@
 package be4rjp.sclat.weapon.subweapon;
 
-import be4rjp.sclat.Main;
-import be4rjp.sclat.api.Sclat;
+import be4rjp.sclat.Sclat;
+import be4rjp.sclat.api.SclatUtil;
 import be4rjp.sclat.api.Sphere;
 import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.data.KasaData;
@@ -134,7 +134,7 @@ public class Boomerang {
 					bloc = as1l.clone();
 
 					if (i % 10 == 0) {
-						for (Player o_player : Main.getPlugin().getServer().getOnlinePlayers())
+						for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers())
 							((CraftPlayer) o_player).getHandle().playerConnection
 									.sendPacket(new PacketPlayOutEntityEquipment(as3.getEntityId(), EnumItemSlot.HEAD,
 											CraftItemStack.asNMSCopy(new ItemStack(DataMgr.getPlayerData(player)
@@ -150,22 +150,22 @@ public class Boomerang {
 					if (i % 2 == 0) {
 						org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(player).getTeam().getTeamColor()
 								.getWool().createBlockData();
-						for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
+						for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 							if (DataMgr.getPlayerData(target).getSettings().ShowEffect_Bomb())
 								if (target.getWorld() == player.getWorld())
 									if (target.getLocation()
-											.distanceSquared(as1l) < Main.PARTICLE_RENDER_DISTANCE_SQUARED)
+											.distanceSquared(as1l) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED)
 										target.spawnParticle(org.bukkit.Particle.BLOCK_DUST, as1l, 2, 0, 0, 0, 1, bd);
 						}
 						// 攻撃判定
-						for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
+						for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 							if (DataMgr.getPlayerData(target).getSettings().ShowEffect_Bomb()) {
 								if (target.getWorld() == player.getWorld()) {
 									if (target.getLocation().distance(as1l) <= 1.2) {
 										double damage = 0.2;
 										if (DataMgr.getPlayerData(player).getTeam() != DataMgr.getPlayerData(target)
 												.getTeam() && target.getGameMode().equals(GameMode.ADVENTURE)) {
-											Sclat.giveDamage(player, target, damage, "subWeapon");
+											SclatUtil.giveDamage(player, target, damage, "subWeapon");
 
 											// AntiNoDamageTime
 											BukkitRunnable task = new BukkitRunnable() {
@@ -175,7 +175,7 @@ public class Boomerang {
 													target.setNoDamageTicks(0);
 												}
 											};
-											task.runTaskLater(Main.getPlugin(), 1);
+											task.runTaskLater(Sclat.getPlugin(), 1);
 										}
 									}
 								}
@@ -205,10 +205,10 @@ public class Boomerang {
 						player.getWorld().playSound(as1l, Sound.ENTITY_FIREWORK_ROCKET_BLAST, 1, 1);
 
 						// 爆発エフェクト
-						Sclat.createInkExplosionEffect(as1l, maxDist, 15, player);
+						SclatUtil.createInkExplosionEffect(as1l, maxDist, 15, player);
 
 						// バリアをはじく
-						Sclat.repelBarrier(as1l, maxDist, player);
+						SclatUtil.repelBarrier(as1l, maxDist, player);
 
 						// 塗る
 						for (int i = 0; i <= maxDist; i++) {
@@ -254,7 +254,7 @@ public class Boomerang {
 							}
 						}
 
-						for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
+						for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 							if (!DataMgr.getPlayerData(target).isInMatch() || target.getWorld() != player.getWorld())
 								continue;
 							if (target.getLocation().distance(as1l) <= maxDist) {
@@ -262,7 +262,7 @@ public class Boomerang {
 										* Gear.getGearInfluence(player, Gear.Type.SUB_SPEC_UP);
 								if (DataMgr.getPlayerData(player).getTeam() != DataMgr.getPlayerData(target).getTeam()
 										&& target.getGameMode().equals(GameMode.ADVENTURE)) {
-									Sclat.giveDamage(player, target, damage, "subWeapon");
+									SclatUtil.giveDamage(player, target, damage, "subWeapon");
 
 									// AntiNoDamageTime
 									BukkitRunnable task = new BukkitRunnable() {
@@ -272,7 +272,7 @@ public class Boomerang {
 											target.setNoDamageTicks(0);
 										}
 									};
-									task.runTaskLater(Main.getPlugin(), 1);
+									task.runTaskLater(Sclat.getPlugin(), 1);
 								}
 							}
 						}
@@ -310,7 +310,7 @@ public class Boomerang {
 			}
 		};
 		if (player.getExp() > 0.6 || DataMgr.getPlayerData(player).getIsBombRush())
-			task.runTaskTimer(Main.getPlugin(), 0, 1);
+			task.runTaskTimer(Sclat.getPlugin(), 0, 1);
 		else {
 			player.sendTitle("", ChatColor.RED + "インクが足りません", 0, 5, 2);
 			player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1F, 1.63F);
@@ -322,6 +322,6 @@ public class Boomerang {
 				DataMgr.getPlayerData(player).setCanUseSubWeapon(true);
 			}
 		};
-		cooltime.runTaskLater(Main.getPlugin(), 10);
+		cooltime.runTaskLater(Sclat.getPlugin(), 10);
 	}
 }

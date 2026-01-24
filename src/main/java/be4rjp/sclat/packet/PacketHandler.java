@@ -1,9 +1,11 @@
 package be4rjp.sclat.packet;
 
+import be4rjp.sclat.api.player.PlayerData;
+import be4rjp.sclat.api.player.PlayerSettings;
 import be4rjp.sclat.data.DataMgr;
-import be4rjp.sclat.data.PlayerData;
-import be4rjp.sclat.data.PlayerSettings;
-import io.netty.channel.*;
+import io.netty.channel.ChannelDuplexHandler;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.ChannelPromise;
 import net.minecraft.server.v1_14_R1.EntityTypes;
 import net.minecraft.server.v1_14_R1.PacketPlayOutAbilities;
 import net.minecraft.server.v1_14_R1.PacketPlayOutSpawnEntity;
@@ -33,10 +35,11 @@ public class PacketHandler extends ChannelDuplexHandler {
 	public void write(ChannelHandlerContext channelHandlerContext, Object packet, ChannelPromise channelPromise)
 			throws Exception {
 
+		// Snowball shown handle
 		if (packet instanceof PacketPlayOutSpawnEntity) {
 			Field k = packet.getClass().getDeclaredField("k");
 			k.setAccessible(true);
-			EntityTypes entityTypes = (EntityTypes) k.get(packet);
+			EntityTypes<?> entityTypes = (EntityTypes<?>) k.get(packet);
 
 			if (entityTypes == EntityTypes.SNOWBALL) {
 				if (!playerSettings.ShowSnowBall())
@@ -44,6 +47,7 @@ public class PacketHandler extends ChannelDuplexHandler {
 			}
 		}
 
+		// Charging fov handle
 		if (packet instanceof PacketPlayOutAbilities) {
 			if (playerData.getIsCharging()) {
 				((PacketPlayOutAbilities) packet).b(playerData.getFov());

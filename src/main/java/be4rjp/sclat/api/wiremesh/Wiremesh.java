@@ -1,9 +1,17 @@
-package be4rjp.sclat.data;
+package be4rjp.sclat.api.wiremesh;
 
-import java.util.*;
-
-import be4rjp.sclat.Main;
-import net.minecraft.server.v1_14_R1.*;
+import be4rjp.sclat.Sclat;
+import net.minecraft.server.v1_14_R1.DataWatcher;
+import net.minecraft.server.v1_14_R1.EntityArmorStand;
+import net.minecraft.server.v1_14_R1.EntityFallingBlock;
+import net.minecraft.server.v1_14_R1.EntityPlayer;
+import net.minecraft.server.v1_14_R1.IBlockData;
+import net.minecraft.server.v1_14_R1.PacketPlayOutEntityDestroy;
+import net.minecraft.server.v1_14_R1.PacketPlayOutEntityMetadata;
+import net.minecraft.server.v1_14_R1.PacketPlayOutMount;
+import net.minecraft.server.v1_14_R1.PacketPlayOutSpawnEntity;
+import net.minecraft.server.v1_14_R1.PacketPlayOutSpawnEntityLiving;
+import net.minecraft.server.v1_14_R1.WorldServer;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -13,6 +21,10 @@ import org.bukkit.craftbukkit.v1_14_R1.block.data.CraftBlockData;
 import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 /**
  *
@@ -53,7 +65,7 @@ public class Wiremesh extends BukkitRunnable {
 		as.setInvisible(true);
 		fb.startRiding(as);
 
-		for (Player player : Main.getPlugin().getServer().getOnlinePlayers()) {
+		for (Player player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 			if (block.getWorld() != player.getWorld())
 				continue;
 
@@ -66,7 +78,7 @@ public class Wiremesh extends BukkitRunnable {
 		try {
 			playerList.removeIf(player -> !player.isOnline());
 
-			for (Player player : Main.getPlugin().getServer().getOnlinePlayers()) {
+			for (Player player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 				if (block.getWorld() != player.getWorld())
 					continue;
 
@@ -123,7 +135,7 @@ public class Wiremesh extends BukkitRunnable {
 	}
 
 	public void startTask() {
-		this.runTaskTimerAsynchronously(Main.getPlugin(), 0, 5);
+		this.runTaskTimerAsynchronously(Sclat.getPlugin(), 0, 5);
 	}
 
 	public void stopTask() {

@@ -1,10 +1,10 @@
 package be4rjp.sclat.weapon;
 
 import be4rjp.dadadachecker.ClickType;
-import be4rjp.sclat.Main;
+import be4rjp.sclat.Sclat;
+import be4rjp.sclat.api.player.PlayerData;
 import be4rjp.sclat.api.raytrace.RayTrace;
 import be4rjp.sclat.data.DataMgr;
-import be4rjp.sclat.data.PlayerData;
 import be4rjp.sclat.manager.PaintMgr;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
@@ -44,7 +44,7 @@ public class Shooter {
 				}
 
 				if (!data.getIsUsingManeuver() && data.getCanShoot()) {
-					ClickType clickType = Main.dadadaCheckerAPI.getPlayerClickType(player);
+					ClickType clickType = Sclat.dadadaCheckerAPI.getPlayerClickType(player);
 					if ((clickType == ClickType.FIRST_CLICK || clickType == ClickType.RENDA
 							|| clickType == ClickType.NAGAOSI) && data.isInMatch()) {
 						Shooter.Shoot(p, false, false,
@@ -62,7 +62,7 @@ public class Shooter {
 				}
 			}
 		};
-		delay.runTaskTimer(Main.getPlugin(), 0,
+		delay.runTaskTimer(Sclat.getPlugin(), 0,
 				DataMgr.getPlayerData(player).getWeaponClass().getMainWeapon().getShootTick());
 	}
 
@@ -82,7 +82,7 @@ public class Shooter {
 				}
 
 				if (data.getIsUsingManeuver()) {
-					ClickType clickType = Main.dadadaCheckerAPI.getPlayerClickType(player);
+					ClickType clickType = Sclat.dadadaCheckerAPI.getPlayerClickType(player);
 					if ((clickType == ClickType.FIRST_CLICK || clickType == ClickType.RENDA
 							|| clickType == ClickType.NAGAOSI) && data.isInMatch()) {
 						Shooter.Shoot(p, true, false, false);
@@ -92,7 +92,7 @@ public class Shooter {
 				}
 			}
 		};
-		delay.runTaskTimer(Main.getPlugin(), 0,
+		delay.runTaskTimer(Sclat.getPlugin(), 0,
 				DataMgr.getPlayerData(player).getWeaponClass().getMainWeapon().getSlidingShootTick());
 	}
 
@@ -158,11 +158,11 @@ public class Shooter {
 							Vector randomVector = new Vector(Math.random() * random - random / 2,
 									Math.random() * random - random / 2, Math.random() * random - random / 2);
 							Vector erv = ev.clone().add(randomVector);
-							for (Player o_player : Main.getPlugin().getServer().getOnlinePlayers()) {
+							for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 								if (DataMgr.getPlayerData(o_player).getSettings().ShowEffect_BombEx()) {
 									if (o_player.getWorld() == location.getWorld()) {
 										if (o_player.getLocation()
-												.distanceSquared(location) < Main.PARTICLE_RENDER_DISTANCE_SQUARED) {
+												.distanceSquared(location) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED) {
 											o_player.spawnParticle(org.bukkit.Particle.BLOCK_DUST,
 													location.clone().add(0, 0.7, 0).add(randomVector.getX(),
 															randomVector.getY(), randomVector.getZ()),
@@ -208,7 +208,7 @@ public class Shooter {
 								i++;
 							}
 						};
-						task.runTaskTimer(Main.getPlugin(), 0, 1);
+						task.runTaskTimer(Sclat.getPlugin(), 0, 1);
 
 						BukkitRunnable task1 = new BukkitRunnable() {
 							@Override
@@ -216,7 +216,7 @@ public class Shooter {
 								data.setIsSliding(false);
 							}
 						};
-						task1.runTaskLater(Main.getPlugin(), 10);
+						task1.runTaskLater(Sclat.getPlugin(), 10);
 						// BukkitRunnable task2 = new BukkitRunnable() {
 						// @Override
 						// public void run() {
@@ -272,9 +272,9 @@ public class Shooter {
 								}
 							};
 							if (sl_recharge_2) {
-								task4.runTaskLater(Main.getPlugin(), 64);
+								task4.runTaskLater(Sclat.getPlugin(), 64);
 							} else {
-								task5.runTaskLater(Main.getPlugin(), 64);
+								task5.runTaskLater(Sclat.getPlugin(), 64);
 							}
 							check = false;
 						}
@@ -285,7 +285,7 @@ public class Shooter {
 				// loc = ploc;
 			}
 		};
-		delay.runTaskTimer(Main.getPlugin(), 0, 1);
+		delay.runTaskTimer(Sclat.getPlugin(), 0, 1);
 	}
 
 	public static void Shoot(Player player, boolean slided, boolean sound, boolean maxRandom) {
@@ -311,7 +311,7 @@ public class Shooter {
 		if (data.getWeaponClass().getMainWeapon().getMaxRandom() == 0) {
 			check : for (Vector vector : positions) {
 				Location position = vector.toLocation(player.getLocation().getWorld());
-				for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
+				for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 					if (player != target && player.getWorld() == target.getWorld()) {
 						if (target.getLocation().distance(position) < 2) {
 							isLockOnPlayer = true;
@@ -356,7 +356,7 @@ public class Shooter {
 		ball.setVelocity(vec);
 		ball.setShooter(player);
 		// スライド時かどうかをSnowballListenerに渡すためのnameの改変
-		String originName = String.valueOf(Main.getNotDuplicateNumber());
+		String originName = String.valueOf(Sclat.getNotDuplicateNumber());
 		StringBuilder buf = new StringBuilder();
 		buf.append(originName);
 		if (slided) {
@@ -393,11 +393,11 @@ public class Shooter {
 				if (i != 0) {
 					org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).getTeam().getTeamColor().getWool()
 							.createBlockData();
-					for (Player o_player : Main.getPlugin().getServer().getOnlinePlayers()) {
+					for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 						if (DataMgr.getPlayerData(o_player).getSettings().ShowEffect_MainWeaponInk())
 							if (o_player.getWorld() == inkball.getWorld())
-								if (o_player.getLocation()
-										.distanceSquared(inkball.getLocation()) < Main.PARTICLE_RENDER_DISTANCE_SQUARED)
+								if (o_player.getLocation().distanceSquared(
+										inkball.getLocation()) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED)
 									o_player.spawnParticle(org.bukkit.Particle.BLOCK_DUST, inkball.getLocation(), 0, 0,
 											-1, 0, 1, bd);
 					}
@@ -418,7 +418,7 @@ public class Shooter {
 				i++;
 			}
 		};
-		task.runTaskTimer(Main.getPlugin(), 0, 1);
+		task.runTaskTimer(Sclat.getPlugin(), 0, 1);
 	}
 
 }

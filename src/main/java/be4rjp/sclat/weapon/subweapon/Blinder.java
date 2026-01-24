@@ -1,7 +1,7 @@
 package be4rjp.sclat.weapon.subweapon;
 
-import be4rjp.sclat.Main;
-import be4rjp.sclat.api.Sclat;
+import be4rjp.sclat.Sclat;
+import be4rjp.sclat.api.SclatUtil;
 import be4rjp.sclat.api.raytrace.BoundingBox;
 import be4rjp.sclat.api.raytrace.RayTrace;
 import be4rjp.sclat.data.DataMgr;
@@ -35,7 +35,7 @@ public class Blinder {
 				DataMgr.getPlayerData(player).setCanUseSubWeapon(true);
 			}
 		};
-		cooltime.runTaskLater(Main.getPlugin(), 8);
+		cooltime.runTaskLater(Sclat.getPlugin(), 8);
 		if (p.getExp() > 0.36f || DataMgr.getPlayerData(player).getIsBombRush()) {
 			if (!DataMgr.getPlayerData(player).getIsBombRush()) {
 				p.setExp(player.getExp() - 0.35f);
@@ -57,16 +57,16 @@ public class Blinder {
 			Block block = player.getLocation().getWorld().getBlockAt(position);
 
 			if (!block.getType().equals(Material.AIR)) {
-				break loop;
+				break;
 			}
 			// if(i<8) {
 			// PaintMgr.PaintHightestBlock(position, player, false, true);
 			// }
-			for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
+			for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 				if (!DataMgr.getPlayerData(target).getSettings().ShowEffect_MainWeaponInk())
 					continue;
 				if (target.getWorld() == position.getWorld()) {
-					if (target.getLocation().distanceSquared(position) < Main.PARTICLE_RENDER_DISTANCE_SQUARED) {
+					if (target.getLocation().distanceSquared(position) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED) {
 						org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(player).getTeam().getTeamColor()
 								.getWool().createBlockData();
 						target.spawnParticle(org.bukkit.Particle.BLOCK_DUST, position, 1, 0, 0, 0, 1, bd);
@@ -75,7 +75,7 @@ public class Blinder {
 			}
 
 			double maxDistSquad = 4 /* 2*2 */;
-			for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
+			for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 				if (!DataMgr.getPlayerData(target).isInMatch())
 					continue;
 				if (DataMgr.getPlayerData(player).getTeam() != DataMgr.getPlayerData(target).getTeam()
@@ -140,7 +140,7 @@ public class Blinder {
 										break loop;
 									}
 								} else {
-									if (Sclat.isNumber(as.getCustomName()))
+									if (SclatUtil.isNumber(as.getCustomName()))
 										if (!as.getCustomName().equals("21") && !as.getCustomName().equals("100"))
 											if (((ArmorStand) as).isVisible())
 												if (i > 85) {
@@ -168,6 +168,6 @@ public class Blinder {
 				DataMgr.getPlayerData(player).setPoison(false);
 			}
 		};
-		cooltime.runTaskLater(Main.getPlugin(), delay);
+		cooltime.runTaskLater(Sclat.getPlugin(), delay);
 	}
 }

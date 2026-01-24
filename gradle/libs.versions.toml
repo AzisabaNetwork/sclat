@@ -12,6 +12,7 @@ bukkit = "1.14.4-R0.1-SNAPSHOT"
 spigot = "1.14.4-R0.1-SNAPSHOT"
 spigotApi = "1.14.4-R0.1-SNAPSHOT"
 cloudPaper = "2.0.0-beta.10"
+jspecify = "1.0.0"
 
 [plugins]
 runPaper = { id = "xyz.jpenilla.run-paper", version.ref = "runPaper" }
@@ -29,3 +30,4 @@ bukkit = { module = "org.bukkit:bukkit", version.ref = "bukkit" }
 spigot = { module = "org.spigotmc:spigot", version.ref = "spigot" }
 spigotApi = { module = "org.spigotmc:spigot-api", version.ref = "spigotApi" }
 cloudPaper = { module = "org.incendo:cloud-paper", version.ref = "cloudPaper" }
+jspecify = { module = "org.jspecify:jspecify", version.ref = "jspecify" }

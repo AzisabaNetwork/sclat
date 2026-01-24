@@ -1,8 +1,8 @@
 package be4rjp.sclat.weapon;
 
-import be4rjp.sclat.Main;
+import be4rjp.sclat.Sclat;
+import be4rjp.sclat.api.player.PlayerData;
 import be4rjp.sclat.data.DataMgr;
-import be4rjp.sclat.data.PlayerData;
 import org.bukkit.GameMode;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -38,10 +38,10 @@ public class Buckler {
 							bk_recharge = true;
 						}
 					};
-					healtask.runTaskLater(Main.getPlugin(), Ctime);
+					healtask.runTaskLater(Sclat.getPlugin(), Ctime);
 				}
 			}
 		};
-		delay3.runTaskTimer(Main.getPlugin(), 0, 1);
+		delay3.runTaskTimer(Sclat.getPlugin(), 0, 1);
 	}
 }

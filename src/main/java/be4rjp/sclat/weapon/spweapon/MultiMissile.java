@@ -1,9 +1,9 @@
 
 package be4rjp.sclat.weapon.spweapon;
 
-import be4rjp.sclat.Main;
+import be4rjp.sclat.Sclat;
 import be4rjp.sclat.api.GlowingAPI;
-import be4rjp.sclat.api.Sclat;
+import be4rjp.sclat.api.SclatUtil;
 import be4rjp.sclat.api.Sphere;
 import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.manager.ArmorStandMgr;
@@ -72,7 +72,7 @@ public class MultiMissile {
 
 						DataMgr.getPlayerData(p).setIsUsingMM(true);
 						WorldServer nmsWorld = ((CraftWorld) p.getWorld()).getHandle();
-						for (Player op : Main.getPlugin(Main.class).getServer().getOnlinePlayers()) {
+						for (Player op : Sclat.getPlugin(Sclat.class).getServer().getOnlinePlayers()) {
 							if (DataMgr.getPlayerData(op).isInMatch() && op.getWorld() == p.getWorld()
 									&& !op.getName().equals(p.getName())
 									&& DataMgr.getPlayerData(p).getTeam() != DataMgr.getPlayerData(op).getTeam()) {
@@ -112,7 +112,7 @@ public class MultiMissile {
 						}
 					}
 					if (c != 0) {
-						for (Player op : Main.getPlugin(Main.class).getServer().getOnlinePlayers()) {
+						for (Player op : Sclat.getPlugin(Sclat.class).getServer().getOnlinePlayers()) {
 							if (DataMgr.getPlayerData(op).isInMatch() && op.getWorld() == p.getWorld()
 									&& !op.getName().equals(p.getName())
 									&& DataMgr.getPlayerData(p).getTeam() != DataMgr.getPlayerData(op).getTeam()) {
@@ -146,7 +146,7 @@ public class MultiMissile {
 					if (!DataMgr.getPlayerData(p).getIsUsingMM() || c == 200) {
 						List<Entity> targetList = new ArrayList<>();
 						int count = 0;
-						for (Player op : Main.getPlugin(Main.class).getServer().getOnlinePlayers()) {
+						for (Player op : Sclat.getPlugin(Sclat.class).getServer().getOnlinePlayers()) {
 							if (DataMgr.getPlayerData(op).isInMatch() && op.getWorld() == p.getWorld()
 									&& !op.getName().equals(p.getName())
 									&& DataMgr.getPlayerData(p).getTeam() != DataMgr.getPlayerData(op).getTeam()) {
@@ -209,7 +209,7 @@ public class MultiMissile {
 				}
 			}
 		};
-		task.runTaskTimer(Main.getPlugin(), 0, 1);
+		task.runTaskTimer(Sclat.getPlugin(), 0, 1);
 	}
 
 	public static void FireworksRunnable(Player player) {
@@ -228,7 +228,7 @@ public class MultiMissile {
 				}
 			}
 		};
-		task.runTaskTimer(Main.getPlugin(), 0, 2);
+		task.runTaskTimer(Sclat.getPlugin(), 0, 2);
 	}
 
 	public static void MMShootRunnable(Player shooter, Entity target, int i) {
@@ -249,7 +249,7 @@ public class MultiMissile {
 				c++;
 			}
 		};
-		task.runTaskTimer(Main.getPlugin(), 0, 10);
+		task.runTaskTimer(Sclat.getPlugin(), 0, 10);
 	}
 
 	public static void MMRunnable(Player shooter, Entity target) {
@@ -271,7 +271,7 @@ public class MultiMissile {
 					ball.setGravity(false);
 					ball.setShooter(s);
 					ball.setVelocity(new Vector(0, 0, 0));
-					for (Player o_player : Main.getPlugin().getServer().getOnlinePlayers()) {
+					for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 						PlayerConnection connection = ((CraftPlayer) o_player).getHandle().playerConnection;
 						connection.sendPacket(new PacketPlayOutEntityDestroy(ball.getEntityId()));
 					}
@@ -314,10 +314,10 @@ public class MultiMissile {
 
 				org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(s).getTeam().getTeamColor().getWool()
 						.createBlockData();
-				for (Player o_player : Main.getPlugin().getServer().getOnlinePlayers()) {
+				for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 					if (o_player.getWorld() == drop.getLocation().getWorld()) {
 						if (o_player.getLocation()
-								.distanceSquared(drop.getLocation()) < Main.PARTICLE_RENDER_DISTANCE_SQUARED) {
+								.distanceSquared(drop.getLocation()) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED) {
 							if (DataMgr.getPlayerData(o_player).getSettings().ShowEffect_SPWeapon())
 								o_player.spawnParticle(org.bukkit.Particle.BLOCK_DUST, drop.getLocation(), 1, 0, 0, 0,
 										1, bd);
@@ -334,7 +334,7 @@ public class MultiMissile {
 					s.getWorld().playSound(drop.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_BLAST, 1, 1);
 
 					// 爆発エフェクト
-					Sclat.createInkExplosionEffect(drop.getLocation(), maxDist, 25, s);
+					SclatUtil.createInkExplosionEffect(drop.getLocation(), maxDist, 25, s);
 
 					// 塗る
 					for (int i = 0; i <= maxDist; i++) {
@@ -345,14 +345,14 @@ public class MultiMissile {
 					}
 
 					// 攻撃判定の処理
-					for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
+					for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 						if (!DataMgr.getPlayerData(target).isInMatch() || target.getWorld() != s.getWorld())
 							continue;
 						if (target.getLocation().distanceSquared(drop.getLocation()) <= maxDistSquared) {
 							double damage = (maxDist - target.getLocation().distance(drop.getLocation())) * 14;
 							if (DataMgr.getPlayerData(s).getTeam() != DataMgr.getPlayerData(target).getTeam()
 									&& target.getGameMode().equals(GameMode.ADVENTURE)) {
-								Sclat.giveDamage(s, target, damage, "spWeapon");
+								SclatUtil.giveDamage(s, target, damage, "spWeapon");
 
 								// AntiNoDamageTime
 								BukkitRunnable task = new BukkitRunnable() {
@@ -362,7 +362,7 @@ public class MultiMissile {
 										target.setNoDamageTicks(0);
 									}
 								};
-								task.runTaskLater(Main.getPlugin(), 1);
+								task.runTaskLater(Sclat.getPlugin(), 1);
 
 							}
 						}
@@ -384,7 +384,7 @@ public class MultiMissile {
 				c++;
 			}
 		};
-		task.runTaskTimer(Main.getPlugin(), 0, 1);
+		task.runTaskTimer(Sclat.getPlugin(), 0, 1);
 	}
 
 	public static void MMSquidRunnable(Player shooter, Player target) {

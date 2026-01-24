@@ -1,6 +1,6 @@
 package be4rjp.sclat.api.async;
 
-import be4rjp.sclat.Main;
+import be4rjp.sclat.Sclat;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -42,7 +42,7 @@ public class AsyncThreadManager {
 	}
 
 	public static void sync(Runnable runnable) {
-		Bukkit.getScheduler().runTask(Main.getPlugin(), runnable);
+		Bukkit.getScheduler().runTask(Sclat.getPlugin(), runnable);
 	}
 
 }

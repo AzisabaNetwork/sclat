@@ -1,6 +1,6 @@
 package be4rjp.sclat.manager;
 
-import be4rjp.sclat.Main;
+import be4rjp.sclat.Sclat;
 import be4rjp.sclat.data.ServerStatus;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -15,7 +15,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.ArrayList;
 import java.util.List;
 
-import static be4rjp.sclat.Main.conf;
+import static be4rjp.sclat.Sclat.conf;
 
 public class ServerStatusManager {
 	public static Inventory inv = Bukkit.createInventory(null, 18, "Server List");
@@ -123,7 +123,7 @@ public class ServerStatusManager {
 				}
 			}
 		};
-		task.runTaskTimer(Main.getPlugin(), 0, 40);
+		task.runTaskTimer(Sclat.getPlugin(), 0, 40);
 	}
 
 	public static void openServerList(Player player) {

@@ -5,13 +5,13 @@ import be4rjp.blockstudio.BlockStudio;
 import be4rjp.blockstudio.api.BSObject;
 import be4rjp.blockstudio.api.BlockStudioAPI;
 import be4rjp.blockstudio.file.ObjectData;
-import be4rjp.sclat.Main;
-import be4rjp.sclat.api.Sclat;
+import be4rjp.sclat.Sclat;
+import be4rjp.sclat.api.SclatUtil;
 import be4rjp.sclat.api.async.AsyncTask;
 import be4rjp.sclat.api.async.AsyncThreadManager;
+import be4rjp.sclat.api.player.PlayerData;
 import be4rjp.sclat.api.raytrace.RayTrace;
 import be4rjp.sclat.data.DataMgr;
-import be4rjp.sclat.data.PlayerData;
 import be4rjp.sclat.manager.ArmorStandMgr;
 import be4rjp.sclat.manager.SPWeaponMgr;
 import be4rjp.sclat.manager.WeaponClassMgr;
@@ -102,7 +102,7 @@ public class MegaLaser {
 				c++;
 			}
 		};
-		task.runTaskTimer(Main.getPlugin(), 0, 1);
+		task.runTaskTimer(Sclat.getPlugin(), 0, 1);
 	}
 
 	public static void playSound(Location targetLoc, Sound sound, float v, float p) {
@@ -143,7 +143,7 @@ public class MegaLaser {
 				if (c == 13 || !playerData.isInMatch() || !p.isOnline()) {
 					playerData.setIsUsingSP(false);
 					for (Player target : AsyncThreadManager.onlinePlayers) {
-						Sclat.sendWorldBorderWarningClearPacket(target);
+						SclatUtil.sendWorldBorderWarningClearPacket(target);
 					}
 					bsObject.remove();
 					cancel();
@@ -194,7 +194,7 @@ public class MegaLaser {
 						for (Player target : AsyncThreadManager.onlinePlayers) {
 							if (p.getWorld() != target.getWorld())
 								continue;
-							if (eloc.distanceSquared(target.getLocation()) < Main.PARTICLE_RENDER_DISTANCE_SQUARED) {
+							if (eloc.distanceSquared(target.getLocation()) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED) {
 								PlayerData targetData = DataMgr.getPlayerData(target);
 								if (targetData == null)
 									continue;
@@ -232,9 +232,9 @@ public class MegaLaser {
 								continue;
 							if (target.getLocation().distanceSquared(position.clone().add(0, 1, 0)) <= maxDistSquared) {
 								// list.add(target);
-								Sclat.sendWorldBorderWarningPacket(target);
+								SclatUtil.sendWorldBorderWarningPacket(target);
 							} else {
-								Sclat.sendWorldBorderWarningClearPacket(target);
+								SclatUtil.sendWorldBorderWarningClearPacket(target);
 							}
 						}
 						// ここは上のループに含ませちゃってもいいのか...?
@@ -278,7 +278,7 @@ public class MegaLaser {
 											target.setNoDamageTicks(0);
 										}
 									};
-									task.runTaskLater(Main.getPlugin(), 1);
+									task.runTaskLater(Sclat.getPlugin(), 1);
 								}
 							}
 						}
@@ -296,7 +296,7 @@ public class MegaLaser {
 
 				AsyncThreadManager.sync(() -> {
 					for (Player target : damageTargets) {
-						Sclat.giveDamage(p, target, damage, "spWeapon");
+						SclatUtil.giveDamage(p, target, damage, "spWeapon");
 					}
 				});
 

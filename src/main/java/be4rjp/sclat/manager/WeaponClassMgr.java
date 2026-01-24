@@ -1,16 +1,17 @@
 
 package be4rjp.sclat.manager;
 
-import be4rjp.sclat.Main;
-import static be4rjp.sclat.Main.conf;
+import be4rjp.sclat.Sclat;
+import be4rjp.sclat.api.player.PlayerData;
 import be4rjp.sclat.data.DataMgr;
-import be4rjp.sclat.data.PlayerData;
 import be4rjp.sclat.data.WeaponClass;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+
+import static be4rjp.sclat.Sclat.conf;
 
 /**
  *
@@ -36,8 +37,8 @@ public class WeaponClassMgr {
 		PlayerData data = DataMgr.getPlayerData(player);
 		ItemStack main = data.getWeaponClass().getMainWeapon().getWeaponIteamStack().clone();
 		if (data.getMainItemGlow()) {
-			Main.glow.enchantGlow(main);
-			main.addEnchantment(Main.glow, 1);
+			Sclat.glow.enchantGlow(main);
+			main.addEnchantment(Sclat.glow, 1);
 		}
 		player.getInventory().setItem(0, main);
 		if (data.getWeaponClass().getMainWeapon().getIsManeuver())
@@ -55,7 +56,7 @@ public class WeaponClassMgr {
 		if (data.getSPGauge() == 100)
 			SPWeaponMgr.setSPWeapon(player);
 
-		if (conf.getConfig().getString("WorkMode").equals("Trial") && !Main.tutorial) {
+		if (conf.getConfig().getString("WorkMode").equals("Trial") && !Sclat.tutorial) {
 			ItemStack join = new ItemStack(Material.CHEST);
 			ItemMeta joinmeta = join.getItemMeta();
 			joinmeta.setDisplayName(ChatColor.GOLD + "右クリックでメインメニューを開く");

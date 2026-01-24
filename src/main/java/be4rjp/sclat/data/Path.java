@@ -1,7 +1,8 @@
 
 package be4rjp.sclat.data;
 
-import be4rjp.sclat.Main;
+import be4rjp.sclat.Sclat;
+import be4rjp.sclat.api.team.Team;
 import net.minecraft.server.v1_14_R1.EnumItemSlot;
 import net.minecraft.server.v1_14_R1.PacketPlayOutEntityEquipment;
 import org.bukkit.Location;
@@ -51,7 +52,7 @@ public class Path {
 
 	public void setTeam(Team t) {
 		this.team = t;
-		for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
+		for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 			if (as.getWorld() != target.getWorld())
 				continue;
 			if (t == null)
@@ -77,7 +78,7 @@ public class Path {
 					setTeamed = false;
 				}
 			};
-			task.runTaskLater(Main.getPlugin(), 3600);
+			task.runTaskLater(Sclat.getPlugin(), 3600);
 		}
 	}
 

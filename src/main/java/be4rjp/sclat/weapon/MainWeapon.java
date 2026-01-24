@@ -1,9 +1,8 @@
 package be4rjp.sclat.weapon;
 
-import be4rjp.sclat.Main;
-import static be4rjp.sclat.Main.conf;
+import be4rjp.sclat.Sclat;
+import be4rjp.sclat.api.player.PlayerData;
 import be4rjp.sclat.data.DataMgr;
-import be4rjp.sclat.data.PlayerData;
 import be4rjp.sclat.manager.DeathMgr;
 import be4rjp.sclat.manager.MainWeaponMgr;
 import be4rjp.sclat.manager.SPWeaponMgr;
@@ -20,6 +19,8 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.scheduler.BukkitRunnable;
+
+import static be4rjp.sclat.Sclat.conf;
 
 /**
  *
@@ -58,7 +59,7 @@ public class MainWeapon implements Listener {
 				data.setIsSneaking(false);
 			}
 		};
-		task.runTaskLater(Main.getPlugin(), 5);
+		task.runTaskLater(Sclat.getPlugin(), 5);
 	}
 
 	@EventHandler
@@ -118,13 +119,13 @@ public class MainWeapon implements Listener {
 			if (e.getCause() == DamageCause.VOID) {
 				e.setCancelled(true);
 				if (conf.getConfig().getString("WorkMode").equals("Trial")) {
-					player.teleport(Main.lobby);
+					player.teleport(Sclat.lobby);
 					return;
 				}
 				if (DataMgr.getPlayerData(player).isInMatch())
 					DeathMgr.PlayerDeathRunnable(player, player, "fall");
 				else
-					player.teleport(Main.lobby);
+					player.teleport(Sclat.lobby);
 
 			} else if (e.getCause() == DamageCause.DROWNING) {
 				e.setCancelled(true);

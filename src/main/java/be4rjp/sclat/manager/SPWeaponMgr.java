@@ -1,12 +1,12 @@
 
 package be4rjp.sclat.manager;
 
-import be4rjp.sclat.Main;
+import be4rjp.sclat.Sclat;
 import be4rjp.sclat.api.GaugeAPI;
 import be4rjp.sclat.api.MessageType;
-import be4rjp.sclat.api.Sclat;
+import be4rjp.sclat.api.SclatUtil;
+import be4rjp.sclat.api.player.PlayerData;
 import be4rjp.sclat.data.DataMgr;
-import be4rjp.sclat.data.PlayerData;
 import be4rjp.sclat.weapon.spweapon.AirStrike;
 import be4rjp.sclat.weapon.spweapon.Amehurasi;
 import be4rjp.sclat.weapon.spweapon.Barrier;
@@ -67,7 +67,7 @@ public class SPWeaponMgr {
 				try {
 					int myTeam = 0;
 					int enemyTeam = 0;
-					for (Player op : Main.getPlugin().getServer().getOnlinePlayers()) {
+					for (Player op : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 						PlayerData opdata = DataMgr.getPlayerData(op);
 						if (data.getMatch() == opdata.getMatch()) {
 							if (data.getTeam() == opdata.getTeam()) {
@@ -89,7 +89,7 @@ public class SPWeaponMgr {
 				}
 			}
 		};
-		task.runTaskTimer(Main.getPlugin(), 0, 20);
+		task.runTaskTimer(Sclat.getPlugin(), 0, 20);
 	}
 
 	public static void SPWeaponRunnable(Player player) {
@@ -103,7 +103,7 @@ public class SPWeaponMgr {
 					if (!data.getIsSP()) {
 						setSPWeapon(p);
 						p.playSound(p.getLocation(), Sound.BLOCK_CHEST_OPEN, 0.8F, 2);
-						Sclat.sendMessage("§6§l！ スペシャルウエポン使用可能 ！", MessageType.PLAYER, player);
+						SclatUtil.sendMessage("§6§l！ スペシャルウエポン使用可能 ！", MessageType.PLAYER, player);
 						data.setIsUsingSP(false);
 					}
 					DataMgr.getPlayerData(p).setIsSP(true);
@@ -121,9 +121,9 @@ public class SPWeaponMgr {
 					cancel();
 			}
 		};
-		task.runTaskTimer(Main.getPlugin(), 0, 5);
+		task.runTaskTimer(Sclat.getPlugin(), 0, 5);
 
-		BossBar bar = Main.getPlugin().getServer().createBossBar("§6§lSpecial Weapon", BarColor.GREEN, BarStyle.SOLID,
+		BossBar bar = Sclat.getPlugin().getServer().createBossBar("§6§lSpecial Weapon", BarColor.GREEN, BarStyle.SOLID,
 				BarFlag.CREATE_FOG);
 		bar.setProgress(0);
 		bar.addPlayer(player);
@@ -146,11 +146,11 @@ public class SPWeaponMgr {
 				}
 			}
 		};
-		anime.runTaskTimer(Main.getPlugin(), 0, 2);
+		anime.runTaskTimer(Sclat.getPlugin(), 0, 2);
 	}
 
 	public static void ArmorRunnable(Player player) {
-		BossBar bar = Main.getPlugin().getServer().createBossBar(
+		BossBar bar = Sclat.getPlugin().getServer().createBossBar(
 				DataMgr.getPlayerData(player).getTeam().getTeamColor().getColorCode() + "§lInk Armor", BarColor.YELLOW,
 				BarStyle.SOLID, BarFlag.CREATE_FOG);
 		bar.setProgress(0);
@@ -174,7 +174,7 @@ public class SPWeaponMgr {
 				}
 			}
 		};
-		anime.runTaskTimer(Main.getPlugin(), 0, 5);
+		anime.runTaskTimer(Sclat.getPlugin(), 0, 5);
 	}
 
 	public static void setSPCoolTimeAnimation(Player player, int tick) {
@@ -202,13 +202,13 @@ public class SPWeaponMgr {
 								WeaponClassMgr.setWeaponClass(p);
 							}
 						};
-						sync.runTask(Main.getPlugin());
+						sync.runTask(Sclat.getPlugin());
 					}
 					cancel();
 				}
 			}
 		};
-		task.runTaskTimerAsynchronously(Main.getPlugin(), 0, 1);
+		task.runTaskTimerAsynchronously(Sclat.getPlugin(), 0, 1);
 	}
 
 	public static void setSPWeapon(Player p) {

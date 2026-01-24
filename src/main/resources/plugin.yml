@@ -4,7 +4,7 @@ description: Sclat
 author: Be4rJP
 api-version: 1.13
 #--------------------------------------
-main: be4rjp.sclat.Main
+main: be4rjp.sclat.Sclat
 depend: [NoteBlockAPI, ProtocolLib, WorldChef, DADADAChecker, BlockStudio]
 #--------------------------------------
 commands:

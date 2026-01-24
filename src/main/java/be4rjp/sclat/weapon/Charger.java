@@ -1,13 +1,13 @@
 package be4rjp.sclat.weapon;
 
-import be4rjp.sclat.Main;
+import be4rjp.sclat.Sclat;
 import be4rjp.sclat.api.GaugeAPI;
-import be4rjp.sclat.api.Sclat;
+import be4rjp.sclat.api.SclatUtil;
+import be4rjp.sclat.api.player.PlayerData;
 import be4rjp.sclat.api.raytrace.BoundingBox;
 import be4rjp.sclat.api.raytrace.RayTrace;
 import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.data.KasaData;
-import be4rjp.sclat.data.PlayerData;
 import be4rjp.sclat.data.SplashShieldData;
 import be4rjp.sclat.manager.ArmorStandMgr;
 import be4rjp.sclat.manager.PaintMgr;
@@ -78,7 +78,7 @@ public class Charger {
 						 * PotionEffect(PotionEffectType.SLOW, 40000, (int)charge / 3));
 						 */
 						if (charge < max) {
-							Sclat.setPlayerFOV(p, -0.1F / ((float) charge / 19.0F));
+							SclatUtil.setPlayerFOV(p, -0.1F / ((float) charge / 19.0F));
 						}
 
 					}
@@ -98,7 +98,7 @@ public class Charger {
 						if (!position.getBlock().getType().equals(Material.AIR)) {
 							// if(rayTrace.intersects(new BoundingBox(block), (int)(charge / 2 *
 							// data.getWeaponClass().getMainWeapon().getDistanceTick()), 0.1))
-							break check;
+							break;
 						}
 						// if(i % 2 == 0){
 						// for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
@@ -140,7 +140,7 @@ public class Charger {
 					 */
 					if (data.getWeaponClass().getMainWeapon().getScope()) {
 						data.setIsCharging(false);
-						Sclat.setPlayerFOV(player, 0.06F);
+						SclatUtil.setPlayerFOV(player, 0.06F);
 					}
 					if (charge <= min) {
 						if (p.getExp() > data.getWeaponClass().getMainWeapon().getNeedInk()
@@ -217,7 +217,7 @@ public class Charger {
 
 			}
 		};
-		task.runTaskTimer(Main.getPlugin(), 0, 1);
+		task.runTaskTimer(Sclat.getPlugin(), 0, 1);
 	}
 
 	public static void Shoot(Player player, int reach, double damage, double decRate) {
@@ -266,7 +266,7 @@ public class Charger {
 				} else {
 					// if(rayTrace.intersects(new BoundingBox(block), reach, 0.01)){
 					PaintMgr.Paint(position, player, true);
-					break loop;
+					break;
 					// }
 				}
 			}
@@ -286,7 +286,7 @@ public class Charger {
 			// }
 			if (DataMgr.getPlayerData(player).getSettings().ShowEffect_MainWeaponInk()) {
 				if (player.getWorld() == position.getWorld()) {
-					if (player.getLocation().distanceSquared(position) < Main.PARTICLE_RENDER_DISTANCE_SQUARED) {
+					if (player.getLocation().distanceSquared(position) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED) {
 						org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(player).getTeam().getTeamColor()
 								.getWool().createBlockData();
 						player.spawnParticle(org.bukkit.Particle.BLOCK_DUST, position, 1, 0, 0, 0, 1, bd);
@@ -295,7 +295,7 @@ public class Charger {
 			}
 
 			double maxDistSquad = 4 /* 2*2 */;
-			for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
+			for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 				if (!DataMgr.getPlayerData(target).isInMatch())
 					continue;
 				if (DataMgr.getPlayerData(player).getTeam() != DataMgr.getPlayerData(target).getTeam()
@@ -308,7 +308,7 @@ public class Charger {
 							if (Isbackstab(player, target)) {
 								hitDamage = damage * decRate;
 							}
-							death = Sclat.giveDamage(player, target, hitDamage, "killed");
+							death = SclatUtil.giveDamage(player, target, hitDamage, "killed");
 							if (death)
 								player.playSound(player.getLocation(), Sound.ENTITY_ARROW_HIT_PLAYER, 1.2F, 1.3F);
 							else
@@ -322,7 +322,7 @@ public class Charger {
 									target.setNoDamageTicks(0);
 								}
 							};
-							task.runTaskLater(Main.getPlugin(), 1);
+							task.runTaskLater(Sclat.getPlugin(), 1);
 							break loop;
 						}
 					}
@@ -353,7 +353,7 @@ public class Charger {
 										break loop;
 									}
 								} else {
-									if (Sclat.isNumber(as.getCustomName()))
+									if (SclatUtil.isNumber(as.getCustomName()))
 										if (!as.getCustomName().equals("21") && !as.getCustomName().equals("100"))
 											if (((ArmorStand) as).isVisible())
 												player.playSound(player.getLocation(), Sound.ENTITY_ARROW_HIT_PLAYER,

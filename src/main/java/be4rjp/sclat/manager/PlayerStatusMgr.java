@@ -1,16 +1,22 @@
 
 package be4rjp.sclat.manager;
 
-import static be4rjp.sclat.Main.conf;
-
-import be4rjp.sclat.Main;
+import be4rjp.sclat.Sclat;
 import com.mojang.authlib.GameProfile;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import net.minecraft.server.v1_14_R1.*;
+import net.minecraft.server.v1_14_R1.DataWatcherRegistry;
+import net.minecraft.server.v1_14_R1.EntityArmorStand;
+import net.minecraft.server.v1_14_R1.EntityPlayer;
+import net.minecraft.server.v1_14_R1.MinecraftServer;
+import net.minecraft.server.v1_14_R1.PacketPlayOutAnimation;
+import net.minecraft.server.v1_14_R1.PacketPlayOutEntityDestroy;
+import net.minecraft.server.v1_14_R1.PacketPlayOutEntityHeadRotation;
+import net.minecraft.server.v1_14_R1.PacketPlayOutEntityMetadata;
+import net.minecraft.server.v1_14_R1.PacketPlayOutNamedEntitySpawn;
+import net.minecraft.server.v1_14_R1.PacketPlayOutPlayerInfo;
+import net.minecraft.server.v1_14_R1.PacketPlayOutSpawnEntityLiving;
+import net.minecraft.server.v1_14_R1.PlayerConnection;
+import net.minecraft.server.v1_14_R1.PlayerInteractManager;
+import net.minecraft.server.v1_14_R1.WorldServer;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -20,6 +26,13 @@ import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_14_R1.util.CraftChatMessage;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static be4rjp.sclat.Sclat.conf;
 
 /**
  *
@@ -45,10 +58,10 @@ public class PlayerStatusMgr {
 		conf.getPlayerStatus().set("Status." + player.getUniqueId().toString() + ".Money", 10000);
 		conf.getPlayerStatus().set("Status." + player.getUniqueId().toString() + ".Lv", 0);
 		conf.getPlayerStatus().set("Status." + player.getUniqueId().toString() + ".Rank", 0);
-		List<String> wlist = new ArrayList<String>();
+		List<String> wlist = new ArrayList<>();
 		wlist.add(conf.getConfig().getString("DefaultClass"));
 		conf.getPlayerStatus().set("Status." + player.getUniqueId().toString() + ".WeaponClass", wlist);
-		List<Integer> glist = new ArrayList<Integer>();
+		List<Integer> glist = new ArrayList<>();
 		glist.add(0);
 		conf.getPlayerStatus().set("Status." + player.getUniqueId().toString() + ".GearList", glist);
 		conf.getPlayerStatus().set("Status." + player.getUniqueId().toString() + ".Gear", 0);
@@ -152,7 +165,7 @@ public class PlayerStatusMgr {
 				}
 			}
 		};
-		task.runTaskTimer(Main.getPlugin(), 0, conf.getConfig().getInt("HologramUpdatePeriod"));
+		task.runTaskTimer(Sclat.getPlugin(), 0, conf.getConfig().getInt("HologramUpdatePeriod"));
 	}
 
 	public static void sendHologramUpdate(Player player) {

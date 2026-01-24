@@ -1,13 +1,15 @@
-package be4rjp.sclat.data;
+package be4rjp.sclat.api.wiremesh;
+
+import be4rjp.sclat.data.RegionBlocks;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.block.data.BlockData;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.block.Block;
-import org.bukkit.block.data.BlockData;
 
 /**
  *
@@ -52,8 +54,6 @@ public class WiremeshListTask {
 	}
 
 	public void stopTask() {
-		wiremeshsList.forEach((wm) -> {
-			wm.stopTask();
-		});
+		wiremeshsList.forEach(Wiremesh::stopTask);
 	}
 }

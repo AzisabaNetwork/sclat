@@ -1,8 +1,8 @@
 package be4rjp.sclat.server;
 
-import be4rjp.sclat.Main;
+import be4rjp.sclat.Sclat;
 import be4rjp.sclat.api.MessageType;
-import be4rjp.sclat.api.Sclat;
+import be4rjp.sclat.api.SclatUtil;
 import be4rjp.sclat.api.SoundType;
 import be4rjp.sclat.data.ServerStatus;
 import be4rjp.sclat.manager.PlayerReturnManager;
@@ -109,7 +109,7 @@ class EchoThread extends Thread {
 						}
 						case "add" : { // add [statusName] [number] [uuid]
 							if (args.length == 4) {
-								if (Sclat.isNumber(args[2]) && args[3].length() == 36) {
+								if (SclatUtil.isNumber(args[2]) && args[3].length() == 36) {
 									switch (args[1]) {
 										case "money" :
 											PlayerStatusMgr.addMoney(args[3], Integer.parseInt(args[2]));
@@ -151,14 +151,14 @@ class EchoThread extends Thread {
 								for (ServerStatus ss : ServerStatusManager.serverList) {
 									if (ss.getServerName().equals(args[1])) {
 										ss.setWaitingEndTime(Long.parseLong(args[2]));
-										Sclat.sendMessage(ss.getDisplayName() + "§aの試合待機が開始されました！",
+										SclatUtil.sendMessage(ss.getDisplayName() + "§aの試合待機が開始されました！",
 												MessageType.ALL_PLAYER);
-										Sclat.sendMessage(
+										SclatUtil.sendMessage(
 												"§a§l" + (ss.getWaitingEndTime() - (System.currentTimeMillis() / 1000))
 														+ "§b秒後に開始されます",
 												MessageType.ALL_PLAYER);
-										Main.getPlugin().getServer().getOnlinePlayers()
-												.forEach(player -> Sclat.playGameSound(player, SoundType.SUCCESS));
+										Sclat.getPlugin().getServer().getOnlinePlayers()
+												.forEach(player -> SclatUtil.playGameSound(player, SoundType.SUCCESS));
 									}
 								}
 							}

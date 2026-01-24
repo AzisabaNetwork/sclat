@@ -1,9 +1,9 @@
 
 package be4rjp.sclat.weapon;
 
-import be4rjp.sclat.Main;
+import be4rjp.sclat.Sclat;
+import be4rjp.sclat.api.player.PlayerData;
 import be4rjp.sclat.data.DataMgr;
-import be4rjp.sclat.data.PlayerData;
 import be4rjp.sclat.manager.PaintMgr;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
@@ -34,7 +34,7 @@ public class Bucket {
 			}
 		};
 		if (data.getCanRollerShoot())
-			delay1.runTaskLater(Main.getPlugin(), data.getWeaponClass().getMainWeapon().getCoolTime());
+			delay1.runTaskLater(Sclat.getPlugin(), data.getWeaponClass().getMainWeapon().getCoolTime());
 
 		BukkitRunnable delay = new BukkitRunnable() {
 			@Override
@@ -71,7 +71,7 @@ public class Bucket {
 		if (data.getCanRollerShoot()) {
 			// delay.runTaskLater(Main.getPlugin(),
 			// data.getWeaponClass().getMainWeapon().getDelay());
-			delay2.runTaskTimer(Main.getPlugin(), 0, data.getWeaponClass().getMainWeapon().getDelay());
+			delay2.runTaskTimer(Sclat.getPlugin(), 0, data.getWeaponClass().getMainWeapon().getDelay());
 			data.setCanRollerShoot(false);
 		}
 	}
@@ -104,7 +104,7 @@ public class Bucket {
 				Math.random() * random - random / 2));
 		ball.setVelocity(vec);
 		ball.setShooter(player);
-		String name = String.valueOf(Main.getNotDuplicateNumber());
+		String name = String.valueOf(Sclat.getNotDuplicateNumber());
 		DataMgr.mws.add(name);
 		ball.setCustomName(name);
 		DataMgr.getMainSnowballNameMap().put(name, ball);
@@ -127,14 +127,14 @@ public class Bucket {
 					DataMgr.setSnowballHitCount(name, 0);
 				}
 				if (i != 0) {
-					for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
+					for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 						if (target.getWorld() != p.getWorld())
 							continue;
 						if (!DataMgr.getPlayerData(target).getSettings().ShowEffect_MainWeaponInk())
 							continue;
 						if (target.getWorld() == inkball.getWorld()) {
 							if (target.getLocation()
-									.distanceSquared(inkball.getLocation()) < Main.PARTICLE_RENDER_DISTANCE_SQUARED) {
+									.distanceSquared(inkball.getLocation()) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED) {
 								org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).getTeam().getTeamColor()
 										.getWool().createBlockData();
 								target.spawnParticle(org.bukkit.Particle.BLOCK_DUST, inkball.getLocation(), 1, 0, 0, 0,
@@ -158,7 +158,7 @@ public class Bucket {
 				i++;
 			}
 		};
-		task.runTaskTimer(Main.getPlugin(), 0, 1);
+		task.runTaskTimer(Sclat.getPlugin(), 0, 1);
 
 		return false;
 	}
@@ -189,10 +189,10 @@ public class Bucket {
 							bh_recharge = true;
 						}
 					};
-					healtask.runTaskLater(Main.getPlugin(), Ctime);
+					healtask.runTaskLater(Sclat.getPlugin(), Ctime);
 				}
 			}
 		};
-		delay3.runTaskTimer(Main.getPlugin(), 0, 1);
+		delay3.runTaskTimer(Sclat.getPlugin(), 0, 1);
 	}
 }

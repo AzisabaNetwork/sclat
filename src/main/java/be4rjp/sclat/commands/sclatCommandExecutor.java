@@ -1,8 +1,8 @@
 package be4rjp.sclat.commands;
 
-import be4rjp.sclat.Main;
+import be4rjp.sclat.Sclat;
 import be4rjp.sclat.api.MessageType;
-import be4rjp.sclat.api.Sclat;
+import be4rjp.sclat.api.SclatUtil;
 import be4rjp.sclat.api.ServerType;
 import be4rjp.sclat.api.SoundType;
 import be4rjp.sclat.data.DataMgr;
@@ -28,9 +28,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static be4rjp.sclat.Main.conf;
+import static be4rjp.sclat.Sclat.conf;
 
 //sclat Command
+// Todo: use cloud command framework
 public class sclatCommandExecutor implements CommandExecutor, TabExecutor {
 	@Override
 	public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String commandLabel,
@@ -57,13 +58,13 @@ public class sclatCommandExecutor implements CommandExecutor, TabExecutor {
 
 			if (type == CommanderType.MEMBER) {
 				sender.sendMessage(ChatColor.RED + "You don't have permission.");
-				Sclat.playGameSound((Player) sender, SoundType.ERROR);
+				SclatUtil.playGameSound((Player) sender, SoundType.ERROR);
 				return true;
 			}
 
 			String num = args[1];
-			if (Sclat.isNumber(num)) {
-				Main.conf.getConfig().set("BlockUpdateRate", Integer.valueOf(num));
+			if (SclatUtil.isNumber(num)) {
+				Sclat.conf.getConfig().set("BlockUpdateRate", Integer.valueOf(num));
 				sender.sendMessage("setConfig [BlockUpdateRate]  :  " + num);
 				return true;
 			} else {
@@ -80,14 +81,14 @@ public class sclatCommandExecutor implements CommandExecutor, TabExecutor {
 
 			if (type == CommanderType.MEMBER) {
 				sender.sendMessage(ChatColor.RED + "You don't have permission.");
-				Sclat.playGameSound((Player) sender, SoundType.ERROR);
+				SclatUtil.playGameSound((Player) sender, SoundType.ERROR);
 				return true;
 			}
 
 			String playerName = args[1];
-			for (Player player : Main.getPlugin().getServer().getOnlinePlayers()) {
+			for (Player player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 				if (playerName.equals(player.getName())) {
-					Main.flyList.add(playerName);
+					Sclat.flyList.add(playerName);
 					return true;
 				}
 			}
@@ -101,14 +102,14 @@ public class sclatCommandExecutor implements CommandExecutor, TabExecutor {
 
 			if (type == CommanderType.MEMBER) {
 				sender.sendMessage(ChatColor.RED + "You don't have permission.");
-				Sclat.playGameSound((Player) sender, SoundType.ERROR);
+				SclatUtil.playGameSound((Player) sender, SoundType.ERROR);
 				return true;
 			}
 
 			if (sender instanceof Player) {
 				Player player = (Player) sender;
 				String targetConfig = args[1];
-				Sclat.sendMessage(String.format("%sの設定を再読み込み中...", targetConfig), MessageType.PLAYER, player);
+				SclatUtil.sendMessage(String.format("%sの設定を再読み込み中...", targetConfig), MessageType.PLAYER, player);
 				switch (targetConfig.toLowerCase()) {
 					case "emblemuserdata" :
 						conf.loadEmblemUserData();
@@ -117,10 +118,10 @@ public class sclatCommandExecutor implements CommandExecutor, TabExecutor {
 						conf.loadEmblemLoreData();
 						break;
 					default :
-						Sclat.sendMessage("そのオプションは存在しません！", MessageType.PLAYER, player);
+						SclatUtil.sendMessage("そのオプションは存在しません！", MessageType.PLAYER, player);
 						return true;
 				}
-				Sclat.sendMessage("再読み込み完了", MessageType.PLAYER, player);
+				SclatUtil.sendMessage("再読み込み完了", MessageType.PLAYER, player);
 			}
 		}
 		// --------------------------------
@@ -132,7 +133,7 @@ public class sclatCommandExecutor implements CommandExecutor, TabExecutor {
 
 			if (type == CommanderType.MEMBER) {
 				sender.sendMessage(ChatColor.RED + "You don't have permission.");
-				Sclat.playGameSound((Player) sender, SoundType.ERROR);
+				SclatUtil.playGameSound((Player) sender, SoundType.ERROR);
 				return true;
 			}
 
@@ -169,7 +170,7 @@ public class sclatCommandExecutor implements CommandExecutor, TabExecutor {
 
 			if (type == CommanderType.MEMBER) {
 				sender.sendMessage(ChatColor.RED + "You don't have permission.");
-				Sclat.playGameSound((Player) sender, SoundType.ERROR);
+				SclatUtil.playGameSound((Player) sender, SoundType.ERROR);
 				return true;
 			}
 
@@ -191,7 +192,7 @@ public class sclatCommandExecutor implements CommandExecutor, TabExecutor {
 
 			if (type == CommanderType.MEMBER) {
 				sender.sendMessage(ChatColor.RED + "You don't have permission.");
-				Sclat.playGameSound((Player) sender, SoundType.ERROR);
+				SclatUtil.playGameSound((Player) sender, SoundType.ERROR);
 				return true;
 			}
 
@@ -211,7 +212,7 @@ public class sclatCommandExecutor implements CommandExecutor, TabExecutor {
 
 			if (type == CommanderType.MEMBER) {
 				sender.sendMessage(ChatColor.RED + "You don't have permission.");
-				Sclat.playGameSound((Player) sender, SoundType.ERROR);
+				SclatUtil.playGameSound((Player) sender, SoundType.ERROR);
 				return true;
 			}
 
@@ -222,14 +223,15 @@ public class sclatCommandExecutor implements CommandExecutor, TabExecutor {
 						List<String> commands = new ArrayList<>();
 						commands.add("mod " + sender.getName());
 						commands.add("stop");
+						// Todo: use redis. fallbacks PluginMessaging
 						EquipmentClient sc = new EquipmentClient(
 								conf.getConfig().getString("EquipShare." + serverName + ".Host"),
 								conf.getConfig().getInt("EquipShare." + serverName + ".Port"), commands);
 						sc.startClient();
 
-						Sclat.sendMessage("Moderatorとして転送中...", MessageType.PLAYER, (Player) sender);
-						Sclat.sendMessage("2秒後に転送されます", MessageType.PLAYER, (Player) sender);
-						Sclat.playGameSound((Player) sender, SoundType.SUCCESS);
+						SclatUtil.sendMessage("Moderatorとして転送中...", MessageType.PLAYER, (Player) sender);
+						SclatUtil.sendMessage("2秒後に転送されます", MessageType.PLAYER, (Player) sender);
+						SclatUtil.playGameSound((Player) sender, SoundType.SUCCESS);
 
 						BukkitRunnable task = new BukkitRunnable() {
 							@Override
@@ -241,7 +243,7 @@ public class sclatCommandExecutor implements CommandExecutor, TabExecutor {
 								}
 							}
 						};
-						task.runTaskLater(Main.getPlugin(), 40);
+						task.runTaskLater(Sclat.getPlugin(), 40);
 					}
 				}
 				return true;
@@ -254,12 +256,12 @@ public class sclatCommandExecutor implements CommandExecutor, TabExecutor {
 
 		// ------------------/sclat ss <status> <server> <flag>---------------------
 		if (args[0].equalsIgnoreCase("ss")) {
-			if (args.length < 4 || Main.type != ServerType.LOBBY)
+			if (args.length < 4 || Sclat.type != ServerType.LOBBY)
 				return false;
 
 			if (type == CommanderType.MEMBER) {
 				sender.sendMessage(ChatColor.RED + "You don't have permission.");
-				Sclat.playGameSound((Player) sender, SoundType.ERROR);
+				SclatUtil.playGameSound((Player) sender, SoundType.ERROR);
 				return true;
 			}
 
@@ -279,12 +281,12 @@ public class sclatCommandExecutor implements CommandExecutor, TabExecutor {
 
 		// ---------------------/sclat tutorial <option> <server>-------------------
 		if (args[0].equalsIgnoreCase("tutorial")) {
-			if (args.length < 2 || Main.type != ServerType.LOBBY)
+			if (args.length < 2 || Sclat.type != ServerType.LOBBY)
 				return false;
 
 			if (type == CommanderType.MEMBER) {
 				sender.sendMessage(ChatColor.RED + "You don't have permission.");
-				Sclat.playGameSound((Player) sender, SoundType.ERROR);
+				SclatUtil.playGameSound((Player) sender, SoundType.ERROR);
 				return true;
 			}
 
@@ -292,20 +294,20 @@ public class sclatCommandExecutor implements CommandExecutor, TabExecutor {
 				if (args.length < 3)
 					return false;
 				String server = args[2];
-				List<String> list = Main.tutorialServers.getConfig().getStringList("server-list");
+				List<String> list = Sclat.tutorialServers.getConfig().getStringList("server-list");
 				if (!list.contains(server)) {
 					list.add(server);
-					Main.tutorialServers.getConfig().set("server-list", list);
+					Sclat.tutorialServers.getConfig().set("server-list", list);
 				} else {
 					sender.sendMessage(ChatColor.RED + "This server is already exist.");
 				}
 				return true;
 			} else if (args[1].equals("list")) {
-				List<String> list = Main.tutorialServers.getConfig().getStringList("server-list");
+				List<String> list = Sclat.tutorialServers.getConfig().getStringList("server-list");
 				sender.sendMessage(list.toString());
 				return true;
 			} else if (args[1].equals("reload")) {
-				Main.tutorialServers.reloadConfig();
+				Sclat.tutorialServers.reloadConfig();
 				return true;
 			}
 		}

@@ -1,9 +1,9 @@
 package be4rjp.sclat.manager;
 
-import be4rjp.sclat.Main;
+import be4rjp.sclat.Sclat;
 import be4rjp.sclat.api.ServerType;
+import be4rjp.sclat.api.player.PlayerData;
 import be4rjp.sclat.data.DataMgr;
-import be4rjp.sclat.data.PlayerData;
 import be4rjp.sclat.weapon.Gear;
 import net.minecraft.server.v1_14_R1.EntitySquid;
 import net.minecraft.server.v1_14_R1.EntityTypes;
@@ -31,7 +31,7 @@ import org.bukkit.scoreboard.ScoreboardManager;
 import org.bukkit.scoreboard.Team;
 import org.bukkit.util.Vector;
 
-import static be4rjp.sclat.Main.conf;
+import static be4rjp.sclat.Sclat.conf;
 
 /**
  *
@@ -61,7 +61,7 @@ public class SquidMgr {
 					p.setWalkSpeed(0.2F);
 					p.setMaxHealth(20);
 
-					if (Main.type == ServerType.MATCH) {
+					if (Sclat.type == ServerType.MATCH) {
 						p.setFoodLevel(20);
 						p.setExp(0F);
 					}
@@ -70,7 +70,7 @@ public class SquidMgr {
 						p.setAllowFlight(true);
 						p.setFlying(true);
 					} else {
-						if (p.hasPermission("sclat.lobbyfly") || Main.flyList.contains(p.getName())) {
+						if (p.hasPermission("sclat.lobbyfly") || Sclat.flyList.contains(p.getName())) {
 							p.setAllowFlight(true);
 						} else {
 							p.setAllowFlight(false);
@@ -112,7 +112,7 @@ public class SquidMgr {
 							p.removePotionEffect(PotionEffectType.POISON);
 					}
 				} else {
-					if (Main.tutorial && down.getType().toString().contains("WOOL")) {
+					if (Sclat.tutorial && down.getType().toString().contains("WOOL")) {
 						if (down.getType() != data.getTeam().getTeamColor().getWool()) {
 							if (data.getArmor() <= 0 && !data.getIsPoisonCoolTime()) {
 								p.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 200, 3));
@@ -234,7 +234,7 @@ public class SquidMgr {
 					data.setPlayerGroundLocation(p.getLocation());
 			}
 		};
-		task.runTaskTimer(Main.getPlugin(), 0, 2);
+		task.runTaskTimer(Sclat.getPlugin(), 0, 2);
 
 	}
 
@@ -329,7 +329,7 @@ public class SquidMgr {
 						if (!is) {
 							is = true;
 							PacketPlayOutSpawnEntityLiving packet = new PacketPlayOutSpawnEntityLiving(es);
-							for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
+							for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 								if (p.getWorld() == target.getWorld()) {
 									((CraftPlayer) target).getHandle().playerConnection.sendPacket(packet);
 								}
@@ -338,7 +338,7 @@ public class SquidMgr {
 						// squid.teleport(p);
 
 						PacketPlayOutEntityTeleport packet = new PacketPlayOutEntityTeleport(es);
-						for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
+						for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 							if (p.getWorld() == target.getWorld()) {
 								((CraftPlayer) target).getHandle().playerConnection.sendPacket(packet);
 							}
@@ -349,7 +349,7 @@ public class SquidMgr {
 							is2 = true;
 							PacketPlayOutEntityDestroy packet = new PacketPlayOutEntityDestroy(
 									es.getBukkitEntity().getEntityId());
-							for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
+							for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 								if (p.getWorld() == target.getWorld()) {
 									((CraftPlayer) target).getHandle().playerConnection.sendPacket(packet);
 								}
@@ -392,7 +392,7 @@ public class SquidMgr {
 					try {
 						PacketPlayOutEntityDestroy packet = new PacketPlayOutEntityDestroy(
 								es.getBukkitEntity().getEntityId());
-						for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
+						for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 							if (p.getWorld() == target.getWorld()) {
 								((CraftPlayer) target).getHandle().playerConnection.sendPacket(packet);
 							}
@@ -405,7 +405,7 @@ public class SquidMgr {
 					try {
 						PacketPlayOutEntityDestroy packet = new PacketPlayOutEntityDestroy(
 								es.getBukkitEntity().getEntityId());
-						for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
+						for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 							if (p.getWorld() == target.getWorld()) {
 								((CraftPlayer) target).getHandle().playerConnection.sendPacket(packet);
 							}
@@ -417,7 +417,7 @@ public class SquidMgr {
 				}
 			}
 		};
-		task.runTaskTimer(Main.getPlugin(), 30, 3);
+		task.runTaskTimer(Sclat.getPlugin(), 30, 3);
 	}
 
 	public static void PoisonCoolTime(Player player) {
@@ -428,6 +428,6 @@ public class SquidMgr {
 				DataMgr.getPlayerData(p).setIsPoisonCoolTime(false);
 			}
 		};
-		task.runTaskLater(Main.getPlugin(), 10);
+		task.runTaskLater(Sclat.getPlugin(), 10);
 	}
 }

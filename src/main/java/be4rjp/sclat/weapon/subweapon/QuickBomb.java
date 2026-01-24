@@ -1,8 +1,8 @@
 
 package be4rjp.sclat.weapon.subweapon;
 
-import be4rjp.sclat.Main;
-import be4rjp.sclat.api.Sclat;
+import be4rjp.sclat.Sclat;
+import be4rjp.sclat.api.SclatUtil;
 import be4rjp.sclat.api.Sphere;
 import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.data.KasaData;
@@ -56,7 +56,7 @@ public class QuickBomb {
 						ItemStack bom = new ItemStack(DataMgr.getPlayerData(p).getTeam().getTeamColor().getWool())
 								.clone();
 						ItemMeta bom_m = bom.getItemMeta();
-						bom_m.setLocalizedName(String.valueOf(Main.getNotDuplicateNumber()));
+						bom_m.setLocalizedName(String.valueOf(Sclat.getNotDuplicateNumber()));
 						bom.setItemMeta(bom_m);
 						drop = p.getWorld().dropItem(p.getEyeLocation(), bom);
 						drop.setVelocity(p_vec.clone());
@@ -65,7 +65,7 @@ public class QuickBomb {
 						ball.setVelocity(new Vector(0, 0, 0));
 						DataMgr.setSnowballIsHit(ball, false);
 
-						for (Player o_player : Main.getPlugin().getServer().getOnlinePlayers()) {
+						for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 							PlayerConnection connection = ((CraftPlayer) o_player).getHandle().playerConnection;
 							connection.sendPacket(new PacketPlayOutEntityDestroy(ball.getEntityId()));
 						}
@@ -85,10 +85,10 @@ public class QuickBomb {
 						player.getWorld().playSound(drop.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_BLAST, 1, 1);
 
 						// 爆発エフェクト
-						Sclat.createInkExplosionEffect(drop.getLocation(), maxDist, 15, player);
+						SclatUtil.createInkExplosionEffect(drop.getLocation(), maxDist, 15, player);
 
 						// バリアをはじく
-						Sclat.repelBarrier(drop.getLocation(), maxDist, player);
+						SclatUtil.repelBarrier(drop.getLocation(), maxDist, player);
 
 						// 塗る
 						for (int i = 0; i <= maxDist; i++) {
@@ -127,7 +127,7 @@ public class QuickBomb {
 							}
 						}
 
-						for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
+						for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 							if (!DataMgr.getPlayerData(target).isInMatch() || target.getWorld() != p.getWorld())
 								continue;
 							if (target.getLocation().distance(drop.getLocation()) <= maxDist) {
@@ -135,7 +135,7 @@ public class QuickBomb {
 										* Gear.getGearInfluence(player, Gear.Type.SUB_SPEC_UP);
 								if (DataMgr.getPlayerData(player).getTeam() != DataMgr.getPlayerData(target).getTeam()
 										&& target.getGameMode().equals(GameMode.ADVENTURE)) {
-									Sclat.giveDamage(player, target, damage, "subWeapon");
+									SclatUtil.giveDamage(player, target, damage, "subWeapon");
 
 									// AntiNoDamageTime
 									BukkitRunnable task = new BukkitRunnable() {
@@ -145,7 +145,7 @@ public class QuickBomb {
 											target.setNoDamageTicks(0);
 										}
 									};
-									task.runTaskLater(Main.getPlugin(), 1);
+									task.runTaskLater(Sclat.getPlugin(), 1);
 
 								}
 							}
@@ -171,11 +171,11 @@ public class QuickBomb {
 					}
 
 					// ボムの視認用エフェクト
-					for (Player o_player : Main.getPlugin().getServer().getOnlinePlayers()) {
+					for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 						if (DataMgr.getPlayerData(o_player).getSettings().ShowEffect_Bomb()) {
 							if (o_player.getWorld() == drop.getLocation().getWorld()) {
 								if (o_player.getLocation()
-										.distanceSquared(drop.getLocation()) < Main.PARTICLE_RENDER_DISTANCE_SQUARED) {
+										.distanceSquared(drop.getLocation()) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED) {
 									Particle.DustOptions dustOptions = new Particle.DustOptions(
 											DataMgr.getPlayerData(p).getTeam().getTeamColor().getBukkitColor(), 1);
 									o_player.spawnParticle(Particle.REDSTONE, drop.getLocation(), 1, 0, 0, 0, 50,
@@ -197,7 +197,7 @@ public class QuickBomb {
 				} catch (Exception e) {
 					drop.remove();
 					cancel();
-					Main.getPlugin().getLogger().warning(e.getMessage());
+					Sclat.getPlugin().getLogger().warning(e.getMessage());
 				}
 			}
 		};
@@ -208,10 +208,10 @@ public class QuickBomb {
 				DataMgr.getPlayerData(player).setCanUseSubWeapon(true);
 			}
 		};
-		cooltime.runTaskLater(Main.getPlugin(), 10);
+		cooltime.runTaskLater(Sclat.getPlugin(), 10);
 
 		if (player.getExp() > 0.4 || DataMgr.getPlayerData(player).getIsBombRush())
-			task.runTaskTimer(Main.getPlugin(), 0, 1);
+			task.runTaskTimer(Sclat.getPlugin(), 0, 1);
 		else {
 			player.sendTitle("", ChatColor.RED + "インクが足りません", 0, 5, 2);
 			player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1F, 1.63F);

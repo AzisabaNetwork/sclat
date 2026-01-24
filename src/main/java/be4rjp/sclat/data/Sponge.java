@@ -1,7 +1,8 @@
 package be4rjp.sclat.data;
 
-import be4rjp.sclat.Main;
-import be4rjp.sclat.api.Sclat;
+import be4rjp.sclat.Sclat;
+import be4rjp.sclat.api.SclatUtil;
+import be4rjp.sclat.api.team.Team;
 import be4rjp.sclat.manager.PaintMgr;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -70,7 +71,7 @@ public class Sponge {
 				canGiveDamage = true;
 			}
 		};
-		task.runTaskLater(Main.getPlugin(), 10);
+		task.runTaskLater(Sclat.getPlugin(), 10);
 
 		if (this.team != team) {
 			if (this.hp > damage) {
@@ -117,7 +118,7 @@ public class Sponge {
 					PaintData data = DataMgr.getPaintDataFromBlock(b);
 					data.setTeam(this.team);
 					// match.getBlockUpdater().setBlock(b, Material.AIR);
-					Sclat.setBlockByNMS(b, Material.AIR, true);
+					SclatUtil.setBlockByNMS(b, Material.AIR, true);
 					// b.setType(Material.AIR);
 				} else {
 					PaintData data = new PaintData(b);
@@ -125,7 +126,7 @@ public class Sponge {
 					data.setOrigianlType(b.getType());
 					data.setTeam(this.team);
 					// match.getBlockUpdater().setBlock(b, Material.AIR);
-					Sclat.setBlockByNMS(b, Material.AIR, true);
+					SclatUtil.setBlockByNMS(b, Material.AIR, true);
 					// b.setType(Material.AIR);
 					DataMgr.setPaintDataFromBlock(b, data);
 					DataMgr.setSpongeWithBlock(b, this);
@@ -141,7 +142,7 @@ public class Sponge {
 				// match.getBlockUpdater().setBlock(b,
 				// Material.getMaterial(this.team.getTeamColor().getConcrete().toString() +
 				// "_POWDER"));
-				Sclat.setBlockByNMS(b,
+				SclatUtil.setBlockByNMS(b,
 						Material.getMaterial(this.team.getTeamColor().getConcrete().toString() + "_POWDER"), false);
 				// b.setType(Material.getMaterial(this.team.getTeamColor().getConcrete().toString()
 				// + "_POWDER"));

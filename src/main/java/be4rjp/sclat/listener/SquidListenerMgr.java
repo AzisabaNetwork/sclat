@@ -1,18 +1,19 @@
 
 package be4rjp.sclat.listener;
 
+import be4rjp.sclat.api.player.PlayerData;
+import be4rjp.sclat.api.team.Team;
 import be4rjp.sclat.data.DataMgr;
-import be4rjp.sclat.data.PlayerData;
-import be4rjp.sclat.data.Team;
 import be4rjp.sclat.manager.DeathMgr;
-import java.util.ArrayList;
-import java.util.List;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *

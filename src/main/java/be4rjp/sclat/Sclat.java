@@ -3,18 +3,20 @@ package be4rjp.sclat;
 import be4rjp.blockstudio.BlockStudio;
 import be4rjp.blockstudio.api.BlockStudioAPI;
 import be4rjp.dadadachecker.DADADACheckerAPI;
-import be4rjp.sclat.api.Sclat;
+import be4rjp.sclat.api.Plugins;
+import be4rjp.sclat.api.SclatUtil;
 import be4rjp.sclat.api.ServerType;
 import be4rjp.sclat.api.async.AsyncPlayerListener;
 import be4rjp.sclat.api.async.AsyncThreadManager;
 import be4rjp.sclat.api.config.CustomConfig;
+import be4rjp.sclat.api.holo.PlayerHolograms;
+import be4rjp.sclat.api.wiremesh.Wiremesh;
 import be4rjp.sclat.commands.sclatCommandExecutor;
 import be4rjp.sclat.config.Config;
 import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.data.MapData;
 import be4rjp.sclat.data.Match;
 import be4rjp.sclat.data.PaintData;
-import be4rjp.sclat.data.Wiremesh;
 import be4rjp.sclat.gui.ClickListener;
 import be4rjp.sclat.listener.SquidListener;
 import be4rjp.sclat.lunachat.LunaChatListener;
@@ -50,6 +52,8 @@ import org.bukkit.plugin.messaging.PluginMessageListener;
 import org.bukkit.scoreboard.NameTagVisibility;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.ScoreboardManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,11 +62,12 @@ import java.util.List;
  *
  * @author Be4rJP
  */
-public class Main extends JavaPlugin implements PluginMessageListener {
+public class Sclat extends JavaPlugin implements PluginMessageListener {
+	private static final Logger logger = LoggerFactory.getLogger(Sclat.class);
 
 	public static Config conf;
 
-	private static Main plugin;
+	private static Sclat plugin;
 
 	public static Location lobby;
 
@@ -90,10 +95,6 @@ public class Main extends JavaPlugin implements PluginMessageListener {
 	// EquipmentShare
 	public static EquipmentServer es = null;
 
-	// API
-	public static boolean NoteBlockAPI = true;
-	public static boolean LunaChat = true;
-
 	// 重複しない数字
 	// ボム等で使用
 	private static int NDNumber = 0;
@@ -111,6 +112,8 @@ public class Main extends JavaPlugin implements PluginMessageListener {
 	public static double PARTICLE_RENDER_DISTANCE = 0;
 	public static double PARTICLE_RENDER_DISTANCE_SQUARED;
 
+	public static final PlayerHolograms playerHolograms = new PlayerHolograms();
+
 	@Override
 	public void onEnable() {
 		plugin = this;
@@ -122,35 +125,14 @@ public class Main extends JavaPlugin implements PluginMessageListener {
 		AsyncThreadManager.setup(1);
 
 		// ----------------------------APICheck-------------------------------
-		NoteBlockAPI = true;
-		if (!Bukkit.getPluginManager().isPluginEnabled("NoteBlockAPI")) {
-			getLogger().severe("*** NoteBlockAPI is not installed or not enabled. ***");
-			NoteBlockAPI = false;
+		if (!Plugins.onInit(logger))
 			return;
-		}
+		logger.info("API check was complted.");
 
-		// LunaChat
-		if (!Bukkit.getPluginManager().isPluginEnabled("LunaChat")) {
-			getLogger().severe("*** LunaChat is not installed or not enabled. ***");
-			LunaChat = false;
-		}
+		protocolManager = ProtocolLibrary.getProtocolManager();
+		SclatPacketListener.init();
 
-		// ProtocolLib
-		if (!Bukkit.getPluginManager().isPluginEnabled("ProtocolLib")) {
-			getLogger().severe("*** ProtocolLib is not installed or not enabled. ***");
-			return;
-		} else {
-			protocolManager = ProtocolLibrary.getProtocolManager();
-			new SclatPacketListener();
-		}
-
-		// DADADAChecker
-		if (!Bukkit.getPluginManager().isPluginEnabled("DADADAChecker")) {
-			getLogger().severe("*** DADADAChecker is not installed or not enabled. ***");
-			return;
-		} else {
-			dadadaCheckerAPI = new DADADACheckerAPI(this);
-		}
+		dadadaCheckerAPI = new DADADACheckerAPI(this);
 		// -------------------------------------------------------------------
 
 		// --------------------------Load config------------------------------
@@ -196,7 +178,7 @@ public class Main extends JavaPlugin implements PluginMessageListener {
 		pm.registerEvents(new SnowballListener(), this);
 		pm.registerEvents(new AsyncPlayerListener(), this);
 
-		if (LunaChat)
+		if (Plugins.LUNACHAT.isLoaded())
 			pm.registerEvents(new LunaChatListener(), this);
 		// -------------------------------------------------------------------
 
@@ -277,7 +259,7 @@ public class Main extends JavaPlugin implements PluginMessageListener {
 		// -------------------------------------------------------------------
 
 		// ------------------------Load NBS songs-----------------------------
-		if (NoteBlockAPI)
+		if (Plugins.NOTEBLOCKAPI.isLoaded())
 			NoteBlockAPIMgr.LoadSongFiles();
 		// -------------------------------------------------------------------
 
@@ -324,7 +306,7 @@ public class Main extends JavaPlugin implements PluginMessageListener {
 
 		// --------------------Send restarted server info---------------------
 		if (conf.getConfig().contains("RestartMatchCount"))
-			Sclat.sendRestartedServerInfo();
+			SclatUtil.sendRestartedServerInfo();
 		// -------------------------------------------------------------------
 
 		// -----------------------------Shop----------------------------------
@@ -369,7 +351,7 @@ public class Main extends JavaPlugin implements PluginMessageListener {
 		// -------------------------------------------------------------------
 
 		// ------------------------Tutorial wire mesh-------------------------
-		if (Main.tutorial) {
+		if (Sclat.tutorial) {
 			for (MapData mData : DataMgr.maplist) {
 				for (Wiremesh wiremesh : mData.getWiremeshListTask().getWiremeshsList()) {
 					wiremesh.startTask();
@@ -442,7 +424,7 @@ public class Main extends JavaPlugin implements PluginMessageListener {
 			as.remove();
 
 		// Worldが保存される前にアンロードして塗られた状態で保存されるのを防ぐ
-		if (Main.type == ServerType.LOBBY) {
+		if (Sclat.type == ServerType.LOBBY) {
 			for (String mapname : conf.getMapConfig().getConfigurationSection("Maps").getKeys(false)) {
 				String worldName = conf.getMapConfig().getString("Maps." + mapname + ".WorldName");
 				Bukkit.unloadWorld(worldName, false);
@@ -454,7 +436,7 @@ public class Main extends JavaPlugin implements PluginMessageListener {
 		}
 	}
 
-	public static Main getPlugin() {
+	public static Sclat getPlugin() {
 		return plugin;
 	}
 

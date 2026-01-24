@@ -1,5 +1,5 @@
 
-package be4rjp.sclat.data;
+package be4rjp.sclat.api.player;
 
 import org.bukkit.entity.Player;
 

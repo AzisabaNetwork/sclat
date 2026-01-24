@@ -17,7 +17,7 @@ import java.util.Set;
 import java.util.StringJoiner;
 import java.util.function.Function;
 
-import static be4rjp.sclat.Main.conf;
+import static be4rjp.sclat.Sclat.conf;
 
 public class EmblemManager {
 	private static ItemStack newEmblemStack(String displayName, List<String> lore, int amount) {
@@ -68,9 +68,7 @@ public class EmblemManager {
 		// On new emblem
 		if (!newEmblems.isEmpty()) {
 			// update cache
-			newEmblems.forEach(_emblem -> {
-				conf.getEmblemUserdata().set(strUuid + "." + _emblem, 1);
-			});
+			newEmblems.forEach(_emblem -> conf.getEmblemUserdata().set(strUuid + "." + _emblem, 1));
 
 			// player feedback
 			StringJoiner sj = new StringJoiner(", ");

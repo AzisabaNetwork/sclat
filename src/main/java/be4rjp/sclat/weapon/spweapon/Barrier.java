@@ -1,10 +1,10 @@
 
 package be4rjp.sclat.weapon.spweapon;
 
-import be4rjp.sclat.Main;
+import be4rjp.sclat.Sclat;
 import be4rjp.sclat.api.Sphere;
+import be4rjp.sclat.api.player.PlayerData;
 import be4rjp.sclat.data.DataMgr;
-import be4rjp.sclat.data.PlayerData;
 import be4rjp.sclat.manager.SPWeaponMgr;
 import net.minecraft.server.v1_14_R1.EntityArmorStand;
 import org.bukkit.GameMode;
@@ -44,7 +44,7 @@ public class Barrier {
 				Location loc = p.getLocation().add(0, 0.5, 0);
 
 				List<Location> s_locs = Sphere.getSphere(loc, 2, 23);
-				for (Player o_player : Main.getPlugin().getServer().getOnlinePlayers()) {
+				for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 					if (DataMgr.getPlayerData(o_player).getSettings().ShowEffect_SPWeapon()
 							&& !o_player.equals(player)) {
 						Particle.DustOptions dustOptions = new Particle.DustOptions(
@@ -54,7 +54,7 @@ public class Barrier {
 						for (Location e_loc : s_locs)
 							if (o_player.getWorld() == e_loc.getWorld())
 								if (o_player.getLocation()
-										.distanceSquared(e_loc) < Main.PARTICLE_RENDER_DISTANCE_SQUARED)
+										.distanceSquared(e_loc) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED)
 									o_player.spawnParticle(Particle.REDSTONE, e_loc, 0, 0, 0, 0, 70, dustOptions);
 					}
 				}
@@ -67,6 +67,6 @@ public class Barrier {
 				c++;
 			}
 		};
-		task.runTaskTimer(Main.getPlugin(), 0, 4);
+		task.runTaskTimer(Sclat.getPlugin(), 0, 4);
 	}
 }

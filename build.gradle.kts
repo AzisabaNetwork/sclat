@@ -36,6 +36,7 @@ dependencies {
     compileOnly(libs.blockstudio)
     compileOnly(libs.paperApi)
     implementation(libs.cloudPaper)
+    implementation(libs.jspecify)
 }
 
 // Project Settings

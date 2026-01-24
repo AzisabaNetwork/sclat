@@ -1,7 +1,7 @@
 
 package be4rjp.sclat.manager;
 
-import be4rjp.sclat.Main;
+import be4rjp.sclat.Sclat;
 import be4rjp.sclat.api.raytrace.RayTrace;
 import be4rjp.sclat.data.DataMgr;
 import net.minecraft.server.v1_14_R1.EntityArmorStand;
@@ -57,11 +57,11 @@ public class SuperJumpMgr {
 			}
 		};
 		if (nearspawnpoint) {
-			task.runTaskLater(Main.getPlugin(), 15);
+			task.runTaskLater(Sclat.getPlugin(), 15);
 		} else {
 			if (!player.hasPotionEffect(PotionEffectType.GLOWING))
 				player.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 50, 1));
-			task.runTaskLater(Main.getPlugin(), 50);
+			task.runTaskLater(Sclat.getPlugin(), 50);
 		}
 	}
 
@@ -141,7 +141,7 @@ public class SuperJumpMgr {
 				t++;
 			}
 		};
-		task.runTaskTimer(Main.getPlugin(), 0, 1);
+		task.runTaskTimer(Sclat.getPlugin(), 0, 1);
 
 		BukkitRunnable effect = new BukkitRunnable() {
 			Player p = player;
@@ -161,7 +161,7 @@ public class SuperJumpMgr {
 					as.setCustomNameVisible(true);
 					as.setSmall(true);
 					id = as.getBukkitEntity().getEntityId();
-					for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
+					for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 						if (p.getWorld() == target.getWorld()) {
 							((CraftPlayer) target).getHandle().playerConnection
 									.sendPacket(new PacketPlayOutSpawnEntityLiving(as));
@@ -179,7 +179,7 @@ public class SuperJumpMgr {
 				p.getWorld().spawnParticle(Particle.REDSTONE, tl, 1, 0, 0.1, 0, 50, dustOptions);
 				if (p.getGameMode().equals(GameMode.ADVENTURE) || !DataMgr.getPlayerData(p).isInMatch()
 						|| !p.isOnline()) {
-					for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
+					for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 						if (p.getWorld() == target.getWorld()) {
 							((CraftPlayer) target).getHandle().playerConnection
 									.sendPacket(new PacketPlayOutEntityDestroy(id));
@@ -190,6 +190,6 @@ public class SuperJumpMgr {
 				c++;
 			}
 		};
-		effect.runTaskTimer(Main.getPlugin(), 0, 1);
+		effect.runTaskTimer(Sclat.getPlugin(), 0, 1);
 	}
 }

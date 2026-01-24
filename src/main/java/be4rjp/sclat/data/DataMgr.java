@@ -1,18 +1,21 @@
 
 package be4rjp.sclat.data;
 
+import be4rjp.sclat.api.player.PlayerData;
+import be4rjp.sclat.api.team.Team;
+import be4rjp.sclat.api.team.TeamLoc;
+import org.bukkit.block.Block;
+import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
+import org.bukkit.entity.Snowball;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-
-import org.bukkit.block.Block;
-import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Projectile;
-import org.bukkit.entity.Snowball;
 
 /**
  *
@@ -43,7 +46,6 @@ public class DataMgr {
 	private static Map<ArmorStand, SplashShieldData> ssam = new HashMap<>();
 	private static Map<Player, KasaData> kpm = new HashMap<>();
 	private static Map<ArmorStand, KasaData> kam = new HashMap<>();
-	private static Map<Player, RankingHolograms> rankingHologramsMap = new HashMap<>();
 	// private static Map<Match, PaintData> paintdata = new HashMap<>();
 	private static List<Color> list = new ArrayList<>();
 	public static Map<String, Integer> oto = new HashMap<>();
@@ -123,9 +125,6 @@ public class DataMgr {
 	public static int getSnowballHitCount(String name) {
 		return msbn.get(name);
 	}
-	public static RankingHolograms getRankingHolograms(Player player) {
-		return rankingHologramsMap.get(player);
-	}
 	// public static PaintData getPaintDataFromMatch(Match match){return
 	// paintdata.get(match);}
 
@@ -194,9 +193,6 @@ public class DataMgr {
 	}
 	public static void setSnowballHitCount(String name, int coount) {
 		msbn.putIfAbsent(name, coount);
-	}
-	public static void setRankingHolograms(Player player, RankingHolograms rankingHolograms) {
-		rankingHologramsMap.put(player, rankingHolograms);
 	}
 
 	public static void addColorList(Color color) {

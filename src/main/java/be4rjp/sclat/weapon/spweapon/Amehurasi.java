@@ -1,8 +1,8 @@
 
 package be4rjp.sclat.weapon.spweapon;
 
-import be4rjp.sclat.Main;
-import be4rjp.sclat.api.Sclat;
+import be4rjp.sclat.Sclat;
+import be4rjp.sclat.api.SclatUtil;
 import be4rjp.sclat.api.Sphere;
 import be4rjp.sclat.api.raytrace.RayTrace;
 import be4rjp.sclat.data.DataMgr;
@@ -57,7 +57,7 @@ public class Amehurasi {
 						DataMgr.getPlayerData(player).setIsUsingAmehurashi(true);
 						ItemStack bom = new ItemStack(Material.BEACON).clone();
 						ItemMeta bom_m = bom.getItemMeta();
-						bom_m.setLocalizedName(String.valueOf(Main.getNotDuplicateNumber()));
+						bom_m.setLocalizedName(String.valueOf(Sclat.getNotDuplicateNumber()));
 						bom.setItemMeta(bom_m);
 						drop = p.getWorld().dropItem(p.getEyeLocation(), bom);
 						drop.setVelocity(p.getEyeLocation().getDirection());
@@ -78,11 +78,11 @@ public class Amehurasi {
 					}
 
 					// 視認用エフェクト
-					for (Player o_player : Main.getPlugin().getServer().getOnlinePlayers()) {
+					for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 						if (DataMgr.getPlayerData(o_player).getSettings().ShowEffect_Bomb()) {
 							if (o_player.getWorld() == drop.getWorld()) {
 								if (o_player.getLocation()
-										.distanceSquared(drop.getLocation()) < Main.PARTICLE_RENDER_DISTANCE_SQUARED) {
+										.distanceSquared(drop.getLocation()) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED) {
 									Particle.DustOptions dustOptions = new Particle.DustOptions(
 											DataMgr.getPlayerData(p).getTeam().getTeamColor().getBukkitColor(), 1);
 									o_player.spawnParticle(Particle.REDSTONE, drop.getLocation(), 1, 0, 0, 0, 50,
@@ -102,12 +102,12 @@ public class Amehurasi {
 				} catch (Exception e) {
 					drop.remove();
 					cancel();
-					Main.getPlugin().getLogger().warning(e.getMessage());
+					Sclat.getPlugin().getLogger().warning(e.getMessage());
 				}
 			}
 		};
 		if (!DataMgr.getPlayerData(player).getIsUsingAmehurashi())
-			task.runTaskTimer(Main.getPlugin(), 0, 1);
+			task.runTaskTimer(Sclat.getPlugin(), 0, 1);
 	}
 
 	public static void AmehurasiRunnable(Player player, Location loc, Vector vec) {
@@ -129,13 +129,13 @@ public class Amehurasi {
 
 					// 雲エフェクト
 					if (c % 2 == 0) {
-						for (Player o_player : Main.getPlugin().getServer().getOnlinePlayers()) {
+						for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 							if (DataMgr.getPlayerData(o_player).getSettings().ShowEffect_SPWeapon()) {
 								for (Location loc : locList) {
 									if (new Random().nextInt(3) == 1) {
 										if (o_player.getWorld() == loc.getWorld()) {
 											if (o_player.getLocation()
-													.distanceSquared(loc) < Main.PARTICLE_RENDER_DISTANCE_SQUARED) {
+													.distanceSquared(loc) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED) {
 												Particle.DustOptions dustOptions = new Particle.DustOptions(DataMgr
 														.getPlayerData(p).getTeam().getTeamColor().getBukkitColor(), 3);
 												o_player.spawnParticle(Particle.REDSTONE, loc, 1, 1, 1, 1, 1,
@@ -163,7 +163,7 @@ public class Amehurasi {
 							double maxDist = 6.5;
 							double maxDistSquared = 42.25; /* 6.5^2 */
 							double damage = 2;
-							for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
+							for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 								if (!DataMgr.getPlayerData(target).isInMatch())
 									continue;
 								if (target.getWorld() != p.getWorld())
@@ -172,7 +172,7 @@ public class Amehurasi {
 										&& new Random().nextInt(100) == 0) {
 									if (DataMgr.getPlayerData(p).getTeam() != DataMgr.getPlayerData(target).getTeam()
 											&& target.getGameMode().equals(GameMode.ADVENTURE)) {
-										Sclat.giveDamage(p, target, damage, "spWeapon");
+										SclatUtil.giveDamage(p, target, damage, "spWeapon");
 
 										// AntiNoDamageTime
 										BukkitRunnable task = new BukkitRunnable() {
@@ -182,7 +182,7 @@ public class Amehurasi {
 												target.setNoDamageTicks(0);
 											}
 										};
-										task.runTaskLater(Main.getPlugin(), 1);
+										task.runTaskLater(Sclat.getPlugin(), 1);
 									}
 								}
 							}
@@ -209,11 +209,11 @@ public class Amehurasi {
 					c++;
 				} catch (Exception e) {
 					cancel();
-					Main.getPlugin().getLogger().warning(e.getMessage());
+					Sclat.getPlugin().getLogger().warning(e.getMessage());
 				}
 			}
 		};
-		task.runTaskTimer(Main.getPlugin(), 0, 1);
+		task.runTaskTimer(Sclat.getPlugin(), 0, 1);
 	}
 
 	public static void SnowballAmehurasiRunnable(Player player, Location loc) {
@@ -231,11 +231,11 @@ public class Amehurasi {
 				if (i % 2 == 0) {
 					org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).getTeam().getTeamColor().getWool()
 							.createBlockData();
-					for (Player o_player : Main.getPlugin().getServer().getOnlinePlayers()) {
+					for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 						if (DataMgr.getPlayerData(o_player).getSettings().ShowEffect_SPWeapon())
 							if (o_player.getWorld() == inkball.getWorld())
-								if (o_player.getLocation()
-										.distanceSquared(inkball.getLocation()) < Main.PARTICLE_RENDER_DISTANCE_SQUARED)
+								if (o_player.getLocation().distanceSquared(
+										inkball.getLocation()) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED)
 									o_player.spawnParticle(org.bukkit.Particle.BLOCK_DUST, inkball.getLocation(), 1, 0,
 											0, 0, 1, bd);
 					}
@@ -247,6 +247,6 @@ public class Amehurasi {
 				i++;
 			}
 		};
-		task.runTaskTimer(Main.getPlugin(), 0, 2);
+		task.runTaskTimer(Sclat.getPlugin(), 0, 2);
 	}
 }

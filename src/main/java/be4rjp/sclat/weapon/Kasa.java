@@ -1,14 +1,14 @@
 
 package be4rjp.sclat.weapon;
 
-import be4rjp.sclat.Main;
-import be4rjp.sclat.api.Sclat;
+import be4rjp.sclat.Sclat;
+import be4rjp.sclat.api.SclatUtil;
+import be4rjp.sclat.api.player.PlayerData;
 import be4rjp.sclat.api.raytrace.BoundingBox;
 import be4rjp.sclat.api.raytrace.RayTrace;
+import be4rjp.sclat.api.team.Team;
 import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.data.KasaData;
-import be4rjp.sclat.data.PlayerData;
-import be4rjp.sclat.data.Team;
 import be4rjp.sclat.manager.MainWeaponMgr;
 import be4rjp.sclat.manager.PaintMgr;
 import be4rjp.sclat.manager.WeaponClassMgr;
@@ -57,7 +57,7 @@ public class Kasa {
 			}
 		};
 		if (data.getCanRollerShoot())
-			delay1.runTaskLater(Main.getPlugin(), data.getWeaponClass().getMainWeapon().getCoolTime());
+			delay1.runTaskLater(Sclat.getPlugin(), data.getWeaponClass().getMainWeapon().getCoolTime());
 
 		BukkitRunnable delay = new BukkitRunnable() {
 			final Player p = player;
@@ -76,7 +76,7 @@ public class Kasa {
 			}
 		};
 		if (data.getCanRollerShoot()) {
-			delay.runTaskLater(Main.getPlugin(), data.getWeaponClass().getMainWeapon().getDelay());
+			delay.runTaskLater(Sclat.getPlugin(), data.getWeaponClass().getMainWeapon().getDelay());
 			data.setCanRollerShoot(false);
 		}
 	}
@@ -109,7 +109,7 @@ public class Kasa {
 				Math.random() * random - random / 2));
 		ball.setVelocity(vec);
 		ball.setShooter(player);
-		String name = String.valueOf(Main.getNotDuplicateNumber());
+		String name = String.valueOf(Sclat.getNotDuplicateNumber());
 		DataMgr.mws.add(name);
 		ball.setCustomName(name);
 		DataMgr.getMainSnowballNameMap().put(name, ball);
@@ -133,12 +133,12 @@ public class Kasa {
 				}
 
 				if (i != 0) {
-					for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
+					for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 						if (!DataMgr.getPlayerData(target).getSettings().ShowEffect_MainWeaponInk())
 							continue;
 						if (target.getWorld() == inkball.getWorld()) {
 							if (target.getLocation()
-									.distanceSquared(inkball.getLocation()) < Main.PARTICLE_RENDER_DISTANCE_SQUARED) {
+									.distanceSquared(inkball.getLocation()) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED) {
 								org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).getTeam().getTeamColor()
 										.getWool().createBlockData();
 								target.spawnParticle(org.bukkit.Particle.BLOCK_DUST, inkball.getLocation(), 1, 0, 0, 0,
@@ -162,7 +162,7 @@ public class Kasa {
 				i++;
 			}
 		};
-		task.runTaskTimer(Main.getPlugin(), 0, 1);
+		task.runTaskTimer(Sclat.getPlugin(), 0, 1);
 
 		return false;
 	}
@@ -174,7 +174,7 @@ public class Kasa {
 		BukkitRunnable task = new BukkitRunnable() {
 			Player p = player;
 			int i = 0;
-			List<ArmorStand> list = new ArrayList<ArmorStand>();
+			List<ArmorStand> list = new ArrayList<>();
 			boolean weapon = false;
 			boolean sound = true;
 
@@ -292,7 +292,7 @@ public class Kasa {
 						} else {
 							if (i % 5 == 0) {
 								for (ArmorStand as : list) {
-									for (Player o_player : Main.getPlugin().getServer().getOnlinePlayers()) {
+									for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 										((CraftPlayer) o_player).getHandle().playerConnection.sendPacket(
 												new PacketPlayOutEntityEquipment(as.getEntityId(), EnumItemSlot.HEAD,
 														CraftItemStack.asNMSCopy(new ItemStack(Material.AIR))));
@@ -362,9 +362,9 @@ public class Kasa {
 		};
 
 		if (big)
-			bigktask.runTaskTimer(Main.getPlugin(), 0, 1);
+			bigktask.runTaskTimer(Sclat.getPlugin(), 0, 1);
 		else
-			task.runTaskTimer(Main.getPlugin(), 0, 1);
+			task.runTaskTimer(Sclat.getPlugin(), 0, 1);
 	}
 
 	public static void Camping(Player player) {
@@ -382,9 +382,9 @@ public class Kasa {
 
 			Vector dir = new Vector(1, 0, 0);
 
-			List<ArmorStand> list = new ArrayList<ArmorStand>();
-			List<ArmorStand> ul = new ArrayList<ArmorStand>();
-			List<ArmorStand> dl = new ArrayList<ArmorStand>();
+			List<ArmorStand> list = new ArrayList<>();
+			List<ArmorStand> ul = new ArrayList<>();
+			List<ArmorStand> dl = new ArrayList<>();
 
 			ArmorStand as1;
 			ArmorStand as2;
@@ -557,11 +557,11 @@ public class Kasa {
 							Location asl = as4.getLocation();
 							org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).getTeam().getTeamColor()
 									.getWool().createBlockData();
-							for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
+							for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 								if (DataMgr.getPlayerData(target).getSettings().ShowEffect_MainWeaponInk())
 									if (target.getWorld() == p.getWorld())
 										if (target.getLocation()
-												.distanceSquared(asl) < Main.PARTICLE_RENDER_DISTANCE_SQUARED)
+												.distanceSquared(asl) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED)
 											target.spawnParticle(org.bukkit.Particle.BLOCK_DUST, asl, 1, 0, 0, 0, 1,
 													bd);
 							}
@@ -575,13 +575,13 @@ public class Kasa {
 							for (ArmorStand as : dl) {
 								RayTrace rayTrace = new RayTrace(as.getLocation().toVector(), new Vector(0, 1, 0));
 								double damage = 1.0;
-								for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
+								for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 									if (!DataMgr.getPlayerData(target).isInMatch())
 										continue;
 									if (DataMgr.getPlayerData(player).getTeam() != DataMgr.getPlayerData(target)
 											.getTeam() && target.getGameMode().equals(GameMode.ADVENTURE)) {
 										if (rayTrace.intersects(new BoundingBox((Entity) target), 5, 0.05)) {
-											Sclat.giveDamage(player, target, damage, "killed");
+											SclatUtil.giveDamage(player, target, damage, "killed");
 
 											// AntiNoDamageTime
 											BukkitRunnable task = new BukkitRunnable() {
@@ -591,7 +591,7 @@ public class Kasa {
 													target.setNoDamageTicks(0);
 												}
 											};
-											task.runTaskLater(Main.getPlugin(), 1);
+											task.runTaskLater(Sclat.getPlugin(), 1);
 										}
 									}
 								}
@@ -604,7 +604,7 @@ public class Kasa {
 							Team team = data.getMatch().getTeam0();
 							if (team == data.getTeam())
 								team = data.getMatch().getTeam1();
-							for (Player o_player : Main.getPlugin().getServer().getOnlinePlayers()) {
+							for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 								if (kdata.getDamage() == 0) {
 									((CraftPlayer) o_player).getHandle().playerConnection
 											.sendPacket(new PacketPlayOutEntityEquipment(as.getEntityId(),
@@ -707,7 +707,7 @@ public class Kasa {
 				}
 			}
 		};
-		task.runTaskTimer(Main.getPlugin(), 0, 1);
+		task.runTaskTimer(Sclat.getPlugin(), 0, 1);
 	}
 
 	public static void ArmorStandItemDelay(List<ArmorStand> list, Player player, KasaData kdata) {
@@ -722,7 +722,7 @@ public class Kasa {
 				int c = 1;
 				for (ArmorStand as : list) {
 					if (c <= 4) {
-						for (Player o_player : Main.getPlugin().getServer().getOnlinePlayers()) {
+						for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 							if (kdata.getDamage() == 0) {
 								((CraftPlayer) o_player).getHandle().playerConnection
 										.sendPacket(new PacketPlayOutEntityEquipment(as.getEntityId(),
@@ -781,7 +781,7 @@ public class Kasa {
 					}
 
 					if (c == 5) {
-						for (Player o_player : Main.getPlugin().getServer().getOnlinePlayers()) {
+						for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 							((CraftPlayer) o_player).getHandle().playerConnection
 									.sendPacket(new PacketPlayOutEntityEquipment(as.getEntityId(), EnumItemSlot.HEAD,
 											CraftItemStack.asNMSCopy(new ItemStack(Material.END_ROD))));
@@ -792,7 +792,7 @@ public class Kasa {
 				}
 			}
 		};
-		task.runTaskLater(Main.getPlugin(), 10);
+		task.runTaskLater(Sclat.getPlugin(), 10);
 	}
 
 	public static void ArmorStandTeleportDelay(List<ArmorStand> list, Player player, KasaData kdata) {
@@ -803,6 +803,6 @@ public class Kasa {
 					as.teleport(player.getLocation().add(0, 50, 0));
 			}
 		};
-		task.runTaskLater(Main.getPlugin(), 3);
+		task.runTaskLater(Sclat.getPlugin(), 3);
 	}
 }

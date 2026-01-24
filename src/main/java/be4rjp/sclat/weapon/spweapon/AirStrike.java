@@ -1,8 +1,8 @@
 
 package be4rjp.sclat.weapon.spweapon;
 
-import be4rjp.sclat.Main;
-import be4rjp.sclat.api.Sclat;
+import be4rjp.sclat.Sclat;
+import be4rjp.sclat.api.SclatUtil;
 import be4rjp.sclat.api.Sphere;
 import be4rjp.sclat.api.raytrace.RayTrace;
 import be4rjp.sclat.data.DataMgr;
@@ -49,7 +49,7 @@ public class AirStrike {
 					player.removePotionEffect(PotionEffectType.SLOW);
 			}
 		};
-		clear.runTaskLater(Main.getPlugin(), 20);
+		clear.runTaskLater(Sclat.getPlugin(), 20);
 
 		Vector vec = MapKitMgr.getMapLocationVector(player);
 		// int y = player.getWorld().getHighestBlockYAt(vec.getBlockX(),
@@ -93,9 +93,9 @@ public class AirStrike {
 			}
 		};
 		if (localized) {
-			task.runTaskTimer(Main.getPlugin(), 5, 5);
+			task.runTaskTimer(Sclat.getPlugin(), 5, 5);
 		} else {
-			task.runTaskTimer(Main.getPlugin(), 50, 10);
+			task.runTaskTimer(Sclat.getPlugin(), 50, 10);
 		}
 
 		BukkitRunnable effect = new BukkitRunnable() {
@@ -117,7 +117,7 @@ public class AirStrike {
 				c++;
 			}
 		};
-		effect.runTaskTimer(Main.getPlugin(), 0, 2);
+		effect.runTaskTimer(Sclat.getPlugin(), 0, 2);
 
 	}
 
@@ -136,7 +136,7 @@ public class AirStrike {
 				if (c == 0) {
 					ItemStack bom = new ItemStack(DataMgr.getPlayerData(p).getTeam().getTeamColor().getWool()).clone();
 					ItemMeta bom_m = bom.getItemMeta();
-					bom_m.setLocalizedName(String.valueOf(Main.getNotDuplicateNumber()));
+					bom_m.setLocalizedName(String.valueOf(Sclat.getNotDuplicateNumber()));
 					bom.setItemMeta(bom_m);
 					drop = p.getWorld().dropItem(loc, bom);
 					if (localized) {
@@ -160,7 +160,7 @@ public class AirStrike {
 					player.getWorld().playSound(drop.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_BLAST, 1, 1);
 
 					// 爆発エフェクト
-					Sclat.createInkExplosionEffect(drop.getLocation(), maxDist, 25, player);
+					SclatUtil.createInkExplosionEffect(drop.getLocation(), maxDist, 25, player);
 
 					// 塗る
 					for (int i = 0; i <= maxDist; i++) {
@@ -172,7 +172,7 @@ public class AirStrike {
 
 					// 攻撃判定の処理
 
-					for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
+					for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 						if (!DataMgr.getPlayerData(target).isInMatch())
 							continue;
 						if (target.getLocation().distanceSquared(drop.getLocation()) <= maxDistSquared) {
@@ -184,7 +184,7 @@ public class AirStrike {
 							}
 							if (DataMgr.getPlayerData(player).getTeam() != DataMgr.getPlayerData(target).getTeam()
 									&& target.getGameMode().equals(GameMode.ADVENTURE)) {
-								Sclat.giveDamage(player, target, damage, "spWeapon");
+								SclatUtil.giveDamage(player, target, damage, "spWeapon");
 
 								// AntiNoDamageTime
 								BukkitRunnable task = new BukkitRunnable() {
@@ -194,7 +194,7 @@ public class AirStrike {
 										target.setNoDamageTicks(0);
 									}
 								};
-								task.runTaskLater(Main.getPlugin(), 1);
+								task.runTaskLater(Sclat.getPlugin(), 1);
 
 							}
 						}
@@ -215,7 +215,7 @@ public class AirStrike {
 				}
 
 				// ボムの視認用エフェクト
-				for (Player o_player : Main.getPlugin().getServer().getOnlinePlayers()) {
+				for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 					if (DataMgr.getPlayerData(o_player).getSettings().ShowEffect_SPWeapon()) {
 						Particle.DustOptions dustOptions = new Particle.DustOptions(
 								DataMgr.getPlayerData(p).getTeam().getTeamColor().getBukkitColor(), 1);
@@ -236,7 +236,7 @@ public class AirStrike {
 			}
 		};
 
-		task.runTaskTimer(Main.getPlugin(), 0, 1);
+		task.runTaskTimer(Sclat.getPlugin(), 0, 1);
 
 	}
 }

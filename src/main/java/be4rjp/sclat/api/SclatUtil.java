@@ -1,9 +1,9 @@
 package be4rjp.sclat.api;
 
-import be4rjp.sclat.Main;
+import be4rjp.sclat.Sclat;
+import be4rjp.sclat.api.player.PlayerData;
+import be4rjp.sclat.api.team.Team;
 import be4rjp.sclat.data.DataMgr;
-import be4rjp.sclat.data.PlayerData;
-import be4rjp.sclat.data.Team;
 import be4rjp.sclat.manager.BungeeCordMgr;
 import be4rjp.sclat.manager.DeathMgr;
 import be4rjp.sclat.manager.MatchMgr;
@@ -36,7 +36,7 @@ import org.bukkit.util.Vector;
 import java.util.ArrayList;
 import java.util.List;
 
-import static be4rjp.sclat.Main.conf;
+import static be4rjp.sclat.Sclat.conf;
 
 /**
  *
@@ -46,7 +46,7 @@ import static be4rjp.sclat.Main.conf;
  * 
  */
 
-public class Sclat {
+public class SclatUtil {
 
 	public static void setBlockByNMS(org.bukkit.block.Block b, org.bukkit.Material material, boolean applyPhysics) {
 		Location loc = b.getLocation();
@@ -82,7 +82,7 @@ public class Sclat {
 		Block block = ((CraftBlockData) Bukkit.createBlockData(material)).getState().getBlock();
 		IBlockAccess iba = (IBlockAccess) nmsWorld;
 		PacketPlayOutBlockChange packet = new PacketPlayOutBlockChange(iba, bp);
-		for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
+		for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 			if (target.getWorld() == b.getWorld()) {
 				((CraftPlayer) target).getHandle().playerConnection.sendPacket(packet);
 			}
@@ -143,7 +143,7 @@ public class Sclat {
 				conf.getConfig().getInt("StatusShare.Port"), commands);
 		sc.startClient();
 
-		for (Player player : Main.getPlugin().getServer().getOnlinePlayers()) {
+		for (Player player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 			BungeeCordMgr.PlayerSendServer(player, "sclat");
 			DataMgr.getPlayerData(player).setServerName("Sclat");
 		}
@@ -153,7 +153,7 @@ public class Sclat {
 				Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "restart");
 			}
 		};
-		task.runTaskLater(Main.getPlugin(), 100);
+		task.runTaskLater(Sclat.getPlugin(), 100);
 	}
 
 	public static void sendRestartedServerInfo() {
@@ -172,7 +172,7 @@ public class Sclat {
 		CraftPlayer cp = (CraftPlayer) player;
 		EntityPlayer ep = cp.getHandle();
 		String origName = ep.getName();
-		for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
+		for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 			if (player != target) {
 				CraftPlayer ct = (CraftPlayer) player;
 				ct.getHandle().playerConnection.sendPacket(new PacketPlayOutNamedEntitySpawn(ep));
@@ -188,17 +188,17 @@ public class Sclat {
 		buff.append(message);
 		switch (type) {
 			case ALL_PLAYER : {
-				for (Player player : Main.getPlugin().getServer().getOnlinePlayers()) {
+				for (Player player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 					player.sendMessage(buff.toString());
 				}
 				break;
 			}
 			case CONSOLE : {
-				Main.getPlugin().getServer().getLogger().info(buff.toString());
+				Sclat.getPlugin().getServer().getLogger().info(buff.toString());
 				break;
 			}
 			case BROADCAST : {
-				Main.getPlugin().getServer().broadcastMessage(buff.toString());
+				Sclat.getPlugin().getServer().broadcastMessage(buff.toString());
 				break;
 			}
 		}
@@ -210,7 +210,7 @@ public class Sclat {
 		buff.append(sclat);
 		buff.append(message);
 		if (type == MessageType.TEAM) {
-			for (Player player : Main.getPlugin().getServer().getOnlinePlayers()) {
+			for (Player player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 				Team playerTeam = DataMgr.getPlayerData(player).getTeam();
 				if (playerTeam == null)
 					continue;
@@ -258,18 +258,18 @@ public class Sclat {
 				}
 			}
 		};
-		send.runTaskLater(Main.getPlugin(), 20);
+		send.runTaskLater(Sclat.getPlugin(), 20);
 	}
 
 	public static void createInkExplosionEffect(Location center, double radius, int accuracy, Player player) {
 		List<Location> s_locs = Sphere.getSphere(center, radius - 0.5, accuracy);
 		org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(player).getTeam().getTeamColor().getWool()
 				.createBlockData();
-		for (Player o_player : Main.getPlugin().getServer().getOnlinePlayers()) {
+		for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 			if (DataMgr.getPlayerData(o_player).getSettings().ShowEffect_BombEx()) {
 				for (Location loc : s_locs) {
 					if (o_player.getWorld() == loc.getWorld()) {
-						if (o_player.getLocation().distanceSquared(loc) < Main.PARTICLE_RENDER_DISTANCE_SQUARED) {
+						if (o_player.getLocation().distanceSquared(loc) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED) {
 							o_player.spawnParticle(org.bukkit.Particle.BLOCK_DUST, loc, 0, loc.getX() - center.getX(),
 									loc.getY() - center.getY(), loc.getZ() - center.getZ(), 1, bd);
 						}
@@ -280,7 +280,7 @@ public class Sclat {
 	}
 
 	public static void repelBarrier(Location center, double radius, Player shooter) {
-		for (Player player : Main.getPlugin().getServer().getOnlinePlayers()) {
+		for (Player player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 			PlayerData playerData = DataMgr.getPlayerData(player);
 
 			if (player.getWorld() != center.getWorld())

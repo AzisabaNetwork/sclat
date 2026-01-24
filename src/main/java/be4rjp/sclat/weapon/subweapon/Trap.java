@@ -1,8 +1,8 @@
 package be4rjp.sclat.weapon.subweapon;
 
-import be4rjp.sclat.Main;
+import be4rjp.sclat.Sclat;
+import be4rjp.sclat.api.player.PlayerData;
 import be4rjp.sclat.data.DataMgr;
-import be4rjp.sclat.data.PlayerData;
 import be4rjp.sclat.data.TrapData;
 import be4rjp.sclat.manager.PaintMgr;
 import be4rjp.sclat.weapon.Gear;
@@ -44,6 +44,6 @@ public class Trap {
 				data.setCanUseSubWeapon(true);
 			}
 		};
-		delay.runTaskLater(Main.getPlugin(), 20);
+		delay.runTaskLater(Sclat.getPlugin(), 20);
 	}
 }

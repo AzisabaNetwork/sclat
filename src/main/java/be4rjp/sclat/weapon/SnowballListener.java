@@ -1,8 +1,8 @@
 
 package be4rjp.sclat.weapon;
 
-import be4rjp.sclat.Main;
-import be4rjp.sclat.api.Sclat;
+import be4rjp.sclat.Sclat;
+import be4rjp.sclat.api.SclatUtil;
 import be4rjp.sclat.api.ServerType;
 import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.data.KasaData;
@@ -43,7 +43,7 @@ public class SnowballListener implements Listener {
 	@EventHandler
 	public void onBlockHit(ProjectileHitEvent event) {
 
-		if (Main.type == ServerType.LOBBY)
+		if (Sclat.type == ServerType.LOBBY)
 			return;
 
 		// EntityDamage
@@ -62,7 +62,7 @@ public class SnowballListener implements Listener {
 								if (!DataMgr.getPlayerData(shooter).getIsUsingSP())
 									SPWeaponMgr.addSPCharge(shooter);
 
-								Sclat.giveDamage(shooter, target, 47, "spWeapon");
+								SclatUtil.giveDamage(shooter, target, 47, "spWeapon");
 							}
 						} else if (event.getHitEntity() instanceof ArmorStand) {
 							ArmorStand as = (ArmorStand) event.getHitEntity();
@@ -92,15 +92,15 @@ public class SnowballListener implements Listener {
 							if (projectile.getCustomName().equals("Sprinkler")
 									|| projectile.getCustomName().equals("Amehurasi")) {
 								if (projectile.getCustomName().equals("Sprinkler"))
-									Sclat.giveDamage(shooter, target, 4, "subWeapon");
+									SclatUtil.giveDamage(shooter, target, 4, "subWeapon");
 								else if (projectile.getCustomName().equals("Amehurasi"))
-									Sclat.giveDamage(shooter, target, 4, "spWeapon");
+									SclatUtil.giveDamage(shooter, target, 4, "spWeapon");
 								PaintMgr.Paint(target.getLocation(), shooter, true);
 							}
 
 							if (projectile.getCustomName().equals("SuperShot")) {
 								shooter.playSound(shooter.getLocation(), Sound.ENTITY_PLAYER_HURT, 0.5F, 1F);
-								Sclat.giveDamage(shooter, target, 47, "spWeapon");
+								SclatUtil.giveDamage(shooter, target, 47, "spWeapon");
 							}
 							if (projectile.getCustomName().contains("#QuadroArmsSpinner")) {
 								shooter.playSound(shooter.getLocation(), Sound.ENTITY_PLAYER_HURT, 0.5F, 1F);
@@ -109,7 +109,7 @@ public class SnowballListener implements Listener {
 								if (QuadroticksLived > 60)
 									QuadroticksLived = 60;
 								Quadrodamage += Quadrodamage * (QuadroticksLived / 30);
-								Sclat.giveDamage(shooter, target, Quadrodamage, "spWeapon");
+								SclatUtil.giveDamage(shooter, target, Quadrodamage, "spWeapon");
 								return;
 							}
 							if (projectile.getCustomName().contains("#QuadroArmsShotgun")) {
@@ -122,7 +122,7 @@ public class SnowballListener implements Listener {
 								if (projectile.getCustomName().contains("CounterShot")) {
 									Quadrodamage = 6.5;
 								}
-								Sclat.giveDamage(shooter, target, Quadrodamage, "spWeapon");
+								SclatUtil.giveDamage(shooter, target, Quadrodamage, "spWeapon");
 								return;
 							}
 
@@ -188,7 +188,7 @@ public class SnowballListener implements Listener {
 									}
 								}
 
-								Sclat.giveDamage(shooter, target, damage, "killed");
+								SclatUtil.giveDamage(shooter, target, damage, "killed");
 							}
 						}
 						// AntiNoDamageTime
@@ -199,7 +199,7 @@ public class SnowballListener implements Listener {
 								target.setNoDamageTicks(0);
 							}
 						};
-						task.runTaskLater(Main.getPlugin(), 1);
+						task.runTaskLater(Sclat.getPlugin(), 1);
 
 						Timer timer = new Timer(false);
 						TimerTask t = new TimerTask() {
@@ -223,7 +223,7 @@ public class SnowballListener implements Listener {
 					if (projectile.getCustomName() != null) {
 						if (DataMgr.mws.contains(projectile.getCustomName())) {
 							if (DataMgr.tsl.contains(projectile.getCustomName())) {
-								if (Sclat.isNumber(as.getCustomName())) {
+								if (SclatUtil.isNumber(as.getCustomName())) {
 									if (!as.getCustomName().equals("21") && !as.getCustomName().equals("100")) {
 										if (as.isVisible()) {
 											if (projectile.getCustomName().contains("#slided")) {
@@ -386,7 +386,7 @@ public class SnowballListener implements Listener {
 						ball2.setCustomName(ball.getCustomName());
 						DataMgr.getSnowballNameMap().put(ball.getCustomName(), ball2);
 						DataMgr.setSnowballIsHit(ball2, false);
-						for (Player o_player : Main.getPlugin().getServer().getOnlinePlayers()) {
+						for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 							PlayerConnection connection = ((CraftPlayer) o_player).getHandle().playerConnection;
 							connection.sendPacket(new PacketPlayOutEntityDestroy(ball2.getEntityId()));
 						}
@@ -480,7 +480,7 @@ public class SnowballListener implements Listener {
 							target.setNoDamageTicks(0);
 						}
 					};
-					task.runTaskLater(Main.getPlugin(), 1);
+					task.runTaskLater(Sclat.getPlugin(), 1);
 
 					Timer timer = new Timer(false);
 					TimerTask t = new TimerTask() {
@@ -505,7 +505,7 @@ public class SnowballListener implements Listener {
 	@EventHandler
 	public void onEntityHit(EntityDamageByEntityEvent event) {
 
-		if (Main.type == ServerType.LOBBY) {
+		if (Sclat.type == ServerType.LOBBY) {
 			if (event.getEntity() instanceof Player)
 				event.setCancelled(true);
 			/*
@@ -535,7 +535,7 @@ public class SnowballListener implements Listener {
 							if (!DataMgr.getPlayerData(shooter).getIsUsingSP())
 								SPWeaponMgr.addSPCharge(shooter);
 
-							Sclat.giveDamage(shooter, target, 47, "spWeapon");
+							SclatUtil.giveDamage(shooter, target, 47, "spWeapon");
 						}
 					} else if (event.getEntity() instanceof ArmorStand) {
 						ArmorStand as = (ArmorStand) event.getEntity();
@@ -620,7 +620,7 @@ public class SnowballListener implements Listener {
 				if (projectile.getCustomName() != null) {
 					if (DataMgr.mws.contains(projectile.getCustomName())) {
 						if (DataMgr.tsl.contains(projectile.getCustomName())) {
-							if (Sclat.isNumber(as.getCustomName())) {
+							if (SclatUtil.isNumber(as.getCustomName())) {
 								if (!as.getCustomName().equals("21") && !as.getCustomName().equals("100")) {
 									if (as.isVisible()) {
 										if (projectile.getCustomName().contains("#slided")) {

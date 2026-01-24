@@ -1,18 +1,17 @@
 package be4rjp.sclat.manager;
 
-import be4rjp.sclat.Main;
+import be4rjp.sclat.Sclat;
 import be4rjp.sclat.api.MessageType;
-import be4rjp.sclat.api.Sclat;
+import be4rjp.sclat.api.SclatUtil;
 import be4rjp.sclat.api.ServerType;
 import be4rjp.sclat.api.SoundType;
+import be4rjp.sclat.api.player.PlayerData;
+import be4rjp.sclat.api.player.PlayerSettings;
+import be4rjp.sclat.api.team.Team;
 import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.data.Match;
 import be4rjp.sclat.data.PaintData;
-import be4rjp.sclat.data.PlayerData;
-import be4rjp.sclat.data.PlayerSettings;
-import be4rjp.sclat.data.RankingHolograms;
 import be4rjp.sclat.data.ServerStatus;
-import be4rjp.sclat.data.Team;
 import be4rjp.sclat.data.WeaponClass;
 import be4rjp.sclat.gui.LootBox;
 import be4rjp.sclat.gui.OpenGUI;
@@ -81,7 +80,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import static be4rjp.sclat.Main.conf;
+import static be4rjp.sclat.Sclat.conf;
 
 /**
  *
@@ -114,13 +113,15 @@ public class GameMgr implements Listener {
 		PlayerStatusMgr.setupPlayerStatus(player);
 
 		conf.getUUIDCash().set(player.getUniqueId().toString(), player.getName());
-		if (Main.type == ServerType.LOBBY) {
-			RankingHolograms rankingHolograms = new RankingHolograms(player);
-			DataMgr.setRankingHolograms(player, rankingHolograms);
-			PlayerStatusMgr.HologramUpdateRunnable(player);
+		if (Sclat.type == ServerType.LOBBY) {
+			// Add user-specific hologram
+			// RankingHolograms rankingHolograms = new RankingHolograms(player);
+			// DataMgr.setRankingHolograms(player, rankingHolograms);
+			// PlayerStatusMgr.HologramUpdateRunnable(player);
+			Sclat.playerHolograms.add(player);
 		}
 
-		if (Main.type != ServerType.MATCH) {
+		if (Sclat.type != ServerType.MATCH) {
 			data.setGearNumber(PlayerStatusMgr.getGear(player));
 			data.setWeaponClass(DataMgr.getWeaponClass(PlayerStatusMgr.getEquiptClass(player)));
 		}
@@ -131,7 +132,7 @@ public class GameMgr implements Listener {
 			public void run() {
 				switch (i) {
 					case 0 : {// ----------------------------------------------------------------------------
-						if (!conf.getConfig().getString("WorkMode").equals("Trial") && Main.type != ServerType.MATCH)
+						if (!conf.getConfig().getString("WorkMode").equals("Trial") && Sclat.type != ServerType.MATCH)
 							PlayerStatusMgr.sendHologram(player);
 					}
 					case 1 : {// ----------------------------------------------------------------------------
@@ -149,10 +150,10 @@ public class GameMgr implements Listener {
 								data.setPlayerHead(CraftItemStack.asNMSCopy(item));
 							}
 						};
-						head.runTaskAsynchronously(Main.getPlugin());
-						if (Main.type == ServerType.MATCH) {
-							if (Main.modList.contains(player.getName()))
-								Main.modList.remove(player.getName());
+						head.runTaskAsynchronously(Sclat.getPlugin());
+						if (Sclat.type == ServerType.MATCH) {
+							if (Sclat.modList.contains(player.getName()))
+								Sclat.modList.remove(player.getName());
 							else
 								MatchMgr.PlayerJoinMatch(player);
 						}
@@ -165,7 +166,7 @@ public class GameMgr implements Listener {
 				i++;
 			}
 		};
-		task.runTaskTimer(Main.getPlugin(), 0, 5);
+		task.runTaskTimer(Sclat.getPlugin(), 0, 5);
 
 		// PacketHandler
 		PacketHandler packetHandler = new PacketHandler(player);
@@ -178,7 +179,7 @@ public class GameMgr implements Listener {
 			Match match = DataMgr.getMatchFromId(MatchMgr.matchcount);
 			data.setMatch(match);
 			data.setTeam(match.getTeam0());
-			player.teleport(Main.lobby);
+			player.teleport(Sclat.lobby);
 			ItemStack join = new ItemStack(Material.CHEST);
 			ItemMeta joinmeta = join.getItemMeta();
 			joinmeta.setDisplayName(ChatColor.GOLD + "右クリックでメインメニューを開く");
@@ -189,7 +190,7 @@ public class GameMgr implements Listener {
 			player.setExp(0.99F);
 			player.getInventory().setItem(7, join);
 
-			if (Main.tutorial) {
+			if (Sclat.tutorial) {
 				Tutorial.setInkResetTimer(player);
 				Tutorial.clearList.add(player);
 			}
@@ -204,13 +205,13 @@ public class GameMgr implements Listener {
 					ItemMeta joinmeta = join.getItemMeta();
 					joinmeta.setDisplayName(ChatColor.GOLD + "右クリックでメインメニューを開く");
 					join.setItemMeta(joinmeta);
-					if (!Main.tutorial)
+					if (!Sclat.tutorial)
 						player.getInventory().setItem(7, join);
 					player.setExp(0F);
 					SPWeaponMgr.SPWeaponRunnable(player);
 					SPWeaponMgr.ArmorRunnable(p);
 					SquidMgr.SquidShowRunnable(player);
-					if (!Main.tutorial) {
+					if (!Sclat.tutorial) {
 						EquipmentServerManager.doCommands();
 						OpenGUI.openWeaponSelect(p, "Main", "null", false);
 					} else {
@@ -332,11 +333,11 @@ public class GameMgr implements Listener {
 								SquidMgr.SquidShowRunnable(player);
 							}
 						};
-						delay.runTaskLater(Main.getPlugin(), 15);
+						delay.runTaskLater(Sclat.getPlugin(), 15);
 					}
 				}
 			};
-			delay.runTaskLater(Main.getPlugin(), 15);
+			delay.runTaskLater(Sclat.getPlugin(), 15);
 
 			BukkitRunnable armor = new BukkitRunnable() {
 				@Override
@@ -346,11 +347,11 @@ public class GameMgr implements Listener {
 			};
 			if (ArmorStandMgr.getIsSpawned())
 				return;
-			armor.runTaskLater(Main.getPlugin(), 50);
+			armor.runTaskLater(Sclat.getPlugin(), 50);
 			ArmorStandMgr.setIsSpawned(true);
 
-			List<Block> blocks = new ArrayList<Block>();
-			Block b0 = Main.lobby.getBlock().getRelative(BlockFace.DOWN);
+			List<Block> blocks = new ArrayList<>();
+			Block b0 = Sclat.lobby.getBlock().getRelative(BlockFace.DOWN);
 			blocks.add(b0);
 			blocks.add(b0.getRelative(BlockFace.EAST));
 			blocks.add(b0.getRelative(BlockFace.NORTH));
@@ -391,8 +392,8 @@ public class GameMgr implements Listener {
 		SquidMgr.SquidRunnable(player);
 
 		player.getInventory().clear();
-		if (Main.type != ServerType.LOBBY) {
-			player.teleport(Main.lobby);
+		if (Sclat.type != ServerType.LOBBY) {
+			player.teleport(Sclat.lobby);
 		} else {
 			if (PlayerStatusMgr.getTutorialState(player.getUniqueId().toString()) == 1) {
 				String WorldName = conf.getConfig().getString("Tutorial.WorldName");
@@ -405,9 +406,9 @@ public class GameMgr implements Listener {
 				tutorial.setYaw(iyaw);
 				player.teleport(tutorial);
 			} else
-				player.teleport(Main.lobby);
+				player.teleport(Sclat.lobby);
 		}
-		if (Main.type != ServerType.MATCH) {
+		if (Sclat.type != ServerType.MATCH) {
 			if (PlayerStatusMgr.getTutorialState(player.getUniqueId().toString()) == 2) {
 				ItemStack join = new ItemStack(Material.CHEST);
 				ItemMeta joinmeta = join.getItemMeta();
@@ -431,10 +432,10 @@ public class GameMgr implements Listener {
 			player.getInventory().setItem(0, join);
 		}
 
-		if (Main.type == ServerType.LOBBY) {
+		if (Sclat.type == ServerType.LOBBY) {
 			// Scoreboard
 			LobbyScoreboardRunnable runnable = new LobbyScoreboardRunnable(player);
-			runnable.runTaskTimerAsynchronously(Main.getPlugin(), 0, 10);
+			runnable.runTaskTimerAsynchronously(Sclat.getPlugin(), 0, 10);
 		}
 
 		Match match = DataMgr.getMatchFromId(Integer.MAX_VALUE);
@@ -448,7 +449,7 @@ public class GameMgr implements Listener {
 		if (!DataMgr.pul.contains(uuid))
 			DataMgr.pul.add(uuid);
 
-		if (Main.type == ServerType.LOBBY) {
+		if (Sclat.type == ServerType.LOBBY) {
 			// if(PlayerStatusMgr.getTutorialState(player.getUniqueId().toString()) == 0){
 			if (PlayerStatusMgr.getTutorialState(player.getUniqueId().toString()) == 0) {
 				e.setJoinMessage(ChatColor.GREEN + player.getName() + " が初めてこのサーバーにログインしました！");
@@ -578,7 +579,7 @@ public class GameMgr implements Listener {
 					target.setNoDamageTicks(0);
 				}
 			};
-			task.runTaskLater(Main.getPlugin(), 1);
+			task.runTaskLater(Sclat.getPlugin(), 1);
 
 			/*
 			 * Timer timer = new Timer(false); TimerTask t = new TimerTask(){ Player p =
@@ -657,33 +658,34 @@ public class GameMgr implements Listener {
 			if (e.getClickedBlock().getType().toString().endsWith("SIGN")) {
 				Sign sign = (Sign) e.getClickedBlock().getState();
 
-				if (Main.type == ServerType.LOBBY) {
+				if (Sclat.type == ServerType.LOBBY) {
 					for (ServerStatus ss : ServerStatusManager.serverList) {
 						if (ss.getSign().equals(e.getClickedBlock())) {
 							if (ss.getRestartingServer()) {
-								Sclat.sendMessage("§c§nこのサーバーは再起動中です1~2分程度お待ちください", MessageType.PLAYER, player);
-								Sclat.playGameSound(player, SoundType.ERROR);
+								SclatUtil.sendMessage("§c§nこのサーバーは再起動中です1~2分程度お待ちください", MessageType.PLAYER, player);
+								SclatUtil.playGameSound(player, SoundType.ERROR);
 								return;
 							}
 							if (ss.isOnline()) {
 								if (ss.getPlayerCount() < ss.getMaxPlayer()) {
 									if (ss.getRunningMatch()) {
-										Sclat.sendMessage("§c§nこのサーバーは試合中のため参加できません", MessageType.PLAYER, player);
-										Sclat.playGameSound(player, SoundType.ERROR);
+										SclatUtil.sendMessage("§c§nこのサーバーは試合中のため参加できません", MessageType.PLAYER, player);
+										SclatUtil.playGameSound(player, SoundType.ERROR);
 										return;
 									}
 									BungeeCordMgr.PlayerSendServer(player, ss.getServerName());
 									DataMgr.getPlayerData(player).setServerName(ss.getDisplayName());
 								} else {
-									Sclat.sendMessage("§c§nこのサーバーは満員のため参加できません", MessageType.PLAYER, player);
-									Sclat.playGameSound(player, SoundType.ERROR);
+									SclatUtil.sendMessage("§c§nこのサーバーは満員のため参加できません", MessageType.PLAYER, player);
+									SclatUtil.playGameSound(player, SoundType.ERROR);
 								}
 							} else {
 								if (ss.isMaintenance())
-									Sclat.sendMessage("§c§nこのサーバーは現在メンテナンス中のため参加できません", MessageType.PLAYER, player);
+									SclatUtil.sendMessage("§c§nこのサーバーは現在メンテナンス中のため参加できません", MessageType.PLAYER, player);
 								else
-									Sclat.sendMessage("§c§nこのサーバーは現在再起動中です1~2分程度お待ちください。", MessageType.PLAYER, player);
-								Sclat.playGameSound(player, SoundType.ERROR);
+									SclatUtil.sendMessage("§c§nこのサーバーは現在再起動中です1~2分程度お待ちください。", MessageType.PLAYER,
+											player);
+								SclatUtil.playGameSound(player, SoundType.ERROR);
 							}
 							return;
 						}
@@ -693,7 +695,7 @@ public class GameMgr implements Listener {
 				String line = sign.getLine(2);
 				switch (line) {
 					case "[ Join ]" :
-						if (Main.type == ServerType.LOBBY)
+						if (Sclat.type == ServerType.LOBBY)
 							ServerStatusManager.openServerList(player);
 						else
 							MatchMgr.PlayerJoinMatch(player);
@@ -771,17 +773,17 @@ public class GameMgr implements Listener {
 						if (PlayerStatusMgr.getMoney(player) > 1000) {
 							PlayerStatusMgr.subMoney(player, 1000);
 							PlayerStatusMgr.addTicket(player, 1);
-							Sclat.sendMessage("1000coinを1ticketに交換しました", MessageType.PLAYER, player);
+							SclatUtil.sendMessage("1000coinを1ticketに交換しました", MessageType.PLAYER, player);
 						} else {
-							Sclat.sendMessage("coinが足りません", MessageType.PLAYER, player);
+							SclatUtil.sendMessage("coinが足りません", MessageType.PLAYER, player);
 						}
 						break;
 					case "[ give ticket ]" :
 						PlayerStatusMgr.addTicket(player, 10);
-						Sclat.sendMessage("10ticket付与しました", MessageType.PLAYER, player);
+						SclatUtil.sendMessage("10ticket付与しました", MessageType.PLAYER, player);
 						break;
 					case "[ Tutorial ]" :
-						List<String> list = Main.tutorialServers.getConfig().getStringList("server-list");
+						List<String> list = Sclat.tutorialServers.getConfig().getStringList("server-list");
 						BungeeCordMgr.PlayerSendServer(player, list.get(new Random().nextInt(list.size())));
 						DataMgr.getPlayerData(player)
 								.setServerName(conf.getServers().getString("Tutorial.DisplayName"));
@@ -835,7 +837,7 @@ public class GameMgr implements Listener {
 			return null;
 		});
 
-		if (Main.type == ServerType.MATCH) {
+		if (Sclat.type == ServerType.MATCH) {
 			if (DataMgr.joinedList.contains(player)) {
 				DataMgr.setPlayerIsQuit(player.getUniqueId().toString(), true);
 				if (data.getMatch().canJoin())
@@ -852,7 +854,7 @@ public class GameMgr implements Listener {
 		if (!server.isEmpty()) {
 			event.setQuitMessage("§6" + player.getName() + " switched to " + server);
 
-			if (Main.type == ServerType.LOBBY) {
+			if (Sclat.type == ServerType.LOBBY) {
 				for (String serverName : conf.getServers().getConfigurationSection("Servers").getKeys(false)) {
 					String name = conf.getServers().getString("Servers." + serverName + ".Server");
 					String displayName = conf.getServers().getString("Servers." + serverName + ".DisplayName");

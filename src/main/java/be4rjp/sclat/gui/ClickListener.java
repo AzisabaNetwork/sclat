@@ -1,9 +1,9 @@
 
 package be4rjp.sclat.gui;
 
-import be4rjp.sclat.Main;
+import be4rjp.sclat.Sclat;
 import be4rjp.sclat.api.MessageType;
-import be4rjp.sclat.api.Sclat;
+import be4rjp.sclat.api.SclatUtil;
 import be4rjp.sclat.api.ServerType;
 import be4rjp.sclat.api.SoundType;
 import be4rjp.sclat.data.BlockUpdater;
@@ -59,7 +59,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.ArrayList;
 import java.util.List;
 
-import static be4rjp.sclat.Main.conf;
+import static be4rjp.sclat.Sclat.conf;
 
 /**
  *
@@ -88,7 +88,7 @@ public class ClickListener implements Listener {
 
 		switch (name) {
 			case "試合に参加 / JOIN THE MATCH" :
-				if (Main.type == ServerType.LOBBY)
+				if (Sclat.type == ServerType.LOBBY)
 					ServerStatusManager.openServerList(player);
 				else
 					MatchMgr.PlayerJoinMatch(player);
@@ -116,10 +116,10 @@ public class ClickListener implements Listener {
 				break;
 			case "塗りをリセット / RESET INK" :
 				if (MatchMgr.canRollback) {
-					Sclat.sendMessage("§a§lインクがリセットされました！", MessageType.ALL_PLAYER);
-					Sclat.sendMessage("§a§l3分後に再リセットできるようになります", MessageType.ALL_PLAYER);
-					for (Player op : Main.getPlugin().getServer().getOnlinePlayers())
-						Sclat.playGameSound(op, SoundType.SUCCESS);
+					SclatUtil.sendMessage("§a§lインクがリセットされました！", MessageType.ALL_PLAYER);
+					SclatUtil.sendMessage("§a§l3分後に再リセットできるようになります", MessageType.ALL_PLAYER);
+					for (Player op : Sclat.getPlugin().getServer().getOnlinePlayers())
+						SclatUtil.playGameSound(op, SoundType.SUCCESS);
 				}
 				Match match = DataMgr.getPlayerData(player).getMatch();
 				match.getBlockUpdater().stop();
@@ -130,8 +130,8 @@ public class ClickListener implements Listener {
 					bur.setMaxBlockInOneTick(conf.getConfig().getInt("BlockUpdateRate"));
 				bur.start();
 				match.setBlockUpdater(bur);
-				List<Block> blocks = new ArrayList<Block>();
-				Block b0 = Main.lobby.getBlock().getRelative(BlockFace.DOWN);
+				List<Block> blocks = new ArrayList<>();
+				Block b0 = Sclat.lobby.getBlock().getRelative(BlockFace.DOWN);
 				blocks.add(b0);
 				blocks.add(b0.getRelative(BlockFace.EAST));
 				blocks.add(b0.getRelative(BlockFace.NORTH));
@@ -153,7 +153,7 @@ public class ClickListener implements Listener {
 				}
 				break;
 			case "ロビーへ戻る / RETURN TO LOBBY" :
-				if (Main.type != ServerType.LOBBY) {
+				if (Sclat.type != ServerType.LOBBY) {
 					BungeeCordMgr.PlayerSendServer(player, "sclat");
 					DataMgr.getPlayerData(player).setServerName("Sclat");
 				} else {
@@ -196,8 +196,8 @@ public class ClickListener implements Listener {
 				if (Gear.getGearName(i).equals(name)) {
 					DataMgr.getPlayerData(player).setGearNumber(i);
 					PlayerStatusMgr.setGear(player, i);
-					Sclat.sendMessage("ギア[" + ChatColor.AQUA + name + ChatColor.RESET + "]を選択しました", MessageType.PLAYER,
-							player);
+					SclatUtil.sendMessage("ギア[" + ChatColor.AQUA + name + ChatColor.RESET + "]を選択しました",
+							MessageType.PLAYER, player);
 					break;
 				}
 				i++;
@@ -208,12 +208,12 @@ public class ClickListener implements Listener {
 					if (PlayerStatusMgr.getMoney(player) >= Gear.getGearPrice(i)) {
 						PlayerStatusMgr.addGear(player, i);
 						PlayerStatusMgr.subMoney(player, Gear.getGearPrice(i));
-						Sclat.sendMessage(ChatColor.GREEN + "購入に成功しました", MessageType.PLAYER, player);
-						Sclat.playGameSound(player, SoundType.SUCCESS);
+						SclatUtil.sendMessage(ChatColor.GREEN + "購入に成功しました", MessageType.PLAYER, player);
+						SclatUtil.playGameSound(player, SoundType.SUCCESS);
 						PlayerStatusMgr.sendHologramUpdate(player);
 					} else {
-						Sclat.sendMessage(ChatColor.RED + "お金が足りません", MessageType.PLAYER, player);
-						Sclat.playGameSound(player, SoundType.ERROR);
+						SclatUtil.sendMessage(ChatColor.RED + "お金が足りません", MessageType.PLAYER, player);
+						SclatUtil.playGameSound(player, SoundType.ERROR);
 					}
 					break;
 				}
@@ -224,29 +224,29 @@ public class ClickListener implements Listener {
 			for (ServerStatus ss : ServerStatusManager.serverList) {
 				if (ss.getDisplayName().equals(name)) {
 					if (ss.getRestartingServer()) {
-						Sclat.sendMessage("§c§nこのサーバーは再起動中です1~2分程度お待ちください", MessageType.PLAYER, player);
-						Sclat.playGameSound(player, SoundType.ERROR);
+						SclatUtil.sendMessage("§c§nこのサーバーは再起動中です1~2分程度お待ちください", MessageType.PLAYER, player);
+						SclatUtil.playGameSound(player, SoundType.ERROR);
 						return;
 					}
 					if (ss.isOnline()) {
 						if (ss.getPlayerCount() < ss.getMaxPlayer()) {
 							if (ss.getRunningMatch()) {
-								Sclat.sendMessage("§c§nこのサーバーは試合中のため参加できません", MessageType.PLAYER, player);
-								Sclat.playGameSound(player, SoundType.ERROR);
+								SclatUtil.sendMessage("§c§nこのサーバーは試合中のため参加できません", MessageType.PLAYER, player);
+								SclatUtil.playGameSound(player, SoundType.ERROR);
 								return;
 							}
 							BungeeCordMgr.PlayerSendServer(player, ss.getServerName());
 							DataMgr.getPlayerData(player).setServerName(ss.getDisplayName());
 						} else {
-							Sclat.sendMessage("§c§nこのサーバーは満員のため参加できません", MessageType.PLAYER, player);
-							Sclat.playGameSound(player, SoundType.ERROR);
+							SclatUtil.sendMessage("§c§nこのサーバーは満員のため参加できません", MessageType.PLAYER, player);
+							SclatUtil.playGameSound(player, SoundType.ERROR);
 						}
 					} else {
 						if (ss.isMaintenance())
-							Sclat.sendMessage("§c§nこのサーバーは現在メンテナンス中のため参加できません", MessageType.PLAYER, player);
+							SclatUtil.sendMessage("§c§nこのサーバーは現在メンテナンス中のため参加できません", MessageType.PLAYER, player);
 						else
-							Sclat.sendMessage("§c§nこのサーバーは現在再起動中です1~2分程度お待ちください。", MessageType.PLAYER, player);
-						Sclat.playGameSound(player, SoundType.ERROR);
+							SclatUtil.sendMessage("§c§nこのサーバーは現在再起動中です1~2分程度お待ちください。", MessageType.PLAYER, player);
+						SclatUtil.playGameSound(player, SoundType.ERROR);
 					}
 					return;
 				}
@@ -315,8 +315,8 @@ public class ClickListener implements Listener {
 				return;
 			}
 			if (name.contains("§6レベル")) {
-				Sclat.sendMessage("§cレベルが足りないため、まだ選択できません", MessageType.PLAYER, player);
-				Sclat.playGameSound(player, SoundType.ERROR);
+				SclatUtil.sendMessage("§cレベルが足りないため、まだ選択できません", MessageType.PLAYER, player);
+				SclatUtil.playGameSound(player, SoundType.ERROR);
 				return;
 			}
 			// 試しうちモード
@@ -441,11 +441,12 @@ public class ClickListener implements Listener {
 						SquidMgr.SquidShowRunnable(player);
 					}
 				};
-				delay.runTaskLater(Main.getPlugin(), 15);
+				delay.runTaskLater(Sclat.getPlugin(), 15);
 			} else {
 				DataMgr.getPlayerData(player).setWeaponClass(DataMgr.getWeaponClass(name));
 			}
-			Sclat.sendMessage("ブキ[" + ChatColor.GOLD + name + ChatColor.RESET + "]を選択しました", MessageType.PLAYER, player);
+			SclatUtil.sendMessage("ブキ[" + ChatColor.GOLD + name + ChatColor.RESET + "]を選択しました", MessageType.PLAYER,
+					player);
 		}
 
 		if (event.getView().getTitle().equals("Shop")) {
@@ -510,13 +511,13 @@ public class ClickListener implements Listener {
 				return;
 			}
 			if (name.contains("§6レベル")) {
-				Sclat.sendMessage("§cレベルが足りないため、まだ購入できません", MessageType.PLAYER, player);
-				Sclat.playGameSound(player, SoundType.ERROR);
+				SclatUtil.sendMessage("§cレベルが足りないため、まだ購入できません", MessageType.PLAYER, player);
+				SclatUtil.playGameSound(player, SoundType.ERROR);
 				return;
 			}
 			if (name.contains("§6ガチャ武器です")) {
-				Sclat.sendMessage("§cガチャから手に入るよ", MessageType.PLAYER, player);
-				Sclat.playGameSound(player, SoundType.ERROR);
+				SclatUtil.sendMessage("§cガチャから手に入るよ", MessageType.PLAYER, player);
+				SclatUtil.playGameSound(player, SoundType.ERROR);
 				return;
 			}
 
@@ -526,18 +527,18 @@ public class ClickListener implements Listener {
 			} else if (PlayerStatusMgr.getMoney(player) >= DataMgr.getWeaponClass(name).getMainWeapon().getMoney()) {
 				PlayerStatusMgr.addWeapon(player, name);
 				PlayerStatusMgr.subMoney(player, DataMgr.getWeaponClass(name).getMainWeapon().getMoney());
-				Sclat.sendMessage(ChatColor.GREEN + "購入に成功しました", MessageType.PLAYER, player);
-				Sclat.playGameSound(player, SoundType.SUCCESS);
+				SclatUtil.sendMessage(ChatColor.GREEN + "購入に成功しました", MessageType.PLAYER, player);
+				SclatUtil.playGameSound(player, SoundType.SUCCESS);
 				PlayerStatusMgr.sendHologramUpdate(player);
 			} else {
-				Sclat.sendMessage(ChatColor.RED + "お金が足りません", MessageType.PLAYER, player);
-				Sclat.playGameSound(player, SoundType.ERROR);
+				SclatUtil.sendMessage(ChatColor.RED + "お金が足りません", MessageType.PLAYER, player);
+				SclatUtil.playGameSound(player, SoundType.ERROR);
 			}
 		}
 
 		if (event.getView().getTitle().equals("Chose Target")) {
 			if (name.equals("§r§6リスポーン地点へジャンプ")) {
-				Location loc = Main.lobby.clone();
+				Location loc = Sclat.lobby.clone();
 				if (!conf.getConfig().getString("WorkMode").equals("Trial"))
 					loc = DataMgr.getPlayerData(player).getMatchLocation();
 				SuperJumpMgr.SuperJumpCollTime(player, loc, false);
@@ -552,21 +553,21 @@ public class ClickListener implements Listener {
 				SuperJumpMgr.SuperJumpCollTime(player, loc, true);
 			}
 			boolean nearspwan = true;
-			Location spawnloc = Main.lobby.clone();
+			Location spawnloc = Sclat.lobby.clone();
 			if (!conf.getConfig().getString("WorkMode").equals("Trial"))
 				spawnloc = DataMgr.getPlayerData(player).getMatchLocation();
 			if (spawnloc.getWorld() == player.getWorld()) {
 				if (player.getLocation().distance(spawnloc) > 10 && !Tutorial.clearList.contains(player))
-					if (!Main.tutorial) {
+					if (!Sclat.tutorial) {
 						nearspwan = false;
 					}
 			}
-			for (Player p : Main.getPlugin(Main.class).getServer().getOnlinePlayers()) {
+			for (Player p : Sclat.getPlugin(Sclat.class).getServer().getOnlinePlayers()) {
 				if (p.getName().equals(name)) {
 					if (event.getCurrentItem().getType().equals(Material.PLAYER_HEAD)) {
 						if (p.getGameMode() == GameMode.SPECTATOR) {
-							Sclat.sendMessage("§c今そのプレイヤーにはジャンプできない！", MessageType.PLAYER, player);
-							Sclat.playGameSound(player, SoundType.ERROR);
+							SclatUtil.sendMessage("§c今そのプレイヤーにはジャンプできない！", MessageType.PLAYER, player);
+							SclatUtil.playGameSound(player, SoundType.ERROR);
 							break;
 						}
 						SuperJumpMgr.SuperJumpCollTime(player, DataMgr.getPlayerData(p).getPlayerGroundLocation(),

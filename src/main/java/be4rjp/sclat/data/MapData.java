@@ -1,8 +1,10 @@
 package be4rjp.sclat.data;
 
+import be4rjp.sclat.api.wiremesh.WiremeshListTask;
+import org.bukkit.Location;
+
 import java.util.ArrayList;
 import java.util.List;
-import org.bukkit.Location;
 
 /**
  *

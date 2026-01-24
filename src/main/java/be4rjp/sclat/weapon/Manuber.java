@@ -1,8 +1,8 @@
 package be4rjp.sclat.weapon;
 
-import be4rjp.sclat.Main;
+import be4rjp.sclat.Sclat;
+import be4rjp.sclat.api.player.PlayerData;
 import be4rjp.sclat.data.DataMgr;
-import be4rjp.sclat.data.PlayerData;
 import be4rjp.sclat.data.SplashShieldData;
 import org.bukkit.Location;
 import org.bukkit.Sound;
@@ -107,11 +107,11 @@ public class Manuber {
 							Vector randomVector = new Vector(Math.random() * random - random / 2,
 									Math.random() * random - random / 2, Math.random() * random - random / 2);
 							Vector erv = ev.clone().add(randomVector);
-							for (Player o_player : Main.getPlugin().getServer().getOnlinePlayers()) {
+							for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 								if (DataMgr.getPlayerData(o_player).getSettings().ShowEffect_BombEx()) {
 									if (o_player.getWorld() == location.getWorld()) {
 										if (o_player.getLocation()
-												.distanceSquared(location) < Main.PARTICLE_RENDER_DISTANCE_SQUARED) {
+												.distanceSquared(location) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED) {
 											for (int i2 = 0; i2 < 4; i2++) {
 												o_player.spawnParticle(org.bukkit.Particle.BLOCK_DUST,
 														location.clone()
@@ -187,9 +187,9 @@ public class Manuber {
 						};
 						if (sl_recharge_2) {
 							// task0_1.runTaskTimer(Main.getPlugin(), 0, 1);
-							task0_1.runTaskTimer(Main.getPlugin(), 0, 1);
+							task0_1.runTaskTimer(Sclat.getPlugin(), 0, 1);
 						} else {
-							task0_0.runTaskTimer(Main.getPlugin(), 0, 1);
+							task0_0.runTaskTimer(Sclat.getPlugin(), 0, 1);
 						}
 						// BukkitRunnable task2 = new BukkitRunnable() {
 						// @Override
@@ -236,9 +236,9 @@ public class Manuber {
 								}
 							};
 							if (sl_recharge_2) {
-								task4.runTaskLater(Main.getPlugin(), 64);
+								task4.runTaskLater(Sclat.getPlugin(), 64);
 							} else {
-								task5.runTaskLater(Main.getPlugin(), 64);
+								task5.runTaskLater(Sclat.getPlugin(), 64);
 							}
 							check = false;
 						}
@@ -249,7 +249,7 @@ public class Manuber {
 				// loc = ploc;
 			}
 		};
-		delay.runTaskTimer(Main.getPlugin(), 0, 1);
+		delay.runTaskTimer(Sclat.getPlugin(), 0, 1);
 	}
 
 	private static double EntityWallHit(Player p, Vector direction) {

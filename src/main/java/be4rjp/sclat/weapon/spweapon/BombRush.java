@@ -1,9 +1,9 @@
 
 package be4rjp.sclat.weapon.spweapon;
 
-import be4rjp.sclat.Main;
+import be4rjp.sclat.Sclat;
+import be4rjp.sclat.api.player.PlayerData;
 import be4rjp.sclat.data.DataMgr;
-import be4rjp.sclat.data.PlayerData;
 import be4rjp.sclat.manager.SPWeaponMgr;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -26,6 +26,6 @@ public class BombRush {
 				data.setIsUsingSP(false);
 			}
 		};
-		task.runTaskLater(Main.getPlugin(), 120);
+		task.runTaskLater(Sclat.getPlugin(), 120);
 	}
 }
