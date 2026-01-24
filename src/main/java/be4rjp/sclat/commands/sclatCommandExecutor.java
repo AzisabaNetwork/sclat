@@ -31,6 +31,7 @@ import java.util.Set;
 import static be4rjp.sclat.Main.conf;
 
 //sclat Command
+// Todo: use cloud command framework
 public class sclatCommandExecutor implements CommandExecutor, TabExecutor {
 	@Override
 	public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String commandLabel,
