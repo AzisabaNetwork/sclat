@@ -36,7 +36,10 @@ import be4rjp.sclat.manager.ServerStatusManager;
 import be4rjp.sclat.manager.WeaponClassMgr;
 import be4rjp.sclat.protocollib.SclatPacketListener;
 import be4rjp.sclat.tutorial.Tutorial;
-import be4rjp.sclat.weapon.SnowballListener;
+import be4rjp.sclat.weapon.listener.MainWeapon;
+import be4rjp.sclat.weapon.listener.SPWeapon;
+import be4rjp.sclat.weapon.listener.SnowballListener;
+import be4rjp.sclat.weapon.listener.SubWeapon;
 import co.aikar.commands.PaperCommandManager;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
@@ -176,9 +179,9 @@ public class Sclat extends JavaPlugin implements PluginMessageListener {
 		pm.registerEvents(new GameMgr(), this);
 		pm.registerEvents(new SquidListener(), this);
 		pm.registerEvents(new ClickListener(), this);
-		pm.registerEvents(new be4rjp.sclat.weapon.MainWeapon(), this);
-		pm.registerEvents(new be4rjp.sclat.weapon.SubWeapon(), this);
-		pm.registerEvents(new be4rjp.sclat.weapon.SPWeapon(), this);
+		pm.registerEvents(new MainWeapon(), this);
+		pm.registerEvents(new SubWeapon(), this);
+		pm.registerEvents(new SPWeapon(), this);
 		pm.registerEvents(new SnowballListener(), this);
 		pm.registerEvents(new AsyncPlayerListener(), this);
 

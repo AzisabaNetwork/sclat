@@ -1,4 +1,4 @@
-package be4rjp.sclat.weapon;
+package be4rjp.sclat.weapon.listener;
 
 import be4rjp.sclat.Sclat;
 import be4rjp.sclat.api.player.PlayerData;

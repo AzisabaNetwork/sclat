@@ -1,9 +1,9 @@
 package be4rjp.sclat.api.holo;
 
 import be4rjp.sclat.Sclat;
+import be4rjp.sclat.api.rank.RankingType;
 import be4rjp.sclat.api.rank.RankingUpdater;
 import be4rjp.sclat.api.rank.Ratings;
-import be4rjp.sclat.data.RankingType;
 import be4rjp.sclat.manager.PlayerStatusMgr;
 import net.minecraft.server.v1_15_R1.EntityArmorStand;
 import net.minecraft.server.v1_15_R1.PacketPlayOutEntityDestroy;
