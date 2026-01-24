@@ -35,12 +35,12 @@ public class Blaster {
 	public static void ShootBlaster(Player player) {
 		PlayerData data = DataMgr.getPlayerData(player);
 		if (data.getCanRollerShoot()) {
-			SimpleRunnable.runTaskLater(() -> {
+			SimpleRunnable.runTaskLater(cancel -> {
 				PlayerData playerData = DataMgr.getPlayerData(player);
 				playerData.setCanRollerShoot(true);
 			}, data.getWeaponClass().getMainWeapon().getCoolTime());
 
-			SimpleRunnable.runTaskLater(() -> {
+			SimpleRunnable.runTaskLater(cancel -> {
 				Shoot(player);
 			}, data.getWeaponClass().getMainWeapon().getDelay());
 			data.setCanRollerShoot(false);
@@ -292,7 +292,7 @@ public class Blaster {
 					SclatUtil.giveDamage(player, target, damage, "killed");
 
 					// AntiNoDamageTime
-					SimpleRunnable.runTaskLater(() -> {
+					SimpleRunnable.runTaskLater(cancel -> {
 						target.setNoDamageTicks(0);
 					}, 1);
 
