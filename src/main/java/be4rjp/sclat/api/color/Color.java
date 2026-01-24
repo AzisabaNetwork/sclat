@@ -1,5 +1,5 @@
 
-package be4rjp.sclat.data;
+package be4rjp.sclat.api.color;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;

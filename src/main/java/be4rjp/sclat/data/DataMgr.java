@@ -1,6 +1,7 @@
 
 package be4rjp.sclat.data;
 
+import be4rjp.sclat.api.color.Color;
 import be4rjp.sclat.api.player.PlayerData;
 import be4rjp.sclat.api.team.Team;
 import be4rjp.sclat.api.team.TeamLoc;
