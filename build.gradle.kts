@@ -25,9 +25,7 @@ repositories {
 }
 
 dependencies {
-//    compileOnly(libs.spigotApi)
-//    compileOnly(libs.spigot)
-//    compileOnly(libs.bukkit)
+    compileOnly(libs.spigot)
     compileOnly(libs.noteblockapi)
     compileOnly(libs.lunachat)
 //    compileOnly(libs.protocolLib)
