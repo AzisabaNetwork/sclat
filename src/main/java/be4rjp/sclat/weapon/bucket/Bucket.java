@@ -28,23 +28,25 @@ public class Bucket {
 				playerData.setCanRollerShoot(true);
 			}, data.getWeaponClass().getMainWeapon().getCoolTime());
 
-//			BukkitRunnable delay = new BukkitRunnable() {
-//				@Override
-//				public void run() {
-//					boolean sound = false;
-//					for (int i = 0; i < data.getWeaponClass().getMainWeapon().getRollerShootQuantity(); i++) {
-//						boolean is = Shoot(player, null);
-//						if (is)
-//							sound = true;
-//					}
-//					if (sound)
-//						player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1F, 1.63F);
-//				}
-//			};
-//			 delay.runTaskLater(Main.getPlugin(),
-//			 data.getWeaponClass().getMainWeapon().getDelay());
+			// BukkitRunnable delay = new BukkitRunnable() {
+			// @Override
+			// public void run() {
+			// boolean sound = false;
+			// for (int i = 0; i <
+			// data.getWeaponClass().getMainWeapon().getRollerShootQuantity(); i++) {
+			// boolean is = Shoot(player, null);
+			// if (is)
+			// sound = true;
+			// }
+			// if (sound)
+			// player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1F, 1.63F);
+			// }
+			// };
+			// delay.runTaskLater(Main.getPlugin(),
+			// data.getWeaponClass().getMainWeapon().getDelay());
 
-			new BucketShootRunnable(player, () -> Shoot(player, null)).runTaskTimer(Sclat.getPlugin(), 0, data.getWeaponClass().getMainWeapon().getDelay());
+			new BucketShootRunnable(player, () -> Shoot(player, null)).runTaskTimer(Sclat.getPlugin(), 0,
+					data.getWeaponClass().getMainWeapon().getDelay());
 			data.setCanRollerShoot(false);
 		}
 	}
