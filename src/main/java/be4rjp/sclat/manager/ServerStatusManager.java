@@ -1,7 +1,7 @@
 package be4rjp.sclat.manager;
 
 import be4rjp.sclat.Sclat;
-import be4rjp.sclat.data.ServerStatus;
+import be4rjp.sclat.api.status.ServerStatus;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
