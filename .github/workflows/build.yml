@@ -2,7 +2,9 @@ name: Build
 
 on:
   push:
-    branches: [ master ]
+    branches:
+      - master
+      - develop
     paths:
       - '**/*.java'
       - '**/*.kt'
@@ -10,7 +12,9 @@ on:
       - 'gradle/**'
       - 'resources/**'
   pull_request:
-    branches: [ master ]
+    branches:
+      - master
+      - develop
     paths:
       - '**/*.java'
       - '**/*.kt'
