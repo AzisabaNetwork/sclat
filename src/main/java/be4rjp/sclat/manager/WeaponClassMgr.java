@@ -26,14 +26,14 @@ public class WeaponClassMgr {
 
 	public synchronized static void WeaponClassSetup() {
 		ConfigurationSection weaponClassSection = conf.getClassConfig().getConfigurationSection("WeaponClass");
-		if(weaponClassSection == null) {
+		if (weaponClassSection == null) {
 			logger.warn("weaponClassSection is null");
 			return;
 		}
 
 		for (String classname : weaponClassSection.getKeys(false)) {
 			ConfigurationSection weaponSection = weaponClassSection.getConfigurationSection(classname);
-			if(weaponSection == null) {
+			if (weaponSection == null) {
 				logger.warn("weaponSection of {} is null", classname);
 				continue;
 			}
