@@ -3,6 +3,7 @@ package be4rjp.sclat.weapon;
 
 import be4rjp.sclat.Sclat;
 import be4rjp.sclat.api.SclatUtil;
+import be4rjp.sclat.api.SimpleRunnable;
 import be4rjp.sclat.api.Sphere;
 import be4rjp.sclat.api.player.PlayerData;
 import be4rjp.sclat.data.DataMgr;
@@ -33,26 +34,15 @@ import java.util.List;
 public class Blaster {
 	public static void ShootBlaster(Player player) {
 		PlayerData data = DataMgr.getPlayerData(player);
-		BukkitRunnable delay1 = new BukkitRunnable() {
-			Player p = player;
-			@Override
-			public void run() {
-				PlayerData data = DataMgr.getPlayerData(player);
-				data.setCanRollerShoot(true);
-			}
-		};
-		if (data.getCanRollerShoot())
-			delay1.runTaskLater(Sclat.getPlugin(), data.getWeaponClass().getMainWeapon().getCoolTime());
-
-		BukkitRunnable delay = new BukkitRunnable() {
-			Player p = player;
-			@Override
-			public void run() {
-				Shoot(player);
-			}
-		};
 		if (data.getCanRollerShoot()) {
-			delay.runTaskLater(Sclat.getPlugin(), data.getWeaponClass().getMainWeapon().getDelay());
+			SimpleRunnable.runTaskLater(() -> {
+				PlayerData playerData = DataMgr.getPlayerData(player);
+				playerData.setCanRollerShoot(true);
+			}, data.getWeaponClass().getMainWeapon().getCoolTime());
+
+			SimpleRunnable.runTaskLater(() -> {
+				Shoot(player);
+			}, data.getWeaponClass().getMainWeapon().getDelay());
 			data.setCanRollerShoot(false);
 		}
 	}
@@ -302,14 +292,9 @@ public class Blaster {
 					SclatUtil.giveDamage(player, target, damage, "killed");
 
 					// AntiNoDamageTime
-					BukkitRunnable task = new BukkitRunnable() {
-						Player p = target;
-						@Override
-						public void run() {
-							target.setNoDamageTicks(0);
-						}
-					};
-					task.runTaskLater(Sclat.getPlugin(), 1);
+					SimpleRunnable.runTaskLater(() -> {
+						target.setNoDamageTicks(0);
+					}, 1);
 
 				}
 			}
