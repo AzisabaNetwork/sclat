@@ -4,6 +4,7 @@ package be4rjp.sclat.manager;
 import be4rjp.sclat.Animation;
 import be4rjp.sclat.Main;
 import be4rjp.sclat.api.MessageType;
+import be4rjp.sclat.api.Plugins;
 import be4rjp.sclat.api.Sclat;
 import be4rjp.sclat.api.ServerType;
 import be4rjp.sclat.api.SoundType;
@@ -809,7 +810,7 @@ public class MatchMgr {
 						// p.setPlayerListName(DataMgr.getPlayerData(p).getTeam().getTeamColor().getColorCode()
 						// + p.getDisplayName());
 
-						if (DataMgr.getPlayerData(p).getPlayerNumber() == 1 && Main.NoteBlockAPI) {
+						if (DataMgr.getPlayerData(p).getPlayerNumber() == 1 && Plugins.NOTEBLOCKAPI.isLoaded()) {
 							NoteBlockSong nbs = NoteBlockAPIMgr.getRandomNormalSong();
 							Song song = nbs.getSong();
 							RadioSongPlayer radio = new RadioSongPlayer(song);
@@ -1111,7 +1112,7 @@ public class MatchMgr {
 								Sclat.sendMessage("§6§n残り1分！", MessageType.PLAYER, oplayer);
 							}
 						}
-						if (DataMgr.getPlayerData(p).getPlayerNumber() == 1 && Main.NoteBlockAPI) {
+						if (DataMgr.getPlayerData(p).getPlayerNumber() == 1 && Plugins.NOTEBLOCKAPI.isLoaded()) {
 							NoteBlockSong nbs = NoteBlockAPIMgr.getRandomFinalSong();
 							Song song = nbs.getSong();
 							RadioSongPlayer radio = new RadioSongPlayer(song);

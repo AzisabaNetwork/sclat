@@ -3,6 +3,7 @@ package be4rjp.sclat;
 import be4rjp.blockstudio.BlockStudio;
 import be4rjp.blockstudio.api.BlockStudioAPI;
 import be4rjp.dadadachecker.DADADACheckerAPI;
+import be4rjp.sclat.api.Plugins;
 import be4rjp.sclat.api.Sclat;
 import be4rjp.sclat.api.ServerType;
 import be4rjp.sclat.api.async.AsyncPlayerListener;
@@ -51,6 +52,8 @@ import org.bukkit.plugin.messaging.PluginMessageListener;
 import org.bukkit.scoreboard.NameTagVisibility;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.ScoreboardManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,6 +63,7 @@ import java.util.List;
  * @author Be4rJP
  */
 public class Main extends JavaPlugin implements PluginMessageListener {
+	private static final Logger logger = LoggerFactory.getLogger(Main.class);
 
 	public static Config conf;
 
@@ -91,10 +95,6 @@ public class Main extends JavaPlugin implements PluginMessageListener {
 	// EquipmentShare
 	public static EquipmentServer es = null;
 
-	// API
-	public static boolean NoteBlockAPI = true;
-	public static boolean LunaChat = true;
-
 	// 重複しない数字
 	// ボム等で使用
 	private static int NDNumber = 0;
@@ -125,35 +125,13 @@ public class Main extends JavaPlugin implements PluginMessageListener {
 		AsyncThreadManager.setup(1);
 
 		// ----------------------------APICheck-------------------------------
-		NoteBlockAPI = true;
-		if (!Bukkit.getPluginManager().isPluginEnabled("NoteBlockAPI")) {
-			getLogger().severe("*** NoteBlockAPI is not installed or not enabled. ***");
-			NoteBlockAPI = false;
-			return;
-		}
+		if(!Plugins.onInit(logger)) return;
+		logger.info("API check was complted.");
 
-		// LunaChat
-		if (!Bukkit.getPluginManager().isPluginEnabled("LunaChat")) {
-			getLogger().severe("*** LunaChat is not installed or not enabled. ***");
-			LunaChat = false;
-		}
+		protocolManager = ProtocolLibrary.getProtocolManager();
+		new SclatPacketListener();
 
-		// ProtocolLib
-		if (!Bukkit.getPluginManager().isPluginEnabled("ProtocolLib")) {
-			getLogger().severe("*** ProtocolLib is not installed or not enabled. ***");
-			return;
-		} else {
-			protocolManager = ProtocolLibrary.getProtocolManager();
-			new SclatPacketListener();
-		}
-
-		// DADADAChecker
-		if (!Bukkit.getPluginManager().isPluginEnabled("DADADAChecker")) {
-			getLogger().severe("*** DADADAChecker is not installed or not enabled. ***");
-			return;
-		} else {
-			dadadaCheckerAPI = new DADADACheckerAPI(this);
-		}
+		dadadaCheckerAPI = new DADADACheckerAPI(this);
 		// -------------------------------------------------------------------
 
 		// --------------------------Load config------------------------------
@@ -199,7 +177,7 @@ public class Main extends JavaPlugin implements PluginMessageListener {
 		pm.registerEvents(new SnowballListener(), this);
 		pm.registerEvents(new AsyncPlayerListener(), this);
 
-		if (LunaChat)
+		if (Plugins.LUNACHAT.isLoaded())
 			pm.registerEvents(new LunaChatListener(), this);
 		// -------------------------------------------------------------------
 
@@ -280,7 +258,7 @@ public class Main extends JavaPlugin implements PluginMessageListener {
 		// -------------------------------------------------------------------
 
 		// ------------------------Load NBS songs-----------------------------
-		if (NoteBlockAPI)
+		if (Plugins.NOTEBLOCKAPI.isLoaded())
 			NoteBlockAPIMgr.LoadSongFiles();
 		// -------------------------------------------------------------------
 
