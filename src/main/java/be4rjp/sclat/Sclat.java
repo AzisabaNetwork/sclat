@@ -16,7 +16,7 @@ import be4rjp.sclat.api.holo.PlayerHolograms;
 import be4rjp.sclat.api.rank.RankingUpdater;
 import be4rjp.sclat.api.status.StatusServer;
 import be4rjp.sclat.api.wiremesh.Wiremesh;
-import be4rjp.sclat.commands.sclatCommandExecutor;
+import be4rjp.sclat.commands.SclatCommand;
 import be4rjp.sclat.config.Config;
 import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.data.MapData;
@@ -37,6 +37,7 @@ import be4rjp.sclat.manager.WeaponClassMgr;
 import be4rjp.sclat.protocollib.SclatPacketListener;
 import be4rjp.sclat.tutorial.Tutorial;
 import be4rjp.sclat.weapon.SnowballListener;
+import co.aikar.commands.PaperCommandManager;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import com.google.common.io.ByteArrayDataInput;
@@ -115,6 +116,8 @@ public class Sclat extends JavaPlugin implements PluginMessageListener {
 
 	public static final PlayerHolograms playerHolograms = new PlayerHolograms();
 
+	private static PaperCommandManager commandManager;
+
 	@Override
 	public void onEnable() {
 		plugin = this;
@@ -185,8 +188,9 @@ public class Sclat extends JavaPlugin implements PluginMessageListener {
 
 		// ------------------------RegisteringCommands------------------------
 		getLogger().info("Registering Commands...");
-		getCommand("sclat").setExecutor(new sclatCommandExecutor());
-		getCommand("sclat").setTabCompleter(new sclatCommandExecutor());
+		commandManager = new PaperCommandManager(this);
+//		commandManager.enableUnstableAPI("help");
+		commandManager.registerCommand(new SclatCommand(this), true);
 		// -------------------------------------------------------------------
 
 		// ------------------------Setup from config--------------------------
@@ -388,6 +392,8 @@ public class Sclat extends JavaPlugin implements PluginMessageListener {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+
+		commandManager.unregisterCommands();
 
 		// -----------------------Tutorial server list------------------------
 		if (type == ServerType.LOBBY) {
