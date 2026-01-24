@@ -1,6 +1,7 @@
 
 package be4rjp.sclat.data;
 
+import be4rjp.sclat.api.IOwnable;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
 
@@ -11,7 +12,7 @@ import java.util.List;
  *
  * @author Be4rJP
  */
-public class KasaData {
+public class KasaData implements IOwnable {
 
 	private List<ArmorStand> list = new ArrayList<>();
 	private Player player;
@@ -39,5 +40,10 @@ public class KasaData {
 
 	public void setArmorStandList(List<ArmorStand> list) {
 		this.list = list;
+	}
+
+	@Override
+	public Player getOwner() {
+		return player;
 	}
 }
