@@ -2,6 +2,7 @@
 package be4rjp.sclat.manager;
 
 import be4rjp.sclat.Sclat;
+import be4rjp.sclat.api.rank.Ratings;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.server.v1_15_R1.DataWatcherRegistry;
 import net.minecraft.server.v1_15_R1.EntityArmorStand;
@@ -117,7 +118,7 @@ public class PlayerStatusMgr {
 		as1.setCustomNameVisible(true);
 		as1.setNoGravity(true);
 		as1.setCustomName(CraftChatMessage.fromStringOrNull("§6Rank : §r" + String.valueOf(getRank(player)) + "  [ §b"
-				+ RankMgr.toABCRank(getRank(player)) + " §r]"));
+				+ Ratings.toABCRank(getRank(player)) + " §r]"));
 
 		list1.put(player, as1);
 
@@ -153,7 +154,7 @@ public class PlayerStatusMgr {
 					EntityArmorStand as1 = list1.get(player);
 					connection.sendPacket(new PacketPlayOutEntityDestroy(as1.getBukkitEntity().getEntityId()));
 					as1.setCustomName(CraftChatMessage.fromStringOrNull("§6Rank : §r" + String.valueOf(getRank(player))
-							+ "  [ §b" + RankMgr.toABCRank(getRank(player)) + " §r]"));
+							+ "  [ §b" + Ratings.toABCRank(getRank(player)) + " §r]"));
 					connection.sendPacket(new PacketPlayOutSpawnEntityLiving(as1));
 
 					EntityArmorStand as2 = list2.get(player);

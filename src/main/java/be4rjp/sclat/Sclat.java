@@ -13,6 +13,7 @@ import be4rjp.sclat.api.config.CustomConfig;
 import be4rjp.sclat.api.enchant.GlowEnchant;
 import be4rjp.sclat.api.equipment.EquipmentServer;
 import be4rjp.sclat.api.holo.PlayerHolograms;
+import be4rjp.sclat.api.rank.RankingUpdater;
 import be4rjp.sclat.api.status.StatusServer;
 import be4rjp.sclat.api.wiremesh.Wiremesh;
 import be4rjp.sclat.commands.sclatCommandExecutor;
@@ -31,7 +32,6 @@ import be4rjp.sclat.manager.MapDataMgr;
 import be4rjp.sclat.manager.MatchMgr;
 import be4rjp.sclat.manager.NoteBlockAPIMgr;
 import be4rjp.sclat.manager.PlayerReturnManager;
-import be4rjp.sclat.manager.RankMgr;
 import be4rjp.sclat.manager.ServerStatusManager;
 import be4rjp.sclat.manager.WeaponClassMgr;
 import be4rjp.sclat.protocollib.SclatPacketListener;
@@ -333,7 +333,7 @@ public class Sclat extends JavaPlugin implements PluginMessageListener {
 
 		// -----------------------Ranking Holograms---------------------------
 		if (type == ServerType.LOBBY) {
-			RankMgr.makeRankingTask();
+			RankingUpdater.makeRankingTask();
 		}
 		// -------------------------------------------------------------------
 

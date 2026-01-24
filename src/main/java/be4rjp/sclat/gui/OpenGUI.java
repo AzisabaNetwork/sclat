@@ -4,12 +4,12 @@ package be4rjp.sclat.gui;
 import be4rjp.sclat.Sclat;
 import be4rjp.sclat.api.ServerType;
 import be4rjp.sclat.api.player.PlayerData;
+import be4rjp.sclat.api.rank.Ratings;
 import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.data.Match;
 import be4rjp.sclat.emblem.EmblemManager;
 import be4rjp.sclat.manager.MatchMgr;
 import be4rjp.sclat.manager.PlayerStatusMgr;
-import be4rjp.sclat.manager.RankMgr;
 import be4rjp.sclat.tutorial.Tutorial;
 import be4rjp.sclat.weapon.Gear;
 import org.bukkit.Bukkit;
@@ -107,7 +107,7 @@ public class OpenGUI {
 			statusMeta.setDisplayName("§r§e" + player.getName() + " のステータス");
 			List lores = new ArrayList();
 			lores.add("§r§6Rank : §r" + PlayerStatusMgr.getRank(player) + " [ §b"
-					+ RankMgr.toABCRank(PlayerStatusMgr.getRank(player)) + " §r]");
+					+ Ratings.toABCRank(PlayerStatusMgr.getRank(player)) + " §r]");
 			lores.add("§r§6Lv : §r" + PlayerStatusMgr.getLv(player));
 			lores.add("§r§bKill(s) : §r" + PlayerStatusMgr.getKill(player));
 			lores.add("§r§bPaint(s) : §r" + PlayerStatusMgr.getPaint(player));

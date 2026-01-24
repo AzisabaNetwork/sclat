@@ -13,6 +13,7 @@ import be4rjp.sclat.api.color.Color;
 import be4rjp.sclat.api.equipment.EquipmentServerManager;
 import be4rjp.sclat.api.player.PlayerData;
 import be4rjp.sclat.api.player.PlayerSettings;
+import be4rjp.sclat.api.rank.Ratings;
 import be4rjp.sclat.api.song.NoteBlockSong;
 import be4rjp.sclat.api.status.StatusClient;
 import be4rjp.sclat.api.team.Team;
@@ -1517,7 +1518,7 @@ public class MatchMgr {
 						if (data.getMatch().getJoinedPlayerCount() == 1 || !conf.getConfig().getBoolean("RateMatch"))
 							pRank = 0;
 
-						int pMoveRank = RankMgr.IndicateRankPointmove(p, pRank);
+						int pMoveRank = Ratings.IndicateRankPointmove(p, pRank);
 						PlayerStatusMgr.addRank(p, pRank);
 
 						PlayerStatusMgr.addLv(p, pLv);
@@ -1555,14 +1556,14 @@ public class MatchMgr {
 							SclatUtil.sendMessage(
 									ChatColor.GOLD + " RankPoint : " + ChatColor.RESET + String.valueOf(pRank)
 											+ (Sclat.type == ServerType.NORMAL
-													? "  [ §b" + RankMgr.toABCRank(getRank(player)) + " §r]"
+													? "  [ §b" + Ratings.toABCRank(getRank(player)) + " §r]"
 													: ""),
 									MessageType.PLAYER, p);
 						else
 							SclatUtil.sendMessage(
 									ChatColor.GOLD + " RankPoint : " + ChatColor.RESET + "+" + String.valueOf(pMoveRank)
 											+ (Sclat.type == ServerType.NORMAL
-													? "  [ §b" + RankMgr.toABCRank(getRank(player)) + " §r]"
+													? "  [ §b" + Ratings.toABCRank(getRank(player)) + " §r]"
 													: ""),
 									MessageType.PLAYER, p);
 						SclatUtil.sendMessage("", MessageType.PLAYER, p);
