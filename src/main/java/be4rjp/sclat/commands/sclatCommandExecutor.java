@@ -222,6 +222,7 @@ public class sclatCommandExecutor implements CommandExecutor, TabExecutor {
 						List<String> commands = new ArrayList<>();
 						commands.add("mod " + sender.getName());
 						commands.add("stop");
+						// Todo: use redis. fallbacks PluginMessaging
 						EquipmentClient sc = new EquipmentClient(
 								conf.getConfig().getString("EquipShare." + serverName + ".Host"),
 								conf.getConfig().getInt("EquipShare." + serverName + ".Port"), commands);

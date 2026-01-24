@@ -129,7 +129,7 @@ public class Main extends JavaPlugin implements PluginMessageListener {
 		logger.info("API check was complted.");
 
 		protocolManager = ProtocolLibrary.getProtocolManager();
-		new SclatPacketListener();
+		SclatPacketListener.init();
 
 		dadadaCheckerAPI = new DADADACheckerAPI(this);
 		// -------------------------------------------------------------------
