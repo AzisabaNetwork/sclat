@@ -1,11 +1,11 @@
 package be4rjp.sclat.data;
 
 import be4rjp.sclat.Sclat;
+import be4rjp.sclat.api.BungeeCordAPI;
 import be4rjp.sclat.api.MessageType;
 import be4rjp.sclat.api.SclatUtil;
 import be4rjp.sclat.api.SoundType;
 import be4rjp.sclat.api.status.ServerStatus;
-import be4rjp.sclat.manager.BungeeCordMgr;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -28,7 +28,7 @@ public class MatchServerRunnable extends BukkitRunnable {
 	public void run() {
 		if (waitTime == 30) {
 			for (Player player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
-				BungeeCordMgr.PlayerSendServer(player, serverStatus.getServerName());
+				BungeeCordAPI.PlayerSendServer(player, serverStatus.getServerName());
 				DataMgr.getPlayerData(player).setServerName(serverStatus.getDisplayName());
 			}
 		}

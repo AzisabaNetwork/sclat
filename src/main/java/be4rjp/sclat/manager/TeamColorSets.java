@@ -12,7 +12,7 @@ import org.bukkit.inventory.meta.LeatherArmorMeta;
  *
  * @author Be4rJP
  */
-public class ColorMgr {
+public class TeamColorSets {
 	public synchronized static void SetupColor() {
 		Color blue = new Color("Blue");
 		blue.setWool(Material.BLUE_WOOL);

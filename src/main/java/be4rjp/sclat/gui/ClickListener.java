@@ -2,6 +2,7 @@
 package be4rjp.sclat.gui;
 
 import be4rjp.sclat.Sclat;
+import be4rjp.sclat.api.BungeeCordAPI;
 import be4rjp.sclat.api.MessageType;
 import be4rjp.sclat.api.SclatUtil;
 import be4rjp.sclat.api.ServerType;
@@ -13,7 +14,6 @@ import be4rjp.sclat.data.Match;
 import be4rjp.sclat.data.PaintData;
 import be4rjp.sclat.data.WeaponClass;
 import be4rjp.sclat.manager.ArmorStandMgr;
-import be4rjp.sclat.manager.BungeeCordMgr;
 import be4rjp.sclat.manager.MatchMgr;
 import be4rjp.sclat.manager.PlayerStatusMgr;
 import be4rjp.sclat.manager.SPWeaponMgr;
@@ -154,10 +154,10 @@ public class ClickListener implements Listener {
 				break;
 			case "ロビーへ戻る / RETURN TO LOBBY" :
 				if (Sclat.type != ServerType.LOBBY) {
-					BungeeCordMgr.PlayerSendServer(player, "sclat");
+					BungeeCordAPI.PlayerSendServer(player, "sclat");
 					DataMgr.getPlayerData(player).setServerName("Sclat");
 				} else {
-					BungeeCordMgr.PlayerSendServer(player, "lobby");
+					BungeeCordAPI.PlayerSendServer(player, "lobby");
 					DataMgr.getPlayerData(player).setServerName("Lobby");
 				}
 				break;
@@ -165,11 +165,11 @@ public class ClickListener implements Listener {
 				OpenGUI.openEmblemMenu(player);
 				break;
 			case "試し打ちサーバーへ接続 / TRAINING FIELD" :
-				BungeeCordMgr.PlayerSendServer(player, "sclattest");
+				BungeeCordAPI.PlayerSendServer(player, "sclattest");
 				DataMgr.getPlayerData(player).setServerName("sclattest");
 				break;
 			case "チームデスマッチサーバーへ接続 / CONNECT TO TDM SERVER" :
-				BungeeCordMgr.PlayerSendServer(player, "tdm");
+				BungeeCordAPI.PlayerSendServer(player, "tdm");
 				DataMgr.getPlayerData(player).setServerName("TDM");
 				break;
 			case "ナワバリバトル" :
@@ -235,7 +235,7 @@ public class ClickListener implements Listener {
 								SclatUtil.playGameSound(player, SoundType.ERROR);
 								return;
 							}
-							BungeeCordMgr.PlayerSendServer(player, ss.getServerName());
+							BungeeCordAPI.PlayerSendServer(player, ss.getServerName());
 							DataMgr.getPlayerData(player).setServerName(ss.getDisplayName());
 						} else {
 							SclatUtil.sendMessage("§c§nこのサーバーは満員のため参加できません", MessageType.PLAYER, player);
@@ -660,7 +660,7 @@ public class ClickListener implements Listener {
 					OpenGUI.SuperJumpGUI(player);
 					break;
 				case "§c§n右クリックで退出" :
-					BungeeCordMgr.PlayerSendServer(player, "sclat");
+					BungeeCordAPI.PlayerSendServer(player, "sclat");
 					DataMgr.getPlayerData(player).setServerName("Sclat");
 					break;
 				case "§a§n右クリックで参加" :

@@ -1,6 +1,7 @@
 package be4rjp.sclat.tutorial;
 
 import be4rjp.sclat.Sclat;
+import be4rjp.sclat.api.BungeeCordAPI;
 import be4rjp.sclat.api.MessageType;
 import be4rjp.sclat.api.SclatUtil;
 import be4rjp.sclat.api.SoundType;
@@ -10,7 +11,6 @@ import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.data.Match;
 import be4rjp.sclat.data.PaintData;
 import be4rjp.sclat.data.Path;
-import be4rjp.sclat.manager.BungeeCordMgr;
 import be4rjp.sclat.manager.PathMgr;
 import be4rjp.sclat.manager.PlayerStatusMgr;
 import org.bukkit.Bukkit;
@@ -321,7 +321,7 @@ public class Tutorial {
 				}
 				player.playSound(player.getLocation(), Sound.ENTITY_MINECART_INSIDE, 0.7F, 1F);
 				if (i == 2) {
-					BungeeCordMgr.PlayerSendServer(player, "sclat");
+					BungeeCordAPI.PlayerSendServer(player, "sclat");
 					DataMgr.getPlayerData(player).setServerName("Sclat");
 				}
 				i++;

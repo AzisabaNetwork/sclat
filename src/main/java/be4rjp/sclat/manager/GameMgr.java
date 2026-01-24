@@ -1,6 +1,7 @@
 package be4rjp.sclat.manager;
 
 import be4rjp.sclat.Sclat;
+import be4rjp.sclat.api.BungeeCordAPI;
 import be4rjp.sclat.api.MessageType;
 import be4rjp.sclat.api.SclatUtil;
 import be4rjp.sclat.api.ServerType;
@@ -673,7 +674,7 @@ public class GameMgr implements Listener {
 										SclatUtil.playGameSound(player, SoundType.ERROR);
 										return;
 									}
-									BungeeCordMgr.PlayerSendServer(player, ss.getServerName());
+									BungeeCordAPI.PlayerSendServer(player, ss.getServerName());
 									DataMgr.getPlayerData(player).setServerName(ss.getDisplayName());
 								} else {
 									SclatUtil.sendMessage("§c§nこのサーバーは満員のため参加できません", MessageType.PLAYER, player);
@@ -723,19 +724,19 @@ public class GameMgr implements Listener {
 						player.setResourcePack(conf.getConfig().getString("ResourcePackURL"));
 						break;
 					case "Click to Return" :
-						BungeeCordMgr.PlayerSendServer(player, "lobby");
+						BungeeCordAPI.PlayerSendServer(player, "lobby");
 						DataMgr.getPlayerData(player).setServerName("Lobby");
 						break;
 					case "[ Training Mode ]" :
-						BungeeCordMgr.PlayerSendServer(player, "sclattest");
+						BungeeCordAPI.PlayerSendServer(player, "sclattest");
 						DataMgr.getPlayerData(player).setServerName("sclattest");
 						break;
 					case "[ Return to jg ]" :
-						BungeeCordMgr.PlayerSendServer(player, "jg");
+						BungeeCordAPI.PlayerSendServer(player, "jg");
 						DataMgr.getPlayerData(player).setServerName("JG");
 						break;
 					case "Return to sclat" :
-						BungeeCordMgr.PlayerSendServer(player, "sclat");
+						BungeeCordAPI.PlayerSendServer(player, "sclat");
 						DataMgr.getPlayerData(player).setServerName("Sclat");
 						break;
 					case "[Charge special]" :
@@ -743,7 +744,7 @@ public class GameMgr implements Listener {
 							DataMgr.getPlayerData(player).setSPGauge(100);
 						break;
 					case "[ Sclat ]" :
-						BungeeCordMgr.PlayerSendServer(player, "sclat");
+						BungeeCordAPI.PlayerSendServer(player, "sclat");
 						DataMgr.getPlayerData(player).setServerName("Sclat");
 						break;
 					case "[ LootBox ]" :
@@ -784,7 +785,7 @@ public class GameMgr implements Listener {
 						break;
 					case "[ Tutorial ]" :
 						List<String> list = Sclat.tutorialServers.getConfig().getStringList("server-list");
-						BungeeCordMgr.PlayerSendServer(player, list.get(new Random().nextInt(list.size())));
+						BungeeCordAPI.PlayerSendServer(player, list.get(new Random().nextInt(list.size())));
 						DataMgr.getPlayerData(player)
 								.setServerName(conf.getServers().getString("Tutorial.DisplayName"));
 						break;

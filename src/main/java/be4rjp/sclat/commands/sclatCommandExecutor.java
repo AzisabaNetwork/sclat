@@ -1,6 +1,7 @@
 package be4rjp.sclat.commands;
 
 import be4rjp.sclat.Sclat;
+import be4rjp.sclat.api.BungeeCordAPI;
 import be4rjp.sclat.api.MessageType;
 import be4rjp.sclat.api.SclatUtil;
 import be4rjp.sclat.api.ServerType;
@@ -9,7 +10,6 @@ import be4rjp.sclat.api.equipment.EquipmentClient;
 import be4rjp.sclat.api.status.ServerStatus;
 import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.emblem.EmblemManager;
-import be4rjp.sclat.manager.BungeeCordMgr;
 import be4rjp.sclat.manager.ServerStatusManager;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -237,7 +237,7 @@ public class sclatCommandExecutor implements CommandExecutor, TabExecutor {
 							@Override
 							public void run() {
 								try {
-									BungeeCordMgr.PlayerSendServer((Player) sender, ss.getServerName());
+									BungeeCordAPI.PlayerSendServer((Player) sender, ss.getServerName());
 									DataMgr.getPlayerData((Player) sender).setServerName(ss.getDisplayName());
 								} catch (Exception ignored) {
 								}

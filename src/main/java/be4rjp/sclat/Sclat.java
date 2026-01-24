@@ -23,7 +23,6 @@ import be4rjp.sclat.gui.ClickListener;
 import be4rjp.sclat.listener.SquidListener;
 import be4rjp.sclat.lunachat.LunaChatListener;
 import be4rjp.sclat.manager.ArmorStandMgr;
-import be4rjp.sclat.manager.ColorMgr;
 import be4rjp.sclat.manager.GameMgr;
 import be4rjp.sclat.manager.MainWeaponMgr;
 import be4rjp.sclat.manager.MapDataMgr;
@@ -32,6 +31,7 @@ import be4rjp.sclat.manager.NoteBlockAPIMgr;
 import be4rjp.sclat.manager.PlayerReturnManager;
 import be4rjp.sclat.manager.RankMgr;
 import be4rjp.sclat.manager.ServerStatusManager;
+import be4rjp.sclat.manager.TeamColorSets;
 import be4rjp.sclat.manager.WeaponClassMgr;
 import be4rjp.sclat.protocollib.SclatPacketListener;
 import be4rjp.sclat.tutorial.Tutorial;
@@ -63,7 +63,7 @@ import java.util.List;
  * @author Be4rJP
  */
 public class Sclat extends JavaPlugin implements PluginMessageListener {
-	private static final Logger logger = LoggerFactory.getLogger(Sclat.class);
+	public static final Logger logger = LoggerFactory.getLogger(Sclat.class);
 
 	public static Config conf;
 
@@ -190,7 +190,7 @@ public class Sclat extends JavaPlugin implements PluginMessageListener {
 
 		// ------------------------Setup from config--------------------------
 		getLogger().info("SetupColor...");
-		ColorMgr.SetupColor();
+		TeamColorSets.SetupColor();
 		getLogger().info("SetupMainWeapon...");
 		MainWeaponMgr.SetupMainWeapon();
 		getLogger().info("WeaponClassSetup...");

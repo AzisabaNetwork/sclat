@@ -3,6 +3,7 @@ package be4rjp.sclat.manager;
 
 import be4rjp.sclat.Sclat;
 import be4rjp.sclat.api.Animation;
+import be4rjp.sclat.api.BungeeCordAPI;
 import be4rjp.sclat.api.MessageType;
 import be4rjp.sclat.api.Plugins;
 import be4rjp.sclat.api.SclatUtil;
@@ -1641,7 +1642,7 @@ public class MatchMgr {
 
 						if (Sclat.type == ServerType.MATCH) {
 							try {
-								BungeeCordMgr.PlayerSendServer(p, "sclat");
+								BungeeCordAPI.PlayerSendServer(p, "sclat");
 								DataMgr.getPlayerData(p).setServerName("Sclat");
 							} catch (Exception e) {
 							}

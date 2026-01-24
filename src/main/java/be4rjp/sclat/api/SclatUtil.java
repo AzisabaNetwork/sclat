@@ -6,7 +6,6 @@ import be4rjp.sclat.api.player.PlayerData;
 import be4rjp.sclat.api.status.StatusClient;
 import be4rjp.sclat.api.team.Team;
 import be4rjp.sclat.data.DataMgr;
-import be4rjp.sclat.manager.BungeeCordMgr;
 import be4rjp.sclat.manager.DeathMgr;
 import be4rjp.sclat.manager.MatchMgr;
 import org.bukkit.Bukkit;
@@ -85,7 +84,7 @@ public class SclatUtil {
 		sc.startClient();
 
 		for (Player player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
-			BungeeCordMgr.PlayerSendServer(player, "sclat");
+			BungeeCordAPI.PlayerSendServer(player, "sclat");
 			DataMgr.getPlayerData(player).setServerName("Sclat");
 		}
 		BukkitRunnable task = new BukkitRunnable() {
@@ -179,7 +178,7 @@ public class SclatUtil {
 			@Override
 			public void run() {
 				try {
-					BungeeCordMgr.PlayerSendServer(player, "sclat");
+					BungeeCordAPI.PlayerSendServer(player, "sclat");
 					DataMgr.getPlayerData(player).setServerName("Sclat");
 				} catch (Exception e) {
 				}
