@@ -58,7 +58,7 @@ public class Funnel {
 			Block block = player.getLocation().getWorld().getBlockAt(position);
 
 			if (!block.getType().equals(Material.AIR)) {
-				break loop;
+				break;
 			}
 			for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 				if (DataMgr.getPlayerData(target).getSettings().ShowEffect_MainWeaponInk()) {
@@ -153,11 +153,11 @@ public class Funnel {
 			PlayerData data = DataMgr.getPlayerData(p);
 			int i = 0;
 
-			List<ArmorStand> list = new ArrayList<ArmorStand>();
-			List<ArmorStand> list1 = new ArrayList<ArmorStand>();
-			List<ArmorStand> list2 = new ArrayList<ArmorStand>();
-			List<List<ArmorStand>> list5 = new ArrayList<List<ArmorStand>>();
-			List<ArmorStand> list6 = new ArrayList<ArmorStand>();
+			List<ArmorStand> list = new ArrayList<>();
+			List<ArmorStand> list1 = new ArrayList<>();
+			List<ArmorStand> list2 = new ArrayList<>();
+			List<List<ArmorStand>> list5 = new ArrayList<>();
+			List<ArmorStand> list6 = new ArrayList<>();
 
 			ArmorStand as1;
 			ArmorStand as2;
@@ -846,7 +846,7 @@ public class Funnel {
 							Block block = player.getLocation().getWorld().getBlockAt(position);
 
 							if (!block.getType().equals(Material.AIR)) {
-								break loop;
+								break;
 							}
 							if (DataMgr.getPlayerData(player).getSettings().ShowEffect_MainWeaponInk()) {
 								if (it < 10) {

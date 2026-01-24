@@ -626,7 +626,7 @@ public class OpenGUI {
 		ItemStack shooter = new ItemStack(Material.WOODEN_HOE);
 		ItemMeta shooter_m = shooter.getItemMeta();
 		shooter_m.setDisplayName("メインウエポンのインクエフェクト");
-		ArrayList<String> shooter_r = new ArrayList<String>();
+		ArrayList<String> shooter_r = new ArrayList<>();
 		if (DataMgr.getPlayerData(player).getSettings().ShowEffect_MainWeaponInk())
 			shooter_r.add("§a§l[Enable]");
 		else
@@ -647,7 +647,7 @@ public class OpenGUI {
 			shooter_p = new ItemStack(Material.GUNPOWDER);
 		ItemMeta shooter_p_m = shooter_p.getItemMeta();
 		shooter_p_m.setDisplayName("メインウエポンのインクエフェクト");
-		ArrayList<String> shooter_p_r = new ArrayList<String>();
+		ArrayList<String> shooter_p_r = new ArrayList<>();
 		if (DataMgr.getPlayerData(player).getSettings().ShowEffect_MainWeaponInk())
 			shooter_p_r.add("§a§l[Enable]");
 		else
@@ -659,7 +659,7 @@ public class OpenGUI {
 		ItemStack charger = new ItemStack(Material.WOODEN_SWORD);
 		ItemMeta charger_m = charger.getItemMeta();
 		charger_m.setDisplayName("チャージャーのレーザー");
-		ArrayList<String> charger_r = new ArrayList<String>();
+		ArrayList<String> charger_r = new ArrayList<>();
 		if (DataMgr.getPlayerData(player).getSettings().ShowEffect_ChargerLine())
 			charger_r.add("§a§l[Enable]");
 		else
@@ -681,7 +681,7 @@ public class OpenGUI {
 			charger_p = new ItemStack(Material.GUNPOWDER);
 		ItemMeta charger_p_m = charger_p.getItemMeta();
 		charger_p_m.setDisplayName("チャージャーのレーザー");
-		ArrayList<String> charger_p_r = new ArrayList<String>();
+		ArrayList<String> charger_p_r = new ArrayList<>();
 		if (DataMgr.getPlayerData(player).getSettings().ShowEffect_ChargerLine())
 			charger_p_r.add("§a§l[Enable]");
 		else
@@ -693,7 +693,7 @@ public class OpenGUI {
 		ItemStack chargerS = new ItemStack(Material.END_CRYSTAL);
 		ItemMeta chargerS_m = chargerS.getItemMeta();
 		chargerS_m.setDisplayName("スペシャルウエポンのエフェクト");
-		ArrayList<String> chargerS_r = new ArrayList<String>();
+		ArrayList<String> chargerS_r = new ArrayList<>();
 		if (DataMgr.getPlayerData(player).getSettings().ShowEffect_SPWeapon())
 			chargerS_r.add("§a§l[Enable]");
 		else
@@ -715,7 +715,7 @@ public class OpenGUI {
 			chargerS_p = new ItemStack(Material.GUNPOWDER);
 		ItemMeta chargerS_p_m = chargerS_p.getItemMeta();
 		chargerS_p_m.setDisplayName("スペシャルウエポンのエフェクト");
-		ArrayList<String> chargerS_p_r = new ArrayList<String>();
+		ArrayList<String> chargerS_p_r = new ArrayList<>();
 		if (DataMgr.getPlayerData(player).getSettings().ShowEffect_SPWeapon())
 			chargerS_p_r.add("§a§l[Enable]");
 		else
@@ -727,7 +727,7 @@ public class OpenGUI {
 		ItemStack rollaerL = new ItemStack(Material.SHULKER_SHELL);
 		ItemMeta rollaerL_m = rollaerL.getItemMeta();
 		rollaerL_m.setDisplayName("スペシャルウエポンの範囲エフェクト");
-		ArrayList<String> rollaerL_r = new ArrayList<String>();
+		ArrayList<String> rollaerL_r = new ArrayList<>();
 		if (DataMgr.getPlayerData(player).getSettings().ShowEffect_SPWeaponRegion())
 			rollaerL_r.add("§a§l[Enable]");
 		else
@@ -750,7 +750,7 @@ public class OpenGUI {
 			rollaerL_p = new ItemStack(Material.GUNPOWDER);
 		ItemMeta rollaerL_p_m = rollaerL_p.getItemMeta();
 		rollaerL_p_m.setDisplayName("スペシャルウエポンの範囲エフェクト");
-		ArrayList<String> rollaerL_p_r = new ArrayList<String>();
+		ArrayList<String> rollaerL_p_r = new ArrayList<>();
 		if (DataMgr.getPlayerData(player).getSettings().ShowEffect_SPWeaponRegion())
 			rollaerL_p_r.add("§a§l[Enable]");
 		else
@@ -762,7 +762,7 @@ public class OpenGUI {
 		ItemStack rollerS = new ItemStack(Material.SNOWBALL);
 		ItemMeta rollerS_m = rollerS.getItemMeta();
 		rollerS_m.setDisplayName("弾の表示");
-		ArrayList<String> rollerS_r = new ArrayList<String>();
+		ArrayList<String> rollerS_r = new ArrayList<>();
 		if (DataMgr.getPlayerData(player).getSettings().ShowSnowBall())
 			rollerS_r.add("§a§l[Enable]");
 		else
@@ -783,7 +783,7 @@ public class OpenGUI {
 			rollerS_p = new ItemStack(Material.GUNPOWDER);
 		ItemMeta rollerS_p_m = rollerS_p.getItemMeta();
 		rollerS_p_m.setDisplayName("弾の表示");
-		ArrayList<String> rollerS_p_r = new ArrayList<String>();
+		ArrayList<String> rollerS_p_r = new ArrayList<>();
 		if (DataMgr.getPlayerData(player).getSettings().ShowSnowBall())
 			rollerS_p_r.add("§a§l[Enable]");
 		else
@@ -799,7 +799,7 @@ public class OpenGUI {
 			bgm_p = new ItemStack(Material.GUNPOWDER);
 		ItemMeta bgm_p_m = bgm_p.getItemMeta();
 		bgm_p_m.setDisplayName("BGM");
-		ArrayList<String> bgm_p_r = new ArrayList<String>();
+		ArrayList<String> bgm_p_r = new ArrayList<>();
 		if (DataMgr.getPlayerData(player).getSettings().PlayBGM())
 			bgm_p_r.add("§a§l[Enable]");
 		else
@@ -812,7 +812,7 @@ public class OpenGUI {
 		ItemStack bgm = new ItemStack(Material.MUSIC_DISC_13);
 		ItemMeta bgm_m = bgm.getItemMeta();
 		bgm_m.setDisplayName("BGM");
-		ArrayList<String> bgm_r = new ArrayList<String>();
+		ArrayList<String> bgm_r = new ArrayList<>();
 		if (DataMgr.getPlayerData(player).getSettings().PlayBGM())
 			bgm_r.add("§a§l[Enable]");
 		else
@@ -825,7 +825,7 @@ public class OpenGUI {
 		ItemStack bomb = new ItemStack(Material.WHITE_STAINED_GLASS);
 		ItemMeta bomb_m = bomb.getItemMeta();
 		bomb_m.setDisplayName("投擲武器の視認用エフェクト");
-		ArrayList<String> bomb_r = new ArrayList<String>();
+		ArrayList<String> bomb_r = new ArrayList<>();
 		if (DataMgr.getPlayerData(player).getSettings().ShowEffect_Bomb())
 			bomb_r.add("§a§l[Enable]");
 		else
@@ -846,7 +846,7 @@ public class OpenGUI {
 			bomb_p = new ItemStack(Material.GUNPOWDER);
 		ItemMeta bomb_p_m = bomb_p.getItemMeta();
 		bomb_p_m.setDisplayName("投擲武器の視認用エフェクト");
-		ArrayList<String> bomb_p_r = new ArrayList<String>();
+		ArrayList<String> bomb_p_r = new ArrayList<>();
 		if (DataMgr.getPlayerData(player).getSettings().ShowEffect_Bomb())
 			bomb_p_r.add("§a§l[Enable]");
 		else
@@ -858,7 +858,7 @@ public class OpenGUI {
 		ItemStack bombEx = new ItemStack(Material.TNT);
 		ItemMeta bombEx_m = bombEx.getItemMeta();
 		bombEx_m.setDisplayName("爆発エフェクト");
-		ArrayList<String> bombEx_r = new ArrayList<String>();
+		ArrayList<String> bombEx_r = new ArrayList<>();
 		if (DataMgr.getPlayerData(player).getSettings().ShowEffect_BombEx())
 			bombEx_r.add("§a§l[Enable]");
 		else
@@ -879,7 +879,7 @@ public class OpenGUI {
 			bombEx_p = new ItemStack(Material.GUNPOWDER);
 		ItemMeta bombEx_p_m = bombEx_p.getItemMeta();
 		bombEx_p_m.setDisplayName("爆発エフェクト");
-		ArrayList<String> bombEx_p_r = new ArrayList<String>();
+		ArrayList<String> bombEx_p_r = new ArrayList<>();
 		if (DataMgr.getPlayerData(player).getSettings().ShowEffect_BombEx())
 			bombEx_p_r.add("§a§l[Enable]");
 		else
@@ -891,7 +891,7 @@ public class OpenGUI {
 		ItemStack ck = new ItemStack(Material.GOLDEN_SWORD);
 		ItemMeta ck_m = ck.getItemMeta();
 		ck_m.setDisplayName("チャージキープ");
-		ArrayList<String> ck_r = new ArrayList<String>();
+		ArrayList<String> ck_r = new ArrayList<>();
 		if (DataMgr.getPlayerData(player).getSettings().doChargeKeep())
 			ck_r.add("§a§l[Enable]");
 		else
@@ -911,7 +911,7 @@ public class OpenGUI {
 			ck_p = new ItemStack(Material.GUNPOWDER);
 		ItemMeta ck_p_m = ck_p.getItemMeta();
 		ck_p_m.setDisplayName("チャージキープ");
-		ArrayList<String> ck_p_r = new ArrayList<String>();
+		ArrayList<String> ck_p_r = new ArrayList<>();
 		if (DataMgr.getPlayerData(player).getSettings().doChargeKeep())
 			ck_p_r.add("§a§l[Enable]");
 		else

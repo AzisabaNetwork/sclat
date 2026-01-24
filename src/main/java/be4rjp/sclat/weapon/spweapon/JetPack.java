@@ -76,7 +76,7 @@ public class JetPack {
 				armorStand.setBasePlate(false);
 				// armorStand.setMarker(true);
 			});
-			List<ArmorStand> list = new ArrayList<ArmorStand>();
+			List<ArmorStand> list = new ArrayList<>();
 
 			Vector vehicleVector = new Vector(0, 0, 0);
 

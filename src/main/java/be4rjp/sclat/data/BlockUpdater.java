@@ -64,7 +64,7 @@ public class BlockUpdater {
 										// Sclat.sendBlockChangeForAllPlayer(block, blocklist.get(block));
 										chunkBlockMap.computeIfAbsent(block.getChunk(), chunk -> new ArrayList<>())
 												.add(block);
-										continue check;
+										continue;
 									}
 								}
 							} catch (Exception e) {

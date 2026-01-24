@@ -68,9 +68,7 @@ public class EmblemManager {
 		// On new emblem
 		if (!newEmblems.isEmpty()) {
 			// update cache
-			newEmblems.forEach(_emblem -> {
-				conf.getEmblemUserdata().set(strUuid + "." + _emblem, 1);
-			});
+			newEmblems.forEach(_emblem -> conf.getEmblemUserdata().set(strUuid + "." + _emblem, 1));
 
 			// player feedback
 			StringJoiner sj = new StringJoiner(", ");

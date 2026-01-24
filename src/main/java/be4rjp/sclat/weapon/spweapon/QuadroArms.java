@@ -314,10 +314,7 @@ public class QuadroArms {
 		ball.setVelocity(vec);
 		ball.setShooter(player);
 		String originName = String.valueOf(Sclat.getNotDuplicateNumber());
-		StringBuilder buf = new StringBuilder();
-		buf.append(originName);
-		buf.append("#QuadroArmsSpinner");
-		String name = buf.toString();
+		String name = originName + "#QuadroArmsSpinner";
 		DataMgr.mws.add(name);//
 		ball.setCustomName(name);
 		DataMgr.getMainSnowballNameMap().put(name, ball);
@@ -389,10 +386,7 @@ public class QuadroArms {
 		ball.setVelocity(vec);
 		ball.setShooter(player);
 		String originName = String.valueOf(Sclat.getNotDuplicateNumber());
-		StringBuilder buf = new StringBuilder();
-		buf.append(originName);
-		buf.append("#QuadroArmsShotgun");
-		String name = buf.toString();
+		String name = originName + "#QuadroArmsShotgun";
 		DataMgr.mws.add(name);
 		ball.setCustomName(name);
 		DataMgr.getMainSnowballNameMap().put(name, ball);
@@ -466,10 +460,7 @@ public class QuadroArms {
 		ball.setVelocity(vec);
 		ball.setShooter(player);
 		String originName = String.valueOf(Sclat.getNotDuplicateNumber());
-		StringBuilder buf = new StringBuilder();
-		buf.append(originName);
-		buf.append("#QuadroArmsSpinner");
-		String name = buf.toString();
+		String name = originName + "#QuadroArmsSpinner";
 		ball.setCustomName(name);
 		DataMgr.mws.add(name);
 		DataMgr.getMainSnowballNameMap().put(name, ball);

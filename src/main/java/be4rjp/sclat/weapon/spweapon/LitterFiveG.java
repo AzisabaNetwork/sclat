@@ -154,7 +154,7 @@ public class LitterFiveG {
 						check : for (int i = 0; i < positions.size(); i++) {
 							Location position = positions.get(i).toLocation(p.getLocation().getWorld());
 							if (!position.getBlock().getType().equals(Material.AIR)) {
-								break check;
+								break;
 							}
 							if (i % 5 == 0) {
 								for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
@@ -224,7 +224,7 @@ public class LitterFiveG {
 						}
 					}
 				}
-				break loop;
+				break;
 			}
 			// PaintMgr.PaintHightestBlock(position, player, false, true);
 			for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {

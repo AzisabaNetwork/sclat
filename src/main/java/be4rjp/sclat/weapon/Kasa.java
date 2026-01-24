@@ -174,7 +174,7 @@ public class Kasa {
 		BukkitRunnable task = new BukkitRunnable() {
 			Player p = player;
 			int i = 0;
-			List<ArmorStand> list = new ArrayList<ArmorStand>();
+			List<ArmorStand> list = new ArrayList<>();
 			boolean weapon = false;
 			boolean sound = true;
 
@@ -382,9 +382,9 @@ public class Kasa {
 
 			Vector dir = new Vector(1, 0, 0);
 
-			List<ArmorStand> list = new ArrayList<ArmorStand>();
-			List<ArmorStand> ul = new ArrayList<ArmorStand>();
-			List<ArmorStand> dl = new ArrayList<ArmorStand>();
+			List<ArmorStand> list = new ArrayList<>();
+			List<ArmorStand> ul = new ArrayList<>();
+			List<ArmorStand> dl = new ArrayList<>();
 
 			ArmorStand as1;
 			ArmorStand as2;

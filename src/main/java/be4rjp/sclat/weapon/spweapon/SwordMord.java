@@ -219,7 +219,7 @@ public class SwordMord {
 							if (!gurd) {
 								kdata = new KasaData(player);
 								DataMgr.setKasaDataWithPlayer(player, kdata);
-								List<ArmorStand> list = new ArrayList<ArmorStand>();
+								List<ArmorStand> list = new ArrayList<>();
 								as1 = player.getWorld().spawn(m1.clone().add(0, -1.8, 0), ArmorStand.class,
 										armorStand -> {
 											armorStand.setGravity(false);
@@ -322,10 +322,7 @@ public class SwordMord {
 		ball.setVelocity(vec);
 		ball.setShooter(player);
 		String originName = String.valueOf(Sclat.getNotDuplicateNumber());
-		StringBuilder buf = new StringBuilder();
-		buf.append(originName);
-		buf.append("#QuadroArmsShotgunCounterShot");
-		String name = buf.toString();
+		String name = originName + "#QuadroArmsShotgunCounterShot";
 		DataMgr.mws.add(name);//
 		ball.setCustomName(name);
 		DataMgr.getMainSnowballNameMap().put(name, ball);

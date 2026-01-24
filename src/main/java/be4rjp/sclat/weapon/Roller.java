@@ -157,7 +157,7 @@ public class Roller {
 							Location position = vector.toLocation(p.getLocation().getWorld());
 							Block block = p.getLocation().getWorld().getBlockAt(position);
 							if (!block.getType().equals(Material.AIR))
-								break loop;
+								break;
 							PaintMgr.PaintHightestBlock(position, p, false, true);
 							p.getLocation().getWorld().spawnParticle(org.bukkit.Particle.BLOCK_DUST, position, 2, 0, 0,
 									0, 1, bd);
@@ -250,7 +250,7 @@ public class Roller {
 							Location position = vector.toLocation(p.getLocation().getWorld());
 							Block block = p.getLocation().getWorld().getBlockAt(position);
 							if (!block.getType().equals(Material.AIR))
-								break loop;
+								break;
 							PaintMgr.PaintHightestBlock(position, p, false, true);
 							for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 								if (DataMgr.getPlayerData(target).getSettings().ShowEffect_MainWeaponInk())

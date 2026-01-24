@@ -39,7 +39,7 @@ public class PacketHandler extends ChannelDuplexHandler {
 		if (packet instanceof PacketPlayOutSpawnEntity) {
 			Field k = packet.getClass().getDeclaredField("k");
 			k.setAccessible(true);
-			EntityTypes entityTypes = (EntityTypes) k.get(packet);
+			EntityTypes<?> entityTypes = (EntityTypes<?>) k.get(packet);
 
 			if (entityTypes == EntityTypes.SNOWBALL) {
 				if (!playerSettings.ShowSnowBall())

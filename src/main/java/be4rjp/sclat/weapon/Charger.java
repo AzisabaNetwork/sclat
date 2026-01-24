@@ -98,7 +98,7 @@ public class Charger {
 						if (!position.getBlock().getType().equals(Material.AIR)) {
 							// if(rayTrace.intersects(new BoundingBox(block), (int)(charge / 2 *
 							// data.getWeaponClass().getMainWeapon().getDistanceTick()), 0.1))
-							break check;
+							break;
 						}
 						// if(i % 2 == 0){
 						// for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
@@ -266,7 +266,7 @@ public class Charger {
 				} else {
 					// if(rayTrace.intersects(new BoundingBox(block), reach, 0.01)){
 					PaintMgr.Paint(position, player, true);
-					break loop;
+					break;
 					// }
 				}
 			}

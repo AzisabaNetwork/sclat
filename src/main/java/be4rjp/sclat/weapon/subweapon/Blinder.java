@@ -57,7 +57,7 @@ public class Blinder {
 			Block block = player.getLocation().getWorld().getBlockAt(position);
 
 			if (!block.getType().equals(Material.AIR)) {
-				break loop;
+				break;
 			}
 			// if(i<8) {
 			// PaintMgr.PaintHightestBlock(position, player, false, true);

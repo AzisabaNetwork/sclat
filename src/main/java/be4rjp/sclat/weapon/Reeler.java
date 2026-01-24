@@ -318,7 +318,7 @@ public class Reeler {
 			Block block = player.getLocation().getWorld().getBlockAt(position);
 
 			if (!block.getType().equals(Material.AIR)) {
-				break loop;
+				break;
 			}
 			if (DataMgr.getPlayerData(player).getSettings().ShowEffect_MainWeaponInk()) {
 				if (it < 10) {
@@ -361,7 +361,7 @@ public class Reeler {
 			Block block = player.getLocation().getWorld().getBlockAt(position);
 
 			if (!block.getType().equals(Material.AIR)) {
-				break loop2;
+				break;
 			}
 			if (DataMgr.getPlayerData(player).getSettings().ShowEffect_MainWeaponInk()) {
 				if (it < 10) {
@@ -478,10 +478,7 @@ public class Reeler {
 		ball.setShooter(player);
 		// スライド時かどうかをSnowballListenerに渡すためのnameの改変
 		String originName = String.valueOf(Sclat.getNotDuplicateNumber());
-		StringBuilder buf = new StringBuilder();
-		buf.append(originName);
-		buf.append("#slided");
-		String name = buf.toString();
+		String name = originName + "#slided";
 		// String name = String.valueOf(Main.getNotDuplicateNumber());//ここで改変終わり
 		DataMgr.mws.add(name);
 		DataMgr.tsl.add(name);

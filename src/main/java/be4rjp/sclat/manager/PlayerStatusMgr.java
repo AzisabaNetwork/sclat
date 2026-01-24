@@ -58,10 +58,10 @@ public class PlayerStatusMgr {
 		conf.getPlayerStatus().set("Status." + player.getUniqueId().toString() + ".Money", 10000);
 		conf.getPlayerStatus().set("Status." + player.getUniqueId().toString() + ".Lv", 0);
 		conf.getPlayerStatus().set("Status." + player.getUniqueId().toString() + ".Rank", 0);
-		List<String> wlist = new ArrayList<String>();
+		List<String> wlist = new ArrayList<>();
 		wlist.add(conf.getConfig().getString("DefaultClass"));
 		conf.getPlayerStatus().set("Status." + player.getUniqueId().toString() + ".WeaponClass", wlist);
-		List<Integer> glist = new ArrayList<Integer>();
+		List<Integer> glist = new ArrayList<>();
 		glist.add(0);
 		conf.getPlayerStatus().set("Status." + player.getUniqueId().toString() + ".GearList", glist);
 		conf.getPlayerStatus().set("Status." + player.getUniqueId().toString() + ".Gear", 0);

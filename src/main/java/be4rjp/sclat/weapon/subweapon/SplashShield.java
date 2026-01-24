@@ -124,7 +124,7 @@ public class SplashShield {
 	}
 
 	public static void SplashShieldRunnable(Player player, Location loc, Vector vec, SplashShieldData ssdata) {
-		List<ArmorStand> list = new ArrayList<ArmorStand>();
+		List<ArmorStand> list = new ArrayList<>();
 		BukkitRunnable task = new BukkitRunnable() {
 			int c = 0;
 			Player p = player;

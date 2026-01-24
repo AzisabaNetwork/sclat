@@ -54,8 +54,6 @@ public class WiremeshListTask {
 	}
 
 	public void stopTask() {
-		wiremeshsList.forEach((wm) -> {
-			wm.stopTask();
-		});
+		wiremeshsList.forEach(Wiremesh::stopTask);
 	}
 }
