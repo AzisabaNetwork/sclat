@@ -10,6 +10,7 @@ import be4rjp.sclat.api.async.AsyncPlayerListener;
 import be4rjp.sclat.api.async.AsyncThreadManager;
 import be4rjp.sclat.api.color.TeamColorSets;
 import be4rjp.sclat.api.config.CustomConfig;
+import be4rjp.sclat.api.enchant.GlowEnchant;
 import be4rjp.sclat.api.equipment.EquipmentServer;
 import be4rjp.sclat.api.holo.PlayerHolograms;
 import be4rjp.sclat.api.status.StatusServer;
@@ -71,7 +72,7 @@ public class Sclat extends JavaPlugin implements PluginMessageListener {
 
 	public static Location lobby;
 
-	public static Glow glow;
+	public static GlowEnchant glowEnchant;
 
 	public static List<Player> pdspList;
 
@@ -117,7 +118,7 @@ public class Sclat extends JavaPlugin implements PluginMessageListener {
 	@Override
 	public void onEnable() {
 		plugin = this;
-		glow = new Glow();
+		glowEnchant = new GlowEnchant();
 
 		pdspList = new ArrayList<>();
 

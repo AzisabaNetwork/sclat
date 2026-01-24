@@ -53,8 +53,8 @@ public class WeaponClassMgr {
 		// === Main weapon ===
 		ItemStack main = data.getWeaponClass().getMainWeapon().getWeaponIteamStack().clone();
 		if (data.getMainItemGlow()) {
-			Sclat.glow.enchantGlow(main);
-			main.addEnchantment(Sclat.glow, 1);
+			Sclat.glowEnchant.enchantGlow(main);
+			main.addEnchantment(Sclat.glowEnchant, 1);
 		}
 		player.getInventory().setItem(0, main);
 
