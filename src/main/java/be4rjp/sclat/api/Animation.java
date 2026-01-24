@@ -1,9 +1,7 @@
 
-package be4rjp.sclat;
+package be4rjp.sclat.api;
 
-import be4rjp.sclat.api.GaugeAPI;
-import be4rjp.sclat.api.Sclat;
-import be4rjp.sclat.api.SoundType;
+import be4rjp.sclat.Main;
 import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.data.Team;
 import org.bukkit.ChatColor;

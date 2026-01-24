@@ -1,8 +1,8 @@
 
 package be4rjp.sclat.manager;
 
-import be4rjp.sclat.Animation;
 import be4rjp.sclat.Main;
+import be4rjp.sclat.api.Animation;
 import be4rjp.sclat.api.MessageType;
 import be4rjp.sclat.api.Plugins;
 import be4rjp.sclat.api.Sclat;
