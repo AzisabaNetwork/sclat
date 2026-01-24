@@ -1,6 +1,6 @@
 package be4rjp.sclat.lobby;
 
-import be4rjp.sclat.Main;
+import be4rjp.sclat.Sclat;
 import be4rjp.sclat.api.player.PlayerData;
 import be4rjp.sclat.api.utils.ObjectiveUtil;
 import be4rjp.sclat.api.utils.TextAnimation;
@@ -35,14 +35,14 @@ public class LobbyScoreboardRunnable extends BukkitRunnable {
 
 		ScoreboardManager scoreboardManager = Bukkit.getScoreboardManager();
 		this.scoreboard = scoreboardManager.getNewScoreboard();
-		this.objective = scoreboard.registerNewObjective("Lobby", player.getName(), "§6§lSclat §r" + Main.VERSION);
+		this.objective = scoreboard.registerNewObjective("Lobby", player.getName(), "§6§lSclat §r" + Sclat.VERSION);
 		this.objective.setDisplaySlot(DisplaySlot.SIDEBAR);
 
 		player.setScoreboard(scoreboard);
 
-		String text = ChatColor.translateAlternateColorCodes('&', Main.news.getConfig().getString("news-message"));
+		String text = ChatColor.translateAlternateColorCodes('&', Sclat.news.getConfig().getString("news-message"));
 
-		this.textAnimation = new TextAnimation(text, Main.news.getConfig().getInt("scoreboard-length"));
+		this.textAnimation = new TextAnimation(text, Sclat.news.getConfig().getInt("scoreboard-length"));
 	}
 
 	@Override
@@ -90,7 +90,7 @@ public class LobbyScoreboardRunnable extends BukkitRunnable {
 		lines.add("   ");
 		lines.add("§7§m                                  §r");
 
-		objective = scoreboard.registerNewObjective("Lobby", player.getName(), "§6§lSclat §r" + Main.VERSION);
+		objective = scoreboard.registerNewObjective("Lobby", player.getName(), "§6§lSclat §r" + Sclat.VERSION);
 		objective.setDisplaySlot(DisplaySlot.SIDEBAR);
 		ObjectiveUtil.setLine(objective, lines);
 	}

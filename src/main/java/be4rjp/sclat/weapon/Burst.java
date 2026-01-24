@@ -1,7 +1,7 @@
 
 package be4rjp.sclat.weapon;
 
-import be4rjp.sclat.Main;
+import be4rjp.sclat.Sclat;
 import be4rjp.sclat.api.player.PlayerData;
 import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.manager.PaintMgr;
@@ -34,7 +34,7 @@ public class Burst {
 			}
 		};
 		if (data.getCanRollerShoot())
-			delay1.runTaskLater(Main.getPlugin(), data.getWeaponClass().getMainWeapon().getCoolTime());
+			delay1.runTaskLater(Sclat.getPlugin(), data.getWeaponClass().getMainWeapon().getCoolTime());
 
 		BukkitRunnable delay = new BukkitRunnable() {
 			Player p = player;
@@ -44,13 +44,13 @@ public class Burst {
 			}
 		};
 		if (data.getCanRollerShoot()) {
-			delay.runTaskLater(Main.getPlugin(), data.getWeaponClass().getMainWeapon().getDelay());
+			delay.runTaskLater(Sclat.getPlugin(), data.getWeaponClass().getMainWeapon().getDelay());
 			data.setCanRollerShoot(false);
 		}
 	}
 
 	public static void Burstshoot(Player player) {
-		String otoNumber = String.valueOf(Main.getNotDuplicateNumber());
+		String otoNumber = String.valueOf(Sclat.getNotDuplicateNumber());
 		BukkitRunnable task = new BukkitRunnable() {
 			Player p = player;
 			int c = 0;
@@ -64,7 +64,7 @@ public class Burst {
 					cancel();
 			}
 		};
-		task.runTaskTimer(Main.getPlugin(), 0,
+		task.runTaskTimer(Sclat.getPlugin(), 0,
 				DataMgr.getPlayerData(player).getWeaponClass().getMainWeapon().getShootTick());
 	}
 
@@ -98,7 +98,7 @@ public class Burst {
 		vec.add(new Vector(Math.random() * random - random / 2, 0, Math.random() * random - random / 2));
 		ball.setVelocity(vec);
 		ball.setShooter(player);
-		String name = String.valueOf(Main.getNotDuplicateNumber()) + ":Burst:" + otoNumber;
+		String name = String.valueOf(Sclat.getNotDuplicateNumber()) + ":Burst:" + otoNumber;
 		DataMgr.mws.add(name);
 		if (sound)
 			DataMgr.tsl.add(name);
@@ -128,11 +128,11 @@ public class Burst {
 				if (i != 0) {
 					org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).getTeam().getTeamColor().getWool()
 							.createBlockData();
-					for (Player o_player : Main.getPlugin().getServer().getOnlinePlayers()) {
+					for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 						if (DataMgr.getPlayerData(o_player).getSettings().ShowEffect_MainWeaponInk())
 							if (o_player.getWorld() == inkball.getWorld())
 								if (o_player.getLocation()
-										.distanceSquared(inkball.getLocation()) < Main.PARTICLE_RENDER_DISTANCE_SQUARED)
+										.distanceSquared(inkball.getLocation()) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED)
 									o_player.spawnParticle(org.bukkit.Particle.BLOCK_DUST, inkball.getLocation(), 0, 0,
 											-1, 0, 1, bd);
 					}
@@ -153,6 +153,6 @@ public class Burst {
 				i++;
 			}
 		};
-		task.runTaskTimer(Main.getPlugin(), 0, 1);
+		task.runTaskTimer(Sclat.getPlugin(), 0, 1);
 	}
 }

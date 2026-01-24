@@ -62,12 +62,12 @@ import java.util.List;
  *
  * @author Be4rJP
  */
-public class Main extends JavaPlugin implements PluginMessageListener {
-	private static final Logger logger = LoggerFactory.getLogger(Main.class);
+public class Sclat extends JavaPlugin implements PluginMessageListener {
+	private static final Logger logger = LoggerFactory.getLogger(Sclat.class);
 
 	public static Config conf;
 
-	private static Main plugin;
+	private static Sclat plugin;
 
 	public static Location lobby;
 
@@ -351,7 +351,7 @@ public class Main extends JavaPlugin implements PluginMessageListener {
 		// -------------------------------------------------------------------
 
 		// ------------------------Tutorial wire mesh-------------------------
-		if (Main.tutorial) {
+		if (Sclat.tutorial) {
 			for (MapData mData : DataMgr.maplist) {
 				for (Wiremesh wiremesh : mData.getWiremeshListTask().getWiremeshsList()) {
 					wiremesh.startTask();
@@ -424,7 +424,7 @@ public class Main extends JavaPlugin implements PluginMessageListener {
 			as.remove();
 
 		// Worldが保存される前にアンロードして塗られた状態で保存されるのを防ぐ
-		if (Main.type == ServerType.LOBBY) {
+		if (Sclat.type == ServerType.LOBBY) {
 			for (String mapname : conf.getMapConfig().getConfigurationSection("Maps").getKeys(false)) {
 				String worldName = conf.getMapConfig().getString("Maps." + mapname + ".WorldName");
 				Bukkit.unloadWorld(worldName, false);
@@ -436,7 +436,7 @@ public class Main extends JavaPlugin implements PluginMessageListener {
 		}
 	}
 
-	public static Main getPlugin() {
+	public static Sclat getPlugin() {
 		return plugin;
 	}
 

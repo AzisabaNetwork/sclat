@@ -1,6 +1,6 @@
 package be4rjp.sclat.api.holo;
 
-import be4rjp.sclat.Main;
+import be4rjp.sclat.Sclat;
 import be4rjp.sclat.data.RankingType;
 import be4rjp.sclat.manager.PlayerStatusMgr;
 import be4rjp.sclat.manager.RankMgr;
@@ -20,7 +20,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.ArrayList;
 import java.util.List;
 
-import static be4rjp.sclat.Main.conf;
+import static be4rjp.sclat.Sclat.conf;
 
 public class RankingHolograms {
 	private final EntityArmorStand title;
@@ -329,6 +329,6 @@ public class RankingHolograms {
 				}
 			}
 		};
-		async.runTaskAsynchronously(Main.getPlugin());
+		async.runTaskAsynchronously(Sclat.getPlugin());
 	}
 }

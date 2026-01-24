@@ -1,6 +1,6 @@
 package be4rjp.sclat.manager;
 
-import be4rjp.sclat.Main;
+import be4rjp.sclat.Sclat;
 import be4rjp.sclat.data.Color;
 import be4rjp.sclat.data.DataMgr;
 import org.bukkit.ChatColor;
@@ -26,7 +26,7 @@ public class ColorMgr {
 		bh.setItemMeta(bhm);
 		blue.setBougu(bh);
 		blue.setChatColor(ChatColor.BLUE);
-		if (Main.colors.isEmpty() || Main.colors.contains("Blue")) {
+		if (Sclat.colors.isEmpty() || Sclat.colors.contains("Blue")) {
 			DataMgr.setColor("Blue", blue);
 			DataMgr.addColorList(blue);
 		}
@@ -43,7 +43,7 @@ public class ColorMgr {
 		ah.setItemMeta(ahm);
 		aqua.setBougu(ah);
 		aqua.setChatColor(ChatColor.AQUA);
-		if (Main.colors.isEmpty() || Main.colors.contains("Aqua")) {
+		if (Sclat.colors.isEmpty() || Sclat.colors.contains("Aqua")) {
 			DataMgr.setColor("Aqua", aqua);
 			DataMgr.addColorList(aqua);
 		}
@@ -60,7 +60,7 @@ public class ColorMgr {
 		oh.setItemMeta(ohm);
 		orange.setBougu(oh);
 		orange.setChatColor(ChatColor.GOLD);
-		if (Main.colors.isEmpty() || Main.colors.contains("Orange")) {
+		if (Sclat.colors.isEmpty() || Sclat.colors.contains("Orange")) {
 			DataMgr.setColor("Orange", orange);
 			DataMgr.addColorList(orange);
 		}
@@ -77,7 +77,7 @@ public class ColorMgr {
 		lh.setItemMeta(lhm);
 		lime.setBougu(lh);
 		lime.setChatColor(ChatColor.GREEN);
-		if (Main.colors.isEmpty() || Main.colors.contains("Lime")) {
+		if (Sclat.colors.isEmpty() || Sclat.colors.contains("Lime")) {
 			DataMgr.setColor("Lime", lime);
 			DataMgr.addColorList(lime);
 		}
@@ -94,7 +94,7 @@ public class ColorMgr {
 		yh.setItemMeta(yhm);
 		y.setBougu(yh);
 		y.setChatColor(ChatColor.YELLOW);
-		if (Main.colors.isEmpty() || Main.colors.contains("Yellow")) {
+		if (Sclat.colors.isEmpty() || Sclat.colors.contains("Yellow")) {
 			DataMgr.setColor("Yellow", y);
 			DataMgr.addColorList(y);
 		}

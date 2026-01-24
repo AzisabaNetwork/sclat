@@ -1,7 +1,7 @@
 
 package be4rjp.sclat.weapon.subweapon;
 
-import be4rjp.sclat.Main;
+import be4rjp.sclat.Sclat;
 import be4rjp.sclat.api.player.PlayerData;
 import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.weapon.Gear;
@@ -27,7 +27,7 @@ public class Beacon {
 				&& player.getExp() >= 0.4 / Gear.getGearInfluence(player, Gear.Type.SUB_SPEC_UP)) {
 			ArmorStand as = DataMgr.getBeaconFromplayer(player);
 			as.setVisible(false);
-			for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
+			for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 				if (as.getWorld() != target.getWorld())
 					continue;
 				((CraftPlayer) target).getHandle().playerConnection.sendPacket(new PacketPlayOutEntityEquipment(
@@ -40,7 +40,7 @@ public class Beacon {
 				@Override
 				public void run() {
 					as.setVisible(true);
-					for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
+					for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 						if (as.getWorld() != target.getWorld())
 							continue;
 						((CraftPlayer) target).getHandle().playerConnection
@@ -51,7 +51,7 @@ public class Beacon {
 					// as.setHelmet(new ItemStack(Material.IRON_TRAPDOOR));
 				}
 			};
-			delay.runTaskLater(Main.getPlugin(), 10);
+			delay.runTaskLater(Sclat.getPlugin(), 10);
 		} else if (player.getExp() < (float) (0.4 / Gear.getGearInfluence(player, Gear.Type.SUB_SPEC_UP))) {
 			player.sendTitle("", ChatColor.RED + "インクが足りません", 0, 5, 2);
 			player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1F, 1.63F);
@@ -65,6 +65,6 @@ public class Beacon {
 				data.setCanUseSubWeapon(true);
 			}
 		};
-		delay.runTaskLater(Main.getPlugin(), 20);
+		delay.runTaskLater(Sclat.getPlugin(), 20);
 	}
 }

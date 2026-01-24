@@ -1,7 +1,7 @@
 
 package be4rjp.sclat.weapon;
 
-import be4rjp.sclat.Main;
+import be4rjp.sclat.Sclat;
 import be4rjp.sclat.api.SclatUtil;
 import be4rjp.sclat.api.Sphere;
 import be4rjp.sclat.api.player.PlayerData;
@@ -40,7 +40,7 @@ public class Slosher {
 			}
 		};
 		if (data.getCanRollerShoot())
-			delay1.runTaskLater(Main.getPlugin(), data.getWeaponClass().getMainWeapon().getCoolTime());
+			delay1.runTaskLater(Sclat.getPlugin(), data.getWeaponClass().getMainWeapon().getCoolTime());
 
 		BukkitRunnable delay = new BukkitRunnable() {
 			Player p = player;
@@ -52,7 +52,7 @@ public class Slosher {
 			}
 		};
 		if (data.getCanRollerShoot()) {
-			delay.runTaskLater(Main.getPlugin(), data.getWeaponClass().getMainWeapon().getDelay());
+			delay.runTaskLater(Sclat.getPlugin(), data.getWeaponClass().getMainWeapon().getDelay());
 			data.setCanRollerShoot(false);
 		}
 	}
@@ -86,7 +86,7 @@ public class Slosher {
 				Math.random() * random - random / 2));
 		ball.setVelocity(vec);
 		ball.setShooter(player);
-		String name = String.valueOf(Main.getNotDuplicateNumber());
+		String name = String.valueOf(Sclat.getNotDuplicateNumber());
 		DataMgr.mws.add(name);
 		ball.setCustomName(name);
 		DataMgr.getMainSnowballNameMap().put(name, ball);
@@ -109,12 +109,12 @@ public class Slosher {
 						i += DataMgr.getSnowballHitCount(name) - 1;
 						DataMgr.setSnowballHitCount(name, 0);
 					}
-					for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
+					for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 						if (!DataMgr.getPlayerData(target).getSettings().ShowEffect_MainWeaponInk())
 							continue;
 						if (target.getWorld() == inkball.getWorld()) {
 							if (target.getLocation()
-									.distanceSquared(inkball.getLocation()) < Main.PARTICLE_RENDER_DISTANCE_SQUARED) {
+									.distanceSquared(inkball.getLocation()) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED) {
 								org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).getTeam().getTeamColor()
 										.getWool().createBlockData();
 								target.spawnParticle(org.bukkit.Particle.BLOCK_DUST, inkball.getLocation(), 3, 0, 0, 0,
@@ -152,7 +152,7 @@ public class Slosher {
 
 						// 攻撃判定の処理
 
-						for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
+						for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 							if (!DataMgr.getPlayerData(target).isInMatch())
 								continue;
 							if (target.getLocation().distanceSquared(inkball.getLocation()) <= maxDist * maxDist) {
@@ -170,7 +170,7 @@ public class Slosher {
 											target.setNoDamageTicks(0);
 										}
 									};
-									task.runTaskLater(Main.getPlugin(), 1);
+									task.runTaskLater(Sclat.getPlugin(), 1);
 
 								}
 							}
@@ -194,6 +194,6 @@ public class Slosher {
 				}
 			}
 		};
-		task.runTaskTimer(Main.getPlugin(), 0, 1);
+		task.runTaskTimer(Sclat.getPlugin(), 0, 1);
 	}
 }

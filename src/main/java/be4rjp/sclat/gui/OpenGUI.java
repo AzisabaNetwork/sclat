@@ -1,7 +1,7 @@
 
 package be4rjp.sclat.gui;
 
-import be4rjp.sclat.Main;
+import be4rjp.sclat.Sclat;
 import be4rjp.sclat.api.ServerType;
 import be4rjp.sclat.api.player.PlayerData;
 import be4rjp.sclat.data.DataMgr;
@@ -26,7 +26,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.ArrayList;
 import java.util.List;
 
-import static be4rjp.sclat.Main.conf;
+import static be4rjp.sclat.Sclat.conf;
 
 /**
  *
@@ -117,7 +117,7 @@ public class OpenGUI {
 			inv.setItem(32, status);
 		}
 
-		if (Main.type == ServerType.LOBBY) {
+		if (Sclat.type == ServerType.LOBBY) {
 			ItemStack b = new ItemStack(Material.EGG);
 			ItemMeta bmeta = b.getItemMeta();
 			bmeta.setDisplayName("称号 / EMBLEM");
@@ -173,7 +173,7 @@ public class OpenGUI {
 			for (int i = 0; i <= 9;) {
 
 				if (!(PlayerStatusMgr.haveGear(player, i) || conf.getConfig().getString("WorkMode").equals("Trial")
-						|| !Main.shop)) {
+						|| !Sclat.shop)) {
 					ItemStack n = new ItemStack(Material.BLACK_STAINED_GLASS_PANE);
 					ItemMeta nmeta = n.getItemMeta();
 					nmeta.setDisplayName(".");
@@ -276,20 +276,20 @@ public class OpenGUI {
 
 		ItemStack is = new ItemStack(DataMgr.getPlayerData(player).getTeam().getTeamColor().getGlass());
 		ItemMeta ism = is.getItemMeta();
-		ism.setDisplayName(Main.tutorial ? "§r§6ロビーへジャンプ" : "§r§6リスポーン地点へジャンプ");
+		ism.setDisplayName(Sclat.tutorial ? "§r§6ロビーへジャンプ" : "§r§6リスポーン地点へジャンプ");
 		is.setItemMeta(ism);
-		Location loc = Main.lobby.clone();
+		Location loc = Sclat.lobby.clone();
 		if (!conf.getConfig().getString("WorkMode").equals("Trial"))
 			loc = DataMgr.getPlayerData(player).getMatchLocation().clone();
 		if (loc.getWorld() == player.getWorld()) {
 			if (player.getLocation().distance(loc) > 10 && !Tutorial.clearList.contains(player))
-				if (!Main.tutorial)
+				if (!Sclat.tutorial)
 					inv.setItem(0, is);
 		}
 
 		int slotnum = 1;
 
-		for (Player p : Main.getPlugin(Main.class).getServer().getOnlinePlayers()) {
+		for (Player p : Sclat.getPlugin(Sclat.class).getServer().getOnlinePlayers()) {
 			if (p.getGameMode() == GameMode.SPECTATOR)
 				continue;
 			if (DataMgr.getPlayerData(p).getTeam().getID() == DataMgr.getPlayerData(player).getTeam().getID()
@@ -480,14 +480,14 @@ public class OpenGUI {
 									shooter.setItem(slotnum, item);
 								}
 								slotnum++;
-							} else if (PlayerStatusMgr.haveWeapon(player, ClassName) || !Main.shop) {
+							} else if (PlayerStatusMgr.haveWeapon(player, ClassName) || !Sclat.shop) {
 								shooter.setItem(slotnum, item);
 								slotnum++;
 							}
 						}
 					}
 				}
-				if (!Main.tutorial) {
+				if (!Sclat.tutorial) {
 					ItemStack is = new ItemStack(Material.OAK_DOOR);
 					ItemMeta ism = is.getItemMeta();
 					ism.setDisplayName("戻る");

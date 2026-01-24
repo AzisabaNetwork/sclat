@@ -1,6 +1,6 @@
 package be4rjp.sclat.server;
 
-import be4rjp.sclat.Main;
+import be4rjp.sclat.Sclat;
 import be4rjp.sclat.api.SclatUtil;
 import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.manager.PlayerStatusMgr;
@@ -27,13 +27,13 @@ public class EquipmentServerManager {
 						if (args[3].length() == 36) {
 							switch (args[1]) {
 								case "weapon" :
-									for (Player player : Main.getPlugin().getServer().getOnlinePlayers())
+									for (Player player : Sclat.getPlugin().getServer().getOnlinePlayers())
 										if (player.getUniqueId().toString().equals(args[3]))
 											DataMgr.getPlayerData(player)
 													.setWeaponClass(DataMgr.getWeaponClass(args[2]));
 									break;
 								case "gear" :
-									for (Player player : Main.getPlugin().getServer().getOnlinePlayers())
+									for (Player player : Sclat.getPlugin().getServer().getOnlinePlayers())
 										if (player.getUniqueId().toString().equals(args[3]) && SclatUtil.isNumber(args[2]))
 											DataMgr.getPlayerData(player).setGearNumber(Integer.parseInt(args[2]));
 									break;

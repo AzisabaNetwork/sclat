@@ -1,7 +1,7 @@
 
 package be4rjp.sclat.weapon;
 
-import be4rjp.sclat.Main;
+import be4rjp.sclat.Sclat;
 import be4rjp.sclat.api.SclatUtil;
 import be4rjp.sclat.api.Sphere;
 import be4rjp.sclat.api.player.PlayerData;
@@ -42,7 +42,7 @@ public class Blaster {
 			}
 		};
 		if (data.getCanRollerShoot())
-			delay1.runTaskLater(Main.getPlugin(), data.getWeaponClass().getMainWeapon().getCoolTime());
+			delay1.runTaskLater(Sclat.getPlugin(), data.getWeaponClass().getMainWeapon().getCoolTime());
 
 		BukkitRunnable delay = new BukkitRunnable() {
 			Player p = player;
@@ -52,7 +52,7 @@ public class Blaster {
 			}
 		};
 		if (data.getCanRollerShoot()) {
-			delay.runTaskLater(Main.getPlugin(), data.getWeaponClass().getMainWeapon().getDelay());
+			delay.runTaskLater(Sclat.getPlugin(), data.getWeaponClass().getMainWeapon().getDelay());
 			data.setCanRollerShoot(false);
 		}
 	}
@@ -87,7 +87,7 @@ public class Blaster {
 		ball.setVelocity(vec);
 		ball.setShooter(player);
 		ball.setGravity(false);
-		String name = String.valueOf(Main.getNotDuplicateNumber());
+		String name = String.valueOf(Sclat.getNotDuplicateNumber());
 		DataMgr.mws.add(name);
 		DataMgr.tsl.add(name);
 		ball.setCustomName(name);
@@ -114,11 +114,11 @@ public class Blaster {
 
 				org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).getTeam().getTeamColor().getWool()
 						.createBlockData();
-				for (Player o_player : Main.getPlugin().getServer().getOnlinePlayers()) {
+				for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 					if (DataMgr.getPlayerData(o_player).getSettings().ShowEffect_MainWeaponInk())
 						if (o_player.getWorld() == inkball.getWorld())
 							if (o_player.getLocation()
-									.distanceSquared(inkball.getLocation()) < Main.PARTICLE_RENDER_DISTANCE_SQUARED)
+									.distanceSquared(inkball.getLocation()) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED)
 								o_player.spawnParticle(org.bukkit.Particle.BLOCK_DUST, inkball.getLocation(), 1, 0, 0,
 										0, 1, bd);
 				}
@@ -174,7 +174,7 @@ public class Blaster {
 						}
 					}
 
-					for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
+					for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 						if (!DataMgr.getPlayerData(target).isInMatch())
 							continue;
 						if (target.getLocation().distance(inkball.getLocation()) <= maxDist + 1) {
@@ -199,7 +199,7 @@ public class Blaster {
 										target.setNoDamageTicks(0);
 									}
 								};
-								task.runTaskLater(Main.getPlugin(), 1);
+								task.runTaskLater(Sclat.getPlugin(), 1);
 
 							}
 						}
@@ -228,7 +228,7 @@ public class Blaster {
 				i++;
 			}
 		};
-		task.runTaskTimer(Main.getPlugin(), 0, 1);
+		task.runTaskTimer(Sclat.getPlugin(), 0, 1);
 	}
 
 	public static void Explode(Player player, Location blastcenter) {
@@ -281,7 +281,7 @@ public class Blaster {
 		// }
 		// }
 
-		for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
+		for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 			if (!DataMgr.getPlayerData(target).isInMatch())
 				continue;
 			if (target.getLocation().distance(blastcenter) <= maxDist + 1) {
@@ -309,7 +309,7 @@ public class Blaster {
 							target.setNoDamageTicks(0);
 						}
 					};
-					task.runTaskLater(Main.getPlugin(), 1);
+					task.runTaskLater(Sclat.getPlugin(), 1);
 
 				}
 			}

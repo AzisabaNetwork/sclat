@@ -1,6 +1,6 @@
 package be4rjp.sclat.api.player;
 
-import be4rjp.sclat.Main;
+import be4rjp.sclat.Sclat;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class PlayerReturn {
@@ -18,7 +18,7 @@ public class PlayerReturn {
 				flag = false;
 			}
 		};
-		this.task.runTaskLater(Main.getPlugin(), 400);
+		this.task.runTaskLater(Sclat.getPlugin(), 400);
 	}
 
 	public boolean getFlag() {

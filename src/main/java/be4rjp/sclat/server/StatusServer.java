@@ -1,6 +1,6 @@
 package be4rjp.sclat.server;
 
-import be4rjp.sclat.Main;
+import be4rjp.sclat.Sclat;
 import be4rjp.sclat.api.MessageType;
 import be4rjp.sclat.api.SclatUtil;
 import be4rjp.sclat.api.SoundType;
@@ -157,7 +157,7 @@ class EchoThread extends Thread {
 												"§a§l" + (ss.getWaitingEndTime() - (System.currentTimeMillis() / 1000))
 														+ "§b秒後に開始されます",
 												MessageType.ALL_PLAYER);
-										Main.getPlugin().getServer().getOnlinePlayers()
+										Sclat.getPlugin().getServer().getOnlinePlayers()
 												.forEach(player -> SclatUtil.playGameSound(player, SoundType.SUCCESS));
 									}
 								}

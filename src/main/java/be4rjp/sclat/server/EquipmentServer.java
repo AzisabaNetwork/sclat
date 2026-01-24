@@ -1,6 +1,6 @@
 package be4rjp.sclat.server;
 
-import be4rjp.sclat.Main;
+import be4rjp.sclat.Sclat;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -9,7 +9,7 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-import static be4rjp.sclat.Main.conf;
+import static be4rjp.sclat.Sclat.conf;
 
 public class EquipmentServer extends Thread {
 
@@ -99,8 +99,8 @@ class EquipEchoThread extends Thread {
 						}
 						case "mod" : { // mod [PlayerName]
 							if (args.length == 2) {
-								if (Main.modList.contains(args[1])) {
-									Main.modList.add(args[1]);
+								if (Sclat.modList.contains(args[1])) {
+									Sclat.modList.add(args[1]);
 								}
 							}
 							break;

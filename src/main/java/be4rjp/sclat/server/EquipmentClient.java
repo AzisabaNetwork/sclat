@@ -1,6 +1,6 @@
 package be4rjp.sclat.server;
 
-import be4rjp.sclat.Main;
+import be4rjp.sclat.Sclat;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.BufferedReader;
@@ -84,7 +84,7 @@ public class EquipmentClient {
 	}
 
 	public void startClient() {
-		this.task.runTaskAsynchronously(Main.getPlugin());
+		this.task.runTaskAsynchronously(Sclat.getPlugin());
 	}
 
 	public void addCommand(String command) {

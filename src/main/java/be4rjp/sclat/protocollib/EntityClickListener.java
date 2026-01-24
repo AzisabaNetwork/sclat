@@ -1,6 +1,6 @@
 package be4rjp.sclat.protocollib;
 
-import be4rjp.sclat.Main;
+import be4rjp.sclat.Sclat;
 import be4rjp.sclat.api.holo.RankingHolograms;
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketAdapter;
@@ -26,7 +26,7 @@ public class EntityClickListener extends PacketAdapter {
 			final int EntityID = packet.getIntegers().readSafely(0);
 
 			try {
-				RankingHolograms rankingHolograms = Main.playerHolograms.get(event.getPlayer());
+				RankingHolograms rankingHolograms = Sclat.playerHolograms.get(event.getPlayer());
 				if (rankingHolograms == null)
 					return;
 				for (EntityArmorStand armorStand : rankingHolograms.getArmorStandList()) {

@@ -1,6 +1,6 @@
 package be4rjp.sclat.commands;
 
-import be4rjp.sclat.Main;
+import be4rjp.sclat.Sclat;
 import be4rjp.sclat.api.MessageType;
 import be4rjp.sclat.api.SclatUtil;
 import be4rjp.sclat.api.ServerType;
@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static be4rjp.sclat.Main.conf;
+import static be4rjp.sclat.Sclat.conf;
 
 //sclat Command
 // Todo: use cloud command framework
@@ -64,7 +64,7 @@ public class sclatCommandExecutor implements CommandExecutor, TabExecutor {
 
 			String num = args[1];
 			if (SclatUtil.isNumber(num)) {
-				Main.conf.getConfig().set("BlockUpdateRate", Integer.valueOf(num));
+				Sclat.conf.getConfig().set("BlockUpdateRate", Integer.valueOf(num));
 				sender.sendMessage("setConfig [BlockUpdateRate]  :  " + num);
 				return true;
 			} else {
@@ -86,9 +86,9 @@ public class sclatCommandExecutor implements CommandExecutor, TabExecutor {
 			}
 
 			String playerName = args[1];
-			for (Player player : Main.getPlugin().getServer().getOnlinePlayers()) {
+			for (Player player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 				if (playerName.equals(player.getName())) {
-					Main.flyList.add(playerName);
+					Sclat.flyList.add(playerName);
 					return true;
 				}
 			}
@@ -243,7 +243,7 @@ public class sclatCommandExecutor implements CommandExecutor, TabExecutor {
 								}
 							}
 						};
-						task.runTaskLater(Main.getPlugin(), 40);
+						task.runTaskLater(Sclat.getPlugin(), 40);
 					}
 				}
 				return true;
@@ -256,7 +256,7 @@ public class sclatCommandExecutor implements CommandExecutor, TabExecutor {
 
 		// ------------------/sclat ss <status> <server> <flag>---------------------
 		if (args[0].equalsIgnoreCase("ss")) {
-			if (args.length < 4 || Main.type != ServerType.LOBBY)
+			if (args.length < 4 || Sclat.type != ServerType.LOBBY)
 				return false;
 
 			if (type == CommanderType.MEMBER) {
@@ -281,7 +281,7 @@ public class sclatCommandExecutor implements CommandExecutor, TabExecutor {
 
 		// ---------------------/sclat tutorial <option> <server>-------------------
 		if (args[0].equalsIgnoreCase("tutorial")) {
-			if (args.length < 2 || Main.type != ServerType.LOBBY)
+			if (args.length < 2 || Sclat.type != ServerType.LOBBY)
 				return false;
 
 			if (type == CommanderType.MEMBER) {
@@ -294,20 +294,20 @@ public class sclatCommandExecutor implements CommandExecutor, TabExecutor {
 				if (args.length < 3)
 					return false;
 				String server = args[2];
-				List<String> list = Main.tutorialServers.getConfig().getStringList("server-list");
+				List<String> list = Sclat.tutorialServers.getConfig().getStringList("server-list");
 				if (!list.contains(server)) {
 					list.add(server);
-					Main.tutorialServers.getConfig().set("server-list", list);
+					Sclat.tutorialServers.getConfig().set("server-list", list);
 				} else {
 					sender.sendMessage(ChatColor.RED + "This server is already exist.");
 				}
 				return true;
 			} else if (args[1].equals("list")) {
-				List<String> list = Main.tutorialServers.getConfig().getStringList("server-list");
+				List<String> list = Sclat.tutorialServers.getConfig().getStringList("server-list");
 				sender.sendMessage(list.toString());
 				return true;
 			} else if (args[1].equals("reload")) {
-				Main.tutorialServers.reloadConfig();
+				Sclat.tutorialServers.reloadConfig();
 				return true;
 			}
 		}

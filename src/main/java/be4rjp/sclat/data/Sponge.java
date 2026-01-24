@@ -1,6 +1,6 @@
 package be4rjp.sclat.data;
 
-import be4rjp.sclat.Main;
+import be4rjp.sclat.Sclat;
 import be4rjp.sclat.api.SclatUtil;
 import be4rjp.sclat.api.team.Team;
 import be4rjp.sclat.manager.PaintMgr;
@@ -71,7 +71,7 @@ public class Sponge {
 				canGiveDamage = true;
 			}
 		};
-		task.runTaskLater(Main.getPlugin(), 10);
+		task.runTaskLater(Sclat.getPlugin(), 10);
 
 		if (this.team != team) {
 			if (this.hp > damage) {

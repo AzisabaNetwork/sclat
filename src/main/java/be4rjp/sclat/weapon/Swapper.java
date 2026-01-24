@@ -1,6 +1,6 @@
 package be4rjp.sclat.weapon;
 
-import be4rjp.sclat.Main;
+import be4rjp.sclat.Sclat;
 import be4rjp.sclat.api.player.PlayerData;
 import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.manager.WeaponClassMgr;
@@ -56,14 +56,14 @@ public class Swapper {
 								sw_recharge = true;
 							}
 						};
-						swapset.runTaskLater(Main.getPlugin(), 5);
-						task.runTaskLater(Main.getPlugin(), 30);
+						swapset.runTaskLater(Sclat.getPlugin(), 5);
+						task.runTaskLater(Sclat.getPlugin(), 30);
 					}
 				}
 				// loc = ploc;
 			}
 		};
-		delay.runTaskTimer(Main.getPlugin(), 0, 1);
+		delay.runTaskTimer(Sclat.getPlugin(), 0, 1);
 	}
 
 }

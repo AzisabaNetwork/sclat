@@ -1,6 +1,6 @@
 package be4rjp.sclat.api.wiremesh;
 
-import be4rjp.sclat.Main;
+import be4rjp.sclat.Sclat;
 import net.minecraft.server.v1_14_R1.DataWatcher;
 import net.minecraft.server.v1_14_R1.EntityArmorStand;
 import net.minecraft.server.v1_14_R1.EntityFallingBlock;
@@ -65,7 +65,7 @@ public class Wiremesh extends BukkitRunnable {
 		as.setInvisible(true);
 		fb.startRiding(as);
 
-		for (Player player : Main.getPlugin().getServer().getOnlinePlayers()) {
+		for (Player player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 			if (block.getWorld() != player.getWorld())
 				continue;
 
@@ -78,7 +78,7 @@ public class Wiremesh extends BukkitRunnable {
 		try {
 			playerList.removeIf(player -> !player.isOnline());
 
-			for (Player player : Main.getPlugin().getServer().getOnlinePlayers()) {
+			for (Player player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 				if (block.getWorld() != player.getWorld())
 					continue;
 
@@ -135,7 +135,7 @@ public class Wiremesh extends BukkitRunnable {
 	}
 
 	public void startTask() {
-		this.runTaskTimerAsynchronously(Main.getPlugin(), 0, 5);
+		this.runTaskTimerAsynchronously(Sclat.getPlugin(), 0, 5);
 	}
 
 	public void stopTask() {

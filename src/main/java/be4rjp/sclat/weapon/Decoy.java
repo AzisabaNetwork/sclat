@@ -1,6 +1,6 @@
 package be4rjp.sclat.weapon;
 
-import be4rjp.sclat.Main;
+import be4rjp.sclat.Sclat;
 import be4rjp.sclat.api.player.PlayerData;
 import be4rjp.sclat.data.DataMgr;
 import com.mojang.authlib.GameProfile;
@@ -64,11 +64,11 @@ public class Decoy {
 						}
 					};
 					// Decoyset.runTaskLater(Main.getPlugin(), 5);
-					task.runTaskLater(Main.getPlugin(), 95);
+					task.runTaskLater(Sclat.getPlugin(), 95);
 				}
 			}
 		};
-		delay.runTaskTimer(Main.getPlugin(), 0, 1);
+		delay.runTaskTimer(Sclat.getPlugin(), 0, 1);
 	}
 
 	public static void createDecoy(Player player1, String npcName1, Location location1) {
@@ -102,7 +102,7 @@ public class Decoy {
 					npc.setLocation(location.getX(), location.getY() - 20, location.getZ(), yaw, 0);
 					npc.getDataWatcher().set(DataWatcherRegistry.a.a(15), (byte) 127);
 
-					for (Player p : Main.getPlugin(Main.class).getServer().getOnlinePlayers()) {
+					for (Player p : Sclat.getPlugin(Sclat.class).getServer().getOnlinePlayers()) {
 						PlayerConnection connection = ((CraftPlayer) p).getHandle().playerConnection;
 						connection.sendPacket(new PacketPlayOutPlayerInfo(
 								PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, npc));
@@ -135,12 +135,12 @@ public class Decoy {
 						es.setLocation(location.getX(), location.getY() - 20, location.getZ(), yaw, 0);
 					}
 					PacketPlayOutSpawnEntityLiving packet = new PacketPlayOutSpawnEntityLiving(es);
-					for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
+					for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 						if (player.getWorld() == target.getWorld()) {
 							((CraftPlayer) target).getHandle().playerConnection.sendPacket(packet);
 						}
 					}
-					for (Player p : Main.getPlugin(Main.class).getServer().getOnlinePlayers()) {
+					for (Player p : Sclat.getPlugin(Sclat.class).getServer().getOnlinePlayers()) {
 						PlayerConnection connection = ((CraftPlayer) p).getHandle().playerConnection;
 						connection.sendPacket(new PacketPlayOutEntityTeleport(npc));
 						connection.sendPacket(new PacketPlayOutEntityHeadRotation(npc,
@@ -177,24 +177,24 @@ public class Decoy {
 						npc.setLocation(location.getX(), location.getY(), location.getZ(), yaw, 0);
 					}
 					PacketPlayOutEntityTeleport packet = new PacketPlayOutEntityTeleport(es);
-					for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
+					for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 						if (player.getWorld() == target.getWorld()) {
 							((CraftPlayer) target).getHandle().playerConnection.sendPacket(packet);
 						}
 					}
-					for (Player p : Main.getPlugin(Main.class).getServer().getOnlinePlayers()) {
+					for (Player p : Sclat.getPlugin(Sclat.class).getServer().getOnlinePlayers()) {
 						PlayerConnection connection = ((CraftPlayer) p).getHandle().playerConnection;
 						connection.sendPacket(new PacketPlayOutEntityTeleport(npc));
 					}
 				}
 				if (s == 15) {
-					for (Player p : Main.getPlugin(Main.class).getServer().getOnlinePlayers()) {
+					for (Player p : Sclat.getPlugin(Sclat.class).getServer().getOnlinePlayers()) {
 						PlayerConnection connection = ((CraftPlayer) p).getHandle().playerConnection;
 						connection.sendPacket(new PacketPlayOutEntityDestroy(npc.getBukkitEntity().getEntityId()));
 					}
 					PacketPlayOutEntityDestroy packet = new PacketPlayOutEntityDestroy(
 							es.getBukkitEntity().getEntityId());
-					for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
+					for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 						if (player.getWorld() == target.getWorld()) {
 							((CraftPlayer) target).getHandle().playerConnection.sendPacket(packet);
 						}
@@ -204,7 +204,7 @@ public class Decoy {
 				s++;
 			}
 		};
-		task.runTaskTimer(Main.getPlugin(), 0, 7);
+		task.runTaskTimer(Sclat.getPlugin(), 0, 7);
 
 	}
 	public static void DecoyShot(Player player) {
@@ -229,7 +229,7 @@ public class Decoy {
 					if (DataMgr.getPlayerData(player).getSettings().ShowEffect_Bomb()) {
 						if (player.getWorld() == as1.getLocation().getWorld()) {
 							if (player.getLocation()
-									.distanceSquared(as1.getLocation()) < Main.PARTICLE_RENDER_DISTANCE_SQUARED) {
+									.distanceSquared(as1.getLocation()) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED) {
 								Particle.DustOptions dustOptions = new Particle.DustOptions(
 										DataMgr.getPlayerData(p).getTeam().getTeamColor().getBukkitColor(), 1);
 								player.spawnParticle(Particle.REDSTONE, as1.getLocation(), 1, 0, 0, 0, 50, dustOptions);
@@ -254,10 +254,10 @@ public class Decoy {
 				} catch (Exception e) {
 					as1.remove();
 					cancel();
-					Main.getPlugin().getLogger().warning(e.getMessage());
+					Sclat.getPlugin().getLogger().warning(e.getMessage());
 				}
 			}
 		};
-		task.runTaskTimer(Main.getPlugin(), 0, 1);
+		task.runTaskTimer(Sclat.getPlugin(), 0, 1);
 	}
 }

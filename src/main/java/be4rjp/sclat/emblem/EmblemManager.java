@@ -17,7 +17,7 @@ import java.util.Set;
 import java.util.StringJoiner;
 import java.util.function.Function;
 
-import static be4rjp.sclat.Main.conf;
+import static be4rjp.sclat.Sclat.conf;
 
 public class EmblemManager {
 	private static ItemStack newEmblemStack(String displayName, List<String> lore, int amount) {

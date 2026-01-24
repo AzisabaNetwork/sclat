@@ -1,6 +1,6 @@
 package be4rjp.sclat.data;
 
-import be4rjp.sclat.Main;
+import be4rjp.sclat.Sclat;
 import be4rjp.sclat.api.SclatUtil;
 import be4rjp.sclat.api.Sphere;
 import be4rjp.sclat.api.team.Team;
@@ -44,12 +44,12 @@ public class TrapData {
 			@Override
 			public void run() {
 				List<Location> s_locs = Sphere.getXZCircle(location.clone().add(0, 1, 0), 3, 2, 40);
-				for (Player o_player : Main.getPlugin().getServer().getOnlinePlayers()) {
+				for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 					if (DataMgr.getPlayerData(o_player).getSettings().ShowEffect_Bomb()) {
 						for (Location loc : s_locs) {
 							if (o_player.getWorld() == loc.getWorld()
 									&& DataMgr.getPlayerData(o_player).getTeam() != null) {
-								if (o_player.getLocation().distanceSquared(loc) < Main.PARTICLE_RENDER_DISTANCE_SQUARED
+								if (o_player.getLocation().distanceSquared(loc) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED
 										&& (DataMgr.getPlayerData(o_player).getTeam() == team || near)) {
 									Particle.DustOptions dustOptions = new Particle.DustOptions(near
 											? DataMgr.getPlayerData(player).getTeam().getTeamColor().getBukkitColor()
@@ -62,7 +62,7 @@ public class TrapData {
 				}
 			}
 		};
-		effect.runTaskTimer(Main.getPlugin(), 0, 5);
+		effect.runTaskTimer(Sclat.getPlugin(), 0, 5);
 
 		this.task = new BukkitRunnable() {
 			@Override
@@ -77,7 +77,7 @@ public class TrapData {
 				if (number + 2 < DataMgr.getPlayerData(player).getTrapCount())
 					Explosion();
 
-				for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
+				for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 					if (!DataMgr.getPlayerData(target).isInMatch() || target.getWorld() != location.getWorld())
 						continue;
 					if (target.getGameMode() == GameMode.SPECTATOR)
@@ -108,7 +108,7 @@ public class TrapData {
 				}
 			}
 		};
-		task.runTaskTimer(Main.getPlugin(), 0, 2);
+		task.runTaskTimer(Sclat.getPlugin(), 0, 2);
 	}
 
 	public void Explosion() {
@@ -140,12 +140,12 @@ public class TrapData {
 
 					// センサーエフェクト
 					List<Location> s_locs = Sphere.getSphere(location, maxDist + 1, 25);
-					for (Player o_player : Main.getPlugin().getServer().getOnlinePlayers()) {
+					for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 						if (DataMgr.getPlayerData(o_player).getSettings().ShowEffect_BombEx()) {
 							for (Location loc : s_locs) {
 								if (o_player.getWorld() == loc.getWorld()) {
 									if (o_player.getLocation()
-											.distanceSquared(loc) < Main.PARTICLE_RENDER_DISTANCE_SQUARED) {
+											.distanceSquared(loc) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED) {
 										Particle.DustOptions dustOptions = new Particle.DustOptions(Color.BLACK, 1);
 										o_player.spawnParticle(Particle.REDSTONE, loc, 1, 0, 0, 0, 1, dustOptions);
 									}
@@ -163,7 +163,7 @@ public class TrapData {
 					}
 
 					// 発光効果
-					for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
+					for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 						if (!DataMgr.getPlayerData(target).isInMatch() || target.getWorld() != player.getWorld())
 							continue;
 						if (target.getLocation().distance(location) <= maxDist + 1) {
@@ -216,7 +216,7 @@ public class TrapData {
 						}
 					}
 
-					for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
+					for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 						if (!DataMgr.getPlayerData(target).isInMatch() || target.getWorld() != player.getWorld())
 							continue;
 						if (target.getLocation().distanceSquared(location) <= maxDistSquared) {
@@ -235,7 +235,7 @@ public class TrapData {
 										target.setNoDamageTicks(0);
 									}
 								};
-								task.runTaskLater(Main.getPlugin(), 1);
+								task.runTaskLater(Sclat.getPlugin(), 1);
 							}
 						}
 					}
@@ -260,7 +260,7 @@ public class TrapData {
 				i++;
 			}
 		};
-		ex.runTaskTimer(Main.getPlugin(), 0, 1);
+		ex.runTaskTimer(Sclat.getPlugin(), 0, 1);
 	}
 
 	public int getNumber() {

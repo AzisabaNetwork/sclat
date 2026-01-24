@@ -1,16 +1,16 @@
 package be4rjp.sclat.protocollib;
 
-import be4rjp.sclat.Main;
+import be4rjp.sclat.Sclat;
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.ListenerPriority;
 
 public class SclatPacketListener {
 	public static void init() {
-		Main.protocolManager.addPacketListener(new VehiclePacketListener(Main.getPlugin(), ListenerPriority.NORMAL,
+		Sclat.protocolManager.addPacketListener(new VehiclePacketListener(Sclat.getPlugin(), ListenerPriority.NORMAL,
 				PacketType.Play.Client.STEER_VEHICLE));
 
-		Main.protocolManager
-				.addPacketListener(new EntityClickListener(Main.getPlugin(), PacketType.Play.Client.USE_ENTITY));
+		Sclat.protocolManager
+				.addPacketListener(new EntityClickListener(Sclat.getPlugin(), PacketType.Play.Client.USE_ENTITY));
 
 		/*
 		 * Main.protocolManager.addPacketListener( new PacketAdapter(Main.getPlugin(),

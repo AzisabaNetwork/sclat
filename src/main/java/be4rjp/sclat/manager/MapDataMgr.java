@@ -1,6 +1,6 @@
 package be4rjp.sclat.manager;
 
-import be4rjp.sclat.Main;
+import be4rjp.sclat.Sclat;
 import be4rjp.sclat.api.wiremesh.WiremeshListTask;
 import be4rjp.sclat.data.Area;
 import be4rjp.sclat.data.DataMgr;
@@ -9,7 +9,7 @@ import be4rjp.sclat.data.Path;
 import org.bukkit.Location;
 import org.bukkit.World;
 
-import static be4rjp.sclat.Main.conf;
+import static be4rjp.sclat.Sclat.conf;
 import static org.bukkit.Bukkit.getServer;
 
 /**
@@ -184,7 +184,7 @@ public class MapDataMgr {
 
 			// Main.getPlugin().getServer().createWorld(new WorldCreator(WorldName));
 
-			Main.getPlugin().getLogger().info(mapname);
+			Sclat.getPlugin().getLogger().info(mapname);
 
 			map.setWorldName(WorldName);
 

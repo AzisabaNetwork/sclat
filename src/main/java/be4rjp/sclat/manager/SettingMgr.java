@@ -4,7 +4,7 @@ import be4rjp.sclat.api.player.PlayerSettings;
 import be4rjp.sclat.data.DataMgr;
 import org.bukkit.entity.Player;
 
-import static be4rjp.sclat.Main.conf;
+import static be4rjp.sclat.Sclat.conf;
 
 public class SettingMgr {
 

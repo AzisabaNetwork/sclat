@@ -1,7 +1,7 @@
 
 package be4rjp.sclat.manager;
 
-import be4rjp.sclat.Main;
+import be4rjp.sclat.Sclat;
 import be4rjp.sclat.api.Animation;
 import be4rjp.sclat.api.MessageType;
 import be4rjp.sclat.api.Plugins;
@@ -74,7 +74,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import static be4rjp.sclat.Main.conf;
+import static be4rjp.sclat.Sclat.conf;
 import static be4rjp.sclat.manager.PlayerStatusMgr.getRank;
 import static org.bukkit.Bukkit.getServer;
 
@@ -148,7 +148,7 @@ public class MatchMgr {
 									match.setIsStartedCount(false);
 									match.setIsStarted(false);
 									// Send match status
-									if (Main.type == ServerType.MATCH) {
+									if (Sclat.type == ServerType.MATCH) {
 										List<String> commands = new ArrayList<>();
 										commands.add("cdc " + conf.getServers().getString("ServerName"));
 										commands.add("stop");
@@ -161,7 +161,7 @@ public class MatchMgr {
 								}
 								if (s == 0) {
 									// Send match status
-									if (Main.type == ServerType.MATCH) {
+									if (Sclat.type == ServerType.MATCH) {
 										List<String> commands = new ArrayList<>();
 										commands.add("cd " + conf.getServers().getString("ServerName") + " "
 												+ (System.currentTimeMillis() / 1000 + 30));
@@ -246,8 +246,8 @@ public class MatchMgr {
 									}
 
 									// Settings
-									if (Main.type == ServerType.MATCH) {
-										for (Player op : Main.getPlugin().getServer().getOnlinePlayers()) {
+									if (Sclat.type == ServerType.MATCH) {
+										for (Player op : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 											PlayerSettings playerSettings = new PlayerSettings(op);
 											SettingMgr.setSettings(playerSettings, op);
 										}
@@ -279,7 +279,7 @@ public class MatchMgr {
 									}
 
 									// Send match status
-									if (Main.type == ServerType.MATCH) {
+									if (Sclat.type == ServerType.MATCH) {
 										List<String> commands = new ArrayList<>();
 										commands.add("started " + conf.getServers().getString("ServerName") + " "
 												+ System.currentTimeMillis() / 1000);
@@ -295,7 +295,7 @@ public class MatchMgr {
 								s++;
 							}
 						};
-						task.runTaskTimer(Main.getPlugin(), 0, 20);
+						task.runTaskTimer(Sclat.getPlugin(), 0, 20);
 					}
 				} else {
 					SclatUtil.sendMessage("§c§n上限人数を超えているため参加できません", MessageType.PLAYER, player);
@@ -433,7 +433,7 @@ public class MatchMgr {
 				canRollback = true;
 			}
 		};
-		task.runTaskLater(Main.getPlugin(), 3600);
+		task.runTaskLater(Sclat.getPlugin(), 3600);
 	}
 
 	public static void StartCount(Player player) {
@@ -459,7 +459,7 @@ public class MatchMgr {
 				i++;
 			}
 		};
-		task.runTaskTimer(Main.getPlugin(), 230, 1);
+		task.runTaskTimer(Sclat.getPlugin(), 230, 1);
 	}
 
 	public static void MatchRunnable(Player player, Match match) {
@@ -467,7 +467,7 @@ public class MatchMgr {
 		task = new BukkitRunnable() {
 			int s = 0;
 			Player p = player;
-			World w = Main.getPlugin().getServer().getWorld(match.getMapData().getWorldName());
+			World w = Sclat.getPlugin().getServer().getWorld(match.getMapData().getWorldName());
 			Location intromove;
 			// EntitySquid squid;
 
@@ -590,7 +590,7 @@ public class MatchMgr {
 						Scoreboard scoreboard = manager.getNewScoreboard();
 
 						Objective objective = scoreboard.registerNewObjective("match", "intro",
-								"§6§lSclat§r " + Main.VERSION);
+								"§6§lSclat§r " + Sclat.VERSION);
 						objective.setDisplaySlot(DisplaySlot.SIDEBAR);
 
 						List<String> lines = new ArrayList<>();
@@ -612,8 +612,8 @@ public class MatchMgr {
 
 						p.setScoreboard(scoreboard);
 
-						for (Player player : Main.getPlugin(Main.class).getServer().getOnlinePlayers()) {
-							p.hidePlayer(Main.getPlugin(), player);
+						for (Player player : Sclat.getPlugin(Sclat.class).getServer().getOnlinePlayers()) {
+							p.hidePlayer(Sclat.getPlugin(), player);
 						}
 
 					}
@@ -674,8 +674,8 @@ public class MatchMgr {
 					}
 
 					if (s == 221) {
-						for (Player player : Main.getPlugin(Main.class).getServer().getOnlinePlayers()) {
-							p.showPlayer(Main.getPlugin(), player);
+						for (Player player : Sclat.getPlugin(Sclat.class).getServer().getOnlinePlayers()) {
+							p.showPlayer(Sclat.getPlugin(), player);
 						}
 					}
 
@@ -815,7 +815,7 @@ public class MatchMgr {
 							Song song = nbs.getSong();
 							RadioSongPlayer radio = new RadioSongPlayer(song);
 							radio.setVolume(volume);
-							for (Player oplayer : Main.getPlugin(Main.class).getServer().getOnlinePlayers()) {
+							for (Player oplayer : Sclat.getPlugin(Sclat.class).getServer().getOnlinePlayers()) {
 								if (DataMgr.getPlayerData(oplayer).getSettings().PlayBGM()
 										&& DataMgr.getPlayerData(oplayer).getIsJoined()) {
 									radio.addPlayer(oplayer);
@@ -856,7 +856,7 @@ public class MatchMgr {
 				}
 			}
 		};
-		task.runTaskTimer(Main.getPlugin(), 0, 1);
+		task.runTaskTimer(Sclat.getPlugin(), 0, 1);
 	}
 
 	public static void StopMusic(RadioSongPlayer radio, long delay, Match match) {
@@ -866,7 +866,7 @@ public class MatchMgr {
 				radio.setPlaying(false);
 			}
 		};
-		task.runTaskLater(Main.getPlugin(), delay);
+		task.runTaskLater(Sclat.getPlugin(), delay);
 
 		BukkitRunnable task2 = new BukkitRunnable() {
 			@Override
@@ -878,11 +878,11 @@ public class MatchMgr {
 				}
 			}
 		};
-		task2.runTaskTimer(Main.getPlugin(), 0, 1);
+		task2.runTaskTimer(Sclat.getPlugin(), 0, 1);
 	}
 
 	public static void StartMatch(Match match) {
-		for (Player player : Main.getPlugin(Main.class).getServer().getOnlinePlayers()) {
+		for (Player player : Sclat.getPlugin(Sclat.class).getServer().getOnlinePlayers()) {
 			PlayerData data = DataMgr.getPlayerData(player);
 			if (data.getMatch() == match) {
 				MatchRunnable(player, match);
@@ -924,7 +924,7 @@ public class MatchMgr {
 		match.getTeam0().setTeam(bteam0);
 		match.getTeam1().setTeam(bteam1);
 
-		for (Player oplayer : Main.getPlugin().getServer().getOnlinePlayers()) {
+		for (Player oplayer : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 			if (DataMgr.getPlayerData(oplayer).getIsJoined()) {
 				oplayer.setScoreboard(scoreboard);
 				if (match.getTeam0() == DataMgr.getPlayerData(oplayer).getTeam())
@@ -936,7 +936,7 @@ public class MatchMgr {
 
 		BukkitRunnable task = new BukkitRunnable() {
 			Scoreboard sb = scoreboard;
-			Objective objective = sb.registerNewObjective("match", "run", "§6§lSclat§r " + Main.VERSION);
+			Objective objective = sb.registerNewObjective("match", "run", "§6§lSclat§r " + Sclat.VERSION);
 			int s = 180;
 			Player p = player;
 
@@ -950,7 +950,7 @@ public class MatchMgr {
 					if (objective != null)
 						objective.unregister();
 
-					objective = scoreboard.registerNewObjective("match", "intro", "§6§lSclat§r " + Main.VERSION);
+					objective = scoreboard.registerNewObjective("match", "intro", "§6§lSclat§r " + Sclat.VERSION);
 					objective.setDisplaySlot(DisplaySlot.SIDEBAR);
 
 					String min = String.format("%02d", s % 60);
@@ -1025,7 +1025,7 @@ public class MatchMgr {
 							if (wteam.getGatiCount() == lteam.getGatiCount()) {
 								if (wteam.getGatiCount() + 1 > lteam.getGatiCount()) {
 									if (wteam.getGatiCount() != 0) {
-										for (Player player : Main.getPlugin().getServer().getOnlinePlayers()) {
+										for (Player player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 											PlayerData data = DataMgr.getPlayerData(player);
 											if (data.getTeam() == null || !data.isInMatch())
 												continue;
@@ -1067,7 +1067,7 @@ public class MatchMgr {
 						}
 
 						if (s == 0 && entyo) {
-							for (Player oplayer : Main.getPlugin(Main.class).getServer().getOnlinePlayers()) {
+							for (Player oplayer : Sclat.getPlugin(Sclat.class).getServer().getOnlinePlayers()) {
 								if (DataMgr.getPlayerData(oplayer).isInMatch()) {
 									oplayer.sendTitle("", "§7延長戦！", 10, 20, 10);
 									SclatUtil.sendMessage("§7延長戦！", MessageType.PLAYER, oplayer);
@@ -1076,7 +1076,7 @@ public class MatchMgr {
 						}
 
 						if (match.getTeam0().getGatiCount() == 100 || match.getTeam1().getGatiCount() == 100) {
-							for (Player oplayer : Main.getPlugin(Main.class).getServer().getOnlinePlayers()) {
+							for (Player oplayer : Sclat.getPlugin(Sclat.class).getServer().getOnlinePlayers()) {
 								if (DataMgr.getPlayerData(oplayer).getIsJoined() && p != oplayer) {
 									oplayer.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
 									oplayer.getInventory().clear();
@@ -1094,7 +1094,7 @@ public class MatchMgr {
 							if (match.getTeam1().getGatiCount() == 95)
 								team1nokori = true;
 
-							for (Player oplayer : Main.getPlugin(Main.class).getServer().getOnlinePlayers()) {
+							for (Player oplayer : Sclat.getPlugin(Sclat.class).getServer().getOnlinePlayers()) {
 								if (DataMgr.getPlayerData(oplayer).isInMatch()) {
 									oplayer.sendTitle("", "§7残りカウントあとわずか！", 10, 20, 10);
 									SclatUtil.sendMessage("§7残りカウントあとわずか！", MessageType.PLAYER, oplayer);
@@ -1107,7 +1107,7 @@ public class MatchMgr {
 					ObjectiveUtil.setLine(objective, lines);
 
 					if (s == 60 && !conf.getConfig().getString("WorkMode").equals("Area")) {
-						for (Player oplayer : Main.getPlugin(Main.class).getServer().getOnlinePlayers()) {
+						for (Player oplayer : Sclat.getPlugin(Sclat.class).getServer().getOnlinePlayers()) {
 							if (DataMgr.getPlayerData(oplayer).getIsJoined()) {
 								SclatUtil.sendMessage("§6§n残り1分！", MessageType.PLAYER, oplayer);
 							}
@@ -1117,7 +1117,7 @@ public class MatchMgr {
 							Song song = nbs.getSong();
 							RadioSongPlayer radio = new RadioSongPlayer(song);
 							radio.setVolume(volume);
-							for (Player oplayer : Main.getPlugin(Main.class).getServer().getOnlinePlayers()) {
+							for (Player oplayer : Sclat.getPlugin(Sclat.class).getServer().getOnlinePlayers()) {
 								if (DataMgr.getPlayerData(oplayer).getSettings().PlayBGM()
 										&& DataMgr.getPlayerData(oplayer).getIsJoined()) {
 									radio.addPlayer(oplayer);
@@ -1130,7 +1130,7 @@ public class MatchMgr {
 						}
 					}
 					if (s <= 0 && !entyo) {
-						for (Player oplayer : Main.getPlugin(Main.class).getServer().getOnlinePlayers()) {
+						for (Player oplayer : Sclat.getPlugin(Sclat.class).getServer().getOnlinePlayers()) {
 							if (DataMgr.getPlayerData(oplayer).getIsJoined() && p != oplayer) {
 								oplayer.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
 								oplayer.getInventory().clear();
@@ -1142,7 +1142,7 @@ public class MatchMgr {
 					}
 
 					if (s <= -60) {
-						for (Player oplayer : Main.getPlugin(Main.class).getServer().getOnlinePlayers()) {
+						for (Player oplayer : Sclat.getPlugin(Sclat.class).getServer().getOnlinePlayers()) {
 							if (DataMgr.getPlayerData(oplayer).getIsJoined() && p != oplayer) {
 								oplayer.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
 								oplayer.getInventory().clear();
@@ -1154,7 +1154,7 @@ public class MatchMgr {
 					}
 
 					if (s <= 5 && s > 0) {
-						for (Player oplayer : Main.getPlugin(Main.class).getServer().getOnlinePlayers()) {
+						for (Player oplayer : Sclat.getPlugin(Sclat.class).getServer().getOnlinePlayers()) {
 							if (DataMgr.getPlayerData(oplayer).isInMatch())
 								oplayer.sendTitle(ChatColor.GRAY + String.valueOf(s), "", 0, 30, 4);
 						}
@@ -1168,7 +1168,7 @@ public class MatchMgr {
 				}
 			}
 		};
-		task.runTaskTimer(Main.getPlugin(), 0, 20);
+		task.runTaskTimer(Sclat.getPlugin(), 0, 20);
 
 	}
 
@@ -1198,7 +1198,7 @@ public class MatchMgr {
 									area.stop();
 								}
 							}
-							for (Player oplayer : Main.getPlugin(Main.class).getServer().getOnlinePlayers()) {
+							for (Player oplayer : Sclat.getPlugin(Sclat.class).getServer().getOnlinePlayers()) {
 								oplayer.setMaxHealth(20);
 							}
 
@@ -1208,7 +1208,7 @@ public class MatchMgr {
 
 							DataMgr.getPlayerData(p).getMatch().getBlockUpdater().stop();
 
-							for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
+							for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 								SclatUtil.sendWorldBorderWarningClearPacket(target);
 							}
 
@@ -1262,8 +1262,8 @@ public class MatchMgr {
 							p.removePotionEffect(PotionEffectType.POISON);
 					}
 					if (i == 46) {
-						for (Player player : Main.getPlugin(Main.class).getServer().getOnlinePlayers()) {
-							p.hidePlayer(Main.getPlugin(), player);
+						for (Player player : Sclat.getPlugin(Sclat.class).getServer().getOnlinePlayers()) {
+							p.hidePlayer(Sclat.getPlugin(), player);
 						}
 					}
 					if (i == 46 && DataMgr.getPlayerData(p).getPlayerNumber() == 1) {
@@ -1289,7 +1289,7 @@ public class MatchMgr {
 							match.setWinTeam(winteam);
 							match.setIsHikiwake(hikiwake);
 
-							for (Player oplayer : Main.getPlugin(Main.class).getServer().getOnlinePlayers()) {
+							for (Player oplayer : Sclat.getPlugin(Sclat.class).getServer().getOnlinePlayers()) {
 								if (DataMgr.getPlayerData(oplayer).getIsJoined())
 									Animation.TDMResultAnimation(oplayer, team0c, team1c, team0code, team1code, winteam,
 											hikiwake);
@@ -1331,7 +1331,7 @@ public class MatchMgr {
 							if (per < 0)
 								per = 0;
 
-							for (Player oplayer : Main.getPlugin(Main.class).getServer().getOnlinePlayers()) {
+							for (Player oplayer : Sclat.getPlugin(Sclat.class).getServer().getOnlinePlayers()) {
 								if (DataMgr.getPlayerData(oplayer).getIsJoined()) {
 									if ((per == 100 || per == 0) && !hikiwake)
 										Animation.AreaResultAnimation(oplayer, per, 100 - per, team0code, team1code,
@@ -1383,7 +1383,7 @@ public class MatchMgr {
 							if (per < 0)
 								per = 0;
 
-							for (Player oplayer : Main.getPlugin(Main.class).getServer().getOnlinePlayers()) {
+							for (Player oplayer : Sclat.getPlugin(Sclat.class).getServer().getOnlinePlayers()) {
 								if (DataMgr.getPlayerData(oplayer).getIsJoined()) {
 									Animation.ResultAnimation(oplayer, per, 100 - per, team0code, team1code, winteam,
 											hikiwake);
@@ -1419,7 +1419,7 @@ public class MatchMgr {
 						SclatUtil.sendMessage("§a----------<< Match result >>----------", MessageType.PLAYER, p);
 						SclatUtil.sendMessage("", MessageType.PLAYER, p);
 
-						for (Player op : Main.getPlugin(Main.class).getServer().getOnlinePlayers()) {
+						for (Player op : Sclat.getPlugin(Sclat.class).getServer().getOnlinePlayers()) {
 							PlayerData odata = DataMgr.getPlayerData(op);
 							if (!odata.getIsJoined())
 								continue;
@@ -1455,7 +1455,7 @@ public class MatchMgr {
 							}
 						}
 
-						for (Player op : Main.getPlugin(Main.class).getServer().getOnlinePlayers()) {
+						for (Player op : Sclat.getPlugin(Sclat.class).getServer().getOnlinePlayers()) {
 							PlayerData odata = DataMgr.getPlayerData(op);
 							if (!odata.getIsJoined())
 								continue;
@@ -1525,7 +1525,7 @@ public class MatchMgr {
 						PlayerStatusMgr.addPaint(p, data.getPaintCount());
 						PlayerStatusMgr.addKill(p, data.getKillCount());
 
-						if (Main.type == ServerType.MATCH) {
+						if (Sclat.type == ServerType.MATCH) {
 							List<String> commands = new ArrayList<>();
 							commands.add("add money " + pMoney + " " + p.getUniqueId().toString());
 							commands.add("add level " + pLv + " " + p.getUniqueId().toString());
@@ -1551,14 +1551,14 @@ public class MatchMgr {
 						SclatUtil.sendMessage("", MessageType.PLAYER, p);
 						if (pRank < 0)
 							SclatUtil.sendMessage(ChatColor.GOLD + " RankPoint : " + ChatColor.RESET + String.valueOf(pRank)
-									+ (Main.type == ServerType.NORMAL
+									+ (Sclat.type == ServerType.NORMAL
 											? "  [ §b" + RankMgr.toABCRank(getRank(player)) + " §r]"
 											: ""),
 									MessageType.PLAYER, p);
 						else
 							SclatUtil.sendMessage(
 									ChatColor.GOLD + " RankPoint : " + ChatColor.RESET + "+" + String.valueOf(pMoveRank)
-											+ (Main.type == ServerType.NORMAL
+											+ (Sclat.type == ServerType.NORMAL
 													? "  [ §b" + RankMgr.toABCRank(getRank(player)) + " §r]"
 													: ""),
 									MessageType.PLAYER, p);
@@ -1583,7 +1583,7 @@ public class MatchMgr {
 						il.setYaw(iyaw);
 						WeaponClass wc = DataMgr.getPlayerData(p).getWeaponClass();
 						p.teleport(il);
-						if (Main.type != ServerType.MATCH) {
+						if (Sclat.type != ServerType.MATCH) {
 							ItemStack join = new ItemStack(org.bukkit.Material.CHEST);
 							ItemMeta joinmeta = join.getItemMeta();
 							joinmeta.setDisplayName("メインメニュー");
@@ -1601,7 +1601,7 @@ public class MatchMgr {
 							MatchSetup();
 
 							// Send match status
-							if (Main.type == ServerType.MATCH) {
+							if (Sclat.type == ServerType.MATCH) {
 								List<String> commands = new ArrayList<>();
 								commands.add("stopped " + conf.getServers().getString("ServerName"));
 								commands.add("map " + conf.getServers().getString("ServerName") + " " + DataMgr
@@ -1633,11 +1633,11 @@ public class MatchMgr {
 						// PlayerData data = new PlayerData(p);
 						// data.setWeaponClass(wc);
 						// DataMgr.setPlayerData(p, data);
-						for (Player player : Main.getPlugin(Main.class).getServer().getOnlinePlayers()) {
-							p.showPlayer(Main.getPlugin(), player);
+						for (Player player : Sclat.getPlugin(Sclat.class).getServer().getOnlinePlayers()) {
+							p.showPlayer(Sclat.getPlugin(), player);
 						}
 
-						if (Main.type == ServerType.MATCH) {
+						if (Sclat.type == ServerType.MATCH) {
 							try {
 								BungeeCordMgr.PlayerSendServer(p, "sclat");
 								DataMgr.getPlayerData(p).setServerName("Sclat");
@@ -1655,7 +1655,7 @@ public class MatchMgr {
 				}
 			}
 		};
-		task.runTaskTimer(Main.getPlugin(), 0, 1);
+		task.runTaskTimer(Sclat.getPlugin(), 0, 1);
 	}
 
 }

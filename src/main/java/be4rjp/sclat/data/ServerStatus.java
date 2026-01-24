@@ -1,6 +1,6 @@
 package be4rjp.sclat.data;
 
-import be4rjp.sclat.Main;
+import be4rjp.sclat.Sclat;
 import be4rjp.sclat.api.MineStat;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
@@ -69,7 +69,7 @@ public class ServerStatus {
 				}
 			}
 		};
-		task.runTaskTimerAsynchronously(Main.getPlugin(), 0, this.period);
+		task.runTaskTimerAsynchronously(Sclat.getPlugin(), 0, this.period);
 
 		this.task2 = new BukkitRunnable() {
 			@Override
@@ -96,7 +96,7 @@ public class ServerStatus {
 				}
 			}
 		};
-		task2.runTaskTimer(Main.getPlugin(), 5, this.period);
+		task2.runTaskTimer(Sclat.getPlugin(), 5, this.period);
 	}
 
 	public int getPlayerCount() {

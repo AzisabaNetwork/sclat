@@ -1,7 +1,7 @@
 package be4rjp.sclat.weapon;
 
 import be4rjp.dadadachecker.ClickType;
-import be4rjp.sclat.Main;
+import be4rjp.sclat.Sclat;
 import be4rjp.sclat.api.SclatUtil;
 import be4rjp.sclat.api.player.PlayerData;
 import be4rjp.sclat.data.DataMgr;
@@ -41,7 +41,7 @@ public class Brush {
 					return;
 				}
 
-				ClickType clickType = Main.dadadaCheckerAPI.getPlayerClickType(player);
+				ClickType clickType = Sclat.dadadaCheckerAPI.getPlayerClickType(player);
 
 				if (/* data.getTick() >= 6 */clickType == ClickType.NO_CLICK && data.isInMatch()) {
 					data.setTick(7);
@@ -51,7 +51,7 @@ public class Brush {
 				}
 			}
 		};
-		task.runTaskTimer(Main.getPlugin(), 0, 1);
+		task.runTaskTimer(Sclat.getPlugin(), 0, 1);
 	}
 
 	public static void RollPaintRunnable(Player player) {
@@ -65,7 +65,7 @@ public class Brush {
 						cancel();
 
 					if (data.getIsHolding() && data.getCanPaint() && data.isInMatch()
-							&& Main.dadadaCheckerAPI.getPlayerClickType(p) != ClickType.RENDA
+							&& Sclat.dadadaCheckerAPI.getPlayerClickType(p) != ClickType.RENDA
 							&& p.getGameMode() != GameMode.SPECTATOR) {
 						if (player.getExp() <= (float) (data.getWeaponClass().getMainWeapon().getRollerNeedInk()
 								* Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP)
@@ -89,11 +89,11 @@ public class Brush {
 							front = eloc.add(vec.getX() * 1.5, -0.9, vec.getZ() * 1.5);
 						org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).getTeam().getTeamColor().getWool()
 								.createBlockData();
-						for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
+						for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 							if (DataMgr.getPlayerData(target).getSettings().ShowEffect_MainWeaponInk())
 								if (target.getWorld() == p.getWorld())
 									if (target.getLocation()
-											.distanceSquared(front) < Main.PARTICLE_RENDER_DISTANCE_SQUARED)
+											.distanceSquared(front) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED)
 										target.spawnParticle(org.bukkit.Particle.BLOCK_DUST, front, 2, 0, 0, 0, 1, bd);
 						}
 						Vector vec1 = new Vector(vec.getZ() * -1, 0, vec.getX());
@@ -106,17 +106,17 @@ public class Brush {
 							p.getLocation().getWorld().spawnParticle(org.bukkit.Particle.BLOCK_DUST, position, 2, 0, 0,
 									0, 1, bd);
 
-							for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
+							for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 								if (DataMgr.getPlayerData(target).getSettings().ShowEffect_MainWeaponInk())
 									if (target.getWorld() == p.getWorld())
 										if (target.getLocation()
-												.distanceSquared(position) < Main.PARTICLE_RENDER_DISTANCE_SQUARED)
+												.distanceSquared(position) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED)
 											target.spawnParticle(org.bukkit.Particle.BLOCK_DUST, position, 2, 0, 0, 0,
 													1, bd);
 							}
 
 							double maxDistSquad = 4 /* 2*2 */;
-							for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
+							for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 								if (!DataMgr.getPlayerData(target).isInMatch())
 									continue;
 								if (DataMgr.getPlayerData(p).getTeam() != DataMgr.getPlayerData(target).getTeam()
@@ -157,9 +157,9 @@ public class Brush {
 			}
 		};
 		if (DataMgr.getPlayerData(player).getWeaponClass().getMainWeapon().getIsHude())
-			task.runTaskTimer(Main.getPlugin(), 0, 1);
+			task.runTaskTimer(Sclat.getPlugin(), 0, 1);
 		else
-			task.runTaskTimer(Main.getPlugin(), 0, 5);
+			task.runTaskTimer(Sclat.getPlugin(), 0, 5);
 	}
 
 	public static void ShootPaintRunnable(Player player) {
@@ -199,7 +199,7 @@ public class Brush {
 
 		};
 		if (pdata.getCanRollerShoot()) {
-			task.runTaskLater(Main.getPlugin(), pdata.getWeaponClass().getMainWeapon().getShootTick());
+			task.runTaskLater(Sclat.getPlugin(), pdata.getWeaponClass().getMainWeapon().getShootTick());
 			pdata.setCanRollerShoot(false);
 		}
 	}
@@ -212,7 +212,7 @@ public class Brush {
 				data.setCanRollerShoot(true);
 			}
 		};
-		task.runTaskLater(Main.getPlugin(), data.getWeaponClass().getMainWeapon().getShootTick());
+		task.runTaskLater(Sclat.getPlugin(), data.getWeaponClass().getMainWeapon().getShootTick());
 	}
 
 	public static void Shoot(Player player, Vector v) {
@@ -259,7 +259,7 @@ public class Brush {
 		}
 		ball.setVelocity(vec);
 		ball.setShooter(player);
-		String name = String.valueOf(Main.getNotDuplicateNumber());
+		String name = String.valueOf(Sclat.getNotDuplicateNumber());
 		DataMgr.mws.add(name);
 		ball.setCustomName(name);
 		DataMgr.getMainSnowballNameMap().put(name, ball);
@@ -282,7 +282,7 @@ public class Brush {
 					DataMgr.setSnowballHitCount(name, 0);
 				}
 				if (i != 0) {
-					for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
+					for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 						if (target.getWorld() != p.getWorld())
 							continue;
 						if (!DataMgr.getPlayerData(target).getSettings().ShowEffect_MainWeaponInk())
@@ -307,7 +307,7 @@ public class Brush {
 				i++;
 			}
 		};
-		task.runTaskTimer(Main.getPlugin(), 0, 1);
+		task.runTaskTimer(Sclat.getPlugin(), 0, 1);
 	}
 
 }

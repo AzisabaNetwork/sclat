@@ -1,7 +1,7 @@
 
 package be4rjp.sclat.manager;
 
-import be4rjp.sclat.Main;
+import be4rjp.sclat.Sclat;
 import be4rjp.sclat.api.SclatUtil;
 import be4rjp.sclat.api.Sphere;
 import be4rjp.sclat.api.player.PlayerData;
@@ -69,7 +69,7 @@ public class DeathMgr {
 				drop2.remove();
 			}
 		};
-		clear.runTaskLater(Main.getPlugin(), 50);
+		clear.runTaskLater(Sclat.getPlugin(), 50);
 
 		if (target.hasPotionEffect(PotionEffectType.GLOWING))
 			target.removePotionEffect(PotionEffectType.GLOWING);
@@ -122,7 +122,7 @@ public class DeathMgr {
 								+ ChatColor.RESET + "でやられた！";
 						if (i == 0) {
 							t.sendTitle(ChatColor.GREEN + "復活まであと: 5秒", msg, 0, 21, 0);
-							for (Player player : Main.getPlugin(Main.class).getServer().getOnlinePlayers()) {
+							for (Player player : Sclat.getPlugin(Sclat.class).getServer().getOnlinePlayers()) {
 								player.sendMessage(sdata.getTeam().getTeamColor().getColorCode() + s.getDisplayName()
 										+ ChatColor.RESET + "が"
 										+ DataMgr.getPlayerData(t).getTeam().getTeamColor().getColorCode()
@@ -189,7 +189,7 @@ public class DeathMgr {
 								+ ChatColor.RESET + "でやられた！";
 						if (i == 0) {
 							t.sendTitle(ChatColor.GREEN + "復活まであと: 5秒", msg, 0, 21, 0);
-							for (Player player : Main.getPlugin(Main.class).getServer().getOnlinePlayers()) {
+							for (Player player : Sclat.getPlugin(Sclat.class).getServer().getOnlinePlayers()) {
 								player.sendMessage(sdata.getTeam().getTeamColor().getColorCode() + s.getDisplayName()
 										+ ChatColor.RESET + "が"
 										+ DataMgr.getPlayerData(t).getTeam().getTeamColor().getColorCode()
@@ -254,7 +254,7 @@ public class DeathMgr {
 								+ ChatColor.RESET + "でやられた！";
 						if (i == 0) {
 							t.sendTitle(ChatColor.GREEN + "復活まであと: 5秒", msg, 0, 21, 0);
-							for (Player player : Main.getPlugin(Main.class).getServer().getOnlinePlayers()) {
+							for (Player player : Sclat.getPlugin(Sclat.class).getServer().getOnlinePlayers()) {
 								player.sendMessage(sdata.getTeam().getTeamColor().getColorCode() + s.getDisplayName()
 										+ ChatColor.RESET + "が"
 										+ DataMgr.getPlayerData(t).getTeam().getTeamColor().getColorCode()
@@ -309,14 +309,14 @@ public class DeathMgr {
 						if (i == 0) {
 							loc = t.getLocation();
 							if (DataMgr.getPlayerData(t).getLastAttack() == t) {
-								for (Player player : Main.getPlugin(Main.class).getServer().getOnlinePlayers()) {
+								for (Player player : Sclat.getPlugin(Sclat.class).getServer().getOnlinePlayers()) {
 									player.sendMessage(DataMgr.getPlayerData(t).getTeam().getTeamColor().getColorCode()
 											+ t.getDisplayName() + ChatColor.RESET + "は溺れてしまった！");
 								}
 							} else {
 								Player splayer = DataMgr.getPlayerData(t).getLastAttack();
 								PlayerData sdata = DataMgr.getPlayerData(splayer);
-								for (Player player : Main.getPlugin(Main.class).getServer().getOnlinePlayers()) {
+								for (Player player : Sclat.getPlugin(Sclat.class).getServer().getOnlinePlayers()) {
 									// player.sendMessage(
 									// DataMgr.getPlayerData(t).getTeam().getTeamColor().getColorCode() +
 									// t.getDisplayName() + ChatColor.RESET + "は" + ChatColor.RESET
@@ -369,14 +369,14 @@ public class DeathMgr {
 						if (i == 0) {
 							loc = DataMgr.getPlayerData(t).getMatch().getMapData().getIntro();
 							if (DataMgr.getPlayerData(t).getLastAttack() == t) {
-								for (Player player : Main.getPlugin(Main.class).getServer().getOnlinePlayers()) {
+								for (Player player : Sclat.getPlugin(Sclat.class).getServer().getOnlinePlayers()) {
 									player.sendMessage(DataMgr.getPlayerData(t).getTeam().getTeamColor().getColorCode()
 											+ t.getDisplayName() + ChatColor.RESET + "は奈落に落ちてしまった！");
 								}
 							} else {
 								Player splayer = DataMgr.getPlayerData(t).getLastAttack();
 								PlayerData sdata = DataMgr.getPlayerData(splayer);
-								for (Player player : Main.getPlugin(Main.class).getServer().getOnlinePlayers()) {
+								for (Player player : Sclat.getPlugin(Sclat.class).getServer().getOnlinePlayers()) {
 									// player.sendMessage(DataMgr.getPlayerData(t).getTeam().getTeamColor().getColorCode()
 									// + t.getDisplayName() + ChatColor.RESET + "は" + ChatColor.RESET +
 									// sdata.getTeam().getTeamColor().getColorCode() + splayer.getDisplayName() +
@@ -441,11 +441,11 @@ public class DeathMgr {
 					if (DataMgr.getPlayerData(t).getSPGauge() == 100)
 						SPWeaponMgr.setSPWeapon(t);
 					cancel();
-					Main.getPlugin().getLogger().warning(e.getMessage());
+					Sclat.getPlugin().getLogger().warning(e.getMessage());
 				}
 			}
 		};
-		task.runTaskTimer(Main.getPlugin(), 0, 1);
+		task.runTaskTimer(Sclat.getPlugin(), 0, 1);
 	}
 	public static void BarrierEffectRunnable(Player player, int time) {
 		int resettime = time / 4;
@@ -463,7 +463,7 @@ public class DeathMgr {
 				Location loc = p.getLocation().add(0, 0.5, 0);
 
 				List<Location> s_locs = Sphere.getSphere(loc, 2, 23);
-				for (Player o_player : Main.getPlugin().getServer().getOnlinePlayers()) {
+				for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 					if (DataMgr.getPlayerData(o_player).getSettings().ShowEffect_SPWeapon()
 							&& !o_player.equals(player)) {
 						Particle.DustOptions dustOptions = new Particle.DustOptions(
@@ -473,7 +473,7 @@ public class DeathMgr {
 						for (Location e_loc : s_locs)
 							if (o_player.getWorld() == e_loc.getWorld())
 								if (o_player.getLocation()
-										.distanceSquared(e_loc) < Main.PARTICLE_RENDER_DISTANCE_SQUARED)
+										.distanceSquared(e_loc) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED)
 									o_player.spawnParticle(Particle.REDSTONE, e_loc, 0, 0, 0, 0, 70, dustOptions);
 					}
 				}
@@ -486,6 +486,6 @@ public class DeathMgr {
 				c++;
 			}
 		};
-		task.runTaskTimer(Main.getPlugin(), 0, 4);
+		task.runTaskTimer(Sclat.getPlugin(), 0, 4);
 	}
 }

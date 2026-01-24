@@ -1,7 +1,7 @@
 
 package be4rjp.sclat.weapon.spweapon;
 
-import be4rjp.sclat.Main;
+import be4rjp.sclat.Sclat;
 import be4rjp.sclat.api.SclatUtil;
 import be4rjp.sclat.api.Sphere;
 import be4rjp.sclat.api.player.PlayerData;
@@ -94,7 +94,7 @@ public class QuadroArms {
 				overheat_bar(player);
 			}
 		};
-		it.runTaskLater(Main.getPlugin(), 2);
+		it.runTaskLater(Sclat.getPlugin(), 2);
 
 		BukkitRunnable task = new BukkitRunnable() {
 			Player p = player;
@@ -108,11 +108,11 @@ public class QuadroArms {
 				}
 			}
 		};
-		task.runTaskLater(Main.getPlugin(), 120);
+		task.runTaskLater(Sclat.getPlugin(), 120);
 	}
 
 	public static void overheat_bar(Player player) {
-		BossBar bar = Main.getPlugin().getServer().createBossBar(
+		BossBar bar = Sclat.getPlugin().getServer().createBossBar(
 				DataMgr.getPlayerData(player).getTeam().getTeamColor().getColorCode() + "§Quadro_overheat",
 				BarColor.RED, BarStyle.SOLID, BarFlag.CREATE_FOG);
 		bar.setProgress(0);
@@ -142,7 +142,7 @@ public class QuadroArms {
 				}
 			}
 		};
-		overheat_anime.runTaskTimer(Main.getPlugin(), 0, 2);
+		overheat_anime.runTaskTimer(Sclat.getPlugin(), 0, 2);
 	}
 	public static void QuadroCooltime(Player player, int i) {
 		PlayerData data = DataMgr.getPlayerData(player);
@@ -210,20 +210,20 @@ public class QuadroArms {
 		};
 		switch (i) {
 			case 1 :
-				delay.runTaskLater(Main.getPlugin(), 1);
-				delay1.runTaskLater(Main.getPlugin(), 6);
+				delay.runTaskLater(Sclat.getPlugin(), 1);
+				delay1.runTaskLater(Sclat.getPlugin(), 6);
 				break;
 			case 2 :
-				delaySG.runTaskLater(Main.getPlugin(), 1);
-				delay1.runTaskLater(Main.getPlugin(), 10);
+				delaySG.runTaskLater(Sclat.getPlugin(), 1);
+				delay1.runTaskLater(Sclat.getPlugin(), 10);
 				break;
 			case 3 :
-				delaySL.runTaskLater(Main.getPlugin(), 1);
-				delay1.runTaskLater(Main.getPlugin(), 17);
+				delaySL.runTaskLater(Sclat.getPlugin(), 1);
+				delay1.runTaskLater(Sclat.getPlugin(), 17);
 				break;
 			case 4 :
-				delaySE.runTaskLater(Main.getPlugin(), 1);
-				delay1.runTaskLater(Main.getPlugin(), 15);
+				delaySE.runTaskLater(Sclat.getPlugin(), 1);
+				delay1.runTaskLater(Sclat.getPlugin(), 15);
 		}
 	}
 	public static void Burstshoot(Player player, boolean IsSG) {
@@ -263,9 +263,9 @@ public class QuadroArms {
 		};
 		if (player.hasPotionEffect(PotionEffectType.LUCK)) {
 			if (!IsSG) {
-				Bursttask.runTaskTimer(Main.getPlugin(), 0, 1);
+				Bursttask.runTaskTimer(Sclat.getPlugin(), 0, 1);
 			} else {
-				BursttaskSG.runTaskTimer(Main.getPlugin(), 0, 1);
+				BursttaskSG.runTaskTimer(Sclat.getPlugin(), 0, 1);
 			}
 		}
 	}
@@ -282,7 +282,7 @@ public class QuadroArms {
 		boolean isLockOnPlayer = false;
 		check : for (Vector vector : positions) {
 			Location position = vector.toLocation(player.getLocation().getWorld());
-			for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
+			for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 				if (player != target && player.getWorld() == target.getWorld()) {
 					if (target.getLocation().distance(position) < 2) {
 						isLockOnPlayer = true;
@@ -313,7 +313,7 @@ public class QuadroArms {
 		vec.add(new Vector(Math.random() * random - random / 2, 0, Math.random() * random - random / 2));
 		ball.setVelocity(vec);
 		ball.setShooter(player);
-		String originName = String.valueOf(Main.getNotDuplicateNumber());
+		String originName = String.valueOf(Sclat.getNotDuplicateNumber());
 		StringBuilder buf = new StringBuilder();
 		buf.append(originName);
 		buf.append("#QuadroArmsSpinner");
@@ -345,11 +345,11 @@ public class QuadroArms {
 				if (i != 0) {
 					org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).getTeam().getTeamColor().getWool()
 							.createBlockData();
-					for (Player o_player : Main.getPlugin().getServer().getOnlinePlayers()) {
+					for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 						if (DataMgr.getPlayerData(o_player).getSettings().ShowEffect_MainWeaponInk())
 							if (o_player.getWorld() == inkball.getWorld())
 								if (o_player.getLocation()
-										.distanceSquared(inkball.getLocation()) < Main.PARTICLE_RENDER_DISTANCE_SQUARED)
+										.distanceSquared(inkball.getLocation()) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED)
 									o_player.spawnParticle(org.bukkit.Particle.BLOCK_DUST, inkball.getLocation(), 0, 0,
 											-1, 0, 1, bd);
 					}
@@ -370,7 +370,7 @@ public class QuadroArms {
 				i++;
 			}
 		};
-		SpinnerTask.runTaskTimer(Main.getPlugin(), 0, 1);
+		SpinnerTask.runTaskTimer(Sclat.getPlugin(), 0, 1);
 	}
 	public static boolean ShootSG(Player player) {
 
@@ -388,7 +388,7 @@ public class QuadroArms {
 				Math.random() * random - random / 2));
 		ball.setVelocity(vec);
 		ball.setShooter(player);
-		String originName = String.valueOf(Main.getNotDuplicateNumber());
+		String originName = String.valueOf(Sclat.getNotDuplicateNumber());
 		StringBuilder buf = new StringBuilder();
 		buf.append(originName);
 		buf.append("#QuadroArmsShotgun");
@@ -415,12 +415,12 @@ public class QuadroArms {
 				}
 
 				if (i != 0) {
-					for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
+					for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 						if (!DataMgr.getPlayerData(target).getSettings().ShowEffect_MainWeaponInk())
 							continue;
 						if (target.getWorld() == inkball.getWorld()) {
 							if (target.getLocation()
-									.distanceSquared(inkball.getLocation()) < Main.PARTICLE_RENDER_DISTANCE_SQUARED) {
+									.distanceSquared(inkball.getLocation()) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED) {
 								org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).getTeam().getTeamColor()
 										.getWool().createBlockData();
 								target.spawnParticle(org.bukkit.Particle.BLOCK_DUST, inkball.getLocation(), 1, 0, 0, 0,
@@ -444,7 +444,7 @@ public class QuadroArms {
 				i++;
 			}
 		};
-		task.runTaskTimer(Main.getPlugin(), 0, 1);
+		task.runTaskTimer(Sclat.getPlugin(), 0, 1);
 
 		return false;
 	}
@@ -465,7 +465,7 @@ public class QuadroArms {
 		int distick = 2;
 		ball.setVelocity(vec);
 		ball.setShooter(player);
-		String originName = String.valueOf(Main.getNotDuplicateNumber());
+		String originName = String.valueOf(Sclat.getNotDuplicateNumber());
 		StringBuilder buf = new StringBuilder();
 		buf.append(originName);
 		buf.append("#QuadroArmsSpinner");
@@ -493,12 +493,12 @@ public class QuadroArms {
 						i += DataMgr.getSnowballHitCount(name) - 1;
 						DataMgr.setSnowballHitCount(name, 0);
 					}
-					for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
+					for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 						if (!DataMgr.getPlayerData(target).getSettings().ShowEffect_MainWeaponInk())
 							continue;
 						if (target.getWorld() == inkball.getWorld()) {
 							if (target.getLocation()
-									.distanceSquared(inkball.getLocation()) < Main.PARTICLE_RENDER_DISTANCE_SQUARED) {
+									.distanceSquared(inkball.getLocation()) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED) {
 								org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).getTeam().getTeamColor()
 										.getWool().createBlockData();
 								target.spawnParticle(org.bukkit.Particle.BLOCK_DUST, inkball.getLocation(), 3, 0, 0, 0,
@@ -535,7 +535,7 @@ public class QuadroArms {
 						}
 
 						// 攻撃判定の処理
-						for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
+						for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 							if (!DataMgr.getPlayerData(target).isInMatch())
 								continue;
 							if (target.getLocation().distanceSquared(inkball.getLocation()) <= maxDist * maxDist) {
@@ -553,7 +553,7 @@ public class QuadroArms {
 											target.setNoDamageTicks(0);
 										}
 									};
-									task.runTaskLater(Main.getPlugin(), 1);
+									task.runTaskLater(Sclat.getPlugin(), 1);
 
 								}
 							}
@@ -577,7 +577,7 @@ public class QuadroArms {
 				}
 			}
 		};
-		task.runTaskTimer(Main.getPlugin(), 0, 1);
+		task.runTaskTimer(Sclat.getPlugin(), 0, 1);
 	}
 	public static void ShootSensor(Player player) {
 		if (!player.hasPotionEffect(PotionEffectType.LUCK)) {
@@ -600,7 +600,7 @@ public class QuadroArms {
 						p_vec = p.getEyeLocation().getDirection().multiply(1.35);
 						ItemStack bom = new ItemStack(Material.DISPENSER).clone();
 						ItemMeta bom_m = bom.getItemMeta();
-						bom_m.setLocalizedName(String.valueOf(Main.getNotDuplicateNumber()));
+						bom_m.setLocalizedName(String.valueOf(Sclat.getNotDuplicateNumber()));
 						bom.setItemMeta(bom_m);
 						drop = p.getWorld().dropItem(p.getEyeLocation(), bom);
 						drop.setVelocity(p_vec);
@@ -609,7 +609,7 @@ public class QuadroArms {
 						ball.setVelocity(new Vector(0, 0, 0));
 						DataMgr.setSnowballIsHit(ball, false);
 
-						for (Player o_player : Main.getPlugin().getServer().getOnlinePlayers()) {
+						for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 							PlayerConnection connection = ((CraftPlayer) o_player).getHandle().playerConnection;
 							connection.sendPacket(new PacketPlayOutEntityDestroy(ball.getEntityId()));
 						}
@@ -630,12 +630,12 @@ public class QuadroArms {
 
 						// 爆発エフェクト
 						List<Location> s_locs = Sphere.getSphere(drop.getLocation(), maxDist, 15);
-						for (Player o_player : Main.getPlugin().getServer().getOnlinePlayers()) {
+						for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 							if (DataMgr.getPlayerData(o_player).getSettings().ShowEffect_BombEx()) {
 								for (Location loc : s_locs) {
 									if (o_player.getWorld() == loc.getWorld()) {
 										if (o_player.getLocation()
-												.distanceSquared(loc) < Main.PARTICLE_RENDER_DISTANCE_SQUARED) {
+												.distanceSquared(loc) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED) {
 											Particle.DustOptions dustOptions = new Particle.DustOptions(Color.BLACK, 1);
 											o_player.spawnParticle(Particle.REDSTONE, loc, 1, 0, 0, 0, 1, dustOptions);
 										}
@@ -646,7 +646,7 @@ public class QuadroArms {
 
 						// あたり判定の処理
 
-						for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
+						for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 							if (!DataMgr.getPlayerData(target).isInMatch() || target.getWorld() != p.getWorld())
 								continue;
 							if (target.getLocation().distance(drop.getLocation()) <= maxDist) {
@@ -680,11 +680,11 @@ public class QuadroArms {
 					}
 
 					// ボムの視認用エフェクト
-					for (Player o_player : Main.getPlugin().getServer().getOnlinePlayers()) {
+					for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 						if (DataMgr.getPlayerData(o_player).getSettings().ShowEffect_Bomb()) {
 							if (o_player.getWorld() == drop.getLocation().getWorld()) {
 								if (o_player.getLocation()
-										.distanceSquared(drop.getLocation()) < Main.PARTICLE_RENDER_DISTANCE_SQUARED) {
+										.distanceSquared(drop.getLocation()) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED) {
 									Particle.DustOptions dustOptions = new Particle.DustOptions(
 											DataMgr.getPlayerData(p).getTeam().getTeamColor().getBukkitColor(), 1);
 									o_player.spawnParticle(Particle.REDSTONE, drop.getLocation(), 1, 0, 0, 0, 50,
@@ -706,10 +706,10 @@ public class QuadroArms {
 				} catch (Exception e) {
 					cancel();
 					drop.remove();
-					Main.getPlugin().getLogger().warning(e.getMessage());
+					Sclat.getPlugin().getLogger().warning(e.getMessage());
 				}
 			}
 		};
-		task.runTaskTimer(Main.getPlugin(), 0, 1);
+		task.runTaskTimer(Sclat.getPlugin(), 0, 1);
 	}
 }

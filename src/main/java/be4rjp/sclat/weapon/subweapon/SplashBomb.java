@@ -1,7 +1,7 @@
 
 package be4rjp.sclat.weapon.subweapon;
 
-import be4rjp.sclat.Main;
+import be4rjp.sclat.Sclat;
 import be4rjp.sclat.api.SclatUtil;
 import be4rjp.sclat.api.Sphere;
 import be4rjp.sclat.data.DataMgr;
@@ -44,7 +44,7 @@ public class SplashBomb {
 						ItemStack bom = new ItemStack(DataMgr.getPlayerData(p).getTeam().getTeamColor().getGlass())
 								.clone();
 						ItemMeta bom_m = bom.getItemMeta();
-						bom_m.setLocalizedName(String.valueOf(Main.getNotDuplicateNumber()));
+						bom_m.setLocalizedName(String.valueOf(Sclat.getNotDuplicateNumber()));
 						bom.setItemMeta(bom_m);
 						drop = p.getWorld().dropItem(p.getEyeLocation(), bom);
 						drop.setVelocity(p.getEyeLocation().getDirection());
@@ -77,7 +77,7 @@ public class SplashBomb {
 
 						// 攻撃判定の処理
 
-						for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
+						for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 							if (!DataMgr.getPlayerData(target).isInMatch() || target.getWorld() != p.getWorld())
 								continue;
 							if (target.getLocation().distance(drop.getLocation()) <= maxDist) {
@@ -95,7 +95,7 @@ public class SplashBomb {
 											target.setNoDamageTicks(0);
 										}
 									};
-									task.runTaskLater(Main.getPlugin(), 1);
+									task.runTaskLater(Sclat.getPlugin(), 1);
 
 								}
 							}
@@ -117,11 +117,11 @@ public class SplashBomb {
 					}
 
 					// ボムの視認用エフェクト
-					for (Player o_player : Main.getPlugin().getServer().getOnlinePlayers()) {
+					for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 						if (DataMgr.getPlayerData(o_player).getSettings().ShowEffect_Bomb()) {
 							if (o_player.getWorld() == drop.getLocation().getWorld()) {
 								if (o_player.getLocation()
-										.distanceSquared(drop.getLocation()) < Main.PARTICLE_RENDER_DISTANCE_SQUARED) {
+										.distanceSquared(drop.getLocation()) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED) {
 									Particle.DustOptions dustOptions = new Particle.DustOptions(
 											DataMgr.getPlayerData(p).getTeam().getTeamColor().getBukkitColor(), 1);
 									o_player.spawnParticle(Particle.REDSTONE, drop.getLocation(), 1, 0, 0, 0, 50,
@@ -144,7 +144,7 @@ public class SplashBomb {
 				} catch (Exception e) {
 					drop.remove();
 					cancel();
-					Main.getPlugin().getLogger().warning(e.getMessage());
+					Sclat.getPlugin().getLogger().warning(e.getMessage());
 				}
 			}
 		};
@@ -155,10 +155,10 @@ public class SplashBomb {
 				DataMgr.getPlayerData(player).setCanUseSubWeapon(true);
 			}
 		};
-		cooltime.runTaskLater(Main.getPlugin(), 10);
+		cooltime.runTaskLater(Sclat.getPlugin(), 10);
 
 		if (player.getExp() > 0.6 || DataMgr.getPlayerData(player).getIsBombRush())
-			task.runTaskTimer(Main.getPlugin(), 0, 1);
+			task.runTaskTimer(Sclat.getPlugin(), 0, 1);
 		else {
 			player.sendTitle("", ChatColor.RED + "インクが足りません", 0, 5, 2);
 			player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1F, 1.63F);

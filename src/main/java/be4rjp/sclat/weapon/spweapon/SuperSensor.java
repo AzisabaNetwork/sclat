@@ -1,7 +1,7 @@
 
 package be4rjp.sclat.weapon.spweapon;
 
-import be4rjp.sclat.Main;
+import be4rjp.sclat.Sclat;
 import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.manager.SPWeaponMgr;
 import org.bukkit.entity.ArmorStand;
@@ -19,7 +19,7 @@ public class SuperSensor {
 	public static void SuperSensorRunnable(Player player) {
 		DataMgr.getPlayerData(player).setIsUsingSP(true);
 		SPWeaponMgr.setSPCoolTimeAnimation(player, 200);
-		for (Player o_player : Main.getPlugin(Main.class).getServer().getOnlinePlayers()) {
+		for (Player o_player : Sclat.getPlugin(Sclat.class).getServer().getOnlinePlayers()) {
 			if (DataMgr.getPlayerData(player).getTeam() != DataMgr.getPlayerData(o_player).getTeam()
 					&& DataMgr.getPlayerData(o_player).isInMatch())
 				o_player.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 200, 1));
@@ -40,6 +40,6 @@ public class SuperSensor {
 				DataMgr.getPlayerData(player).setIsUsingSP(false);
 			}
 		};
-		sound.runTaskLater(Main.getPlugin(), 200);
+		sound.runTaskLater(Sclat.getPlugin(), 200);
 	}
 }

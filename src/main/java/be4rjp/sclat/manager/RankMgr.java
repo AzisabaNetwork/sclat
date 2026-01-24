@@ -1,7 +1,7 @@
 
 package be4rjp.sclat.manager;
 
-import be4rjp.sclat.Main;
+import be4rjp.sclat.Sclat;
 import be4rjp.sclat.api.holo.RankingHolograms;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import static be4rjp.sclat.Main.conf;
+import static be4rjp.sclat.Sclat.conf;
 
 /**
  *
@@ -135,7 +135,7 @@ public class RankMgr {
 				}
 			}
 		};
-		async.runTaskAsynchronously(Main.getPlugin());
+		async.runTaskAsynchronously(Sclat.getPlugin());
 	}
 
 	public static void makeKillRankingAsync() {
@@ -166,7 +166,7 @@ public class RankMgr {
 				}
 			}
 		};
-		async.runTaskAsynchronously(Main.getPlugin());
+		async.runTaskAsynchronously(Sclat.getPlugin());
 	}
 
 	public static void makePaintRankingAsync() {
@@ -196,7 +196,7 @@ public class RankMgr {
 				}
 			}
 		};
-		async.runTaskAsynchronously(Main.getPlugin());
+		async.runTaskAsynchronously(Sclat.getPlugin());
 	}
 
 	public static void makeRankingTask() {
@@ -206,14 +206,14 @@ public class RankMgr {
 				makeRankingAsync();
 				makeKillRankingAsync();
 				makePaintRankingAsync();
-				for (Player player : Main.getPlugin().getServer().getOnlinePlayers()) {
+				for (Player player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 					try {
-						Main.playerHolograms.ifPresent(player, RankingHolograms::refreshRankingAsync);
+						Sclat.playerHolograms.ifPresent(player, RankingHolograms::refreshRankingAsync);
 					} catch (Exception e) {
 					}
 				}
 			}
 		};
-		task.runTaskTimer(Main.getPlugin(), 0, conf.getConfig().getInt("MakeRankingPeriod"));
+		task.runTaskTimer(Sclat.getPlugin(), 0, conf.getConfig().getInt("MakeRankingPeriod"));
 	}
 }

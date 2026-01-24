@@ -2,7 +2,7 @@
 package be4rjp.sclat.manager;
 
 import be4rjp.dadadachecker.ClickType;
-import be4rjp.sclat.Main;
+import be4rjp.sclat.Sclat;
 import be4rjp.sclat.api.player.PlayerData;
 import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.data.MainWeapon;
@@ -18,7 +18,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import static be4rjp.sclat.Main.conf;
+import static be4rjp.sclat.Sclat.conf;
 
 /**
  *
@@ -187,9 +187,9 @@ public class MainWeaponMgr {
 	public static void UseMainWeapon(Player player) {
 		if (equalWeapon(player)) {
 
-			Main.dadadaCheckerAPI.fireClickEvent(player);
+			Sclat.dadadaCheckerAPI.fireClickEvent(player);
 
-			ClickType clickType = Main.dadadaCheckerAPI.getPlayerClickType(player);
+			ClickType clickType = Sclat.dadadaCheckerAPI.getPlayerClickType(player);
 
 			PlayerData data = DataMgr.getPlayerData(player);
 			if (data.getCanCharge())

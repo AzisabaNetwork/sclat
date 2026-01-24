@@ -1,7 +1,7 @@
 
 package be4rjp.sclat.weapon;
 
-import be4rjp.sclat.Main;
+import be4rjp.sclat.Sclat;
 import be4rjp.sclat.api.SclatUtil;
 import be4rjp.sclat.api.ServerType;
 import be4rjp.sclat.data.DataMgr;
@@ -43,7 +43,7 @@ public class SnowballListener implements Listener {
 	@EventHandler
 	public void onBlockHit(ProjectileHitEvent event) {
 
-		if (Main.type == ServerType.LOBBY)
+		if (Sclat.type == ServerType.LOBBY)
 			return;
 
 		// EntityDamage
@@ -199,7 +199,7 @@ public class SnowballListener implements Listener {
 								target.setNoDamageTicks(0);
 							}
 						};
-						task.runTaskLater(Main.getPlugin(), 1);
+						task.runTaskLater(Sclat.getPlugin(), 1);
 
 						Timer timer = new Timer(false);
 						TimerTask t = new TimerTask() {
@@ -386,7 +386,7 @@ public class SnowballListener implements Listener {
 						ball2.setCustomName(ball.getCustomName());
 						DataMgr.getSnowballNameMap().put(ball.getCustomName(), ball2);
 						DataMgr.setSnowballIsHit(ball2, false);
-						for (Player o_player : Main.getPlugin().getServer().getOnlinePlayers()) {
+						for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 							PlayerConnection connection = ((CraftPlayer) o_player).getHandle().playerConnection;
 							connection.sendPacket(new PacketPlayOutEntityDestroy(ball2.getEntityId()));
 						}
@@ -480,7 +480,7 @@ public class SnowballListener implements Listener {
 							target.setNoDamageTicks(0);
 						}
 					};
-					task.runTaskLater(Main.getPlugin(), 1);
+					task.runTaskLater(Sclat.getPlugin(), 1);
 
 					Timer timer = new Timer(false);
 					TimerTask t = new TimerTask() {
@@ -505,7 +505,7 @@ public class SnowballListener implements Listener {
 	@EventHandler
 	public void onEntityHit(EntityDamageByEntityEvent event) {
 
-		if (Main.type == ServerType.LOBBY) {
+		if (Sclat.type == ServerType.LOBBY) {
 			if (event.getEntity() instanceof Player)
 				event.setCancelled(true);
 			/*

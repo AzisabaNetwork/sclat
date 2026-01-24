@@ -1,7 +1,7 @@
 
 package be4rjp.sclat.data;
 
-import be4rjp.sclat.Main;
+import be4rjp.sclat.Sclat;
 import be4rjp.sclat.api.SclatUtil;
 import net.minecraft.server.v1_14_R1.PacketPlayOutMultiBlockChange;
 import org.bukkit.Chunk;
@@ -94,7 +94,7 @@ public class BlockUpdater {
 						}
 						PacketPlayOutMultiBlockChange packet = new PacketPlayOutMultiBlockChange(positionArray.length,
 								positionArray, ((CraftChunk) chunk).getHandle());
-						for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
+						for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 							if (target.getWorld() == chunk.getWorld()) {
 								((CraftPlayer) target).getHandle().playerConnection.sendPacket(packet);
 							}
@@ -155,7 +155,7 @@ public class BlockUpdater {
 	}
 
 	public void start() {
-		task.runTaskTimer(Main.getPlugin(), 0, 2);
+		task.runTaskTimer(Sclat.getPlugin(), 0, 2);
 	}
 
 	public void stop() {

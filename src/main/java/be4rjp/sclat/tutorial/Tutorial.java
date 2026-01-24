@@ -1,6 +1,6 @@
 package be4rjp.sclat.tutorial;
 
-import be4rjp.sclat.Main;
+import be4rjp.sclat.Sclat;
 import be4rjp.sclat.api.MessageType;
 import be4rjp.sclat.api.SclatUtil;
 import be4rjp.sclat.api.SoundType;
@@ -36,7 +36,7 @@ import org.bukkit.util.Vector;
 import java.util.ArrayList;
 import java.util.List;
 
-import static be4rjp.sclat.Main.conf;
+import static be4rjp.sclat.Sclat.conf;
 
 public class Tutorial {
 
@@ -45,8 +45,8 @@ public class Tutorial {
 	public static int clearPlayerCount = 0;
 
 	public static void setupTutorial(Match match) {
-		final int time = Main.conf.getConfig().getInt("InkResetPeriod");
-		bar = Main.getPlugin().getServer().createBossBar("§a§lインクリセットまで残り §c§l" + time + " §a§l秒", BarColor.WHITE,
+		final int time = Sclat.conf.getConfig().getInt("InkResetPeriod");
+		bar = Sclat.getPlugin().getServer().createBossBar("§a§lインクリセットまで残り §c§l" + time + " §a§l秒", BarColor.WHITE,
 				BarStyle.SOLID, BarFlag.CREATE_FOG);
 		PathMgr.setupPath(match);
 		inkResetRunnable(time, match);
@@ -60,7 +60,7 @@ public class Tutorial {
 				if (clearPlayerCount >= 1)
 					trainLightRunRunnable();
 				if (i % 20 == 0) {
-					for (Entity as : Main.lobby.getWorld().getEntities()) {
+					for (Entity as : Sclat.lobby.getWorld().getEntities()) {
 						if (as instanceof ArmorStand) {
 							if (as.getCustomName() == null)
 								as.remove();
@@ -72,7 +72,7 @@ public class Tutorial {
 				i++;
 			}
 		};
-		task.runTaskTimer(Main.getPlugin(), 0, 60);
+		task.runTaskTimer(Sclat.getPlugin(), 0, 60);
 	}
 
 	public static void trainLightRunRunnable() {
@@ -125,7 +125,7 @@ public class Tutorial {
 				i++;
 			}
 		};
-		task.runTaskTimer(Main.getPlugin(), 0, 1);
+		task.runTaskTimer(Sclat.getPlugin(), 0, 1);
 
 		BukkitRunnable task1 = new BukkitRunnable() {
 			ArmorStand as;
@@ -176,7 +176,7 @@ public class Tutorial {
 				i++;
 			}
 		};
-		task1.runTaskTimer(Main.getPlugin(), 0, 1);
+		task1.runTaskTimer(Sclat.getPlugin(), 0, 1);
 	}
 
 	public static void weaponRemoveRunnable() {
@@ -190,7 +190,7 @@ public class Tutorial {
 		BukkitRunnable task = new BukkitRunnable() {
 			@Override
 			public void run() {
-				for (Player player : Main.getPlugin().getServer().getOnlinePlayers()) {
+				for (Player player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 					if (player.getWorld() != w)
 						continue;
 					if (player.getLocation().distance(loc) < 8) {
@@ -201,7 +201,7 @@ public class Tutorial {
 				}
 			}
 		};
-		task.runTaskTimer(Main.getPlugin(), 0, 5);
+		task.runTaskTimer(Sclat.getPlugin(), 0, 5);
 	}
 
 	public static void clearRegionRunnable() {
@@ -215,7 +215,7 @@ public class Tutorial {
 		BukkitRunnable task = new BukkitRunnable() {
 			@Override
 			public void run() {
-				for (Player player : Main.getPlugin().getServer().getOnlinePlayers()) {
+				for (Player player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 					if (player.getWorld() != w)
 						continue;
 					if (player.getLocation().distance(loc) < 5) {
@@ -231,7 +231,7 @@ public class Tutorial {
 				}
 			}
 		};
-		task.runTaskTimer(Main.getPlugin(), 0, 10);
+		task.runTaskTimer(Sclat.getPlugin(), 0, 10);
 	}
 
 	public static void lobbyRegionRunnable() {
@@ -246,7 +246,7 @@ public class Tutorial {
 			List<Player> list = new ArrayList<>();
 			@Override
 			public void run() {
-				for (Player player : Main.getPlugin().getServer().getOnlinePlayers()) {
+				for (Player player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 					if (player.getWorld() != w)
 						continue;
 					if (player.getLocation().distance(loc) < 5 && !list.contains(player)) {
@@ -256,7 +256,7 @@ public class Tutorial {
 				}
 			}
 		};
-		task.runTaskTimer(Main.getPlugin(), 0, 10);
+		task.runTaskTimer(Sclat.getPlugin(), 0, 10);
 	}
 
 	public static void lobbySetStatusRunnable() {
@@ -270,7 +270,7 @@ public class Tutorial {
 		BukkitRunnable task = new BukkitRunnable() {
 			@Override
 			public void run() {
-				for (Player player : Main.getPlugin().getServer().getOnlinePlayers()) {
+				for (Player player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 					if (player.getWorld() != w)
 						continue;
 					if (player.getLocation().distance(loc) < 10) {
@@ -295,7 +295,7 @@ public class Tutorial {
 				}
 			}
 		};
-		task.runTaskTimer(Main.getPlugin(), 0, 10);
+		task.runTaskTimer(Sclat.getPlugin(), 0, 10);
 	}
 
 	public static void sendPlayerRunnable(Player player) {
@@ -327,7 +327,7 @@ public class Tutorial {
 				i++;
 			}
 		};
-		task.runTaskTimer(Main.getPlugin(), 0, 100);
+		task.runTaskTimer(Sclat.getPlugin(), 0, 100);
 	}
 
 	public static void inkResetRunnable(int period, Match match) {
@@ -354,7 +354,7 @@ public class Tutorial {
 					DataMgr.getBlockDataMap().clear();
 					DataMgr.getSpongeMap().clear();
 					// ------------------------------------------------------------
-					for (Player player : Main.getPlugin().getServer().getOnlinePlayers())
+					for (Player player : Sclat.getPlugin().getServer().getOnlinePlayers())
 						player.setExp(0.99F);
 					BlockUpdater bur = new BlockUpdater();
 					if (conf.getConfig().contains("BlockUpdateRate"))
@@ -362,7 +362,7 @@ public class Tutorial {
 					bur.start();
 					match.setBlockUpdater(bur);
 					List<Block> blocks = new ArrayList<Block>();
-					Block b0 = Main.lobby.getBlock().getRelative(BlockFace.DOWN);
+					Block b0 = Sclat.lobby.getBlock().getRelative(BlockFace.DOWN);
 					blocks.add(b0);
 					blocks.add(b0.getRelative(BlockFace.EAST));
 					blocks.add(b0.getRelative(BlockFace.NORTH));
@@ -384,14 +384,14 @@ public class Tutorial {
 					}
 
 					SclatUtil.sendMessage("§a§lインクがリセットされました！", MessageType.ALL_PLAYER);
-					for (Player op : Main.getPlugin().getServer().getOnlinePlayers())
+					for (Player op : Sclat.getPlugin().getServer().getOnlinePlayers())
 						SclatUtil.playGameSound(op, SoundType.SUCCESS);
 					time = 0;
 				}
 				time++;
 			}
 		};
-		task.runTaskTimer(Main.getPlugin(), 0, 20);
+		task.runTaskTimer(Sclat.getPlugin(), 0, 20);
 	}
 
 	public static void setInkResetTimer(Player player) {

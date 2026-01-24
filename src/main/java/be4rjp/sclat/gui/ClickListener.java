@@ -1,7 +1,7 @@
 
 package be4rjp.sclat.gui;
 
-import be4rjp.sclat.Main;
+import be4rjp.sclat.Sclat;
 import be4rjp.sclat.api.MessageType;
 import be4rjp.sclat.api.SclatUtil;
 import be4rjp.sclat.api.ServerType;
@@ -59,7 +59,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.ArrayList;
 import java.util.List;
 
-import static be4rjp.sclat.Main.conf;
+import static be4rjp.sclat.Sclat.conf;
 
 /**
  *
@@ -88,7 +88,7 @@ public class ClickListener implements Listener {
 
 		switch (name) {
 			case "試合に参加 / JOIN THE MATCH" :
-				if (Main.type == ServerType.LOBBY)
+				if (Sclat.type == ServerType.LOBBY)
 					ServerStatusManager.openServerList(player);
 				else
 					MatchMgr.PlayerJoinMatch(player);
@@ -118,7 +118,7 @@ public class ClickListener implements Listener {
 				if (MatchMgr.canRollback) {
 					SclatUtil.sendMessage("§a§lインクがリセットされました！", MessageType.ALL_PLAYER);
 					SclatUtil.sendMessage("§a§l3分後に再リセットできるようになります", MessageType.ALL_PLAYER);
-					for (Player op : Main.getPlugin().getServer().getOnlinePlayers())
+					for (Player op : Sclat.getPlugin().getServer().getOnlinePlayers())
 						SclatUtil.playGameSound(op, SoundType.SUCCESS);
 				}
 				Match match = DataMgr.getPlayerData(player).getMatch();
@@ -131,7 +131,7 @@ public class ClickListener implements Listener {
 				bur.start();
 				match.setBlockUpdater(bur);
 				List<Block> blocks = new ArrayList<Block>();
-				Block b0 = Main.lobby.getBlock().getRelative(BlockFace.DOWN);
+				Block b0 = Sclat.lobby.getBlock().getRelative(BlockFace.DOWN);
 				blocks.add(b0);
 				blocks.add(b0.getRelative(BlockFace.EAST));
 				blocks.add(b0.getRelative(BlockFace.NORTH));
@@ -153,7 +153,7 @@ public class ClickListener implements Listener {
 				}
 				break;
 			case "ロビーへ戻る / RETURN TO LOBBY" :
-				if (Main.type != ServerType.LOBBY) {
+				if (Sclat.type != ServerType.LOBBY) {
 					BungeeCordMgr.PlayerSendServer(player, "sclat");
 					DataMgr.getPlayerData(player).setServerName("Sclat");
 				} else {
@@ -441,7 +441,7 @@ public class ClickListener implements Listener {
 						SquidMgr.SquidShowRunnable(player);
 					}
 				};
-				delay.runTaskLater(Main.getPlugin(), 15);
+				delay.runTaskLater(Sclat.getPlugin(), 15);
 			} else {
 				DataMgr.getPlayerData(player).setWeaponClass(DataMgr.getWeaponClass(name));
 			}
@@ -537,7 +537,7 @@ public class ClickListener implements Listener {
 
 		if (event.getView().getTitle().equals("Chose Target")) {
 			if (name.equals("§r§6リスポーン地点へジャンプ")) {
-				Location loc = Main.lobby.clone();
+				Location loc = Sclat.lobby.clone();
 				if (!conf.getConfig().getString("WorkMode").equals("Trial"))
 					loc = DataMgr.getPlayerData(player).getMatchLocation();
 				SuperJumpMgr.SuperJumpCollTime(player, loc, false);
@@ -552,16 +552,16 @@ public class ClickListener implements Listener {
 				SuperJumpMgr.SuperJumpCollTime(player, loc, true);
 			}
 			boolean nearspwan = true;
-			Location spawnloc = Main.lobby.clone();
+			Location spawnloc = Sclat.lobby.clone();
 			if (!conf.getConfig().getString("WorkMode").equals("Trial"))
 				spawnloc = DataMgr.getPlayerData(player).getMatchLocation();
 			if (spawnloc.getWorld() == player.getWorld()) {
 				if (player.getLocation().distance(spawnloc) > 10 && !Tutorial.clearList.contains(player))
-					if (!Main.tutorial) {
+					if (!Sclat.tutorial) {
 						nearspwan = false;
 					}
 			}
-			for (Player p : Main.getPlugin(Main.class).getServer().getOnlinePlayers()) {
+			for (Player p : Sclat.getPlugin(Sclat.class).getServer().getOnlinePlayers()) {
 				if (p.getName().equals(name)) {
 					if (event.getCurrentItem().getType().equals(Material.PLAYER_HEAD)) {
 						if (p.getGameMode() == GameMode.SPECTATOR) {

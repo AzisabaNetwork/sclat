@@ -1,7 +1,7 @@
 
 package be4rjp.sclat.data;
 
-import be4rjp.sclat.Main;
+import be4rjp.sclat.Sclat;
 import be4rjp.sclat.api.MessageType;
 import be4rjp.sclat.api.SclatUtil;
 import be4rjp.sclat.api.team.Team;
@@ -42,12 +42,12 @@ public class Area {
 
 	public void setupAreaTeam() {
 		colorTeam0 = match.getTeam0().getTeam().getScoreboard()
-				.registerNewTeam("ColorTeam0" + Main.getNotDuplicateNumber());
+				.registerNewTeam("ColorTeam0" + Sclat.getNotDuplicateNumber());
 		colorTeam0.setCanSeeFriendlyInvisibles(false);
 		colorTeam0.setColor(match.getTeam0().getTeamColor().getChatColor());
 
 		colorTeam1 = match.getTeam0().getTeam().getScoreboard()
-				.registerNewTeam("ColorTeam1" + Main.getNotDuplicateNumber());
+				.registerNewTeam("ColorTeam1" + Sclat.getNotDuplicateNumber());
 		colorTeam1.setCanSeeFriendlyInvisibles(false);
 		colorTeam1.setColor(match.getTeam1().getTeamColor().getChatColor());
 	}
@@ -123,7 +123,7 @@ public class Area {
 					if (team == match.getTeam0()) {
 						if ((blist.size() * 0.5) < (double) t1c) {
 							SclatUtil.sendMessage("§3§lカウントストップ!", MessageType.ALL_PLAYER);
-							for (Player oplayer : Main.getPlugin(Main.class).getServer().getOnlinePlayers()) {
+							for (Player oplayer : Sclat.getPlugin(Sclat.class).getServer().getOnlinePlayers()) {
 								if (DataMgr.getPlayerData(oplayer).isInMatch()) {
 									oplayer.playSound(oplayer.getLocation(), Sound.BLOCK_ANVIL_PLACE, 1F, 2F);
 								}
@@ -135,7 +135,7 @@ public class Area {
 					if (team == match.getTeam1()) {
 						if ((blist.size() * 0.5) < (double) t0c) {
 							SclatUtil.sendMessage("§3§lカウントストップ!", MessageType.ALL_PLAYER);
-							for (Player oplayer : Main.getPlugin(Main.class).getServer().getOnlinePlayers()) {
+							for (Player oplayer : Sclat.getPlugin(Sclat.class).getServer().getOnlinePlayers()) {
 								if (DataMgr.getPlayerData(oplayer).isInMatch()) {
 									oplayer.playSound(oplayer.getLocation(), Sound.BLOCK_ANVIL_PLACE, 1F, 2F);
 								}
@@ -147,7 +147,7 @@ public class Area {
 				} else {
 					if ((blist.size() * 0.6) < (double) t0c) {
 						team = match.getTeam0();
-						for (Player oplayer : Main.getPlugin(Main.class).getServer().getOnlinePlayers()) {
+						for (Player oplayer : Sclat.getPlugin(Sclat.class).getServer().getOnlinePlayers()) {
 							if (DataMgr.getPlayerData(oplayer).isInMatch()) {
 								if (team == DataMgr.getPlayerData(oplayer).getTeam()) {
 									SclatUtil.sendMessage("§fエリアを確保した!", MessageType.PLAYER, oplayer);
@@ -163,7 +163,7 @@ public class Area {
 						updateBlocks();
 					} else if ((blist.size() * 0.6) < (double) t1c) {
 						team = match.getTeam1();
-						for (Player oplayer : Main.getPlugin(Main.class).getServer().getOnlinePlayers()) {
+						for (Player oplayer : Sclat.getPlugin(Sclat.class).getServer().getOnlinePlayers()) {
 							if (DataMgr.getPlayerData(oplayer).isInMatch()) {
 								if (team == DataMgr.getPlayerData(oplayer).getTeam()) {
 									SclatUtil.sendMessage("§fエリアを確保した!", MessageType.PLAYER, oplayer);
@@ -184,7 +184,7 @@ public class Area {
 	}
 
 	public void start() {
-		this.task.runTaskTimer(Main.getPlugin(), 0, 20);
+		this.task.runTaskTimer(Sclat.getPlugin(), 0, 20);
 	}
 
 	public void stop() {

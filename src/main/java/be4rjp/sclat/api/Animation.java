@@ -1,7 +1,7 @@
 
 package be4rjp.sclat.api;
 
-import be4rjp.sclat.Main;
+import be4rjp.sclat.Sclat;
 import be4rjp.sclat.api.team.Team;
 import be4rjp.sclat.data.DataMgr;
 import org.bukkit.ChatColor;
@@ -65,7 +65,7 @@ public class Animation {
 				i++;
 			}
 		};
-		task.runTaskTimer(Main.getPlugin(), 0, 2);
+		task.runTaskTimer(Sclat.getPlugin(), 0, 2);
 	}
 
 	public static void AreaResultAnimation(Player p, int team0point, int team1point, String team0color,
@@ -107,7 +107,7 @@ public class Animation {
 				i++;
 			}
 		};
-		task.runTaskTimer(Main.getPlugin(), 0, 2);
+		task.runTaskTimer(Sclat.getPlugin(), 0, 2);
 	}
 
 	public static void TDMResultAnimation(Player p, int team0point, int team1point, String team0color,
@@ -177,6 +177,6 @@ public class Animation {
 				i++;
 			}
 		};
-		task.runTaskTimer(Main.getPlugin(), 0, 2);
+		task.runTaskTimer(Sclat.getPlugin(), 0, 2);
 	}
 }

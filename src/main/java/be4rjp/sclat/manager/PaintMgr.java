@@ -1,7 +1,7 @@
 
 package be4rjp.sclat.manager;
 
-import be4rjp.sclat.Main;
+import be4rjp.sclat.Sclat;
 import be4rjp.sclat.api.SclatUtil;
 import be4rjp.sclat.api.ServerType;
 import be4rjp.sclat.api.player.PlayerData;
@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import static be4rjp.sclat.Main.conf;
+import static be4rjp.sclat.Sclat.conf;
 
 /**
  *
@@ -30,7 +30,7 @@ import static be4rjp.sclat.Main.conf;
 public class PaintMgr {
 	public static void Paint(Location location, Player player, boolean sphere) {
 
-		if (Main.type == ServerType.LOBBY)
+		if (Sclat.type == ServerType.LOBBY)
 			return;
 
 		be4rjp.sclat.data.MainWeapon mw = DataMgr.getPlayerData(player).getWeaponClass().getMainWeapon();
