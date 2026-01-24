@@ -683,7 +683,8 @@ public class GameMgr implements Listener {
 								if (ss.isMaintenance())
 									SclatUtil.sendMessage("§c§nこのサーバーは現在メンテナンス中のため参加できません", MessageType.PLAYER, player);
 								else
-									SclatUtil.sendMessage("§c§nこのサーバーは現在再起動中です1~2分程度お待ちください。", MessageType.PLAYER, player);
+									SclatUtil.sendMessage("§c§nこのサーバーは現在再起動中です1~2分程度お待ちください。", MessageType.PLAYER,
+											player);
 								SclatUtil.playGameSound(player, SoundType.ERROR);
 							}
 							return;

@@ -114,7 +114,8 @@ public class MatchMgr {
 
 					DataMgr.joinedList.add(player);
 
-					SclatUtil.sendMessage("§b§n" + player.getDisplayName() + " joined the match", MessageType.ALL_PLAYER);
+					SclatUtil.sendMessage("§b§n" + player.getDisplayName() + " joined the match",
+							MessageType.ALL_PLAYER);
 
 					player.teleport(match.getMapData().getTaikibayso());
 					if (conf.getConfig().getBoolean("CanVoting")
@@ -1550,10 +1551,11 @@ public class MatchMgr {
 								MessageType.PLAYER, p);
 						SclatUtil.sendMessage("", MessageType.PLAYER, p);
 						if (pRank < 0)
-							SclatUtil.sendMessage(ChatColor.GOLD + " RankPoint : " + ChatColor.RESET + String.valueOf(pRank)
-									+ (Sclat.type == ServerType.NORMAL
-											? "  [ §b" + RankMgr.toABCRank(getRank(player)) + " §r]"
-											: ""),
+							SclatUtil.sendMessage(
+									ChatColor.GOLD + " RankPoint : " + ChatColor.RESET + String.valueOf(pRank)
+											+ (Sclat.type == ServerType.NORMAL
+													? "  [ §b" + RankMgr.toABCRank(getRank(player)) + " §r]"
+													: ""),
 									MessageType.PLAYER, p);
 						else
 							SclatUtil.sendMessage(

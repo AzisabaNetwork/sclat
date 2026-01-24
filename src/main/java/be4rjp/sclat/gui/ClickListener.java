@@ -196,8 +196,8 @@ public class ClickListener implements Listener {
 				if (Gear.getGearName(i).equals(name)) {
 					DataMgr.getPlayerData(player).setGearNumber(i);
 					PlayerStatusMgr.setGear(player, i);
-					SclatUtil.sendMessage("ギア[" + ChatColor.AQUA + name + ChatColor.RESET + "]を選択しました", MessageType.PLAYER,
-							player);
+					SclatUtil.sendMessage("ギア[" + ChatColor.AQUA + name + ChatColor.RESET + "]を選択しました",
+							MessageType.PLAYER, player);
 					break;
 				}
 				i++;
@@ -445,7 +445,8 @@ public class ClickListener implements Listener {
 			} else {
 				DataMgr.getPlayerData(player).setWeaponClass(DataMgr.getWeaponClass(name));
 			}
-			SclatUtil.sendMessage("ブキ[" + ChatColor.GOLD + name + ChatColor.RESET + "]を選択しました", MessageType.PLAYER, player);
+			SclatUtil.sendMessage("ブキ[" + ChatColor.GOLD + name + ChatColor.RESET + "]を選択しました", MessageType.PLAYER,
+					player);
 		}
 
 		if (event.getView().getTitle().equals("Shop")) {

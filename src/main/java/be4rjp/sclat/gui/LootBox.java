@@ -40,7 +40,8 @@ public class LootBox {
 					isHit = true;
 					if (!PlayerStatusMgr.haveWeapon(player, ClassName)) {
 						PlayerStatusMgr.addWeapon(player, ClassName);
-						SclatUtil.sendMessage(ChatColor.GREEN + ClassName + "が当たったよ、おめでとう！", MessageType.PLAYER, player);
+						SclatUtil.sendMessage(ChatColor.GREEN + ClassName + "が当たったよ、おめでとう！", MessageType.PLAYER,
+								player);
 					} else {
 						SclatUtil.sendMessage(ChatColor.GREEN + ClassName + "が重複したよ +" + Firstprize + "coin",
 								MessageType.PLAYER, player);
