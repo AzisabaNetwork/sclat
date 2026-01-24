@@ -189,7 +189,7 @@ public class Sclat extends JavaPlugin implements PluginMessageListener {
 		// ------------------------RegisteringCommands------------------------
 		getLogger().info("Registering Commands...");
 		commandManager = new PaperCommandManager(this);
-//		commandManager.enableUnstableAPI("help");
+		// commandManager.enableUnstableAPI("help");
 		commandManager.registerCommand(new SclatCommand(this), true);
 		// -------------------------------------------------------------------
 
