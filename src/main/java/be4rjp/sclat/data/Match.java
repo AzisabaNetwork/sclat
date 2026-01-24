@@ -1,6 +1,7 @@
 
 package be4rjp.sclat.data;
 
+import be4rjp.sclat.api.team.Team;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Scoreboard;

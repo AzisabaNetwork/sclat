@@ -3,6 +3,7 @@ package be4rjp.sclat.data;
 import be4rjp.sclat.Main;
 import be4rjp.sclat.api.Sclat;
 import be4rjp.sclat.api.Sphere;
+import be4rjp.sclat.api.team.Team;
 import be4rjp.sclat.manager.ArmorStandMgr;
 import be4rjp.sclat.manager.PaintMgr;
 import be4rjp.sclat.weapon.Gear;

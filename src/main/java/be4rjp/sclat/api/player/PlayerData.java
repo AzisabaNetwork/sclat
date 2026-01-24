@@ -1,8 +1,8 @@
 package be4rjp.sclat.api.player;
 
+import be4rjp.sclat.api.team.Team;
 import be4rjp.sclat.data.MainWeapon;
 import be4rjp.sclat.data.Match;
-import be4rjp.sclat.data.Team;
 import be4rjp.sclat.data.WeaponClass;
 import net.minecraft.server.v1_14_R1.ItemStack;
 import org.bukkit.Location;

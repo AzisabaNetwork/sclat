@@ -2,6 +2,7 @@ package be4rjp.sclat.data;
 
 import be4rjp.sclat.Main;
 import be4rjp.sclat.api.Sclat;
+import be4rjp.sclat.api.team.Team;
 import be4rjp.sclat.manager.PaintMgr;
 import org.bukkit.Material;
 import org.bukkit.Sound;

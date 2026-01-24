@@ -3,10 +3,10 @@ package be4rjp.sclat.manager;
 
 import be4rjp.sclat.Main;
 import be4rjp.sclat.api.raytrace.RayTrace;
+import be4rjp.sclat.api.team.Team;
 import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.data.Match;
 import be4rjp.sclat.data.Path;
-import be4rjp.sclat.data.Team;
 import net.minecraft.server.v1_14_R1.EnumItemSlot;
 import net.minecraft.server.v1_14_R1.PacketPlayOutEntityEquipment;
 import org.bukkit.Location;

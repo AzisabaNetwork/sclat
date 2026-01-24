@@ -2,8 +2,8 @@
 package be4rjp.sclat.listener;
 
 import be4rjp.sclat.api.player.PlayerData;
+import be4rjp.sclat.api.team.Team;
 import be4rjp.sclat.data.DataMgr;
-import be4rjp.sclat.data.Team;
 import be4rjp.sclat.manager.DeathMgr;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
