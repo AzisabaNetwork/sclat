@@ -4,9 +4,7 @@ package be4rjp.sclat.manager;
 import be4rjp.sclat.Sclat;
 import be4rjp.sclat.api.rank.Ratings;
 import com.mojang.authlib.GameProfile;
-import net.minecraft.server.v1_15_R1.DataWatcherRegistry;
 import net.minecraft.server.v1_15_R1.EntityArmorStand;
-import net.minecraft.server.v1_15_R1.EntityPlayer;
 import net.minecraft.server.v1_15_R1.MinecraftServer;
 import net.minecraft.server.v1_15_R1.PacketPlayOutAnimation;
 import net.minecraft.server.v1_15_R1.PacketPlayOutEntityDestroy;
@@ -88,11 +86,11 @@ public class PlayerStatusMgr {
 
 		MinecraftServer nmsServer = ((CraftServer) Bukkit.getServer()).getServer();
 		WorldServer nmsWorld = ((CraftWorld) location.getWorld()).getHandle();
-		GameProfile gameProfile = new GameProfile(player.getUniqueId(), player.getName());
+		GameProfile gameProfile = ((CraftPlayer) player).getHandle().getProfile();
 
-		EntityPlayer npc = new EntityPlayer(nmsServer, nmsWorld, gameProfile, new PlayerInteractManager(nmsWorld));
+		FakePlayer npc = new FakePlayer(nmsServer, nmsWorld, gameProfile, new PlayerInteractManager(nmsWorld));
 		npc.setLocation(location.getX(), location.getY(), location.getZ(), location.getYaw(), 0);
-		npc.getDataWatcher().set(DataWatcherRegistry.a.a(15), (byte) 127);
+		npc.setBQ((byte) 127);
 
 		PlayerConnection connection = ((CraftPlayer) player).getHandle().playerConnection;
 		connection
