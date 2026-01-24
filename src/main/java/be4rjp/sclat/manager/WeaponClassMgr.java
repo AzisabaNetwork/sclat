@@ -5,6 +5,7 @@ import be4rjp.sclat.Sclat;
 import be4rjp.sclat.api.config.WeaponConfig;
 import be4rjp.sclat.api.player.PlayerData;
 import be4rjp.sclat.data.DataMgr;
+import be4rjp.sclat.data.MainWeapon;
 import be4rjp.sclat.data.WeaponClass;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -51,7 +52,8 @@ public class WeaponClassMgr {
 		PlayerData data = DataMgr.getPlayerData(player);
 
 		// === Main weapon ===
-		ItemStack main = data.getWeaponClass().getMainWeapon().getWeaponIteamStack().clone();
+		MainWeapon mainWeapon = data.getWeaponClass().getMainWeapon();
+		ItemStack main = mainWeapon.getWeaponIteamStack().clone();
 		if (data.getMainItemGlow()) {
 			Sclat.glowEnchant.enchantGlow(main);
 			main.addEnchantment(Sclat.glowEnchant, 1);
@@ -59,8 +61,8 @@ public class WeaponClassMgr {
 		player.getInventory().setItem(0, main);
 
 		// If maneuver is main weapon
-		if (data.getWeaponClass().getMainWeapon().getIsManeuver()) {
-			player.getInventory().setItem(40, data.getWeaponClass().getMainWeapon().getWeaponIteamStack().clone());
+		if (mainWeapon.getIsManeuver()) {
+			player.getInventory().setItem(40, mainWeapon.getWeaponIteamStack().clone());
 		}
 
 		// === Sub weapon ===
