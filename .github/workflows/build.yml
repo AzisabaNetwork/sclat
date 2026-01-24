@@ -62,7 +62,7 @@ jobs:
         run: wget -O ./libs/ProtocolLib.jar "https://github.com/dmulloy2/ProtocolLib/releases/download/4.8.0/ProtocolLib.jar"
 
       - name: Build with Gradle
-        run: ./gradlew build
+        run: ./gradlew shadowJar
 
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
