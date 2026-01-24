@@ -2,9 +2,9 @@ package be4rjp.sclat.weapon;
 
 import be4rjp.dadadachecker.ClickType;
 import be4rjp.sclat.Main;
+import be4rjp.sclat.api.player.PlayerData;
 import be4rjp.sclat.api.raytrace.RayTrace;
 import be4rjp.sclat.data.DataMgr;
-import be4rjp.sclat.data.PlayerData;
 import be4rjp.sclat.manager.PaintMgr;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;

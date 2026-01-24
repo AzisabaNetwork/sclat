@@ -2,8 +2,8 @@
 package be4rjp.sclat.manager;
 
 import be4rjp.sclat.Main;
+import be4rjp.sclat.api.player.PlayerData;
 import be4rjp.sclat.data.DataMgr;
-import be4rjp.sclat.data.PlayerData;
 import org.bukkit.Sound;
 import org.bukkit.craftbukkit.v1_14_R1.entity.CraftSnowball;
 import org.bukkit.craftbukkit.v1_14_R1.inventory.CraftItemStack;

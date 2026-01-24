@@ -2,8 +2,8 @@
 package be4rjp.sclat.weapon.subweapon;
 
 import be4rjp.sclat.Main;
+import be4rjp.sclat.api.player.PlayerData;
 import be4rjp.sclat.data.DataMgr;
-import be4rjp.sclat.data.PlayerData;
 import be4rjp.sclat.weapon.Gear;
 import net.minecraft.server.v1_14_R1.EnumItemSlot;
 import net.minecraft.server.v1_14_R1.PacketPlayOutEntityEquipment;

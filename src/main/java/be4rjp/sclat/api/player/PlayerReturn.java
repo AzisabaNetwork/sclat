@@ -1,4 +1,4 @@
-package be4rjp.sclat.data;
+package be4rjp.sclat.api.player;
 
 import be4rjp.sclat.Main;
 import org.bukkit.scheduler.BukkitRunnable;

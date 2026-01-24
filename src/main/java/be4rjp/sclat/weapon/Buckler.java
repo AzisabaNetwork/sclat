@@ -1,8 +1,8 @@
 package be4rjp.sclat.weapon;
 
 import be4rjp.sclat.Main;
+import be4rjp.sclat.api.player.PlayerData;
 import be4rjp.sclat.data.DataMgr;
-import be4rjp.sclat.data.PlayerData;
 import org.bukkit.GameMode;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;

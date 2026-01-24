@@ -3,9 +3,9 @@ package be4rjp.sclat.manager;
 
 import be4rjp.dadadachecker.ClickType;
 import be4rjp.sclat.Main;
+import be4rjp.sclat.api.player.PlayerData;
 import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.data.MainWeapon;
-import be4rjp.sclat.data.PlayerData;
 import be4rjp.sclat.weapon.Blaster;
 import be4rjp.sclat.weapon.Brush;
 import be4rjp.sclat.weapon.Bucket;

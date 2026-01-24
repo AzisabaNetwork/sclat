@@ -1,10 +1,10 @@
 package be4rjp.sclat.lobby;
 
 import be4rjp.sclat.Main;
+import be4rjp.sclat.api.player.PlayerData;
 import be4rjp.sclat.api.utils.ObjectiveUtil;
 import be4rjp.sclat.api.utils.TextAnimation;
 import be4rjp.sclat.data.DataMgr;
-import be4rjp.sclat.data.PlayerData;
 import be4rjp.sclat.data.ServerStatus;
 import be4rjp.sclat.manager.PlayerStatusMgr;
 import be4rjp.sclat.manager.RankMgr;

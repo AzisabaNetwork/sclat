@@ -1,8 +1,8 @@
 
 package be4rjp.sclat.listener;
 
+import be4rjp.sclat.api.player.PlayerData;
 import be4rjp.sclat.data.DataMgr;
-import be4rjp.sclat.data.PlayerData;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

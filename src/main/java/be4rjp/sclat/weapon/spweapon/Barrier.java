@@ -3,8 +3,8 @@ package be4rjp.sclat.weapon.spweapon;
 
 import be4rjp.sclat.Main;
 import be4rjp.sclat.api.Sphere;
+import be4rjp.sclat.api.player.PlayerData;
 import be4rjp.sclat.data.DataMgr;
-import be4rjp.sclat.data.PlayerData;
 import be4rjp.sclat.manager.SPWeaponMgr;
 import net.minecraft.server.v1_14_R1.EntityArmorStand;
 import org.bukkit.GameMode;

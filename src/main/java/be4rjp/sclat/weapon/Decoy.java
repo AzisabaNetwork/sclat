@@ -1,8 +1,8 @@
 package be4rjp.sclat.weapon;
 
 import be4rjp.sclat.Main;
+import be4rjp.sclat.api.player.PlayerData;
 import be4rjp.sclat.data.DataMgr;
-import be4rjp.sclat.data.PlayerData;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.server.v1_14_R1.DataWatcherRegistry;
 import net.minecraft.server.v1_14_R1.EntityPlayer;

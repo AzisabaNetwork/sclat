@@ -2,15 +2,16 @@
 package be4rjp.sclat.manager;
 
 import be4rjp.sclat.Main;
-import static be4rjp.sclat.Main.conf;
+import be4rjp.sclat.api.player.PlayerData;
 import be4rjp.sclat.data.DataMgr;
-import be4rjp.sclat.data.PlayerData;
 import be4rjp.sclat.data.WeaponClass;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+
+import static be4rjp.sclat.Main.conf;
 
 /**
  *

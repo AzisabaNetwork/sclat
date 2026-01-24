@@ -1,8 +1,8 @@
 package be4rjp.sclat.api;
 
 import be4rjp.sclat.Main;
+import be4rjp.sclat.api.player.PlayerData;
 import be4rjp.sclat.data.DataMgr;
-import be4rjp.sclat.data.PlayerData;
 import be4rjp.sclat.data.Team;
 import be4rjp.sclat.manager.BungeeCordMgr;
 import be4rjp.sclat.manager.DeathMgr;

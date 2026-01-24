@@ -1,8 +1,8 @@
 package be4rjp.sclat.lunachat;
 
 import be4rjp.sclat.Main;
+import be4rjp.sclat.api.player.PlayerData;
 import be4rjp.sclat.data.DataMgr;
-import be4rjp.sclat.data.PlayerData;
 import com.github.ucchyocean.lc3.bukkit.event.LunaChatBukkitPreChatEvent;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
