@@ -23,5 +23,5 @@ public class GlowingAPI {
 		} catch (InvocationTargetException e) {
 			e.printStackTrace();
 		}
-    }
+	}
 }

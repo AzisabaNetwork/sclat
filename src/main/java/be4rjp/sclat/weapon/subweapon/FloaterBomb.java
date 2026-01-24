@@ -4,20 +4,18 @@ package be4rjp.sclat.weapon.subweapon;
 import be4rjp.sclat.Sclat;
 import be4rjp.sclat.api.SclatUtil;
 import be4rjp.sclat.api.Sphere;
+import be4rjp.sclat.api.packet.EntityPackets;
 import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.data.KasaData;
 import be4rjp.sclat.data.SplashShieldData;
 import be4rjp.sclat.manager.ArmorStandMgr;
 import be4rjp.sclat.manager.PaintMgr;
 import be4rjp.sclat.weapon.Gear;
-import net.minecraft.server.v1_14_R1.PacketPlayOutEntityDestroy;
-import net.minecraft.server.v1_14_R1.PlayerConnection;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
-import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
@@ -75,8 +73,10 @@ public class FloaterBomb {
 						DataMgr.setSnowballIsHit(ball, false);
 
 						for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
-							PlayerConnection connection = ((CraftPlayer) o_player).getHandle().playerConnection;
-							connection.sendPacket(new PacketPlayOutEntityDestroy(ball.getEntityId()));
+							// PlayerConnection connection = ((CraftPlayer)
+							// o_player).getHandle().playerConnection;
+							// connection.sendPacket(new PacketPlayOutEntityDestroy(ball.getEntityId()));
+							EntityPackets.sendDestroyEntities(o_player, ball.getEntityId());
 						}
 						p_vec = p.getEyeLocation().getDirection();
 					}
