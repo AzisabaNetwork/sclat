@@ -33,7 +33,7 @@ dependencies {
     compileOnly(libs.dadadachecker)
     compileOnly(libs.blockstudio)
     compileOnly(libs.paperApi)
-    implementation(libs.cloudPaper)
+    implementation(libs.acfPaper)
     implementation(libs.jspecify)
 }
 
