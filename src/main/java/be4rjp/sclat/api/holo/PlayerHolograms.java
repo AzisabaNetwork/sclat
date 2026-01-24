@@ -22,7 +22,7 @@ public class PlayerHolograms {
 
 	public void ifPresent(Player player, Consumer<RankingHolograms> holoConsumer) {
 		RankingHolograms holo = get(player);
-		if(holo != null) {
+		if (holo != null) {
 			holoConsumer.accept(holo);
 		}
 	}

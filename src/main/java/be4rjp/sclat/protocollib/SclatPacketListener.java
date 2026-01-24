@@ -58,7 +58,8 @@ public class SclatPacketListener {
 
 					try {
 						RankingHolograms rankingHolograms = Main.playerHolograms.get(event.getPlayer());
-						if(rankingHolograms == null) return;
+						if (rankingHolograms == null)
+							return;
 						for (EntityArmorStand armorStand : rankingHolograms.getArmorStandList()) {
 							if (armorStand.getBukkitEntity().getEntityId() == EntityID) {
 								player.playSound(player.getLocation(), Sound.BLOCK_WOODEN_PRESSURE_PLATE_CLICK_ON, 1F,
