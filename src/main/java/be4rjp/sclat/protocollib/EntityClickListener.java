@@ -13,33 +13,32 @@ import org.bukkit.plugin.Plugin;
 
 public class EntityClickListener extends PacketAdapter {
 
-    public EntityClickListener(Plugin plugin, PacketType... types) {
-        super(plugin, types);
-    }
+	public EntityClickListener(Plugin plugin, PacketType... types) {
+		super(plugin, types);
+	}
 
-    @Override
-    public void onPacketReceiving(PacketEvent event) {// プレイヤーがエンティティをクリックしたときのパケットの監視
-        final Player player = event.getPlayer();
-        if (event.getPacketType() == PacketType.Play.Client.USE_ENTITY) {
-            final PacketContainer packet = event.getPacket();
+	@Override
+	public void onPacketReceiving(PacketEvent event) {// プレイヤーがエンティティをクリックしたときのパケットの監視
+		final Player player = event.getPlayer();
+		if (event.getPacketType() == PacketType.Play.Client.USE_ENTITY) {
+			final PacketContainer packet = event.getPacket();
 
-            final int EntityID = packet.getIntegers().readSafely(0);
+			final int EntityID = packet.getIntegers().readSafely(0);
 
-            try {
-                RankingHolograms rankingHolograms = Main.playerHolograms.get(event.getPlayer());
-                if (rankingHolograms == null)
-                    return;
-                for (EntityArmorStand armorStand : rankingHolograms.getArmorStandList()) {
-                    if (armorStand.getBukkitEntity().getEntityId() == EntityID) {
-                        player.playSound(player.getLocation(), Sound.BLOCK_WOODEN_PRESSURE_PLATE_CLICK_ON, 1F,
-                                1.2F);
-                        rankingHolograms.switchNextRankingType();
-                        rankingHolograms.refreshRankingAsync();
-                        break;
-                    }
-                }
-            } catch (Exception e) {
-            }
-        }
-    }
+			try {
+				RankingHolograms rankingHolograms = Main.playerHolograms.get(event.getPlayer());
+				if (rankingHolograms == null)
+					return;
+				for (EntityArmorStand armorStand : rankingHolograms.getArmorStandList()) {
+					if (armorStand.getBukkitEntity().getEntityId() == EntityID) {
+						player.playSound(player.getLocation(), Sound.BLOCK_WOODEN_PRESSURE_PLATE_CLICK_ON, 1F, 1.2F);
+						rankingHolograms.switchNextRankingType();
+						rankingHolograms.refreshRankingAsync();
+						break;
+					}
+				}
+			} catch (Exception e) {
+			}
+		}
+	}
 }

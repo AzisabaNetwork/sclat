@@ -125,7 +125,8 @@ public class Main extends JavaPlugin implements PluginMessageListener {
 		AsyncThreadManager.setup(1);
 
 		// ----------------------------APICheck-------------------------------
-		if(!Plugins.onInit(logger)) return;
+		if (!Plugins.onInit(logger))
+			return;
 		logger.info("API check was complted.");
 
 		protocolManager = ProtocolLibrary.getProtocolManager();

@@ -6,9 +6,11 @@ import com.comphenix.protocol.events.ListenerPriority;
 
 public class SclatPacketListener {
 	public static void init() {
-		Main.protocolManager.addPacketListener(new VehiclePacketListener(Main.getPlugin(), ListenerPriority.NORMAL, PacketType.Play.Client.STEER_VEHICLE));
+		Main.protocolManager.addPacketListener(new VehiclePacketListener(Main.getPlugin(), ListenerPriority.NORMAL,
+				PacketType.Play.Client.STEER_VEHICLE));
 
-		Main.protocolManager.addPacketListener(new EntityClickListener(Main.getPlugin(), PacketType.Play.Client.USE_ENTITY));
+		Main.protocolManager
+				.addPacketListener(new EntityClickListener(Main.getPlugin(), PacketType.Play.Client.USE_ENTITY));
 
 		/*
 		 * Main.protocolManager.addPacketListener( new PacketAdapter(Main.getPlugin(),
