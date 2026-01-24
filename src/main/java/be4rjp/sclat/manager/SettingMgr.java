@@ -11,24 +11,26 @@ public class SettingMgr {
 	public static void setSettings(PlayerSettings settings, Player player) {
 		String uuid = player.getUniqueId().toString();
 		String def = "011111111";
-		if (conf.getPlayerSettings().contains("Settings." + uuid)) {
-			if (conf.getPlayerSettings().getString("Settings." + uuid).charAt(1) == '0')
-				settings.S_ShowEffect_MainWeaponInk();
-			if (conf.getPlayerSettings().getString("Settings." + uuid).charAt(2) == '0')
-				settings.S_ShowEffect_ChargerLine();
-			if (conf.getPlayerSettings().getString("Settings." + uuid).charAt(3) == '0')
-				settings.S_ShowEffect_SPWeapon();
-			if (conf.getPlayerSettings().getString("Settings." + uuid).charAt(4) == '0')
-				settings.S_ShowEffect_SPWeaponRegion();
-			if (conf.getPlayerSettings().getString("Settings." + uuid).charAt(5) == '0')
-				settings.S_ShowSnowBall();
-			if (conf.getPlayerSettings().getString("Settings." + uuid).charAt(0) == '0')
+		String settingStr = conf.getPlayerSettings().getString("Settings." + uuid);
+		if (settingStr != null) {
+			char[] options = settingStr.toCharArray();
+			if (options[0] == '0')
 				settings.S_PlayBGM();
-			if (conf.getPlayerSettings().getString("Settings." + uuid).charAt(6) == '0')
+			if (options[1] == '0')
+				settings.S_ShowEffect_MainWeaponInk();
+			if (options[2] == '0')
+				settings.S_ShowEffect_ChargerLine();
+			if (options[3] == '0')
+				settings.S_ShowEffect_SPWeapon();
+			if (options[4] == '0')
+				settings.S_ShowEffect_SPWeaponRegion();
+			if (options[5] == '0')
+				settings.S_ShowSnowBall();
+			if (options[6] == '0')
 				settings.S_ShowEffect_Bomb();
-			if (conf.getPlayerSettings().getString("Settings." + uuid).charAt(7) == '0')
+			if (options[7] == '0')
 				settings.S_ShowEffect_BombEx();
-			if (conf.getPlayerSettings().getString("Settings." + uuid).charAt(8) == '0')
+			if (options[8] == '0')
 				settings.S_doChargeKeep();
 		} else {
 			conf.getPlayerSettings().set("Settings." + uuid, def);

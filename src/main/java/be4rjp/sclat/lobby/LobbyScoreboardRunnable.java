@@ -2,12 +2,12 @@ package be4rjp.sclat.lobby;
 
 import be4rjp.sclat.Sclat;
 import be4rjp.sclat.api.player.PlayerData;
+import be4rjp.sclat.api.rank.Ratings;
+import be4rjp.sclat.api.status.ServerStatus;
 import be4rjp.sclat.api.utils.ObjectiveUtil;
 import be4rjp.sclat.api.utils.TextAnimation;
 import be4rjp.sclat.data.DataMgr;
-import be4rjp.sclat.data.ServerStatus;
 import be4rjp.sclat.manager.PlayerStatusMgr;
-import be4rjp.sclat.manager.RankMgr;
 import be4rjp.sclat.manager.ServerStatusManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -57,7 +57,7 @@ public class LobbyScoreboardRunnable extends BukkitRunnable {
 		lines.add("§6§lステータス »");
 		lines.add("§e COIN: §r" + PlayerStatusMgr.getMoney(player));
 		lines.add("§e TICKET: §r" + PlayerStatusMgr.getTicket(player));
-		lines.add("§b RANK: §r" + RankMgr.toABCRank(PlayerStatusMgr.getRank(player)) + " ["
+		lines.add("§b RANK: §r" + Ratings.toABCRank(PlayerStatusMgr.getRank(player)) + " ["
 				+ PlayerStatusMgr.getRank(player) + "]");
 		lines.add(" ");
 		lines.add("§9§lサーバー »");

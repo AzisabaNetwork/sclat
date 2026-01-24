@@ -1,4 +1,4 @@
-package be4rjp.sclat.server;
+package be4rjp.sclat.api.status;
 
 import be4rjp.sclat.Sclat;
 import org.bukkit.scheduler.BukkitRunnable;

@@ -1,5 +1,5 @@
 
-package be4rjp.sclat.manager;
+package be4rjp.sclat.api;
 
 import be4rjp.sclat.Sclat;
 import com.google.common.io.ByteArrayDataOutput;
@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
  *
  * @author Be4rJP
  */
-public class BungeeCordMgr {
+public class BungeeCordAPI {
 	public static void PlayerSendServer(Player player, String servername) {
 		ByteArrayDataOutput out = ByteStreams.newDataOutput();
 		out.writeUTF("Connect");

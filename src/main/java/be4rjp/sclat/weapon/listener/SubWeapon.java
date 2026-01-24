@@ -1,5 +1,5 @@
 
-package be4rjp.sclat.weapon;
+package be4rjp.sclat.weapon.listener;
 
 import be4rjp.sclat.api.player.PlayerData;
 import be4rjp.sclat.api.raytrace.RayTrace;

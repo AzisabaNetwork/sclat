@@ -1,4 +1,4 @@
-package be4rjp.sclat.api;
+package be4rjp.sclat.api.status;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;

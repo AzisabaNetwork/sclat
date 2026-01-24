@@ -1,7 +1,7 @@
-package be4rjp.sclat.data;
+package be4rjp.sclat.api.status;
 
 import be4rjp.sclat.Sclat;
-import be4rjp.sclat.api.MineStat;
+import be4rjp.sclat.data.MatchServerRunnable;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.scheduler.BukkitRunnable;

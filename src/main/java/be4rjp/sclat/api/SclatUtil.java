@@ -1,33 +1,19 @@
 package be4rjp.sclat.api;
 
 import be4rjp.sclat.Sclat;
+import be4rjp.sclat.api.packet.WorldPackets;
 import be4rjp.sclat.api.player.PlayerData;
+import be4rjp.sclat.api.status.StatusClient;
 import be4rjp.sclat.api.team.Team;
 import be4rjp.sclat.data.DataMgr;
-import be4rjp.sclat.manager.BungeeCordMgr;
 import be4rjp.sclat.manager.DeathMgr;
 import be4rjp.sclat.manager.MatchMgr;
-import be4rjp.sclat.server.StatusClient;
-import net.minecraft.server.v1_14_R1.Block;
-import net.minecraft.server.v1_14_R1.BlockPosition;
-import net.minecraft.server.v1_14_R1.EntityPlayer;
-import net.minecraft.server.v1_14_R1.IBlockAccess;
-import net.minecraft.server.v1_14_R1.IBlockData;
-import net.minecraft.server.v1_14_R1.PacketPlayOutAbilities;
-import net.minecraft.server.v1_14_R1.PacketPlayOutBlockChange;
-import net.minecraft.server.v1_14_R1.PacketPlayOutNamedEntitySpawn;
-import net.minecraft.server.v1_14_R1.PacketPlayOutWorldBorder;
-import net.minecraft.server.v1_14_R1.PlayerAbilities;
-import net.minecraft.server.v1_14_R1.WorldBorder;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Instrument;
 import org.bukkit.Location;
 import org.bukkit.Note;
 import org.bukkit.Sound;
-import org.bukkit.craftbukkit.v1_14_R1.CraftWorld;
-import org.bukkit.craftbukkit.v1_14_R1.block.data.CraftBlockData;
-import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -49,74 +35,28 @@ import static be4rjp.sclat.Sclat.conf;
 public class SclatUtil {
 
 	public static void setBlockByNMS(org.bukkit.block.Block b, org.bukkit.Material material, boolean applyPhysics) {
-		Location loc = b.getLocation();
-		Block block = ((CraftBlockData) Bukkit.createBlockData(material)).getState().getBlock();
-		net.minecraft.server.v1_14_R1.World nmsWorld = ((CraftWorld) loc.getWorld()).getHandle();
-		BlockPosition bp = new BlockPosition(loc.getX(), loc.getY(), loc.getZ());
-		IBlockData ibd = block.getBlockData();
-		nmsWorld.setTypeAndData(bp, ibd, applyPhysics ? 3 : 2);
+		b.setType(material, applyPhysics);
 	}
 
 	public static void setBlockByNMSChunk(org.bukkit.block.Block b, org.bukkit.Material material,
 			boolean applyPhysics) {
-		Location loc = b.getLocation();
-		int x = loc.getBlockX();
-		int y = loc.getBlockY();
-		int z = loc.getBlockZ();
-		Block block = ((CraftBlockData) Bukkit.createBlockData(material)).getState().getBlock();
-		net.minecraft.server.v1_14_R1.World nmsWorld = ((CraftWorld) loc.getWorld()).getHandle();
-		net.minecraft.server.v1_14_R1.Chunk nmsChunk = nmsWorld.getChunkAt(x >> 4, z >> 4);
-		BlockPosition bp = new BlockPosition(x, y, z);
-		IBlockData ibd = block.getBlockData();
-		nmsChunk.setType(bp, ibd, applyPhysics);
+		b.setBlockData(material.createBlockData(), applyPhysics);
 	}
 
 	public static void sendBlockChangeForAllPlayer(org.bukkit.block.Block b, org.bukkit.Material material) {
-		Location loc = b.getLocation();
-		int x = loc.getBlockX();
-		int y = loc.getBlockY();
-		int z = loc.getBlockZ();
-		BlockPosition bp = new BlockPosition(x, y, z);
-		net.minecraft.server.v1_14_R1.World nmsWorld = ((CraftWorld) loc.getWorld()).getHandle();
-		net.minecraft.server.v1_14_R1.Chunk nmsChunk = nmsWorld.getChunkAt(x >> 4, z >> 4);
-		Block block = ((CraftBlockData) Bukkit.createBlockData(material)).getState().getBlock();
-		IBlockAccess iba = (IBlockAccess) nmsWorld;
-		PacketPlayOutBlockChange packet = new PacketPlayOutBlockChange(iba, bp);
-		for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
-			if (target.getWorld() == b.getWorld()) {
-				((CraftPlayer) target).getHandle().playerConnection.sendPacket(packet);
-			}
-		}
+		WorldPackets.broadcastBlockChange(b.getLocation(), material);
 	}
 
 	public static void sendWorldBorderWarningPacket(Player player) {
-		EntityPlayer nmsPlayer = ((CraftPlayer) player).getHandle();
-		net.minecraft.server.v1_14_R1.WorldBorder wb = new WorldBorder();
-		wb.world = nmsPlayer.getWorldServer();
-		wb.setSize(1);
-		wb.setCenter(player.getLocation().getX() + 10_000, player.getLocation().getZ() + 10_000);
-		PacketPlayOutWorldBorder packet = new PacketPlayOutWorldBorder(wb,
-				PacketPlayOutWorldBorder.EnumWorldBorderAction.INITIALIZE);
-		((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
+		WorldPackets.sendWorldBorderWarningPacket(player);
 	}
 
 	public static void sendWorldBorderWarningClearPacket(Player player) {
-		EntityPlayer nmsPlayer = ((CraftPlayer) player).getHandle();
-		net.minecraft.server.v1_14_R1.WorldBorder wb = new WorldBorder();
-		wb.world = nmsPlayer.getWorldServer();
-		wb.setSize(30_000_000);
-		wb.setCenter(player.getLocation().getX(), player.getLocation().getZ());
-		PacketPlayOutWorldBorder packet = new PacketPlayOutWorldBorder(wb,
-				PacketPlayOutWorldBorder.EnumWorldBorderAction.INITIALIZE);
-		((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
+		WorldPackets.sendWorldBorderWarningClearPacket(player);
 	}
 
 	public static void setPlayerFOV(Player player, float fov) {
-		PlayerAbilities abilities = new PlayerAbilities();
-		abilities.walkSpeed = fov;
-		DataMgr.getPlayerData(player).setFov(fov);
-		PacketPlayOutAbilities packet = new PacketPlayOutAbilities(abilities);
-		((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
+		WorldPackets.setPlayerFOV(player, fov);
 	}
 
 	/*
@@ -125,8 +65,8 @@ public class SclatUtil {
 	 * b.getLocation(); Block block = ((CraftBlockData)
 	 * Bukkit.createBlockData(material)).getState().getBlock(); int x =
 	 * loc.getBlockX(); int y = loc.getBlockY(); int z = loc.getBlockZ();
-	 * net.minecraft.server.v1_14_R1.World nmsWorld = ((CraftWorld)
-	 * loc.getWorld()).getHandle(); net.minecraft.server.v1_14_R1.Chunk nmsChunk =
+	 * net.minecraft.server.v1_15_R1.World nmsWorld = ((CraftWorld)
+	 * loc.getWorld()).getHandle(); net.minecraft.server.v1_15_R1.Chunk nmsChunk =
 	 * nmsWorld.getChunkAt(x >> 4, z >> 4); ChunkSection cs =
 	 * nmsChunk.getSections()[y >> 4]; IBlockData ibd = block.getBlockData(); if (cs
 	 * == nmsChunk.a()) { cs = new ChunkSection(y >> 4 << 4, false);
@@ -144,7 +84,7 @@ public class SclatUtil {
 		sc.startClient();
 
 		for (Player player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
-			BungeeCordMgr.PlayerSendServer(player, "sclat");
+			BungeeCordAPI.PlayerSendServer(player, "sclat");
 			DataMgr.getPlayerData(player).setServerName("Sclat");
 		}
 		BukkitRunnable task = new BukkitRunnable() {
@@ -165,20 +105,6 @@ public class SclatUtil {
 		StatusClient sc = new StatusClient(conf.getConfig().getString("StatusShare.Host"),
 				conf.getConfig().getInt("StatusShare.Port"), commands);
 		sc.startClient();
-	}
-
-	public static void setPlayerPrefix(Player player, String prefix) {
-		String name = prefix + player.getDisplayName();
-		CraftPlayer cp = (CraftPlayer) player;
-		EntityPlayer ep = cp.getHandle();
-		String origName = ep.getName();
-		for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
-			if (player != target) {
-				CraftPlayer ct = (CraftPlayer) player;
-				ct.getHandle().playerConnection.sendPacket(new PacketPlayOutNamedEntitySpawn(ep));
-			}
-		}
-
 	}
 
 	public static void sendMessage(String message, MessageType type) {
@@ -252,7 +178,7 @@ public class SclatUtil {
 			@Override
 			public void run() {
 				try {
-					BungeeCordMgr.PlayerSendServer(player, "sclat");
+					BungeeCordAPI.PlayerSendServer(player, "sclat");
 					DataMgr.getPlayerData(player).setServerName("Sclat");
 				} catch (Exception e) {
 				}

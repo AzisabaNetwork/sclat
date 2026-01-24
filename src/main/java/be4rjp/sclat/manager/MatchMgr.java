@@ -3,29 +3,31 @@ package be4rjp.sclat.manager;
 
 import be4rjp.sclat.Sclat;
 import be4rjp.sclat.api.Animation;
+import be4rjp.sclat.api.BungeeCordAPI;
 import be4rjp.sclat.api.MessageType;
 import be4rjp.sclat.api.Plugins;
 import be4rjp.sclat.api.SclatUtil;
 import be4rjp.sclat.api.ServerType;
 import be4rjp.sclat.api.SoundType;
+import be4rjp.sclat.api.color.Color;
+import be4rjp.sclat.api.equipment.EquipmentServerManager;
 import be4rjp.sclat.api.player.PlayerData;
 import be4rjp.sclat.api.player.PlayerSettings;
+import be4rjp.sclat.api.rank.Ratings;
+import be4rjp.sclat.api.song.NoteBlockSong;
+import be4rjp.sclat.api.status.StatusClient;
 import be4rjp.sclat.api.team.Team;
 import be4rjp.sclat.api.utils.ObjectiveUtil;
 import be4rjp.sclat.api.wiremesh.Wiremesh;
 import be4rjp.sclat.data.Area;
 import be4rjp.sclat.data.BlockUpdater;
-import be4rjp.sclat.data.Color;
 import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.data.MapData;
 import be4rjp.sclat.data.Match;
-import be4rjp.sclat.data.NoteBlockSong;
 import be4rjp.sclat.data.PaintData;
 import be4rjp.sclat.data.Path;
 import be4rjp.sclat.data.WeaponClass;
 import be4rjp.sclat.gui.OpenGUI;
-import be4rjp.sclat.server.EquipmentServerManager;
-import be4rjp.sclat.server.StatusClient;
 import be4rjp.sclat.weapon.Brush;
 import be4rjp.sclat.weapon.Bucket;
 import be4rjp.sclat.weapon.Buckler;
@@ -1516,7 +1518,7 @@ public class MatchMgr {
 						if (data.getMatch().getJoinedPlayerCount() == 1 || !conf.getConfig().getBoolean("RateMatch"))
 							pRank = 0;
 
-						int pMoveRank = RankMgr.IndicateRankPointmove(p, pRank);
+						int pMoveRank = Ratings.IndicateRankPointmove(p, pRank);
 						PlayerStatusMgr.addRank(p, pRank);
 
 						PlayerStatusMgr.addLv(p, pLv);
@@ -1554,14 +1556,14 @@ public class MatchMgr {
 							SclatUtil.sendMessage(
 									ChatColor.GOLD + " RankPoint : " + ChatColor.RESET + String.valueOf(pRank)
 											+ (Sclat.type == ServerType.NORMAL
-													? "  [ §b" + RankMgr.toABCRank(getRank(player)) + " §r]"
+													? "  [ §b" + Ratings.toABCRank(getRank(player)) + " §r]"
 													: ""),
 									MessageType.PLAYER, p);
 						else
 							SclatUtil.sendMessage(
 									ChatColor.GOLD + " RankPoint : " + ChatColor.RESET + "+" + String.valueOf(pMoveRank)
 											+ (Sclat.type == ServerType.NORMAL
-													? "  [ §b" + RankMgr.toABCRank(getRank(player)) + " §r]"
+													? "  [ §b" + Ratings.toABCRank(getRank(player)) + " §r]"
 													: ""),
 									MessageType.PLAYER, p);
 						SclatUtil.sendMessage("", MessageType.PLAYER, p);
@@ -1641,7 +1643,7 @@ public class MatchMgr {
 
 						if (Sclat.type == ServerType.MATCH) {
 							try {
-								BungeeCordMgr.PlayerSendServer(p, "sclat");
+								BungeeCordAPI.PlayerSendServer(p, "sclat");
 								DataMgr.getPlayerData(p).setServerName("Sclat");
 							} catch (Exception e) {
 							}

@@ -2,7 +2,6 @@
 plugins {
     `java-library`
     `maven-publish`
-    alias(libs.plugins.runPaper)
     alias(libs.plugins.spotless)
     alias(libs.plugins.shadow)
 }
@@ -26,16 +25,15 @@ repositories {
 }
 
 dependencies {
-    compileOnly(libs.spigotApi)
     compileOnly(libs.spigot)
-    compileOnly(libs.bukkit)
     compileOnly(libs.noteblockapi)
     compileOnly(libs.lunachat)
-    compileOnly(libs.protocolLib)
+//    compileOnly(libs.protocolLib)
+    compileOnly(files("libs/ProtocolLib.jar"))
     compileOnly(libs.dadadachecker)
     compileOnly(libs.blockstudio)
     compileOnly(libs.paperApi)
-    implementation(libs.cloudPaper)
+    implementation(libs.acfPaper)
     implementation(libs.jspecify)
 }
 
@@ -54,14 +52,6 @@ java {
 }
 
 tasks {
-    runServer {
-        minecraftVersion("1.14.4")
-        downloadPlugins {
-            url("https://github.com/ucchyocean/LunaChat/releases/download/v3.0.16/LunaChat.jar") // LunaChat 3.0.16
-            url("https://github.com/koca2000/NoteBlockAPI/releases/download/1.6.3/NoteBlockAPI-1.6.3.jar") // NoteBlockAPI 1.6.3
-            url("https://github.com/dmulloy2/ProtocolLib/releases/download/4.6.0/ProtocolLib.jar") // ProtocolLib 4.6.0
-        }
-    }
 
     compileJava {
         options.encoding = defaultEncoding

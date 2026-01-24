@@ -31,7 +31,7 @@ public enum Plugins {
 	 * To support plugman load.
 	 */
 	private void resetLoadedState() {
-		_isLoaded = false;
+		_isLoaded = null;
 	}
 
 	/**

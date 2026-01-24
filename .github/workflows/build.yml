@@ -56,7 +56,10 @@ jobs:
         if: steps.cache.outputs.cache-hit != 'true'
         run: |
           wget "https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar"
-          java -jar BuildTools.jar --rev 1.14.4
+          java -jar BuildTools.jar --rev 1.15.2
+
+      - name: Download ProtocolLib
+        run: wget -O ./libs/ProtocolLib.jar "https://github.com/dmulloy2/ProtocolLib/releases/download/4.8.0/ProtocolLib.jar"
 
       - name: Build with Gradle
         run: ./gradlew build

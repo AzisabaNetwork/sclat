@@ -8,10 +8,15 @@ import be4rjp.sclat.api.SclatUtil;
 import be4rjp.sclat.api.ServerType;
 import be4rjp.sclat.api.async.AsyncPlayerListener;
 import be4rjp.sclat.api.async.AsyncThreadManager;
+import be4rjp.sclat.api.color.TeamColorSets;
 import be4rjp.sclat.api.config.CustomConfig;
+import be4rjp.sclat.api.enchant.GlowEnchant;
+import be4rjp.sclat.api.equipment.EquipmentServer;
 import be4rjp.sclat.api.holo.PlayerHolograms;
+import be4rjp.sclat.api.rank.RankingUpdater;
+import be4rjp.sclat.api.status.StatusServer;
 import be4rjp.sclat.api.wiremesh.Wiremesh;
-import be4rjp.sclat.commands.sclatCommandExecutor;
+import be4rjp.sclat.commands.SclatCommand;
 import be4rjp.sclat.config.Config;
 import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.data.MapData;
@@ -21,21 +26,21 @@ import be4rjp.sclat.gui.ClickListener;
 import be4rjp.sclat.listener.SquidListener;
 import be4rjp.sclat.lunachat.LunaChatListener;
 import be4rjp.sclat.manager.ArmorStandMgr;
-import be4rjp.sclat.manager.ColorMgr;
 import be4rjp.sclat.manager.GameMgr;
 import be4rjp.sclat.manager.MainWeaponMgr;
 import be4rjp.sclat.manager.MapDataMgr;
 import be4rjp.sclat.manager.MatchMgr;
 import be4rjp.sclat.manager.NoteBlockAPIMgr;
 import be4rjp.sclat.manager.PlayerReturnManager;
-import be4rjp.sclat.manager.RankMgr;
 import be4rjp.sclat.manager.ServerStatusManager;
 import be4rjp.sclat.manager.WeaponClassMgr;
 import be4rjp.sclat.protocollib.SclatPacketListener;
-import be4rjp.sclat.server.EquipmentServer;
-import be4rjp.sclat.server.StatusServer;
 import be4rjp.sclat.tutorial.Tutorial;
-import be4rjp.sclat.weapon.SnowballListener;
+import be4rjp.sclat.weapon.listener.MainWeapon;
+import be4rjp.sclat.weapon.listener.SPWeapon;
+import be4rjp.sclat.weapon.listener.SnowballListener;
+import be4rjp.sclat.weapon.listener.SubWeapon;
+import co.aikar.commands.PaperCommandManager;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import com.google.common.io.ByteArrayDataInput;
@@ -63,7 +68,7 @@ import java.util.List;
  * @author Be4rJP
  */
 public class Sclat extends JavaPlugin implements PluginMessageListener {
-	private static final Logger logger = LoggerFactory.getLogger(Sclat.class);
+	public static final Logger logger = LoggerFactory.getLogger(Sclat.class);
 
 	public static Config conf;
 
@@ -71,7 +76,7 @@ public class Sclat extends JavaPlugin implements PluginMessageListener {
 
 	public static Location lobby;
 
-	public static Glow glow;
+	public static GlowEnchant glowEnchant;
 
 	public static List<Player> pdspList;
 
@@ -114,10 +119,12 @@ public class Sclat extends JavaPlugin implements PluginMessageListener {
 
 	public static final PlayerHolograms playerHolograms = new PlayerHolograms();
 
+	private static PaperCommandManager commandManager;
+
 	@Override
 	public void onEnable() {
 		plugin = this;
-		glow = new Glow();
+		glowEnchant = new GlowEnchant();
 
 		pdspList = new ArrayList<>();
 
@@ -172,9 +179,9 @@ public class Sclat extends JavaPlugin implements PluginMessageListener {
 		pm.registerEvents(new GameMgr(), this);
 		pm.registerEvents(new SquidListener(), this);
 		pm.registerEvents(new ClickListener(), this);
-		pm.registerEvents(new be4rjp.sclat.weapon.MainWeapon(), this);
-		pm.registerEvents(new be4rjp.sclat.weapon.SubWeapon(), this);
-		pm.registerEvents(new be4rjp.sclat.weapon.SPWeapon(), this);
+		pm.registerEvents(new MainWeapon(), this);
+		pm.registerEvents(new SubWeapon(), this);
+		pm.registerEvents(new SPWeapon(), this);
 		pm.registerEvents(new SnowballListener(), this);
 		pm.registerEvents(new AsyncPlayerListener(), this);
 
@@ -184,13 +191,14 @@ public class Sclat extends JavaPlugin implements PluginMessageListener {
 
 		// ------------------------RegisteringCommands------------------------
 		getLogger().info("Registering Commands...");
-		getCommand("sclat").setExecutor(new sclatCommandExecutor());
-		getCommand("sclat").setTabCompleter(new sclatCommandExecutor());
+		commandManager = new PaperCommandManager(this);
+		// commandManager.enableUnstableAPI("help");
+		commandManager.registerCommand(new SclatCommand(this), true);
 		// -------------------------------------------------------------------
 
 		// ------------------------Setup from config--------------------------
 		getLogger().info("SetupColor...");
-		ColorMgr.SetupColor();
+		TeamColorSets.SetupColor();
 		getLogger().info("SetupMainWeapon...");
 		MainWeaponMgr.SetupMainWeapon();
 		getLogger().info("WeaponClassSetup...");
@@ -332,7 +340,7 @@ public class Sclat extends JavaPlugin implements PluginMessageListener {
 
 		// -----------------------Ranking Holograms---------------------------
 		if (type == ServerType.LOBBY) {
-			RankMgr.makeRankingTask();
+			RankingUpdater.makeRankingTask();
 		}
 		// -------------------------------------------------------------------
 
@@ -387,6 +395,8 @@ public class Sclat extends JavaPlugin implements PluginMessageListener {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+
+		commandManager.unregisterCommands();
 
 		// -----------------------Tutorial server list------------------------
 		if (type == ServerType.LOBBY) {

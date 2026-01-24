@@ -1,19 +1,20 @@
 package be4rjp.sclat.api.holo;
 
 import be4rjp.sclat.Sclat;
-import be4rjp.sclat.data.RankingType;
+import be4rjp.sclat.api.rank.RankingType;
+import be4rjp.sclat.api.rank.RankingUpdater;
+import be4rjp.sclat.api.rank.Ratings;
 import be4rjp.sclat.manager.PlayerStatusMgr;
-import be4rjp.sclat.manager.RankMgr;
-import net.minecraft.server.v1_14_R1.EntityArmorStand;
-import net.minecraft.server.v1_14_R1.PacketPlayOutEntityDestroy;
-import net.minecraft.server.v1_14_R1.PacketPlayOutSpawnEntityLiving;
-import net.minecraft.server.v1_14_R1.WorldServer;
+import net.minecraft.server.v1_15_R1.EntityArmorStand;
+import net.minecraft.server.v1_15_R1.PacketPlayOutEntityDestroy;
+import net.minecraft.server.v1_15_R1.PacketPlayOutSpawnEntityLiving;
+import net.minecraft.server.v1_15_R1.WorldServer;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.craftbukkit.v1_14_R1.CraftWorld;
-import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
-import org.bukkit.craftbukkit.v1_14_R1.util.CraftChatMessage;
+import org.bukkit.craftbukkit.v1_15_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_15_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_15_R1.util.CraftChatMessage;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -210,7 +211,7 @@ public class RankingHolograms {
 						list.add(armorStand);
 
 						if (rankingType == RankingType.TOTAL) {
-							String uuid = RankMgr.ranking.get(i);
+							String uuid = RankingUpdater.ranking.get(i);
 							String mcid = conf.getUUIDCash().getString(uuid);
 
 							int rank = PlayerStatusMgr.getRank(uuid);
@@ -218,14 +219,14 @@ public class RankingHolograms {
 							if (rank != 0) {
 								armorStand.setCustomName(
 										CraftChatMessage.fromStringOrNull("§e" + String.valueOf(i + 1) + "位 §f" + mcid
-												+ "  §6Rank : §r" + rank + " [§b " + RankMgr.toABCRank(rank) + " §f]"));
+												+ "  §6Rank : §r" + rank + " [§b " + Ratings.toABCRank(rank) + " §f]"));
 							} else {
 								armorStand.setCustomName(CraftChatMessage.fromStringOrNull("--"));
 							}
 						}
 
 						if (rankingType == RankingType.KILL) {
-							String uuid = RankMgr.killRanking.get(i);
+							String uuid = RankingUpdater.killRanking.get(i);
 							String mcid = conf.getUUIDCash().getString(uuid);
 
 							int kill = PlayerStatusMgr.getKill(uuid);
@@ -239,7 +240,7 @@ public class RankingHolograms {
 						}
 
 						if (rankingType == RankingType.PAINT) {
-							String uuid = RankMgr.paintRanking.get(i);
+							String uuid = RankingUpdater.paintRanking.get(i);
 							String mcid = conf.getUUIDCash().getString(uuid);
 
 							int paint = PlayerStatusMgr.getPaint(uuid);
@@ -261,7 +262,7 @@ public class RankingHolograms {
 					if (rankingType == RankingType.TOTAL) {
 						String mcid = player.getName();
 						int ranking = 1;
-						for (String uuid : RankMgr.ranking) {
+						for (String uuid : RankingUpdater.ranking) {
 							if (uuid.equals(player.getUniqueId().toString()))
 								break;
 							ranking++;
@@ -270,13 +271,13 @@ public class RankingHolograms {
 						int rank = PlayerStatusMgr.getRank(player.getUniqueId().toString());
 
 						you.setCustomName(CraftChatMessage.fromStringOrNull("§aYou ->> §e" + (rank == 0 ? "-" : ranking)
-								+ "位 §f" + mcid + "  §6Rank : §r" + rank + " [§b " + RankMgr.toABCRank(rank) + " §f]"));
+								+ "位 §f" + mcid + "  §6Rank : §r" + rank + " [§b " + Ratings.toABCRank(rank) + " §f]"));
 					}
 
 					if (rankingType == RankingType.KILL) {
 						String mcid = player.getName();
 						int ranking = 1;
-						for (String uuid : RankMgr.killRanking) {
+						for (String uuid : RankingUpdater.killRanking) {
 							if (uuid.equals(player.getUniqueId().toString()))
 								break;
 							ranking++;
@@ -291,7 +292,7 @@ public class RankingHolograms {
 					if (rankingType == RankingType.PAINT) {
 						String mcid = player.getName();
 						int ranking = 1;
-						for (String uuid : RankMgr.paintRanking) {
+						for (String uuid : RankingUpdater.paintRanking) {
 							if (uuid.equals(player.getUniqueId().toString()))
 								break;
 							ranking++;

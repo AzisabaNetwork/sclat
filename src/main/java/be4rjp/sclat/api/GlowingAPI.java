@@ -7,6 +7,8 @@ import com.comphenix.protocol.wrappers.WrappedDataWatcher;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
+import java.lang.reflect.InvocationTargetException;
+
 public class GlowingAPI {
 	public static void setGlowing(Entity entity, Player player, boolean flag) {
 		PacketContainer packet = Sclat.protocolManager.createPacket(PacketType.Play.Server.ENTITY_METADATA);
@@ -18,7 +20,7 @@ public class GlowingAPI {
 		packet.getWatchableCollectionModifier().write(0, watcher.getWatchableObjects());
 		try {
 			Sclat.protocolManager.sendServerPacket(player, packet);
-		} catch (RuntimeException e) {
+		} catch (InvocationTargetException e) {
 			e.printStackTrace();
 		}
 	}

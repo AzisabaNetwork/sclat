@@ -1,13 +1,12 @@
-package be4rjp.sclat.server;
+package be4rjp.sclat.api.status;
 
 import be4rjp.sclat.Sclat;
 import be4rjp.sclat.api.MessageType;
 import be4rjp.sclat.api.SclatUtil;
 import be4rjp.sclat.api.SoundType;
-import be4rjp.sclat.data.ServerStatus;
+import be4rjp.sclat.api.rank.Ratings;
 import be4rjp.sclat.manager.PlayerReturnManager;
 import be4rjp.sclat.manager.PlayerStatusMgr;
-import be4rjp.sclat.manager.RankMgr;
 import be4rjp.sclat.manager.ServerStatusManager;
 
 import java.io.BufferedReader;
@@ -115,7 +114,7 @@ class EchoThread extends Thread {
 											PlayerStatusMgr.addMoney(args[3], Integer.parseInt(args[2]));
 											break;
 										case "rank" :
-											RankMgr.addPlayerRankPoint(args[3], Integer.parseInt(args[2]));
+											Ratings.addPlayerRankPoint(args[3], Integer.parseInt(args[2]));
 											break;
 										case "level" :
 											PlayerStatusMgr.addLv(args[3], Integer.parseInt(args[2]));

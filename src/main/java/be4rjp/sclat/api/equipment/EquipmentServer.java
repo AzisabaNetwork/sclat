@@ -1,4 +1,4 @@
-package be4rjp.sclat.server;
+package be4rjp.sclat.api.equipment;
 
 import be4rjp.sclat.Sclat;
 

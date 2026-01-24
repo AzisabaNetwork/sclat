@@ -194,14 +194,14 @@ public class MainWeaponMgr {
 			PlayerData data = DataMgr.getPlayerData(player);
 			if (data.getCanCharge())
 				data.setTick(0);
-			if (!data.getWeaponClass().getMainWeapon().getWeaponType().equals("Shooter")
-					&& !data.getWeaponClass().getMainWeapon().getWeaponType().equals("Blaster"))
+			String weaponType = data.getWeaponClass().getMainWeapon().getWeaponType();
+			if (!weaponType.equals("Shooter") && !weaponType.equals("Blaster"))
 				data.setIsHolding(true);
-			if (data.getWeaponClass().getMainWeapon().getWeaponType().equals("Blaster"))
+			if (weaponType.equals("Blaster"))
 				Blaster.ShootBlaster(player);
-			if (data.getWeaponClass().getMainWeapon().getWeaponType().equals("Burst"))
+			if (weaponType.equals("Burst"))
 				Burst.BurstCooltime(player);
-			if (data.getWeaponClass().getMainWeapon().getWeaponType().equals("Roller")) {
+			if (weaponType.equals("Roller")) {
 				if (data.getWeaponClass().getMainWeapon().getIsHude()) {
 					if (data.getCanShoot() || clickType == ClickType.RENDA) {
 						data.setCanShoot(false);
@@ -214,12 +214,11 @@ public class MainWeaponMgr {
 					}
 				}
 			}
-			if (data.getWeaponClass().getMainWeapon().getWeaponType().equals("Bucket"))
+			if (weaponType.equals("Bucket"))
 				Bucket.ShootBucket(player);
-			if (data.getWeaponClass().getMainWeapon().getWeaponType().equals("Slosher"))
+			if (weaponType.equals("Slosher"))
 				Slosher.ShootSlosher(player);
-			if (data.getWeaponClass().getMainWeapon().getWeaponType().equals("Kasa")
-					|| data.getWeaponClass().getMainWeapon().getWeaponType().equals("Camping"))
+			if (weaponType.equals("Kasa") || weaponType.equals("Camping"))
 				Kasa.ShootKasa(player);
 		}
 	}

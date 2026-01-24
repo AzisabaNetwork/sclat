@@ -1,7 +1,6 @@
-package be4rjp.sclat.manager;
+package be4rjp.sclat.api.color;
 
 import be4rjp.sclat.Sclat;
-import be4rjp.sclat.data.Color;
 import be4rjp.sclat.data.DataMgr;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -12,7 +11,7 @@ import org.bukkit.inventory.meta.LeatherArmorMeta;
  *
  * @author Be4rJP
  */
-public class ColorMgr {
+public class TeamColorSets {
 	public synchronized static void SetupColor() {
 		Color blue = new Color("Blue");
 		blue.setWool(Material.BLUE_WOOL);

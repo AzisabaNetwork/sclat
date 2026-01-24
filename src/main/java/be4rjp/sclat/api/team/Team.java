@@ -1,6 +1,6 @@
 package be4rjp.sclat.api.team;
 
-import be4rjp.sclat.data.Color;
+import be4rjp.sclat.api.color.Color;
 
 /**
  *
