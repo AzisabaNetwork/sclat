@@ -1,8 +1,8 @@
 package be4rjp.sclat.protocollib;
 
 import be4rjp.sclat.Main;
+import be4rjp.sclat.api.holo.RankingHolograms;
 import be4rjp.sclat.data.DataMgr;
-import be4rjp.sclat.data.RankingHolograms;
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.ListenerPriority;
 import com.comphenix.protocol.events.PacketAdapter;
@@ -57,7 +57,8 @@ public class SclatPacketListener {
 					final int EntityID = packet.getIntegers().readSafely(0);
 
 					try {
-						RankingHolograms rankingHolograms = DataMgr.getRankingHolograms(event.getPlayer());
+						RankingHolograms rankingHolograms = Main.playerHolograms.get(event.getPlayer());
+						if(rankingHolograms == null) return;
 						for (EntityArmorStand armorStand : rankingHolograms.getArmorStandList()) {
 							if (armorStand.getBukkitEntity().getEntityId() == EntityID) {
 								player.playSound(player.getLocation(), Sound.BLOCK_WOODEN_PRESSURE_PLATE_CLICK_ON, 1F,

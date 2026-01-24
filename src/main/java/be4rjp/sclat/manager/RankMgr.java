@@ -2,11 +2,16 @@
 package be4rjp.sclat.manager;
 
 import be4rjp.sclat.Main;
-import be4rjp.sclat.data.DataMgr;
+import be4rjp.sclat.api.holo.RankingHolograms;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import static be4rjp.sclat.Main.conf;
 
@@ -203,7 +208,7 @@ public class RankMgr {
 				makePaintRankingAsync();
 				for (Player player : Main.getPlugin().getServer().getOnlinePlayers()) {
 					try {
-						DataMgr.getRankingHolograms(player).refreshRankingAsync();
+						Main.playerHolograms.ifPresent(player, RankingHolograms::refreshRankingAsync);
 					} catch (Exception e) {
 					}
 				}

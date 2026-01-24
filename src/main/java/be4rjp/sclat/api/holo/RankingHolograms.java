@@ -1,9 +1,13 @@
-package be4rjp.sclat.data;
+package be4rjp.sclat.api.holo;
 
 import be4rjp.sclat.Main;
+import be4rjp.sclat.data.RankingType;
 import be4rjp.sclat.manager.PlayerStatusMgr;
 import be4rjp.sclat.manager.RankMgr;
-import net.minecraft.server.v1_14_R1.*;
+import net.minecraft.server.v1_14_R1.EntityArmorStand;
+import net.minecraft.server.v1_14_R1.PacketPlayOutEntityDestroy;
+import net.minecraft.server.v1_14_R1.PacketPlayOutSpawnEntityLiving;
+import net.minecraft.server.v1_14_R1.WorldServer;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;

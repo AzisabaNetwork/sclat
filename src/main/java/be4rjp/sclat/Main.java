@@ -8,6 +8,7 @@ import be4rjp.sclat.api.ServerType;
 import be4rjp.sclat.api.async.AsyncPlayerListener;
 import be4rjp.sclat.api.async.AsyncThreadManager;
 import be4rjp.sclat.api.config.CustomConfig;
+import be4rjp.sclat.api.holo.PlayerHolograms;
 import be4rjp.sclat.commands.sclatCommandExecutor;
 import be4rjp.sclat.config.Config;
 import be4rjp.sclat.data.DataMgr;
@@ -110,6 +111,8 @@ public class Main extends JavaPlugin implements PluginMessageListener {
 
 	public static double PARTICLE_RENDER_DISTANCE = 0;
 	public static double PARTICLE_RENDER_DISTANCE_SQUARED;
+
+	public static final PlayerHolograms playerHolograms = new PlayerHolograms();
 
 	@Override
 	public void onEnable() {

@@ -10,7 +10,6 @@ import be4rjp.sclat.data.Match;
 import be4rjp.sclat.data.PaintData;
 import be4rjp.sclat.data.PlayerData;
 import be4rjp.sclat.data.PlayerSettings;
-import be4rjp.sclat.data.RankingHolograms;
 import be4rjp.sclat.data.ServerStatus;
 import be4rjp.sclat.data.Team;
 import be4rjp.sclat.data.WeaponClass;
@@ -115,9 +114,11 @@ public class GameMgr implements Listener {
 
 		conf.getUUIDCash().set(player.getUniqueId().toString(), player.getName());
 		if (Main.type == ServerType.LOBBY) {
-			RankingHolograms rankingHolograms = new RankingHolograms(player);
-			DataMgr.setRankingHolograms(player, rankingHolograms);
-			PlayerStatusMgr.HologramUpdateRunnable(player);
+			// Add user-specific hologram
+			// RankingHolograms rankingHolograms = new RankingHolograms(player);
+			// DataMgr.setRankingHolograms(player, rankingHolograms);
+			// PlayerStatusMgr.HologramUpdateRunnable(player);
+			Main.playerHolograms.add(player);
 		}
 
 		if (Main.type != ServerType.MATCH) {
