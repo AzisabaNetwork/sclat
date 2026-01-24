@@ -6,7 +6,7 @@ import be4rjp.sclat.api.Sphere;
 import be4rjp.sclat.api.player.PlayerData;
 import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.manager.SPWeaponMgr;
-import net.minecraft.server.v1_14_R1.EntityArmorStand;
+import net.minecraft.server.v1_15_R1.EntityArmorStand;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Particle;

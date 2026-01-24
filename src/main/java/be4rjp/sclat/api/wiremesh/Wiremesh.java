@@ -1,24 +1,24 @@
 package be4rjp.sclat.api.wiremesh;
 
 import be4rjp.sclat.Sclat;
-import net.minecraft.server.v1_14_R1.DataWatcher;
-import net.minecraft.server.v1_14_R1.EntityArmorStand;
-import net.minecraft.server.v1_14_R1.EntityFallingBlock;
-import net.minecraft.server.v1_14_R1.EntityPlayer;
-import net.minecraft.server.v1_14_R1.IBlockData;
-import net.minecraft.server.v1_14_R1.PacketPlayOutEntityDestroy;
-import net.minecraft.server.v1_14_R1.PacketPlayOutEntityMetadata;
-import net.minecraft.server.v1_14_R1.PacketPlayOutMount;
-import net.minecraft.server.v1_14_R1.PacketPlayOutSpawnEntity;
-import net.minecraft.server.v1_14_R1.PacketPlayOutSpawnEntityLiving;
-import net.minecraft.server.v1_14_R1.WorldServer;
+import net.minecraft.server.v1_15_R1.DataWatcher;
+import net.minecraft.server.v1_15_R1.EntityArmorStand;
+import net.minecraft.server.v1_15_R1.EntityFallingBlock;
+import net.minecraft.server.v1_15_R1.EntityPlayer;
+import net.minecraft.server.v1_15_R1.IBlockData;
+import net.minecraft.server.v1_15_R1.PacketPlayOutEntityDestroy;
+import net.minecraft.server.v1_15_R1.PacketPlayOutEntityMetadata;
+import net.minecraft.server.v1_15_R1.PacketPlayOutMount;
+import net.minecraft.server.v1_15_R1.PacketPlayOutSpawnEntity;
+import net.minecraft.server.v1_15_R1.PacketPlayOutSpawnEntityLiving;
+import net.minecraft.server.v1_15_R1.WorldServer;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
-import org.bukkit.craftbukkit.v1_14_R1.CraftWorld;
-import org.bukkit.craftbukkit.v1_14_R1.block.data.CraftBlockData;
-import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_15_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_15_R1.block.data.CraftBlockData;
+import org.bukkit.craftbukkit.v1_15_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -97,7 +97,7 @@ public class Wiremesh extends BukkitRunnable {
 
 					if (!playerList.contains(player)) {
 						PacketPlayOutSpawnEntity fbPacket = new PacketPlayOutSpawnEntity(fb,
-								net.minecraft.server.v1_14_R1.Block.getCombinedId(ibd));
+								net.minecraft.server.v1_15_R1.Block.getCombinedId(ibd));
 						entityPlayer.playerConnection.sendPacket(fbPacket);
 						PacketPlayOutSpawnEntityLiving asPacket = new PacketPlayOutSpawnEntityLiving(as);
 						entityPlayer.playerConnection.sendPacket(asPacket);

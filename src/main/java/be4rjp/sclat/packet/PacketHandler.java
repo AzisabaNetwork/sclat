@@ -6,9 +6,9 @@ import be4rjp.sclat.data.DataMgr;
 import io.netty.channel.ChannelDuplexHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelPromise;
-import net.minecraft.server.v1_14_R1.EntityTypes;
-import net.minecraft.server.v1_14_R1.PacketPlayOutAbilities;
-import net.minecraft.server.v1_14_R1.PacketPlayOutSpawnEntity;
+import net.minecraft.server.v1_15_R1.EntityTypes;
+import net.minecraft.server.v1_15_R1.PacketPlayOutAbilities;
+import net.minecraft.server.v1_15_R1.PacketPlayOutSpawnEntity;
 import org.bukkit.entity.Player;
 
 import java.lang.reflect.Field;
