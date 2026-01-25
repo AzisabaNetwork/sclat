@@ -3,8 +3,6 @@ package be4rjp.sclat.manager;
 import be4rjp.sclat.Sclat;
 import be4rjp.sclat.data.DataMgr;
 import com.mojang.authlib.GameProfile;
-import net.minecraft.server.v1_15_R1.DataWatcherRegistry;
-import net.minecraft.server.v1_15_R1.EntityPlayer;
 import net.minecraft.server.v1_15_R1.EnumItemSlot;
 import net.minecraft.server.v1_15_R1.MinecraftServer;
 import net.minecraft.server.v1_15_R1.PacketPlayOutAnimation;
@@ -31,7 +29,7 @@ public class NPCMgr {
 
 	public static void createNPC(Player player1, String npcName1, Location location1) {
 		BukkitRunnable task = new BukkitRunnable() {
-			EntityPlayer npc;
+			FakePlayer npc;
 
 			int s = 0;
 
@@ -46,13 +44,13 @@ public class NPCMgr {
 
 					MinecraftServer nmsServer = ((CraftServer) Bukkit.getServer()).getServer();
 					WorldServer nmsWorld = ((CraftWorld) location.getWorld()).getHandle();
-					GameProfile gameProfile = new GameProfile(player.getUniqueId(), npcName);
+					GameProfile gameProfile = ((CraftPlayer) player).getHandle().getProfile();
 
-					npc = new EntityPlayer(nmsServer, nmsWorld, gameProfile, new PlayerInteractManager(nmsWorld));
+					npc = new FakePlayer(nmsServer, nmsWorld, gameProfile, new PlayerInteractManager(nmsWorld));
 
 					// 見えないところにスポーンさせて、クライアントにスキンを先に読み込ませる
 					npc.setLocation(location.getX(), location.getY() - 20, location.getZ(), location.getYaw(), 0);
-					npc.getDataWatcher().set(DataWatcherRegistry.a.a(15), (byte) 127);
+					npc.setBQ((byte) 127);
 
 					for (Player p : Sclat.getPlugin(Sclat.class).getServer().getOnlinePlayers()) {
 						PlayerConnection connection = ((CraftPlayer) p).getHandle().playerConnection;

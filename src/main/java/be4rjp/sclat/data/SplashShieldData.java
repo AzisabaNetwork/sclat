@@ -1,6 +1,7 @@
 
 package be4rjp.sclat.data;
 
+import be4rjp.sclat.api.IOwnable;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -12,7 +13,7 @@ import java.util.List;
  *
  * @author Be4rJP
  */
-public class SplashShieldData {
+public class SplashShieldData implements IOwnable {
 	private BukkitRunnable task;
 	private List<ArmorStand> list = new ArrayList<>();
 	private Player player;
@@ -59,4 +60,8 @@ public class SplashShieldData {
 		this.IsDeploy = isdep;
 	}
 
+	@Override
+	public Player getOwner() {
+		return player;
+	}
 }

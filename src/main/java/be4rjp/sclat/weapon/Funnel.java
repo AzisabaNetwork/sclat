@@ -2,22 +2,25 @@ package be4rjp.sclat.weapon;
 
 import be4rjp.sclat.Sclat;
 import be4rjp.sclat.api.GlowingAPI;
+import be4rjp.sclat.api.IOwnable;
 import be4rjp.sclat.api.SclatUtil;
+import be4rjp.sclat.api.SimpleRunnable;
 import be4rjp.sclat.api.player.PlayerData;
 import be4rjp.sclat.api.raytrace.BoundingBox;
 import be4rjp.sclat.api.raytrace.RayTrace;
 import be4rjp.sclat.api.team.Team;
 import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.data.KasaData;
-import be4rjp.sclat.data.SplashShieldData;
 import be4rjp.sclat.manager.ArmorStandMgr;
 import net.minecraft.server.v1_15_R1.EnumItemSlot;
 import net.minecraft.server.v1_15_R1.PacketPlayOutEntityEquipment;
+import net.minecraft.server.v1_15_R1.PlayerConnection;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.v1_15_R1.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_15_R1.inventory.CraftItemStack;
@@ -33,7 +36,6 @@ import org.bukkit.util.Vector;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class Funnel {
 
@@ -54,14 +56,22 @@ public class Funnel {
 
 		loop : for (Vector vector : positions) {
 
-			Location position = vector.toLocation(player.getLocation().getWorld());
-			Block block = player.getLocation().getWorld().getBlockAt(position);
+			World world = player.getLocation().getWorld();
+			if (world == null) {
+				Sclat.logger.warn("Player world is null");
+				continue;
+			}
+			Location position = vector.toLocation(world);
+			Block block = world.getBlockAt(position);
 
 			if (!block.getType().equals(Material.AIR)) {
 				break;
 			}
+
+			double maxDistSquad = 4 /* 2*2 */;
 			for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
-				if (DataMgr.getPlayerData(target).getSettings().ShowEffect_MainWeaponInk()) {
+				PlayerData playerData = DataMgr.getPlayerData(target);
+				if (playerData.getSettings().ShowEffect_MainWeaponInk()) {
 					if (target.getWorld() == position.getWorld()) {
 						if (target.getLocation().distanceSquared(position) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED) {
 							org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(player).getTeam().getTeamColor()
@@ -70,71 +80,59 @@ public class Funnel {
 						}
 					}
 				}
-			}
-
-			double maxDistSquad = 4 /* 2*2 */;
-			for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
-				if (!DataMgr.getPlayerData(target).isInMatch())
+				if (!playerData.isInMatch())
 					continue;
-				if (DataMgr.getPlayerData(player).getTeam() != DataMgr.getPlayerData(target).getTeam()
+				if (DataMgr.getPlayerData(player).getTeam() != playerData.getTeam()
 						&& target.getGameMode().equals(GameMode.ADVENTURE)) {
 					if (target.getLocation().distanceSquared(position) <= maxDistSquad) {
-						if (rayTrace.intersects(new BoundingBox((Entity) target), 4, 0.05)) {
+						if (rayTrace.intersects(new BoundingBox(target), 4, 0.05)) {
 							SclatUtil.giveDamage(player, target, damage, "killed");
 							player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_HURT, 1.2F, 1.3F);
 
 							// AntiNoDamageTime
-							BukkitRunnable task = new BukkitRunnable() {
-								Player p = target;
-
-								@Override
-								public void run() {
-									target.setNoDamageTicks(0);
-								}
-							};
-							task.runTaskLater(Sclat.getPlugin(), 1);
+							SimpleRunnable.runTaskLater(cancel -> {
+								target.setNoDamageTicks(0);
+							}, 1);
 							break loop;
 						}
 					}
 				}
 			}
 
-			for (Entity as : player.getWorld().getEntities()) {
-				if (as instanceof ArmorStand) {
-					if (as.getLocation().distanceSquared(position) <= maxDistSquad) {
-						if (rayTrace.intersects(new BoundingBox((Entity) as), 4, 0.05)) {
-							if (as.getCustomName() != null) {
-								if (as.getCustomName().equals("SplashShield")) {
-									SplashShieldData ssdata = DataMgr
-											.getSplashShieldDataFromArmorStand((ArmorStand) as);
-									if (DataMgr.getPlayerData(ssdata.getPlayer()).getTeam() != DataMgr
+			for (ArmorStand as : player.getWorld().getEntitiesByClass(ArmorStand.class)) {
+				if (as == null) {
+					Sclat.logger.warn("ArmorStand is null");
+					continue loop;
+				}
+				if (as.getLocation().distanceSquared(position) <= maxDistSquad) {
+					if (rayTrace.intersects(new BoundingBox(as), 4, 0.05)) {
+						String customName = as.getCustomName();
+						if (customName != null) {
+							switch (customName) {
+								case "Kasa" :
+								case "SplashShield" : {
+									IOwnable ownableEntity = customName.equals("Kasa")
+											? DataMgr.getKasaDataFromArmorStand(as)
+											: DataMgr.getSplashShieldDataFromArmorStand(as);
+									if (DataMgr.getPlayerData(ownableEntity.getOwner()).getTeam() != DataMgr
 											.getPlayerData(player).getTeam()) {
-										ArmorStandMgr.giveDamageArmorStand((ArmorStand) as, damage, player);
+										ArmorStandMgr.giveDamageArmorStand(as, damage, player);
 										as.getWorld().playSound(as.getLocation(), Sound.ENTITY_PLAYER_HURT, 0.8F, 1.2F);
 										break loop;
 									}
-								} else if (as.getCustomName().equals("Kasa")) {
-									KasaData ssdata = DataMgr.getKasaDataFromArmorStand((ArmorStand) as);
-									if (DataMgr.getPlayerData(ssdata.getPlayer()).getTeam() != DataMgr
-											.getPlayerData(player).getTeam()) {
-										ArmorStandMgr.giveDamageArmorStand((ArmorStand) as, damage, player);
-										as.getWorld().playSound(as.getLocation(), Sound.ENTITY_PLAYER_HURT, 0.8F, 1.2F);
-										break loop;
-									}
-								} else {
-									if (SclatUtil.isNumber(as.getCustomName()))
-										if (!as.getCustomName().equals("21") && !as.getCustomName().equals("100"))
-											if (((ArmorStand) as).isVisible())
-												player.playSound(player.getLocation(), Sound.ENTITY_ARROW_HIT_PLAYER,
-														1.2F, 1.3F);
-									ArmorStandMgr.giveDamageArmorStand((ArmorStand) as, damage, player);
-									break loop;
+									break;
 								}
+								default :
+									if (SclatUtil.isNumber(customName) && !customName.equals("21")
+											&& !customName.equals("100") && as.isVisible())
+										player.playSound(player.getLocation(), Sound.ENTITY_ARROW_HIT_PLAYER, 1.2F,
+												1.3F);
 							}
-							ArmorStandMgr.giveDamageArmorStand((ArmorStand) as, damage, player);
 						}
+						ArmorStandMgr.giveDamageArmorStand(as, damage, player);
 					}
 				}
+
 			}
 		}
 	}
@@ -459,6 +457,7 @@ public class Funnel {
 								kdata2.setDamage(1024);
 							}
 						}
+						int listRemoveDelay = kdata.getDamage() == 1024 ? 110 : 160;
 						if (kdata.getDamage() > FunnelMaxHP && kdata.getDamage() < 9999) {
 							ArmorStand kasaStand = kdata.getArmorStandList().get(0);
 							data.subArmorlist(kasaStand);
@@ -472,11 +471,7 @@ public class Funnel {
 								HashArmorstand.remove(kasaStand);
 							} else {
 								list6.remove(kasaStand);
-								if (kdata.getDamage() == 1024) {
-									listremove.runTaskLater(Sclat.getPlugin(), 110);
-								} else {
-									listremove.runTaskLater(Sclat.getPlugin(), 160);
-								}
+								listremove.runTaskLater(Sclat.getPlugin(), listRemoveDelay);
 							}
 							kdata.setDamage(10000);
 							for (ArmorStand as : kdata.getArmorStandList()) {
@@ -496,11 +491,7 @@ public class Funnel {
 								HashArmorstand.remove(kasaStand1);
 							} else {
 								list6.remove(kasaStand1);
-								if (kdata1.getDamage() == 1024) {
-									listremove1.runTaskLater(Sclat.getPlugin(), 110);
-								} else {
-									listremove1.runTaskLater(Sclat.getPlugin(), 160);
-								}
+								listremove1.runTaskLater(Sclat.getPlugin(), listRemoveDelay);
 							}
 							kdata1.setDamage(10000);
 							for (ArmorStand as : kdata1.getArmorStandList()) {
@@ -520,11 +511,7 @@ public class Funnel {
 								HashArmorstand.remove(kasaStand2);
 							} else {
 								list6.remove(kasaStand2);
-								if (kdata2.getDamage() == 1024) {
-									listremove2.runTaskLater(Sclat.getPlugin(), 110);
-								} else {
-									listremove2.runTaskLater(Sclat.getPlugin(), 160);
-								}
+								listremove2.runTaskLater(Sclat.getPlugin(), listRemoveDelay);
 							}
 							kdata2.setDamage(10000);
 							for (ArmorStand as : kdata2.getArmorStandList()) {
@@ -613,22 +600,19 @@ public class Funnel {
 									if (i % 20 == 0) {
 										Team team = data.getTeam();
 										for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
-											((CraftPlayer) o_player).getHandle().playerConnection.sendPacket(
-													new PacketPlayOutEntityEquipment(aslist.get(2).getEntityId(),
-															EnumItemSlot.HEAD,
-															CraftItemStack.asNMSCopy(new ItemStack(Material.getMaterial(
-																	team.getTeamColor().getGlass().toString()
-																			+ "_PANE")))));
-											((CraftPlayer) o_player).getHandle().playerConnection.sendPacket(
-													new PacketPlayOutEntityEquipment(aslist.get(1).getEntityId(),
-															EnumItemSlot.HEAD,
-															CraftItemStack.asNMSCopy(new ItemStack(Material.getMaterial(
-																	team.getTeamColor().getGlass().toString()
-																			+ "_PANE")))));
-											((CraftPlayer) o_player).getHandle().playerConnection.sendPacket(
-													new PacketPlayOutEntityEquipment(aslist.get(0).getEntityId(),
-															EnumItemSlot.HEAD, CraftItemStack.asNMSCopy(
-																	new ItemStack(team.getTeamColor().getWool()))));
+											PlayerConnection playerConnection = ((CraftPlayer) o_player)
+													.getHandle().playerConnection;
+											Material teamColoredGlassPane = Material
+													.getMaterial(team.getTeamColor().getGlass().toString() + "_PANE");
+											playerConnection.sendPacket(new PacketPlayOutEntityEquipment(
+													aslist.get(2).getEntityId(), EnumItemSlot.HEAD,
+													CraftItemStack.asNMSCopy(new ItemStack(teamColoredGlassPane))));
+											playerConnection.sendPacket(new PacketPlayOutEntityEquipment(
+													aslist.get(1).getEntityId(), EnumItemSlot.HEAD,
+													CraftItemStack.asNMSCopy(new ItemStack(teamColoredGlassPane))));
+											playerConnection.sendPacket(new PacketPlayOutEntityEquipment(
+													aslist.get(0).getEntityId(), EnumItemSlot.HEAD, CraftItemStack
+															.asNMSCopy(new ItemStack(team.getTeamColor().getWool()))));
 										}
 									}
 								} else {
@@ -759,9 +743,8 @@ public class Funnel {
 									} else if (HashArmorstand.containsKey(aslistget0)) {
 										Location las = aslistget0.getLocation();
 										Location lpl = HashArmorstand.get(aslistget0).getLocation()
-												.add(r1.clone().multiply(2).add(new Vector(0, 1.4, 0)));
-										pv = new Vector(lpl.getX() - las.getX(), lpl.getY() - las.getY(),
-												lpl.getZ() - las.getZ());
+												.add(r1.clone().multiply(2).add(new Vector(0, 1.4, 0))).subtract(las);
+										pv = lpl.clone().subtract(las).toVector();
 										if (i % 48 == 32) {
 											Funnel.FunnelShot(p, aslistget0,
 													HashArmorstand.get(aslistget0).getEyeLocation());
@@ -797,22 +780,19 @@ public class Funnel {
 										// 残数表記了
 										Team team = data.getTeam();
 										for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
-											((CraftPlayer) o_player).getHandle().playerConnection.sendPacket(
-													new PacketPlayOutEntityEquipment(aslist.get(2).getEntityId(),
-															EnumItemSlot.HEAD,
-															CraftItemStack.asNMSCopy(new ItemStack(Material.getMaterial(
-																	team.getTeamColor().getGlass().toString()
-																			+ "_PANE")))));
-											((CraftPlayer) o_player).getHandle().playerConnection.sendPacket(
-													new PacketPlayOutEntityEquipment(aslist.get(1).getEntityId(),
-															EnumItemSlot.HEAD,
-															CraftItemStack.asNMSCopy(new ItemStack(Material.getMaterial(
-																	team.getTeamColor().getGlass().toString()
-																			+ "_PANE")))));
-											((CraftPlayer) o_player).getHandle().playerConnection.sendPacket(
-													new PacketPlayOutEntityEquipment(aslist.get(0).getEntityId(),
-															EnumItemSlot.HEAD, CraftItemStack.asNMSCopy(
-																	new ItemStack(team.getTeamColor().getWool()))));
+											Material teamGlassPaneMaterial = Material
+													.getMaterial(team.getTeamColor().getGlass().toString() + "_PANE");
+											PlayerConnection playerConnection = ((CraftPlayer) o_player)
+													.getHandle().playerConnection;
+											playerConnection.sendPacket(new PacketPlayOutEntityEquipment(
+													aslist.get(2).getEntityId(), EnumItemSlot.HEAD,
+													CraftItemStack.asNMSCopy(new ItemStack(teamGlassPaneMaterial))));
+											playerConnection.sendPacket(new PacketPlayOutEntityEquipment(
+													aslist.get(1).getEntityId(), EnumItemSlot.HEAD,
+													CraftItemStack.asNMSCopy(new ItemStack(teamGlassPaneMaterial))));
+											playerConnection.sendPacket(new PacketPlayOutEntityEquipment(
+													aslist.get(0).getEntityId(), EnumItemSlot.HEAD, CraftItemStack
+															.asNMSCopy(new ItemStack(team.getTeamColor().getWool()))));
 										}
 									}
 								} else {
@@ -869,11 +849,12 @@ public class Funnel {
 								if (DataMgr.getPlayerData(player).getTeam() != DataMgr.getPlayerData(target).getTeam()
 										&& target.getGameMode().equals(GameMode.ADVENTURE)) {
 									if (target.getLocation().distanceSquared(position) <= maxDistSquad) {
-										// if(rayTrace.intersects(new BoundingBox((Entity)target), (30), 0.2)){
 										player.getWorld().playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BIT,
 												1.0f, 5);
 										if (!list6.isEmpty()) {
-											if (list6.get(list6.size() - 1).equals(as3) && FunAmoP(target)) {
+											if (!FunAmoP(target))
+												return;
+											if (list6.get(list6.size() - 1).equals(as3)) {
 												player.getWorld().playSound(target.getLocation(),
 														Sound.BLOCK_NOTE_BLOCK_DIDGERIDOO, 1.0f, 2);
 												HashPlayer.put(as3, target);
@@ -886,7 +867,7 @@ public class Funnel {
 												kdataReset = i + 210;
 												// listremove.runTaskLater(Main.getPlugin(), 140);
 												list6.remove(list6.size() - 1);
-											} else if (list6.get(list6.size() - 1).equals(as13) && FunAmoP(target)) {
+											} else if (list6.get(list6.size() - 1).equals(as13)) {
 												player.getWorld().playSound(target.getLocation(),
 														Sound.BLOCK_NOTE_BLOCK_DIDGERIDOO, 1.0f, 2);
 												HashPlayer.put(as13, target);
@@ -897,9 +878,8 @@ public class Funnel {
 												}
 												as13.setGravity(true);
 												kdataReset1 = i + 210;
-												// listremove1.runTaskLater(Main.getPlugin(), 140);
 												list6.remove(list6.size() - 1);
-											} else if (list6.get(list6.size() - 1).equals(as23) && FunAmoP(target)) {
+											} else if (list6.get(list6.size() - 1).equals(as23)) {
 												player.getWorld().playSound(target.getLocation(),
 														Sound.BLOCK_NOTE_BLOCK_DIDGERIDOO, 1.0f, 2);
 												HashPlayer.put(as23, target);
@@ -910,92 +890,67 @@ public class Funnel {
 												}
 												as23.setGravity(true);
 												kdataReset2 = i + 210;
-												// listremove2.runTaskLater(Main.getPlugin(), 140);
 												list6.remove(list6.size() - 1);
 											}
 										}
 										break loop;
-										// }
 									}
 								}
 							}
 
+							// Todo: We need to write some wrap methods
 							for (Entity as : player.getWorld().getEntities()) {
-								if (as instanceof ArmorStand) {
-									if (as.getLocation().distanceSquared(position) <= maxDistSquad) {
-										// if(rayTrace.intersects(new BoundingBox((Entity)as), (int)(30), 0.2)){
-										if (as.getCustomName() != null) {
-											if (as.getCustomName().equals("SplashShield")) {
-												// SplashShieldData ssdata =
-												// DataMgr.getSplashShieldDataFromArmorStand((ArmorStand)as);
-												// if(DataMgr.getPlayerData(ssdata.getPlayer()).getTeam() !=
-												// DataMgr.getPlayerData(player).getTeam()){
-												// break loop;
-												// }
-											} else if (as.getCustomName().equals("Kasa")) {
-												// KasaData ssdata = DataMgr.getKasaDataFromArmorStand((ArmorStand)as);
-												// if(DataMgr.getPlayerData(ssdata.getPlayer()).getTeam() !=
-												// DataMgr.getPlayerData(player).getTeam()){
-												// break loop;
-												// }
-											} else {
-												if (SclatUtil.isNumber(as.getCustomName()))
-													if (!as.getCustomName().equals("21")
-															&& !as.getCustomName().equals("100"))
-														if (((ArmorStand) as).isVisible())
-															// player.playSound(player.getLocation(),
-															// Sound.ENTITY_ARROW_HIT_PLAYER, 1.2F, 1.3F);
-															player.getWorld().playSound(player.getLocation(),
-																	Sound.BLOCK_NOTE_BLOCK_BIT, 1.0f, 5);
-												if (!list6.isEmpty()) {
-													if (list6.get(list6.size() - 1).equals(as3)
-															&& FunAmoA((ArmorStand) as)) {
-														player.getWorld().playSound(as.getLocation(),
-																Sound.BLOCK_NOTE_BLOCK_DIDGERIDOO, 1.0f, 2);
-														HashArmorstand.put(as3, (ArmorStand) as);
-														GlowingAPI.setGlowing(as3, player, true);
-														if (kdata.getDamage() < FunnelMaxHP2) {
-															kdata.setDamage(FunnelMaxHP2);
-														}
-														as3.setGravity(true);
-														kdataReset = i + 210;
-														// listremove.runTaskLater(Main.getPlugin(), 140);
-														list6.remove(list6.size() - 1);
-													} else if (list6.get(list6.size() - 1).equals(as13)
-															&& FunAmoA((ArmorStand) as)) {
-														player.getWorld().playSound(as.getLocation(),
-																Sound.BLOCK_NOTE_BLOCK_DIDGERIDOO, 1.0f, 2);
-														HashArmorstand.put(as13, (ArmorStand) as);
-														GlowingAPI.setGlowing(as13, player, true);
-														if (kdata1.getDamage() < FunnelMaxHP2) {
-															kdata1.setDamage(FunnelMaxHP2);
-														}
-														as13.setGravity(true);
-														kdataReset1 = i + 210;
-														// listremove1.runTaskLater(Main.getPlugin(), 140);
-														list6.remove(list6.size() - 1);
-													} else if (list6.get(list6.size() - 1).equals(as23)
-															&& FunAmoA((ArmorStand) as)) {
-														player.getWorld().playSound(as.getLocation(),
-																Sound.BLOCK_NOTE_BLOCK_DIDGERIDOO, 1.0f, 2);
-														HashArmorstand.put(as23, (ArmorStand) as);
-														GlowingAPI.setGlowing(as23, player, true);
-														if (kdata2.getDamage() < FunnelMaxHP2) {
-															kdata2.setDamage(FunnelMaxHP2);
-														}
-														as23.setGravity(true);
-														kdataReset2 = i + 210;
-														// listremove2.runTaskLater(Main.getPlugin(), 140);
-														list6.remove(list6.size() - 1);
-													}
-												}
-												break loop;
+								if (!(as instanceof ArmorStand)
+										|| as.getLocation().distanceSquared(position) > maxDistSquad
+										|| as.getCustomName() == null || as.getCustomName().equals("SplashShield"))
+									continue;
+								if (!as.getCustomName().equals("Kasa")) {
+									if (SclatUtil.isNumber(as.getCustomName()) && !as.getCustomName().equals("21")
+											&& !as.getCustomName().equals("100") && ((ArmorStand) as).isVisible())
+										player.getWorld().playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BIT,
+												1.0f, 5);
+									if (!list6.isEmpty()) {
+										if (!FunAmoA((ArmorStand) as))
+											return;
+										ArmorStand armorStand = list6.get(list6.size() - 1);
+										if (armorStand.equals(as3)) {
+											player.getWorld().playSound(as.getLocation(),
+													Sound.BLOCK_NOTE_BLOCK_DIDGERIDOO, 1.0f, 2);
+											HashArmorstand.put(as3, (ArmorStand) as);
+											GlowingAPI.setGlowing(as3, player, true);
+											if (kdata.getDamage() < FunnelMaxHP2) {
+												kdata.setDamage(FunnelMaxHP2);
 											}
+											as3.setGravity(true);
+											kdataReset = i + 210;
+											list6.remove(list6.size() - 1);
+										} else if (armorStand.equals(as13)) {
+											player.getWorld().playSound(as.getLocation(),
+													Sound.BLOCK_NOTE_BLOCK_DIDGERIDOO, 1.0f, 2);
+											HashArmorstand.put(as13, (ArmorStand) as);
+											GlowingAPI.setGlowing(as13, player, true);
+											if (kdata1.getDamage() < FunnelMaxHP2) {
+												kdata1.setDamage(FunnelMaxHP2);
+											}
+											as13.setGravity(true);
+											kdataReset1 = i + 210;
+											list6.remove(list6.size() - 1);
+										} else if (armorStand.equals(as23)) {
+											player.getWorld().playSound(as.getLocation(),
+													Sound.BLOCK_NOTE_BLOCK_DIDGERIDOO, 1.0f, 2);
+											HashArmorstand.put(as23, (ArmorStand) as);
+											GlowingAPI.setGlowing(as23, player, true);
+											if (kdata2.getDamage() < FunnelMaxHP2) {
+												kdata2.setDamage(FunnelMaxHP2);
+											}
+											as23.setGravity(true);
+											kdataReset2 = i + 210;
+											list6.remove(list6.size() - 1);
 										}
-										// ArmorStandMgr.giveDamageArmorStand((ArmorStand) as, damage, player);
-										// }
 									}
+									break loop;
 								}
+
 							}
 
 						}
@@ -1092,10 +1047,8 @@ public class Funnel {
 		double rate = 0;
 		for (int ai = 0; ai < 3; ai++) {
 			try {
-				if (HashPlayer.containsKey(DataMgr.getPlayerData(player).getArmorlist(ai))) {
-					if (HashPlayer.get(DataMgr.getPlayerData(player).getArmorlist(ai)).equals(target)) {
-						rate = rate + 1.5;
-					}
+				if (target.equals(HashPlayer.get(DataMgr.getPlayerData(player).getArmorlist(ai)))) {
+					rate = rate + 1.5;
 				}
 			} catch (Exception e) {
 				rate = rate - 0.7;
@@ -1158,34 +1111,23 @@ public class Funnel {
 		int rate = 3;
 		for (int ai = 0; ai < 3; ai++) {
 			try {
-				if (HashPlayer.containsKey(DataMgr.getPlayerData(player).getArmorlist(ai))) {
-					rate = rate - 1;
+				ArmorStand armorList = DataMgr.getPlayerData(player).getArmorlist(ai);
+				if (HashPlayer.containsKey(armorList)) {
+					rate--;
 				}
-				if (HashArmorstand.containsKey(DataMgr.getPlayerData(player).getArmorlist(ai))) {
-					rate = rate - 1;
+				if (HashArmorstand.containsKey(armorList)) {
+					rate--;
 				}
 			} catch (Exception e) {
-				rate = rate - 1;
+				rate--;
 			}
 		}
 		return rate;
 	}
 	private static boolean FunAmoP(Player player) {
-		int count = 0;
-		for (Map.Entry<ArmorStand, Player> entry : HashPlayer.entrySet()) {
-			if (entry.getValue() == player) {
-				count++;
-			}
-		}
-		return count < 3;
+		return HashPlayer.values().stream().filter(p -> p == player).count() < 3;
 	}
 	private static boolean FunAmoA(ArmorStand stand) {
-		int count = 0;
-		for (Map.Entry<ArmorStand, ArmorStand> entry : HashArmorstand.entrySet()) {
-			if (entry.getValue() == stand) {
-				count++;
-			}
-		}
-		return count < 3;
+		return HashPlayer.keySet().stream().filter(s -> s == stand).count() < 3;
 	}
 }
