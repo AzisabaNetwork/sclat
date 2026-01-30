@@ -2,29 +2,20 @@ name: Build
 
 on:
   push:
-    branches:
-      - kotlin
-      - master
-      - develop
-    paths:
+    paths: &build_paths
       - '**/*.java'
       - '**/*.kt'
       - '**/*.gradle'
       - '**/*.gradle.kts'
       - 'gradle/**'
       - 'resources/**'
+      - '.github/**'
   pull_request:
     branches:
       - kotlin
       - master
       - develop
-    paths:
-      - '**/*.java'
-      - '**/*.kt'
-      - '**/*.gradle'
-      - '**/*.gradle.kts'
-      - 'gradle/**'
-      - 'resources/**'
+    paths: *build_paths
   workflow_dispatch:
 
 concurrency:
