@@ -33,9 +33,18 @@ concurrency:
 
 jobs:
   build:
-    name: Build with Java 8
-    runs-on: ubuntu-latest
+    name: Build with Java ${{ matrix.java }} on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
     timeout-minutes: 15
+
+    strategy:
+      fail-fast: false
+      matrix:
+        java:
+          - "11"
+          - "17"
+        os:
+          - "ubuntu-latest"
 
     steps:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
