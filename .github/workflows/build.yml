@@ -3,6 +3,7 @@ name: Build
 on:
   push:
     branches:
+      - kotlin
       - master
       - develop
     paths:
@@ -13,6 +14,7 @@ on:
       - 'resources/**'
   pull_request:
     branches:
+      - kotlin
       - master
       - develop
     paths:
