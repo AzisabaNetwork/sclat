@@ -1,4 +1,5 @@
 [versions]
+kotlin = "2.3.0"
 runPaper = "2.3.1" # 3.x.x can't run in Java8
 spotless = "6.13.0" # 6.14.0 can't run in Java8
 shadow = "8.3.0"
@@ -18,8 +19,10 @@ jspecify = "1.0.0"
 runPaper = { id = "xyz.jpenilla.run-paper", version.ref = "runPaper" }
 spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
 shadow = { id = "com.gradleup.shadow", version.ref = "shadow" }
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 
 [libraries]
+kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8" }
 protocolLib = { module = "net.dmulloy2:ProtocolLib", version.ref = "protocolLib" }
 paperApi = { module = "com.destroystokyo.paper:paper-api", version.ref = "paperApi" }
 blockstudio = { module = "com.github.Be4rJP:BlockStudio", version.ref = "blockstudio" }

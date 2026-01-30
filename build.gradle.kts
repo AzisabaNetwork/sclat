@@ -4,6 +4,7 @@ plugins {
     `maven-publish`
     alias(libs.plugins.spotless)
     alias(libs.plugins.shadow)
+    alias(libs.plugins.kotlin.jvm)
 }
 
 group = "be4rjp"
@@ -35,11 +36,16 @@ dependencies {
     compileOnly(libs.paperApi)
     implementation(libs.cloudPaper)
     implementation(libs.jspecify)
+    implementation(libs.kotlin.stdlib)
 }
 
 // Project Settings
-val targetJavaVersion = 8
+val targetJavaVersion: Int = 8
 val defaultEncoding: String = "UTF-8"
+
+kotlin {
+    jvmToolchain(targetJavaVersion)
+}
 
 // Java Version Setup
 java {
@@ -52,6 +58,9 @@ java {
 }
 
 tasks {
+    build {
+        dependsOn(shadowJar)
+    }
 
     compileJava {
         options.encoding = defaultEncoding
@@ -110,9 +119,17 @@ spotless {
     }
     java {
         target("src/main/java/**/*.java", "src/test/java/**/*.java")
+        indentWithSpaces(4)
         toggleOffOn()
         removeUnusedImports()
         endWithNewline()
         eclipse()
+    }
+    kotlin {
+        ktlint()
+        target("src/main/java/**/*.kt", "src/main/kotlin/**/*.kt")
+        endWithNewline()
+        trimTrailingWhitespace()
+        indentWithSpaces(4)
     }
 }
