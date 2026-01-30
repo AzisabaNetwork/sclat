@@ -7,6 +7,7 @@ import be4rjp.sclat.api.team.Team;
 import be4rjp.sclat.manager.ArmorStandMgr;
 import be4rjp.sclat.manager.PaintMgr;
 import be4rjp.sclat.weapon.Gear;
+import java.util.List;
 import org.bukkit.Color;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -19,8 +20,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
-
-import java.util.List;
 
 public class TrapData {
 
@@ -73,7 +72,7 @@ public class TrapData {
 						Explosion();
 				}
 
-				if (number + 2 < DataMgr.getPlayerData(player).getTrapCount())
+				if (number + 2 < DataMgr.getPlayerData(player).trapCount)
 					Explosion();
 
 				for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {

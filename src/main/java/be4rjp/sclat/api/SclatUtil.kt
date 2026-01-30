@@ -179,7 +179,7 @@ object SclatUtil {
         buff.append(message)
         if (type == MessageType.TEAM) {
             for (player in Sclat.getPlugin().getServer().getOnlinePlayers()) {
-                val playerTeam = DataMgr.getPlayerData(player).getTeam()
+                val playerTeam = DataMgr.getPlayerData(player).team
                 if (playerTeam == null) continue
                 if (team == null) continue
                 if (playerTeam != team) continue
@@ -247,12 +247,12 @@ object SclatUtil {
         val bd =
             DataMgr
                 .getPlayerData(player)
-                .getTeam()
+                .team
                 .teamColor!!
                 .getWool()
                 .createBlockData()
         for (o_player in Sclat.getPlugin().getServer().getOnlinePlayers()) {
-            if (DataMgr.getPlayerData(o_player).getSettings().ShowEffect_BombEx()) {
+            if (DataMgr.getPlayerData(o_player).settings.ShowEffect_BombEx()) {
                 for (loc in s_locs) {
                     if (o_player.getWorld() === loc.getWorld()) {
                         if (o_player.getLocation().distanceSquared(loc) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED) {
@@ -283,9 +283,9 @@ object SclatUtil {
             val playerData = DataMgr.getPlayerData(player)
 
             if (player.getWorld() !== center.getWorld()) continue
-            if (playerData.getArmor() < 10000.0) continue
+            if (playerData.armor < 10000.0) continue
             if (player.getGameMode() == GameMode.SPECTATOR) continue
-            if (playerData.getTeam() == DataMgr.getPlayerData(shooter).getTeam()) continue
+            if (playerData.team == DataMgr.getPlayerData(shooter).team) continue
 
             val distance = player.getLocation().distance(center)
 
@@ -353,28 +353,28 @@ object SclatUtil {
         if (target.hasPotionEffect(PotionEffectType.FIRE_RESISTANCE)) {
             damage = damage * 0.6
         }
-        val armorHealth = targetData.getArmor()
+        val armorHealth = targetData.armor
         // if((target.getHealth()*2 + armorHealth*2 + target.getAbsorptionAmount() >
         // damage && armorHealth>=0.01 )||(target.getHealth() + armorHealth +
         // target.getAbsorptionAmount() > damage) && armorHealth<0.01){
         if ((target.getHealth() + target.getAbsorptionAmount() > (damage - armorHealth) / 2 && armorHealth > 0.01) ||
             ((target.getHealth() + target.getAbsorptionAmount() > damage) && armorHealth <= 0.01)
         ) {
-            targetData.setLastAttack(player)
+            targetData.lastAttack = player
             if (armorHealth > damage) {
-                targetData.setArmor(armorHealth - damage)
+                targetData.armor = armorHealth - damage
             } else {
                 if (armorHealth > 0.01) {
                     target.damage((damage - armorHealth) / 2)
                 } else {
                     target.damage(damage - armorHealth)
                 }
-                targetData.setArmor(0.0)
+                targetData.armor = 0.0
             }
         } else {
             target.setGameMode(GameMode.SPECTATOR)
             DeathMgr.PlayerDeathRunnable(target, player, damageType)
-            targetData.setArmor(0.0)
+            targetData.armor = 0.0
             return true
         }
         return false

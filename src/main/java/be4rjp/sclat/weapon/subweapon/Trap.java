@@ -20,8 +20,7 @@ public class Trap {
 			PaintMgr.Paint(block.getLocation(), player, true);
 			if (player.isOnGround() && DataMgr.getPlayerData(player).isInMatch()
 					&& player.getExp() >= 0.4 / Gear.getGearInfluence(player, Gear.Type.SUB_SPEC_UP)) {
-				TrapData trapData = new TrapData(player.getLocation().add(0, -1, 0), player, data.team,
-						data.getTrapCount());
+				TrapData trapData = new TrapData(player.getLocation().add(0, -1, 0), player, data.team, data.trapCount);
 				data.addTrapCount();
 				player.setExp(player.getExp() - (float) (0.39 / Gear.getGearInfluence(player, Gear.Type.SUB_SPEC_UP)));
 				player.playSound(player.getLocation(), Sound.BLOCK_WOODEN_PRESSURE_PLATE_CLICK_ON, 1F, 1.2F);

@@ -105,7 +105,7 @@ object WorldPackets {
         packet.getBooleans().write(3, player.getGameMode() == GameMode.CREATIVE)
 
         // Update your local data manager
-        DataMgr.getPlayerData(player).setFov(fov)
+        DataMgr.getPlayerData(player).fov = fov
 
         return Packets.sendServerPacket(player, packet)
     }
