@@ -113,8 +113,8 @@ public class QuadroArms {
 
 	public static void overheat_bar(Player player) {
 		BossBar bar = Sclat.getPlugin().getServer().createBossBar(
-				DataMgr.getPlayerData(player).getTeam().getTeamColor().getColorCode() + "§Quadro_overheat",
-				BarColor.RED, BarStyle.SOLID, BarFlag.CREATE_FOG);
+				DataMgr.getPlayerData(player).team.getTeamColor().getColorCode() + "§Quadro_overheat", BarColor.RED,
+				BarStyle.SOLID, BarFlag.CREATE_FOG);
 		bar.setProgress(0);
 		bar.addPlayer(player);
 
@@ -304,8 +304,8 @@ public class QuadroArms {
 		PaintMgr.PaintHightestBlock(player.getLocation(), player, true, true);
 
 		Snowball ball = player.launchProjectile(Snowball.class);
-		((CraftSnowball) ball).getHandle().setItem(CraftItemStack
-				.asNMSCopy(new ItemStack(DataMgr.getPlayerData(player).getTeam().getTeamColor().getWool())));
+		((CraftSnowball) ball).getHandle().setItem(
+				CraftItemStack.asNMSCopy(new ItemStack(DataMgr.getPlayerData(player).team.getTeamColor().getWool())));
 		player.getWorld().playSound(player.getLocation(), Sound.ENTITY_PIG_STEP, 0.3F, 1F);
 		Vector vec = player.getLocation().getDirection().multiply(QuadroShootSpeed);
 		double random = 0.32;
@@ -340,10 +340,10 @@ public class QuadroArms {
 				}
 
 				if (i != 0) {
-					org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).getTeam().getTeamColor().getWool()
+					org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).team.getTeamColor().getWool()
 							.createBlockData();
 					for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
-						if (DataMgr.getPlayerData(o_player).getSettings().ShowEffect_MainWeaponInk())
+						if (DataMgr.getPlayerData(o_player).settings.ShowEffect_MainWeaponInk())
 							if (o_player.getWorld() == inkball.getWorld())
 								if (o_player.getLocation().distanceSquared(
 										inkball.getLocation()) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED)
@@ -376,8 +376,8 @@ public class QuadroArms {
 		double ShootSpeed = 4.5;
 		PlayerData data = DataMgr.getPlayerData(player);
 		Snowball ball = player.launchProjectile(Snowball.class);
-		((CraftSnowball) ball).getHandle().setItem(CraftItemStack
-				.asNMSCopy(new ItemStack(DataMgr.getPlayerData(player).getTeam().getTeamColor().getWool())));
+		((CraftSnowball) ball).getHandle().setItem(
+				CraftItemStack.asNMSCopy(new ItemStack(DataMgr.getPlayerData(player).team.getTeamColor().getWool())));
 		Vector vec = player.getLocation().getDirection().multiply(ShootSpeed);
 		double random = 1.2;
 		int distick = 2;
@@ -410,12 +410,12 @@ public class QuadroArms {
 
 				if (i != 0) {
 					for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
-						if (!DataMgr.getPlayerData(target).getSettings().ShowEffect_MainWeaponInk())
+						if (!DataMgr.getPlayerData(target).settings.ShowEffect_MainWeaponInk())
 							continue;
 						if (target.getWorld() == inkball.getWorld()) {
 							if (target.getLocation()
 									.distanceSquared(inkball.getLocation()) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED) {
-								org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).getTeam().getTeamColor()
+								org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).team.getTeamColor()
 										.getWool().createBlockData();
 								target.spawnParticle(org.bukkit.Particle.BLOCK_DUST, inkball.getLocation(), 1, 0, 0, 0,
 										1, bd);
@@ -453,8 +453,8 @@ public class QuadroArms {
 		double ShootSpeed = 3.9;
 		PlayerData data = DataMgr.getPlayerData(player);
 		Snowball ball = player.launchProjectile(Snowball.class);
-		((CraftSnowball) ball).getHandle().setItem(CraftItemStack
-				.asNMSCopy(new ItemStack(DataMgr.getPlayerData(player).getTeam().getTeamColor().getWool())));
+		((CraftSnowball) ball).getHandle().setItem(
+				CraftItemStack.asNMSCopy(new ItemStack(DataMgr.getPlayerData(player).team.getTeamColor().getWool())));
 		Vector vec = player.getLocation().getDirection().multiply(ShootSpeed);
 		int distick = 2;
 		ball.setVelocity(vec);
@@ -485,12 +485,12 @@ public class QuadroArms {
 						DataMgr.setSnowballHitCount(name, 0);
 					}
 					for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
-						if (!DataMgr.getPlayerData(target).getSettings().ShowEffect_MainWeaponInk())
+						if (!DataMgr.getPlayerData(target).settings.ShowEffect_MainWeaponInk())
 							continue;
 						if (target.getWorld() == inkball.getWorld()) {
 							if (target.getLocation()
 									.distanceSquared(inkball.getLocation()) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED) {
-								org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).getTeam().getTeamColor()
+								org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).team.getTeamColor()
 										.getWool().createBlockData();
 								target.spawnParticle(org.bukkit.Particle.BLOCK_DUST, inkball.getLocation(), 3, 0, 0, 0,
 										1, bd);
@@ -532,7 +532,7 @@ public class QuadroArms {
 							if (target.getLocation().distanceSquared(inkball.getLocation()) <= maxDist * maxDist) {
 								double damage = (1 + maxDist - target.getLocation().distance(inkball.getLocation()))
 										* BlasterExDamage;
-								if (DataMgr.getPlayerData(player).getTeam() != DataMgr.getPlayerData(target).getTeam()
+								if (DataMgr.getPlayerData(player).team != DataMgr.getPlayerData(target).team
 										&& target.getGameMode().equals(GameMode.ADVENTURE)) {
 									SclatUtil.giveDamage(player, target, damage, "spWeapon");
 
@@ -622,7 +622,7 @@ public class QuadroArms {
 						// 爆発エフェクト
 						List<Location> s_locs = Sphere.getSphere(drop.getLocation(), maxDist, 15);
 						for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
-							if (DataMgr.getPlayerData(o_player).getSettings().ShowEffect_BombEx()) {
+							if (DataMgr.getPlayerData(o_player).settings.ShowEffect_BombEx()) {
 								for (Location loc : s_locs) {
 									if (o_player.getWorld() == loc.getWorld()) {
 										if (o_player.getLocation()
@@ -641,8 +641,8 @@ public class QuadroArms {
 							if (!DataMgr.getPlayerData(target).isInMatch() || target.getWorld() != p.getWorld())
 								continue;
 							if (target.getLocation().distance(drop.getLocation()) <= maxDist) {
-								if (DataMgr.getPlayerData(player).getTeam().getID() != DataMgr.getPlayerData(target)
-										.getTeam().getID()) {
+								if (DataMgr.getPlayerData(player).team.getID() != DataMgr.getPlayerData(target).team
+										.getID()) {
 									target.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 240, 1));
 								}
 
@@ -672,12 +672,12 @@ public class QuadroArms {
 
 					// ボムの視認用エフェクト
 					for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
-						if (DataMgr.getPlayerData(o_player).getSettings().ShowEffect_Bomb()) {
+						if (DataMgr.getPlayerData(o_player).settings.ShowEffect_Bomb()) {
 							if (o_player.getWorld() == drop.getLocation().getWorld()) {
 								if (o_player.getLocation()
 										.distanceSquared(drop.getLocation()) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED) {
 									Particle.DustOptions dustOptions = new Particle.DustOptions(
-											DataMgr.getPlayerData(p).getTeam().getTeamColor().getBukkitColor(), 1);
+											DataMgr.getPlayerData(p).team.getTeamColor().getBukkitColor(), 1);
 									o_player.spawnParticle(Particle.REDSTONE, drop.getLocation(), 1, 0, 0, 0, 50,
 											dustOptions);
 								}

@@ -107,7 +107,7 @@ public class AirStrike {
 				check : for (Vector vector : positions) {
 					Location position = vector.toLocation(player.getLocation().getWorld());
 					Particle.DustOptions dustOptions = new Particle.DustOptions(
-							DataMgr.getPlayerData(player).getTeam().getTeamColor().getBukkitColor(), 1);
+							DataMgr.getPlayerData(player).team.getTeamColor().getBukkitColor(), 1);
 					player.getWorld().spawnParticle(Particle.REDSTONE, position, 1, 0, 0, 0, 1, dustOptions);
 				}
 				if (c == 100 || !DataMgr.getPlayerData(player).isInMatch()) {
@@ -134,7 +134,7 @@ public class AirStrike {
 			@Override
 			public void run() {
 				if (c == 0) {
-					ItemStack bom = new ItemStack(DataMgr.getPlayerData(p).getTeam().getTeamColor().getWool()).clone();
+					ItemStack bom = new ItemStack(DataMgr.getPlayerData(p).team.getTeamColor().getWool()).clone();
 					ItemMeta bom_m = bom.getItemMeta();
 					bom_m.setLocalizedName(String.valueOf(Sclat.getNotDuplicateNumber()));
 					bom.setItemMeta(bom_m);
@@ -182,7 +182,7 @@ public class AirStrike {
 							} else {
 								damage = (maxDist - target.getLocation().distance(drop.getLocation())) * 7;
 							}
-							if (DataMgr.getPlayerData(player).getTeam() != DataMgr.getPlayerData(target).getTeam()
+							if (DataMgr.getPlayerData(player).team != DataMgr.getPlayerData(target).team
 									&& target.getGameMode().equals(GameMode.ADVENTURE)) {
 								SclatUtil.giveDamage(player, target, damage, "spWeapon");
 
@@ -216,9 +216,9 @@ public class AirStrike {
 
 				// ボムの視認用エフェクト
 				for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
-					if (DataMgr.getPlayerData(o_player).getSettings().ShowEffect_SPWeapon()) {
+					if (DataMgr.getPlayerData(o_player).settings.ShowEffect_SPWeapon()) {
 						Particle.DustOptions dustOptions = new Particle.DustOptions(
-								DataMgr.getPlayerData(p).getTeam().getTeamColor().getBukkitColor(), 1);
+								DataMgr.getPlayerData(p).team.getTeamColor().getBukkitColor(), 1);
 						o_player.spawnParticle(Particle.REDSTONE, drop.getLocation(), 1, 0, 0, 0, 50, dustOptions);
 					}
 				}

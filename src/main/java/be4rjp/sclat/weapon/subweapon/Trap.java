@@ -16,11 +16,11 @@ public class Trap {
 	public static void useTrap(Player player) {
 		PlayerData data = DataMgr.getPlayerData(player);
 		Block block = player.getLocation().add(0, -1, 0).getBlock();
-		if (data.getTeam() != null && PaintMgr.canPaint(block)) {
+		if (data.team != null && PaintMgr.canPaint(block)) {
 			PaintMgr.Paint(block.getLocation(), player, true);
 			if (player.isOnGround() && DataMgr.getPlayerData(player).isInMatch()
 					&& player.getExp() >= 0.4 / Gear.getGearInfluence(player, Gear.Type.SUB_SPEC_UP)) {
-				TrapData trapData = new TrapData(player.getLocation().add(0, -1, 0), player, data.getTeam(),
+				TrapData trapData = new TrapData(player.getLocation().add(0, -1, 0), player, data.team,
 						data.getTrapCount());
 				data.addTrapCount();
 				player.setExp(player.getExp() - (float) (0.39 / Gear.getGearInfluence(player, Gear.Type.SUB_SPEC_UP)));

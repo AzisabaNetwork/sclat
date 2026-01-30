@@ -35,21 +35,20 @@ public class Barrier {
 			@Override
 			public void run() {
 				if (!data.isInMatch() || !player.getGameMode().equals(GameMode.ADVENTURE) || !p.isOnline()) {
-					data.setArmor(0);
+					data.armor = 0;
 					DataMgr.getPlayerData(player).setIsUsingSP(false);
 					cancel();
 				}
 				if (c == 0)
-					data.setArmor(Double.MAX_VALUE);
+					data.armor = Double.MAX_VALUE;
 				Location loc = p.getLocation().add(0, 0.5, 0);
 
 				List<Location> s_locs = Sphere.getSphere(loc, 2, 23);
 				for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
-					if (DataMgr.getPlayerData(o_player).getSettings().ShowEffect_SPWeapon()
-							&& !o_player.equals(player)) {
+					if (DataMgr.getPlayerData(o_player).settings.ShowEffect_SPWeapon() && !o_player.equals(player)) {
 						Particle.DustOptions dustOptions = new Particle.DustOptions(
-								data.getTeam().getTeamColor().getBukkitColor(), 1);
-						org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).getTeam().getTeamColor().getWool()
+								data.team.getTeamColor().getBukkitColor(), 1);
+						org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).team.getTeamColor().getWool()
 								.createBlockData();
 						for (Location e_loc : s_locs)
 							if (o_player.getWorld() == e_loc.getWorld())
@@ -59,7 +58,7 @@ public class Barrier {
 					}
 				}
 				if (c == 25) {
-					data.setArmor(0);
+					data.armor = 0;
 					// p.playSound(p.getLocation(), Sound.BLOCK_CHEST_CLOSE, 1, 2);
 					DataMgr.getPlayerData(player).setIsUsingSP(false);
 					cancel();

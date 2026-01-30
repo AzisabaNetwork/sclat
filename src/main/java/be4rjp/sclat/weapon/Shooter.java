@@ -38,7 +38,7 @@ public class Shooter {
 			public void run() {
 				PlayerData data = DataMgr.getPlayerData(p);
 
-				if (!data.isInMatch() || !p.isOnline() || data.getStoprun()) {
+				if (!data.isInMatch() || !p.isOnline() || data.stoprun) {
 					cancel();
 					return;
 				}
@@ -49,8 +49,8 @@ public class Shooter {
 							|| clickType == ClickType.NAGAOSI) && data.isInMatch()) {
 						Shooter.Shoot(p, false, false,
 								maxRandomCount >= data.getWeaponClass().getMainWeapon().getMaxRandomCount());
-						data.setTick(data.getTick()
-								+ DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getShootTick());
+						data.tick = data.tick
+								+ DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getShootTick();
 						if (data.getWeaponClass().getMainWeapon().getMaxRandom() != 0
 								&& maxRandomCount <= data.getWeaponClass().getMainWeapon().getMaxRandomCount() * 2) {
 							maxRandomCount++;
@@ -86,8 +86,8 @@ public class Shooter {
 					if ((clickType == ClickType.FIRST_CLICK || clickType == ClickType.RENDA
 							|| clickType == ClickType.NAGAOSI) && data.isInMatch()) {
 						Shooter.Shoot(p, true, false, false);
-						data.setTick(data.getTick()
-								+ DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getShootTick());
+						data.tick = data.tick
+								+ DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getShootTick();
 					}
 				}
 			}
@@ -151,15 +151,15 @@ public class Shooter {
 						// p.setExp(p.getExp() - ink);
 
 						// エフェクト
-						org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(player).getTeam().getTeamColor()
-								.getWool().createBlockData();
+						org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(player).team.getTeamColor().getWool()
+								.createBlockData();
 						double random = 1.0;
 						for (int i = 0; i < 35; i++) {
 							Vector randomVector = new Vector(Math.random() * random - random / 2,
 									Math.random() * random - random / 2, Math.random() * random - random / 2);
 							Vector erv = ev.clone().add(randomVector);
 							for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
-								if (DataMgr.getPlayerData(o_player).getSettings().ShowEffect_BombEx()) {
+								if (DataMgr.getPlayerData(o_player).settings.ShowEffect_BombEx()) {
 									if (o_player.getWorld() == location.getWorld()) {
 										if (o_player.getLocation()
 												.distanceSquared(location) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED) {
@@ -173,8 +173,8 @@ public class Shooter {
 							}
 						}
 
-						if (DataMgr.getPlayerData(player).getArmor() > 9999) {
-							DataMgr.getPlayerData(player).setArmor(0);
+						if (DataMgr.getPlayerData(player).armor > 9999) {
+							DataMgr.getPlayerData(player).armor = 0;
 						}
 						p.getWorld().playSound(p.getLocation(), Sound.ITEM_ARMOR_EQUIP_GENERIC, 1.4F, 1.5F);
 
@@ -339,8 +339,8 @@ public class Shooter {
 		PaintMgr.PaintHightestBlock(player.getLocation(), player, true, true);
 
 		Snowball ball = player.launchProjectile(Snowball.class);
-		((CraftSnowball) ball).getHandle().setItem(CraftItemStack
-				.asNMSCopy(new ItemStack(DataMgr.getPlayerData(player).getTeam().getTeamColor().getWool())));
+		((CraftSnowball) ball).getHandle().setItem(
+				CraftItemStack.asNMSCopy(new ItemStack(DataMgr.getPlayerData(player).team.getTeamColor().getWool())));
 		player.getWorld().playSound(player.getLocation(), Sound.ENTITY_PIG_STEP, 0.3F, 1F);
 		Vector vec = player.getLocation().getDirection()
 				.multiply(DataMgr.getPlayerData(player).getWeaponClass().getMainWeapon().getShootSpeed());
@@ -391,10 +391,10 @@ public class Shooter {
 				}
 
 				if (i != 0) {
-					org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).getTeam().getTeamColor().getWool()
+					org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).team.getTeamColor().getWool()
 							.createBlockData();
 					for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
-						if (DataMgr.getPlayerData(o_player).getSettings().ShowEffect_MainWeaponInk())
+						if (DataMgr.getPlayerData(o_player).settings.ShowEffect_MainWeaponInk())
 							if (o_player.getWorld() == inkball.getWorld())
 								if (o_player.getLocation().distanceSquared(
 										inkball.getLocation()) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED)

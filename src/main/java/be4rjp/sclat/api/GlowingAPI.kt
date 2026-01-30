@@ -1,27 +1,30 @@
-package be4rjp.sclat.api;
+package be4rjp.sclat.api
 
-import be4rjp.sclat.Sclat;
-import com.comphenix.protocol.PacketType;
-import com.comphenix.protocol.events.PacketContainer;
-import com.comphenix.protocol.wrappers.WrappedDataWatcher;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
+import be4rjp.sclat.Sclat
+import com.comphenix.protocol.PacketType
+import com.comphenix.protocol.wrappers.WrappedDataWatcher
+import org.bukkit.entity.Entity
+import org.bukkit.entity.Player
+import java.lang.reflect.InvocationTargetException
 
-import java.lang.reflect.InvocationTargetException;
-
-public class GlowingAPI {
-	public static void setGlowing(Entity entity, Player player, boolean flag) {
-		PacketContainer packet = Sclat.protocolManager.createPacket(PacketType.Play.Server.ENTITY_METADATA);
-		packet.getIntegers().write(0, entity.getEntityId());
-		WrappedDataWatcher watcher = new WrappedDataWatcher();
-		WrappedDataWatcher.Serializer serializer = WrappedDataWatcher.Registry.get(Byte.class);
-		watcher.setEntity(entity);
-		watcher.setObject(0, serializer, (byte) (flag ? 0x40 : 0));
-		packet.getWatchableCollectionModifier().write(0, watcher.getWatchableObjects());
-		try {
-			Sclat.protocolManager.sendServerPacket(player, packet);
-		} catch (InvocationTargetException e) {
-			e.printStackTrace();
-		}
-	}
+object GlowingAPI {
+    @JvmStatic
+    fun setGlowing(
+        entity: Entity,
+        player: Player?,
+        flag: Boolean,
+    ) {
+        val packet = Sclat.protocolManager.createPacket(PacketType.Play.Server.ENTITY_METADATA)
+        packet.getIntegers().write(0, entity.getEntityId())
+        val watcher = WrappedDataWatcher()
+        val serializer = WrappedDataWatcher.Registry.get(Byte::class.java)
+        watcher.setEntity(entity)
+        watcher.setObject(0, serializer, (if (flag) 0x40 else 0).toByte())
+        packet.getWatchableCollectionModifier().write(0, watcher.getWatchableObjects())
+        try {
+            Sclat.protocolManager.sendServerPacket(player, packet)
+        } catch (e: InvocationTargetException) {
+            e.printStackTrace()
+        }
+    }
 }

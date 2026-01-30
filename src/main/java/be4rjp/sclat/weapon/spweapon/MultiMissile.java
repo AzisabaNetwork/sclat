@@ -75,7 +75,7 @@ public class MultiMissile {
 						for (Player op : Sclat.getPlugin(Sclat.class).getServer().getOnlinePlayers()) {
 							if (DataMgr.getPlayerData(op).isInMatch() && op.getWorld() == p.getWorld()
 									&& !op.getName().equals(p.getName())
-									&& DataMgr.getPlayerData(p).getTeam() != DataMgr.getPlayerData(op).getTeam()) {
+									&& DataMgr.getPlayerData(p).team != DataMgr.getPlayerData(op).team) {
 								Location loc = op.getLocation();
 								EntitySquid es = new EntitySquid(EntityTypes.SQUID, nmsWorld);
 								es.setLocation(loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), loc.getPitch());
@@ -115,7 +115,7 @@ public class MultiMissile {
 						for (Player op : Sclat.getPlugin(Sclat.class).getServer().getOnlinePlayers()) {
 							if (DataMgr.getPlayerData(op).isInMatch() && op.getWorld() == p.getWorld()
 									&& !op.getName().equals(p.getName())
-									&& DataMgr.getPlayerData(p).getTeam() != DataMgr.getPlayerData(op).getTeam()) {
+									&& DataMgr.getPlayerData(p).team != DataMgr.getPlayerData(op).team) {
 								EntitySquid es = ps.get(op);
 								Location loc = op.getLocation();
 								es.setLocation(loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), loc.getPitch());
@@ -149,7 +149,7 @@ public class MultiMissile {
 						for (Player op : Sclat.getPlugin(Sclat.class).getServer().getOnlinePlayers()) {
 							if (DataMgr.getPlayerData(op).isInMatch() && op.getWorld() == p.getWorld()
 									&& !op.getName().equals(p.getName())
-									&& DataMgr.getPlayerData(p).getTeam() != DataMgr.getPlayerData(op).getTeam()) {
+									&& DataMgr.getPlayerData(p).team != DataMgr.getPlayerData(op).team) {
 								EntitySquid es = ps.get(op);
 								((CraftPlayer) p).getHandle().playerConnection
 										.sendPacket(new PacketPlayOutEntityDestroy(es.getBukkitEntity().getEntityId()));
@@ -265,7 +265,7 @@ public class MultiMissile {
 			public void run() {
 				if (c == 0) {
 					drop = shooter.getWorld().dropItem(t.getLocation().add(0, 40, 0),
-							new ItemStack(DataMgr.getPlayerData(s).getTeam().getTeamColor().getWool()));
+							new ItemStack(DataMgr.getPlayerData(s).team.getTeamColor().getWool()));
 					drop.setGravity(false);
 					ball = (Snowball) s.getWorld().spawnEntity(drop.getLocation(), EntityType.SNOWBALL);
 					ball.setGravity(false);
@@ -277,7 +277,7 @@ public class MultiMissile {
 					}
 					if (t instanceof Player) {
 						if (DataMgr.getPlayerData((Player) t).isInMatch())
-							tl = DataMgr.getPlayerData((Player) t).getPlayerGroundLocation();
+							tl = DataMgr.getPlayerData((Player) t).playerGroundLocation;
 					}
 					DataMgr.setSnowballIsHit(ball, false);
 				}
@@ -312,13 +312,13 @@ public class MultiMissile {
 				else
 					drop.setVelocity(drop.getVelocity().add(new Vector(0, -0.1, 0)));
 
-				org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(s).getTeam().getTeamColor().getWool()
+				org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(s).team.getTeamColor().getWool()
 						.createBlockData();
 				for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 					if (o_player.getWorld() == drop.getLocation().getWorld()) {
 						if (o_player.getLocation()
 								.distanceSquared(drop.getLocation()) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED) {
-							if (DataMgr.getPlayerData(o_player).getSettings().ShowEffect_SPWeapon())
+							if (DataMgr.getPlayerData(o_player).settings.ShowEffect_SPWeapon())
 								o_player.spawnParticle(org.bukkit.Particle.BLOCK_DUST, drop.getLocation(), 1, 0, 0, 0,
 										1, bd);
 						}
@@ -350,7 +350,7 @@ public class MultiMissile {
 							continue;
 						if (target.getLocation().distanceSquared(drop.getLocation()) <= maxDistSquared) {
 							double damage = (maxDist - target.getLocation().distance(drop.getLocation())) * 14;
-							if (DataMgr.getPlayerData(s).getTeam() != DataMgr.getPlayerData(target).getTeam()
+							if (DataMgr.getPlayerData(s).team != DataMgr.getPlayerData(target).team
 									&& target.getGameMode().equals(GameMode.ADVENTURE)) {
 								SclatUtil.giveDamage(s, target, damage, "spWeapon");
 

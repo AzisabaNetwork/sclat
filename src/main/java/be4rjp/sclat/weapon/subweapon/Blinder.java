@@ -63,12 +63,12 @@ public class Blinder {
 			// PaintMgr.PaintHightestBlock(position, player, false, true);
 			// }
 			for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
-				if (!DataMgr.getPlayerData(target).getSettings().ShowEffect_MainWeaponInk())
+				if (!DataMgr.getPlayerData(target).settings.ShowEffect_MainWeaponInk())
 					continue;
 				if (target.getWorld() == position.getWorld()) {
 					if (target.getLocation().distanceSquared(position) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED) {
-						org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(player).getTeam().getTeamColor()
-								.getWool().createBlockData();
+						org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(player).team.getTeamColor().getWool()
+								.createBlockData();
 						target.spawnParticle(org.bukkit.Particle.BLOCK_DUST, position, 1, 0, 0, 0, 1, bd);
 					}
 				}
@@ -78,7 +78,7 @@ public class Blinder {
 			for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 				if (!DataMgr.getPlayerData(target).isInMatch())
 					continue;
-				if (DataMgr.getPlayerData(player).getTeam() != DataMgr.getPlayerData(target).getTeam()
+				if (DataMgr.getPlayerData(player).team != DataMgr.getPlayerData(target).team
 						&& target.getGameMode().equals(GameMode.ADVENTURE)) {
 					if (target.getLocation().distanceSquared(position) <= maxDistSquad) {
 						if (rayTrace.intersects(new BoundingBox((Entity) target), reach, 0.2)) {
@@ -95,7 +95,7 @@ public class Blinder {
 								effecttime -= 10;
 							}
 							if (DataMgr.getPlayerData(target).getIsUsingSP()
-									|| DataMgr.getPlayerData(target).getArmor() > 0) {
+									|| DataMgr.getPlayerData(target).armor > 0) {
 								target.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 120, 1));
 								player.playSound(player.getLocation(), Sound.ENTITY_BLAZE_HURT, 1.2F, 1.3F);
 							} else if (i > 85 && !target.hasPotionEffect(PotionEffectType.FIRE_RESISTANCE)) {
@@ -127,15 +127,15 @@ public class Blinder {
 								if (as.getCustomName().equals("SplashShield")) {
 									SplashShieldData ssdata = DataMgr
 											.getSplashShieldDataFromArmorStand((ArmorStand) as);
-									if (DataMgr.getPlayerData(ssdata.getPlayer()).getTeam() != DataMgr
-											.getPlayerData(player).getTeam()) {
+									if (DataMgr.getPlayerData(ssdata.getPlayer()).team != DataMgr
+											.getPlayerData(player).team) {
 										as.getWorld().playSound(as.getLocation(), Sound.ENTITY_BLAZE_HURT, 0.8F, 1.2F);
 										break loop;
 									}
 								} else if (as.getCustomName().equals("Kasa")) {
 									KasaData ssdata = DataMgr.getKasaDataFromArmorStand((ArmorStand) as);
-									if (DataMgr.getPlayerData(ssdata.getPlayer()).getTeam() != DataMgr
-											.getPlayerData(player).getTeam()) {
+									if (DataMgr.getPlayerData(ssdata.getPlayer()).team != DataMgr
+											.getPlayerData(player).team) {
 										as.getWorld().playSound(as.getLocation(), Sound.ENTITY_BLAZE_HURT, 0.8F, 1.2F);
 										break loop;
 									}

@@ -1,18 +1,19 @@
-package be4rjp.sclat.api.utils;
+package be4rjp.sclat.api.utils
 
-import org.bukkit.scoreboard.Objective;
-import org.bukkit.scoreboard.Score;
+import org.bukkit.scoreboard.Objective
 
-import java.util.List;
+object ObjectiveUtil {
+    @JvmStatic
+    fun setLine(
+        objective: Objective,
+        list: MutableList<String>,
+    ) {
+        var index = list.size
 
-public class ObjectiveUtil {
-	public static void setLine(Objective objective, List<String> list) {
-		int index = list.size();
-
-		for (String line : list) {
-			index -= 1;
-			Score score = objective.getScore(line);
-			score.setScore(index);
-		}
-	}
+        for (line in list) {
+            index -= 1
+            val score = objective.getScore(line)
+            score.setScore(index)
+        }
+    }
 }

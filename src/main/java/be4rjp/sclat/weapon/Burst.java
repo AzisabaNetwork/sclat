@@ -88,8 +88,8 @@ public class Burst {
 		PaintMgr.PaintHightestBlock(player.getLocation(), player, true, true);
 
 		Snowball ball = player.launchProjectile(Snowball.class);
-		((CraftSnowball) ball).getHandle().setItem(CraftItemStack
-				.asNMSCopy(new ItemStack(DataMgr.getPlayerData(player).getTeam().getTeamColor().getWool())));
+		((CraftSnowball) ball).getHandle().setItem(
+				CraftItemStack.asNMSCopy(new ItemStack(DataMgr.getPlayerData(player).team.getTeamColor().getWool())));
 		player.getWorld().playSound(player.getLocation(), Sound.ENTITY_PIG_STEP, 0.3F, 1F);
 		Vector vec = player.getLocation().getDirection()
 				.multiply(DataMgr.getPlayerData(player).getWeaponClass().getMainWeapon().getShootSpeed());
@@ -126,10 +126,10 @@ public class Burst {
 				}
 
 				if (i != 0) {
-					org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).getTeam().getTeamColor().getWool()
+					org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).team.getTeamColor().getWool()
 							.createBlockData();
 					for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
-						if (DataMgr.getPlayerData(o_player).getSettings().ShowEffect_MainWeaponInk())
+						if (DataMgr.getPlayerData(o_player).settings.ShowEffect_MainWeaponInk())
 							if (o_player.getWorld() == inkball.getWorld())
 								if (o_player.getLocation().distanceSquared(
 										inkball.getLocation()) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED)

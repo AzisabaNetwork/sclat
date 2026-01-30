@@ -1,48 +1,46 @@
-package be4rjp.sclat.api.async;
+package be4rjp.sclat.api.async
 
-import be4rjp.sclat.Sclat;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
+import be4rjp.sclat.Sclat
+import org.bukkit.Bukkit
+import org.bukkit.entity.Player
+import java.util.Random
+import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.CopyOnWriteArrayList
 
-import java.util.List;
-import java.util.Random;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
+object AsyncThreadManager {
+    private val tickThreads: MutableList<AsyncTickThread> = CopyOnWriteArrayList<AsyncTickThread>()
 
-public class AsyncThreadManager {
+    val randomTickThread: AsyncTickThread
+        get() = tickThreads.get(Random().nextInt(tickThreads.size))
 
-	private static final List<AsyncTickThread> tickThreads = new CopyOnWriteArrayList<>();
+    @JvmStatic
+    fun setup(numberOfThread: Int) {
+        for (i in 0..<numberOfThread) {
+            val thread = AsyncTickThread()
+            tickThreads.add(thread)
+        }
+    }
 
-	public static AsyncTickThread getRandomTickThread() {
-		return tickThreads.get(new Random().nextInt(tickThreads.size()));
-	}
+    @JvmStatic
+    fun shutdownAll() {
+        for (thread in tickThreads) {
+            thread.shutdown()
+        }
+    }
 
-	public static void setup(int numberOfThread) {
-		for (int i = 0; i < numberOfThread; i++) {
-			AsyncTickThread thread = new AsyncTickThread();
-			tickThreads.add(thread);
-		}
-	}
+    @JvmField
+    var onlinePlayers: MutableSet<Player?> = ConcurrentHashMap.newKeySet<Player?>()
 
-	public static void shutdownAll() {
-		for (AsyncTickThread thread : tickThreads) {
-			thread.shutdown();
-		}
-	}
+    fun toOnline(player: Player?) {
+        onlinePlayers.add(player)
+    }
 
-	public static Set<Player> onlinePlayers = ConcurrentHashMap.newKeySet();
+    fun toOffline(player: Player?) {
+        onlinePlayers.add(player)
+    }
 
-	public static void toOnline(Player player) {
-		onlinePlayers.add(player);
-	}
-
-	public static void toOffline(Player player) {
-		onlinePlayers.add(player);
-	}
-
-	public static void sync(Runnable runnable) {
-		Bukkit.getScheduler().runTask(Sclat.getPlugin(), runnable);
-	}
-
+    @JvmStatic
+    fun sync(runnable: Runnable) {
+        Bukkit.getScheduler().runTask(Sclat.getPlugin(), runnable)
+    }
 }

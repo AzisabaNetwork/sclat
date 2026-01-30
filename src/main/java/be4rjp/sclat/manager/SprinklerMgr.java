@@ -23,8 +23,8 @@ public class SprinklerMgr {
 	public static void sprinklerShoot(Player player, ArmorStand as, Vector vec) {
 		PlayerData data = DataMgr.getPlayerData(player);
 		Snowball ball = (Snowball) player.getWorld().spawnEntity(as.getLocation().add(0, 0.5, 0), EntityType.SNOWBALL);
-		((CraftSnowball) ball).getHandle().setItem(CraftItemStack
-				.asNMSCopy(new ItemStack(DataMgr.getPlayerData(player).getTeam().getTeamColor().getWool())));
+		((CraftSnowball) ball).getHandle().setItem(
+				CraftItemStack.asNMSCopy(new ItemStack(DataMgr.getPlayerData(player).team.getTeamColor().getWool())));
 		player.getWorld().playSound(as.getLocation(), Sound.ENTITY_PIG_STEP, 0.1F, 1F);
 		double random = 1.2;
 		vec.add(new Vector(Math.random() * random - random / 2, Math.random() * random - random / 2,
@@ -41,10 +41,10 @@ public class SprinklerMgr {
 			Player p = player;
 			@Override
 			public void run() {
-				org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).getTeam().getTeamColor().getWool()
+				org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).team.getTeamColor().getWool()
 						.createBlockData();
 				for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
-					if (DataMgr.getPlayerData(o_player).getSettings().ShowEffect_MainWeaponInk())
+					if (DataMgr.getPlayerData(o_player).settings.ShowEffect_MainWeaponInk())
 						o_player.spawnParticle(org.bukkit.Particle.BLOCK_DUST, inkball.getLocation(), 1, 0, 0, 0, 1,
 								bd);
 				}

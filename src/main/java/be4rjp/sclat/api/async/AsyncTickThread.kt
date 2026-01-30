@@ -1,22 +1,20 @@
-package be4rjp.sclat.api.async;
+package be4rjp.sclat.api.async
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
 
-public class AsyncTickThread {
+class AsyncTickThread {
+    private val executor: ExecutorService
 
-	private final ExecutorService executor;
+    init {
+        this.executor = Executors.newSingleThreadExecutor()
+    }
 
-	public AsyncTickThread() {
-		this.executor = Executors.newSingleThreadExecutor();
-	}
+    fun shutdown() {
+        executor.shutdown()
+    }
 
-	public void shutdown() {
-		executor.shutdown();
-	}
-
-	public void runTask(Runnable runnable) {
-		executor.submit(runnable);
-	}
-
+    fun runTask(runnable: Runnable) {
+        executor.submit(runnable)
+    }
 }

@@ -1,5 +1,5 @@
-package be4rjp.sclat.api;
+package be4rjp.sclat.api
 
-public enum ServerType {
-	LOBBY, MATCH, NORMAL
+enum class ServerType {
+    LOBBY, MATCH, NORMAL
 }

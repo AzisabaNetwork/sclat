@@ -39,17 +39,17 @@ public class SubWeaponMgr {
 
 		switch (data.getWeaponClass().getSubWeaponName()) {
 			case "スプラッシュボム" :
-				is = new ItemStack(data.getTeam().getTeamColor().getGlass());
+				is = new ItemStack(data.team.getTeamColor().getGlass());
 				ism = is.getItemMeta();
 				ism.setDisplayName("スプラッシュボム");
 				break;
 			case "クイックボム" :
-				is = new ItemStack(data.getTeam().getTeamColor().getWool());
+				is = new ItemStack(data.team.getTeamColor().getWool());
 				ism = is.getItemMeta();
 				ism.setDisplayName("クイックボム");
 				break;
 			case "フローターボム" :
-				is = new ItemStack(data.getTeam().getTeamColor().getWool());
+				is = new ItemStack(data.team.getTeamColor().getWool());
 				ism = is.getItemMeta();
 				ism.setDisplayName("フローターボム");
 				break;
@@ -69,7 +69,7 @@ public class SubWeaponMgr {
 				ism.setDisplayName("ポイズン");
 				break;
 			case "キューバンボム" :
-				is = new ItemStack(data.getTeam().getTeamColor().getConcrete());
+				is = new ItemStack(data.team.getTeamColor().getConcrete());
 				ism = is.getItemMeta();
 				ism.setDisplayName("キューバンボム");
 				break;
@@ -141,7 +141,7 @@ public class SubWeaponMgr {
 				data.setCanUseSubWeapon(false);
 				break;
 			case "右クリックで射撃!" :
-				if (data.getSettings().ShowEffect_ChargerLine()) {
+				if (data.settings.ShowEffect_ChargerLine()) {
 					LitterFiveG.Shoot_LitterFiveG(player);
 					data.setCanUseSubWeapon(false);
 				} else {

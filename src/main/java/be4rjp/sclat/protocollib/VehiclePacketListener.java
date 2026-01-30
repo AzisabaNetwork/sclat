@@ -40,7 +40,7 @@ public class VehiclePacketListener extends PacketAdapter {
 			}
 
 			Vector vec = new Vector(x, y, z);
-			DataMgr.getPlayerData(player).setVehicleVector(vec);
+			DataMgr.getPlayerData(player).vehicleVector = vec;
 		}
 	}
 }

@@ -1,61 +1,54 @@
-package be4rjp.sclat.api.config;
+package be4rjp.sclat.api.config
 
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.plugin.Plugin;
+import org.bukkit.configuration.file.FileConfiguration
+import org.bukkit.configuration.file.YamlConfiguration
+import org.bukkit.plugin.Plugin
+import java.io.File
+import java.io.IOException
+import java.io.InputStreamReader
+import java.nio.charset.StandardCharsets
+import java.util.logging.Level
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
-import java.util.logging.Level;
+class CustomConfig(private val plugin: Plugin, private val file: String) {
+    private var config: FileConfiguration? = null
+    private val configFile: File
 
-public class CustomConfig {
+    init {
+        configFile = File(plugin.getDataFolder(), file)
+    }
 
-	private FileConfiguration config = null;
-	private final File configFile;
-	private final String file;
-	private final Plugin plugin;
+    fun saveDefaultConfig() {
+        if (!configFile.exists()) {
+            plugin.saveResource(file, false)
+        }
+    }
 
-	public CustomConfig(Plugin plugin, String fileName) {
-		this.plugin = plugin;
-		this.file = fileName;
-		configFile = new File(plugin.getDataFolder(), file);
-	}
+    fun getConfig(): FileConfiguration? {
+        if (config == null) {
+            reloadConfig()
+        }
+        return config
+    }
 
-	public void saveDefaultConfig() {
-		if (!configFile.exists()) {
-			plugin.saveResource(file, false);
-		}
-	}
+    fun saveConfig() {
+        if (config == null) return
+        try {
+            getConfig()!!.save(configFile)
+        } catch (ex: IOException) {
+            plugin.getLogger().log(Level.SEVERE, "Could not save config to " + configFile, ex)
+        }
+    }
 
-	public FileConfiguration getConfig() {
-		if (config == null) {
-			reloadConfig();
-		}
-		return config;
-	}
+    fun reloadConfig() {
+        config = YamlConfiguration.loadConfiguration(configFile)
 
-	public void saveConfig() {
-		if (config == null)
-			return;
-		try {
-			getConfig().save(configFile);
-		} catch (IOException ex) {
-			plugin.getLogger().log(Level.SEVERE, "Could not save config to " + configFile, ex);
-		}
-	}
+        val defConfigStream = plugin.getResource(file)
+        if (defConfigStream == null) {
+            return
+        }
 
-	public void reloadConfig() {
-		config = YamlConfiguration.loadConfiguration(configFile);
-
-		final InputStream defConfigStream = plugin.getResource(file);
-		if (defConfigStream == null) {
-			return;
-		}
-
-		config.setDefaults(
-				YamlConfiguration.loadConfiguration(new InputStreamReader(defConfigStream, StandardCharsets.UTF_8)));
-	}
+        config!!.setDefaults(
+            YamlConfiguration.loadConfiguration(InputStreamReader(defConfigStream, StandardCharsets.UTF_8)),
+        )
+    }
 }

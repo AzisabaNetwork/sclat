@@ -39,7 +39,7 @@ public class PathMgr {
 			public void run() {
 				if (c == 0) {
 					drop = p.getWorld().dropItem(from.clone().add(0, -0.25, 0),
-							new ItemStack(DataMgr.getPlayerData(p).getTeam().getTeamColor().getWool()));
+							new ItemStack(DataMgr.getPlayerData(p).team.getTeamColor().getWool()));
 					drop.setGravity(false);
 					drop.setCustomName(String.valueOf(Sclat.getNotDuplicateNumber()));
 					// vec = (to.subtract(from)).toVector().normalize();
@@ -56,7 +56,7 @@ public class PathMgr {
 						|| !p.getInventory().getItemInMainHand().getType().equals(Material.AIR);
 				if (path.getTeam() == null)
 					is = true;
-				else if (path.getTeam() != DataMgr.getPlayerData(p).getTeam())
+				else if (path.getTeam() != DataMgr.getPlayerData(p).team)
 					is = true;
 
 				if (is) {
@@ -114,7 +114,7 @@ public class PathMgr {
 					for (Vector vector : positions) {
 						Location position = vector.toLocation(from.getWorld());
 						for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
-							if (!DataMgr.getPlayerData(target).getSettings().ShowEffect_ChargerLine())
+							if (!DataMgr.getPlayerData(target).settings.ShowEffect_ChargerLine())
 								continue;
 							Particle.DustOptions dustOptions;
 							if (team == null) {
@@ -145,7 +145,7 @@ public class PathMgr {
 						if (team != null) {
 							if (DataMgr.getPlayerData(player).isInMatch() && player.getWorld() == from.getWorld()
 									&& player.getInventory().getItemInMainHand().getType().equals(Material.AIR)
-									&& DataMgr.getPlayerData(player).getTeam() == team
+									&& DataMgr.getPlayerData(player).team == team
 									&& !DataMgr.getPlayerData(player).getIsOnPath()) {
 								if (player.getLocation().distanceSquared(from) < 1 /* 1*1 */)
 									setPath(player, from, to, path1);

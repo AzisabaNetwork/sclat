@@ -144,7 +144,7 @@ public class ArmorStandMgr {
 			public void run() {
 				if (as.getCustomName().equals("21")) {
 					Particle.DustOptions dustOptions = new Particle.DustOptions(
-							DataMgr.getPlayerData(p).getTeam().getTeamColor().getBukkitColor(), 1);
+							DataMgr.getPlayerData(p).team.getTeamColor().getBukkitColor(), 1);
 					p.getWorld().spawnParticle(Particle.REDSTONE, as.getLocation().add(0, 0.7, 0), 3, 0.3, 0.3, 0.3, 1,
 							dustOptions);
 					if (c % 10 == 0) {
@@ -163,8 +163,8 @@ public class ArmorStandMgr {
 							if (!DataMgr.getPlayerData(target).isInMatch() || target.getWorld() != p.getWorld())
 								continue;
 							if (target.getLocation().distance(as.getLocation()) <= distance) {
-								if (DataMgr.getPlayerData(player).getTeam().getID() != DataMgr.getPlayerData(target)
-										.getTeam().getID()) {
+								if (DataMgr.getPlayerData(player).team.getID() != DataMgr.getPlayerData(target).team
+										.getID()) {
 									target.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 40, 1));
 								}
 							}
@@ -244,7 +244,7 @@ public class ArmorStandMgr {
 			public void run() {
 				if (as.getCustomName().equals("21")) {
 					Particle.DustOptions dustOptions = new Particle.DustOptions(
-							DataMgr.getPlayerData(p).getTeam().getTeamColor().getBukkitColor(), 1);
+							DataMgr.getPlayerData(p).team.getTeamColor().getBukkitColor(), 1);
 					p.getWorld().spawnParticle(Particle.REDSTONE, as.getLocation().add(0, 0.7, 0), 3, 0.3, 0.3, 0.3, 1,
 							dustOptions);
 					if (c % 10 == 0) {
@@ -252,8 +252,8 @@ public class ArmorStandMgr {
 							if (as.getWorld() == player.getWorld()) {
 								((CraftPlayer) player).getHandle().playerConnection
 										.sendPacket(new PacketPlayOutEntityEquipment(as.getEntityId(),
-												EnumItemSlot.HEAD, CraftItemStack.asNMSCopy(new ItemStack(DataMgr
-														.getPlayerData(p).getTeam().getTeamColor().getGlass()))));
+												EnumItemSlot.HEAD, CraftItemStack.asNMSCopy(new ItemStack(
+														DataMgr.getPlayerData(p).team.getTeamColor().getGlass()))));
 							}
 						}
 					}
@@ -339,7 +339,7 @@ public class ArmorStandMgr {
 
 		if (as.getCustomName().equals("SplashShield")) {
 			SplashShieldData ssdata = DataMgr.getSplashShieldDataFromArmorStand(as);
-			if (DataMgr.getPlayerData(ssdata.getPlayer()).getTeam() != DataMgr.getPlayerData(shooter).getTeam()) {
+			if (DataMgr.getPlayerData(ssdata.getPlayer()).team != DataMgr.getPlayerData(shooter).team) {
 				ssdata.setDamage(ssdata.getDamage() + damage);
 				// ssdata.setDamage(ssdata.getDamage() +
 				// DataMgr.getPlayerData(shooter).getWeaponClass().getMainWeapon().getDamage());
@@ -350,7 +350,7 @@ public class ArmorStandMgr {
 
 		if (as.getCustomName().equals("Kasa")) {
 			KasaData ssdata = DataMgr.getKasaDataFromArmorStand(as);
-			if (DataMgr.getPlayerData(ssdata.getPlayer()).getTeam() != DataMgr.getPlayerData(shooter).getTeam()) {
+			if (DataMgr.getPlayerData(ssdata.getPlayer()).team != DataMgr.getPlayerData(shooter).team) {
 				ssdata.setDamage(ssdata.getDamage() + damage);
 				if (ssdata.getDamage() > 200)
 					as.getWorld().playSound(as.getLocation(), Sound.ENTITY_ITEM_BREAK, 0.8F, 0.8F);
@@ -360,9 +360,9 @@ public class ArmorStandMgr {
 		}
 
 		if (as.getCustomName().equals("Path")) {
-			for (Path path : DataMgr.getPlayerData(shooter).getMatch().getMapData().getPathList()) {
+			for (Path path : DataMgr.getPlayerData(shooter).match.getMapData().getPathList()) {
 				if (path.getArmorStand().equals(as))
-					path.setTeam(DataMgr.getPlayerData(shooter).getTeam());
+					path.setTeam(DataMgr.getPlayerData(shooter).team);
 			}
 			return;
 		}
@@ -393,8 +393,8 @@ public class ArmorStandMgr {
 					drop4.setVelocity(new Vector(Math.random() * random - random / 2, random * 2 / 3,
 							Math.random() * random - random / 2));
 
-					org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(shooter).getTeam().getTeamColor()
-							.getWool().createBlockData();
+					org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(shooter).team.getTeamColor().getWool()
+							.createBlockData();
 					as.getWorld().spawnParticle(org.bukkit.Particle.BLOCK_DUST, as.getEyeLocation(), 15, 1, 1, 1, 1,
 							bd);
 
@@ -461,7 +461,7 @@ public class ArmorStandMgr {
 			}
 		} else if (health == 21) {
 			Player player = DataMgr.getArmorStandPlayer(as);
-			if (DataMgr.getPlayerData(shooter).getTeam() != DataMgr.getPlayerData(player).getTeam()) {
+			if (DataMgr.getPlayerData(shooter).team != DataMgr.getPlayerData(player).team) {
 				as.setCustomName("100");
 				as.setVisible(false);
 				for (Player op : Sclat.getPlugin().getServer().getOnlinePlayers()) {

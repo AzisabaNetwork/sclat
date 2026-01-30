@@ -57,12 +57,12 @@ public class SplashShield {
 					}
 
 					for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
-						if (DataMgr.getPlayerData(o_player).getSettings().ShowEffect_Bomb()) {
+						if (DataMgr.getPlayerData(o_player).settings.ShowEffect_Bomb()) {
 							if (drop.getWorld() == o_player.getWorld()) {
 								if (o_player.getLocation()
 										.distanceSquared(drop.getLocation()) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED) {
 									Particle.DustOptions dustOptions = new Particle.DustOptions(
-											DataMgr.getPlayerData(p).getTeam().getTeamColor().getBukkitColor(), 1);
+											DataMgr.getPlayerData(p).team.getTeamColor().getBukkitColor(), 1);
 									o_player.spawnParticle(Particle.REDSTONE, drop.getLocation(), 1, 0, 0, 0, 50,
 											dustOptions);
 								}
@@ -302,8 +302,8 @@ public class SplashShield {
 								if (i > 11 && i < 14)
 									((CraftPlayer) target).getHandle().playerConnection
 											.sendPacket(new PacketPlayOutEntityEquipment(a.getEntityId(),
-													EnumItemSlot.HEAD, CraftItemStack.asNMSCopy(new ItemStack(DataMgr
-															.getPlayerData(p).getTeam().getTeamColor().getGlass()))));
+													EnumItemSlot.HEAD, CraftItemStack.asNMSCopy(new ItemStack(
+															DataMgr.getPlayerData(p).team.getTeamColor().getGlass()))));
 							}
 							i++;
 						}
@@ -342,7 +342,7 @@ public class SplashShield {
 
 						Vector sv = pv.clone().multiply(-0.25);
 
-						BlockData bd = DataMgr.getPlayerData(p).getTeam().getTeamColor().getWool().createBlockData();
+						BlockData bd = DataMgr.getPlayerData(p).team.getTeamColor().getWool().createBlockData();
 						ray : for (int i = 0; i < positions1.size() - 4; i++) {
 							Location position = positions1.get(i).toLocation(p.getLocation().getWorld());
 							PaintMgr.PaintHightestBlock(position, p, false, false);
@@ -351,8 +351,8 @@ public class SplashShield {
 									new Vector(0, -1, 0));
 							for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 								if (target.getWorld() == p.getWorld()) {
-									if (rayTrace4.intersects(new BoundingBox((Entity) target), 3, 0.5) && DataMgr
-											.getPlayerData(target).getTeam() != DataMgr.getPlayerData(p).getTeam()
+									if (rayTrace4.intersects(new BoundingBox((Entity) target), 3, 0.5)
+											&& DataMgr.getPlayerData(target).team != DataMgr.getPlayerData(p).team
 											&& target.getGameMode().equals(GameMode.ADVENTURE)) {
 										SclatUtil.giveDamage(player, target, damage, "subWeapon");
 
@@ -383,8 +383,8 @@ public class SplashShield {
 									new Vector(0, -1, 0));
 							for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 								if (target.getWorld() == p.getWorld()) {
-									if (rayTrace4.intersects(new BoundingBox((Entity) target), 3, 0.5) && DataMgr
-											.getPlayerData(target).getTeam() != DataMgr.getPlayerData(p).getTeam()
+									if (rayTrace4.intersects(new BoundingBox((Entity) target), 3, 0.5)
+											&& DataMgr.getPlayerData(target).team != DataMgr.getPlayerData(p).team
 											&& target.getGameMode().equals(GameMode.ADVENTURE)) {
 										SclatUtil.giveDamage(player, target, damage, "subWeapon");
 

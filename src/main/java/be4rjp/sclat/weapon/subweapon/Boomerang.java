@@ -137,8 +137,8 @@ public class Boomerang {
 						for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers())
 							((CraftPlayer) o_player).getHandle().playerConnection
 									.sendPacket(new PacketPlayOutEntityEquipment(as3.getEntityId(), EnumItemSlot.HEAD,
-											CraftItemStack.asNMSCopy(new ItemStack(DataMgr.getPlayerData(player)
-													.getTeam().getTeamColor().getWool()))));
+											CraftItemStack.asNMSCopy(new ItemStack(
+													DataMgr.getPlayerData(player).team.getTeamColor().getWool()))));
 					}
 
 					if (i >= cumbacktime + 3 && i <= cumbacktime + 13) {
@@ -148,10 +148,10 @@ public class Boomerang {
 
 					// エフェクト
 					if (i % 2 == 0) {
-						org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(player).getTeam().getTeamColor()
-								.getWool().createBlockData();
+						org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(player).team.getTeamColor().getWool()
+								.createBlockData();
 						for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
-							if (DataMgr.getPlayerData(target).getSettings().ShowEffect_Bomb())
+							if (DataMgr.getPlayerData(target).settings.ShowEffect_Bomb())
 								if (target.getWorld() == player.getWorld())
 									if (target.getLocation()
 											.distanceSquared(as1l) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED)
@@ -159,12 +159,12 @@ public class Boomerang {
 						}
 						// 攻撃判定
 						for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
-							if (DataMgr.getPlayerData(target).getSettings().ShowEffect_Bomb()) {
+							if (DataMgr.getPlayerData(target).settings.ShowEffect_Bomb()) {
 								if (target.getWorld() == player.getWorld()) {
 									if (target.getLocation().distance(as1l) <= 1.2) {
 										double damage = 0.2;
-										if (DataMgr.getPlayerData(player).getTeam() != DataMgr.getPlayerData(target)
-												.getTeam() && target.getGameMode().equals(GameMode.ADVENTURE)) {
+										if (DataMgr.getPlayerData(player).team != DataMgr.getPlayerData(target).team
+												&& target.getGameMode().equals(GameMode.ADVENTURE)) {
 											SclatUtil.giveDamage(player, target, damage, "subWeapon");
 
 											// AntiNoDamageTime
@@ -227,8 +227,8 @@ public class Boomerang {
 										try {
 											if (as.getCustomName().equals("Kasa")) {
 												KasaData kasaData = DataMgr.getKasaDataFromArmorStand((ArmorStand) as);
-												if (DataMgr.getPlayerData(kasaData.getPlayer()).getTeam() != DataMgr
-														.getPlayerData(player).getTeam()) {
+												if (DataMgr.getPlayerData(kasaData.getPlayer()).team != DataMgr
+														.getPlayerData(player).team) {
 													as1.remove();
 													as2.remove();
 													as3.remove();
@@ -238,8 +238,8 @@ public class Boomerang {
 											} else if (as.getCustomName().equals("SplashShield")) {
 												SplashShieldData splashShieldData = DataMgr
 														.getSplashShieldDataFromArmorStand((ArmorStand) as);
-												if (DataMgr.getPlayerData(splashShieldData.getPlayer())
-														.getTeam() != DataMgr.getPlayerData(player).getTeam()) {
+												if (DataMgr.getPlayerData(splashShieldData.getPlayer()).team != DataMgr
+														.getPlayerData(player).team) {
 													as1.remove();
 													as2.remove();
 													as3.remove();
@@ -260,7 +260,7 @@ public class Boomerang {
 							if (target.getLocation().distance(as1l) <= maxDist) {
 								double damage = (maxDist - target.getLocation().distance(as1l)) * 1
 										* Gear.getGearInfluence(player, Gear.Type.SUB_SPEC_UP);
-								if (DataMgr.getPlayerData(player).getTeam() != DataMgr.getPlayerData(target).getTeam()
+								if (DataMgr.getPlayerData(player).team != DataMgr.getPlayerData(target).team
 										&& target.getGameMode().equals(GameMode.ADVENTURE)) {
 									SclatUtil.giveDamage(player, target, damage, "subWeapon");
 

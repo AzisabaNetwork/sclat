@@ -1,184 +1,131 @@
-package be4rjp.sclat.api;
+package be4rjp.sclat.api
 
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.InputStreamReader;
-import java.net.InetSocketAddress;
-import java.net.Socket;
+import java.io.BufferedReader
+import java.io.DataOutputStream
+import java.io.InputStreamReader
+import java.net.InetSocketAddress
+import java.net.Socket
 
 /**
  *
- * from <a href=
- * "https://github.com/ldilley/minestat/blob/master/Java/me/dilley/MineStat.java">MineStat.java</a>
+ * from [MineStat.java](https://github.com/ldilley/minestat/blob/master/Java/me/dilley/MineStat.java)
  */
-public class MineStat {
-	public static final byte NUM_FIELDS = 6; // expected number of fields returned from server after query
-	public static final int DEFAULT_TIMEOUT = 5; // default TCP socket connection timeout in seconds
+class MineStat
+@JvmOverloads
+constructor(
+    address: String?,
+    port: Int,
+    timeout: Int = DEFAULT_TIMEOUT,
+) {
+    /**
+     * Hostname or IP address of the Minecraft server
+     */
+    var address: String? = null
 
-	/**
-	 * Hostname or IP address of the Minecraft server
-	 */
-	private String address;
+    /**
+     * Port number the Minecraft server accepts connections on
+     */
+    var port: Int = 0
 
-	/**
-	 * Port number the Minecraft server accepts connections on
-	 */
-	private int port;
+    /**
+     * TCP socket connection timeout in milliseconds
+     */
+    private var timeout = 0
 
-	/**
-	 * TCP socket connection timeout in milliseconds
-	 */
-	private int timeout;
+    /**
+     * Is the server up? (true or false)
+     */
+    var isServerUp: Boolean = false
+        private set
 
-	/**
-	 * Is the server up? (true or false)
-	 */
-	private boolean serverUp;
+    /**
+     * Message of the day from the server
+     */
+    var motd: String? = null
 
-	/**
-	 * Message of the day from the server
-	 */
-	private String motd;
+    /**
+     * Minecraft version the server is running
+     */
+    var version: String? = null
 
-	/**
-	 * Minecraft version the server is running
-	 */
-	private String version;
+    /**
+     * Current number of players on the server
+     */
+    @JvmField
+    var currentPlayers: String? = null
 
-	/**
-	 * Current number of players on the server
-	 */
-	private String currentPlayers;
+    /**
+     * Maximum player capacity of the server
+     */
+    var maximumPlayers: String? = null
 
-	/**
-	 * Maximum player capacity of the server
-	 */
-	private String maximumPlayers;
+    /**
+     * Ping time to server in milliseconds
+     */
+    var latency: Long = 0
 
-	/**
-	 * Ping time to server in milliseconds
-	 */
-	private long latency;
+    init {
+        this.address = address
+        this.port = port
+        setTimeout(timeout)
+        refresh()
+    }
 
-	public MineStat(String address, int port) {
-		this(address, port, DEFAULT_TIMEOUT);
-	}
+    /**
+     * Refresh state of the server
+     *
+     * @return `true`; `false` if the server is down
+     */
+    fun refresh(): Boolean {
+        val serverData: Array<String?>?
+        val rawServerData: String?
+        try {
+            // Socket clientSocket = new Socket(getAddress(), getPort());
+            val clientSocket = Socket()
+            val startTime = System.currentTimeMillis()
+            clientSocket.connect(InetSocketAddress(this.address, this.port), timeout)
+            this.latency = System.currentTimeMillis() - startTime
+            val dos = DataOutputStream(clientSocket.getOutputStream())
+            val br = BufferedReader(InputStreamReader(clientSocket.getInputStream()))
+            val payload = byteArrayOf(0xFE.toByte(), 0x01.toByte())
+            // dos.writeBytes("\u00FE\u0001");
+            dos.write(payload, 0, payload.size)
+            rawServerData = br.readLine()
+            clientSocket.close()
+        } catch (e: Exception) {
+            this.isServerUp = false
+            // e.printStackTrace();
+            return this.isServerUp
+        }
 
-	public MineStat(String address, int port, int timeout) {
-		setAddress(address);
-		setPort(port);
-		setTimeout(timeout);
-		refresh();
-	}
+        if (rawServerData == null) {
+            this.isServerUp = false
+        } else {
+            serverData =
+                rawServerData.split("\u0000\u0000\u0000".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+            if (serverData.size >= NUM_FIELDS) {
+                this.isServerUp = true
+                this.version = serverData[2]!!.replace("\u0000", "")
+                this.motd = serverData[3]!!.replace("\u0000", "")
+                this.currentPlayers = serverData[4]!!.replace("\u0000", "")
+                this.maximumPlayers = serverData[5]!!.replace("\u0000", "")
+            } else {
+                this.isServerUp = false
+            }
+        }
+        return this.isServerUp
+    }
 
-	/**
-	 * Refresh state of the server
-	 * 
-	 * @return <code>true</code>; <code>false</code> if the server is down
-	 */
-	public boolean refresh() {
-		String[] serverData;
-		String rawServerData;
-		try {
-			// Socket clientSocket = new Socket(getAddress(), getPort());
-			Socket clientSocket = new Socket();
-			long startTime = System.currentTimeMillis();
-			clientSocket.connect(new InetSocketAddress(getAddress(), getPort()), timeout);
-			setLatency(System.currentTimeMillis() - startTime);
-			DataOutputStream dos = new DataOutputStream(clientSocket.getOutputStream());
-			BufferedReader br = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-			byte[] payload = {(byte) 0xFE, (byte) 0x01};
-			// dos.writeBytes("\u00FE\u0001");
-			dos.write(payload, 0, payload.length);
-			rawServerData = br.readLine();
-			clientSocket.close();
-		} catch (Exception e) {
-			serverUp = false;
-			// e.printStackTrace();
-			return serverUp;
-		}
+    fun getTimeout(): Int {
+        return timeout * 1000 // milliseconds
+    }
 
-		if (rawServerData == null)
-			serverUp = false;
-		else {
-			serverData = rawServerData.split("\u0000\u0000\u0000");
-			if (serverData.length >= NUM_FIELDS) {
-				serverUp = true;
-				setVersion(serverData[2].replace("\u0000", ""));
-				setMotd(serverData[3].replace("\u0000", ""));
-				setCurrentPlayers(serverData[4].replace("\u0000", ""));
-				setMaximumPlayers(serverData[5].replace("\u0000", ""));
-			} else
-				serverUp = false;
-		}
-		return serverUp;
-	}
+    fun setTimeout(timeout: Int) {
+        this.timeout = timeout * 1000 // milliseconds
+    }
 
-	public String getAddress() {
-		return address;
-	}
-
-	public void setAddress(String address) {
-		this.address = address;
-	}
-
-	public int getPort() {
-		return port;
-	}
-
-	public void setPort(int port) {
-		this.port = port;
-	}
-
-	public int getTimeout() {
-		return timeout * 1000; // milliseconds
-	}
-
-	public void setTimeout(int timeout) {
-		this.timeout = timeout * 1000; // milliseconds
-	}
-
-	public String getMotd() {
-		return motd;
-	}
-
-	public String getVersion() {
-		return version;
-	}
-
-	public String getCurrentPlayers() {
-		return currentPlayers;
-	}
-
-	public String getMaximumPlayers() {
-		return maximumPlayers;
-	}
-
-	public long getLatency() {
-		return latency;
-	}
-
-	public void setLatency(long latency) {
-		this.latency = latency;
-	}
-
-	public void setMaximumPlayers(String maximumPlayers) {
-		this.maximumPlayers = maximumPlayers;
-	}
-
-	public void setCurrentPlayers(String currentPlayers) {
-		this.currentPlayers = currentPlayers;
-	}
-
-	public void setMotd(String motd) {
-		this.motd = motd;
-	}
-
-	public void setVersion(String version) {
-		this.version = version;
-	}
-
-	public boolean isServerUp() {
-		return serverUp;
-	}
+    companion object {
+        const val NUM_FIELDS: Byte = 6 // expected number of fields returned from server after query
+        const val DEFAULT_TIMEOUT: Int = 5 // default TCP socket connection timeout in seconds
+    }
 }

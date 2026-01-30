@@ -85,7 +85,7 @@ public class Poison {
 						// 爆発エフェクト
 						List<Location> s_locs = Sphere.getSphere(drop.getLocation(), maxDist, 15);
 						for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
-							if (DataMgr.getPlayerData(o_player).getSettings().ShowEffect_BombEx()) {
+							if (DataMgr.getPlayerData(o_player).settings.ShowEffect_BombEx()) {
 								for (Location loc : s_locs) {
 									if (o_player.getWorld() == loc.getWorld()) {
 										if (o_player.getLocation()
@@ -104,8 +104,8 @@ public class Poison {
 							if (!DataMgr.getPlayerData(target).isInMatch() || target.getWorld() != p.getWorld())
 								continue;
 							if (target.getLocation().distance(drop.getLocation()) <= maxDist) {
-								if (DataMgr.getPlayerData(player).getTeam().getID() != DataMgr.getPlayerData(target)
-										.getTeam().getID()) {
+								if (DataMgr.getPlayerData(player).team.getID() != DataMgr.getPlayerData(target).team
+										.getID()) {
 									target.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 80, 2));
 									DataMgr.getPlayerData(target).setPoison(true);
 									PoisonRunnable2(target);
@@ -137,12 +137,12 @@ public class Poison {
 
 					// ボムの視認用エフェクト
 					for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
-						if (DataMgr.getPlayerData(o_player).getSettings().ShowEffect_Bomb()) {
+						if (DataMgr.getPlayerData(o_player).settings.ShowEffect_Bomb()) {
 							if (o_player.getWorld() == drop.getLocation().getWorld()) {
 								if (o_player.getLocation()
 										.distanceSquared(drop.getLocation()) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED) {
 									Particle.DustOptions dustOptions = new Particle.DustOptions(
-											DataMgr.getPlayerData(p).getTeam().getTeamColor().getBukkitColor(), 1);
+											DataMgr.getPlayerData(p).team.getTeamColor().getBukkitColor(), 1);
 									o_player.spawnParticle(Particle.REDSTONE, drop.getLocation(), 1, 0, 0, 0, 50,
 											dustOptions);
 								}

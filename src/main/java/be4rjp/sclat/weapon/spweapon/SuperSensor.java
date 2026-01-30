@@ -20,7 +20,7 @@ public class SuperSensor {
 		DataMgr.getPlayerData(player).setIsUsingSP(true);
 		SPWeaponMgr.setSPCoolTimeAnimation(player, 200);
 		for (Player o_player : Sclat.getPlugin(Sclat.class).getServer().getOnlinePlayers()) {
-			if (DataMgr.getPlayerData(player).getTeam() != DataMgr.getPlayerData(o_player).getTeam()
+			if (DataMgr.getPlayerData(player).team != DataMgr.getPlayerData(o_player).team
 					&& DataMgr.getPlayerData(o_player).isInMatch())
 				o_player.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 200, 1));
 		}

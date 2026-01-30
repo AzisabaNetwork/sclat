@@ -176,10 +176,10 @@ public class LootBox {
 		}
 	}
 	public static void changeteam(Player player) {
-		if (DataMgr.getPlayerData(player).getTeam() == DataMgr.getPlayerData(player).getMatch().getTeam1()) {
-			DataMgr.getPlayerData(player).setTeam(DataMgr.getPlayerData(player).getMatch().getTeam0());
+		if (DataMgr.getPlayerData(player).team == DataMgr.getPlayerData(player).match.getTeam1()) {
+			DataMgr.getPlayerData(player).team = DataMgr.getPlayerData(player).match.getTeam0();
 		} else {
-			DataMgr.getPlayerData(player).setTeam(DataMgr.getPlayerData(player).getMatch().getTeam1());
+			DataMgr.getPlayerData(player).team = DataMgr.getPlayerData(player).match.getTeam1();
 		}
 	}
 

@@ -1,182 +1,317 @@
+package be4rjp.sclat.api
 
-package be4rjp.sclat.api;
-
-import be4rjp.sclat.Sclat;
-import be4rjp.sclat.api.team.Team;
-import be4rjp.sclat.data.DataMgr;
-import org.bukkit.ChatColor;
-import org.bukkit.Sound;
-import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
-
-import java.util.Random;
+import be4rjp.sclat.Sclat
+import be4rjp.sclat.api.team.Team
+import be4rjp.sclat.data.DataMgr
+import org.bukkit.ChatColor
+import org.bukkit.Sound
+import org.bukkit.entity.Player
+import org.bukkit.scheduler.BukkitRunnable
+import java.util.Random
 
 /**
  *
  * @author Be4rJP
  */
-public class Animation {
-	public static void ResultAnimation(Player p, int team0point, int team1point, String team0color, String team1color,
-			Team winteam, Boolean hikiwake) {
-		BukkitRunnable task = new BukkitRunnable() {
-			Player player = p;
-			int i = 0;
-			int g = 0;
-			@Override
-			public void run() {
+object Animation {
+    @JvmStatic
+    fun resultAnimation(
+        p: Player,
+        team0point: Int,
+        team1point: Int,
+        team0color: String?,
+        team1color: String?,
+        winteam: Team?,
+        hikiwake: Boolean,
+    ) {
+        val task: BukkitRunnable =
+            object : BukkitRunnable() {
+                var player: Player = p
+                var i: Int = 0
+                var g: Int = 0
 
-				if (i <= 15) {
-					player.sendTitle("",
-							String.valueOf(g) + "% [" + GaugeAPI.toGauge(g, 50, team0color, "§7")
-									+ GaugeAPI.toGauge(50 - g, 50, "§7", team1color) + "] " + String.valueOf(g) + "%",
-							0, 40, 0);
-					g = g + 2;
-				}
-				/*
-				 * if(i >= 6 && i <= 10){ player.sendTitle("", String.valueOf(g) + "% [" +
-				 * GaugeAPI.toGauge(g,50,team0color,"§7") + GaugeAPI.toGauge(50 -
-				 * g,50,"§7",team1color) + "] " + String.valueOf(g) + "%", 0, 40, 0); g++; }
-				 */
-				if (i == 35) {
-					if (hikiwake) {
-						player.sendTitle("引き分け！", "[" + GaugeAPI.toGauge(50, 100, team0color, team1color) + "]", 0, 40,
-								10);
-					} else {
-						if (winteam == DataMgr.getPlayerData(player).getTeam())
-							player.sendTitle(ChatColor.GREEN + "You Win!",
-									String.valueOf(team0point) + "% ["
-											+ GaugeAPI.toGauge(team0point, 100, team0color, team1color) + "] "
-											+ String.valueOf(100 - team0point) + "%",
-									0, 40, 10);
-						else
-							player.sendTitle(ChatColor.RED + "You Lose...",
-									String.valueOf(team0point) + "% ["
-											+ GaugeAPI.toGauge(team0point, 100, team0color, team1color) + "] "
-											+ String.valueOf(100 - team0point) + "%",
-									0, 40, 10);
-					}
-					player.playSound(player.getLocation(), Sound.ENTITY_ZOMBIE_INFECT, 13.0F, 1.5F);
-				}
-				if (i == 40) {
-					if (winteam == DataMgr.getPlayerData(player).getTeam())
-						SclatUtil.playGameSound(player, SoundType.CONGRATULATIONS);
-					cancel();
-				}
-				i++;
-			}
-		};
-		task.runTaskTimer(Sclat.getPlugin(), 0, 2);
-	}
+                override fun run() {
+                    if (i <= 15) {
+                        player.sendTitle(
+                            "",
+                            (
+                                g.toString() + "% [" + GaugeAPI.toGauge(g, 50, team0color, "§7") +
+                                    GaugeAPI.toGauge(50 - g, 50, "§7", team1color) + "] " + g.toString() + "%"
+                                ),
+                            0,
+                            40,
+                            0,
+                        )
+                        g = g + 2
+                    }
+                /*
+                 * if(i >= 6 && i <= 10){ player.sendTitle("", String.valueOf(g) + "% [" +
+                 * GaugeAPI.toGauge(g,50,team0color,"§7") + GaugeAPI.toGauge(50 -
+                 * g,50,"§7",team1color) + "] " + String.valueOf(g) + "%", 0, 40, 0); g++; }
+                 */
+                    if (i == 35) {
+                        if (hikiwake) {
+                            player.sendTitle(
+                                "引き分け！",
+                                "[" + GaugeAPI.toGauge(50, 100, team0color, team1color) + "]",
+                                0,
+                                40,
+                                10,
+                            )
+                        } else {
+                            if (winteam === DataMgr.getPlayerData(player).getTeam()) {
+                                player.sendTitle(
+                                    ChatColor.GREEN.toString() + "You Win!",
+                                    (
+                                        team0point.toString() + "% [" +
+                                            GaugeAPI.toGauge(team0point, 100, team0color, team1color) + "] " +
+                                            (100 - team0point).toString() + "%"
+                                        ),
+                                    0,
+                                    40,
+                                    10,
+                                )
+                            } else {
+                                player.sendTitle(
+                                    ChatColor.RED.toString() + "You Lose...",
+                                    (
+                                        team0point.toString() + "% [" +
+                                            GaugeAPI.toGauge(team0point, 100, team0color, team1color) + "] " +
+                                            (100 - team0point).toString() + "%"
+                                        ),
+                                    0,
+                                    40,
+                                    10,
+                                )
+                            }
+                        }
+                        player.playSound(player.getLocation(), Sound.ENTITY_ZOMBIE_INFECT, 13.0f, 1.5f)
+                    }
+                    if (i == 40) {
+                        if (winteam === DataMgr.getPlayerData(player).getTeam()) {
+                            SclatUtil.playGameSound(
+                                player,
+                                SoundType.CONGRATULATIONS,
+                            )
+                        }
+                        cancel()
+                    }
+                    i++
+                }
+            }
+        task.runTaskTimer(Sclat.getPlugin(), 0, 2)
+    }
 
-	public static void AreaResultAnimation(Player p, int team0point, int team1point, String team0color,
-			String team1color, Team winteam) {
-		BukkitRunnable task = new BukkitRunnable() {
-			Player player = p;
-			int i = 0;
-			int g = 0;
-			@Override
-			public void run() {
+    @JvmStatic
+    fun areaResultAnimation(
+        p: Player,
+        team0point: Int,
+        team1point: Int,
+        team0color: String?,
+        team1color: String?,
+        winteam: Team?,
+    ) {
+        val task: BukkitRunnable =
+            object : BukkitRunnable() {
+                var player: Player = p
+                var i: Int = 0
+                var g: Int = 0
 
-				if (i <= 15) {
-					player.sendTitle("",
-							String.valueOf(g) + "% [" + GaugeAPI.toGauge(g, 50, team0color, "§7")
-									+ GaugeAPI.toGauge(50 - g, 50, "§7", team1color) + "] " + String.valueOf(g) + "%",
-							0, 40, 0);
-					g = g + 2;
-				}
-				if (i == 35) {
-					if (winteam == DataMgr.getPlayerData(player).getTeam())
-						player.sendTitle(ChatColor.GREEN + "Knock Out !!",
-								String.valueOf(team0point) + "% ["
-										+ GaugeAPI.toGauge(team0point, 100, team0color, team1color) + "] "
-										+ String.valueOf(100 - team0point) + "%",
-								0, 40, 10);
-					else
-						player.sendTitle(ChatColor.RED + "You Lose...",
-								String.valueOf(team0point) + "% ["
-										+ GaugeAPI.toGauge(team0point, 100, team0color, team1color) + "] "
-										+ String.valueOf(100 - team0point) + "%",
-								0, 40, 10);
-					player.playSound(player.getLocation(), Sound.ENTITY_ZOMBIE_INFECT, 13.0F, 1.5F);
-				}
-				if (i == 40) {
-					if (winteam == DataMgr.getPlayerData(player).getTeam())
-						SclatUtil.playGameSound(player, SoundType.CONGRATULATIONS);
-					cancel();
-				}
-				i++;
-			}
-		};
-		task.runTaskTimer(Sclat.getPlugin(), 0, 2);
-	}
+                override fun run() {
+                    if (i <= 15) {
+                        player.sendTitle(
+                            "",
+                            (
+                                g.toString() + "% [" + GaugeAPI.toGauge(g, 50, team0color, "§7") +
+                                    GaugeAPI.toGauge(50 - g, 50, "§7", team1color) + "] " + g.toString() + "%"
+                                ),
+                            0,
+                            40,
+                            0,
+                        )
+                        g = g + 2
+                    }
+                    if (i == 35) {
+                        if (winteam === DataMgr.getPlayerData(player).getTeam()) {
+                            player.sendTitle(
+                                ChatColor.GREEN.toString() + "Knock Out !!",
+                                (
+                                    team0point.toString() + "% [" +
+                                        GaugeAPI.toGauge(team0point, 100, team0color, team1color) + "] " +
+                                        (100 - team0point).toString() + "%"
+                                    ),
+                                0,
+                                40,
+                                10,
+                            )
+                        } else {
+                            player.sendTitle(
+                                ChatColor.RED.toString() + "You Lose...",
+                                (
+                                    team0point.toString() + "% [" +
+                                        GaugeAPI.toGauge(team0point, 100, team0color, team1color) + "] " +
+                                        (100 - team0point).toString() + "%"
+                                    ),
+                                0,
+                                40,
+                                10,
+                            )
+                        }
+                        player.playSound(player.getLocation(), Sound.ENTITY_ZOMBIE_INFECT, 13.0f, 1.5f)
+                    }
+                    if (i == 40) {
+                        if (winteam === DataMgr.getPlayerData(player).getTeam()) {
+                            SclatUtil.playGameSound(
+                                player,
+                                SoundType.CONGRATULATIONS,
+                            )
+                        }
+                        cancel()
+                    }
+                    i++
+                }
+            }
+        task.runTaskTimer(Sclat.getPlugin(), 0, 2)
+    }
 
-	public static void TDMResultAnimation(Player p, int team0point, int team1point, String team0color,
-			String team1color, Team winteam, Boolean hikiwake) {
-		BukkitRunnable task = new BukkitRunnable() {
-			Player player = p;
-			int i = 0;
-			@Override
-			public void run() {
+    @JvmStatic
+    fun tdmResultAnimation(
+        p: Player,
+        team0point: Int,
+        team1point: Int,
+        team0color: String?,
+        team1color: String?,
+        winteam: Team?,
+        hikiwake: Boolean,
+    ) {
+        val task: BukkitRunnable =
+            object : BukkitRunnable() {
+                var player: Player = p
+                var i: Int = 0
 
-				if (i <= 15) {
-					player.sendTitle("", team0color
-							+ DataMgr.getPlayerData(player).getMatch().getTeam0().getTeamColor().getColorName() + "Team"
-							+ ChatColor.RESET + " : " + String.valueOf(new Random().nextInt(10)) + " Kill       "
-							+ team1color
-							+ DataMgr.getPlayerData(player).getMatch().getTeam1().getTeamColor().getColorName() + "Team"
-							+ ChatColor.RESET + " : " + String.valueOf(new Random().nextInt(10)) + " Kill", 0, 40, 0);
-				}
-				/*
-				 * if(i >= 6 && i <= 10){ player.sendTitle("", String.valueOf(g) + "% [" +
-				 * GaugeAPI.toGauge(g,50,team0color,"§7") + GaugeAPI.toGauge(50 -
-				 * g,50,"§7",team1color) + "] " + String.valueOf(g) + "%", 0, 40, 0); g++; }
-				 */
-				if (i == 35) {
-					if (hikiwake) {
-						player.sendTitle("引き分け！",
-								team0color
-										+ DataMgr.getPlayerData(player).getMatch().getTeam0().getTeamColor()
-												.getColorName()
-										+ "Team" + ChatColor.RESET + " : " + String.valueOf(team0point) + " Kill       "
-										+ team1color
-										+ DataMgr.getPlayerData(player).getMatch().getTeam1().getTeamColor()
-												.getColorName()
-										+ "Team" + ChatColor.RESET + " : " + String.valueOf(team1point) + " Kill",
-								0, 40, 10);
-					} else {
-						if (winteam == DataMgr.getPlayerData(player).getTeam())
-							player.sendTitle(ChatColor.GREEN + "You  Win!",
-									team0color
-											+ DataMgr.getPlayerData(player).getMatch().getTeam0().getTeamColor()
-													.getColorName()
-											+ "Team" + ChatColor.RESET + " : " + String.valueOf(team0point)
-											+ " Kill       " + team1color
-											+ DataMgr.getPlayerData(player).getMatch().getTeam1().getTeamColor()
-													.getColorName()
-											+ "Team" + ChatColor.RESET + " : " + String.valueOf(team1point) + " Kill",
-									0, 40, 10);
-						else
-							player.sendTitle(ChatColor.RED + "You  Lose...",
-									team0color
-											+ DataMgr.getPlayerData(player).getMatch().getTeam0().getTeamColor()
-													.getColorName()
-											+ "Team" + ChatColor.RESET + " : " + String.valueOf(team0point)
-											+ " Kill       " + team1color
-											+ DataMgr.getPlayerData(player).getMatch().getTeam1().getTeamColor()
-													.getColorName()
-											+ "Team" + ChatColor.RESET + " : " + String.valueOf(team1point) + " Kill",
-									0, 40, 10);
-					}
-					player.playSound(player.getLocation(), Sound.ENTITY_ZOMBIE_INFECT, 13.0F, 1.5F);
-				}
-				if (i == 40) {
-					if (winteam == DataMgr.getPlayerData(player).getTeam())
-						SclatUtil.playGameSound(player, SoundType.CONGRATULATIONS);
-					cancel();
-				}
-				i++;
-			}
-		};
-		task.runTaskTimer(Sclat.getPlugin(), 0, 2);
-	}
+                override fun run() {
+                    if (i <= 15) {
+                        player.sendTitle(
+                            "",
+                            (
+                                team0color +
+                                    DataMgr
+                                        .getPlayerData(player)
+                                        .getMatch()
+                                        .getTeam0()
+                                        ?.teamColor
+                                        ?.colorName!! + "Team" +
+                                    ChatColor.RESET + " : " + Random().nextInt(10).toString() + " Kill       " +
+                                    team1color +
+                                    DataMgr
+                                        .getPlayerData(player)
+                                        .getMatch()
+                                        .getTeam1()
+                                        ?.teamColor
+                                        ?.colorName!! + "Team" +
+                                    ChatColor.RESET + " : " + Random().nextInt(10).toString() + " Kill"
+                                ),
+                            0,
+                            40,
+                            0,
+                        )
+                    }
+                /*
+                 * if(i >= 6 && i <= 10){ player.sendTitle("", String.valueOf(g) + "% [" +
+                 * GaugeAPI.toGauge(g,50,team0color,"§7") + GaugeAPI.toGauge(50 -
+                 * g,50,"§7",team1color) + "] " + String.valueOf(g) + "%", 0, 40, 0); g++; }
+                 */
+                    if (i == 35) {
+                        if (hikiwake) {
+                            player.sendTitle(
+                                "引き分け！",
+                                (
+                                    team0color +
+                                        DataMgr
+                                            .getPlayerData(player)
+                                            .getMatch()
+                                            .getTeam0()
+                                            ?.teamColor
+                                            ?.colorName!! +
+                                        "Team" + ChatColor.RESET + " : " + team0point.toString() + " Kill       " +
+                                        team1color +
+                                        DataMgr
+                                            .getPlayerData(player)
+                                            .getMatch()
+                                            .getTeam1()
+                                            ?.teamColor
+                                            ?.colorName!! +
+                                        "Team" + ChatColor.RESET + " : " + team1point.toString() + " Kill"
+                                    ),
+                                0,
+                                40,
+                                10,
+                            )
+                        } else {
+                            if (winteam === DataMgr.getPlayerData(player).getTeam()) {
+                                player.sendTitle(
+                                    ChatColor.GREEN.toString() + "You  Win!",
+                                    (
+                                        team0color +
+                                            DataMgr
+                                                .getPlayerData(player)
+                                                .getMatch()
+                                                .getTeam0()
+                                                ?.teamColor
+                                                ?.colorName!! +
+                                            "Team" + ChatColor.RESET + " : " + team0point.toString() + " Kill       " + team1color +
+                                            DataMgr
+                                                .getPlayerData(player)
+                                                .getMatch()
+                                                .getTeam1()
+                                                ?.teamColor
+                                                ?.colorName!! +
+                                            "Team" + ChatColor.RESET + " : " + team1point.toString() + " Kill"
+                                        ),
+                                    0,
+                                    40,
+                                    10,
+                                )
+                            } else {
+                                player.sendTitle(
+                                    ChatColor.RED.toString() + "You  Lose...",
+                                    (
+                                        team0color +
+                                            DataMgr
+                                                .getPlayerData(player)
+                                                .getMatch()
+                                                .getTeam0()
+                                                ?.teamColor
+                                                ?.colorName!! +
+                                            "Team" + ChatColor.RESET + " : " + team0point.toString() + " Kill       " + team1color +
+                                            DataMgr
+                                                .getPlayerData(player)
+                                                .getMatch()
+                                                .getTeam1()
+                                                ?.teamColor
+                                                ?.colorName!! +
+                                            "Team" + ChatColor.RESET + " : " + team1point.toString() + " Kill"
+                                        ),
+                                    0,
+                                    40,
+                                    10,
+                                )
+                            }
+                        }
+                        player.playSound(player.getLocation(), Sound.ENTITY_ZOMBIE_INFECT, 13.0f, 1.5f)
+                    }
+                    if (i == 40) {
+                        if (winteam === DataMgr.getPlayerData(player).getTeam()) {
+                            SclatUtil.playGameSound(
+                                player,
+                                SoundType.CONGRATULATIONS,
+                            )
+                        }
+                        cancel()
+                    }
+                    i++
+                }
+            }
+        task.runTaskTimer(Sclat.getPlugin(), 0, 2)
+    }
 }

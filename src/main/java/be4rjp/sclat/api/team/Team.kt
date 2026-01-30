@@ -1,82 +1,48 @@
-package be4rjp.sclat.api.team;
+package be4rjp.sclat.api.team
 
-import be4rjp.sclat.data.Color;
+import be4rjp.sclat.data.Color
+import org.bukkit.scoreboard.Team
 
 /**
  *
  * @author Be4rJP
  */
-public class Team {
-	private int teamid;
-	private Color teamcolor;
-	private String mapname;
-	private int paintcount = 0;
-	private int killcount = 0;
-	private org.bukkit.scoreboard.Team bt;
-	private int gaticount = 0;
-	private int rateTotal = 0;
+class Team(
+    val iD: Int,
+) {
+    var teamColor: Color? = null
+    private val mapname: String? = null
+    var point: Int = 0
+        private set
+    var killCount: Int = 0
+        private set
+    var team: Team? = null
+    var gatiCount: Int = 0
+        private set
+    var rateTotal: Int = 0
+        private set
 
-	public Team(int id) {
-		this.teamid = id;
-	}
+    fun addPaintCount() {
+        this.point++
+    }
 
-	public int getID() {
-		return this.teamid;
-	}
+    fun subtractPaintCount() {
+        this.point--
+    }
 
-	public Color getTeamColor() {
-		return teamcolor;
-	}
+    fun subtractRateTotal(rate: Int) {
+        this.rateTotal -= rate
+    }
 
-	public int getPoint() {
-		return this.paintcount;
-	}
+    fun addKillCount() {
+        this.killCount++
+    }
 
-	public int getKillCount() {
-		return this.killcount;
-	}
+    fun addGatiCount() {
+        this.gatiCount++
+    }
 
-	public org.bukkit.scoreboard.Team getTeam() {
-		return this.bt;
-	}
-
-	public int getGatiCount() {
-		return this.gaticount;
-	}
-
-	public int getRateTotal() {
-		return this.rateTotal;
-	}
-
-	public void addPaintCount() {
-		paintcount++;
-	}
-
-	public void subtractPaintCount() {
-		paintcount--;
-	}
-
-	public void subtractRateTotal(int rate) {
-		this.rateTotal -= rate;
-	}
-
-	public void addKillCount() {
-		killcount++;
-	}
-
-	public void setTeamColor(Color color) {
-		teamcolor = color;
-	}
-
-	public void setTeam(org.bukkit.scoreboard.Team team) {
-		this.bt = team;
-	}
-
-	public void addGatiCount() {
-		this.gaticount++;
-	}
-
-	public void addRateTotal(int rate) {
-		this.rateTotal += rate;
-	}
+    fun addRateTotal(rate: Int) {
+        this.rateTotal += rate
+    }
 }

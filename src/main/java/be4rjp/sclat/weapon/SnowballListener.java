@@ -57,7 +57,7 @@ public class SnowballListener implements Listener {
 						Player shooter = (Player) projectile.getShooter();
 						if (event.getHitEntity() instanceof Player) {
 							Player target = (Player) event.getHitEntity();
-							if (DataMgr.getPlayerData(shooter).getTeam() != DataMgr.getPlayerData(target).getTeam()
+							if (DataMgr.getPlayerData(shooter).team != DataMgr.getPlayerData(target).team
 									&& target.getGameMode().equals(GameMode.ADVENTURE)) {
 								if (!DataMgr.getPlayerData(shooter).getIsUsingSP())
 									SPWeaponMgr.addSPCharge(shooter);
@@ -75,14 +75,14 @@ public class SnowballListener implements Listener {
 				Player shooter = (Player) projectile.getShooter();
 				if (event.getHitEntity() instanceof Player) {
 					Player target = (Player) event.getHitEntity();
-					if (DataMgr.getPlayerData(shooter).getTeam() != DataMgr.getPlayerData(target).getTeam()
+					if (DataMgr.getPlayerData(shooter).team != DataMgr.getPlayerData(target).team
 							&& target.getGameMode().equals(GameMode.ADVENTURE)) {
 						if (!DataMgr.getPlayerData(shooter).getIsUsingSP())
 							SPWeaponMgr.addSPCharge(shooter);
-						if (DataMgr.getPlayerData(target).getArmor() > 0) {
+						if (DataMgr.getPlayerData(target).armor > 0) {
 							target.getWorld().playSound(target.getLocation(), Sound.ENTITY_SPLASH_POTION_BREAK, 1F,
 									1.5F);
-							if (DataMgr.getPlayerData(target).getArmor() > 10000) {
+							if (DataMgr.getPlayerData(target).armor > 10000) {
 								Vector vec = projectile.getVelocity();
 								Vector v = new Vector(vec.getX(), 0, vec.getZ()).normalize();
 								target.setVelocity(new Vector(v.getX(), 0.2, v.getZ()).multiply(0.33));
@@ -319,15 +319,15 @@ public class SnowballListener implements Listener {
 							if (as.getCustomName() != null) {
 								if (as.getCustomName().equals("Kasa")) {
 									KasaData kasaData = DataMgr.getKasaDataFromArmorStand((ArmorStand) as);
-									if (DataMgr.getPlayerData(kasaData.getPlayer()).getTeam() != DataMgr
-											.getPlayerData(shooter).getTeam()) {
+									if (DataMgr.getPlayerData(kasaData.getPlayer()).team != DataMgr
+											.getPlayerData(shooter).team) {
 										Blaster.Explode(shooter, as.getLocation().add(new Vector(0, 1.0, 0)));
 									}
 								} else if (as.getCustomName().equals("SplashShield")) {
 									SplashShieldData splashShieldData = DataMgr
 											.getSplashShieldDataFromArmorStand((ArmorStand) as);
-									if (DataMgr.getPlayerData(splashShieldData.getPlayer()).getTeam() != DataMgr
-											.getPlayerData(shooter).getTeam()) {
+									if (DataMgr.getPlayerData(splashShieldData.getPlayer()).team != DataMgr
+											.getPlayerData(shooter).team) {
 										Blaster.Explode(shooter, as.getLocation().add(new Vector(0, 1.0, 0)));
 									}
 								}
@@ -411,8 +411,8 @@ public class SnowballListener implements Listener {
 									// DataMgr.getPlayerData(shooter).getTeam())
 									// ssdata.setDamage(ssdata.getDamage() +
 									// DataMgr.getPlayerData(shooter).getWeaponClass().getMainWeapon().getDamage());
-									if (DataMgr.getPlayerData(ssdata.getPlayer()).getTeam() != DataMgr
-											.getPlayerData(shooter).getTeam())
+									if (DataMgr.getPlayerData(ssdata.getPlayer()).team != DataMgr
+											.getPlayerData(shooter).team)
 										return;
 									Vector vec = ball.getVelocity();
 									Location loc = ball.getLocation();
@@ -421,7 +421,7 @@ public class SnowballListener implements Listener {
 													loc.getY() + vec.getY(), loc.getZ() + vec.getZ()),
 											EntityType.SNOWBALL);
 									((CraftSnowball) ball2).getHandle().setItem(CraftItemStack.asNMSCopy(new ItemStack(
-											DataMgr.getPlayerData(shooter).getTeam().getTeamColor().getWool())));
+											DataMgr.getPlayerData(shooter).team.getTeamColor().getWool())));
 									ball2.setShooter(shooter);
 									ball2.setVelocity(vec);
 									ball2.setCustomName(ball.getCustomName());
@@ -438,8 +438,8 @@ public class SnowballListener implements Listener {
 									// DataMgr.getPlayerData(shooter).getTeam())
 									// ssdata.setDamage(ssdata.getDamage() +
 									// DataMgr.getPlayerData(shooter).getWeaponClass().getMainWeapon().getDamage());
-									if (DataMgr.getPlayerData(ssdata.getPlayer()).getTeam() != DataMgr
-											.getPlayerData(shooter).getTeam())
+									if (DataMgr.getPlayerData(ssdata.getPlayer()).team != DataMgr
+											.getPlayerData(shooter).team)
 										return;
 									Vector vec = ball.getVelocity();
 									Location loc = ball.getLocation();
@@ -448,7 +448,7 @@ public class SnowballListener implements Listener {
 													loc.getY() + vec.getY(), loc.getZ() + vec.getZ()),
 											EntityType.SNOWBALL);
 									((CraftSnowball) ball2).getHandle().setItem(CraftItemStack.asNMSCopy(new ItemStack(
-											DataMgr.getPlayerData(shooter).getTeam().getTeamColor().getWool())));
+											DataMgr.getPlayerData(shooter).team.getTeamColor().getWool())));
 									ball2.setShooter(shooter);
 									ball2.setVelocity(vec);
 									ball2.setCustomName(ball.getCustomName());
@@ -530,7 +530,7 @@ public class SnowballListener implements Listener {
 					Player shooter = (Player) projectile.getShooter();
 					if (event.getEntity() instanceof Player) {
 						Player target = (Player) event.getEntity();
-						if (DataMgr.getPlayerData(shooter).getTeam() != DataMgr.getPlayerData(target).getTeam()
+						if (DataMgr.getPlayerData(shooter).team != DataMgr.getPlayerData(target).team
 								&& target.getGameMode().equals(GameMode.ADVENTURE)) {
 							if (!DataMgr.getPlayerData(shooter).getIsUsingSP())
 								SPWeaponMgr.addSPCharge(shooter);

@@ -69,8 +69,8 @@ public class SPWeaponMgr {
 					int enemyTeam = 0;
 					for (Player op : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 						PlayerData opdata = DataMgr.getPlayerData(op);
-						if (data.getMatch() == opdata.getMatch()) {
-							if (data.getTeam() == opdata.getTeam()) {
+						if (data.match == opdata.match) {
+							if (data.team == opdata.team) {
 								if (!opdata.getIsDead())
 									myTeam++;
 							} else {
@@ -151,7 +151,7 @@ public class SPWeaponMgr {
 
 	public static void ArmorRunnable(Player player) {
 		BossBar bar = Sclat.getPlugin().getServer().createBossBar(
-				DataMgr.getPlayerData(player).getTeam().getTeamColor().getColorCode() + "§lInk Armor", BarColor.YELLOW,
+				DataMgr.getPlayerData(player).team.getTeamColor().getColorCode() + "§lInk Armor", BarColor.YELLOW,
 				BarStyle.SOLID, BarFlag.CREATE_FOG);
 		bar.setProgress(0);
 		bar.addPlayer(player);
@@ -161,8 +161,8 @@ public class SPWeaponMgr {
 			@Override
 			public void run() {
 				PlayerData data = DataMgr.getPlayerData(p);
-				if (data.getArmor() > 0) {
-					bar.setProgress(data.getArmor() >= 30 ? 1D : data.getArmor() / 30D);
+				if (data.armor > 0) {
+					bar.setProgress(data.armor >= 30 ? 1D : data.armor / 30D);
 					if (!bar.getPlayers().contains(p))
 						bar.addPlayer(p);
 				} else {

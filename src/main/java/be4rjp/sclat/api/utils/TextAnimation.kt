@@ -1,46 +1,40 @@
-package be4rjp.sclat.api.utils;
+package be4rjp.sclat.api.utils
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+class TextAnimation(text: String, private val length: Int) {
+    private val text: String
 
-public class TextAnimation {
+    private var index = 0
 
-	private static final Set<Character> SMALLS = new HashSet<>(
-			Arrays.asList('.', '|', 'i', '!', '！', '/', '1', ' ', 'l'));
+    init {
+        this.text = text + text + text + text
+    }
 
-	private final String text;
-	private final int length;
+    fun next(): String {
+        var line = text.substring(index, index + length)
 
-	private int index = 0;
+        var plus = 0
+        var hankaku = 0
 
-	public TextAnimation(String text, int length) {
-		this.text = text + text + text + text;
-		this.length = length;
-	}
+        val chars = line.toCharArray()
+        for (aChar in chars) {
+            if (SMALLS.contains(aChar)) {
+                plus++
+            } else if (aChar.toString().toByteArray().size < 2) {
+                hankaku++
+            }
+        }
 
-	public String next() {
+        line = text.substring(index, index + length + plus + hankaku / 2)
 
-		String line = text.substring(index, index + length);
+        index++
+        if (index == text.length / 4) index = 0
 
-		int plus = 0;
-		int hankaku = 0;
+        return line
+    }
 
-		char[] chars = line.toCharArray();
-		for (char aChar : chars) {
-			if (SMALLS.contains(aChar)) {
-				plus++;
-			} else if (String.valueOf(aChar).getBytes().length < 2) {
-				hankaku++;
-			}
-		}
-
-		line = text.substring(index, index + length + plus + hankaku / 2);
-
-		index++;
-		if (index == text.length() / 4)
-			index = 0;
-
-		return line;
-	}
+    companion object {
+        private val SMALLS: MutableSet<Char?> = HashSet<Char?>(
+            mutableListOf<Char?>('.', '|', 'i', '!', '！', '/', '1', ' ', 'l'),
+        )
+    }
 }

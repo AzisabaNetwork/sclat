@@ -1,26 +1,31 @@
+package be4rjp.sclat.api
 
-package be4rjp.sclat.api;
-
-import org.bukkit.ChatColor;
+import org.bukkit.ChatColor
 
 /**
  *
  * @author Be4rJP
  */
-public class GaugeAPI {
-	public static String toGauge(int value, int max, String color1, String color2) {
-		String m = "|";
-		StringBuilder ms = new StringBuilder();
-		ms.append(ChatColor.RESET).append(color1);
-		for (int i = 1; i <= value; i++) {
-			ms.append(m);
-		}
-		ms.append(color2);
-		int rem = max - value;
-		for (int i1 = 1; i1 <= rem; i1++) {
-			ms.append(m);
-		}
-		ms.append(ChatColor.RESET);
-		return ms.toString();
-	}
+object GaugeAPI {
+    @JvmStatic
+    fun toGauge(
+        value: Int,
+        max: Int,
+        color1: String?,
+        color2: String?,
+    ): String {
+        val m = "|"
+        val ms = StringBuilder()
+        ms.append(ChatColor.RESET).append(color1)
+        for (i in 1..value) {
+            ms.append(m)
+        }
+        ms.append(color2)
+        val rem = max - value
+        for (i1 in 1..rem) {
+            ms.append(m)
+        }
+        ms.append(ChatColor.RESET)
+        return ms.toString()
+    }
 }

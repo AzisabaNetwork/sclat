@@ -1,48 +1,67 @@
+package be4rjp.sclat.api
 
-package be4rjp.sclat.api;
-
-import org.bukkit.Location;
-
-import java.util.ArrayList;
-import java.util.List;
+import org.bukkit.Location
+import kotlin.math.cos
+import kotlin.math.sin
 
 /**
  *
  * @author Be4rJP
  */
-public class Sphere {
+object Sphere {
+    @JvmStatic
+    fun getSphere(
+        baseLoc: Location,
+        r: Double,
+        accuracy: Int,
+    ): MutableList<Location?> {
+        val tempList: MutableList<Location?> = ArrayList<Location?>()
+        var count = 0
+        var i = 0
+        while (i < 180) {
+            var t = 0
+            while (t < 360) {
+                var s = 1
+                if (count % 2 == 0) s = -1
+                val x = r * cos(Math.toRadians(i.toDouble())) * cos(Math.toRadians(t.toDouble())) * s
+                val y = r * cos(Math.toRadians(i.toDouble())) * sin(Math.toRadians(t.toDouble())) * s
+                val z = r * sin(Math.toRadians(i.toDouble())) * s
+                val sphereLoc =
+                    Location(
+                        baseLoc.getWorld(),
+                        baseLoc.getX() + x,
+                        baseLoc.getY() + y,
+                        baseLoc.getZ() + z,
+                    )
+                tempList.add(sphereLoc)
+                count++
+                t += accuracy
+            }
+            i += accuracy
+        }
+        return tempList
+    }
 
-	public static List<Location> getSphere(Location baseLoc, double r, int accuracy) {
-		List<Location> tempList = new ArrayList<>();
-		int count = 0;
-		for (int i = 0; i < 180; i += accuracy) {
-			for (int t = 0; t < 360; t += accuracy) {
-				int s = 1;
-				if (count % 2 == 0)
-					s = -1;
-				double x = r * Math.cos(Math.toRadians(i)) * Math.cos(Math.toRadians(t)) * s;
-				double y = r * Math.cos(Math.toRadians(i)) * Math.sin(Math.toRadians(t)) * s;
-				double z = r * Math.sin(Math.toRadians(i)) * s;
-				Location sphereLoc = new Location(baseLoc.getWorld(), baseLoc.getX() + x, baseLoc.getY() + y,
-						baseLoc.getZ() + z);
-				tempList.add(sphereLoc);
-				count++;
-			}
-		}
-		return tempList;
-	}
-
-	public static List<Location> getXZCircle(Location baseLoc, double r, double r_accuracy, int accuracy) {
-		List<Location> tempList = new ArrayList<>();
-		for (int tr = 1; tr <= r; tr += r_accuracy) {
-			for (int t = 0; t < 360; t += accuracy / tr) {
-				double x = tr * Math.sin(Math.toRadians(t));
-				double z = tr * Math.cos(Math.toRadians(t));
-				Location loc = new Location(baseLoc.getWorld(), baseLoc.getX() + x, baseLoc.getY(), baseLoc.getZ() + z);
-				tempList.add(loc);
-			}
-		}
-		return tempList;
-	}
-
+    @JvmStatic
+    fun getXZCircle(
+        baseLoc: Location,
+        r: Double,
+        r_accuracy: Double,
+        accuracy: Int,
+    ): MutableList<Location?> {
+        val tempList: MutableList<Location?> = ArrayList<Location?>()
+        var tr = 1
+        while (tr <= r) {
+            var t = 0
+            while (t < 360) {
+                val x = tr * sin(Math.toRadians(t.toDouble()))
+                val z = tr * cos(Math.toRadians(t.toDouble()))
+                val loc = Location(baseLoc.getWorld(), baseLoc.getX() + x, baseLoc.getY(), baseLoc.getZ() + z)
+                tempList.add(loc)
+                t += accuracy / tr
+            }
+            tr = (tr + r_accuracy).toInt()
+        }
+        return tempList
+    }
 }

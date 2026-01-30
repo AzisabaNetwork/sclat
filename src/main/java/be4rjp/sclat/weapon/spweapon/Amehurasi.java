@@ -79,12 +79,12 @@ public class Amehurasi {
 
 					// 視認用エフェクト
 					for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
-						if (DataMgr.getPlayerData(o_player).getSettings().ShowEffect_Bomb()) {
+						if (DataMgr.getPlayerData(o_player).settings.ShowEffect_Bomb()) {
 							if (o_player.getWorld() == drop.getWorld()) {
 								if (o_player.getLocation()
 										.distanceSquared(drop.getLocation()) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED) {
 									Particle.DustOptions dustOptions = new Particle.DustOptions(
-											DataMgr.getPlayerData(p).getTeam().getTeamColor().getBukkitColor(), 1);
+											DataMgr.getPlayerData(p).team.getTeamColor().getBukkitColor(), 1);
 									o_player.spawnParticle(Particle.REDSTONE, drop.getLocation(), 1, 0, 0, 0, 50,
 											dustOptions);
 								}
@@ -130,14 +130,15 @@ public class Amehurasi {
 					// 雲エフェクト
 					if (c % 2 == 0) {
 						for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
-							if (DataMgr.getPlayerData(o_player).getSettings().ShowEffect_SPWeapon()) {
+							if (DataMgr.getPlayerData(o_player).settings.ShowEffect_SPWeapon()) {
 								for (Location loc : locList) {
 									if (new Random().nextInt(3) == 1) {
 										if (o_player.getWorld() == loc.getWorld()) {
 											if (o_player.getLocation()
 													.distanceSquared(loc) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED) {
-												Particle.DustOptions dustOptions = new Particle.DustOptions(DataMgr
-														.getPlayerData(p).getTeam().getTeamColor().getBukkitColor(), 3);
+												Particle.DustOptions dustOptions = new Particle.DustOptions(
+														DataMgr.getPlayerData(p).team.getTeamColor().getBukkitColor(),
+														3);
 												o_player.spawnParticle(Particle.REDSTONE, loc, 1, 1, 1, 1, 1,
 														dustOptions);
 											}
@@ -170,7 +171,7 @@ public class Amehurasi {
 									continue;
 								if (target.getLocation().distanceSquared(position) <= maxDistSquared
 										&& new Random().nextInt(100) == 0) {
-									if (DataMgr.getPlayerData(p).getTeam() != DataMgr.getPlayerData(target).getTeam()
+									if (DataMgr.getPlayerData(p).team != DataMgr.getPlayerData(target).team
 											&& target.getGameMode().equals(GameMode.ADVENTURE)) {
 										SclatUtil.giveDamage(p, target, damage, "spWeapon");
 
@@ -218,8 +219,8 @@ public class Amehurasi {
 
 	public static void SnowballAmehurasiRunnable(Player player, Location loc) {
 		Snowball ball = (Snowball) player.getWorld().spawnEntity(loc, EntityType.SNOWBALL);
-		((CraftSnowball) ball).getHandle().setItem(CraftItemStack
-				.asNMSCopy(new ItemStack(DataMgr.getPlayerData(player).getTeam().getTeamColor().getWool())));
+		((CraftSnowball) ball).getHandle().setItem(
+				CraftItemStack.asNMSCopy(new ItemStack(DataMgr.getPlayerData(player).team.getTeamColor().getWool())));
 		ball.setShooter(player);
 		ball.setCustomName("Amehurasi");
 		BukkitRunnable task = new BukkitRunnable() {
@@ -229,10 +230,10 @@ public class Amehurasi {
 			@Override
 			public void run() {
 				if (i % 2 == 0) {
-					org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).getTeam().getTeamColor().getWool()
+					org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).team.getTeamColor().getWool()
 							.createBlockData();
 					for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
-						if (DataMgr.getPlayerData(o_player).getSettings().ShowEffect_SPWeapon())
+						if (DataMgr.getPlayerData(o_player).settings.ShowEffect_SPWeapon())
 							if (o_player.getWorld() == inkball.getWorld())
 								if (o_player.getLocation().distanceSquared(
 										inkball.getLocation()) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED)

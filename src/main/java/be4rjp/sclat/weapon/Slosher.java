@@ -74,8 +74,8 @@ public class Slosher {
 				* Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP)
 				/ Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)));
 		Snowball ball = player.launchProjectile(Snowball.class);
-		((CraftSnowball) ball).getHandle().setItem(CraftItemStack
-				.asNMSCopy(new ItemStack(DataMgr.getPlayerData(player).getTeam().getTeamColor().getWool())));
+		((CraftSnowball) ball).getHandle().setItem(
+				CraftItemStack.asNMSCopy(new ItemStack(DataMgr.getPlayerData(player).team.getTeamColor().getWool())));
 		Vector vec = player.getLocation().getDirection()
 				.multiply(DataMgr.getPlayerData(player).getWeaponClass().getMainWeapon().getShootSpeed());
 		if (v != null)
@@ -110,12 +110,12 @@ public class Slosher {
 						DataMgr.setSnowballHitCount(name, 0);
 					}
 					for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
-						if (!DataMgr.getPlayerData(target).getSettings().ShowEffect_MainWeaponInk())
+						if (!DataMgr.getPlayerData(target).settings.ShowEffect_MainWeaponInk())
 							continue;
 						if (target.getWorld() == inkball.getWorld()) {
 							if (target.getLocation()
 									.distanceSquared(inkball.getLocation()) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED) {
-								org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).getTeam().getTeamColor()
+								org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).team.getTeamColor()
 										.getWool().createBlockData();
 								target.spawnParticle(org.bukkit.Particle.BLOCK_DUST, inkball.getLocation(), 3, 0, 0, 0,
 										1, bd);
@@ -158,7 +158,7 @@ public class Slosher {
 							if (target.getLocation().distanceSquared(inkball.getLocation()) <= maxDist * maxDist) {
 								double damage = (maxDist - target.getLocation().distance(inkball.getLocation()))
 										* data.getWeaponClass().getMainWeapon().getBlasterExDamage();
-								if (DataMgr.getPlayerData(player).getTeam() != DataMgr.getPlayerData(target).getTeam()
+								if (DataMgr.getPlayerData(player).team != DataMgr.getPlayerData(target).team
 										&& target.getGameMode().equals(GameMode.ADVENTURE)) {
 									SclatUtil.giveDamage(player, target, damage, "killed");
 

@@ -1,31 +1,19 @@
-package be4rjp.sclat.api.player;
+package be4rjp.sclat.api.player
 
-import be4rjp.sclat.Sclat;
-import org.bukkit.scheduler.BukkitRunnable;
+import be4rjp.sclat.Sclat
+import org.bukkit.scheduler.BukkitRunnable
 
-public class PlayerReturn {
+class PlayerReturn(val uUID: String?) {
+    private val task: BukkitRunnable
+    var flag: Boolean = true
+        private set
 
-	private final String uuid;
-	private final BukkitRunnable task;
-	private boolean flag = true;
-
-	public PlayerReturn(String uuid) {
-		this.uuid = uuid;
-
-		this.task = new BukkitRunnable() {
-			@Override
-			public void run() {
-				flag = false;
-			}
-		};
-		this.task.runTaskLater(Sclat.getPlugin(), 400);
-	}
-
-	public boolean getFlag() {
-		return this.flag;
-	}
-
-	public String getUUID() {
-		return this.uuid;
-	}
+    init {
+        this.task = object : BukkitRunnable() {
+            override fun run() {
+                flag = false
+            }
+        }
+        this.task.runTaskLater(Sclat.getPlugin(), 400)
+    }
 }

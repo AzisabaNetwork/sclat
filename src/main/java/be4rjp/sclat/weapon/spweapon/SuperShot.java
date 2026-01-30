@@ -133,8 +133,7 @@ public class SuperShot {
 			public void run() {
 				try {
 					if (c == 0) {
-						ItemStack i = new ItemStack(DataMgr.getPlayerData(p).getTeam().getTeamColor().getWool())
-								.clone();
+						ItemStack i = new ItemStack(DataMgr.getPlayerData(p).team.getTeamColor().getWool()).clone();
 						ItemMeta i_m = i.getItemMeta();
 						i_m.setLocalizedName(String.valueOf(Sclat.getNotDuplicateNumber()));
 						i.setItemMeta(i_m);
@@ -156,10 +155,10 @@ public class SuperShot {
 					PaintMgr.PaintHightestBlock(ball.getLocation(), p, false, false);
 
 					if (new Random().nextInt(20) == 0) {
-						org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).getTeam().getTeamColor().getWool()
+						org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).team.getTeamColor().getWool()
 								.createBlockData();
 						for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
-							if (DataMgr.getPlayerData(o_player).getSettings().ShowEffect_SPWeapon())
+							if (DataMgr.getPlayerData(o_player).settings.ShowEffect_SPWeapon())
 								if (o_player.getWorld() == ball.getWorld())
 									if (o_player.getLocation().distanceSquared(
 											ball.getLocation()) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED)

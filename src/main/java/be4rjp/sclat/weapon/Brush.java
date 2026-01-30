@@ -34,7 +34,7 @@ public class Brush {
 			public void run() {
 				PlayerData data = DataMgr.getPlayerData(p);
 
-				data.setTick(data.getTick() + 1);
+				data.tick = data.tick + 1;
 
 				if (!data.isInMatch() || !p.isOnline()) {
 					cancel();
@@ -44,7 +44,7 @@ public class Brush {
 				ClickType clickType = Sclat.dadadaCheckerAPI.getPlayerClickType(player);
 
 				if (/* data.getTick() >= 6 */clickType == ClickType.NO_CLICK && data.isInMatch()) {
-					data.setTick(7);
+					data.tick = 7;
 					data.setIsHolding(false);
 					data.setCanPaint(false);
 					data.setCanShoot(true);
@@ -87,10 +87,10 @@ public class Brush {
 						Location front = eloc.add(vec.getX() * 2, -0.9, vec.getZ() * 2);
 						if (data.getWeaponClass().getMainWeapon().getIsHude())
 							front = eloc.add(vec.getX() * 1.5, -0.9, vec.getZ() * 1.5);
-						org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).getTeam().getTeamColor().getWool()
+						org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).team.getTeamColor().getWool()
 								.createBlockData();
 						for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
-							if (DataMgr.getPlayerData(target).getSettings().ShowEffect_MainWeaponInk())
+							if (DataMgr.getPlayerData(target).settings.ShowEffect_MainWeaponInk())
 								if (target.getWorld() == p.getWorld())
 									if (target.getLocation()
 											.distanceSquared(front) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED)
@@ -107,7 +107,7 @@ public class Brush {
 									0, 1, bd);
 
 							for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
-								if (DataMgr.getPlayerData(target).getSettings().ShowEffect_MainWeaponInk())
+								if (DataMgr.getPlayerData(target).settings.ShowEffect_MainWeaponInk())
 									if (target.getWorld() == p.getWorld())
 										if (target.getLocation()
 												.distanceSquared(position) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED)
@@ -119,7 +119,7 @@ public class Brush {
 							for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 								if (!DataMgr.getPlayerData(target).isInMatch())
 									continue;
-								if (DataMgr.getPlayerData(p).getTeam() != DataMgr.getPlayerData(target).getTeam()
+								if (DataMgr.getPlayerData(p).team != DataMgr.getPlayerData(target).team
 										&& target.getGameMode().equals(GameMode.ADVENTURE)) {
 									if (target.getLocation().distanceSquared(position) <= maxDistSquad) {
 
@@ -232,8 +232,8 @@ public class Brush {
 				* Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP)
 				/ Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)));
 		Snowball ball = player.launchProjectile(Snowball.class);
-		((CraftSnowball) ball).getHandle().setItem(CraftItemStack
-				.asNMSCopy(new ItemStack(DataMgr.getPlayerData(player).getTeam().getTeamColor().getWool())));
+		((CraftSnowball) ball).getHandle().setItem(
+				CraftItemStack.asNMSCopy(new ItemStack(DataMgr.getPlayerData(player).team.getTeamColor().getWool())));
 		Vector vec = player.getLocation().getDirection()
 				.multiply(DataMgr.getPlayerData(player).getWeaponClass().getMainWeapon().getShootSpeed());
 		if (v != null)
@@ -285,9 +285,9 @@ public class Brush {
 					for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 						if (target.getWorld() != p.getWorld())
 							continue;
-						if (!DataMgr.getPlayerData(target).getSettings().ShowEffect_MainWeaponInk())
+						if (!DataMgr.getPlayerData(target).settings.ShowEffect_MainWeaponInk())
 							continue;
-						org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).getTeam().getTeamColor().getWool()
+						org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).team.getTeamColor().getWool()
 								.createBlockData();
 						target.spawnParticle(org.bukkit.Particle.BLOCK_DUST, inkball.getLocation(), 1, 0, 0, 0, 1, bd);
 					}

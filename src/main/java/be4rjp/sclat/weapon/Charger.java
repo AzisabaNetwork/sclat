@@ -45,21 +45,20 @@ public class Charger {
 			public void run() {
 				PlayerData data = DataMgr.getPlayerData(p);
 
-				data.setTick(data.getTick() + 1);
+				data.tick = data.tick + 1;
 
 				if (data.getIsUsingMM() || data.getIsUsingJetPack() || data.getIsUsingTyakuti()
 						|| data.getIsUsingSS()) {
 					charge = 0;
-					data.setTick(8);
+					data.tick = 8;
 					return;
 				}
 
 				if (keeping == data.getWeaponClass().getMainWeapon().getChargeKeepingTime()
-						&& data.getWeaponClass().getMainWeapon().getCanChargeKeep()
-						&& data.getSettings().doChargeKeep())
+						&& data.getWeaponClass().getMainWeapon().getCanChargeKeep() && data.settings.doChargeKeep())
 					charge = 0;
 
-				if (data.getTick() <= 6 && data.isInMatch()) {
+				if (data.tick <= 6 && data.isInMatch()) {
 					ItemStack w = data.getWeaponClass().getMainWeapon().getWeaponIteamStack().clone();
 					ItemMeta wm = w.getItemMeta();
 
@@ -84,7 +83,7 @@ public class Charger {
 					}
 
 					wm.setDisplayName(wm.getDisplayName() + "§7["
-							+ GaugeAPI.toGauge(charge, max, data.getTeam().getTeamColor().getColorCode(), "§7") + "]");
+							+ GaugeAPI.toGauge(charge, max, data.team.getTeamColor().getColorCode(), "§7") + "]");
 					w.setItemMeta(wm);
 					p.getInventory().setItem(0, w);
 					RayTrace rayTrace = new RayTrace(p.getEyeLocation().toVector(), p.getEyeLocation().getDirection());
@@ -122,18 +121,18 @@ public class Charger {
 				if (charge == max || data.getWeaponClass().getMainWeapon().getHanbunCharge())
 					if (p.getInventory().getItemInMainHand().getType().equals(Material.AIR))
 						if (data.getWeaponClass().getMainWeapon().getCanChargeKeep())
-							if (data.getSettings().doChargeKeep())
-								data.setTick(11);
+							if (data.settings.doChargeKeep())
+								data.tick = 11;
 
 				if (p.getGameMode().equals(GameMode.SPECTATOR))
 					charge = 0;
 
-				if (data.getTick() >= 11 && (charge == max || data.getWeaponClass().getMainWeapon().getHanbunCharge()))
+				if (data.tick >= 11 && (charge == max || data.getWeaponClass().getMainWeapon().getHanbunCharge()))
 					keeping++;
 				else
 					keeping = 0;
 
-				if (data.getTick() == 7 && data.isInMatch()) {
+				if (data.tick == 7 && data.isInMatch()) {
 					/*
 					 * if(player.hasPotionEffect(PotionEffectType.SLOW))
 					 * player.removePotionEffect(PotionEffectType.SLOW);
@@ -208,7 +207,7 @@ public class Charger {
 					}
 					charge = 0;
 					p.getInventory().setItem(0, data.getWeaponClass().getMainWeapon().getWeaponIteamStack());
-					data.setTick(8);
+					data.tick = 8;
 					data.setIsHolding(false);
 				}
 
@@ -284,11 +283,11 @@ public class Charger {
 			// }
 			// }
 			// }
-			if (DataMgr.getPlayerData(player).getSettings().ShowEffect_MainWeaponInk()) {
+			if (DataMgr.getPlayerData(player).settings.ShowEffect_MainWeaponInk()) {
 				if (player.getWorld() == position.getWorld()) {
 					if (player.getLocation().distanceSquared(position) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED) {
-						org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(player).getTeam().getTeamColor()
-								.getWool().createBlockData();
+						org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(player).team.getTeamColor().getWool()
+								.createBlockData();
 						player.spawnParticle(org.bukkit.Particle.BLOCK_DUST, position, 1, 0, 0, 0, 1, bd);
 					}
 				}
@@ -298,7 +297,7 @@ public class Charger {
 			for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 				if (!DataMgr.getPlayerData(target).isInMatch())
 					continue;
-				if (DataMgr.getPlayerData(player).getTeam() != DataMgr.getPlayerData(target).getTeam()
+				if (DataMgr.getPlayerData(player).team != DataMgr.getPlayerData(target).team
 						&& target.getGameMode().equals(GameMode.ADVENTURE)) {
 					if (target.getLocation().distanceSquared(position) <= maxDistSquad) {
 						if (rayTrace.intersects(new BoundingBox((Entity) target),
@@ -338,16 +337,16 @@ public class Charger {
 								if (as.getCustomName().equals("SplashShield")) {
 									SplashShieldData ssdata = DataMgr
 											.getSplashShieldDataFromArmorStand((ArmorStand) as);
-									if (DataMgr.getPlayerData(ssdata.getPlayer()).getTeam() != DataMgr
-											.getPlayerData(player).getTeam()) {
+									if (DataMgr.getPlayerData(ssdata.getPlayer()).team != DataMgr
+											.getPlayerData(player).team) {
 										ArmorStandMgr.giveDamageArmorStand((ArmorStand) as, damage, player);
 										as.getWorld().playSound(as.getLocation(), Sound.ENTITY_PLAYER_HURT, 0.8F, 1.2F);
 										break loop;
 									}
 								} else if (as.getCustomName().equals("Kasa")) {
 									KasaData ssdata = DataMgr.getKasaDataFromArmorStand((ArmorStand) as);
-									if (DataMgr.getPlayerData(ssdata.getPlayer()).getTeam() != DataMgr
-											.getPlayerData(player).getTeam()) {
+									if (DataMgr.getPlayerData(ssdata.getPlayer()).team != DataMgr
+											.getPlayerData(player).team) {
 										ArmorStandMgr.giveDamageArmorStand((ArmorStand) as, damage, player);
 										as.getWorld().playSound(as.getLocation(), Sound.ENTITY_PLAYER_HURT, 0.8F, 1.2F);
 										break loop;

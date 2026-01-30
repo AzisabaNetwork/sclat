@@ -193,7 +193,7 @@ public class MainWeaponMgr {
 
 			PlayerData data = DataMgr.getPlayerData(player);
 			if (data.getCanCharge())
-				data.setTick(0);
+				data.tick = 0;
 			if (!data.getWeaponClass().getMainWeapon().getWeaponType().equals("Shooter")
 					&& !data.getWeaponClass().getMainWeapon().getWeaponType().equals("Blaster"))
 				data.setIsHolding(true);

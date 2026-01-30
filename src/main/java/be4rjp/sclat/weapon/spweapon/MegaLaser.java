@@ -198,9 +198,9 @@ public class MegaLaser {
 								PlayerData targetData = DataMgr.getPlayerData(target);
 								if (targetData == null)
 									continue;
-								if (targetData.getSettings().ShowEffect_SPWeaponRegion()) {
+								if (targetData.settings.ShowEffect_SPWeaponRegion()) {
 									Particle.DustOptions dustOptions = new Particle.DustOptions(
-											playerData.getTeam().getTeamColor().getBukkitColor(), c <= 3 ? 1 : 2);
+											playerData.team.getTeamColor().getBukkitColor(), c <= 3 ? 1 : 2);
 									target.spawnParticle(Particle.REDSTONE, eloc, 1, 0, 0, 0, 30, dustOptions);
 								}
 							}
@@ -228,7 +228,7 @@ public class MegaLaser {
 								continue;
 							if (target.getWorld() != p.getWorld())
 								continue;
-							if (targetData.getTeam() == playerData.getTeam())
+							if (targetData.team == playerData.team)
 								continue;
 							if (target.getLocation().distanceSquared(position.clone().add(0, 1, 0)) <= maxDistSquared) {
 								// list.add(target);
@@ -258,10 +258,10 @@ public class MegaLaser {
 								continue;
 							if (target.getLocation()
 									.distanceSquared(position.clone().add(0, -1, 0)) <= maxDistSquared) {
-								if (playerData.getTeam() != targetData.getTeam()
+								if (playerData.team != targetData.team
 										&& target.getGameMode().equals(GameMode.ADVENTURE)) {
 
-									if (targetData.getArmor() > 10000.0 && target.getGameMode() != GameMode.SPECTATOR) {
+									if (targetData.armor > 10000.0 && target.getGameMode() != GameMode.SPECTATOR) {
 										target.setVelocity(
 												new Vector(direction.getX(), 0, direction.getZ()).multiply(2.0));
 										target.getWorld().playSound(target.getLocation(),

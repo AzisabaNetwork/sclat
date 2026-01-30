@@ -29,7 +29,7 @@ public class EntityClickListener extends PacketAdapter {
 				RankingHolograms rankingHolograms = Sclat.playerHolograms.get(event.getPlayer());
 				if (rankingHolograms == null)
 					return;
-				for (EntityArmorStand armorStand : rankingHolograms.getArmorStandList()) {
+				for (EntityArmorStand armorStand : rankingHolograms.armorStandList) {
 					if (armorStand.getBukkitEntity().getEntityId() == EntityID) {
 						player.playSound(player.getLocation(), Sound.BLOCK_WOODEN_PRESSURE_PLATE_CLICK_ON, 1F, 1.2F);
 						rankingHolograms.switchNextRankingType();

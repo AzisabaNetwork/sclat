@@ -26,7 +26,7 @@ public class Swapper {
 				if (data.getWeaponClass().getMainWeapon().getIsSwap()) {
 					if (data.getIsSneaking() && sw_recharge && p.getInventory().getItemInMainHand().getType()
 							.equals(data.getWeaponClass().getMainWeapon().getWeaponIteamStack().getType())) {
-						data.setStoprun(true);
+						data.stoprun = true;
 						player.getInventory().clear();
 						p.getWorld().playSound(p.getLocation(), Sound.ITEM_ARMOR_EQUIP_GENERIC, 1.4F, 1.5F);
 						sw_recharge = false;
@@ -34,7 +34,7 @@ public class Swapper {
 							@Override
 							public void run() {
 								String swapname = data.getWeaponClass().getMainWeapon().getSwap();
-								data.setStoprun(false);
+								data.stoprun = false;
 								data.setWeaponClass(DataMgr.getWeaponClass(swapname));
 								data.setCanRollerShoot(true);
 								DataMgr.getPlayerData(p).setIsUsingManeuver(false);

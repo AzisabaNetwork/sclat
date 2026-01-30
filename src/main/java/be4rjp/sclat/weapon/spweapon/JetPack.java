@@ -59,7 +59,7 @@ public class JetPack {
 
 		BukkitRunnable task = new BukkitRunnable() {
 			Player p = player;
-			Location ol = DataMgr.getPlayerData(player).getPlayerGroundLocation();
+			Location ol = DataMgr.getPlayerData(player).playerGroundLocation;
 			int i = 0;
 			int id = 0;
 			Location btl = player.getLocation();
@@ -102,7 +102,7 @@ public class JetPack {
 
 				Vector vec = new Vector(0, 0, 0);
 				if (i % 2 == 0)
-					vec = DataMgr.getPlayerData(p).getVehicleVector().clone().multiply(0.8);
+					vec = DataMgr.getPlayerData(p).vehicleVector.clone().multiply(0.8);
 				Vector pvec = p.getEyeLocation().getDirection();
 				Vector w_WASDVector = (new Vector(pvec.getX(), 0, pvec.getZ())).multiply(vec.getX());
 				Vector d_WASDVector = (new Vector(pvec.getZ(), 0, pvec.getX() * -1)).multiply(vec.getZ());
@@ -159,7 +159,7 @@ public class JetPack {
 					Location position = loc2.clone().add(0, -0.2, 0);
 					Location position2 = loc3.clone().add(0, -0.2, 0);
 					for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
-						if (!DataMgr.getPlayerData(o_player).getSettings().ShowEffect_SPWeapon())
+						if (!DataMgr.getPlayerData(o_player).settings.ShowEffect_SPWeapon())
 							continue;
 						if (o_player.getWorld() == position.getWorld()) {
 							if (o_player.getLocation()
@@ -168,8 +168,8 @@ public class JetPack {
 									double random = 0.015;
 									o_player.spawnParticle(Particle.ITEM_CRACK, position, 0,
 											Math.random() * random - random / 2, -0.13,
-											Math.random() * random - random / 2, 10, new ItemStack(
-													DataMgr.getPlayerData(player).getTeam().getTeamColor().getWool()));
+											Math.random() * random - random / 2, 10,
+											new ItemStack(DataMgr.getPlayerData(player).team.getTeamColor().getWool()));
 									// o_player.spawnParticle(org.bukkit.Particle.BLOCK_DUST, position, 0, 0, -2, 0,
 									// 10, bd);
 								}
@@ -180,8 +180,8 @@ public class JetPack {
 									double random = 0.015;
 									o_player.spawnParticle(Particle.ITEM_CRACK, position, 0,
 											Math.random() * random - random / 2, -0.13,
-											Math.random() * random - random / 2, 10, new ItemStack(
-													DataMgr.getPlayerData(player).getTeam().getTeamColor().getWool()));
+											Math.random() * random - random / 2, 10,
+											new ItemStack(DataMgr.getPlayerData(player).team.getTeamColor().getWool()));
 								}
 							}
 						}
@@ -227,7 +227,7 @@ public class JetPack {
 					as.setNoGravity(true);
 					as.setBasePlate(false);
 					as.setCustomName(CraftChatMessage.fromStringOrNull(
-							DataMgr.getPlayerData(p).getTeam().getTeamColor().getColorCode() + "↓↓↓  くコ:彡  ↓↓↓"));
+							DataMgr.getPlayerData(p).team.getTeamColor().getColorCode() + "↓↓↓  くコ:彡  ↓↓↓"));
 					as.setCustomNameVisible(true);
 					as.setSmall(true);
 					id = as.getBukkitEntity().getEntityId();
@@ -305,8 +305,7 @@ public class JetPack {
 								1.2F);
 						p.getWorld().playSound(p.getLocation(), Sound.ENTITY_WITHER_SHOOT, 0.2F, 2F);
 						p_vec = p.getEyeLocation().getDirection();
-						ItemStack bom = new ItemStack(DataMgr.getPlayerData(p).getTeam().getTeamColor().getWool())
-								.clone();
+						ItemStack bom = new ItemStack(DataMgr.getPlayerData(p).team.getTeamColor().getWool()).clone();
 						ItemMeta bom_m = bom.getItemMeta();
 						bom_m.setLocalizedName(String.valueOf(Sclat.getNotDuplicateNumber()));
 						bom.setItemMeta(bom_m);
@@ -334,13 +333,13 @@ public class JetPack {
 						ball.setVelocity(drop.getVelocity());
 
 					for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
-						if (!DataMgr.getPlayerData(target).getSettings().ShowEffect_SPWeapon()) {
+						if (!DataMgr.getPlayerData(target).settings.ShowEffect_SPWeapon()) {
 							continue;
 						}
 						if (target.getWorld() == ball.getWorld()) {
 							if (target.getLocation()
 									.distanceSquared(ball.getLocation()) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED) {
-								org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).getTeam().getTeamColor()
+								org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).team.getTeamColor()
 										.getWool().createBlockData();
 								target.spawnParticle(org.bukkit.Particle.BLOCK_DUST, ball.getLocation(), 1, 0, 0, 0, 1,
 										bd);
@@ -352,7 +351,7 @@ public class JetPack {
 							if (target.getLocation()
 									.distanceSquared(drop.getLocation()) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED) {
 								Particle.DustOptions dustOptions = new Particle.DustOptions(
-										DataMgr.getPlayerData(p).getTeam().getTeamColor().getBukkitColor(), 1);
+										DataMgr.getPlayerData(p).team.getTeamColor().getBukkitColor(), 1);
 								target.spawnParticle(Particle.REDSTONE, drop.getLocation(), 1, 0, 0, 0, 50,
 										dustOptions);
 							}
@@ -386,7 +385,7 @@ public class JetPack {
 								continue;
 							if (target.getLocation().distanceSquared(drop.getLocation()) <= 12.25 /* 3.5^2 */) {
 								double damage = (3.5 - target.getLocation().distance(drop.getLocation())) * 10;
-								if (DataMgr.getPlayerData(player).getTeam() != DataMgr.getPlayerData(target).getTeam()
+								if (DataMgr.getPlayerData(player).team != DataMgr.getPlayerData(target).team
 										&& target.getGameMode().equals(GameMode.ADVENTURE)) {
 									SclatUtil.giveDamage(player, target, damage, "spWeapon");
 

@@ -43,8 +43,8 @@ public class SquidListenerMgr {
 			DeathMgr.PlayerDeathRunnable(player, player, "water");
 
 		try {
-			if (data.getMatch().getMapData().getVoidY() != 0) {
-				if (player.getLocation().getY() <= data.getMatch().getMapData().getVoidY()) {
+			if (data.match.getMapData().getVoidY() != 0) {
+				if (player.getLocation().getY() <= data.match.getMapData().getVoidY()) {
 					DeathMgr.PlayerDeathRunnable(player, player, "fall");
 				}
 			}
@@ -58,13 +58,13 @@ public class SquidListenerMgr {
 		// !DataMgr.getBlockDataMap().containsKey(b1))
 		// return;
 
-		Team team = DataMgr.getPlayerData(player).getTeam();
-		Material p = Material.getMaterial(data.getTeam().getTeamColor().getConcrete().toString() + "_POWDER");
+		Team team = DataMgr.getPlayerData(player).team;
+		Material p = Material.getMaterial(data.team.getTeamColor().getConcrete().toString() + "_POWDER");
 
 		for (Block block : list) {
 			if (!block.equals(b1)) {
 				if (DataMgr.getBlockDataMap().containsKey(block)) {
-					if (DataMgr.getBlockDataMap().get(block).getTeam() == data.getTeam()) {
+					if (DataMgr.getBlockDataMap().get(block).getTeam() == data.team) {
 						if (!data.getIsSquid() || block.getType().equals(Material.AIR))
 							continue;
 						data.setIsOnInk(true);
@@ -75,7 +75,7 @@ public class SquidListenerMgr {
 				}
 			} else {
 				if (DataMgr.getBlockDataMap().containsKey(block)) {
-					if (DataMgr.getBlockDataMap().get(block).getTeam() == data.getTeam()) {
+					if (DataMgr.getBlockDataMap().get(block).getTeam() == data.team) {
 						if (!data.getIsSquid() || block.getType().equals(Material.AIR))
 							continue;
 						data.setIsOnInk(true);

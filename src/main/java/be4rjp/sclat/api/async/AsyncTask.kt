@@ -1,47 +1,43 @@
-package be4rjp.sclat.api.async;
+package be4rjp.sclat.api.async
 
-import be4rjp.sclat.Sclat;
-import org.bukkit.scheduler.BukkitRunnable;
+import be4rjp.sclat.Sclat
+import org.bukkit.scheduler.BukkitRunnable
 
-public abstract class AsyncTask implements Runnable {
+abstract class AsyncTask : Runnable {
+    var isCanceled: Boolean = false
+        private set
 
-	private boolean canceled = false;
+    fun cancel() {
+        this.isCanceled = true
+    }
 
-	public boolean isCanceled() {
-		return canceled;
-	}
+    fun runTask() {
+        AsyncThreadManager.randomTickThread.runTask(this)
+    }
 
-	public void cancel() {
-		this.canceled = true;
-	}
+    fun runTaskLater(delay: Long) {
+        val runnable = this
+        object : BukkitRunnable() {
+            override fun run() {
+                AsyncThreadManager.randomTickThread.runTask(runnable)
+            }
+        }.runTaskLater(Sclat.getPlugin(), delay)
+    }
 
-	public void runTask() {
-		AsyncThreadManager.getRandomTickThread().runTask(this);
-	}
-
-	public void runTaskLater(long delay) {
-		AsyncTask runnable = this;
-		new BukkitRunnable() {
-			@Override
-			public void run() {
-				AsyncThreadManager.getRandomTickThread().runTask(runnable);
-			}
-		}.runTaskLater(Sclat.getPlugin(), delay);
-	}
-
-	public void runTaskTimer(long delay, long period) {
-		AsyncTask runnable = this;
-		AsyncTickThread thread = AsyncThreadManager.getRandomTickThread();
-		new BukkitRunnable() {
-			@Override
-			public void run() {
-				if (runnable.isCanceled()) {
-					cancel();
-					return;
-				}
-				thread.runTask(runnable);
-			}
-		}.runTaskTimer(Sclat.getPlugin(), delay, period);
-	}
-
+    fun runTaskTimer(
+        delay: Long,
+        period: Long,
+    ) {
+        val runnable = this
+        val thread = AsyncThreadManager.randomTickThread
+        object : BukkitRunnable() {
+            override fun run() {
+                if (runnable.isCanceled) {
+                    cancel()
+                    return
+                }
+                thread.runTask(runnable)
+            }
+        }.runTaskTimer(Sclat.getPlugin(), delay, period)
+    }
 }

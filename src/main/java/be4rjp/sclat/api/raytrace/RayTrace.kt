@@ -1,84 +1,77 @@
+package be4rjp.sclat.api.raytrace
 
-package be4rjp.sclat.api.raytrace;
+import org.bukkit.util.Vector
 
-import org.bukkit.util.Vector;
+class RayTrace(var origin: Vector, var direction: Vector) {
+    fun getPostion(blocksAway: Double): Vector {
+        return origin.clone().add(direction.clone().multiply(blocksAway))
+    }
 
-import java.util.ArrayList;
+    fun isOnLine(position: Vector): Boolean {
+        val t = (position.getX() - origin.getX()) / direction.getX()
+        return position.getBlockY().toDouble() == origin.getY() + (t * direction.getY()) &&
+            position.getBlockZ().toDouble() == origin.getZ() + (t * direction.getZ())
+    }
 
-public class RayTrace {
+    fun traverse(blocksAway: Double, accuracy: Double): ArrayList<Vector> {
+        val positions = ArrayList<Vector>()
+        var d = 0.0
+        while (d <= blocksAway) {
+            positions.add(getPostion(d))
+            d += accuracy
+        }
+        return positions
+    }
 
-	public Vector origin, direction;
+    fun positionOfIntersection(min: Vector, max: Vector, blocksAway: Double, accuracy: Double): Vector? {
+        val positions = traverse(blocksAway, accuracy)
+        for (position in positions) {
+            if (intersects(position, min, max)) {
+                return position
+            }
+        }
+        return null
+    }
 
-	public RayTrace(Vector origin, Vector direction) {
-		this.origin = origin;
-		this.direction = direction;
-	}
+    fun intersects(min: Vector, max: Vector, blocksAway: Double, accuracy: Double): Boolean {
+        val positions = traverse(blocksAway, accuracy)
+        for (position in positions) {
+            if (intersects(position, min, max)) {
+                return true
+            }
+        }
+        return false
+    }
 
-	public Vector getPostion(double blocksAway) {
-		return origin.clone().add(direction.clone().multiply(blocksAway));
-	}
+    fun positionOfIntersection(boundingBox: BoundingBox, blocksAway: Double, accuracy: Double): Vector? {
+        val positions = traverse(blocksAway, accuracy)
+        for (position in positions) {
+            if (intersects(position, boundingBox.min, boundingBox.max)) {
+                return position
+            }
+        }
+        return null
+    }
 
-	public boolean isOnLine(Vector position) {
-		double t = (position.getX() - origin.getX()) / direction.getX();
-		return position.getBlockY() == origin.getY() + (t * direction.getY())
-				&& position.getBlockZ() == origin.getZ() + (t * direction.getZ());
-	}
+    fun intersects(boundingBox: BoundingBox, blocksAway: Double, accuracy: Double): Boolean {
+        val positions = traverse(blocksAway, accuracy)
+        for (position in positions) {
+            if (intersects(position, boundingBox.min, boundingBox.max)) {
+                return true
+            }
+        }
+        return false
+    }
 
-	public ArrayList<Vector> traverse(double blocksAway, double accuracy) {
-		ArrayList<Vector> positions = new ArrayList<>();
-		for (double d = 0; d <= blocksAway; d += accuracy) {
-			positions.add(getPostion(d));
-		}
-		return positions;
-	}
-
-	public Vector positionOfIntersection(Vector min, Vector max, double blocksAway, double accuracy) {
-		ArrayList<Vector> positions = traverse(blocksAway, accuracy);
-		for (Vector position : positions) {
-			if (intersects(position, min, max)) {
-				return position;
-			}
-		}
-		return null;
-	}
-
-	public boolean intersects(Vector min, Vector max, double blocksAway, double accuracy) {
-		ArrayList<Vector> positions = traverse(blocksAway, accuracy);
-		for (Vector position : positions) {
-			if (intersects(position, min, max)) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	public Vector positionOfIntersection(BoundingBox boundingBox, double blocksAway, double accuracy) {
-		ArrayList<Vector> positions = traverse(blocksAway, accuracy);
-		for (Vector position : positions) {
-			if (intersects(position, boundingBox.min, boundingBox.max)) {
-				return position;
-			}
-		}
-		return null;
-	}
-
-	public boolean intersects(BoundingBox boundingBox, double blocksAway, double accuracy) {
-		ArrayList<Vector> positions = traverse(blocksAway, accuracy);
-		for (Vector position : positions) {
-			if (intersects(position, boundingBox.min, boundingBox.max)) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	public static boolean intersects(Vector position, Vector min, Vector max) {
-		if (position.getX() < min.getX() || position.getX() > max.getX()) {
-			return false;
-		} else if (position.getY() < min.getY() || position.getY() > max.getY()) {
-			return false;
-		} else
-			return !(position.getZ() < min.getZ()) && !(position.getZ() > max.getZ());
-	}
-
+    companion object {
+        fun intersects(position: Vector, min: Vector, max: Vector): Boolean {
+            if (position.getX() < min.getX() || position.getX() > max.getX()) {
+                return false
+            } else if (position.getY() < min.getY() || position.getY() > max.getY()) {
+                return false
+            } else {
+                return !(position.getZ() < min.getZ()) && !(position.getZ() > max.getZ())
+            }
+        }
+    }
 }

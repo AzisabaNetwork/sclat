@@ -1,146 +1,136 @@
-package be4rjp.sclat.api.wiremesh;
+package be4rjp.sclat.api.wiremesh
 
-import be4rjp.sclat.Sclat;
-import net.minecraft.server.v1_14_R1.DataWatcher;
-import net.minecraft.server.v1_14_R1.EntityArmorStand;
-import net.minecraft.server.v1_14_R1.EntityFallingBlock;
-import net.minecraft.server.v1_14_R1.EntityPlayer;
-import net.minecraft.server.v1_14_R1.IBlockData;
-import net.minecraft.server.v1_14_R1.PacketPlayOutEntityDestroy;
-import net.minecraft.server.v1_14_R1.PacketPlayOutEntityMetadata;
-import net.minecraft.server.v1_14_R1.PacketPlayOutMount;
-import net.minecraft.server.v1_14_R1.PacketPlayOutSpawnEntity;
-import net.minecraft.server.v1_14_R1.PacketPlayOutSpawnEntityLiving;
-import net.minecraft.server.v1_14_R1.WorldServer;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.block.Block;
-import org.bukkit.block.data.BlockData;
-import org.bukkit.craftbukkit.v1_14_R1.CraftWorld;
-import org.bukkit.craftbukkit.v1_14_R1.block.data.CraftBlockData;
-import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
-import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import be4rjp.sclat.Sclat
+import net.minecraft.server.v1_14_R1.EntityArmorStand
+import net.minecraft.server.v1_14_R1.EntityFallingBlock
+import net.minecraft.server.v1_14_R1.IBlockData
+import net.minecraft.server.v1_14_R1.PacketPlayOutEntityDestroy
+import net.minecraft.server.v1_14_R1.PacketPlayOutEntityMetadata
+import net.minecraft.server.v1_14_R1.PacketPlayOutMount
+import net.minecraft.server.v1_14_R1.PacketPlayOutSpawnEntity
+import net.minecraft.server.v1_14_R1.PacketPlayOutSpawnEntityLiving
+import org.bukkit.Material
+import org.bukkit.block.Block
+import org.bukkit.block.data.BlockData
+import org.bukkit.craftbukkit.v1_14_R1.CraftWorld
+import org.bukkit.craftbukkit.v1_14_R1.block.data.CraftBlockData
+import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer
+import org.bukkit.entity.Player
+import org.bukkit.scheduler.BukkitRunnable
+import java.util.Random
 
 /**
  *
  * @author Be4rJP
  */
-public class Wiremesh extends BukkitRunnable {
-	private final Block block;
-	private final Material originalType;
-	private EntityFallingBlock fb;
-	private EntityArmorStand as;
-	private final BlockData blockData;
-	private final IBlockData ibd;
+class Wiremesh(private val block: Block, private val originalType: Material, private val blockData: BlockData) :
+    BukkitRunnable() {
+    private val fb: EntityFallingBlock
+    private val `as`: EntityArmorStand
+    private val ibd: IBlockData?
 
-	private List<Player> playerList = new ArrayList<>();
+    private val playerList: MutableList<Player?> = ArrayList<Player?>()
 
-	private boolean despawn = true;
-	private boolean spawn = false;
+    private val despawn = true
+    private val spawn = false
 
-	public Wiremesh(Block b, Material origType, BlockData bData) {
-		this.block = b;
-		this.originalType = origType;
-		this.blockData = bData;
-		this.ibd = ((CraftBlockData) bData).getState();
+    init {
+        this.ibd = (blockData as CraftBlockData).getState()
 
-		block.setType(Material.AIR);
+        block.setType(Material.AIR)
 
-		WorldServer nmsWorld = ((CraftWorld) block.getWorld()).getHandle();
-		Location loc = block.getLocation();
-		BlockData blockData = block.getBlockData();
-		IBlockData ibd = ((CraftBlockData) blockData).getState();
-		fb = new EntityFallingBlock(nmsWorld, loc.getX() + 0.5, loc.getY() - 0.02, loc.getZ() + 0.5, ibd);
-		fb.setNoGravity(true);
-		fb.ticksLived = 1;
+        val nmsWorld = (block.getWorld() as CraftWorld).getHandle()
+        val loc = block.getLocation()
+        val blockData = block.getBlockData()
+        val ibd = (blockData as CraftBlockData).getState()
+        fb = EntityFallingBlock(nmsWorld, loc.getX() + 0.5, loc.getY() - 0.02, loc.getZ() + 0.5, ibd)
+        fb.setNoGravity(true)
+        fb.ticksLived = 1
 
-		as = new EntityArmorStand(nmsWorld, loc.getX() + 0.5, loc.getY(), loc.getZ() + 0.5);
-		as.setNoGravity(true);
-		as.setMarker(true);
-		as.setInvisible(true);
-		fb.startRiding(as);
+        `as` = EntityArmorStand(nmsWorld, loc.getX() + 0.5, loc.getY(), loc.getZ() + 0.5)
+        `as`.setNoGravity(true)
+        `as`.setMarker(true)
+        `as`.setInvisible(true)
+        fb.startRiding(`as`)
 
-		for (Player player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
-			if (block.getWorld() != player.getWorld())
-				continue;
+        for (player in Sclat.getPlugin().getServer().getOnlinePlayers()) {
+            if (block.getWorld() !== player.getWorld()) continue
 
-			player.sendBlockChange(block.getLocation(), blockData);
-		}
-	}
+            player.sendBlockChange(block.getLocation(), blockData)
+        }
+    }
 
-	@Override
-	public void run() {
-		try {
-			playerList.removeIf(player -> !player.isOnline());
+    override fun run() {
+        try {
+            playerList.removeIf { player: Player? -> !player!!.isOnline() }
 
-			for (Player player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
-				if (block.getWorld() != player.getWorld())
-					continue;
+            for (player in Sclat.getPlugin().getServer().getOnlinePlayers()) {
+                if (block.getWorld() !== player.getWorld()) continue
 
-				// 透過条件
-				boolean is = player.getInventory().getItemInMainHand().getType() == Material.AIR;
+                // 透過条件
+                val `is` = player.getInventory().getItemInMainHand().getType() == Material.AIR
 
-				EntityPlayer entityPlayer = ((CraftPlayer) player).getHandle();
+                val entityPlayer = (player as CraftPlayer).getHandle()
 
-				if (block.getLocation().distanceSquared(player.getLocation()) <= 25 /* 5*5 */) {
+                if (block.getLocation().distanceSquared(player.getLocation()) <= 25 /* 5*5 */) {
+                    if (`is`) {
+                        player.sendBlockChange(block.getLocation(), Material.AIR.createBlockData())
+                    } else {
+                        player.sendBlockChange(block.getLocation(), blockData)
+                    }
 
-					if (is) {
-						player.sendBlockChange(block.getLocation(), Material.AIR.createBlockData());
-					} else {
-						player.sendBlockChange(block.getLocation(), blockData);
-					}
+                    if (!playerList.contains(player)) {
+                        val fbPacket = PacketPlayOutSpawnEntity(
+                            fb,
+                            net.minecraft.server.v1_14_R1.Block.getCombinedId(ibd),
+                        )
+                        entityPlayer.playerConnection.sendPacket(fbPacket)
+                        val asPacket = PacketPlayOutSpawnEntityLiving(`as`)
+                        entityPlayer.playerConnection.sendPacket(asPacket)
+                        val dataWatcher = fb.getDataWatcher()
+                        val metadata = PacketPlayOutEntityMetadata(
+                            fb.getBukkitEntity().getEntityId(),
+                            dataWatcher,
+                            true,
+                        )
+                        entityPlayer.playerConnection.sendPacket(metadata)
+                        val mount = PacketPlayOutMount(`as`)
+                        entityPlayer.playerConnection.sendPacket(mount)
 
-					if (!playerList.contains(player)) {
-						PacketPlayOutSpawnEntity fbPacket = new PacketPlayOutSpawnEntity(fb,
-								net.minecraft.server.v1_14_R1.Block.getCombinedId(ibd));
-						entityPlayer.playerConnection.sendPacket(fbPacket);
-						PacketPlayOutSpawnEntityLiving asPacket = new PacketPlayOutSpawnEntityLiving(as);
-						entityPlayer.playerConnection.sendPacket(asPacket);
-						DataWatcher dataWatcher = fb.getDataWatcher();
-						PacketPlayOutEntityMetadata metadata = new PacketPlayOutEntityMetadata(
-								fb.getBukkitEntity().getEntityId(), dataWatcher, true);
-						entityPlayer.playerConnection.sendPacket(metadata);
-						PacketPlayOutMount mount = new PacketPlayOutMount(as);
-						entityPlayer.playerConnection.sendPacket(mount);
+                        playerList.add(player)
+                    }
+                } else {
+                    if (Random().nextInt(5) == 0) {
+                        player.sendBlockChange(block.getLocation(), blockData)
+                    }
 
-						playerList.add(player);
-					}
-				} else {
+                    if (playerList.contains(player)) {
+                        val fbPacket = PacketPlayOutEntityDestroy(
+                            fb.getBukkitEntity().getEntityId(),
+                        )
+                        entityPlayer.playerConnection.sendPacket(fbPacket)
+                        val asPacket = PacketPlayOutEntityDestroy(
+                            `as`.getBukkitEntity().getEntityId(),
+                        )
+                        entityPlayer.playerConnection.sendPacket(asPacket)
+                        player.sendBlockChange(block.getLocation(), blockData)
 
-					if (new Random().nextInt(5) == 0) {
-						player.sendBlockChange(block.getLocation(), blockData);
-					}
+                        playerList.remove(player)
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
 
-					if (playerList.contains(player)) {
-						PacketPlayOutEntityDestroy fbPacket = new PacketPlayOutEntityDestroy(
-								fb.getBukkitEntity().getEntityId());
-						entityPlayer.playerConnection.sendPacket(fbPacket);
-						PacketPlayOutEntityDestroy asPacket = new PacketPlayOutEntityDestroy(
-								as.getBukkitEntity().getEntityId());
-						entityPlayer.playerConnection.sendPacket(asPacket);
-						player.sendBlockChange(block.getLocation(), blockData);
+    fun startTask() {
+        this.runTaskTimerAsynchronously(Sclat.getPlugin(), 0, 5)
+    }
 
-						playerList.remove(player);
-					}
-				}
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	public void startTask() {
-		this.runTaskTimerAsynchronously(Sclat.getPlugin(), 0, 5);
-	}
-
-	public void stopTask() {
-		this.cancel();
-		this.block.setType(originalType);
-		this.block.setBlockData(blockData);
-	}
+    fun stopTask() {
+        this.cancel()
+        this.block.setType(originalType)
+        this.block.setBlockData(blockData)
+    }
 }

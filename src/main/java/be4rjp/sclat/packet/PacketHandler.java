@@ -22,7 +22,7 @@ public class PacketHandler extends ChannelDuplexHandler {
 	public PacketHandler(Player player) {
 		this.player = player;
 		this.playerData = DataMgr.getPlayerData(player);
-		this.playerSettings = playerData.getSettings();
+		this.playerSettings = playerData.settings;
 	}
 
 	@Override
@@ -50,7 +50,7 @@ public class PacketHandler extends ChannelDuplexHandler {
 		// Charging fov handle
 		if (packet instanceof PacketPlayOutAbilities) {
 			if (playerData.getIsCharging()) {
-				((PacketPlayOutAbilities) packet).b(playerData.getFov());
+				((PacketPlayOutAbilities) packet).b(playerData.fov);
 			}
 		}
 

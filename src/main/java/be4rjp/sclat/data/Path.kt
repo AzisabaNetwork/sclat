@@ -50,7 +50,7 @@ class Path(
                         PacketPlayOutEntityEquipment(
                             armorStand!!.getEntityId(),
                             EnumItemSlot.HEAD,
-                            CraftItemStack.asNMSCopy(ItemStack(team!!.teamColor.glass)),
+                            CraftItemStack.asNMSCopy(ItemStack(team!!.teamColor!!.glass)),
                         ),
                     )
             }

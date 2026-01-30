@@ -160,7 +160,7 @@ public class Hound {
 
 					// エフェクト
 					if (i % 2 == 0) {
-						org.bukkit.block.data.BlockData bd = data.getTeam().getTeamColor().getWool().createBlockData();
+						org.bukkit.block.data.BlockData bd = data.team.getTeamColor().getWool().createBlockData();
 						for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 							// if (DataMgr.getPlayerData(target).getSettings().ShowEffect_Bomb()){
 							if (target.getWorld() == player.getWorld()) {
@@ -225,16 +225,15 @@ public class Hound {
 										try {
 											if (as.getCustomName().equals("Kasa")) {
 												KasaData kasaData = DataMgr.getKasaDataFromArmorStand((ArmorStand) as);
-												if (DataMgr.getPlayerData(kasaData.getPlayer()).getTeam() != data
-														.getTeam()) {
+												if (DataMgr.getPlayerData(kasaData.getPlayer()).team != data.team) {
 													as1.remove();
 													cancel();
 												}
 											} else if (as.getCustomName().equals("SplashShield")) {
 												SplashShieldData splashShieldData = DataMgr
 														.getSplashShieldDataFromArmorStand((ArmorStand) as);
-												if (DataMgr.getPlayerData(splashShieldData.getPlayer())
-														.getTeam() != data.getTeam()) {
+												if (DataMgr.getPlayerData(
+														splashShieldData.getPlayer()).team != data.team) {
 													as1.remove();
 													cancel();
 												}
@@ -253,7 +252,7 @@ public class Hound {
 								double damage = exdamage(heightdiff, maxDist - target.getLocation().distance(as1l),
 										data.getWeaponClass().getMainWeapon().getBlasterExDamage()
 												* Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP));
-								if (data.getTeam() != DataMgr.getPlayerData(target).getTeam()
+								if (data.team != DataMgr.getPlayerData(target).team
 										&& target.getGameMode().equals(GameMode.ADVENTURE)) {
 									SclatUtil.giveDamage(player, target, damage, "killed");
 

@@ -99,8 +99,8 @@ public class Gear {
 	}
 
 	public static double getGearInfluence(Player player, int gearN) {
-		if (DataMgr.getPlayerData(player).getGearNumber() == gearN) {
-			switch (DataMgr.getPlayerData(player).getGearNumber()) {
+		if (DataMgr.getPlayerData(player).gearNumber == gearN) {
+			switch (DataMgr.getPlayerData(player).gearNumber) {
 				case 1 :
 					return 1.1;
 				case 2 :

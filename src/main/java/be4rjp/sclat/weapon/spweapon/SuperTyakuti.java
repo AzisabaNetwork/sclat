@@ -73,14 +73,13 @@ public class SuperTyakuti {
 
 					if (i >= 5 && i <= 23) {
 						for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
-							if (DataMgr.getPlayerData(o_player).getSettings().ShowEffect_SPWeapon()
+							if (DataMgr.getPlayerData(o_player).settings.ShowEffect_SPWeapon()
 									&& !o_player.equals(player)) {
 								if (o_player.getWorld() == player.getWorld()) {
 									if (o_player.getLocation().distanceSquared(
 											player.getLocation()) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED) {
 										Particle.DustOptions dustOptions = new Particle.DustOptions(
-												DataMgr.getPlayerData(player).getTeam().getTeamColor().getBukkitColor(),
-												1);
+												DataMgr.getPlayerData(player).team.getTeamColor().getBukkitColor(), 1);
 										o_player.spawnParticle(Particle.REDSTONE,
 												player.getEyeLocation().add(0, -0.5, 0), 5, 0.5, 0.4, 0.5, 5,
 												dustOptions);
@@ -108,12 +107,12 @@ public class SuperTyakuti {
 						}
 						List<Location> s_locs = Sphere.getXZCircle(bloc.add(0, 1, 0), 7, 3, 40);
 						for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
-							if (DataMgr.getPlayerData(o_player).getSettings().ShowEffect_SPWeaponRegion()) {
+							if (DataMgr.getPlayerData(o_player).settings.ShowEffect_SPWeaponRegion()) {
 								for (Location loc : s_locs) {
 									if (o_player.getWorld() == loc.getWorld()) {
 										if (o_player.getLocation()
 												.distanceSquared(loc) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED) {
-											org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(player).getTeam()
+											org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(player).team
 													.getTeamColor().getWool().createBlockData();
 											o_player.spawnParticle(org.bukkit.Particle.BLOCK_DUST, loc, 1, 0, 0, 0, 1,
 													bd);
@@ -151,7 +150,7 @@ public class SuperTyakuti {
 								continue;
 							if (target.getLocation().distanceSquared(player.getLocation()) <= maxDistSquared) {
 								double damage = (maxDist - target.getLocation().distance(player.getLocation())) * 15;
-								if (DataMgr.getPlayerData(player).getTeam() != DataMgr.getPlayerData(target).getTeam()
+								if (DataMgr.getPlayerData(player).team != DataMgr.getPlayerData(target).team
 										&& target.getGameMode().equals(GameMode.ADVENTURE)) {
 									SclatUtil.giveDamage(player, target, damage, "spWeapon");
 

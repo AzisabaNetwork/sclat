@@ -93,12 +93,12 @@ public class Sprinkler {
 
 					// 視認用エフェクト
 					for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
-						if (DataMgr.getPlayerData(o_player).getSettings().ShowEffect_Bomb()) {
+						if (DataMgr.getPlayerData(o_player).settings.ShowEffect_Bomb()) {
 							if (o_player.getWorld() == drop.getLocation().getWorld()) {
 								if (o_player.getLocation()
 										.distanceSquared(drop.getLocation()) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED) {
 									Particle.DustOptions dustOptions = new Particle.DustOptions(
-											DataMgr.getPlayerData(p).getTeam().getTeamColor().getBukkitColor(), 1);
+											DataMgr.getPlayerData(p).team.getTeamColor().getBukkitColor(), 1);
 									o_player.spawnParticle(Particle.REDSTONE, drop.getLocation(), 1, 0, 0, 0, 50,
 											dustOptions);
 								}
@@ -148,7 +148,7 @@ public class Sprinkler {
 						continue;
 					((CraftPlayer) target).getHandle().playerConnection.sendPacket(new PacketPlayOutEntityEquipment(
 							as.getEntityId(), EnumItemSlot.HEAD, CraftItemStack.asNMSCopy(
-									new ItemStack(DataMgr.getPlayerData(player).getTeam().getTeamColor().getGlass()))));
+									new ItemStack(DataMgr.getPlayerData(player).team.getTeamColor().getGlass()))));
 				}
 				as.getWorld().playSound(as.getLocation(), Sound.ITEM_ARMOR_EQUIP_GENERIC, 1F, 1F);
 				// as.setHelmet(new

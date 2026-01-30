@@ -97,8 +97,8 @@ public class Kasa {
 				* Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP)
 				/ Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)));
 		Snowball ball = player.launchProjectile(Snowball.class);
-		((CraftSnowball) ball).getHandle().setItem(CraftItemStack
-				.asNMSCopy(new ItemStack(DataMgr.getPlayerData(player).getTeam().getTeamColor().getWool())));
+		((CraftSnowball) ball).getHandle().setItem(
+				CraftItemStack.asNMSCopy(new ItemStack(DataMgr.getPlayerData(player).team.getTeamColor().getWool())));
 		Vector vec = player.getLocation().getDirection()
 				.multiply(DataMgr.getPlayerData(player).getWeaponClass().getMainWeapon().getShootSpeed());
 		if (v != null)
@@ -134,12 +134,12 @@ public class Kasa {
 
 				if (i != 0) {
 					for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
-						if (!DataMgr.getPlayerData(target).getSettings().ShowEffect_MainWeaponInk())
+						if (!DataMgr.getPlayerData(target).settings.ShowEffect_MainWeaponInk())
 							continue;
 						if (target.getWorld() == inkball.getWorld()) {
 							if (target.getLocation()
 									.distanceSquared(inkball.getLocation()) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED) {
-								org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).getTeam().getTeamColor()
+								org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).team.getTeamColor()
 										.getWool().createBlockData();
 								target.spawnParticle(org.bukkit.Particle.BLOCK_DUST, inkball.getLocation(), 1, 0, 0, 0,
 										1, bd);
@@ -555,10 +555,10 @@ public class Kasa {
 
 						if (i % 2 == 0) {
 							Location asl = as4.getLocation();
-							org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).getTeam().getTeamColor()
-									.getWool().createBlockData();
+							org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).team.getTeamColor().getWool()
+									.createBlockData();
 							for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
-								if (DataMgr.getPlayerData(target).getSettings().ShowEffect_MainWeaponInk())
+								if (DataMgr.getPlayerData(target).settings.ShowEffect_MainWeaponInk())
 									if (target.getWorld() == p.getWorld())
 										if (target.getLocation()
 												.distanceSquared(asl) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED)
@@ -578,8 +578,8 @@ public class Kasa {
 								for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 									if (!DataMgr.getPlayerData(target).isInMatch())
 										continue;
-									if (DataMgr.getPlayerData(player).getTeam() != DataMgr.getPlayerData(target)
-											.getTeam() && target.getGameMode().equals(GameMode.ADVENTURE)) {
+									if (DataMgr.getPlayerData(player).team != DataMgr.getPlayerData(target).team
+											&& target.getGameMode().equals(GameMode.ADVENTURE)) {
 										if (rayTrace.intersects(new BoundingBox((Entity) target), 5, 0.05)) {
 											SclatUtil.giveDamage(player, target, damage, "killed");
 
@@ -601,9 +601,9 @@ public class Kasa {
 						int c = 1;
 						for (ArmorStand as : list) {
 							PlayerData data = DataMgr.getPlayerData(player);
-							Team team = data.getMatch().getTeam0();
-							if (team == data.getTeam())
-								team = data.getMatch().getTeam1();
+							Team team = data.match.getTeam0();
+							if (team == data.team)
+								team = data.match.getTeam1();
 							for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 								if (kdata.getDamage() == 0) {
 									((CraftPlayer) o_player).getHandle().playerConnection
@@ -715,9 +715,9 @@ public class Kasa {
 			@Override
 			public void run() {
 				PlayerData data = DataMgr.getPlayerData(player);
-				Team team = data.getMatch().getTeam0();
-				if (team == data.getTeam())
-					team = data.getMatch().getTeam1();
+				Team team = data.match.getTeam0();
+				if (team == data.team)
+					team = data.match.getTeam1();
 
 				int c = 1;
 				for (ArmorStand as : list) {

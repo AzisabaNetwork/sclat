@@ -24,7 +24,7 @@ public class LunaChatListener implements Listener {
 		if (sender != null) {
 			PlayerData data = DataMgr.getPlayerData(sender);
 			if (data.getIsJoined())
-				event.setMessage(data.getTeam().getTeamColor().getColorCode() + event.getMessage());
+				event.setMessage(data.team.getTeamColor().getColorCode() + event.getMessage());
 		}
 
 	}

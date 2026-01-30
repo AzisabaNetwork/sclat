@@ -31,8 +31,8 @@ public class SuperArmor {
 		}
 
 		PlayerData data = DataMgr.getPlayerData(player);
-		if (armor > data.getArmor())
-			data.setArmor(armor);
+		if (armor > data.armor)
+			data.armor = armor;
 
 		// エフェクト
 		BukkitRunnable effect_r = new BukkitRunnable() {
@@ -44,20 +44,19 @@ public class SuperArmor {
 					cancel();
 				}
 				for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
-					if (DataMgr.getPlayerData(o_player).getSettings().ShowEffect_SPWeapon()
-							&& !o_player.equals(player)) {
+					if (DataMgr.getPlayerData(o_player).settings.ShowEffect_SPWeapon() && !o_player.equals(player)) {
 						if (o_player.getWorld() == player.getWorld()) {
 							if (o_player.getLocation()
 									.distanceSquared(player.getLocation()) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED) {
 								Particle.DustOptions dustOptions = new Particle.DustOptions(
-										data.getTeam().getTeamColor().getBukkitColor(), 1);
+										data.team.getTeamColor().getBukkitColor(), 1);
 								o_player.spawnParticle(Particle.REDSTONE, player.getEyeLocation(), 5, 0.5, 0.4, 0.5, 5,
 										dustOptions);
 							}
 						}
 					}
 				}
-				if (data.getArmor() <= 0) {
+				if (data.armor <= 0) {
 					player.playSound(player.getLocation(), Sound.BLOCK_GLASS_BREAK, 3.5F, 1.8F);
 					player.sendMessage("§c§l！ アーマーが破壊された ！");
 					cancel();
@@ -70,7 +69,7 @@ public class SuperArmor {
 		BukkitRunnable task = new BukkitRunnable() {
 			@Override
 			public void run() {
-				data.setArmor(0);
+				data.armor = 0;
 				if (effect) {
 					effect_r.cancel();
 					DataMgr.getPlayerData(player).setIsUsingSP(false);
@@ -90,8 +89,8 @@ public class SuperArmor {
 		}
 
 		PlayerData data = DataMgr.getPlayerData(player);
-		if (armor > data.getArmor())
-			data.setArmor(regene);
+		if (armor > data.armor)
+			data.armor = regene;
 
 		BukkitRunnable rgene_r = new BukkitRunnable() {
 			int c = 0;
@@ -104,20 +103,20 @@ public class SuperArmor {
 					DataMgr.getPlayerData(player).setIsUsingSP(false);
 					cancel();
 				}
-				if ((c >= 1 && beforeArmor > data.getArmor())) {
+				if ((c >= 1 && beforeArmor > data.armor)) {
 					canregene = false;
 				}
 				if (canregene) {
 					regenearmor = 1 + c / 4;
-					if (data.getArmor() + regenearmor < armor) {
-						data.setArmor(data.getArmor() + regenearmor);
+					if (data.armor + regenearmor < armor) {
+						data.armor = data.armor + regenearmor;
 					} else {
-						data.setArmor(armor);
+						data.armor = armor;
 						canregene = false;
 					}
 				}
-				beforeArmor = data.getArmor();
-				if (data.getArmor() <= 0) {
+				beforeArmor = data.armor;
+				if (data.armor <= 0) {
 					cancel();
 				}
 				c++;
@@ -133,20 +132,19 @@ public class SuperArmor {
 					cancel();
 				}
 				for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
-					if (DataMgr.getPlayerData(o_player).getSettings().ShowEffect_SPWeapon()
-							&& !o_player.equals(player)) {
+					if (DataMgr.getPlayerData(o_player).settings.ShowEffect_SPWeapon() && !o_player.equals(player)) {
 						if (o_player.getWorld() == player.getWorld()) {
 							if (o_player.getLocation()
 									.distanceSquared(player.getLocation()) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED) {
 								Particle.DustOptions dustOptions = new Particle.DustOptions(
-										data.getTeam().getTeamColor().getBukkitColor(), 1);
+										data.team.getTeamColor().getBukkitColor(), 1);
 								o_player.spawnParticle(Particle.REDSTONE, player.getEyeLocation(), 5, 0.5, 0.4, 0.5, 5,
 										dustOptions);
 							}
 						}
 					}
 				}
-				if (data.getArmor() <= 0) {
+				if (data.armor <= 0) {
 					player.playSound(player.getLocation(), Sound.BLOCK_GLASS_BREAK, 3.5F, 1.8F);
 					player.sendMessage("§c§l！ アーマーが破壊された ！");
 					cancel();
@@ -159,7 +157,7 @@ public class SuperArmor {
 		BukkitRunnable task = new BukkitRunnable() {
 			@Override
 			public void run() {
-				data.setArmor(0);
+				data.armor = 0;
 				if (effect) {
 					effect_r.cancel();
 					DataMgr.getPlayerData(player).setIsUsingSP(false);

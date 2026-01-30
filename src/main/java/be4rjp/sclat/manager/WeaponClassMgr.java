@@ -51,7 +51,7 @@ public class WeaponClassMgr {
 		co.setItemMeta(meta);
 		player.getInventory().setItem(6, co);
 		if (!data.getIsSquid())
-			player.getEquipment().setHelmet(DataMgr.getPlayerData(player).getTeam().getTeamColor().getBougu());
+			player.getEquipment().setHelmet(DataMgr.getPlayerData(player).team.getTeamColor().getBougu());
 
 		if (data.getSPGauge() == 100)
 			SPWeaponMgr.setSPWeapon(player);

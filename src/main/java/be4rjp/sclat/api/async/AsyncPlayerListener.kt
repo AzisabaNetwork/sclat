@@ -1,23 +1,20 @@
-package be4rjp.sclat.api.async;
+package be4rjp.sclat.api.async
 
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.EventHandler
+import org.bukkit.event.Listener
+import org.bukkit.event.player.PlayerJoinEvent
+import org.bukkit.event.player.PlayerQuitEvent
 
-public class AsyncPlayerListener implements Listener {
+class AsyncPlayerListener : Listener {
+    @EventHandler
+    fun online(event: PlayerJoinEvent) {
+        val player = event.getPlayer()
+        AsyncThreadManager.onlinePlayers.add(player)
+    }
 
-	@EventHandler
-	public void online(PlayerJoinEvent event) {
-		Player player = event.getPlayer();
-		AsyncThreadManager.onlinePlayers.add(player);
-	}
-
-	@EventHandler
-	public void offline(PlayerQuitEvent event) {
-		Player player = event.getPlayer();
-		AsyncThreadManager.onlinePlayers.remove(player);
-	}
-
+    @EventHandler
+    fun offline(event: PlayerQuitEvent) {
+        val player = event.getPlayer()
+        AsyncThreadManager.onlinePlayers.remove(player)
+    }
 }

@@ -34,6 +34,6 @@ public class SettingMgr {
 			conf.getPlayerSettings().set("Settings." + uuid, def);
 			settings.S_PlayBGM();
 		}
-		DataMgr.getPlayerData(player).setSettings(settings);
+		DataMgr.getPlayerData(player).settings = settings;
 	}
 }

@@ -40,15 +40,15 @@ public class Roller {
 			public void run() {
 				PlayerData data = DataMgr.getPlayerData(p);
 
-				data.setTick(data.getTick() + 1);
+				data.tick = data.tick + 1;
 
 				if (!data.isInMatch() || !p.isOnline()) {
 					cancel();
 					return;
 				}
 
-				if (data.getTick() >= 6 && data.isInMatch()) {
-					data.setTick(7);
+				if (data.tick >= 6 && data.isInMatch()) {
+					data.tick = 7;
 					data.setIsHolding(false);
 					data.setCanPaint(false);
 					data.setCanShoot(true);
@@ -89,10 +89,10 @@ public class Roller {
 						Location front = eloc.add(vec.getX() * 2.5, -0.9, vec.getZ() * 2.5);
 						if (data.getWeaponClass().getMainWeapon().getIsHude())
 							front = eloc.add(vec.getX() * 1.5, -0.9, vec.getZ() * 1.5);
-						org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).getTeam().getTeamColor().getWool()
+						org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).team.getTeamColor().getWool()
 								.createBlockData();
 						for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
-							if (DataMgr.getPlayerData(target).getSettings().ShowEffect_MainWeaponInk())
+							if (DataMgr.getPlayerData(target).settings.ShowEffect_MainWeaponInk())
 								if (target.getWorld() == p.getWorld())
 									if (target.getLocation()
 											.distanceSquared(front) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED)
@@ -109,7 +109,7 @@ public class Roller {
 									0, 1, bd);
 
 							for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
-								if (DataMgr.getPlayerData(target).getSettings().ShowEffect_MainWeaponInk())
+								if (DataMgr.getPlayerData(target).settings.ShowEffect_MainWeaponInk())
 									if (target.getWorld() == p.getWorld())
 										if (target.getLocation()
 												.distanceSquared(position) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED)
@@ -122,7 +122,7 @@ public class Roller {
 								if (!DataMgr.getPlayerData(target).isInMatch())
 									continue;
 								if (target.getLocation().distanceSquared(position) <= maxDistSquad) {
-									if (DataMgr.getPlayerData(p).getTeam() != DataMgr.getPlayerData(target).getTeam()
+									if (DataMgr.getPlayerData(p).team != DataMgr.getPlayerData(target).team
 											&& target.getGameMode().equals(GameMode.ADVENTURE)) {
 
 										double damage = DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon()
@@ -163,7 +163,7 @@ public class Roller {
 									0, 1, bd);
 
 							for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
-								if (DataMgr.getPlayerData(target).getSettings().ShowEffect_MainWeaponInk())
+								if (DataMgr.getPlayerData(target).settings.ShowEffect_MainWeaponInk())
 									if (target.getWorld() == p.getWorld())
 										if (target.getLocation()
 												.distanceSquared(position) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED)
@@ -181,15 +181,15 @@ public class Roller {
 												if (as.getCustomName().equals("Kasa")) {
 													KasaData kasaData = DataMgr
 															.getKasaDataFromArmorStand((ArmorStand) as);
-													if (DataMgr.getPlayerData(kasaData.getPlayer()).getTeam() != DataMgr
-															.getPlayerData(p).getTeam()) {
+													if (DataMgr.getPlayerData(kasaData.getPlayer()).team != DataMgr
+															.getPlayerData(p).team) {
 														break loop;
 													}
 												} else if (as.getCustomName().equals("SplashShield")) {
 													SplashShieldData splashShieldData = DataMgr
 															.getSplashShieldDataFromArmorStand((ArmorStand) as);
-													if (DataMgr.getPlayerData(splashShieldData.getPlayer())
-															.getTeam() != DataMgr.getPlayerData(p).getTeam()) {
+													if (DataMgr.getPlayerData(splashShieldData
+															.getPlayer()).team != DataMgr.getPlayerData(p).team) {
 														break loop;
 													}
 												}
@@ -203,7 +203,7 @@ public class Roller {
 							for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 								if (!DataMgr.getPlayerData(target).isInMatch())
 									continue;
-								if (DataMgr.getPlayerData(p).getTeam() != DataMgr.getPlayerData(target).getTeam()
+								if (DataMgr.getPlayerData(p).team != DataMgr.getPlayerData(target).team
 										&& target.getGameMode().equals(GameMode.ADVENTURE)) {
 									if (target.getLocation().distanceSquared(position) <= maxDistSquad) {
 										if (rayTrace1.intersects(new BoundingBox((Entity) target),
@@ -253,7 +253,7 @@ public class Roller {
 								break;
 							PaintMgr.PaintHightestBlock(position, p, false, true);
 							for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
-								if (DataMgr.getPlayerData(target).getSettings().ShowEffect_MainWeaponInk())
+								if (DataMgr.getPlayerData(target).settings.ShowEffect_MainWeaponInk())
 									if (target.getWorld() == p.getWorld())
 										if (target.getLocation()
 												.distanceSquared(position) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED)
@@ -271,15 +271,15 @@ public class Roller {
 												if (as.getCustomName().equals("Kasa")) {
 													KasaData kasaData = DataMgr
 															.getKasaDataFromArmorStand((ArmorStand) as);
-													if (DataMgr.getPlayerData(kasaData.getPlayer()).getTeam() != DataMgr
-															.getPlayerData(p).getTeam()) {
+													if (DataMgr.getPlayerData(kasaData.getPlayer()).team != DataMgr
+															.getPlayerData(p).team) {
 														break loop;
 													}
 												} else if (as.getCustomName().equals("SplashShield")) {
 													SplashShieldData splashShieldData = DataMgr
 															.getSplashShieldDataFromArmorStand((ArmorStand) as);
-													if (DataMgr.getPlayerData(splashShieldData.getPlayer())
-															.getTeam() != DataMgr.getPlayerData(p).getTeam()) {
+													if (DataMgr.getPlayerData(splashShieldData
+															.getPlayer()).team != DataMgr.getPlayerData(p).team) {
 														break loop;
 													}
 												}
@@ -293,7 +293,7 @@ public class Roller {
 							for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 								if (!DataMgr.getPlayerData(target).isInMatch())
 									continue;
-								if (DataMgr.getPlayerData(p).getTeam() != DataMgr.getPlayerData(target).getTeam()
+								if (DataMgr.getPlayerData(p).team != DataMgr.getPlayerData(target).team
 										&& target.getGameMode().equals(GameMode.ADVENTURE)) {
 									if (rayTrace1.intersects(new BoundingBox((Entity) target),
 											data.getWeaponClass().getMainWeapon().getRollerWidth(), 0.05)) {
@@ -424,8 +424,8 @@ public class Roller {
 				* Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP)
 				/ Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)));
 		Snowball ball = player.launchProjectile(Snowball.class);
-		((CraftSnowball) ball).getHandle().setItem(CraftItemStack
-				.asNMSCopy(new ItemStack(DataMgr.getPlayerData(player).getTeam().getTeamColor().getWool())));
+		((CraftSnowball) ball).getHandle().setItem(
+				CraftItemStack.asNMSCopy(new ItemStack(DataMgr.getPlayerData(player).team.getTeamColor().getWool())));
 		Vector vec = player.getLocation().getDirection()
 				.multiply(DataMgr.getPlayerData(player).getWeaponClass().getMainWeapon().getShootSpeed());
 		if (v != null)
@@ -477,9 +477,9 @@ public class Roller {
 					for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 						if (target.getWorld() != p.getWorld())
 							continue;
-						if (!DataMgr.getPlayerData(target).getSettings().ShowEffect_MainWeaponInk())
+						if (!DataMgr.getPlayerData(target).settings.ShowEffect_MainWeaponInk())
 							continue;
-						org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).getTeam().getTeamColor().getWool()
+						org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).team.getTeamColor().getWool()
 								.createBlockData();
 						target.spawnParticle(org.bukkit.Particle.BLOCK_DUST, inkball.getLocation(), 1, 0, 0, 0, 1, bd);
 					}

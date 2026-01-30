@@ -79,12 +79,12 @@ public class Manuber {
 						// p.setExp(p.getExp() - ink);
 
 						// エフェクト
-						org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(player).getTeam().getTeamColor()
-								.getWool().createBlockData();
+						org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(player).team.getTeamColor().getWool()
+								.createBlockData();
 						double random = 1.0;
 
-						if (DataMgr.getPlayerData(player).getArmor() > 9999) {
-							DataMgr.getPlayerData(player).setArmor(0);
+						if (DataMgr.getPlayerData(player).armor > 9999) {
+							DataMgr.getPlayerData(player).armor = 0;
 						}
 						p.getWorld().playSound(p.getLocation(), Sound.ITEM_ARMOR_EQUIP_GENERIC, 1.4F, 1.5F);
 
@@ -108,7 +108,7 @@ public class Manuber {
 									Math.random() * random - random / 2, Math.random() * random - random / 2);
 							Vector erv = ev.clone().add(randomVector);
 							for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
-								if (DataMgr.getPlayerData(o_player).getSettings().ShowEffect_BombEx()) {
+								if (DataMgr.getPlayerData(o_player).settings.ShowEffect_BombEx()) {
 									if (o_player.getWorld() == location.getWorld()) {
 										if (o_player.getLocation()
 												.distanceSquared(location) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED) {
@@ -289,7 +289,7 @@ public class Manuber {
 			if (armorStand.getCustomName() != null) {
 				if (armorStand.getCustomName().equals("SplashShield")) {
 					SplashShieldData ssdata = DataMgr.getSplashShieldDataFromArmorStand(armorStand);
-					if (DataMgr.getPlayerData(p).getTeam() != DataMgr.getPlayerData(ssdata.getPlayer()).getTeam()
+					if (DataMgr.getPlayerData(p).team != DataMgr.getPlayerData(ssdata.getPlayer()).team
 							&& ssdata.getIsDeploy()) {
 						Location hitLocation = result.getHitPosition().toLocation(world);
 						distance2 = entityLocation.distance(hitLocation);

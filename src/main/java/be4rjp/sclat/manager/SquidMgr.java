@@ -103,8 +103,8 @@ public class SquidMgr {
 
 				Block down = p.getLocation().getBlock().getRelative(BlockFace.DOWN);
 				if (DataMgr.getBlockDataMap().containsKey(down) && p.getGameMode().equals(GameMode.ADVENTURE)) {
-					if (DataMgr.getBlockDataMap().get(down).getTeam() != data.getTeam()) {
-						if (data.getArmor() <= 0 && !data.getIsPoisonCoolTime()) {
+					if (DataMgr.getBlockDataMap().get(down).getTeam() != data.team) {
+						if (data.armor <= 0 && !data.getIsPoisonCoolTime()) {
 							p.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 200, 3));
 						}
 					} else {
@@ -113,8 +113,8 @@ public class SquidMgr {
 					}
 				} else {
 					if (Sclat.tutorial && down.getType().toString().contains("WOOL")) {
-						if (down.getType() != data.getTeam().getTeamColor().getWool()) {
-							if (data.getArmor() <= 0 && !data.getIsPoisonCoolTime()) {
+						if (down.getType() != data.team.getTeamColor().getWool()) {
+							if (data.armor <= 0 && !data.getIsPoisonCoolTime()) {
 								p.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 200, 3));
 							}
 						}
@@ -158,12 +158,12 @@ public class SquidMgr {
 					// p.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 200, 1));
 
 					Location loc = p.getLocation();
-					Location gro = data.getPlayerGroundLocation();
+					Location gro = data.playerGroundLocation;
 					if (gro == null)
 						gro = loc;
 					if (loc.getX() != gro.getX() || loc.getX() != gro.getX() || loc.getX() != gro.getX()) {
 						p.setSprinting(true);
-						org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).getTeam().getTeamColor().getWool()
+						org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).team.getTeamColor().getWool()
 								.createBlockData();
 						p.getLocation().getWorld().spawnParticle(org.bukkit.Particle.BLOCK_DUST, p.getLocation(), 2,
 								0.1, 0.1, 0.1, 1, bd);
@@ -174,8 +174,8 @@ public class SquidMgr {
 					double speed = conf.getConfig().getDouble("SquidSpeed")
 							* Gear.getGearInfluence(p, Gear.Type.IKA_SPEED_UP);
 
-					if (data.getSpeed() != 0)
-						speed = data.getSpeed();
+					if (data.speed != 0)
+						speed = data.speed;
 
 					if (!DataMgr.getPlayerData(p).getPoison())
 						p.setWalkSpeed((float) speed);
@@ -205,8 +205,8 @@ public class SquidMgr {
 						speed = conf.getConfig().getDouble("PlayerWalkSpeed")
 								* Gear.getGearInfluence(p, Gear.Type.HITO_SPEED_UP);
 
-					if (data.getSpeed() != 0)
-						speed = data.getSpeed();
+					if (data.speed != 0)
+						speed = data.speed;
 
 					if (p.getExp() <= (0.99F - (float) conf.getConfig().getDouble("NormalRecovery"))) {
 						p.setExp(p.getExp() + (float) conf.getConfig().getDouble("NormalRecovery"));
@@ -231,7 +231,7 @@ public class SquidMgr {
 
 				// プレイヤーが最後に立っていた地面を記録する
 				if (p.isOnGround())
-					data.setPlayerGroundLocation(p.getLocation());
+					data.playerGroundLocation = p.getLocation();
 			}
 		};
 		task.runTaskTimer(Sclat.getPlugin(), 0, 2);
@@ -299,10 +299,10 @@ public class SquidMgr {
 						Scoreboard scoreboard = manager.getNewScoreboard();
 
 						org.bukkit.scoreboard.Team bteam0 = scoreboard
-								.registerNewTeam(data.getTeam().getTeamColor().getColorName());
-						bteam0.setColor(data.getTeam().getTeamColor().getChatColor());
+								.registerNewTeam(data.team.getTeamColor().getColorName());
+						bteam0.setColor(data.team.getTeamColor().getChatColor());
 						// bteam0.setNameTagVisibility(NameTagVisibility.HIDE_FOR_OTHER_TEAMS);
-						bteam0.setPrefix(data.getTeam().getTeamColor().getColorCode());
+						bteam0.setPrefix(data.team.getTeamColor().getColorCode());
 						bteam0.setOption(org.bukkit.scoreboard.Team.Option.COLLISION_RULE, Team.OptionStatus.NEVER);
 
 						bteam0.addPlayer(player);
@@ -315,7 +315,7 @@ public class SquidMgr {
 
 						// data.getTeam().getTeam().addEntry(es.getBukkitEntity().getUniqueId().toString());
 					} else {
-						data.getTeam().getTeam().addEntry(es.getBukkitEntity().getUniqueId().toString());
+						data.team.getTeam().addEntry(es.getBukkitEntity().getUniqueId().toString());
 					}
 				}
 
@@ -376,7 +376,7 @@ public class SquidMgr {
 					is3 = false;
 					if (!is4) {
 						is4 = true;
-						p.getEquipment().setHelmet(DataMgr.getPlayerData(p).getTeam().getTeamColor().getBougu());
+						p.getEquipment().setHelmet(DataMgr.getPlayerData(p).team.getTeamColor().getBougu());
 						if (data.getWeaponClass().getMainWeapon().getWeaponType().equals("Buckler")) {
 							p.getInventory().setItem(40, new ItemStack(Material.SLIME_BALL));
 						}

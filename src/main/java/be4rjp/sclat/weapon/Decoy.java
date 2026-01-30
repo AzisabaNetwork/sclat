@@ -120,7 +120,7 @@ public class Decoy {
 					block = location.getBlock().getRelative(BlockFace.DOWN);
 					if (DataMgr.getBlockDataMap().containsKey(block)) {
 						if (block.getType().toString().contains("WOOL")) {
-							if (block.getType() != data.getTeam().getTeamColor().getWool()) {
+							if (block.getType() != data.team.getTeamColor().getWool()) {
 								ika = true;
 							}
 						}
@@ -150,7 +150,7 @@ public class Decoy {
 										.getWeaponClass().getMainWeapon().getWeaponIteamStack())));
 						connection.sendPacket(new PacketPlayOutEntityEquipment(npc.getBukkitEntity().getEntityId(),
 								EnumItemSlot.HEAD, CraftItemStack
-										.asNMSCopy(DataMgr.getPlayerData(player).getTeam().getTeamColor().getBougu())));
+										.asNMSCopy(DataMgr.getPlayerData(player).team.getTeamColor().getBougu())));
 						connection.sendPacket(new PacketPlayOutAnimation(npc, 0));
 					}
 
@@ -159,7 +159,7 @@ public class Decoy {
 					block = location.getBlock().getRelative(BlockFace.DOWN);
 					if (DataMgr.getBlockDataMap().containsKey(block)) {
 						if (block.getType().toString().contains("WOOL")) {
-							ika = block.getType() != data.getTeam().getTeamColor().getWool();
+							ika = block.getType() != data.team.getTeamColor().getWool();
 						} else {
 							ika = false;
 						}
@@ -226,12 +226,12 @@ public class Decoy {
 					}
 
 					// デコイショットの視認用エフェクト
-					if (DataMgr.getPlayerData(player).getSettings().ShowEffect_Bomb()) {
+					if (DataMgr.getPlayerData(player).settings.ShowEffect_Bomb()) {
 						if (player.getWorld() == as1.getLocation().getWorld()) {
 							if (player.getLocation()
 									.distanceSquared(as1.getLocation()) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED) {
 								Particle.DustOptions dustOptions = new Particle.DustOptions(
-										DataMgr.getPlayerData(p).getTeam().getTeamColor().getBukkitColor(), 1);
+										DataMgr.getPlayerData(p).team.getTeamColor().getBukkitColor(), 1);
 								player.spawnParticle(Particle.REDSTONE, as1.getLocation(), 1, 0, 0, 0, 50, dustOptions);
 							}
 						}

@@ -86,7 +86,7 @@ public class SwordMord {
 				Location vec = player.getLocation()
 						.add(player.getEyeLocation().getDirection().normalize().multiply(2.4));
 				for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
-					if (DataMgr.getPlayerData(target).getSettings().ShowEffect_Bomb())
+					if (DataMgr.getPlayerData(target).settings.ShowEffect_Bomb())
 						if (target.getWorld() == player.getWorld())
 							if (target.getLocation().distance(vec) < Sclat.PARTICLE_RENDER_DISTANCE)
 								if (target.equals(player)) {
@@ -109,7 +109,7 @@ public class SwordMord {
 						continue;
 					if (target.getLocation().distance(vec) <= maxDist) {
 						double damage = 15.1;
-						if (DataMgr.getPlayerData(player).getTeam() != DataMgr.getPlayerData(target).getTeam()
+						if (DataMgr.getPlayerData(player).team != DataMgr.getPlayerData(target).team
 								&& target.getGameMode().equals(GameMode.ADVENTURE)) {
 							SclatUtil.giveDamage(player, target, damage, "spWeapon");
 
@@ -266,8 +266,8 @@ public class SwordMord {
 								for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 									if (!DataMgr.getPlayerData(target).isInMatch())
 										continue;
-									if (DataMgr.getPlayerData(player).getTeam() != DataMgr.getPlayerData(target)
-											.getTeam() && target.getGameMode().equals(GameMode.ADVENTURE)) {
+									if (DataMgr.getPlayerData(player).team != DataMgr.getPlayerData(target).team
+											&& target.getGameMode().equals(GameMode.ADVENTURE)) {
 										if (rayTrace.intersects(new BoundingBox((Entity) target), 5, 0.05)) {
 											SclatUtil.giveDamage(player, target, 6, "spWeapon");
 
@@ -313,8 +313,8 @@ public class SwordMord {
 		PaintMgr.PaintHightestBlock(player.getLocation(), player, true, true);
 
 		Snowball ball = player.launchProjectile(Snowball.class);
-		((CraftSnowball) ball).getHandle().setItem(CraftItemStack
-				.asNMSCopy(new ItemStack(DataMgr.getPlayerData(player).getTeam().getTeamColor().getWool())));
+		((CraftSnowball) ball).getHandle().setItem(
+				CraftItemStack.asNMSCopy(new ItemStack(DataMgr.getPlayerData(player).team.getTeamColor().getWool())));
 		player.getWorld().playSound(player.getLocation(), Sound.ENTITY_PIG_STEP, 0.3F, 1F);
 		Vector vec = player.getLocation().getDirection().multiply(QuadroShootSpeed);
 		double random = 0.1;
@@ -349,10 +349,10 @@ public class SwordMord {
 				}
 
 				if (i != 0) {
-					org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).getTeam().getTeamColor().getWool()
+					org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).team.getTeamColor().getWool()
 							.createBlockData();
 					for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
-						if (DataMgr.getPlayerData(o_player).getSettings().ShowEffect_MainWeaponInk())
+						if (DataMgr.getPlayerData(o_player).settings.ShowEffect_MainWeaponInk())
 							if (o_player.getWorld() == inkball.getWorld())
 								if (o_player.getLocation().distanceSquared(
 										inkball.getLocation()) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED)

@@ -43,11 +43,11 @@ public class PaintMgr {
 
 		for (Block block : blocks) {
 
-			if (block.getType() == DataMgr.getPlayerData(player).getTeam().getTeamColor().getWool())
+			if (block.getType() == DataMgr.getPlayerData(player).team.getTeamColor().getWool())
 				continue;
 
 			try {
-				if (block.getY() <= DataMgr.getPlayerData(player).getMatch().getMapData().getVoidY()) {
+				if (block.getY() <= DataMgr.getPlayerData(player).match.getMapData().getVoidY()) {
 					continue;
 				}
 			} catch (Exception e) {
@@ -58,16 +58,16 @@ public class PaintMgr {
 					Sponge sponge = DataMgr.getSpongeFromBlock(block);
 					PlayerData pdata = DataMgr.getPlayerData(player);
 					if (pdata.getWeaponClass().getMainWeapon().getWeaponType().equals("Charger"))
-						sponge.giveDamage(15, pdata.getTeam());
+						sponge.giveDamage(15, pdata.team);
 					else
-						sponge.giveDamage(pdata.getWeaponClass().getMainWeapon().getDamage(), pdata.getTeam());
+						sponge.giveDamage(pdata.getWeaponClass().getMainWeapon().getDamage(), pdata.team);
 				} else if (block.getType().equals(Material.WET_SPONGE)) {
 					Sponge sponge = new Sponge(block);
 					PlayerData pdata = DataMgr.getPlayerData(player);
-					sponge.setMatch(pdata.getMatch());
-					sponge.setTeam(pdata.getTeam());
+					sponge.setMatch(pdata.match);
+					sponge.setTeam(pdata.team);
 					DataMgr.setSpongeWithBlock(block, sponge);
-					sponge.giveDamage(pdata.getWeaponClass().getMainWeapon().getDamage(), pdata.getTeam());
+					sponge.giveDamage(pdata.getWeaponClass().getMainWeapon().getDamage(), pdata.team);
 				}
 			}
 
@@ -76,19 +76,19 @@ public class PaintMgr {
 
 			if (canPaint(block)) {
 				if (!conf.getConfig().getString("WorkMode").equals("Trial"))
-					if (!DataMgr.getPlayerData(player).getMatch().getMapData().canPaintBBlock()
+					if (!DataMgr.getPlayerData(player).match.getMapData().canPaintBBlock()
 							&& block.getType() == Material.BARRIER)
 						return;
 				if (DataMgr.getBlockDataMap().containsKey(block)) {
 					PaintData data = DataMgr.getPaintDataFromBlock(block);
 					Team BTeam = data.getTeam();
-					Team ATeam = DataMgr.getPlayerData(player).getTeam();
+					Team ATeam = DataMgr.getPlayerData(player).team;
 					if (BTeam != ATeam) {
 						data.setTeam(ATeam);
 						BTeam.subtractPaintCount();
 						ATeam.addPaintCount();
 						// Sclat.setBlockByNMS(block, ATeam.getTeamColor().getWool(), false);
-						DataMgr.getPlayerData(player).getMatch().getBlockUpdater().setBlock(block,
+						DataMgr.getPlayerData(player).match.getBlockUpdater().setBlock(block,
 								ATeam.getTeamColor().getWool());
 						DataMgr.getPlayerData(player).addPaintCount();
 						if (new Random().nextInt((int) (12 / Gear.getGearInfluence(player, Gear.Type.SPECIAL_UP)
@@ -97,17 +97,17 @@ public class PaintMgr {
 							SPWeaponMgr.addSPCharge(player);
 					}
 				} else {
-					Team team = DataMgr.getPlayerData(player).getTeam();
+					Team team = DataMgr.getPlayerData(player).team;
 					team.addPaintCount();
 					PaintData data = new PaintData(block);
-					data.setMatch(DataMgr.getPlayerData(player).getMatch());
+					data.setMatch(DataMgr.getPlayerData(player).match);
 					data.setTeam(team);
 					data.setOrigianlType(block.getType());
 					data.setBlockData(block.getBlockData());
 					// data.setOriginalState(block.getState());
 					DataMgr.setPaintDataFromBlock(block, data);
 					// Sclat.setBlockByNMS(block, team.getTeamColor().getWool(), false);
-					DataMgr.getPlayerData(player).getMatch().getBlockUpdater().setBlock(block,
+					DataMgr.getPlayerData(player).match.getBlockUpdater().setBlock(block,
 							team.getTeamColor().getWool());
 					DataMgr.getPlayerData(player).addPaintCount();
 					if (new Random().nextInt((int) (13 / Gear.getGearInfluence(player, Gear.Type.SPECIAL_UP)

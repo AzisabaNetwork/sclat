@@ -34,21 +34,20 @@ public class Spinner {
 			public void run() {
 				PlayerData data = DataMgr.getPlayerData(p);
 
-				data.setTick(data.getTick() + 1);
+				data.tick = data.tick + 1;
 
 				if (keeping == data.getWeaponClass().getMainWeapon().getChargeKeepingTime()
-						&& data.getWeaponClass().getMainWeapon().getCanChargeKeep()
-						&& data.getSettings().doChargeKeep())
+						&& data.getWeaponClass().getMainWeapon().getCanChargeKeep() && data.settings.doChargeKeep())
 					charge = 0;
 
 				if (data.getIsUsingMM() || data.getIsUsingJetPack() || data.getIsUsingTyakuti()
 						|| data.getIsUsingSS()) {
 					charge = 0;
-					data.setTick(8);
+					data.tick = 8;
 					return;
 				}
 
-				if (data.getTick() <= 6 && data.isInMatch()) {
+				if (data.tick <= 6 && data.isInMatch()) {
 					ItemStack w = data.getWeaponClass().getMainWeapon().getWeaponIteamStack().clone();
 					ItemMeta wm = w.getItemMeta();
 
@@ -57,7 +56,7 @@ public class Spinner {
 						charge++;
 
 					wm.setDisplayName(wm.getDisplayName() + "§7["
-							+ GaugeAPI.toGauge(charge, max, data.getTeam().getTeamColor().getColorCode(), "§7") + "]");
+							+ GaugeAPI.toGauge(charge, max, data.team.getTeamColor().getColorCode(), "§7") + "]");
 					w.setItemMeta(wm);
 					p.getInventory().setItem(0, w);
 				}
@@ -65,18 +64,18 @@ public class Spinner {
 				if (charge == max || data.getWeaponClass().getMainWeapon().getHanbunCharge())
 					if (p.getInventory().getItemInMainHand().getType().equals(Material.AIR))
 						if (data.getWeaponClass().getMainWeapon().getCanChargeKeep())
-							if (data.getSettings().doChargeKeep())
-								data.setTick(11);
+							if (data.settings.doChargeKeep())
+								data.tick = 11;
 
 				if (p.getGameMode().equals(GameMode.SPECTATOR))
 					charge = 0;
 
-				if (data.getTick() >= 11 && (charge == max || data.getWeaponClass().getMainWeapon().getHanbunCharge()))
+				if (data.tick >= 11 && (charge == max || data.getWeaponClass().getMainWeapon().getHanbunCharge()))
 					keeping++;
 				else
 					keeping = 0;
 
-				if (data.getTick() == 7 && data.isInMatch()) {
+				if (data.tick == 7 && data.isInMatch()) {
 					if (p.getExp() > data.getWeaponClass().getMainWeapon().getNeedInk() * charge) {
 						SpinnerShootRunnable((int) (charge * data.getWeaponClass().getMainWeapon().getChargeRatio()),
 								p);
@@ -93,7 +92,7 @@ public class Spinner {
 					}
 					charge = 0;
 					p.getInventory().setItem(0, data.getWeaponClass().getMainWeapon().getWeaponIteamStack());
-					data.setTick(8);
+					data.tick = 8;
 					data.setIsHolding(false);
 				}
 
@@ -147,8 +146,8 @@ public class Spinner {
 				* Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP)
 				/ Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)));
 		Snowball ball = player.launchProjectile(Snowball.class);
-		((CraftSnowball) ball).getHandle().setItem(CraftItemStack
-				.asNMSCopy(new ItemStack(DataMgr.getPlayerData(player).getTeam().getTeamColor().getWool())));
+		((CraftSnowball) ball).getHandle().setItem(
+				CraftItemStack.asNMSCopy(new ItemStack(DataMgr.getPlayerData(player).team.getTeamColor().getWool())));
 		player.getWorld().playSound(player.getLocation(), Sound.ENTITY_PIG_STEP, 0.3F, 1.1F);
 		Vector vec = player.getLocation().getDirection()
 				.multiply(DataMgr.getPlayerData(player).getWeaponClass().getMainWeapon().getShootSpeed() * charge);
@@ -184,10 +183,10 @@ public class Spinner {
 				}
 
 				if (i != 0) {
-					org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).getTeam().getTeamColor().getWool()
+					org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).team.getTeamColor().getWool()
 							.createBlockData();
 					for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
-						if (DataMgr.getPlayerData(o_player).getSettings().ShowEffect_MainWeaponInk())
+						if (DataMgr.getPlayerData(o_player).settings.ShowEffect_MainWeaponInk())
 							if (o_player.getWorld() == inkball.getWorld())
 								if (o_player.getLocation().distanceSquared(
 										inkball.getLocation()) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED)

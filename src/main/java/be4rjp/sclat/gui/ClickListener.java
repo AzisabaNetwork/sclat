@@ -121,7 +121,7 @@ public class ClickListener implements Listener {
 					for (Player op : Sclat.getPlugin().getServer().getOnlinePlayers())
 						SclatUtil.playGameSound(op, SoundType.SUCCESS);
 				}
-				Match match = DataMgr.getPlayerData(player).getMatch();
+				Match match = DataMgr.getPlayerData(player).match;
 				match.getBlockUpdater().stop();
 				MatchMgr.RollBack();
 				player.setExp(0.99F);
@@ -194,7 +194,7 @@ public class ClickListener implements Listener {
 		if (event.getView().getTitle().equals("Gear")) {
 			for (int i = 0; i <= 9;) {
 				if (Gear.getGearName(i).equals(name)) {
-					DataMgr.getPlayerData(player).setGearNumber(i);
+					DataMgr.getPlayerData(player).gearNumber = i;
 					PlayerStatusMgr.setGear(player, i);
 					SclatUtil.sendMessage("ギア[" + ChatColor.AQUA + name + ChatColor.RESET + "]を選択しました",
 							MessageType.PLAYER, player);
@@ -343,7 +343,7 @@ public class ClickListener implements Listener {
 						DataMgr.getPlayerData(p).setIsInMatch(true);
 						DataMgr.getPlayerData(p).setIsJoined(true);
 						DataMgr.getPlayerData(p).setMainItemGlow(false);
-						DataMgr.getPlayerData(p).setTick(10);
+						DataMgr.getPlayerData(p).tick = 10;
 						WeaponClass wc = DataMgr.getWeaponClass(name);
 						DataMgr.getPlayerData(p).setWeaponClass(wc);
 						if (DataMgr.getPlayerData(p).getWeaponClass().getSubWeaponName().equals("ビーコン"))
@@ -361,7 +361,7 @@ public class ClickListener implements Listener {
 								.equals("Shooter")) {
 							Shooter.ShooterRunnable(p);
 							if (DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getIsManeuver()) {
-								if (DataMgr.getPlayerData(p).getSettings().doChargeKeep()) {
+								if (DataMgr.getPlayerData(p).settings.doChargeKeep()) {
 									Shooter.ManeuverRunnable(p);
 								} else {
 									Manuber.ManeuverRunnable(p);
@@ -570,7 +570,7 @@ public class ClickListener implements Listener {
 							SclatUtil.playGameSound(player, SoundType.ERROR);
 							break;
 						}
-						SuperJumpMgr.SuperJumpCollTime(player, DataMgr.getPlayerData(p).getPlayerGroundLocation(),
+						SuperJumpMgr.SuperJumpCollTime(player, DataMgr.getPlayerData(p).playerGroundLocation,
 								nearspwan);
 					}
 					if (event.getCurrentItem().getType().equals(Material.IRON_TRAPDOOR))
@@ -587,31 +587,31 @@ public class ClickListener implements Listener {
 
 			switch (name) {
 				case "メインウエポンのインクエフェクト" :
-					DataMgr.getPlayerData(player).getSettings().S_ShowEffect_MainWeaponInk();
+					DataMgr.getPlayerData(player).settings.S_ShowEffect_MainWeaponInk();
 					break;
 				case "チャージャーのレーザー" :
-					DataMgr.getPlayerData(player).getSettings().S_ShowEffect_ChargerLine();
+					DataMgr.getPlayerData(player).settings.S_ShowEffect_ChargerLine();
 					break;
 				case "スペシャルウエポンのエフェクト" :
-					DataMgr.getPlayerData(player).getSettings().S_ShowEffect_SPWeapon();
+					DataMgr.getPlayerData(player).settings.S_ShowEffect_SPWeapon();
 					break;
 				case "スペシャルウエポンの範囲エフェクト" :
-					DataMgr.getPlayerData(player).getSettings().S_ShowEffect_SPWeaponRegion();
+					DataMgr.getPlayerData(player).settings.S_ShowEffect_SPWeaponRegion();
 					break;
 				case "弾の表示" :
-					DataMgr.getPlayerData(player).getSettings().S_ShowSnowBall();
+					DataMgr.getPlayerData(player).settings.S_ShowSnowBall();
 					break;
 				case "BGM" :
-					DataMgr.getPlayerData(player).getSettings().S_PlayBGM();
+					DataMgr.getPlayerData(player).settings.S_PlayBGM();
 					break;
 				case "投擲武器の視認用エフェクト" :
-					DataMgr.getPlayerData(player).getSettings().S_ShowEffect_Bomb();
+					DataMgr.getPlayerData(player).settings.S_ShowEffect_Bomb();
 					break;
 				case "爆発エフェクト" :
-					DataMgr.getPlayerData(player).getSettings().S_ShowEffect_BombEx();
+					DataMgr.getPlayerData(player).settings.S_ShowEffect_BombEx();
 					break;
 				case "チャージキープ" :
-					DataMgr.getPlayerData(player).getSettings().S_doChargeKeep();
+					DataMgr.getPlayerData(player).settings.S_doChargeKeep();
 					break;
 			}
 
@@ -619,17 +619,17 @@ public class ClickListener implements Listener {
 
 			player.playNote(player.getLocation(), Instrument.STICKS, Note.flat(1, Note.Tone.C));
 
-			String B = DataMgr.getPlayerData(player).getSettings().PlayBGM() ? "1" : "0";
-			String E_S = DataMgr.getPlayerData(player).getSettings().ShowEffect_MainWeaponInk() ? "1" : "0";
-			String E_CL = DataMgr.getPlayerData(player).getSettings().ShowEffect_ChargerLine() ? "1" : "0";
-			String E_CS = DataMgr.getPlayerData(player).getSettings().ShowEffect_SPWeapon() ? "1" : "0";
-			String E_RR = DataMgr.getPlayerData(player).getSettings().ShowEffect_SPWeaponRegion() ? "1" : "0";
-			String E_RS = DataMgr.getPlayerData(player).getSettings().ShowSnowBall() ? "1" : "0";
+			String B = DataMgr.getPlayerData(player).settings.PlayBGM() ? "1" : "0";
+			String E_S = DataMgr.getPlayerData(player).settings.ShowEffect_MainWeaponInk() ? "1" : "0";
+			String E_CL = DataMgr.getPlayerData(player).settings.ShowEffect_ChargerLine() ? "1" : "0";
+			String E_CS = DataMgr.getPlayerData(player).settings.ShowEffect_SPWeapon() ? "1" : "0";
+			String E_RR = DataMgr.getPlayerData(player).settings.ShowEffect_SPWeaponRegion() ? "1" : "0";
+			String E_RS = DataMgr.getPlayerData(player).settings.ShowSnowBall() ? "1" : "0";
 			// String E_BGM = DataMgr.getPlayerData(player).getSettings().PlayBGM() ? "1" :
 			// "0";
-			String E_B = DataMgr.getPlayerData(player).getSettings().ShowEffect_Bomb() ? "1" : "0";
-			String E_BEx = DataMgr.getPlayerData(player).getSettings().ShowEffect_BombEx() ? "1" : "0";
-			String ck = DataMgr.getPlayerData(player).getSettings().doChargeKeep() ? "1" : "0";
+			String E_B = DataMgr.getPlayerData(player).settings.ShowEffect_Bomb() ? "1" : "0";
+			String E_BEx = DataMgr.getPlayerData(player).settings.ShowEffect_BombEx() ? "1" : "0";
+			String ck = DataMgr.getPlayerData(player).settings.doChargeKeep() ? "1" : "0";
 
 			String s_data = B + E_S + E_CL + E_CS + E_RR + E_RS + E_B + E_BEx + ck;
 

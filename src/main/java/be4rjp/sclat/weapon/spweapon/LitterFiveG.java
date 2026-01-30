@@ -86,7 +86,7 @@ public class LitterFiveG {
 	}
 	public static void charge_bar(Player player) {
 		BossBar bar = Sclat.getPlugin().getServer().createBossBar(
-				DataMgr.getPlayerData(player).getTeam().getTeamColor().getColorCode() + "§cCharge", BarColor.RED,
+				DataMgr.getPlayerData(player).team.getTeamColor().getColorCode() + "§cCharge", BarColor.RED,
 				BarStyle.SOLID, BarFlag.CREATE_FOG);
 		bar.setProgress(0);
 		bar.addPlayer(player);
@@ -128,7 +128,7 @@ public class LitterFiveG {
 						bar.removeAll();
 						cancel();
 					}
-					if (data.getSettings().ShowEffect_ChargerLine()) {
+					if (data.settings.ShowEffect_ChargerLine()) {
 						if (Hash_charge.get(p) < max_charge) {
 							Hash_charge.replace(p, Hash_charge.get(p) + Hash_cps.get(p));
 						}
@@ -164,7 +164,7 @@ public class LitterFiveG {
 										if (target.getLocation()
 												.distanceSquared(position) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED) {
 											Particle.DustOptions dustOptions = new Particle.DustOptions(
-													data.getTeam().getTeamColor().getBukkitColor(), 1);
+													data.team.getTeamColor().getBukkitColor(), 1);
 											target.spawnParticle(Particle.REDSTONE, position, 1, 0, 0, 0, 10,
 													dustOptions);
 										}
@@ -207,7 +207,7 @@ public class LitterFiveG {
 
 			if (!block.getType().equals(Material.AIR)) {
 				for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
-					if (DataMgr.getPlayerData(o_player).getSettings().ShowEffect_MainWeaponInk()) {
+					if (DataMgr.getPlayerData(o_player).settings.ShowEffect_MainWeaponInk()) {
 						// 爆発音
 						player.getWorld().playSound(position, Sound.ENTITY_GENERIC_EXPLODE, 1, 1);
 
@@ -228,12 +228,12 @@ public class LitterFiveG {
 			}
 			// PaintMgr.PaintHightestBlock(position, player, false, true);
 			for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
-				if (!DataMgr.getPlayerData(target).getSettings().ShowEffect_MainWeaponInk())
+				if (!DataMgr.getPlayerData(target).settings.ShowEffect_MainWeaponInk())
 					continue;
 				if (target.getWorld() == position.getWorld()) {
 					if (target.getLocation().distanceSquared(position) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED) {
-						org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(player).getTeam().getTeamColor()
-								.getWool().createBlockData();
+						org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(player).team.getTeamColor().getWool()
+								.createBlockData();
 						target.spawnParticle(Particle.BLOCK_DUST, position, 1, 0, 0, 0, 1, bd);
 					}
 				}
@@ -243,7 +243,7 @@ public class LitterFiveG {
 			for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 				if (!DataMgr.getPlayerData(target).isInMatch())
 					continue;
-				if (DataMgr.getPlayerData(player).getTeam() != DataMgr.getPlayerData(target).getTeam()
+				if (DataMgr.getPlayerData(player).team != DataMgr.getPlayerData(target).team
 						&& target.getGameMode().equals(GameMode.ADVENTURE)) {
 					if (target.getLocation().distanceSquared(position) <= maxDistSquad) {
 						if (rayTrace.intersects(new BoundingBox((Entity) target), (int) (reach), 0.05)) {
@@ -281,16 +281,16 @@ public class LitterFiveG {
 								if (as.getCustomName().equals("SplashShield")) {
 									SplashShieldData ssdata = DataMgr
 											.getSplashShieldDataFromArmorStand((ArmorStand) as);
-									if (DataMgr.getPlayerData(ssdata.getPlayer()).getTeam() != DataMgr
-											.getPlayerData(player).getTeam()) {
+									if (DataMgr.getPlayerData(ssdata.getPlayer()).team != DataMgr
+											.getPlayerData(player).team) {
 										ArmorStandMgr.giveDamageArmorStand((ArmorStand) as, damage, player);
 										as.getWorld().playSound(as.getLocation(), Sound.ENTITY_PLAYER_HURT, 0.8F, 1.2F);
 										break loop;
 									}
 								} else if (as.getCustomName().equals("Kasa")) {
 									KasaData ssdata = DataMgr.getKasaDataFromArmorStand((ArmorStand) as);
-									if (DataMgr.getPlayerData(ssdata.getPlayer()).getTeam() != DataMgr
-											.getPlayerData(player).getTeam()) {
+									if (DataMgr.getPlayerData(ssdata.getPlayer()).team != DataMgr
+											.getPlayerData(player).team) {
 										ArmorStandMgr.giveDamageArmorStand((ArmorStand) as, damage, player);
 										as.getWorld().playSound(as.getLocation(), Sound.ENTITY_PLAYER_HURT, 0.8F, 1.2F);
 										break loop;
@@ -319,7 +319,7 @@ public class LitterFiveG {
 				DataMgr.getPlayerData(p).setCanUseSubWeapon(true);
 			}
 		};
-		if (DataMgr.getPlayerData(player).getSettings().ShowEffect_ChargerLine()) {
+		if (DataMgr.getPlayerData(player).settings.ShowEffect_ChargerLine()) {
 			task2.runTaskLater(Sclat.getPlugin(), 8);
 		}
 	}

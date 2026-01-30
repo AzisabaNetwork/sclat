@@ -45,14 +45,13 @@ public class TrapData {
 			public void run() {
 				List<Location> s_locs = Sphere.getXZCircle(location.clone().add(0, 1, 0), 3, 2, 40);
 				for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
-					if (DataMgr.getPlayerData(o_player).getSettings().ShowEffect_Bomb()) {
+					if (DataMgr.getPlayerData(o_player).settings.ShowEffect_Bomb()) {
 						for (Location loc : s_locs) {
-							if (o_player.getWorld() == loc.getWorld()
-									&& DataMgr.getPlayerData(o_player).getTeam() != null) {
+							if (o_player.getWorld() == loc.getWorld() && DataMgr.getPlayerData(o_player).team != null) {
 								if (o_player.getLocation().distanceSquared(loc) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED
-										&& (DataMgr.getPlayerData(o_player).getTeam() == team || near)) {
+										&& (DataMgr.getPlayerData(o_player).team == team || near)) {
 									Particle.DustOptions dustOptions = new Particle.DustOptions(near
-											? DataMgr.getPlayerData(player).getTeam().getTeamColor().getBukkitColor()
+											? DataMgr.getPlayerData(player).team.getTeamColor().getBukkitColor()
 											: Color.BLACK, 1);
 									o_player.spawnParticle(Particle.REDSTONE, loc, 1, 0, 0, 0, 5, dustOptions);
 								}
@@ -82,8 +81,7 @@ public class TrapData {
 						continue;
 					if (target.getGameMode() == GameMode.SPECTATOR)
 						continue;
-					if (target.getLocation().distance(location) <= 3
-							&& DataMgr.getPlayerData(target).getTeam() != team) {
+					if (target.getLocation().distance(location) <= 3 && DataMgr.getPlayerData(target).team != team) {
 						Explosion();
 					}
 				}
@@ -141,7 +139,7 @@ public class TrapData {
 					// センサーエフェクト
 					List<Location> s_locs = Sphere.getSphere(location, maxDist + 1, 25);
 					for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
-						if (DataMgr.getPlayerData(o_player).getSettings().ShowEffect_BombEx()) {
+						if (DataMgr.getPlayerData(o_player).settings.ShowEffect_BombEx()) {
 							for (Location loc : s_locs) {
 								if (o_player.getWorld() == loc.getWorld()) {
 									if (o_player.getLocation()
@@ -167,8 +165,8 @@ public class TrapData {
 						if (!DataMgr.getPlayerData(target).isInMatch() || target.getWorld() != player.getWorld())
 							continue;
 						if (target.getLocation().distance(location) <= maxDist + 1) {
-							if (DataMgr.getPlayerData(player).getTeam().getID() != DataMgr.getPlayerData(target)
-									.getTeam().getID()) {
+							if (DataMgr.getPlayerData(player).team.getID() != DataMgr.getPlayerData(target).team
+									.getID()) {
 								target.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 200, 1));
 							}
 
@@ -197,15 +195,15 @@ public class TrapData {
 									try {
 										if (as.getCustomName().equals("Kasa")) {
 											KasaData kasaData = DataMgr.getKasaDataFromArmorStand((ArmorStand) as);
-											if (DataMgr.getPlayerData(kasaData.getPlayer()).getTeam() != DataMgr
-													.getPlayerData(player).getTeam()) {
+											if (DataMgr.getPlayerData(kasaData.getPlayer()).team != DataMgr
+													.getPlayerData(player).team) {
 												cancel();
 											}
 										} else if (as.getCustomName().equals("SplashShield")) {
 											SplashShieldData splashShieldData = DataMgr
 													.getSplashShieldDataFromArmorStand((ArmorStand) as);
-											if (DataMgr.getPlayerData(splashShieldData.getPlayer()).getTeam() != DataMgr
-													.getPlayerData(player).getTeam()) {
+											if (DataMgr.getPlayerData(splashShieldData.getPlayer()).team != DataMgr
+													.getPlayerData(player).team) {
 												cancel();
 											}
 										}
@@ -222,7 +220,7 @@ public class TrapData {
 						if (target.getLocation().distanceSquared(location) <= maxDistSquared) {
 							double damage = (maxDist - target.getLocation().distance(location)) * 5.0
 									* Gear.getGearInfluence(player, Gear.Type.SUB_SPEC_UP);
-							if (DataMgr.getPlayerData(player).getTeam() != DataMgr.getPlayerData(target).getTeam()
+							if (DataMgr.getPlayerData(player).team != DataMgr.getPlayerData(target).team
 									&& target.getGameMode().equals(GameMode.ADVENTURE)) {
 								SclatUtil.giveDamage(player, target, damage, "subWeapon");
 

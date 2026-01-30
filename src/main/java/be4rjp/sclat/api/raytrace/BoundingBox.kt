@@ -1,34 +1,31 @@
+package be4rjp.sclat.api.raytrace
 
-package be4rjp.sclat.api.raytrace;
+import net.minecraft.server.v1_14_R1.AxisAlignedBB
+import org.bukkit.craftbukkit.v1_14_R1.entity.CraftEntity
+import org.bukkit.entity.Entity
+import org.bukkit.util.Vector
 
-import net.minecraft.server.v1_14_R1.AxisAlignedBB;
-import org.bukkit.craftbukkit.v1_14_R1.entity.CraftEntity;
-import org.bukkit.entity.Entity;
-import org.bukkit.util.Vector;
+class BoundingBox {
+    var max: Vector
+    var min: Vector
 
-public class BoundingBox {
+    constructor(min: Vector, max: Vector) {
+        this.max = max
+        this.min = min
+    }
 
-	Vector max;
-	Vector min;
+    constructor(entity: Entity) {
+        val bb = (entity as CraftEntity).getHandle().getBoundingBox()
+        min = Vector(bb.minX - 0.15, bb.minY, bb.minZ - 0.15)
+        max = Vector(bb.maxX + 0.15, bb.maxY, bb.maxZ + 0.15)
+    }
 
-	public BoundingBox(Vector min, Vector max) {
-		this.max = max;
-		this.min = min;
-	}
+    constructor(bb: AxisAlignedBB) {
+        min = Vector(bb.minX, bb.minY, bb.minZ)
+        max = Vector(bb.maxX, bb.maxY, bb.maxZ)
+    }
 
-	public BoundingBox(Entity entity) {
-		AxisAlignedBB bb = ((CraftEntity) entity).getHandle().getBoundingBox();
-		min = new Vector(bb.minX - 0.15, bb.minY, bb.minZ - 0.15);
-		max = new Vector(bb.maxX + 0.15, bb.maxY, bb.maxZ + 0.15);
-	}
-
-	public BoundingBox(AxisAlignedBB bb) {
-		min = new Vector(bb.minX, bb.minY, bb.minZ);
-		max = new Vector(bb.maxX, bb.maxY, bb.maxZ);
-	}
-
-	public Vector midPoint() {
-		return max.clone().add(min).multiply(0.5);
-	}
-
+    fun midPoint(): Vector {
+        return max.clone().add(min).multiply(0.5)
+    }
 }

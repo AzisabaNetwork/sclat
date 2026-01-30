@@ -353,7 +353,7 @@ public class Sclat extends JavaPlugin implements PluginMessageListener {
 		// ------------------------Tutorial wire mesh-------------------------
 		if (Sclat.tutorial) {
 			for (MapData mData : DataMgr.maplist) {
-				for (Wiremesh wiremesh : mData.getWiremeshListTask().getWiremeshsList()) {
+				for (Wiremesh wiremesh : mData.getWiremeshListTask().wiremeshsList) {
 					wiremesh.startTask();
 				}
 			}

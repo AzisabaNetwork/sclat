@@ -1,59 +1,55 @@
-package be4rjp.sclat.api.wiremesh;
+package be4rjp.sclat.api.wiremesh
 
-import be4rjp.sclat.data.RegionBlocks;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.block.Block;
-import org.bukkit.block.data.BlockData;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import be4rjp.sclat.data.RegionBlocks
+import org.bukkit.Location
+import org.bukkit.Material
+import org.bukkit.block.Block
+import org.bukkit.block.data.BlockData
+import java.util.function.Consumer
 
 /**
  *
  * @author Be4rJP
  */
-public class WiremeshListTask {
-	private List<Block> blockList = new ArrayList<>();
-	private List<Wiremesh> wiremeshsList = new ArrayList<>();
-	private Map<Block, BlockData> blockDataMap = new HashMap<>();
+class WiremeshListTask(
+    private val firstPoint: Location,
+    private val secondPoint: Location,
+    trapDoor: Boolean,
+    ironBars: Boolean,
+    fence: Boolean,
+) {
+    private val blockList: MutableList<Block> = ArrayList<Block>()
 
-	private final Location firstPoint;
-	private final Location secondPoint;
+    @JvmField
+    val wiremeshsList: MutableList<Wiremesh?> = ArrayList<Wiremesh?>()
+    private val blockDataMap: MutableMap<Block, BlockData> = mutableMapOf()
 
-	public WiremeshListTask(Location firstLocation, Location secondLocation, boolean trapDoor, boolean ironBars,
-			boolean fence) {
-		this.firstPoint = firstLocation;
-		this.secondPoint = secondLocation;
+    init {
+        // 先に対象のブロックとそのBlockDataを取得して保存しておく
+        val list = RegionBlocks(firstPoint, secondPoint).getBlocks()
 
-		// 先に対象のブロックとそのBlockDataを取得して保存しておく
-		List<Block> list = new RegionBlocks(firstPoint, secondPoint).getBlocks();
+        for (block in list) {
+            if (!blockList.contains(block) && (
+                    (block.getType() == Material.IRON_TRAPDOOR && trapDoor) ||
+                        (block.getType() == Material.IRON_BARS && ironBars) ||
+                        (block.getType().toString().contains("FENCE") && fence)
+                    )
+            ) {
+                val bData = block.getBlockData()
+                blockDataMap.put(block, bData)
+                blockList.add(block)
+            }
+        }
 
-		for (Block block : list) {
-			if (!blockList.contains(block) && ((block.getType().equals(Material.IRON_TRAPDOOR) && trapDoor)
-					|| (block.getType().equals(Material.IRON_BARS) && ironBars)
-					|| (block.getType().toString().contains("FENCE") && fence))) {
-				BlockData bData = block.getBlockData();
-				blockDataMap.put(block, bData);
-				blockList.add(block);
-			}
-		}
+        // Wiremeshを作成してタスクを実行
+        for (block in blockList) {
+            val bData = blockDataMap.get(block)
+            val wm = Wiremesh(block, block.getType(), bData!!)
+            wiremeshsList.add(wm)
+        }
+    }
 
-		// Wiremeshを作成してタスクを実行
-		for (Block block : blockList) {
-			BlockData bData = blockDataMap.get(block);
-			Wiremesh wm = new Wiremesh(block, block.getType(), bData);
-			wiremeshsList.add(wm);
-		}
-	}
-
-	public List<Wiremesh> getWiremeshsList() {
-		return this.wiremeshsList;
-	}
-
-	public void stopTask() {
-		wiremeshsList.forEach(Wiremesh::stopTask);
-	}
+    fun stopTask() {
+        wiremeshsList.forEach(Consumer { obj: Wiremesh? -> obj!!.stopTask() })
+    }
 }

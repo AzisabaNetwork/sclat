@@ -60,8 +60,7 @@ public class FloaterBomb {
 						}
 						if (!DataMgr.getPlayerData(player).getIsBombRush())
 							p.setExp(p.getExp() - 0.47F);
-						ItemStack bom = new ItemStack(DataMgr.getPlayerData(p).getTeam().getTeamColor().getWool())
-								.clone();
+						ItemStack bom = new ItemStack(DataMgr.getPlayerData(p).team.getTeamColor().getWool()).clone();
 						ItemMeta bom_m = bom.getItemMeta();
 						bom_m.setLocalizedName(String.valueOf(Sclat.getNotDuplicateNumber()));
 						bom.setItemMeta(bom_m);
@@ -137,16 +136,16 @@ public class FloaterBomb {
 										try {
 											if (as.getCustomName().equals("Kasa")) {
 												KasaData kasaData = DataMgr.getKasaDataFromArmorStand((ArmorStand) as);
-												if (DataMgr.getPlayerData(kasaData.getPlayer()).getTeam() != DataMgr
-														.getPlayerData(p).getTeam()) {
+												if (DataMgr.getPlayerData(kasaData.getPlayer()).team != DataMgr
+														.getPlayerData(p).team) {
 													drop.remove();
 													cancel();
 												}
 											} else if (as.getCustomName().equals("SplashShield")) {
 												SplashShieldData splashShieldData = DataMgr
 														.getSplashShieldDataFromArmorStand((ArmorStand) as);
-												if (DataMgr.getPlayerData(splashShieldData.getPlayer())
-														.getTeam() != DataMgr.getPlayerData(p).getTeam()) {
+												if (DataMgr.getPlayerData(splashShieldData.getPlayer()).team != DataMgr
+														.getPlayerData(p).team) {
 													drop.remove();
 													cancel();
 												}
@@ -167,7 +166,7 @@ public class FloaterBomb {
 								if (!turn) {
 									damage = damage * 0.9;
 								}
-								if (DataMgr.getPlayerData(player).getTeam() != DataMgr.getPlayerData(target).getTeam()
+								if (DataMgr.getPlayerData(player).team != DataMgr.getPlayerData(target).team
 										&& target.getGameMode().equals(GameMode.ADVENTURE)) {
 									SclatUtil.giveDamage(player, target, damage, "subWeapon");
 
@@ -209,12 +208,12 @@ public class FloaterBomb {
 
 					// ボムの視認用エフェクト
 					for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
-						if (DataMgr.getPlayerData(o_player).getSettings().ShowEffect_Bomb()) {
+						if (DataMgr.getPlayerData(o_player).settings.ShowEffect_Bomb()) {
 							if (o_player.getWorld() == drop.getLocation().getWorld()) {
 								if (o_player.getLocation()
 										.distanceSquared(drop.getLocation()) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED) {
 									Particle.DustOptions dustOptions = new Particle.DustOptions(
-											DataMgr.getPlayerData(p).getTeam().getTeamColor().getBukkitColor(), 1);
+											DataMgr.getPlayerData(p).team.getTeamColor().getBukkitColor(), 1);
 									o_player.spawnParticle(Particle.REDSTONE, drop.getLocation(), 1, 0, 0, 0, 50,
 											dustOptions);
 								}

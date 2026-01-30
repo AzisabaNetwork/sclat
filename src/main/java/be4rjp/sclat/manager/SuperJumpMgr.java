@@ -43,7 +43,7 @@ public class SuperJumpMgr {
 
 		player.getInventory().clear();
 		player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 40000, 10));
-		DataMgr.getPlayerData(player).setArmor(0.0);
+		DataMgr.getPlayerData(player).armor = 0.0;
 		BukkitRunnable task = new BukkitRunnable() {
 			Player p = player;
 			@Override
@@ -157,7 +157,7 @@ public class SuperJumpMgr {
 					as.setNoGravity(true);
 					as.setBasePlate(false);
 					as.setCustomName(CraftChatMessage.fromStringOrNull(
-							DataMgr.getPlayerData(p).getTeam().getTeamColor().getColorCode() + "↓↓↓  くコ:彡  ↓↓↓"));
+							DataMgr.getPlayerData(p).team.getTeamColor().getColorCode() + "↓↓↓  くコ:彡  ↓↓↓"));
 					as.setCustomNameVisible(true);
 					as.setSmall(true);
 					id = as.getBukkitEntity().getEntityId();
@@ -175,7 +175,7 @@ public class SuperJumpMgr {
 				double z = to.getZ() + r * Math.sin(c);
 				Location tl = new Location(p.getWorld(), x, y, z);
 				Particle.DustOptions dustOptions = new Particle.DustOptions(
-						DataMgr.getPlayerData(p).getTeam().getTeamColor().getBukkitColor(), 1);
+						DataMgr.getPlayerData(p).team.getTeamColor().getBukkitColor(), 1);
 				p.getWorld().spawnParticle(Particle.REDSTONE, tl, 1, 0, 0.1, 0, 50, dustOptions);
 				if (p.getGameMode().equals(GameMode.ADVENTURE) || !DataMgr.getPlayerData(p).isInMatch()
 						|| !p.isOnline()) {

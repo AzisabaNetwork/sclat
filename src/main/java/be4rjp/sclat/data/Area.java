@@ -150,7 +150,7 @@ public class Area {
 						team = match.getTeam0();
 						for (Player oplayer : Sclat.getPlugin(Sclat.class).getServer().getOnlinePlayers()) {
 							if (DataMgr.getPlayerData(oplayer).isInMatch()) {
-								if (team == DataMgr.getPlayerData(oplayer).getTeam()) {
+								if (team == DataMgr.getPlayerData(oplayer).team) {
 									SclatUtil.sendMessage("§fエリアを確保した!", MessageType.PLAYER, oplayer);
 									oplayer.sendTitle("", "§fエリアを確保した!", 10, 20, 10);
 									oplayer.playSound(oplayer.getLocation(), Sound.BLOCK_ANVIL_PLACE, 1F, 3F);
@@ -166,7 +166,7 @@ public class Area {
 						team = match.getTeam1();
 						for (Player oplayer : Sclat.getPlugin(Sclat.class).getServer().getOnlinePlayers()) {
 							if (DataMgr.getPlayerData(oplayer).isInMatch()) {
-								if (team == DataMgr.getPlayerData(oplayer).getTeam()) {
+								if (team == DataMgr.getPlayerData(oplayer).team) {
 									SclatUtil.sendMessage("§fエリアを確保した!", MessageType.PLAYER, oplayer);
 									oplayer.sendTitle("", "§fエリアを確保した!", 10, 20, 10);
 									oplayer.playSound(oplayer.getLocation(), Sound.BLOCK_ANVIL_PLACE, 1F, 3F);

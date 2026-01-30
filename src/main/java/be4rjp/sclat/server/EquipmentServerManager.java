@@ -36,7 +36,7 @@ public class EquipmentServerManager {
 									for (Player player : Sclat.getPlugin().getServer().getOnlinePlayers())
 										if (player.getUniqueId().toString().equals(args[3])
 												&& SclatUtil.isNumber(args[2]))
-											DataMgr.getPlayerData(player).setGearNumber(Integer.parseInt(args[2]));
+											DataMgr.getPlayerData(player).gearNumber = Integer.parseInt(args[2]);
 									break;
 								case "rank" :
 									PlayerStatusMgr.setRank(args[3], Integer.parseInt(args[2]));

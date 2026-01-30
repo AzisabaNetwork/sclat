@@ -41,8 +41,7 @@ public class SplashBomb {
 					if (c == 0) {
 						if (!DataMgr.getPlayerData(player).getIsBombRush())
 							p.setExp(p.getExp() - 0.59F);
-						ItemStack bom = new ItemStack(DataMgr.getPlayerData(p).getTeam().getTeamColor().getGlass())
-								.clone();
+						ItemStack bom = new ItemStack(DataMgr.getPlayerData(p).team.getTeamColor().getGlass()).clone();
 						ItemMeta bom_m = bom.getItemMeta();
 						bom_m.setLocalizedName(String.valueOf(Sclat.getNotDuplicateNumber()));
 						bom.setItemMeta(bom_m);
@@ -83,7 +82,7 @@ public class SplashBomb {
 							if (target.getLocation().distance(drop.getLocation()) <= maxDist) {
 								double damage = (maxDist - target.getLocation().distance(drop.getLocation())) * 14
 										* Gear.getGearInfluence(player, Gear.Type.SUB_SPEC_UP);
-								if (DataMgr.getPlayerData(player).getTeam() != DataMgr.getPlayerData(target).getTeam()
+								if (DataMgr.getPlayerData(player).team != DataMgr.getPlayerData(target).team
 										&& target.getGameMode().equals(GameMode.ADVENTURE)) {
 									SclatUtil.giveDamage(player, target, damage, "subWeapon");
 
@@ -118,12 +117,12 @@ public class SplashBomb {
 
 					// ボムの視認用エフェクト
 					for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
-						if (DataMgr.getPlayerData(o_player).getSettings().ShowEffect_Bomb()) {
+						if (DataMgr.getPlayerData(o_player).settings.ShowEffect_Bomb()) {
 							if (o_player.getWorld() == drop.getLocation().getWorld()) {
 								if (o_player.getLocation()
 										.distanceSquared(drop.getLocation()) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED) {
 									Particle.DustOptions dustOptions = new Particle.DustOptions(
-											DataMgr.getPlayerData(p).getTeam().getTeamColor().getBukkitColor(), 1);
+											DataMgr.getPlayerData(p).team.getTeamColor().getBukkitColor(), 1);
 									o_player.spawnParticle(Particle.REDSTONE, drop.getLocation(), 1, 0, 0, 0, 50,
 											dustOptions);
 								}

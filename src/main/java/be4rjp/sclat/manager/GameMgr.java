@@ -104,7 +104,7 @@ public class GameMgr implements Listener {
 
 		String uuid = player.getUniqueId().toString();
 		PlayerSettings settings = new PlayerSettings(player);
-		data.setSettings(settings);
+		data.settings = settings;
 		data.setWeaponClass(DataMgr.getWeaponClass(conf.getConfig().getString("DefaultClass")));
 		DataMgr.setPlayerData(player, data);
 
@@ -122,7 +122,7 @@ public class GameMgr implements Listener {
 		}
 
 		if (Sclat.type != ServerType.MATCH) {
-			data.setGearNumber(PlayerStatusMgr.getGear(player));
+			data.gearNumber = PlayerStatusMgr.getGear(player);
 			data.setWeaponClass(DataMgr.getWeaponClass(PlayerStatusMgr.getEquiptClass(player)));
 		}
 		// 処理の分散
@@ -177,8 +177,8 @@ public class GameMgr implements Listener {
 		// 試し撃ちモード
 		if (conf.getConfig().getString("WorkMode").equals("Trial")) {
 			Match match = DataMgr.getMatchFromId(MatchMgr.matchcount);
-			data.setMatch(match);
-			data.setTeam(match.getTeam0());
+			data.match = match;
+			data.team = match.getTeam0();
 			player.teleport(Sclat.lobby);
 			ItemStack join = new ItemStack(Material.CHEST);
 			ItemMeta joinmeta = join.getItemMeta();
@@ -236,7 +236,7 @@ public class GameMgr implements Listener {
 								DataMgr.getPlayerData(p).setIsInMatch(true);
 								DataMgr.getPlayerData(p).setIsJoined(true);
 								DataMgr.getPlayerData(p).setMainItemGlow(false);
-								DataMgr.getPlayerData(p).setTick(10);
+								DataMgr.getPlayerData(p).tick = 10;
 								WeaponClass wc = DataMgr.getWeaponClass(conf.getConfig().getString("DefaultClass"));
 								DataMgr.getPlayerData(p).setWeaponClass(wc);
 								if (DataMgr.getPlayerData(p).getWeaponClass().getSubWeaponName().equals("ビーコン"))
@@ -255,7 +255,7 @@ public class GameMgr implements Listener {
 										.equals("Shooter")) {
 									Shooter.ShooterRunnable(p);
 									if (DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getIsManeuver()) {
-										if (DataMgr.getPlayerData(p).getSettings().doChargeKeep()) {
+										if (DataMgr.getPlayerData(p).settings.doChargeKeep()) {
 											Shooter.ManeuverRunnable(p);
 										} else {
 											Manuber.ManeuverRunnable(p);
@@ -439,8 +439,8 @@ public class GameMgr implements Listener {
 		}
 
 		Match match = DataMgr.getMatchFromId(Integer.MAX_VALUE);
-		data.setMatch(match);
-		data.setTeam(match.getTeam0());
+		data.match = match;
+		data.team = match.getTeam0();
 
 		if (!DataMgr.getPlayerIsQuitMap().containsKey(player.getUniqueId().toString())) {
 			DataMgr.setPlayerIsQuit(uuid, false);
@@ -840,10 +840,10 @@ public class GameMgr implements Listener {
 		if (Sclat.type == ServerType.MATCH) {
 			if (DataMgr.joinedList.contains(player)) {
 				DataMgr.setPlayerIsQuit(player.getUniqueId().toString(), true);
-				if (data.getMatch().canJoin())
-					data.getMatch().subJoinedPlayerCount();
+				if (data.match.canJoin())
+					data.match.subJoinedPlayerCount();
 
-				Team team = data.getTeam();
+				Team team = data.team;
 				team.subtractRateTotal(PlayerStatusMgr.getRank(player));
 
 				DataMgr.joinedList.remove(player);
@@ -862,7 +862,7 @@ public class GameMgr implements Listener {
 						List<String> commands = new ArrayList<>();
 						commands.add("set weapon " + data.getWeaponClass().getClassName() + " "
 								+ player.getUniqueId().toString());
-						commands.add("set gear " + data.getGearNumber() + " " + player.getUniqueId().toString());
+						commands.add("set gear " + data.gearNumber + " " + player.getUniqueId().toString());
 						commands.add("set rank " + String.valueOf(PlayerStatusMgr.getRank(player)) + " "
 								+ player.getUniqueId().toString());
 						commands.add("setting "

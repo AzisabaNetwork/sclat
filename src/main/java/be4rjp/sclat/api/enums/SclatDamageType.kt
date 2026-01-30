@@ -1,16 +1,11 @@
-package be4rjp.sclat.api.enums;
+package be4rjp.sclat.api.enums
 
-public enum SclatDamageType {
-
-	MAIN_WEAPON("killed"), SUB_WEAPON("subWeapon"), SP_WEAPON("spWeapon"), WATER("water"), FALL("fall");
-
-	private final String name;
-
-	SclatDamageType(String name) {
-		this.name = name;
-	}
-
-	public String getName() {
-		return this.name;
-	}
+enum class SclatDamageType(
+    name: String,
+) {
+    MAIN_WEAPON("killed"),
+    SUB_WEAPON("subWeapon"),
+    SP_WEAPON("spWeapon"),
+    WATER("water"),
+    FALL("fall"),
 }
