@@ -1,365 +1,374 @@
-package be4rjp.sclat.commands;
+package be4rjp.sclat.commands
 
-import be4rjp.sclat.Sclat;
-import be4rjp.sclat.api.MessageType;
-import be4rjp.sclat.api.SclatUtil;
-import be4rjp.sclat.api.ServerType;
-import be4rjp.sclat.api.SoundType;
-import be4rjp.sclat.data.DataMgr;
-import be4rjp.sclat.data.ServerStatus;
-import be4rjp.sclat.emblem.EmblemManager;
-import be4rjp.sclat.manager.BungeeCordMgr;
-import be4rjp.sclat.manager.ServerStatusManager;
-import be4rjp.sclat.server.EquipmentClient;
-import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.TabExecutor;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
-import org.jetbrains.annotations.NotNull;
+import be4rjp.sclat.Sclat
+import be4rjp.sclat.api.MessageType
+import be4rjp.sclat.api.SclatUtil.isNumber
+import be4rjp.sclat.api.SclatUtil.playGameSound
+import be4rjp.sclat.api.SclatUtil.sendMessage
+import be4rjp.sclat.api.ServerType
+import be4rjp.sclat.api.SoundType
+import be4rjp.sclat.data.DataMgr
+import be4rjp.sclat.emblem.EmblemManager
+import be4rjp.sclat.manager.BungeeCordMgr
+import be4rjp.sclat.manager.ServerStatusManager
+import be4rjp.sclat.server.EquipmentClient
+import org.bukkit.ChatColor
+import org.bukkit.command.Command
+import org.bukkit.command.CommandExecutor
+import org.bukkit.command.CommandSender
+import org.bukkit.command.TabExecutor
+import org.bukkit.configuration.file.YamlConfiguration
+import org.bukkit.entity.Player
+import org.bukkit.scheduler.BukkitRunnable
+import java.io.IOException
+import java.util.Locale
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import static be4rjp.sclat.Sclat.conf;
-
-//sclat Command
+// sclat Command
 // Todo: use cloud command framework
-public class sclatCommandExecutor implements CommandExecutor, TabExecutor {
-	@Override
-	public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String commandLabel,
-			String[] args) {
-		if (args == null)
-			return false;
-		if (args.length == 0)
-			return false;
+class SclatCommandExecutor :
+    CommandExecutor,
+    TabExecutor {
+    override fun onCommand(
+        sender: CommandSender,
+        cmd: Command,
+        commandLabel: String,
+        args: Array<String>?,
+    ): Boolean {
+        if (args == null) return false
+        if (args.size == 0) return false
 
-		// ------------------------Check sender type-----------------------------
-		CommanderType type = CommanderType.CONSOLE;
-		if (sender instanceof Player) {
-			if (sender.hasPermission("sclat.admin"))
-				type = CommanderType.ADMIN;
-			else
-				type = CommanderType.MEMBER;
-		}
-		// ----------------------------------------------------------------------
+        // ------------------------Check sender type-----------------------------
+        var type = CommanderType.CONSOLE
+        if (sender is Player) {
+            if (sender.hasPermission("sclat.admin")) {
+                type = CommanderType.ADMIN
+            } else {
+                type = CommanderType.MEMBER
+            }
+        }
 
-		// -------------------------/sclat setUpdateRate----------------------------
-		if (args[0].equalsIgnoreCase("setUpdateRate") || args[0].equalsIgnoreCase("sur")) {
-			if (args.length != 2)
-				return false;
+        // ----------------------------------------------------------------------
 
-			if (type == CommanderType.MEMBER) {
-				sender.sendMessage(ChatColor.RED + "You don't have permission.");
-				SclatUtil.playGameSound((Player) sender, SoundType.ERROR);
-				return true;
-			}
+        // -------------------------/sclat setUpdateRate----------------------------
+        if (args[0].equals("setUpdateRate", ignoreCase = true) || args[0].equals("sur", ignoreCase = true)) {
+            if (args.size != 2) return false
 
-			String num = args[1];
-			if (SclatUtil.isNumber(num)) {
-				Sclat.conf.getConfig().set("BlockUpdateRate", Integer.valueOf(num));
-				sender.sendMessage("setConfig [BlockUpdateRate]  :  " + num);
-				return true;
-			} else {
-				sender.sendMessage("Please type with number");
-				return false;
-			}
-		}
-		// -------------------------------------------------------------------------
+            if (type == CommanderType.MEMBER) {
+                sender.sendMessage(ChatColor.RED.toString() + "You don't have permission.")
+                playGameSound(sender as Player, SoundType.ERROR)
+                return true
+            }
 
-		// ----------------------------/sclat fly-----------------------------------
-		if (args[0].equalsIgnoreCase("fly")) {
-			if (args.length != 2)
-				return false;
+            val num = args[1]
+            if (isNumber(num)) {
+                Sclat.conf.getConfig().set("BlockUpdateRate", num.toInt())
+                sender.sendMessage("setConfig [BlockUpdateRate]  :  " + num)
+                return true
+            } else {
+                sender.sendMessage("Please type with number")
+                return false
+            }
+        }
 
-			if (type == CommanderType.MEMBER) {
-				sender.sendMessage(ChatColor.RED + "You don't have permission.");
-				SclatUtil.playGameSound((Player) sender, SoundType.ERROR);
-				return true;
-			}
+        // -------------------------------------------------------------------------
 
-			String playerName = args[1];
-			for (Player player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
-				if (playerName.equals(player.getName())) {
-					Sclat.flyList.add(playerName);
-					return true;
-				}
-			}
-		}
-		// -------------------------------------------------------------------------
+        // ----------------------------/sclat fly-----------------------------------
+        if (args[0].equals("fly", ignoreCase = true)) {
+            if (args.size != 2) return false
 
-		// ----- /sclat refresh-config-----
-		if (args[0].equalsIgnoreCase("refresh-config")) {
-			if (args.length != 2)
-				return false;
+            if (type == CommanderType.MEMBER) {
+                sender.sendMessage(ChatColor.RED.toString() + "You don't have permission.")
+                playGameSound(sender as Player, SoundType.ERROR)
+                return true
+            }
 
-			if (type == CommanderType.MEMBER) {
-				sender.sendMessage(ChatColor.RED + "You don't have permission.");
-				SclatUtil.playGameSound((Player) sender, SoundType.ERROR);
-				return true;
-			}
+            val playerName = args[1]
+            for (player in Sclat.getPlugin().getServer().getOnlinePlayers()) {
+                if (playerName == player.getName()) {
+                    Sclat.flyList.add(playerName)
+                    return true
+                }
+            }
+        }
 
-			if (sender instanceof Player) {
-				Player player = (Player) sender;
-				String targetConfig = args[1];
-				SclatUtil.sendMessage(String.format("%sの設定を再読み込み中...", targetConfig), MessageType.PLAYER, player);
-				switch (targetConfig.toLowerCase()) {
-					case "emblemuserdata" :
-						conf.loadEmblemUserData();
-						break;
-					case "emblemloredata" :
-						conf.loadEmblemLoreData();
-						break;
-					default :
-						SclatUtil.sendMessage("そのオプションは存在しません！", MessageType.PLAYER, player);
-						return true;
-				}
-				SclatUtil.sendMessage("再読み込み完了", MessageType.PLAYER, player);
-			}
-		}
-		// --------------------------------
+        // -------------------------------------------------------------------------
 
-		// ----------------/sclat migrate-emblems-----------------
-		if (args[0].equalsIgnoreCase("migrate-emblems")) {
-			if (args.length != 1)
-				return false;
+        // ----- /sclat refresh-config-----
+        if (args[0].equals("refresh-config", ignoreCase = true)) {
+            if (args.size != 2) return false
 
-			if (type == CommanderType.MEMBER) {
-				sender.sendMessage(ChatColor.RED + "You don't have permission.");
-				SclatUtil.playGameSound((Player) sender, SoundType.ERROR);
-				return true;
-			}
+            if (type == CommanderType.MEMBER) {
+                sender.sendMessage(ChatColor.RED.toString() + "You don't have permission.")
+                playGameSound(sender as Player, SoundType.ERROR)
+                return true
+            }
 
-			if (!conf.emblemsFile.exists()) {
-				sender.sendMessage(ChatColor.RED + "Old emblem userdata file isn't exists.");
-				return true;
-			}
+            if (sender is Player) {
+                val player = sender
+                val targetConfig = args[1]
+                sendMessage(String.format("%sの設定を再読み込み中...", targetConfig), MessageType.PLAYER, player)
+                when (targetConfig.lowercase(Locale.getDefault())) {
+                    "emblemuserdata" -> {
+                        Sclat.conf.loadEmblemUserData()
+                    }
 
-			YamlConfiguration oldData = YamlConfiguration.loadConfiguration(conf.emblemsFile);
-			Set<String> dataUuids = oldData.getKeys(false);
-			for (String _uuid : dataUuids) {
-				List<String> userEmblems = oldData.getStringList(_uuid);
-				for (String emblem : userEmblems) {
-					conf.getEmblemUserdata().set(_uuid + "." + emblem, 1);
-				}
-			}
-			sender.sendMessage(ChatColor.GREEN + "Migration was succeeded!");
+                    "emblemloredata" -> {
+                        Sclat.conf.loadEmblemLoreData()
+                    }
 
-			try {
-				conf.saveEmblemUserdata();
-				sender.sendMessage(ChatColor.GREEN + "Successfully to save emblem userdata");
-			} catch (IOException e) {
-				sender.sendMessage(ChatColor.RED + "Failed to save emblem userdata");
-				e.printStackTrace();
-			}
-			return true;
-		}
-		// -------------------------------------------------------
+                    else -> {
+                        sendMessage("そのオプションは存在しません！", MessageType.PLAYER, player)
+                        return true
+                    }
+                }
+                sendMessage("再読み込み完了", MessageType.PLAYER, player)
+            }
+        }
 
-		// ----------------/sclat save-emblems--------------------
-		if (args[0].equalsIgnoreCase("save-emblems")) {
-			if (args.length != 1)
-				return false;
+        // --------------------------------
 
-			if (type == CommanderType.MEMBER) {
-				sender.sendMessage(ChatColor.RED + "You don't have permission.");
-				SclatUtil.playGameSound((Player) sender, SoundType.ERROR);
-				return true;
-			}
+        // ----------------/sclat migrate-emblems-----------------
+        if (args[0].equals("migrate-emblems", ignoreCase = true)) {
+            if (args.size != 1) return false
 
-			try {
-				conf.saveEmblemUserdata();
-				sender.sendMessage(ChatColor.GREEN + "Successfully to save emblem userdata");
-			} catch (IOException e) {
-				sender.sendMessage(ChatColor.RED + "Failed to save emblem userdata");
-				e.printStackTrace();
-			}
-			return true;
-		}
-		// -------------------------------------------------------
+            if (type == CommanderType.MEMBER) {
+                sender.sendMessage(ChatColor.RED.toString() + "You don't have permission.")
+                playGameSound(sender as Player, SoundType.ERROR)
+                return true
+            }
 
-		// ----------------/sclat check-emblems-------------------
-		if (args[0].equalsIgnoreCase("check-emblems")) {
-			if (args.length != 1)
-				return false;
+            if (!Sclat.conf.emblemsFile.exists()) {
+                sender.sendMessage(ChatColor.RED.toString() + "Old emblem userdata file isn't exists.")
+                return true
+            }
 
-			if (type == CommanderType.MEMBER) {
-				sender.sendMessage(ChatColor.RED + "You don't have permission.");
-				SclatUtil.playGameSound((Player) sender, SoundType.ERROR);
-				return true;
-			}
+            val oldData = YamlConfiguration.loadConfiguration(Sclat.conf.emblemsFile)
+            val dataUuids = oldData.getKeys(false)
+            for (_uuid in dataUuids) {
+                val userEmblems = oldData.getStringList(_uuid)
+                for (emblem in userEmblems) {
+                    Sclat.conf.getEmblemUserdata().set(_uuid + "." + emblem, 1)
+                }
+            }
+            sender.sendMessage(ChatColor.GREEN.toString() + "Migration was succeeded!")
 
-			Map<String, Map<String, Integer>> dataMap = EmblemManager.getDataMap();
-			for (String _key : dataMap.keySet()) {
-				sender.sendMessage(_key);
-				Map<String, Integer> playerUuids = dataMap.getOrDefault(_key, new HashMap<>());
-				playerUuids.forEach((k, v) -> sender.sendMessage("- " + k + ": " + v));
-			}
-		}
-		// --------------------------------------------------------
+            try {
+                Sclat.conf.saveEmblemUserdata()
+                sender.sendMessage(ChatColor.GREEN.toString() + "Successfully to save emblem userdata")
+            } catch (e: IOException) {
+                sender.sendMessage(ChatColor.RED.toString() + "Failed to save emblem userdata")
+                e.printStackTrace()
+            }
+            return true
+        }
 
-		// ----------------------------/sclat mod-----------------------------------
-		if (args[0].equalsIgnoreCase("mod")) {
-			if (args.length != 2)
-				return false;
+        // -------------------------------------------------------
 
-			if (type == CommanderType.MEMBER) {
-				sender.sendMessage(ChatColor.RED + "You don't have permission.");
-				SclatUtil.playGameSound((Player) sender, SoundType.ERROR);
-				return true;
-			}
+        // ----------------/sclat save-emblems--------------------
+        if (args[0].equals("save-emblems", ignoreCase = true)) {
+            if (args.size != 1) return false
 
-			if (sender instanceof Player) {
-				String serverName = args[1];
-				for (ServerStatus ss : ServerStatusManager.serverList) {
-					if (ss.getServerName().equals(serverName)) {
-						List<String> commands = new ArrayList<>();
-						commands.add("mod " + sender.getName());
-						commands.add("stop");
-						// Todo: use redis. fallbacks PluginMessaging
-						EquipmentClient sc = new EquipmentClient(
-								conf.getConfig().getString("EquipShare." + serverName + ".Host"),
-								conf.getConfig().getInt("EquipShare." + serverName + ".Port"), commands);
-						sc.startClient();
+            if (type == CommanderType.MEMBER) {
+                sender.sendMessage(ChatColor.RED.toString() + "You don't have permission.")
+                playGameSound(sender as Player, SoundType.ERROR)
+                return true
+            }
 
-						SclatUtil.sendMessage("Moderatorとして転送中...", MessageType.PLAYER, (Player) sender);
-						SclatUtil.sendMessage("2秒後に転送されます", MessageType.PLAYER, (Player) sender);
-						SclatUtil.playGameSound((Player) sender, SoundType.SUCCESS);
+            try {
+                Sclat.conf.saveEmblemUserdata()
+                sender.sendMessage(ChatColor.GREEN.toString() + "Successfully to save emblem userdata")
+            } catch (e: IOException) {
+                sender.sendMessage(ChatColor.RED.toString() + "Failed to save emblem userdata")
+                e.printStackTrace()
+            }
+            return true
+        }
 
-						BukkitRunnable task = new BukkitRunnable() {
-							@Override
-							public void run() {
-								try {
-									BungeeCordMgr.PlayerSendServer((Player) sender, ss.getServerName());
-									DataMgr.getPlayerData((Player) sender).setServerName(ss.getDisplayName());
-								} catch (Exception ignored) {
-								}
-							}
-						};
-						task.runTaskLater(Sclat.getPlugin(), 40);
-					}
-				}
-				return true;
-			} else {
-				return false;
-			}
+        // -------------------------------------------------------
 
-		}
-		// -------------------------------------------------------------------------
+        // ----------------/sclat check-emblems-------------------
+        if (args[0].equals("check-emblems", ignoreCase = true)) {
+            if (args.size != 1) return false
 
-		// ------------------/sclat ss <status> <server> <flag>---------------------
-		if (args[0].equalsIgnoreCase("ss")) {
-			if (args.length < 4 || Sclat.type != ServerType.LOBBY)
-				return false;
+            if (type == CommanderType.MEMBER) {
+                sender.sendMessage(ChatColor.RED.toString() + "You don't have permission.")
+                playGameSound(sender as Player, SoundType.ERROR)
+                return true
+            }
 
-			if (type == CommanderType.MEMBER) {
-				sender.sendMessage(ChatColor.RED + "You don't have permission.");
-				SclatUtil.playGameSound((Player) sender, SoundType.ERROR);
-				return true;
-			}
+            val dataMap = EmblemManager.getDataMap()
+            for (_key in dataMap.keys) {
+                sender.sendMessage(_key)
+                val playerUuids = dataMap.getOrDefault(_key, HashMap<String?, Int?>())
+                playerUuids.forEach { (k: String?, v: Int?) -> sender.sendMessage("- " + k + ": " + v) }
+            }
+        }
 
-			if (args[1].equals("mt")) {
-				String server = args[2];
-				for (ServerStatus ss : ServerStatusManager.serverList) {
-					if (ss.getServerName().equals(server)) {
-						ss.setMaintenance(args[3].equals("true"));
-						sender.sendMessage("Switched " + ss.getDisplayName() + " §rto "
-								+ (args[3].equals("true") ? "§cMAINTENANCE" : "§6NORMAL"));
-						return true;
-					}
-				}
-			}
-		}
-		// -------------------------------------------------------------------------
+        // --------------------------------------------------------
 
-		// ---------------------/sclat tutorial <option> <server>-------------------
-		if (args[0].equalsIgnoreCase("tutorial")) {
-			if (args.length < 2 || Sclat.type != ServerType.LOBBY)
-				return false;
+        // ----------------------------/sclat mod-----------------------------------
+        if (args[0].equals("mod", ignoreCase = true)) {
+            if (args.size != 2) return false
 
-			if (type == CommanderType.MEMBER) {
-				sender.sendMessage(ChatColor.RED + "You don't have permission.");
-				SclatUtil.playGameSound((Player) sender, SoundType.ERROR);
-				return true;
-			}
+            if (type == CommanderType.MEMBER) {
+                sender.sendMessage(ChatColor.RED.toString() + "You don't have permission.")
+                playGameSound(sender as Player, SoundType.ERROR)
+                return true
+            }
 
-			if (args[1].equals("add")) {
-				if (args.length < 3)
-					return false;
-				String server = args[2];
-				List<String> list = Sclat.tutorialServers.getConfig().getStringList("server-list");
-				if (!list.contains(server)) {
-					list.add(server);
-					Sclat.tutorialServers.getConfig().set("server-list", list);
-				} else {
-					sender.sendMessage(ChatColor.RED + "This server is already exist.");
-				}
-				return true;
-			} else if (args[1].equals("list")) {
-				List<String> list = Sclat.tutorialServers.getConfig().getStringList("server-list");
-				sender.sendMessage(list.toString());
-				return true;
-			} else if (args[1].equals("reload")) {
-				Sclat.tutorialServers.reloadConfig();
-				return true;
-			}
-		}
-		// -------------------------------------------------------------------------
-		return false;
-	}
+            if (sender is Player) {
+                val serverName: String? = args[1]
+                for (ss in ServerStatusManager.serverList) {
+                    if (ss.getServerName() == serverName) {
+                        val commands: MutableList<String?> = ArrayList<String?>()
+                        commands.add("mod " + sender.getName())
+                        commands.add("stop")
+                        // Todo: use redis. fallbacks PluginMessaging
+                        val sc =
+                            EquipmentClient(
+                                Sclat.conf.getConfig().getString("EquipShare." + serverName + ".Host"),
+                                Sclat.conf.getConfig().getInt("EquipShare." + serverName + ".Port"),
+                                commands,
+                            )
+                        sc.startClient()
 
-	@Override
-	public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias,
-			String[] args) {
+                        sendMessage("Moderatorとして転送中...", MessageType.PLAYER, sender)
+                        sendMessage("2秒後に転送されます", MessageType.PLAYER, sender)
+                        playGameSound(sender, SoundType.SUCCESS)
 
-		// ------------------------Check sender type-----------------------------
-		CommanderType type = CommanderType.CONSOLE;
-		if (sender instanceof Player) {
-			if (sender.hasPermission("sclat.admin"))
-				type = CommanderType.ADMIN;
-			else
-				type = CommanderType.MEMBER;
-		}
-		// ----------------------------------------------------------------------
+                        val task: BukkitRunnable =
+                            object : BukkitRunnable() {
+                                override fun run() {
+                                    try {
+                                        BungeeCordMgr.PlayerSendServer(sender, ss.getServerName())
+                                        DataMgr.getPlayerData(sender).setServerName(ss.getDisplayName())
+                                    } catch (ignored: Exception) {
+                                    }
+                                }
+                            }
+                        task.runTaskLater(Sclat.getPlugin(), 40)
+                    }
+                }
+                return true
+            } else {
+                return false
+            }
+        }
 
-		// -----------------------------Tab complete-----------------------------
-		if (args.length == 1) {
-			List<String> list = new ArrayList<>();
+        // -------------------------------------------------------------------------
 
-			list.add("help");
+        // ------------------/sclat ss <status> <server> <flag>---------------------
+        if (args[0].equals("ss", ignoreCase = true)) {
+            if (args.size < 4 || Sclat.type != ServerType.LOBBY) return false
 
-			if (type != CommanderType.MEMBER) {
-				list.add("setUpdateRate");
-				list.add("sur");
-				list.add("fly");
-				list.add("ss");
-				list.add("tutorial");
-				list.add("refresh-config");
-				list.add("migrate-emblems");
-				list.add("save-emblems");
-				list.add("check-emblems");
-			}
+            if (type == CommanderType.MEMBER) {
+                sender.sendMessage(ChatColor.RED.toString() + "You don't have permission.")
+                playGameSound(sender as Player, SoundType.ERROR)
+                return true
+            }
 
-			return list;
+            if (args[1] == "mt") {
+                val server: String? = args[2]
+                for (ss in ServerStatusManager.serverList) {
+                    if (ss.getServerName() == server) {
+                        ss.setMaintenance(args[3] == "true")
+                        sender.sendMessage(
+                            (
+                                "Switched " + ss.getDisplayName() + " §rto " +
+                                    (if (args[3] == "true") "§cMAINTENANCE" else "§6NORMAL")
+                                ),
+                        )
+                        return true
+                    }
+                }
+            }
+        }
 
-		} else if (args.length == 2) {
-			List<String> list = new ArrayList<>();
-			if (type != CommanderType.MEMBER) {
-				if (args[1].equalsIgnoreCase("refresh-config")) {
-					list.add("emblemuserdata");
-					list.add("emblemloredata");
-				}
-			}
-			return list;
-		}
-		return null;
-		// ----------------------------------------------------------------------
-	}
+        // -------------------------------------------------------------------------
+
+        // ---------------------/sclat tutorial <option> <server>-------------------
+        if (args[0].equals("tutorial", ignoreCase = true)) {
+            if (args.size < 2 || Sclat.type != ServerType.LOBBY) return false
+
+            if (type == CommanderType.MEMBER) {
+                sender.sendMessage(ChatColor.RED.toString() + "You don't have permission.")
+                playGameSound(sender as Player, SoundType.ERROR)
+                return true
+            }
+
+            if (args[1] == "add") {
+                if (args.size < 3) return false
+                val server: String? = args[2]
+                val list = Sclat.tutorialServers.getConfig()!!.getStringList("server-list")
+                if (!list.contains(server)) {
+                    list.add(server)
+                    Sclat.tutorialServers.getConfig()!!.set("server-list", list)
+                } else {
+                    sender.sendMessage(ChatColor.RED.toString() + "This server is already exist.")
+                }
+                return true
+            } else if (args[1] == "list") {
+                val list = Sclat.tutorialServers.getConfig()!!.getStringList("server-list")
+                sender.sendMessage(list.toString())
+                return true
+            } else if (args[1] == "reload") {
+                Sclat.tutorialServers.reloadConfig()
+                return true
+            }
+        }
+        // -------------------------------------------------------------------------
+        return false
+    }
+
+    override fun onTabComplete(
+        sender: CommandSender,
+        command: Command,
+        alias: String,
+        args: Array<String?>,
+    ): MutableList<String?>? {
+        // ------------------------Check sender type-----------------------------
+
+        var type = CommanderType.CONSOLE
+        if (sender is Player) {
+            if (sender.hasPermission("sclat.admin")) {
+                type = CommanderType.ADMIN
+            } else {
+                type = CommanderType.MEMBER
+            }
+        }
+
+        // ----------------------------------------------------------------------
+
+        // -----------------------------Tab complete-----------------------------
+        if (args.size == 1) {
+            val list: MutableList<String?> = ArrayList<String?>()
+
+            list.add("help")
+
+            if (type != CommanderType.MEMBER) {
+                list.add("setUpdateRate")
+                list.add("sur")
+                list.add("fly")
+                list.add("ss")
+                list.add("tutorial")
+                list.add("refresh-config")
+                list.add("migrate-emblems")
+                list.add("save-emblems")
+                list.add("check-emblems")
+            }
+
+            return list
+        } else if (args.size == 2) {
+            val list: MutableList<String?> = ArrayList<String?>()
+            if (type != CommanderType.MEMBER) {
+                if (args[1].equals("refresh-config", ignoreCase = true)) {
+                    list.add("emblemuserdata")
+                    list.add("emblemloredata")
+                }
+            }
+            return list
+        }
+        return null
+        // ----------------------------------------------------------------------
+    }
 }

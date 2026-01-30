@@ -11,7 +11,7 @@ import be4rjp.sclat.api.async.AsyncThreadManager;
 import be4rjp.sclat.api.config.CustomConfig;
 import be4rjp.sclat.api.holo.PlayerHolograms;
 import be4rjp.sclat.api.wiremesh.Wiremesh;
-import be4rjp.sclat.commands.sclatCommandExecutor;
+import be4rjp.sclat.commands.SclatCommandExecutor;
 import be4rjp.sclat.config.Config;
 import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.data.MapData;
@@ -40,6 +40,8 @@ import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteStreams;
+import java.util.ArrayList;
+import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -54,9 +56,6 @@ import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.ScoreboardManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  *
@@ -184,8 +183,8 @@ public class Sclat extends JavaPlugin implements PluginMessageListener {
 
 		// ------------------------RegisteringCommands------------------------
 		getLogger().info("Registering Commands...");
-		getCommand("sclat").setExecutor(new sclatCommandExecutor());
-		getCommand("sclat").setTabCompleter(new sclatCommandExecutor());
+		getCommand("sclat").setExecutor(new SclatCommandExecutor());
+		getCommand("sclat").setTabCompleter(new SclatCommandExecutor());
 		// -------------------------------------------------------------------
 
 		// ------------------------Setup from config--------------------------
