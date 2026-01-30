@@ -10,6 +10,7 @@ on:
       - '**/*.java'
       - '**/*.kt'
       - '**/*.gradle'
+      - '**/*.gradle.kts'
       - 'gradle/**'
       - 'resources/**'
   pull_request:
@@ -21,6 +22,7 @@ on:
       - '**/*.java'
       - '**/*.kt'
       - '**/*.gradle'
+      - '**/*.gradle.kts'
       - 'gradle/**'
       - 'resources/**'
   workflow_dispatch:

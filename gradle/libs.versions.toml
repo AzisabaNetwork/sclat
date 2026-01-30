@@ -9,9 +9,7 @@ blockstudio = "-SNAPSHOT"
 dadadachecker = "1.0.0"
 noteblockapi = "1.6.3"
 lunachat = "3.0.16"
-bukkit = "1.14.4-R0.1-SNAPSHOT"
 spigot = "1.14.4-R0.1-SNAPSHOT"
-spigotApi = "1.14.4-R0.1-SNAPSHOT"
 cloudPaper = "2.0.0-beta.10"
 jspecify = "1.0.0"
 
@@ -29,8 +27,6 @@ blockstudio = { module = "com.github.Be4rJP:BlockStudio", version.ref = "blockst
 dadadachecker = { module = "com.github.Be4rJP:DADADAChecker", version.ref = "dadadachecker" }
 noteblockapi = { module = "com.github.koca2000:NoteBlockAPI", version.ref = "noteblockapi" }
 lunachat = { module = "com.github.ucchyocean:LunaChat", version.ref = "lunachat" }
-bukkit = { module = "org.bukkit:bukkit", version.ref = "bukkit" }
 spigot = { module = "org.spigotmc:spigot", version.ref = "spigot" }
-spigotApi = { module = "org.spigotmc:spigot-api", version.ref = "spigotApi" }
 cloudPaper = { module = "org.incendo:cloud-paper", version.ref = "cloudPaper" }
 jspecify = { module = "org.jspecify:jspecify", version.ref = "jspecify" }
