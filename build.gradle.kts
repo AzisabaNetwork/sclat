@@ -40,7 +40,7 @@ dependencies {
 }
 
 // Project Settings
-val targetJavaVersion: Int = 8
+val targetJavaVersion: Int = 11
 val defaultEncoding: String = "UTF-8"
 
 kotlin {
