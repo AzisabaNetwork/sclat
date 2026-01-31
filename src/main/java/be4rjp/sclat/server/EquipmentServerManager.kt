@@ -1,57 +1,62 @@
-package be4rjp.sclat.server;
+package be4rjp.sclat.server
 
-import be4rjp.sclat.Sclat;
-import be4rjp.sclat.api.SclatUtil;
-import be4rjp.sclat.data.DataMgr;
-import be4rjp.sclat.manager.PlayerStatusMgr;
-import org.bukkit.entity.Player;
+import be4rjp.sclat.Sclat
+import be4rjp.sclat.api.SclatUtil
+import be4rjp.sclat.data.DataMgr.getPlayerData
+import be4rjp.sclat.data.DataMgr.getWeaponClass
+import be4rjp.sclat.manager.PlayerStatusMgr
 
-import java.util.ArrayList;
-import java.util.List;
+object EquipmentServerManager {
+    var commands: MutableList<String> = ArrayList<String>()
 
-public class EquipmentServerManager {
+    fun addEquipmentCommand(command: String?) {
+        commands.add(command!!)
+    }
 
-	public static List<String> commands = new ArrayList<>();
+    @JvmStatic
+    fun doCommands() {
+        for (cmd in commands) {
+            val args: Array<String?>? = cmd.split(" ".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
 
-	public static void addEquipmentCommand(String command) {
-		commands.add(command);
-	}
+            when (args!![0]) {
+                "set" -> {
+                    // add [statusName] [number or name] [uuid]
+                    if (args.size == 4) {
+                        if (args[3]!!.length == 36) {
+                            when (args[1]) {
+                                "weapon" -> for (player in Sclat
+                                    .getPlugin()
+                                    .getServer()
+                                    .getOnlinePlayers()) {
+                                    if (player
+                                            .getUniqueId()
+                                            .toString() == args[3]
+                                    ) {
+                                        getPlayerData(player)!!
+                                            .setWeaponClass(getWeaponClass(args[2]))
+                                    }
+                                }
 
-	public static void doCommands() {
-		for (String cmd : commands) {
-			String args[] = cmd.split(" ");
+                                "gear" -> for (player in Sclat
+                                    .getPlugin()
+                                    .getServer()
+                                    .getOnlinePlayers()) {
+                                    if (player.getUniqueId().toString() == args[3] &&
+                                        SclatUtil.isNumber(args[2]!!)
+                                    ) {
+                                        getPlayerData(player)!!.gearNumber = args[2]!!.toInt()
+                                    }
+                                }
 
-			switch (args[0]) {
-				case "set" : { // add [statusName] [number or name] [uuid]
-					if (args.length == 4) {
-						if (args[3].length() == 36) {
-							switch (args[1]) {
-								case "weapon" :
-									for (Player player : Sclat.getPlugin().getServer().getOnlinePlayers())
-										if (player.getUniqueId().toString().equals(args[3]))
-											DataMgr.getPlayerData(player)
-													.setWeaponClass(DataMgr.getWeaponClass(args[2]));
-									break;
-								case "gear" :
-									for (Player player : Sclat.getPlugin().getServer().getOnlinePlayers())
-										if (player.getUniqueId().toString().equals(args[3])
-												&& SclatUtil.isNumber(args[2]))
-											DataMgr.getPlayerData(player).gearNumber = Integer.parseInt(args[2]);
-									break;
-								case "rank" :
-									PlayerStatusMgr.setRank(args[3], Integer.parseInt(args[2]));
-									break;
-								case "lv" :
-									PlayerStatusMgr.setLv(args[3], Integer.parseInt(args[2]));
-									break;
-							}
-						}
-					}
-					break;
-				}
-			}
-		}
-		commands.clear();
-	}
+                                "rank" -> PlayerStatusMgr.setRank(args[3], args[2]!!.toInt())
 
+                                "lv" -> PlayerStatusMgr.setLv(args[3], args[2]!!.toInt())
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        commands.clear()
+    }
 }

@@ -1,84 +1,80 @@
-package be4rjp.sclat.server;
+package be4rjp.sclat.server
 
-import be4rjp.sclat.Sclat;
-import org.bukkit.scheduler.BukkitRunnable;
+import be4rjp.sclat.Sclat
+import org.bukkit.scheduler.BukkitRunnable
+import java.io.BufferedReader
+import java.io.IOException
+import java.io.InputStreamReader
+import java.io.PrintWriter
+import java.net.Socket
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.net.Socket;
-import java.util.ArrayList;
-import java.util.List;
+class EquipmentClient(private val host: String?, private val port: Int, commands: MutableList<String?>) {
+    private var commands: MutableList<String?> = ArrayList<String?>()
 
-public class EquipmentClient {
-	private List<String> commands = new ArrayList<>();
+    private val task: BukkitRunnable
 
-	private final String host;
-	private final int port;
+    init {
+        this.commands = commands
+        this.task = object : BukkitRunnable() {
+            override fun run() {
+                var reader: BufferedReader? = null
 
-	private final BukkitRunnable task;
+                try {
+                    Socket(
+                        host,
+                        port,
+                    ).use { cSocket ->
+                        PrintWriter(cSocket.getOutputStream(), true).use { writer ->
+                            try {
+                                // System.out.println("test");
+                                // IPアドレスとポート番号を指定してクライアント側のソケットを作成
 
-	public EquipmentClient(String host, int port, List<String> commands) {
-		this.host = host;
-		this.port = port;
-		this.commands = commands;
-		this.task = new BukkitRunnable() {
-			@Override
-			public void run() {
-				BufferedReader reader = null;
+                                // クライアント側からサーバへの送信用
 
-				try (Socket cSocket = new Socket(host, port);
-						PrintWriter writer = new PrintWriter(cSocket.getOutputStream(), true)) {
-					try {
-						// System.out.println("test");
-						// IPアドレスとポート番号を指定してクライアント側のソケットを作成
+                                // サーバ側からの受取用
 
-						// クライアント側からサーバへの送信用
+                                reader = BufferedReader(InputStreamReader(cSocket.getInputStream()))
 
-						// サーバ側からの受取用
-						reader = new BufferedReader(new InputStreamReader(cSocket.getInputStream()));
+                                // 命令送信ループ
+                                var cmd: String? = null
+                                while (true) {
+                                    if (!commands.isEmpty()) {
+                                        cmd = commands.get(0)
 
-						// 命令送信ループ
-						String cmd = null;
-						while (true) {
-							if (!commands.isEmpty()) {
+                                        // 送信用の文字を送信
+                                        writer.println(cmd)
 
-								cmd = commands.get(0);
+                                        // stopの入力でループを抜ける
+                                        if (cmd == "stop") {
+                                            break
+                                        }
 
-								// 送信用の文字を送信
-								writer.println(cmd);
+                                        // サーバ側からの受取の結果を表示
+                                        // System.out.println("result：" + reader.readLine());
+                                        commands.removeAt(0)
+                                    } else {
+                                        break
+                                    }
+                                }
+                            } catch (e: Exception) {
+                                e.printStackTrace()
+                            }
+                        }
+                    }
+                } catch (e: IOException) {
+                    e.printStackTrace()
+                } finally {
+                    println("Client is stopped!")
+                }
+            }
+        }
+    }
 
-								// stopの入力でループを抜ける
-								if (cmd.equals("stop")) {
-									break;
-								}
+    fun startClient() {
+        this.task.runTaskAsynchronously(Sclat.getPlugin())
+    }
 
-								// サーバ側からの受取の結果を表示
-								// System.out.println("result：" + reader.readLine());
-
-								commands.remove(0);
-							} else {
-								break;
-							}
-						}
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-				} catch (IOException e) {
-					e.printStackTrace();
-				} finally {
-					System.out.println("Client is stopped!");
-				}
-			}
-		};
-	}
-
-	public void startClient() {
-		this.task.runTaskAsynchronously(Sclat.getPlugin());
-	}
-
-	public void addCommand(String command) {
-		commands.add(command);
-	}
+    fun addCommand(command: String?) {
+        commands.add(command)
+    }
 }

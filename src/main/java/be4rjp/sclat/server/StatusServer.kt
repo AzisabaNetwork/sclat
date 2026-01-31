@@ -1,241 +1,228 @@
-package be4rjp.sclat.server;
+package be4rjp.sclat.server
 
-import be4rjp.sclat.Sclat;
-import be4rjp.sclat.api.MessageType;
-import be4rjp.sclat.api.SclatUtil;
-import be4rjp.sclat.api.SoundType;
-import be4rjp.sclat.data.ServerStatus;
-import be4rjp.sclat.manager.PlayerReturnManager;
-import be4rjp.sclat.manager.PlayerStatusMgr;
-import be4rjp.sclat.manager.RankMgr;
-import be4rjp.sclat.manager.ServerStatusManager;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.net.ServerSocket;
-import java.net.Socket;
+import be4rjp.sclat.Sclat
+import be4rjp.sclat.api.MessageType
+import be4rjp.sclat.api.SclatUtil
+import be4rjp.sclat.api.SclatUtil.sendMessage
+import be4rjp.sclat.api.SoundType
+import be4rjp.sclat.manager.PlayerReturnManager
+import be4rjp.sclat.manager.PlayerStatusMgr
+import be4rjp.sclat.manager.RankMgr
+import be4rjp.sclat.manager.ServerStatusManager
+import org.bukkit.entity.Player
+import java.io.BufferedReader
+import java.io.IOException
+import java.io.InputStreamReader
+import java.io.PrintWriter
+import java.net.ServerSocket
+import java.net.Socket
 
-public class StatusServer extends Thread {
+class StatusServer( // private List<String> commands = new ArrayList<>();
+    private val port: Int,
+) : Thread() {
+    private var sSocket: ServerSocket? = null
 
-	private ServerSocket sSocket = null;
+    override fun run() {
+        try {
+            // ソケットを作成
+            sSocket = ServerSocket(port)
+            println("Waiting for status client...")
 
-	// private List<String> commands = new ArrayList<>();
+            // クライアントからの要求待ち
+            while (true) {
+                val socket = sSocket!!.accept()
+                EchoThread(socket).start()
 
-	private final int port;
-
-	public StatusServer(int port) {
-		this.port = port;
-	}
-
-	public void run() {
-		try {
-			// ソケットを作成
-			sSocket = new ServerSocket(port);
-			System.out.println("Waiting for status client...");
-
-			// クライアントからの要求待ち
-			while (true) {
-				Socket socket = sSocket.accept();
-				new EchoThread(socket).start();
-
-				try {
-					Thread.sleep(100);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				if (sSocket != null)
-					sSocket.close();
-				System.out.println("Status server is stopped!");
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-	}
+                try {
+                    sleep(100)
+                } catch (e: InterruptedException) {
+                    e.printStackTrace()
+                }
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        } finally {
+            try {
+                if (sSocket != null) sSocket!!.close()
+                println("Status server is stopped!")
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
+        }
+    }
 }
 
 // 非同期スレッド
-class EchoThread extends Thread {
+internal class EchoThread(socket: Socket) : Thread() {
+    private val socket: Socket?
 
-	private Socket socket;
+    init {
+        this.socket = socket
+        println("Connected " + socket.getRemoteSocketAddress())
+    }
 
-	public EchoThread(Socket socket) {
-		this.socket = socket;
-		System.out.println("Connected " + socket.getRemoteSocketAddress());
-	}
+    override fun run() {
+        try {
+            println("Waiting for commands...")
+            // クライアントからの受取用
+            val reader = BufferedReader(InputStreamReader(socket!!.getInputStream()))
 
-	public void run() {
-		try {
-			System.out.println("Waiting for commands...");
-			// クライアントからの受取用
-			BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            // サーバーからクライアントへの送信用
+            val writer = PrintWriter(socket.getOutputStream(), true)
 
-			// サーバーからクライアントへの送信用
-			PrintWriter writer = new PrintWriter(socket.getOutputStream(), true);
+            var cmd: String? = null
+            // 命令受け取り用ループ
+            while (true) {
+                if ((reader.readLine().also { cmd = it }) != null) {
+                    if (cmd == "stop") {
+                        socket.close()
+                        println("Socket closed.")
+                        break
+                    }
 
-			String cmd = null;
-			// 命令受け取り用ループ
-			while (true) {
-				if ((cmd = reader.readLine()) != null) {
+                    println(cmd)
 
-					if (cmd.equals("stop")) {
-						socket.close();
-						System.out.println("Socket closed.");
-						break;
-					}
+                    val args: Array<String?>? = cmd!!.split(" ".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
 
-					System.out.println(cmd);
+                    if (args!![0] == "return" && args.size == 2) {
+                        if (args[1]!!.length == 36) {
+                            PlayerReturnManager.addPlayerReturn(args[1])
+                        }
+                    }
 
-					String args[] = cmd.split(" ");
+                    when (args[0]) {
+                        "get" -> {
+                            if (args.size == 3) {
+                            }
+                        }
 
-					if (args[0].equals("return") && args.length == 2) {
-						if (args[1].length() == 36) {
-							PlayerReturnManager.addPlayerReturn(args[1]);
-						}
-					}
+                        "add" -> {
+                            // add [statusName] [number] [uuid]
+                            if (args.size == 4) {
+                                if (SclatUtil.isNumber(args[2]!!) && args[3]!!.length == 36) {
+                                    when (args[1]) {
+                                        "money" -> PlayerStatusMgr.addMoney(args[3], args[2]!!.toInt())
+                                        "rank" -> RankMgr.addPlayerRankPoint(args[3], args[2]!!.toInt())
+                                        "level" -> PlayerStatusMgr.addLv(args[3], args[2]!!.toInt())
+                                        "kill" -> PlayerStatusMgr.addKill(args[3], args[2]!!.toInt())
+                                        "paint" -> PlayerStatusMgr.addPaint(args[3], args[2]!!.toInt())
+                                        "ticket" -> PlayerStatusMgr.addTicketUuid(args[3], args[2]!!.toInt())
+                                    }
+                                }
+                            }
+                        }
 
-					switch (args[0]) {
-						case "get" : {
-							if (args.length == 3) {
+                        "started" -> {
+                            if (args.size == 3) {
+                                for (ss in ServerStatusManager.serverList) {
+                                    if (ss.serverName == args[1]) {
+                                        ss.runningMatch = true
+                                        ss.waitingEndTime = 0
+                                        ss.matchStartTime = args[2]!!.toLong()
+                                    }
+                                }
+                            }
+                        }
 
-							}
-							break;
-						}
-						case "add" : { // add [statusName] [number] [uuid]
-							if (args.length == 4) {
-								if (SclatUtil.isNumber(args[2]) && args[3].length() == 36) {
-									switch (args[1]) {
-										case "money" :
-											PlayerStatusMgr.addMoney(args[3], Integer.parseInt(args[2]));
-											break;
-										case "rank" :
-											RankMgr.addPlayerRankPoint(args[3], Integer.parseInt(args[2]));
-											break;
-										case "level" :
-											PlayerStatusMgr.addLv(args[3], Integer.parseInt(args[2]));
-											break;
-										case "kill" :
-											PlayerStatusMgr.addKill(args[3], Integer.parseInt(args[2]));
-											break;
-										case "paint" :
-											PlayerStatusMgr.addPaint(args[3], Integer.parseInt(args[2]));
-											break;
-										case "ticket" :
-											PlayerStatusMgr.addTicketUuid(args[3], Integer.parseInt(args[2]));
-											break;
-									}
-								}
-							}
-							break;
-						}
-						case "started" : {
-							if (args.length == 3) {
-								for (ServerStatus ss : ServerStatusManager.serverList) {
-									if (ss.serverName.equals(args[1])) {
-										ss.setRunningMatch(true);
-										ss.waitingEndTime = 0;
-										ss.matchStartTime = Long.parseLong(args[2]);
-									}
-								}
-							}
-							break;
-						}
-						case "cd" : {
-							if (args.length == 3) {
-								for (ServerStatus ss : ServerStatusManager.serverList) {
-									if (ss.serverName.equals(args[1])) {
-										ss.waitingEndTime = Long.parseLong(args[2]);
-										SclatUtil.sendMessage(ss.displayName + "§aの試合待機が開始されました！",
-												MessageType.ALL_PLAYER);
-										SclatUtil.sendMessage(
-												"§a§l" + (ss.waitingEndTime - (System.currentTimeMillis() / 1000))
-														+ "§b秒後に開始されます",
-												MessageType.ALL_PLAYER);
-										Sclat.getPlugin().getServer().getOnlinePlayers()
-												.forEach(player -> SclatUtil.playGameSound(player, SoundType.SUCCESS));
-									}
-								}
-							}
-							break;
-						}
-						case "cdc" : {
-							if (args.length == 2) {
-								for (ServerStatus ss : ServerStatusManager.serverList) {
-									if (ss.serverName.equals(args[1])) {
-										ss.waitingEndTime = 0;
-									}
-								}
-							}
-							break;
-						}
-						case "stopped" : {
-							if (args.length == 2) {
-								for (ServerStatus ss : ServerStatusManager.serverList) {
-									if (ss.serverName.equals(args[1])) {
-										ss.setRunningMatch(false);
-										ss.matchStartTime = 0;
-									}
-								}
-							}
-							break;
-						}
-						case "restart" : {
-							if (args.length == 2) {
-								for (ServerStatus ss : ServerStatusManager.serverList) {
-									if (ss.serverName.equals(args[1])) {
-										ss.setRestartingServer(true);
-									}
-								}
-							}
-							break;
-						}
-						case "restarted" : {
-							if (args.length == 2) {
-								for (ServerStatus ss : ServerStatusManager.serverList) {
-									if (ss.serverName.equals(args[1])) {
-										ss.setRestartingServer(false);
-									}
-								}
-							}
-							break;
-						}
-						case "map" : {
-							if (args.length == 3) {
-								for (ServerStatus ss : ServerStatusManager.serverList) {
-									if (ss.serverName.equals(args[1])) {
-										ss.mapName = args[2];
-									}
-								}
-							}
-							break;
-						}
-						case "tutorial" : {
-							if (args.length == 2) {
-								PlayerStatusMgr.setTutorialState(args[1], 1);
-							}
-							break;
-						}
-					}
-				} else {
-					break;
-				}
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				if (socket != null) {
-					socket.close();
-				}
-			} catch (IOException e) {
-			}
-			System.out.println("Disconnected " + socket.getRemoteSocketAddress());
-		}
-	}
+                        "cd" -> {
+                            if (args.size == 3) {
+                                for (ss in ServerStatusManager.serverList) {
+                                    if (ss.serverName == args[1]) {
+                                        ss.waitingEndTime = args[2]!!.toLong()
+                                        sendMessage(
+                                            ss.displayName + "§aの試合待機が開始されました！",
+                                            MessageType.ALL_PLAYER,
+                                        )
+                                        sendMessage(
+                                            (
+                                                "§a§l" + (ss.waitingEndTime - (System.currentTimeMillis() / 1000)) +
+                                                    "§b秒後に開始されます"
+                                                ),
+                                            MessageType.ALL_PLAYER,
+                                        )
+                                        Sclat.getPlugin().getServer().getOnlinePlayers()
+                                            .forEach { player: Player? ->
+                                                SclatUtil.playGameSound(
+                                                    player!!,
+                                                    SoundType.SUCCESS,
+                                                )
+                                            }
+                                    }
+                                }
+                            }
+                        }
 
+                        "cdc" -> {
+                            if (args.size == 2) {
+                                for (ss in ServerStatusManager.serverList) {
+                                    if (ss.serverName == args[1]) {
+                                        ss.waitingEndTime = 0
+                                    }
+                                }
+                            }
+                        }
+
+                        "stopped" -> {
+                            if (args.size == 2) {
+                                for (ss in ServerStatusManager.serverList) {
+                                    if (ss.serverName == args[1]) {
+                                        ss.runningMatch = false
+                                        ss.matchStartTime = 0
+                                    }
+                                }
+                            }
+                        }
+
+                        "restart" -> {
+                            if (args.size == 2) {
+                                for (ss in ServerStatusManager.serverList) {
+                                    if (ss.serverName == args[1]) {
+                                        ss.restartingServer = true
+                                    }
+                                }
+                            }
+                        }
+
+                        "restarted" -> {
+                            if (args.size == 2) {
+                                for (ss in ServerStatusManager.serverList) {
+                                    if (ss.serverName == args[1]) {
+                                        ss.restartingServer = false
+                                    }
+                                }
+                            }
+                        }
+
+                        "map" -> {
+                            if (args.size == 3) {
+                                for (ss in ServerStatusManager.serverList) {
+                                    if (ss.serverName == args[1]) {
+                                        ss.mapName = args[2]
+                                    }
+                                }
+                            }
+                        }
+
+                        "tutorial" -> {
+                            if (args.size == 2) {
+                                PlayerStatusMgr.setTutorialState(args[1], 1)
+                            }
+                        }
+                    }
+                } else {
+                    break
+                }
+            }
+        } catch (e: IOException) {
+            e.printStackTrace()
+        } finally {
+            try {
+                if (socket != null) {
+                    socket.close()
+                }
+            } catch (e: IOException) {
+            }
+            println("Disconnected " + socket!!.getRemoteSocketAddress())
+        }
+    }
 }

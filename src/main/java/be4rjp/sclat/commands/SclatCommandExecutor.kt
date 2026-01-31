@@ -299,7 +299,7 @@ class SclatCommandExecutor :
             if (args[1] == "add") {
                 if (args.size < 3) return false
                 val server: String? = args[2]
-                val list = Sclat.tutorialServers?.getConfig()!!!!.getStringList("server-list")
+                val list = Sclat.tutorialServers?.getConfig()!!.getStringList("server-list")
                 if (!list.contains(server)) {
                     list.add(server)
                     Sclat.tutorialServers?.getConfig()!!.set("server-list", list)
