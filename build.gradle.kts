@@ -2,7 +2,7 @@
 plugins {
     `java-library`
     `maven-publish`
-    alias(libs.plugins.spotless)
+    alias(libs.plugins.ktlint)
     alias(libs.plugins.shadow)
     alias(libs.plugins.kotlin.jvm)
 }
@@ -29,7 +29,6 @@ dependencies {
     compileOnly(libs.spigot)
     compileOnly(libs.noteblockapi)
     compileOnly(libs.lunachat)
-//    compileOnly(libs.protocolLib)
     compileOnly(files("libs/ProtocolLib.jar"))
     compileOnly(libs.dadadachecker)
     compileOnly(libs.blockstudio)
@@ -47,31 +46,9 @@ kotlin {
     jvmToolchain(targetJavaVersion)
 }
 
-// Java Version Setup
-java {
-    val javaVersion = JavaVersion.toVersion(targetJavaVersion)
-    sourceCompatibility = javaVersion
-    targetCompatibility = javaVersion
-    if (JavaVersion.current() < javaVersion) {
-        toolchain.languageVersion = JavaLanguageVersion.of(targetJavaVersion)
-    }
-}
-
 tasks {
     build {
         dependsOn(shadowJar)
-    }
-
-    compileJava {
-        options.encoding = defaultEncoding
-
-        if (targetJavaVersion >= 10 || JavaVersion.current().isJava10Compatible) {
-            options.release.set(targetJavaVersion)
-        }
-    }
-
-    javadoc {
-        options.encoding = defaultEncoding
     }
 
     shadowJar {
@@ -107,29 +84,5 @@ publishing {
                     uri("https://repo.azisaba.net/repository/maven-releases/")
                 }
         }
-    }
-}
-
-spotless {
-    format("misc") {
-        target(".gitignore")
-        trimTrailingWhitespace()
-        indentWithSpaces(4)
-        endWithNewline()
-    }
-    java {
-        target("src/main/java/**/*.java", "src/test/java/**/*.java")
-        indentWithSpaces(4)
-        toggleOffOn()
-        removeUnusedImports()
-        endWithNewline()
-        eclipse()
-    }
-    kotlin {
-        ktlint()
-        target("src/main/java/**/*.kt", "src/main/kotlin/**/*.kt")
-        endWithNewline()
-        trimTrailingWhitespace()
-        indentWithSpaces(4)
     }
 }
