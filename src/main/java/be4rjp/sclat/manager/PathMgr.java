@@ -7,6 +7,7 @@ import be4rjp.sclat.api.team.Team;
 import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.data.Match;
 import be4rjp.sclat.data.Path;
+import java.util.ArrayList;
 import net.minecraft.server.v1_14_R1.EnumItemSlot;
 import net.minecraft.server.v1_14_R1.PacketPlayOutEntityEquipment;
 import org.bukkit.Location;
@@ -21,8 +22,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
-
-import java.util.ArrayList;
 
 /**
  *
@@ -39,7 +38,7 @@ public class PathMgr {
 			public void run() {
 				if (c == 0) {
 					drop = p.getWorld().dropItem(from.clone().add(0, -0.25, 0),
-							new ItemStack(DataMgr.getPlayerData(p).team.getTeamColor().getWool()));
+							new ItemStack(DataMgr.getPlayerData(p).team.getTeamColor().wool));
 					drop.setGravity(false);
 					drop.setCustomName(String.valueOf(Sclat.getNotDuplicateNumber()));
 					// vec = (to.subtract(from)).toVector().normalize();
@@ -169,7 +168,7 @@ public class PathMgr {
 									((CraftPlayer) player).getHandle().playerConnection.sendPacket(
 											new PacketPlayOutEntityEquipment(path1.getArmorStand().getEntityId(),
 													EnumItemSlot.HEAD, CraftItemStack
-															.asNMSCopy(new ItemStack(team.getTeamColor().getGlass()))));
+															.asNMSCopy(new ItemStack(team.getTeamColor().glass))));
 								}
 							}
 						}

@@ -17,7 +17,6 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-
 import static be4rjp.sclat.Sclat.conf;
 
 /**
@@ -90,43 +89,43 @@ public class MainWeaponMgr {
 			itemMeta.setDisplayName(weaponname);
 			is.setItemMeta(itemMeta);
 			mw.setWeaponItemStack(is);
-			mw.setRandom(random);
+			mw.random = (random);
 			mw.setDistanceTick(distick);
 			mw.setShootSpeed(shootspeed);
 			mw.setShootTick(shoottick);
 			mw.setPaintRandom(paintrandom);
 			mw.setMaxPaintDis(maxpaintdis);
 			mw.setNeedInk(needink);
-			mw.setDamage(damage);
+			mw.damage = (damage);
 			mw.setMaxCharge(maxcharge);
 			mw.setRollerShootQuantity(rollershootQuantity);
 			mw.setUsingWalkSpeed(usinwalkspeed);
-			mw.setRollerWidth(rollerWidth);
+			mw.rollerWidth = (rollerWidth);
 			mw.setRollerDamage(rollerdamage);
 			mw.setRollerNeedInk(rollerneedink);
 			mw.setCanTatehuri(tatehuri);
 			mw.setBlasterExHankei(exh);
-			mw.setDelay(delay);
+			mw.delay = (delay);
 			mw.setCoolTime(cooltime);
 			mw.setBlasterExDamage(exd);
-			mw.setIsHude(hude);
+			mw.isHude = (hude);
 			mw.setHudeRandom(huder);
-			mw.setIsManeuver(man);
+			mw.isManeuver = (man);
 			mw.setSlidingShootTick(slST);
 			mw.setChargeRatio(cr);
 			mw.setCanChargeKeep(ck);
-			mw.setChargeKeepingTime(ckt);
+			mw.chargeKeepingTime = (ckt);
 			mw.setHanbunCharge(hc);
-			mw.setSlideNeedINK(sn);
+			mw.slideNeedINK = (sn);
 
 			if (conf.getWeaponConfig().contains("MainWeapon." + weaponname + ".SPRate"))
 				mw.setSPRate(conf.getWeaponConfig().getDouble("MainWeapon." + weaponname + ".SPRate"));
 
 			if (conf.getWeaponConfig().contains("MainWeapon." + weaponname + ".MaxRandom"))
-				mw.setMaxRandom(conf.getWeaponConfig().getDouble("MainWeapon." + weaponname + ".MaxRandom"));
+				mw.maxRandom = (conf.getWeaponConfig().getDouble("MainWeapon." + weaponname + ".MaxRandom"));
 
 			if (conf.getWeaponConfig().contains("MainWeapon." + weaponname + ".MaxRandomCount"))
-				mw.setMaxRandomCount(conf.getWeaponConfig().getInt("MainWeapon." + weaponname + ".MaxRandomCount"));
+				mw.maxRandomCount = (conf.getWeaponConfig().getInt("MainWeapon." + weaponname + ".MaxRandomCount"));
 
 			if (conf.getWeaponConfig().contains("MainWeapon." + weaponname + ".Scope"))
 				mw.setScope(conf.getWeaponConfig().getBoolean("MainWeapon." + weaponname + ".Scope"));
@@ -138,14 +137,14 @@ public class MainWeaponMgr {
 				mw.setAppDistance(conf.getWeaponConfig().getInt("MainWeapon." + weaponname + ".AppDistance"));
 
 			if (conf.getWeaponConfig().contains("MainWeapon." + weaponname + ".Money"))
-				mw.setMoney(conf.getWeaponConfig().getInt("MainWeapon." + weaponname + ".Money"));
+				mw.money = (conf.getWeaponConfig().getInt("MainWeapon." + weaponname + ".Money"));
 			else
-				mw.setMoney(0);
+				mw.money = (0);
 
 			if (conf.getWeaponConfig().contains("MainWeapon." + weaponname + ".Level"))
-				mw.setLevel(conf.getWeaponConfig().getInt("MainWeapon." + weaponname + ".Level"));
+				mw.level = (conf.getWeaponConfig().getInt("MainWeapon." + weaponname + ".Level"));
 			else
-				mw.setLevel(0);
+				mw.level = (0);
 
 			if (conf.getWeaponConfig().contains("MainWeapon." + weaponname + ".InHoldWalkSpeed"))
 				mw.setInHoldSpeed(
@@ -154,16 +153,16 @@ public class MainWeaponMgr {
 				mw.setInHoldSpeed((float) conf.getConfig().getDouble("PlayerWalkSpeed"));
 
 			if (conf.getWeaponConfig().contains("MainWeapon." + weaponname + ".IsLootBox")) {// ガチャ武器用
-				mw.setIslootbox(conf.getWeaponConfig().getBoolean("MainWeapon." + weaponname + ".IsLootBox"));
+				mw.islootbox = (conf.getWeaponConfig().getBoolean("MainWeapon." + weaponname + ".IsLootBox"));
 			}
 			if (conf.getWeaponConfig().contains("MainWeapon." + weaponname + ".LootPro")) {// ガチャ武器用排出率
-				mw.setLootpro(conf.getWeaponConfig().getDouble("MainWeapon." + weaponname + ".LootPro"));
+				mw.lootpro = (conf.getWeaponConfig().getDouble("MainWeapon." + weaponname + ".LootPro"));
 			}
 			if (conf.getWeaponConfig().contains("MainWeapon." + weaponname + ".IsSwapper")) {// スワッパ―判別
 				mw.setIsSwap(conf.getWeaponConfig().getBoolean("MainWeapon." + weaponname + ".IsSwapper"));
 			}
 			if (conf.getWeaponConfig().contains("MainWeapon." + weaponname + ".SwapWeapon")) {// スワッパ―スワップ先
-				mw.setSwap(conf.getWeaponConfig().getString("MainWeapon." + weaponname + ".SwapWeapon"));
+				mw.swap = (conf.getWeaponConfig().getString("MainWeapon." + weaponname + ".SwapWeapon"));
 			}
 			DataMgr.setMainWeapon(weaponname, mw);
 		}
@@ -202,7 +201,7 @@ public class MainWeaponMgr {
 			if (data.getWeaponClass().getMainWeapon().getWeaponType().equals("Burst"))
 				Burst.BurstCooltime(player);
 			if (data.getWeaponClass().getMainWeapon().getWeaponType().equals("Roller")) {
-				if (data.getWeaponClass().getMainWeapon().getIsHude()) {
+				if (data.getWeaponClass().getMainWeapon().isHude) {
 					if (data.getCanShoot() || clickType == ClickType.RENDA) {
 						data.setCanShoot(false);
 						Brush.ShootPaintRunnable(player);

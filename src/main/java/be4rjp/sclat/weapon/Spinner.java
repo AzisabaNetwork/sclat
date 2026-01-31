@@ -36,7 +36,7 @@ public class Spinner {
 
 				data.tick = data.tick + 1;
 
-				if (keeping == data.getWeaponClass().getMainWeapon().getChargeKeepingTime()
+				if (keeping == data.getWeaponClass().getMainWeapon().chargeKeepingTime
 						&& data.getWeaponClass().getMainWeapon().getCanChargeKeep() && data.settings.doChargeKeep())
 					charge = 0;
 
@@ -147,11 +147,11 @@ public class Spinner {
 				/ Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)));
 		Snowball ball = player.launchProjectile(Snowball.class);
 		((CraftSnowball) ball).getHandle().setItem(
-				CraftItemStack.asNMSCopy(new ItemStack(DataMgr.getPlayerData(player).team.getTeamColor().getWool())));
+				CraftItemStack.asNMSCopy(new ItemStack(DataMgr.getPlayerData(player).team.getTeamColor().wool)));
 		player.getWorld().playSound(player.getLocation(), Sound.ENTITY_PIG_STEP, 0.3F, 1.1F);
 		Vector vec = player.getLocation().getDirection()
 				.multiply(DataMgr.getPlayerData(player).getWeaponClass().getMainWeapon().getShootSpeed() * charge);
-		double random = DataMgr.getPlayerData(player).getWeaponClass().getMainWeapon().getRandom();
+		double random = DataMgr.getPlayerData(player).getWeaponClass().getMainWeapon().random;
 		int distick = DataMgr.getPlayerData(player).getWeaponClass().getMainWeapon().getDistanceTick();
 		vec.add(new Vector(Math.random() * random - random / 2, Math.random() * random - random / 2,
 				Math.random() * random - random / 2));
@@ -183,7 +183,7 @@ public class Spinner {
 				}
 
 				if (i != 0) {
-					org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).team.getTeamColor().getWool()
+					org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).team.getTeamColor().wool
 							.createBlockData();
 					for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 						if (DataMgr.getPlayerData(o_player).settings.ShowEffect_MainWeaponInk())

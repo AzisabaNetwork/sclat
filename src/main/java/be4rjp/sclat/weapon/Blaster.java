@@ -10,6 +10,7 @@ import be4rjp.sclat.data.KasaData;
 import be4rjp.sclat.data.SplashShieldData;
 import be4rjp.sclat.manager.ArmorStandMgr;
 import be4rjp.sclat.manager.PaintMgr;
+import java.util.List;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -23,8 +24,6 @@ import org.bukkit.entity.Snowball;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
-
-import java.util.List;
 
 /**
  *
@@ -52,7 +51,7 @@ public class Blaster {
 			}
 		};
 		if (data.getCanRollerShoot()) {
-			delay.runTaskLater(Sclat.getPlugin(), data.getWeaponClass().getMainWeapon().getDelay());
+			delay.runTaskLater(Sclat.getPlugin(), data.getWeaponClass().getMainWeapon().delay);
 			data.setCanRollerShoot(false);
 		}
 	}
@@ -76,11 +75,11 @@ public class Blaster {
 				/ Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)));
 		Snowball ball = player.launchProjectile(Snowball.class);
 		((CraftSnowball) ball).getHandle().setItem(
-				CraftItemStack.asNMSCopy(new ItemStack(DataMgr.getPlayerData(player).team.getTeamColor().getWool())));
+				CraftItemStack.asNMSCopy(new ItemStack(DataMgr.getPlayerData(player).team.getTeamColor().wool)));
 		player.getWorld().playSound(player.getLocation(), Sound.ENTITY_PIG_STEP, 0.3F, 1F);
 		Vector vec = player.getLocation().getDirection()
 				.multiply(DataMgr.getPlayerData(player).getWeaponClass().getMainWeapon().getShootSpeed());
-		double random = DataMgr.getPlayerData(player).getWeaponClass().getMainWeapon().getRandom();
+		double random = DataMgr.getPlayerData(player).getWeaponClass().getMainWeapon().random;
 		int distick = DataMgr.getPlayerData(player).getWeaponClass().getMainWeapon().getDistanceTick();
 		if (!player.isOnGround())
 			vec.add(new Vector(Math.random() * random - random / 2, 0, Math.random() * random - random / 2));
@@ -112,7 +111,7 @@ public class Blaster {
 					DataMgr.setSnowballHitCount(name, 0);
 				}
 
-				org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).team.getTeamColor().getWool()
+				org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).team.getTeamColor().wool
 						.createBlockData();
 				for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 					if (DataMgr.getPlayerData(o_player).settings.ShowEffect_MainWeaponInk())
@@ -153,7 +152,7 @@ public class Blaster {
 									try {
 										if (as.getCustomName().equals("Kasa")) {
 											KasaData kasaData = DataMgr.getKasaDataFromArmorStand((ArmorStand) as);
-											if (DataMgr.getPlayerData(kasaData.getPlayer()).team != DataMgr
+											if (DataMgr.getPlayerData(kasaData.player).team != DataMgr
 													.getPlayerData(p).team) {
 												inkball.remove();
 												cancel();
@@ -161,7 +160,7 @@ public class Blaster {
 										} else if (as.getCustomName().equals("SplashShield")) {
 											SplashShieldData splashShieldData = DataMgr
 													.getSplashShieldDataFromArmorStand((ArmorStand) as);
-											if (DataMgr.getPlayerData(splashShieldData.getPlayer()).team != DataMgr
+											if (DataMgr.getPlayerData(splashShieldData.player).team != DataMgr
 													.getPlayerData(p).team) {
 												inkball.remove();
 												cancel();
@@ -179,13 +178,13 @@ public class Blaster {
 							continue;
 						if (target.getLocation().distance(inkball.getLocation()) <= maxDist + 1) {
 							double damage = 10;
-							if (data.getWeaponClass().getMainWeapon().getIsManeuver())
+							if (data.getWeaponClass().getMainWeapon().isManeuver)
 								damage = data.getWeaponClass().getMainWeapon().getBlasterExDamage();
 							else
 								damage = (maxDist + 1 - target.getLocation().distance(inkball.getLocation()))
 										* data.getWeaponClass().getMainWeapon().getBlasterExDamage();
-							if (damage > data.getWeaponClass().getMainWeapon().getDamage()) {
-								damage = data.getWeaponClass().getMainWeapon().getDamage();
+							if (damage > data.getWeaponClass().getMainWeapon().damage) {
+								damage = data.getWeaponClass().getMainWeapon().damage;
 							}
 							if (DataMgr.getPlayerData(player).team != DataMgr.getPlayerData(target).team
 									&& target.getGameMode().equals(GameMode.ADVENTURE)) {
@@ -211,8 +210,8 @@ public class Blaster {
 									* (maxDist + 1)) {
 								double damage = (maxDist + 1 - as.getLocation().distance(inkball.getLocation()))
 										* data.getWeaponClass().getMainWeapon().getBlasterExDamage();
-								if (damage > data.getWeaponClass().getMainWeapon().getDamage()) {
-									damage = data.getWeaponClass().getMainWeapon().getDamage();
+								if (damage > data.getWeaponClass().getMainWeapon().damage) {
+									damage = data.getWeaponClass().getMainWeapon().damage;
 								}
 								ArmorStandMgr.giveDamageArmorStand((ArmorStand) as, damage, p);
 							}
@@ -263,14 +262,14 @@ public class Blaster {
 		// try {
 		// if (as.getCustomName().equals("Kasa")) {
 		// KasaData kasaData = DataMgr.getKasaDataFromArmorStand((ArmorStand) as);
-		// if (DataMgr.getPlayerData(kasaData.getPlayer()).getTeam() !=
+		// if (DataMgr.getPlayerData(kasaData.player).getTeam() !=
 		// DataMgr.getPlayerData(player).getTeam()) {
 		// cancel();
 		// }
 		// } else if (as.getCustomName().equals("SplashShield")) {
 		// SplashShieldData splashShieldData =
 		// DataMgr.getSplashShieldDataFromArmorStand((ArmorStand) as);
-		// if (DataMgr.getPlayerData(splashShieldData.getPlayer()).getTeam() !=
+		// if (DataMgr.getPlayerData(splashShieldData.player).getTeam() !=
 		// DataMgr.getPlayerData(player).getTeam()) {
 		// cancel();
 		// }
@@ -286,13 +285,13 @@ public class Blaster {
 				continue;
 			if (target.getLocation().distance(blastcenter) <= maxDist + 1) {
 				double damage = 10;
-				if (data.getWeaponClass().getMainWeapon().getIsManeuver())
+				if (data.getWeaponClass().getMainWeapon().isManeuver)
 					damage = data.getWeaponClass().getMainWeapon().getBlasterExDamage();
 				else
 					damage = (maxDist - target.getLocation().distance(blastcenter))
 							* data.getWeaponClass().getMainWeapon().getBlasterExDamage() * 0.4;
-				if (damage > data.getWeaponClass().getMainWeapon().getDamage()) {
-					damage = data.getWeaponClass().getMainWeapon().getDamage();
+				if (damage > data.getWeaponClass().getMainWeapon().damage) {
+					damage = data.getWeaponClass().getMainWeapon().damage;
 				}
 				if (damage < 0.1) {
 					damage = 0.1;
@@ -321,19 +320,18 @@ public class Blaster {
 					try {
 						double damage = (maxDist + 1 - as.getLocation().distance(blastcenter))
 								* data.getWeaponClass().getMainWeapon().getBlasterExDamage();
-						if (damage > data.getWeaponClass().getMainWeapon().getDamage()) {
-							damage = data.getWeaponClass().getMainWeapon().getDamage();
+						if (damage > data.getWeaponClass().getMainWeapon().damage) {
+							damage = data.getWeaponClass().getMainWeapon().damage;
 						}
 						if (as.getCustomName().equals("Kasa")) {
 							KasaData kasaData = DataMgr.getKasaDataFromArmorStand((ArmorStand) as);
-							if (DataMgr.getPlayerData(kasaData.getPlayer()).team != DataMgr
-									.getPlayerData(player).team) {
+							if (DataMgr.getPlayerData(kasaData.player).team != DataMgr.getPlayerData(player).team) {
 								ArmorStandMgr.giveDamageArmorStand((ArmorStand) as, damage, player);
 							}
 						} else if (as.getCustomName().equals("SplashShield")) {
 							SplashShieldData splashShieldData = DataMgr
 									.getSplashShieldDataFromArmorStand((ArmorStand) as);
-							if (DataMgr.getPlayerData(splashShieldData.getPlayer()).team != DataMgr
+							if (DataMgr.getPlayerData(splashShieldData.player).team != DataMgr
 									.getPlayerData(player).team) {
 								ArmorStandMgr.giveDamageArmorStand((ArmorStand) as, damage, player);
 							}

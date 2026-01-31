@@ -5,6 +5,7 @@ import be4rjp.sclat.api.player.PlayerData;
 import be4rjp.sclat.api.raytrace.RayTrace;
 import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.manager.SubWeaponMgr;
+import java.util.ArrayList;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -16,8 +17,6 @@ import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.util.Vector;
-
-import java.util.ArrayList;
 
 /**
  *

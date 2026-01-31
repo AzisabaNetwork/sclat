@@ -36,6 +36,9 @@ import be4rjp.sclat.weapon.Spinner;
 import be4rjp.sclat.weapon.Swapper;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelPipeline;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
@@ -75,11 +78,6 @@ import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.scheduler.BukkitRunnable;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
 import static be4rjp.sclat.Sclat.conf;
 
 /**
@@ -178,7 +176,7 @@ public class GameMgr implements Listener {
 		if (conf.getConfig().getString("WorkMode").equals("Trial")) {
 			Match match = DataMgr.getMatchFromId(MatchMgr.matchcount);
 			data.match = match;
-			data.team = match.getTeam0();
+			data.team = match.team0;
 			player.teleport(Sclat.lobby);
 			ItemStack join = new ItemStack(Material.CHEST);
 			ItemMeta joinmeta = join.getItemMeta();
@@ -254,7 +252,7 @@ public class GameMgr implements Listener {
 								if (DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getWeaponType()
 										.equals("Shooter")) {
 									Shooter.ShooterRunnable(p);
-									if (DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getIsManeuver()) {
+									if (DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().isManeuver) {
 										if (DataMgr.getPlayerData(p).settings.doChargeKeep()) {
 											Shooter.ManeuverRunnable(p);
 										} else {
@@ -271,7 +269,7 @@ public class GameMgr implements Listener {
 								}
 								if (DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getWeaponType()
 										.equals("Blaster")) {
-									if (DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getIsManeuver()) {
+									if (DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().isManeuver) {
 										Shooter.ManeuverRunnable(p);
 									}
 								}
@@ -296,7 +294,7 @@ public class GameMgr implements Listener {
 									Spinner.SpinnerRunnable(p);
 								if (DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getWeaponType()
 										.equals("Roller")) {
-									if (DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getIsHude()) {
+									if (DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().isHude) {
 										Brush.HoldRunnable(p);
 										Brush.RollPaintRunnable(p);
 									} else {
@@ -364,11 +362,11 @@ public class GameMgr implements Listener {
 			for (Block block : blocks) {
 				if (block.getType().equals(Material.WHITE_STAINED_GLASS)) {
 					PaintData pdata = new PaintData(block);
-					pdata.setMatch(match);
-					pdata.setTeam(match.getTeam0());
+					pdata.match = match;
+					pdata.team = match.team0;
 					pdata.setOrigianlType(block.getType());
 					DataMgr.setPaintDataFromBlock(block, pdata);
-					block.setType(match.getTeam0().getTeamColor().getGlass());
+					block.setType(match.team0.getTeamColor().glass);
 				}
 			}
 
@@ -440,7 +438,7 @@ public class GameMgr implements Listener {
 
 		Match match = DataMgr.getMatchFromId(Integer.MAX_VALUE);
 		data.match = match;
-		data.team = match.getTeam0();
+		data.team = match.team0;
 
 		if (!DataMgr.getPlayerIsQuitMap().containsKey(player.getUniqueId().toString())) {
 			DataMgr.setPlayerIsQuit(uuid, false);
@@ -660,21 +658,21 @@ public class GameMgr implements Listener {
 
 				if (Sclat.type == ServerType.LOBBY) {
 					for (ServerStatus ss : ServerStatusManager.serverList) {
-						if (ss.getSign().equals(e.getClickedBlock())) {
+						if (ss.sign.equals(e.getClickedBlock())) {
 							if (ss.getRestartingServer()) {
 								SclatUtil.sendMessage("§c§nこのサーバーは再起動中です1~2分程度お待ちください", MessageType.PLAYER, player);
 								SclatUtil.playGameSound(player, SoundType.ERROR);
 								return;
 							}
 							if (ss.isOnline()) {
-								if (ss.getPlayerCount() < ss.getMaxPlayer()) {
+								if (ss.getPlayerCount() < ss.maxPlayer) {
 									if (ss.getRunningMatch()) {
 										SclatUtil.sendMessage("§c§nこのサーバーは試合中のため参加できません", MessageType.PLAYER, player);
 										SclatUtil.playGameSound(player, SoundType.ERROR);
 										return;
 									}
-									BungeeCordMgr.PlayerSendServer(player, ss.getServerName());
-									DataMgr.getPlayerData(player).setServerName(ss.getDisplayName());
+									BungeeCordMgr.PlayerSendServer(player, ss.serverName);
+									DataMgr.getPlayerData(player).setServerName(ss.displayName);
 								} else {
 									SclatUtil.sendMessage("§c§nこのサーバーは満員のため参加できません", MessageType.PLAYER, player);
 									SclatUtil.playGameSound(player, SoundType.ERROR);

@@ -37,6 +37,8 @@ import be4rjp.sclat.weapon.Roller;
 import be4rjp.sclat.weapon.Shooter;
 import be4rjp.sclat.weapon.Spinner;
 import be4rjp.sclat.weapon.Swapper;
+import java.util.ArrayList;
+import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
@@ -55,10 +57,6 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.scheduler.BukkitRunnable;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import static be4rjp.sclat.Sclat.conf;
 
 /**
@@ -144,11 +142,11 @@ public class ClickListener implements Listener {
 				for (Block block : blocks) {
 					if (block.getType().equals(Material.WHITE_STAINED_GLASS)) {
 						PaintData pdata = new PaintData(block);
-						pdata.setMatch(match);
-						pdata.setTeam(match.getTeam0());
+						pdata.match = (match);
+						pdata.team = (match.team0);
 						pdata.setOrigianlType(block.getType());
 						DataMgr.setPaintDataFromBlock(block, pdata);
-						block.setType(match.getTeam0().getTeamColor().getGlass());
+						block.setType(match.team0.getTeamColor().glass);
 					}
 				}
 				break;
@@ -174,15 +172,15 @@ public class ClickListener implements Listener {
 				break;
 			case "ナワバリバトル" :
 				Match ma = DataMgr.getMatchFromId(MatchMgr.matchcount);
-				ma.addNawabari_T_Count();
+				ma.addnawabariTCount();
 				break;
 			case "チームデスマッチ" :
 				Match m = DataMgr.getMatchFromId(MatchMgr.matchcount);
-				m.addTDM_T_Count();
+				m.addtdmTCount();
 				break;
 			case "ガチエリア" :
 				Match m2 = DataMgr.getMatchFromId(MatchMgr.matchcount);
-				m2.addGatiArea_T_Count();
+				m2.addgatiareaTCount();
 				break;
 			case "戻る" :
 				if (!name.equals("武器選択") || !name.equals("Shop"))
@@ -222,21 +220,21 @@ public class ClickListener implements Listener {
 		}
 		if (event.getView().getTitle().equals("Server List")) {
 			for (ServerStatus ss : ServerStatusManager.serverList) {
-				if (ss.getDisplayName().equals(name)) {
+				if (ss.displayName.equals(name)) {
 					if (ss.getRestartingServer()) {
 						SclatUtil.sendMessage("§c§nこのサーバーは再起動中です1~2分程度お待ちください", MessageType.PLAYER, player);
 						SclatUtil.playGameSound(player, SoundType.ERROR);
 						return;
 					}
 					if (ss.isOnline()) {
-						if (ss.getPlayerCount() < ss.getMaxPlayer()) {
+						if (ss.getPlayerCount() < ss.maxPlayer) {
 							if (ss.getRunningMatch()) {
 								SclatUtil.sendMessage("§c§nこのサーバーは試合中のため参加できません", MessageType.PLAYER, player);
 								SclatUtil.playGameSound(player, SoundType.ERROR);
 								return;
 							}
-							BungeeCordMgr.PlayerSendServer(player, ss.getServerName());
-							DataMgr.getPlayerData(player).setServerName(ss.getDisplayName());
+							BungeeCordMgr.PlayerSendServer(player, ss.serverName);
+							DataMgr.getPlayerData(player).setServerName(ss.displayName);
 						} else {
 							SclatUtil.sendMessage("§c§nこのサーバーは満員のため参加できません", MessageType.PLAYER, player);
 							SclatUtil.playGameSound(player, SoundType.ERROR);
@@ -360,7 +358,7 @@ public class ClickListener implements Listener {
 						if (DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getWeaponType()
 								.equals("Shooter")) {
 							Shooter.ShooterRunnable(p);
-							if (DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getIsManeuver()) {
+							if (DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().isManeuver) {
 								if (DataMgr.getPlayerData(p).settings.doChargeKeep()) {
 									Shooter.ManeuverRunnable(p);
 								} else {
@@ -377,7 +375,7 @@ public class ClickListener implements Listener {
 						}
 						if (DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getWeaponType()
 								.equals("Blaster")) {
-							if (DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getIsManeuver()) {
+							if (DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().isManeuver) {
 								Shooter.ManeuverRunnable(p);
 							}
 						}
@@ -390,7 +388,7 @@ public class ClickListener implements Listener {
 							Spinner.SpinnerRunnable(p);
 						if (DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getWeaponType()
 								.equals("Roller")) {
-							if (DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getIsHude()) {
+							if (DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().isHude) {
 								Brush.HoldRunnable(p);
 								Brush.RollPaintRunnable(p);
 							} else {
@@ -522,11 +520,11 @@ public class ClickListener implements Listener {
 			}
 
 			player.closeInventory();
-			if (DataMgr.getWeaponClass(name).getMainWeapon().getIslootbox()) {
+			if (DataMgr.getWeaponClass(name).getMainWeapon().islootbox) {
 
-			} else if (PlayerStatusMgr.getMoney(player) >= DataMgr.getWeaponClass(name).getMainWeapon().getMoney()) {
+			} else if (PlayerStatusMgr.getMoney(player) >= DataMgr.getWeaponClass(name).getMainWeapon().money) {
 				PlayerStatusMgr.addWeapon(player, name);
-				PlayerStatusMgr.subMoney(player, DataMgr.getWeaponClass(name).getMainWeapon().getMoney());
+				PlayerStatusMgr.subMoney(player, DataMgr.getWeaponClass(name).getMainWeapon().money);
 				SclatUtil.sendMessage(ChatColor.GREEN + "購入に成功しました", MessageType.PLAYER, player);
 				SclatUtil.playGameSound(player, SoundType.SUCCESS);
 				PlayerStatusMgr.sendHologramUpdate(player);

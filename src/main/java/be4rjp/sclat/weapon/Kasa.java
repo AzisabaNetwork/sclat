@@ -12,6 +12,8 @@ import be4rjp.sclat.data.KasaData;
 import be4rjp.sclat.manager.MainWeaponMgr;
 import be4rjp.sclat.manager.PaintMgr;
 import be4rjp.sclat.manager.WeaponClassMgr;
+import java.util.ArrayList;
+import java.util.List;
 import net.minecraft.server.v1_14_R1.EnumItemSlot;
 import net.minecraft.server.v1_14_R1.PacketPlayOutEntityEquipment;
 import org.bukkit.ChatColor;
@@ -20,7 +22,9 @@ import org.bukkit.Instrument;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Note;
+import org.bukkit.Particle;
 import org.bukkit.Sound;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_14_R1.entity.CraftSnowball;
 import org.bukkit.craftbukkit.v1_14_R1.inventory.CraftItemStack;
@@ -33,9 +37,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.EulerAngle;
 import org.bukkit.util.Vector;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  *
@@ -76,7 +77,7 @@ public class Kasa {
 			}
 		};
 		if (data.getCanRollerShoot()) {
-			delay.runTaskLater(Sclat.getPlugin(), data.getWeaponClass().getMainWeapon().getDelay());
+			delay.runTaskLater(Sclat.getPlugin(), data.getWeaponClass().getMainWeapon().delay);
 			data.setCanRollerShoot(false);
 		}
 	}
@@ -98,12 +99,12 @@ public class Kasa {
 				/ Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)));
 		Snowball ball = player.launchProjectile(Snowball.class);
 		((CraftSnowball) ball).getHandle().setItem(
-				CraftItemStack.asNMSCopy(new ItemStack(DataMgr.getPlayerData(player).team.getTeamColor().getWool())));
+				CraftItemStack.asNMSCopy(new ItemStack(DataMgr.getPlayerData(player).team.getTeamColor().wool)));
 		Vector vec = player.getLocation().getDirection()
 				.multiply(DataMgr.getPlayerData(player).getWeaponClass().getMainWeapon().getShootSpeed());
 		if (v != null)
 			vec = v;
-		double random = DataMgr.getPlayerData(player).getWeaponClass().getMainWeapon().getRandom();
+		double random = DataMgr.getPlayerData(player).getWeaponClass().getMainWeapon().random;
 		int distick = DataMgr.getPlayerData(player).getWeaponClass().getMainWeapon().getDistanceTick();
 		vec.add(new Vector(Math.random() * random - random / 2, Math.random() * random / 1.5 - random / 3,
 				Math.random() * random - random / 2));
@@ -139,8 +140,8 @@ public class Kasa {
 						if (target.getWorld() == inkball.getWorld()) {
 							if (target.getLocation()
 									.distanceSquared(inkball.getLocation()) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED) {
-								org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).team.getTeamColor()
-										.getWool().createBlockData();
+								org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).team.getTeamColor().wool
+										.createBlockData();
 								target.spawnParticle(org.bukkit.Particle.BLOCK_DUST, inkball.getLocation(), 1, 0, 0, 0,
 										1, bd);
 							}
@@ -197,7 +198,7 @@ public class Kasa {
 						weapon = false;
 					}
 
-					if (data.getIsSneaking() && kdata.getDamage() <= 200) {
+					if (data.getIsSneaking() && kdata.damage <= 200) {
 						if (!sound) {
 							sound = true;
 							p.getWorld().playSound(p.getLocation(), Sound.ITEM_ARMOR_EQUIP_GENERIC, 1F, 1F);
@@ -276,7 +277,7 @@ public class Kasa {
 					}
 
 					if (i != 0) {
-						if (p.isSneaking() && kdata.getDamage() <= 200 && weapon
+						if (p.isSneaking() && kdata.damage <= 200 && weapon
 								&& p.getGameMode().equals(GameMode.ADVENTURE)) {
 							as1.teleport(rl.clone().add(0, 0.2, 0));
 							as2.teleport(rl2.clone().add(0, -0.52, 0));
@@ -304,15 +305,15 @@ public class Kasa {
 					}
 
 					if (i % 100 == 0) {
-						if (kdata.getDamage() - 50 > 0) {
-							kdata.setDamage(kdata.getDamage() - 50);
+						if (kdata.damage - 50 > 0) {
+							kdata.damage = (kdata.damage - 50);
 						} else {
-							kdata.setDamage(0);
+							kdata.damage = (0);
 						}
 					}
 
 					if (p.getGameMode().equals(GameMode.SPECTATOR))
-						kdata.setDamage(0);
+						kdata.damage = (0);
 
 					if (!data.isInMatch() || !p.isOnline()) {
 						for (ArmorStand as : list)
@@ -332,7 +333,7 @@ public class Kasa {
 			int i = 0;
 			int c = 0;
 			boolean is = true;
-			int pageCooltime = DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getRollerWidth();
+			int pageCooltime = DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().rollerWidth;
 
 			@Override
 			public void run() {
@@ -378,7 +379,7 @@ public class Kasa {
 			boolean bp = false;
 			boolean squid = true;
 			float kasaSpeed = DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getRollerNeedInk();
-			int pageCooltime = DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getRollerWidth();
+			int pageCooltime = DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().rollerWidth;
 
 			Vector dir = new Vector(1, 0, 0);
 
@@ -507,7 +508,7 @@ public class Kasa {
 
 						List<ArmorStand> aslist = new ArrayList<>(list);
 						kdata.setArmorStandList(aslist);
-						kdata.setDamage(DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getSlideNeedINK());
+						kdata.damage = (DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().slideNeedINK);
 
 						for (ArmorStand as : list) {
 							// as.setHeadPose(new EulerAngle(Math.toRadians(90), 0, 0));
@@ -555,15 +556,13 @@ public class Kasa {
 
 						if (i % 2 == 0) {
 							Location asl = as4.getLocation();
-							org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).team.getTeamColor().getWool()
-									.createBlockData();
+							BlockData bd = DataMgr.getPlayerData(p).team.getTeamColor().wool.createBlockData();
 							for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 								if (DataMgr.getPlayerData(target).settings.ShowEffect_MainWeaponInk())
 									if (target.getWorld() == p.getWorld())
 										if (target.getLocation()
 												.distanceSquared(asl) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED)
-											target.spawnParticle(org.bukkit.Particle.BLOCK_DUST, asl, 1, 0, 0, 0, 1,
-													bd);
+											target.spawnParticle(Particle.BLOCK_DUST, asl, 1, 0, 0, 0, 1, bd);
 							}
 
 							for (ArmorStand as : ul) {
@@ -601,62 +600,58 @@ public class Kasa {
 						int c = 1;
 						for (ArmorStand as : list) {
 							PlayerData data = DataMgr.getPlayerData(player);
-							Team team = data.match.getTeam0();
+							Team team = data.match.team0;
 							if (team == data.team)
-								team = data.match.getTeam1();
+								team = data.match.team1;
 							for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
-								if (kdata.getDamage() == 0) {
+								if (kdata.damage == 0) {
 									((CraftPlayer) o_player).getHandle().playerConnection
 											.sendPacket(new PacketPlayOutEntityEquipment(as.getEntityId(),
 													EnumItemSlot.HEAD, CraftItemStack.asNMSCopy(
 															new ItemStack(Material.WHITE_STAINED_GLASS_PANE))));
 								}
-								if (kdata.getDamage() > 0 && kdata.getDamage() <= 50) {
+								if (kdata.damage > 0 && kdata.damage <= 50) {
 									if (c == 1)
 										((CraftPlayer) o_player).getHandle().playerConnection.sendPacket(
 												new PacketPlayOutEntityEquipment(as.getEntityId(), EnumItemSlot.HEAD,
-														CraftItemStack.asNMSCopy(new ItemStack(Material
-																.getMaterial(team.getTeamColor().getGlass().toString()
-																		+ "_PANE")))));
+														CraftItemStack.asNMSCopy(new ItemStack(Material.getMaterial(
+																team.getTeamColor().glass.toString() + "_PANE")))));
 									else
 										((CraftPlayer) o_player).getHandle().playerConnection
 												.sendPacket(new PacketPlayOutEntityEquipment(as.getEntityId(),
 														EnumItemSlot.HEAD, CraftItemStack.asNMSCopy(
 																new ItemStack(Material.WHITE_STAINED_GLASS_PANE))));
 								}
-								if (kdata.getDamage() > 50 && kdata.getDamage() <= 100) {
+								if (kdata.damage > 50 && kdata.damage <= 100) {
 									if (c <= 2)
 										((CraftPlayer) o_player).getHandle().playerConnection.sendPacket(
 												new PacketPlayOutEntityEquipment(as.getEntityId(), EnumItemSlot.HEAD,
-														CraftItemStack.asNMSCopy(new ItemStack(Material
-																.getMaterial(team.getTeamColor().getGlass().toString()
-																		+ "_PANE")))));
+														CraftItemStack.asNMSCopy(new ItemStack(Material.getMaterial(
+																team.getTeamColor().glass.toString() + "_PANE")))));
 									else
 										((CraftPlayer) o_player).getHandle().playerConnection
 												.sendPacket(new PacketPlayOutEntityEquipment(as.getEntityId(),
 														EnumItemSlot.HEAD, CraftItemStack.asNMSCopy(
 																new ItemStack(Material.WHITE_STAINED_GLASS_PANE))));
 								}
-								if (kdata.getDamage() > 100 && kdata.getDamage() <= 150) {
+								if (kdata.damage > 100 && kdata.damage <= 150) {
 									if (c <= 3)
 										((CraftPlayer) o_player).getHandle().playerConnection.sendPacket(
 												new PacketPlayOutEntityEquipment(as.getEntityId(), EnumItemSlot.HEAD,
-														CraftItemStack.asNMSCopy(new ItemStack(Material
-																.getMaterial(team.getTeamColor().getGlass().toString()
-																		+ "_PANE")))));
+														CraftItemStack.asNMSCopy(new ItemStack(Material.getMaterial(
+																team.getTeamColor().glass.toString() + "_PANE")))));
 									else
 										((CraftPlayer) o_player).getHandle().playerConnection
 												.sendPacket(new PacketPlayOutEntityEquipment(as.getEntityId(),
 														EnumItemSlot.HEAD, CraftItemStack.asNMSCopy(
 																new ItemStack(Material.WHITE_STAINED_GLASS_PANE))));
 								}
-								if (kdata.getDamage() > 150) {
+								if (kdata.damage > 150) {
 									if (c <= 4)
 										((CraftPlayer) o_player).getHandle().playerConnection.sendPacket(
 												new PacketPlayOutEntityEquipment(as.getEntityId(), EnumItemSlot.HEAD,
-														CraftItemStack.asNMSCopy(new ItemStack(Material
-																.getMaterial(team.getTeamColor().getGlass().toString()
-																		+ "_PANE")))));
+														CraftItemStack.asNMSCopy(new ItemStack(Material.getMaterial(
+																team.getTeamColor().glass.toString() + "_PANE")))));
 									else
 										((CraftPlayer) o_player).getHandle().playerConnection
 												.sendPacket(new PacketPlayOutEntityEquipment(as.getEntityId(),
@@ -689,9 +684,9 @@ public class Kasa {
 						p.playSound(p.getLocation(), Sound.BLOCK_WOODEN_PRESSURE_PLATE_CLICK_ON, 1F, 1.2F);
 					}
 
-					if (i == pageCooltime + 20 || kdata.getDamage() > 200 || !p.isOnline()
+					if (i == pageCooltime + 20 || kdata.damage > 200 || !p.isOnline()
 							|| !DataMgr.getPlayerData(p).isInMatch()) {
-						if (kdata.getDamage() <= 200 && DataMgr.getPlayerData(p).isInMatch())
+						if (kdata.damage <= 200 && DataMgr.getPlayerData(p).isInMatch())
 							as1.getWorld().playSound(as1.getLocation(), Sound.ENTITY_ITEM_BREAK, 0.8F, 0.8F);
 
 						for (ArmorStand as : list) {
@@ -715,62 +710,62 @@ public class Kasa {
 			@Override
 			public void run() {
 				PlayerData data = DataMgr.getPlayerData(player);
-				Team team = data.match.getTeam0();
+				Team team = data.match.team0;
 				if (team == data.team)
-					team = data.match.getTeam1();
+					team = data.match.team1;
 
 				int c = 1;
 				for (ArmorStand as : list) {
 					if (c <= 4) {
 						for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
-							if (kdata.getDamage() == 0) {
+							if (kdata.damage == 0) {
 								((CraftPlayer) o_player).getHandle().playerConnection
 										.sendPacket(new PacketPlayOutEntityEquipment(as.getEntityId(),
 												EnumItemSlot.HEAD, CraftItemStack
 														.asNMSCopy(new ItemStack(Material.WHITE_STAINED_GLASS_PANE))));
 							}
-							if (kdata.getDamage() > 0 && kdata.getDamage() <= 50) {
+							if (kdata.damage > 0 && kdata.damage <= 50) {
 								if (c == 1)
 									((CraftPlayer) o_player).getHandle().playerConnection.sendPacket(
 											new PacketPlayOutEntityEquipment(as.getEntityId(), EnumItemSlot.HEAD,
 													CraftItemStack.asNMSCopy(new ItemStack(Material.getMaterial(
-															team.getTeamColor().getGlass().toString() + "_PANE")))));
+															team.getTeamColor().glass.toString() + "_PANE")))));
 								else
 									((CraftPlayer) o_player).getHandle().playerConnection
 											.sendPacket(new PacketPlayOutEntityEquipment(as.getEntityId(),
 													EnumItemSlot.HEAD, CraftItemStack.asNMSCopy(
 															new ItemStack(Material.WHITE_STAINED_GLASS_PANE))));
 							}
-							if (kdata.getDamage() > 50 && kdata.getDamage() <= 100) {
+							if (kdata.damage > 50 && kdata.damage <= 100) {
 								if (c <= 2)
 									((CraftPlayer) o_player).getHandle().playerConnection.sendPacket(
 											new PacketPlayOutEntityEquipment(as.getEntityId(), EnumItemSlot.HEAD,
 													CraftItemStack.asNMSCopy(new ItemStack(Material.getMaterial(
-															team.getTeamColor().getGlass().toString() + "_PANE")))));
+															team.getTeamColor().glass.toString() + "_PANE")))));
 								else
 									((CraftPlayer) o_player).getHandle().playerConnection
 											.sendPacket(new PacketPlayOutEntityEquipment(as.getEntityId(),
 													EnumItemSlot.HEAD, CraftItemStack.asNMSCopy(
 															new ItemStack(Material.WHITE_STAINED_GLASS_PANE))));
 							}
-							if (kdata.getDamage() > 100 && kdata.getDamage() <= 150) {
+							if (kdata.damage > 100 && kdata.damage <= 150) {
 								if (c <= 3)
 									((CraftPlayer) o_player).getHandle().playerConnection.sendPacket(
 											new PacketPlayOutEntityEquipment(as.getEntityId(), EnumItemSlot.HEAD,
 													CraftItemStack.asNMSCopy(new ItemStack(Material.getMaterial(
-															team.getTeamColor().getGlass().toString() + "_PANE")))));
+															team.getTeamColor().glass.toString() + "_PANE")))));
 								else
 									((CraftPlayer) o_player).getHandle().playerConnection
 											.sendPacket(new PacketPlayOutEntityEquipment(as.getEntityId(),
 													EnumItemSlot.HEAD, CraftItemStack.asNMSCopy(
 															new ItemStack(Material.WHITE_STAINED_GLASS_PANE))));
 							}
-							if (kdata.getDamage() > 150) {
+							if (kdata.damage > 150) {
 								if (c <= 4)
 									((CraftPlayer) o_player).getHandle().playerConnection.sendPacket(
 											new PacketPlayOutEntityEquipment(as.getEntityId(), EnumItemSlot.HEAD,
 													CraftItemStack.asNMSCopy(new ItemStack(Material.getMaterial(
-															team.getTeamColor().getGlass().toString() + "_PANE")))));
+															team.getTeamColor().glass.toString() + "_PANE")))));
 								else
 									((CraftPlayer) o_player).getHandle().playerConnection
 											.sendPacket(new PacketPlayOutEntityEquipment(as.getEntityId(),

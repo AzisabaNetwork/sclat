@@ -82,12 +82,12 @@ public class Brush {
 						Vector vec = new Vector(locvec.getX(), 0, locvec.getZ()).normalize();
 						// RayTrace rayTrace1 = new RayTrace(front.toVector(), vec1);
 						// ArrayList<Vector> positions1 =
-						// rayTrace1.traverse(data.getWeaponClass().getMainWeapon().getRollerWidth(),
+						// rayTrace1.traverse(data.getWeaponClass().getMainWeapon().rollerWidth,
 						// 0.5);
 						Location front = eloc.add(vec.getX() * 2, -0.9, vec.getZ() * 2);
-						if (data.getWeaponClass().getMainWeapon().getIsHude())
+						if (data.getWeaponClass().getMainWeapon().isHude)
 							front = eloc.add(vec.getX() * 1.5, -0.9, vec.getZ() * 1.5);
-						org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).team.getTeamColor().getWool()
+						org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).team.getTeamColor().wool
 								.createBlockData();
 						for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 							if (DataMgr.getPlayerData(target).settings.ShowEffect_MainWeaponInk())
@@ -100,7 +100,7 @@ public class Brush {
 						Vector vec2 = new Vector(vec.getZ(), 0, vec.getX() * -1);
 
 						// 筆系武器
-						if (data.getWeaponClass().getMainWeapon().getIsHude()) {
+						if (data.getWeaponClass().getMainWeapon().isHude) {
 							Location position = p.getLocation();
 							PaintMgr.PaintHightestBlock(front, p, false, true);
 							p.getLocation().getWorld().spawnParticle(org.bukkit.Particle.BLOCK_DUST, position, 2, 0, 0,
@@ -156,7 +156,7 @@ public class Brush {
 				}
 			}
 		};
-		if (DataMgr.getPlayerData(player).getWeaponClass().getMainWeapon().getIsHude())
+		if (DataMgr.getPlayerData(player).getWeaponClass().getMainWeapon().isHude)
 			task.runTaskTimer(Sclat.getPlugin(), 0, 1);
 		else
 			task.runTaskTimer(Sclat.getPlugin(), 0, 5);
@@ -187,7 +187,7 @@ public class Brush {
 				vec.add(new Vector(Math.random() * random - random / 2, Math.random() * random / 4 - random / 8,
 						Math.random() * random - random / 2));
 				for (int i = 0; i < data.getWeaponClass().getMainWeapon().getRollerShootQuantity(); i++) {
-					if (data.getWeaponClass().getMainWeapon().getIsHude())
+					if (data.getWeaponClass().getMainWeapon().isHude)
 						Brush.Shoot(p, vec);
 					else
 						Brush.Shoot(p, null);
@@ -233,14 +233,14 @@ public class Brush {
 				/ Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)));
 		Snowball ball = player.launchProjectile(Snowball.class);
 		((CraftSnowball) ball).getHandle().setItem(
-				CraftItemStack.asNMSCopy(new ItemStack(DataMgr.getPlayerData(player).team.getTeamColor().getWool())));
+				CraftItemStack.asNMSCopy(new ItemStack(DataMgr.getPlayerData(player).team.getTeamColor().wool)));
 		Vector vec = player.getLocation().getDirection()
 				.multiply(DataMgr.getPlayerData(player).getWeaponClass().getMainWeapon().getShootSpeed());
 		if (v != null)
 			vec = v;
-		double random = DataMgr.getPlayerData(player).getWeaponClass().getMainWeapon().getRandom();
+		double random = DataMgr.getPlayerData(player).getWeaponClass().getMainWeapon().random;
 		int distick = DataMgr.getPlayerData(player).getWeaponClass().getMainWeapon().getDistanceTick();
-		if (!data.getWeaponClass().getMainWeapon().getIsHude()) {
+		if (!data.getWeaponClass().getMainWeapon().isHude) {
 			if (player.isOnGround())
 				vec.add(new Vector(Math.random() * random - random / 2, Math.random() * random / 4 - random / 8,
 						Math.random() * random - random / 2));
@@ -287,7 +287,7 @@ public class Brush {
 							continue;
 						if (!DataMgr.getPlayerData(target).settings.ShowEffect_MainWeaponInk())
 							continue;
-						org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).team.getTeamColor().getWool()
+						org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).team.getTeamColor().wool
 								.createBlockData();
 						target.spawnParticle(org.bukkit.Particle.BLOCK_DUST, inkball.getLocation(), 1, 0, 0, 0, 1, bd);
 					}

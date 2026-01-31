@@ -6,6 +6,7 @@ import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.manager.PaintMgr;
 import be4rjp.sclat.manager.SPWeaponMgr;
 import be4rjp.sclat.manager.WeaponClassMgr;
+import java.util.Random;
 import net.minecraft.server.v1_14_R1.PacketPlayOutEntityDestroy;
 import net.minecraft.server.v1_14_R1.PlayerConnection;
 import org.bukkit.Location;
@@ -22,8 +23,6 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
-
-import java.util.Random;
 
 /**
  *
@@ -133,7 +132,7 @@ public class SuperShot {
 			public void run() {
 				try {
 					if (c == 0) {
-						ItemStack i = new ItemStack(DataMgr.getPlayerData(p).team.getTeamColor().getWool()).clone();
+						ItemStack i = new ItemStack(DataMgr.getPlayerData(p).team.getTeamColor().wool).clone();
 						ItemMeta i_m = i.getItemMeta();
 						i_m.setLocalizedName(String.valueOf(Sclat.getNotDuplicateNumber()));
 						i.setItemMeta(i_m);
@@ -155,7 +154,7 @@ public class SuperShot {
 					PaintMgr.PaintHightestBlock(ball.getLocation(), p, false, false);
 
 					if (new Random().nextInt(20) == 0) {
-						org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).team.getTeamColor().getWool()
+						org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).team.getTeamColor().wool
 								.createBlockData();
 						for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 							if (DataMgr.getPlayerData(o_player).settings.ShowEffect_SPWeapon())

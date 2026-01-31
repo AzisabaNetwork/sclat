@@ -59,7 +59,7 @@ object Animation {
                                 10,
                             )
                         } else {
-                            if (winteam === DataMgr.getPlayerData(player).team) {
+                            if (winteam === DataMgr.getPlayerData(player)?.team!!) {
                                 player.sendTitle(
                                     ChatColor.GREEN.toString() + "You Win!",
                                     (
@@ -88,7 +88,7 @@ object Animation {
                         player.playSound(player.getLocation(), Sound.ENTITY_ZOMBIE_INFECT, 13.0f, 1.5f)
                     }
                     if (i == 40) {
-                        if (winteam === DataMgr.getPlayerData(player).team) {
+                        if (winteam === DataMgr.getPlayerData(player)?.team!!) {
                             SclatUtil.playGameSound(
                                 player,
                                 SoundType.CONGRATULATIONS,
@@ -132,7 +132,7 @@ object Animation {
                         g = g + 2
                     }
                     if (i == 35) {
-                        if (winteam === DataMgr.getPlayerData(player).team) {
+                        if (winteam === DataMgr.getPlayerData(player)?.team!!) {
                             player.sendTitle(
                                 ChatColor.GREEN.toString() + "Knock Out !!",
                                 (
@@ -160,7 +160,7 @@ object Animation {
                         player.playSound(player.getLocation(), Sound.ENTITY_ZOMBIE_INFECT, 13.0f, 1.5f)
                     }
                     if (i == 40) {
-                        if (winteam === DataMgr.getPlayerData(player).team) {
+                        if (winteam === DataMgr.getPlayerData(player)?.team!!) {
                             SclatUtil.playGameSound(
                                 player,
                                 SoundType.CONGRATULATIONS,
@@ -197,16 +197,16 @@ object Animation {
                                 team0color +
                                     DataMgr
                                         .getPlayerData(player)
-                                        .match
-                                        .getTeam0()
+                                        ?.match
+                                        ?.team0
                                         ?.teamColor
                                         ?.colorName!! + "Team" +
                                     ChatColor.RESET + " : " + Random().nextInt(10).toString() + " Kill       " +
                                     team1color +
                                     DataMgr
                                         .getPlayerData(player)
-                                        .match
-                                        .getTeam1()
+                                        ?.match
+                                        ?.team1
                                         ?.teamColor
                                         ?.colorName!! + "Team" +
                                     ChatColor.RESET + " : " + Random().nextInt(10).toString() + " Kill"
@@ -229,16 +229,16 @@ object Animation {
                                     team0color +
                                         DataMgr
                                             .getPlayerData(player)
-                                            .match
-                                            .getTeam0()
+                                            ?.match
+                                            ?.team0
                                             ?.teamColor
                                             ?.colorName!! +
                                         "Team" + ChatColor.RESET + " : " + team0point.toString() + " Kill       " +
                                         team1color +
                                         DataMgr
                                             .getPlayerData(player)
-                                            .match
-                                            .getTeam1()
+                                            ?.match
+                                            ?.team1
                                             ?.teamColor
                                             ?.colorName!! +
                                         "Team" + ChatColor.RESET + " : " + team1point.toString() + " Kill"
@@ -248,22 +248,22 @@ object Animation {
                                 10,
                             )
                         } else {
-                            if (winteam === DataMgr.getPlayerData(player).team) {
+                            if (winteam === DataMgr.getPlayerData(player)?.team!!) {
                                 player.sendTitle(
                                     ChatColor.GREEN.toString() + "You  Win!",
                                     (
                                         team0color +
                                             DataMgr
                                                 .getPlayerData(player)
-                                                .match
-                                                .getTeam0()
+                                                ?.match
+                                                ?.team0
                                                 ?.teamColor
                                                 ?.colorName!! +
                                             "Team" + ChatColor.RESET + " : " + team0point.toString() + " Kill       " + team1color +
                                             DataMgr
                                                 .getPlayerData(player)
-                                                .match
-                                                .getTeam1()
+                                                ?.match
+                                                ?.team1
                                                 ?.teamColor
                                                 ?.colorName!! +
                                             "Team" + ChatColor.RESET + " : " + team1point.toString() + " Kill"
@@ -279,15 +279,15 @@ object Animation {
                                         team0color +
                                             DataMgr
                                                 .getPlayerData(player)
-                                                .match
-                                                .getTeam0()
+                                                ?.match
+                                                ?.team0
                                                 ?.teamColor
                                                 ?.colorName!! +
                                             "Team" + ChatColor.RESET + " : " + team0point.toString() + " Kill       " + team1color +
                                             DataMgr
                                                 .getPlayerData(player)
-                                                .match
-                                                .getTeam1()
+                                                ?.match
+                                                ?.team1
                                                 ?.teamColor
                                                 ?.colorName!! +
                                             "Team" + ChatColor.RESET + " : " + team1point.toString() + " Kill"
@@ -301,7 +301,7 @@ object Animation {
                         player.playSound(player.getLocation(), Sound.ENTITY_ZOMBIE_INFECT, 13.0f, 1.5f)
                     }
                     if (i == 40) {
-                        if (winteam === DataMgr.getPlayerData(player).team) {
+                        if (winteam === DataMgr.getPlayerData(player)?.team!!) {
                             SclatUtil.playGameSound(
                                 player,
                                 SoundType.CONGRATULATIONS,

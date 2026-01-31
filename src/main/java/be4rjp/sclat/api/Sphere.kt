@@ -48,8 +48,8 @@ object Sphere {
         r: Double,
         r_accuracy: Double,
         accuracy: Int,
-    ): MutableList<Location?> {
-        val tempList: MutableList<Location?> = ArrayList<Location?>()
+    ): MutableList<Location> {
+        val tempList: MutableList<Location> = mutableListOf()
         var tr = 1
         while (tr <= r) {
             var t = 0

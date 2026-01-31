@@ -9,6 +9,9 @@ import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.manager.ArmorStandMgr;
 import be4rjp.sclat.manager.SPWeaponMgr;
 import be4rjp.sclat.manager.WeaponClassMgr;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -25,10 +28,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
 
 /**
  *
@@ -220,7 +219,7 @@ public class Amehurasi {
 	public static void SnowballAmehurasiRunnable(Player player, Location loc) {
 		Snowball ball = (Snowball) player.getWorld().spawnEntity(loc, EntityType.SNOWBALL);
 		((CraftSnowball) ball).getHandle().setItem(
-				CraftItemStack.asNMSCopy(new ItemStack(DataMgr.getPlayerData(player).team.getTeamColor().getWool())));
+				CraftItemStack.asNMSCopy(new ItemStack(DataMgr.getPlayerData(player).team.getTeamColor().wool)));
 		ball.setShooter(player);
 		ball.setCustomName("Amehurasi");
 		BukkitRunnable task = new BukkitRunnable() {
@@ -230,7 +229,7 @@ public class Amehurasi {
 			@Override
 			public void run() {
 				if (i % 2 == 0) {
-					org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).team.getTeamColor().getWool()
+					org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).team.getTeamColor().wool
 							.createBlockData();
 					for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 						if (DataMgr.getPlayerData(o_player).settings.ShowEffect_SPWeapon())

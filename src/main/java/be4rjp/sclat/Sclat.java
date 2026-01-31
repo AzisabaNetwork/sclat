@@ -231,22 +231,20 @@ public class Sclat extends JavaPlugin implements PluginMessageListener {
 
 			Match match = DataMgr.getMatchFromId(MatchMgr.matchcount);
 
-			org.bukkit.scoreboard.Team bteam0 = scoreboard
-					.registerNewTeam(match.getTeam0().getTeamColor().getColorName());
-			bteam0.setColor(match.getTeam0().getTeamColor().getChatColor());
+			org.bukkit.scoreboard.Team bteam0 = scoreboard.registerNewTeam(match.team0.getTeamColor().getColorName());
+			bteam0.setColor(match.team0.getTeamColor().getChatColor());
 			bteam0.setNameTagVisibility(NameTagVisibility.HIDE_FOR_OTHER_TEAMS);
 			bteam0.setOption(org.bukkit.scoreboard.Team.Option.COLLISION_RULE,
 					org.bukkit.scoreboard.Team.OptionStatus.NEVER);
 
-			org.bukkit.scoreboard.Team bteam1 = scoreboard
-					.registerNewTeam(match.getTeam1().getTeamColor().getColorName());
-			bteam1.setColor(match.getTeam1().getTeamColor().getChatColor());
+			org.bukkit.scoreboard.Team bteam1 = scoreboard.registerNewTeam(match.team1.getTeamColor().getColorName());
+			bteam1.setColor(match.team1.getTeamColor().getChatColor());
 			bteam1.setNameTagVisibility(NameTagVisibility.HIDE_FOR_OTHER_TEAMS);
 			bteam1.setOption(org.bukkit.scoreboard.Team.Option.COLLISION_RULE,
 					org.bukkit.scoreboard.Team.OptionStatus.NEVER);
 
-			match.getTeam0().setTeam(bteam0);
-			match.getTeam1().setTeam(bteam1);
+			match.team0.setTeam(bteam0);
+			match.team1.setTeam(bteam1);
 
 			ArmorStandMgr.ArmorStandEquipPacketSender(w);
 		}
@@ -405,8 +403,8 @@ public class Sclat extends JavaPlugin implements PluginMessageListener {
 		// 塗りリセット
 		for (PaintData data : DataMgr.getBlockDataMap().values()) {
 			data.getBlock().setType(data.getOriginalType());
-			if (data.getBlockData() != null)
-				data.getBlock().setBlockData(data.getBlockData());
+			if (data.blockData != null)
+				data.getBlock().setBlockData(data.blockData);
 		}
 		DataMgr.getBlockDataMap().clear();
 

@@ -33,7 +33,7 @@ public class Swapper {
 						BukkitRunnable swapset = new BukkitRunnable() {// チャージャーとローラーのみ対応
 							@Override
 							public void run() {
-								String swapname = data.getWeaponClass().getMainWeapon().getSwap();
+								String swapname = data.getWeaponClass().getMainWeapon().swap;
 								data.stoprun = false;
 								data.setWeaponClass(DataMgr.getWeaponClass(swapname));
 								data.setCanRollerShoot(true);

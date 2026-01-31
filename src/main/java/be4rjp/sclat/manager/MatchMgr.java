@@ -56,6 +56,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.entity.ArmorStand;
@@ -129,10 +130,9 @@ public class MatchMgr {
 								MessageType.ALL_PLAYER);
 					}
 
-					if (match.getJoinedPlayerCount() == startPlayerCount && !match.getIsStarted()
-							&& !match.isStartedCount()) {
-						match.setIsStarted(true);
-						match.setIsStartedCount(true);
+					if (match.getJoinedPlayerCount() == startPlayerCount && !match.isStarted && !match.isStartedCount) {
+						match.isStarted = (true);
+						match.isStartedCount = (true);
 						BukkitRunnable task = new BukkitRunnable() {
 							int s = 0;
 							Player p = player;
@@ -144,8 +144,8 @@ public class MatchMgr {
 											"§aあと§c" + String.valueOf(startPlayerCount - match.getJoinedPlayerCount())
 													+ "§a人必要です",
 											MessageType.ALL_PLAYER);
-									match.setIsStartedCount(false);
-									match.setIsStarted(false);
+									match.isStartedCount = (false);
+									match.isStarted = (false);
 									// Send match status
 									if (Sclat.type == ServerType.MATCH) {
 										List<String> commands = new ArrayList<>();
@@ -192,7 +192,7 @@ public class MatchMgr {
 									// かぶらないようにマッピング
 									Map<Integer, Player> playerMap = new HashMap<>();
 									for (Player jp : DataMgr.joinedList) {
-										int rate = PlayerStatusMgr.getRank(jp);
+										int rate = getRank(jp);
 										while (playerMap.containsKey(rate)) {
 											rate++;
 										}
@@ -226,9 +226,9 @@ public class MatchMgr {
 									for (Player jp : sortedMember) {
 										PlayerData data = DataMgr.getPlayerData(jp);
 										if (i % 2 == 0)
-											data.team = match.getTeam0();
+											data.team = match.team0;
 										else
-											data.team = match.getTeam1();
+											data.team = match.team1;
 										i++;
 									}
 
@@ -237,7 +237,7 @@ public class MatchMgr {
 										PlayerData data = DataMgr.getPlayerData(jp);
 										if (jp.isOnline()) {
 											data.setPlayerNumber(playerNumber);
-											data.team.addRateTotal(PlayerStatusMgr.getRank(jp));
+											data.team.addRateTotal(getRank(jp));
 											// jp.setDisplayName(data.getTeam().getTeamColor().getColorCode() +
 											// jp.getName());
 										}
@@ -255,16 +255,17 @@ public class MatchMgr {
 									SclatUtil.sendMessage("§6試合が開始されました", MessageType.BROADCAST);
 									if (conf.getConfig().getBoolean("RateMatch")) {
 										SclatUtil.sendMessage("", MessageType.ALL_PLAYER);
-										SclatUtil.sendMessage("§b試合の総合レート : §r"
-												+ (match.getTeam0().getRateTotal() + match.getTeam1().getRateTotal()),
+										SclatUtil.sendMessage(
+												"§b試合の総合レート : §r"
+														+ (match.team0.getRateTotal() + match.team1.getRateTotal()),
 												MessageType.ALL_PLAYER);
 									}
 									EquipmentServerManager.doCommands();
 									if (conf.getConfig().getBoolean("CanVoting")) {
-										if (match.getNawabari_T_Count() >= match.getTDM_T_Count()
-												&& match.getNawabari_T_Count() >= match.getGatiArea_T_Count()) {
+										if (match.getNawabariTCount() >= match.getTdmTCount()
+												&& match.getNawabariTCount() >= match.getGatiareaTCount()) {
 											conf.getConfig().set("WorkMode", "Normal");
-										} else if (match.getTDM_T_Count() >= match.getGatiArea_T_Count()) {
+										} else if (match.getTdmTCount() >= match.getGatiareaTCount()) {
 											conf.getConfig().set("WorkMode", "TDM");
 										} else {
 											conf.getConfig().set("WorkMode", "Area");
@@ -336,8 +337,8 @@ public class MatchMgr {
 		team0.setTeamColor(color0);
 		team1.setTeamColor(color1);
 
-		match.setTeam0(team0);
-		match.setTeam1(team1);
+		match.team0 = (team0);
+		match.team1 = (team1);
 
 		if (id == 0)
 			DataMgr.MapDataShuffle();
@@ -368,8 +369,8 @@ public class MatchMgr {
 		lobby_t0.setTeamColor(lc0);
 		lobby_t1.setTeamColor(lc1);
 
-		lobby_m.setTeam0(lobby_t0);
-		lobby_m.setTeam1(lobby_t1);
+		lobby_m.team0 = (lobby_t0);
+		lobby_m.team1 = (lobby_t1);
 
 		MapData map1 = DataMgr.getMapRandom(0);
 		lobby_m.setMapData(map1);
@@ -385,17 +386,15 @@ public class MatchMgr {
 			ScoreboardManager manager = Bukkit.getScoreboardManager();
 			Scoreboard scoreboard = manager.getNewScoreboard();
 
-			org.bukkit.scoreboard.Team bteam0 = scoreboard
-					.registerNewTeam(match.getTeam0().getTeamColor().getColorName());
-			bteam0.setColor(match.getTeam0().getTeamColor().getChatColor());
+			org.bukkit.scoreboard.Team bteam0 = scoreboard.registerNewTeam(match.team0.getTeamColor().getColorName());
+			bteam0.setColor(match.team0.getTeamColor().getChatColor());
 			bteam0.setOption(org.bukkit.scoreboard.Team.Option.NAME_TAG_VISIBILITY,
 					org.bukkit.scoreboard.Team.OptionStatus.FOR_OTHER_TEAMS);
 			bteam0.setOption(org.bukkit.scoreboard.Team.Option.COLLISION_RULE,
 					org.bukkit.scoreboard.Team.OptionStatus.FOR_OWN_TEAM);
 
-			org.bukkit.scoreboard.Team bteam1 = scoreboard
-					.registerNewTeam(match.getTeam1().getTeamColor().getColorName());
-			bteam1.setColor(match.getTeam1().getTeamColor().getChatColor());
+			org.bukkit.scoreboard.Team bteam1 = scoreboard.registerNewTeam(match.team1.getTeamColor().getColorName());
+			bteam1.setColor(match.team1.getTeamColor().getChatColor());
 			bteam1.setOption(org.bukkit.scoreboard.Team.Option.NAME_TAG_VISIBILITY,
 					org.bukkit.scoreboard.Team.OptionStatus.FOR_OTHER_TEAMS);
 			bteam1.setOption(org.bukkit.scoreboard.Team.Option.COLLISION_RULE,
@@ -404,7 +403,7 @@ public class MatchMgr {
 			team0.setTeam(bteam0);
 			team1.setTeam(bteam1);
 
-			match.setScoreboard(scoreboard);
+			match.scoreboard = (scoreboard);
 		}
 	}
 
@@ -413,8 +412,8 @@ public class MatchMgr {
 			return;
 		for (PaintData data : DataMgr.getBlockDataMap().values()) {
 			data.getBlock().setType(data.getOriginalType());
-			if (data.getBlockData() != null)
-				data.getBlock().setBlockData(data.getBlockData());
+			if (data.blockData != null)
+				data.getBlock().setBlockData(data.blockData);
 			data = null;
 		}
 		DataMgr.getBlockDataMap().clear();
@@ -514,7 +513,7 @@ public class MatchMgr {
 								break;
 						}
 
-						if (DataMgr.getPlayerData(p).team == match.getTeam0()) {
+						if (DataMgr.getPlayerData(p).team == match.team0) {
 							Location l = DataMgr.getPlayerData(p).match.getMapData().getTeam0Loc();
 							int i = (DataMgr.getPlayerData(p).getPlayerNumber() + 1) / 2;
 							Location sl = null;
@@ -536,7 +535,7 @@ public class MatchMgr {
 							sl.setYaw(l.getYaw());
 							DataMgr.getPlayerData(p).setMatchLocation(sl);
 						}
-						if (DataMgr.getPlayerData(p).team == match.getTeam1()) {
+						if (DataMgr.getPlayerData(p).team == match.team1) {
 							Location l = DataMgr.getPlayerData(p).match.getMapData().getTeam1Loc();
 							int i = DataMgr.getPlayerData(p).getPlayerNumber() / 2;
 							Location sl = null;
@@ -626,10 +625,10 @@ public class MatchMgr {
 					if (s >= 100 && s <= 160) {
 						Location introl = match.getMapData().getTeam0Intro().clone().add(0.5, 0, 0.5);
 						p.teleport(introl);
-						if (DataMgr.getPlayerData(p).team == match.getTeam0()) {
+						if (DataMgr.getPlayerData(p).team == match.team0) {
 							if (s >= 101 && s <= 120) {
-								org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).team.getTeamColor()
-										.getWool().createBlockData();
+								org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).team.getTeamColor().wool
+										.createBlockData();
 								introl.getWorld().spawnParticle(org.bukkit.Particle.BLOCK_DUST,
 										DataMgr.getPlayerData(p).getMatchLocation(), 10, 0.3, 0.4, 0.3, 1, bd);
 
@@ -650,10 +649,10 @@ public class MatchMgr {
 					if (s >= 160 && s <= 220) {
 						Location introl = match.getMapData().getTeam1Intro().clone().add(0.5, 0, 0.5);
 						p.teleport(introl);
-						if (DataMgr.getPlayerData(p).team == match.getTeam1()) {
+						if (DataMgr.getPlayerData(p).team == match.team1) {
 							if (s >= 161 && s <= 180) {
-								org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).team.getTeamColor()
-										.getWool().createBlockData();
+								org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).team.getTeamColor().wool
+										.createBlockData();
 								introl.getWorld().spawnParticle(org.bukkit.Particle.BLOCK_DUST,
 										DataMgr.getPlayerData(p).getMatchLocation(), 10, 0.3, 0.4, 0.3, 1, bd);
 							}
@@ -705,7 +704,7 @@ public class MatchMgr {
 						if (DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getWeaponType()
 								.equals("Shooter")) {
 							Shooter.ShooterRunnable(p);
-							if (DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getIsManeuver()) {
+							if (DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().isManeuver) {
 								if (DataMgr.getPlayerData(p).settings.doChargeKeep()) {
 									Shooter.ManeuverRunnable(p);
 								} else {
@@ -722,7 +721,7 @@ public class MatchMgr {
 						}
 						if (DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getWeaponType()
 								.equals("Blaster")) {
-							if (DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getIsManeuver()) {
+							if (DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().isManeuver) {
 								Shooter.ManeuverRunnable(p);
 							}
 						}
@@ -744,7 +743,7 @@ public class MatchMgr {
 							Spinner.SpinnerRunnable(p);
 						if (DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getWeaponType()
 								.equals("Roller")) {
-							if (DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getIsHude()) {
+							if (DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().isHude) {
 								Brush.HoldRunnable(p);
 								Brush.RollPaintRunnable(p);
 							} else {
@@ -775,7 +774,7 @@ public class MatchMgr {
 
 						SquidMgr.SquidShowRunnable(p);
 
-						p.getEquipment().setHelmet(DataMgr.getPlayerData(p).team.getTeamColor().getBougu());
+						p.getEquipment().setHelmet(DataMgr.getPlayerData(p).team.getTeamColor().bougu);
 
 						SuperArmor.setArmor(p, 31, 100, false);
 						SPWeaponMgr.SPWeaponRunnable(p);
@@ -806,11 +805,11 @@ public class MatchMgr {
 						SPWeaponMgr.SPWeaponHuriRunnable(p);
 
 						// p.setPlayerListName(DataMgr.getPlayerData(p).getTeam().getTeamColor().getColorCode()
-						// + p.getDisplayName());
+						// + p.displayName);
 
 						if (DataMgr.getPlayerData(p).getPlayerNumber() == 1 && Plugins.NOTEBLOCKAPI.isLoaded()) {
 							NoteBlockSong nbs = NoteBlockAPIMgr.getRandomNormalSong();
-							Song song = nbs.getSong();
+							Song song = nbs.song;
 							RadioSongPlayer radio = new RadioSongPlayer(song);
 							radio.setVolume(volume);
 							for (Player oplayer : Sclat.getPlugin(Sclat.class).getServer().getOnlinePlayers()) {
@@ -899,35 +898,35 @@ public class MatchMgr {
 		Scoreboard scoreboard = manager.getNewScoreboard();
 
 		Match match = DataMgr.getPlayerData(player).match;
-		match.setScoreboard(scoreboard);
+		match.scoreboard = (scoreboard);
 
-		org.bukkit.scoreboard.Team bteam0 = scoreboard.registerNewTeam(match.getTeam0().getTeamColor().getColorName());
-		bteam0.setColor(match.getTeam0().getTeamColor().getChatColor());
+		org.bukkit.scoreboard.Team bteam0 = scoreboard.registerNewTeam(match.team0.getTeamColor().getColorName());
+		bteam0.setColor(match.team0.getTeamColor().getChatColor());
 		bteam0.setOption(org.bukkit.scoreboard.Team.Option.NAME_TAG_VISIBILITY,
 				org.bukkit.scoreboard.Team.OptionStatus.FOR_OTHER_TEAMS);
 		// bteam0.setNameTagVisibility(NameTagVisibility.HIDE_FOR_OTHER_TEAMS);
 		bteam0.setOption(org.bukkit.scoreboard.Team.Option.COLLISION_RULE,
 				org.bukkit.scoreboard.Team.OptionStatus.FOR_OWN_TEAM);
-		bteam0.setPrefix(match.getTeam0().getTeamColor().getColorCode());
+		bteam0.setPrefix(match.team0.getTeamColor().getColorCode());
 
-		org.bukkit.scoreboard.Team bteam1 = scoreboard.registerNewTeam(match.getTeam1().getTeamColor().getColorName());
-		bteam1.setColor(match.getTeam1().getTeamColor().getChatColor());
+		org.bukkit.scoreboard.Team bteam1 = scoreboard.registerNewTeam(match.team1.getTeamColor().getColorName());
+		bteam1.setColor(match.team1.getTeamColor().getChatColor());
 		// bteam1.setNameTagVisibility(NameTagVisibility.HIDE_FOR_OTHER_TEAMS);
 		bteam1.setOption(org.bukkit.scoreboard.Team.Option.NAME_TAG_VISIBILITY,
 				org.bukkit.scoreboard.Team.OptionStatus.FOR_OTHER_TEAMS);
 		bteam1.setOption(org.bukkit.scoreboard.Team.Option.COLLISION_RULE,
 				org.bukkit.scoreboard.Team.OptionStatus.FOR_OWN_TEAM);
-		bteam1.setPrefix(match.getTeam1().getTeamColor().getColorCode());
+		bteam1.setPrefix(match.team1.getTeamColor().getColorCode());
 
-		match.getTeam0().setTeam(bteam0);
-		match.getTeam1().setTeam(bteam1);
+		match.team0.setTeam(bteam0);
+		match.team1.setTeam(bteam1);
 
 		for (Player oplayer : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 			if (DataMgr.getPlayerData(oplayer).getIsJoined()) {
 				oplayer.setScoreboard(scoreboard);
-				if (match.getTeam0() == DataMgr.getPlayerData(oplayer).team)
+				if (match.team0 == DataMgr.getPlayerData(oplayer).team)
 					bteam0.addEntry(oplayer.getName());
-				if (match.getTeam1() == DataMgr.getPlayerData(oplayer).team)
+				if (match.team1 == DataMgr.getPlayerData(oplayer).team)
 					bteam1.addEntry(oplayer.getName());
 			}
 		}
@@ -1015,10 +1014,10 @@ public class MatchMgr {
 
 							Team wteam = t; // エリアを確保しているチーム
 							Team lteam = t; // エリアを確保できていないチーム
-							if (match.getTeam0() == t)
-								lteam = match.getTeam1();
+							if (match.team0 == t)
+								lteam = match.team1;
 							else
-								lteam = match.getTeam0();
+								lteam = match.team0;
 
 							if (wteam.getGatiCount() == lteam.getGatiCount()) {
 								if (wteam.getGatiCount() + 1 > lteam.getGatiCount()) {
@@ -1049,17 +1048,15 @@ public class MatchMgr {
 
 						lines.add("   ");
 						lines.add("§lカウント » ");
-						lines.add(match.getTeam0().getTeamColor().getColorCode()
-								+ match.getTeam0().getTeamColor().getColorName() + " : "
-								+ String.valueOf(100 - match.getTeam0().getGatiCount()) + "  "
-								+ match.getTeam1().getTeamColor().getColorCode()
-								+ match.getTeam1().getTeamColor().getColorName() + " : "
-								+ String.valueOf(100 - match.getTeam1().getGatiCount()));
+						lines.add(match.team0.getTeamColor().getColorCode() + match.team0.getTeamColor().getColorName()
+								+ " : " + String.valueOf(100 - match.team0.getGatiCount()) + "  "
+								+ match.team1.getTeamColor().getColorCode() + match.team1.getTeamColor().getColorName()
+								+ " : " + String.valueOf(100 - match.team1.getGatiCount()));
 
 						if (isgc) {
-							Team ngcteam = match.getTeam0();
-							if (match.getTeam0() == gcteam)
-								ngcteam = match.getTeam1();
+							Team ngcteam = match.team0;
+							if (match.team0 == gcteam)
+								ngcteam = match.team1;
 							if (gcteam.getGatiCount() <= ngcteam.getGatiCount())
 								entyo = true;
 						}
@@ -1073,7 +1070,7 @@ public class MatchMgr {
 							}
 						}
 
-						if (match.getTeam0().getGatiCount() == 100 || match.getTeam1().getGatiCount() == 100) {
+						if (match.team0.getGatiCount() == 100 || match.team1.getGatiCount() == 100) {
 							for (Player oplayer : Sclat.getPlugin(Sclat.class).getServer().getOnlinePlayers()) {
 								if (DataMgr.getPlayerData(oplayer).getIsJoined() && p != oplayer) {
 									oplayer.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
@@ -1084,12 +1081,12 @@ public class MatchMgr {
 							FinishMatch(p);
 							cancel();
 						}
-						if ((match.getTeam0().getGatiCount() == 95 && !team0nokori)
-								|| (match.getTeam1().getGatiCount() == 95 && !team1nokori)) {
+						if ((match.team0.getGatiCount() == 95 && !team0nokori)
+								|| (match.team1.getGatiCount() == 95 && !team1nokori)) {
 
-							if (match.getTeam0().getGatiCount() == 95)
+							if (match.team0.getGatiCount() == 95)
 								team0nokori = true;
-							if (match.getTeam1().getGatiCount() == 95)
+							if (match.team1.getGatiCount() == 95)
 								team1nokori = true;
 
 							for (Player oplayer : Sclat.getPlugin(Sclat.class).getServer().getOnlinePlayers()) {
@@ -1112,7 +1109,7 @@ public class MatchMgr {
 						}
 						if (DataMgr.getPlayerData(p).getPlayerNumber() == 1 && Plugins.NOTEBLOCKAPI.isLoaded()) {
 							NoteBlockSong nbs = NoteBlockAPIMgr.getRandomFinalSong();
-							Song song = nbs.getSong();
+							Song song = nbs.song;
 							RadioSongPlayer radio = new RadioSongPlayer(song);
 							radio.setVolume(volume);
 							for (Player oplayer : Sclat.getPlugin(Sclat.class).getServer().getOnlinePlayers()) {
@@ -1174,7 +1171,7 @@ public class MatchMgr {
 		BukkitRunnable task = new BukkitRunnable() {
 			Player p = player;
 			Location loc;
-			Team winteam = DataMgr.getPlayerData(player).match.getTeam0();
+			Team winteam = DataMgr.getPlayerData(player).match.team0;
 			int i = 0;
 			int bestkills = 0;
 			int bestpaint = 0;
@@ -1185,7 +1182,7 @@ public class MatchMgr {
 
 						p.setDisplayName(p.getName());
 
-						DataMgr.getPlayerData(p).match.setIsFinished(true);
+						DataMgr.getPlayerData(p).match.setFinished(true);
 						if (DataMgr.getPlayerData(p).getPlayerNumber() == 1) {
 							for (Path path : DataMgr.getPlayerData(p).match.getMapData().getPathList()) {
 								path.stop();
@@ -1232,7 +1229,7 @@ public class MatchMgr {
 						loc = p.getLocation();
 
 						p.getInventory().clear();
-						// p.setPlayerListName(p.getDisplayName());
+						// p.setPlayerListName(p.displayName);
 
 						ScoreboardManager manager = Bukkit.getScoreboardManager();
 						Scoreboard scoreboard = manager.getNewScoreboard();
@@ -1271,21 +1268,21 @@ public class MatchMgr {
 							int team1c;
 							String team0code;
 							String team1code;
-							winteam = match.getTeam0();
+							winteam = match.team0;
 							Boolean hikiwake = false;
 
-							team0c = match.getTeam0().getKillCount();
-							team1c = match.getTeam1().getKillCount();
-							team0code = match.getTeam0().getTeamColor().getColorCode();
-							team1code = match.getTeam1().getTeamColor().getColorCode();
+							team0c = match.team0.getKillCount();
+							team1c = match.team1.getKillCount();
+							team0code = match.team0.getTeamColor().getColorCode();
+							team1code = match.team1.getTeamColor().getColorCode();
 
 							if (team0c < team1c)
-								winteam = match.getTeam1();
+								winteam = match.team1;
 							else if (team0c == team1c)
 								hikiwake = true;
 
 							match.setWinTeam(winteam);
-							match.setIsHikiwake(hikiwake);
+							match.isHikiwake = (hikiwake);
 
 							for (Player oplayer : Sclat.getPlugin(Sclat.class).getServer().getOnlinePlayers()) {
 								if (DataMgr.getPlayerData(oplayer).getIsJoined())
@@ -1300,29 +1297,29 @@ public class MatchMgr {
 							int per;
 							String team0code;
 							String team1code;
-							winteam = match.getTeam0();
+							winteam = match.team0;
 							Boolean hikiwake = false;
 
-							team0 = match.getTeam0().getGatiCount();
-							team1 = match.getTeam1().getGatiCount();
-							team0code = match.getTeam0().getTeamColor().getColorCode();
-							team1code = match.getTeam1().getTeamColor().getColorCode();
+							team0 = match.team0.getGatiCount();
+							team1 = match.team1.getGatiCount();
+							team0code = match.team0.getTeamColor().getColorCode();
+							team1code = match.team1.getTeamColor().getColorCode();
 							dper = (double) team0 / (double) (team0 + team1) * 100;
 							per = (int) dper;
 
-							if (match.getTeam0().getGatiCount() > match.getTeam1().getGatiCount()) {
-								winteam = match.getTeam0();
+							if (match.team0.getGatiCount() > match.team1.getGatiCount()) {
+								winteam = match.team0;
 								per++;
-								// match.getTeam0().addPaintCount();
-							} else if (match.getTeam0().getGatiCount() == match.getTeam1().getGatiCount()) {
+								// match.team0.addPaintCount();
+							} else if (match.team0.getGatiCount() == match.team1.getGatiCount()) {
 								hikiwake = true;
 							} else {
-								winteam = match.getTeam1();
+								winteam = match.team1;
 								per--;
 							}
 
 							match.setWinTeam(winteam);
-							match.setIsHikiwake(hikiwake);
+							match.isHikiwake = (hikiwake);
 
 							if (per > 100)
 								per = 100;
@@ -1352,29 +1349,29 @@ public class MatchMgr {
 							int per;
 							String team0code;
 							String team1code;
-							winteam = match.getTeam0();
+							winteam = match.team0;
 							Boolean hikiwake = false;
 
-							team0 = match.getTeam0().getPoint();
-							team1 = match.getTeam1().getPoint();
-							team0code = match.getTeam0().getTeamColor().getColorCode();
-							team1code = match.getTeam1().getTeamColor().getColorCode();
+							team0 = match.team0.getPoint();
+							team1 = match.team1.getPoint();
+							team0code = match.team0.getTeamColor().getColorCode();
+							team1code = match.team1.getTeamColor().getColorCode();
 							dper = (double) team0 / (double) (team0 + team1) * 100;
 							per = (int) dper;
 
-							if (match.getTeam0().getPoint() > match.getTeam1().getPoint()) {
-								winteam = match.getTeam0();
+							if (match.team0.getPoint() > match.team1.getPoint()) {
+								winteam = match.team0;
 								per++;
-								// match.getTeam0().addPaintCount();
-							} else if (match.getTeam0().getPoint() == match.getTeam1().getPoint()) {
+								// match.team0.addPaintCount();
+							} else if (match.team0.getPoint() == match.team1.getPoint()) {
 								hikiwake = true;
 							} else {
-								winteam = match.getTeam1();
+								winteam = match.team1;
 								per--;
 							}
 
 							match.setWinTeam(winteam);
-							match.setIsHikiwake(hikiwake);
+							match.isHikiwake = (hikiwake);
 
 							if (per > 100)
 								per = 100;
@@ -1429,7 +1426,7 @@ public class MatchMgr {
 											+ "Points : " + ChatColor.YELLOW + odata.getPaintCount(),
 											MessageType.PLAYER, p);
 									// p.sendMessage(odata.getTeam().getTeamColor().getColorCode() + "§l[ §l" +
-									// op.getDisplayName() + "§l ]" + ChatColor.RESET + "Kills : " +
+									// op.displayName + "§l ]" + ChatColor.RESET + "Kills : " +
 									// ChatColor.YELLOW + odata.getKillCount() + " " + ChatColor.RESET + "Points : "
 									// + ChatColor.YELLOW + odata.getPaintCount());
 								} else {
@@ -1439,7 +1436,7 @@ public class MatchMgr {
 											+ "Points : " + ChatColor.YELLOW + odata.getPaintCount(),
 											MessageType.PLAYER, p);
 									// p.sendMessage(odata.getTeam().getTeamColor().getColorCode() + "[ " +
-									// op.getDisplayName() + " ]" + ChatColor.RESET + "Kills : " + ChatColor.YELLOW
+									// op.displayName + " ]" + ChatColor.RESET + "Kills : " + ChatColor.YELLOW
 									// + odata.getKillCount() + " " + ChatColor.RESET + "Points : " +
 									// ChatColor.YELLOW + odata.getPaintCount());
 								}
@@ -1464,7 +1461,7 @@ public class MatchMgr {
 											+ "Points : " + ChatColor.YELLOW + odata.getPaintCount(),
 											MessageType.PLAYER, p);
 									// p.sendMessage(odata.getTeam().getTeamColor().getColorCode() + "§l[ §l" +
-									// op.getDisplayName() + "§l ]" + ChatColor.RESET + "Kills : " +
+									// op.displayName + "§l ]" + ChatColor.RESET + "Kills : " +
 									// ChatColor.YELLOW + odata.getKillCount() + " " + ChatColor.RESET + "Points : "
 									// + ChatColor.YELLOW + odata.getPaintCount());
 								} else {
@@ -1474,7 +1471,7 @@ public class MatchMgr {
 											+ "Points : " + ChatColor.YELLOW + odata.getPaintCount(),
 											MessageType.PLAYER, p);
 									// p.sendMessage(odata.getTeam().getTeamColor().getColorCode() + "[ " +
-									// op.getDisplayName() + " ]" + ChatColor.RESET + "Kills : " + ChatColor.YELLOW
+									// op.displayName + " ]" + ChatColor.RESET + "Kills : " + ChatColor.YELLOW
 									// + odata.getKillCount() + " " + ChatColor.RESET + "Points : " +
 									// ChatColor.YELLOW + odata.getPaintCount());
 								}
@@ -1489,7 +1486,7 @@ public class MatchMgr {
 						int pTicket = (int) ((double) data.getKillCount() * 1 + 10
 								+ (double) data.getPaintCount() / 750D);
 						int pLv = 1;
-						if (data.team == data.match.getWinTeam() || data.match.getIsHikiwake()) {
+						if (data.team == data.match.getWinTeam() || data.match.isHikiwake) {
 							pLv = 2;
 							pTicket += 5;
 						}
@@ -1581,7 +1578,7 @@ public class MatchMgr {
 						WeaponClass wc = DataMgr.getPlayerData(p).getWeaponClass();
 						p.teleport(il);
 						if (Sclat.type != ServerType.MATCH) {
-							ItemStack join = new ItemStack(org.bukkit.Material.CHEST);
+							ItemStack join = new ItemStack(Material.CHEST);
 							ItemMeta joinmeta = join.getItemMeta();
 							joinmeta.setDisplayName("メインメニュー");
 							join.setItemMeta(joinmeta);

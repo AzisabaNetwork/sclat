@@ -5,15 +5,14 @@ import be4rjp.sclat.api.player.PlayerData;
 import be4rjp.sclat.api.team.Team;
 import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.manager.DeathMgr;
+import java.util.ArrayList;
+import java.util.List;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  *
@@ -59,12 +58,12 @@ public class SquidListenerMgr {
 		// return;
 
 		Team team = DataMgr.getPlayerData(player).team;
-		Material p = Material.getMaterial(data.team.getTeamColor().getConcrete().toString() + "_POWDER");
+		Material p = Material.getMaterial(data.team.getTeamColor().concrete.toString() + "_POWDER");
 
 		for (Block block : list) {
 			if (!block.equals(b1)) {
 				if (DataMgr.getBlockDataMap().containsKey(block)) {
-					if (DataMgr.getBlockDataMap().get(block).getTeam() == data.team) {
+					if (DataMgr.getBlockDataMap().get(block).team == data.team) {
 						if (!data.getIsSquid() || block.getType().equals(Material.AIR))
 							continue;
 						data.setIsOnInk(true);
@@ -75,7 +74,7 @@ public class SquidListenerMgr {
 				}
 			} else {
 				if (DataMgr.getBlockDataMap().containsKey(block)) {
-					if (DataMgr.getBlockDataMap().get(block).getTeam() == data.team) {
+					if (DataMgr.getBlockDataMap().get(block).team == data.team) {
 						if (!data.getIsSquid() || block.getType().equals(Material.AIR))
 							continue;
 						data.setIsOnInk(true);

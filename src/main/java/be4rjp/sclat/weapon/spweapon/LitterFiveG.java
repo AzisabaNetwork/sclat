@@ -14,6 +14,9 @@ import be4rjp.sclat.manager.PaintMgr;
 import be4rjp.sclat.manager.SPWeaponMgr;
 import be4rjp.sclat.manager.WeaponClassMgr;
 import be4rjp.sclat.weapon.Gear;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -31,10 +34,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 public class LitterFiveG {
 	private static HashMap<Player, Integer> Hash_charge = new HashMap<>();
@@ -232,7 +231,7 @@ public class LitterFiveG {
 					continue;
 				if (target.getWorld() == position.getWorld()) {
 					if (target.getLocation().distanceSquared(position) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED) {
-						org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(player).team.getTeamColor().getWool()
+						org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(player).team.getTeamColor().wool
 								.createBlockData();
 						target.spawnParticle(Particle.BLOCK_DUST, position, 1, 0, 0, 0, 1, bd);
 					}
@@ -281,7 +280,7 @@ public class LitterFiveG {
 								if (as.getCustomName().equals("SplashShield")) {
 									SplashShieldData ssdata = DataMgr
 											.getSplashShieldDataFromArmorStand((ArmorStand) as);
-									if (DataMgr.getPlayerData(ssdata.getPlayer()).team != DataMgr
+									if (DataMgr.getPlayerData(ssdata.player).team != DataMgr
 											.getPlayerData(player).team) {
 										ArmorStandMgr.giveDamageArmorStand((ArmorStand) as, damage, player);
 										as.getWorld().playSound(as.getLocation(), Sound.ENTITY_PLAYER_HURT, 0.8F, 1.2F);
@@ -289,7 +288,7 @@ public class LitterFiveG {
 									}
 								} else if (as.getCustomName().equals("Kasa")) {
 									KasaData ssdata = DataMgr.getKasaDataFromArmorStand((ArmorStand) as);
-									if (DataMgr.getPlayerData(ssdata.getPlayer()).team != DataMgr
+									if (DataMgr.getPlayerData(ssdata.player).team != DataMgr
 											.getPlayerData(player).team) {
 										ArmorStandMgr.giveDamageArmorStand((ArmorStand) as, damage, player);
 										as.getWorld().playSound(as.getLocation(), Sound.ENTITY_PLAYER_HURT, 0.8F, 1.2F);

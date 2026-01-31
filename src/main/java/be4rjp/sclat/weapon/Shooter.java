@@ -6,6 +6,8 @@ import be4rjp.sclat.api.player.PlayerData;
 import be4rjp.sclat.api.raytrace.RayTrace;
 import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.manager.PaintMgr;
+import java.util.ArrayList;
+import java.util.Random;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -19,9 +21,6 @@ import org.bukkit.entity.Snowball;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
-
-import java.util.ArrayList;
-import java.util.Random;
 
 /**
  *
@@ -48,15 +47,15 @@ public class Shooter {
 					if ((clickType == ClickType.FIRST_CLICK || clickType == ClickType.RENDA
 							|| clickType == ClickType.NAGAOSI) && data.isInMatch()) {
 						Shooter.Shoot(p, false, false,
-								maxRandomCount >= data.getWeaponClass().getMainWeapon().getMaxRandomCount());
+								maxRandomCount >= data.getWeaponClass().getMainWeapon().maxRandomCount);
 						data.tick = data.tick
 								+ DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getShootTick();
-						if (data.getWeaponClass().getMainWeapon().getMaxRandom() != 0
-								&& maxRandomCount <= data.getWeaponClass().getMainWeapon().getMaxRandomCount() * 2) {
+						if (data.getWeaponClass().getMainWeapon().maxRandom != 0
+								&& maxRandomCount <= data.getWeaponClass().getMainWeapon().maxRandomCount * 2) {
 							maxRandomCount++;
 						}
 					} else {
-						if (data.getWeaponClass().getMainWeapon().getMaxRandom() != 0 && maxRandomCount >= 0)
+						if (data.getWeaponClass().getMainWeapon().maxRandom != 0 && maxRandomCount >= 0)
 							maxRandomCount -= 2;
 					}
 				}
@@ -139,7 +138,7 @@ public class Shooter {
 				// float ink = data.getWeaponClass().getMainWeapon().getSlideNeedINK();
 
 				// マニューバー系
-				if (data.getWeaponClass().getMainWeapon().getIsManeuver()) {
+				if (data.getWeaponClass().getMainWeapon().isManeuver) {
 					// if(p.getExp() >= ink) {
 					if (data.getIsSneaking() && sl_recharge_2 && !data.getIsSliding()
 							&& p.getInventory().getItemInMainHand().getType()
@@ -151,7 +150,7 @@ public class Shooter {
 						// p.setExp(p.getExp() - ink);
 
 						// エフェクト
-						org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(player).team.getTeamColor().getWool()
+						org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(player).team.getTeamColor().wool
 								.createBlockData();
 						double random = 1.0;
 						for (int i = 0; i < 35; i++) {
@@ -308,7 +307,7 @@ public class Shooter {
 		ArrayList<Vector> positions = rayTrace.traverse(data.getWeaponClass().getMainWeapon().getShootSpeed()
 				* data.getWeaponClass().getMainWeapon().getDistanceTick(), 0.7);
 		boolean isLockOnPlayer = false;
-		if (data.getWeaponClass().getMainWeapon().getMaxRandom() == 0) {
+		if (data.getWeaponClass().getMainWeapon().maxRandom == 0) {
 			check : for (Vector vector : positions) {
 				Location position = vector.toLocation(player.getLocation().getWorld());
 				for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
@@ -340,13 +339,13 @@ public class Shooter {
 
 		Snowball ball = player.launchProjectile(Snowball.class);
 		((CraftSnowball) ball).getHandle().setItem(
-				CraftItemStack.asNMSCopy(new ItemStack(DataMgr.getPlayerData(player).team.getTeamColor().getWool())));
+				CraftItemStack.asNMSCopy(new ItemStack(DataMgr.getPlayerData(player).team.getTeamColor().wool)));
 		player.getWorld().playSound(player.getLocation(), Sound.ENTITY_PIG_STEP, 0.3F, 1F);
 		Vector vec = player.getLocation().getDirection()
 				.multiply(DataMgr.getPlayerData(player).getWeaponClass().getMainWeapon().getShootSpeed());
-		double random = data.getWeaponClass().getMainWeapon().getRandom();
+		double random = data.getWeaponClass().getMainWeapon().random;
 		if (maxRandom)
-			random = data.getWeaponClass().getMainWeapon().getMaxRandom();
+			random = data.getWeaponClass().getMainWeapon().maxRandom;
 		if (isLockOnPlayer)
 			random /= 2.0;
 		if (slided)
@@ -391,7 +390,7 @@ public class Shooter {
 				}
 
 				if (i != 0) {
-					org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).team.getTeamColor().getWool()
+					org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).team.getTeamColor().wool
 							.createBlockData();
 					for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 						if (DataMgr.getPlayerData(o_player).settings.ShowEffect_MainWeaponInk())

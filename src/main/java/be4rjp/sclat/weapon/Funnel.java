@@ -11,6 +11,10 @@ import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.data.KasaData;
 import be4rjp.sclat.data.SplashShieldData;
 import be4rjp.sclat.manager.ArmorStandMgr;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import net.minecraft.server.v1_14_R1.EnumItemSlot;
 import net.minecraft.server.v1_14_R1.PacketPlayOutEntityEquipment;
 import org.bukkit.GameMode;
@@ -29,11 +33,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.EulerAngle;
 import org.bukkit.util.Vector;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public class Funnel {
 
@@ -64,8 +63,8 @@ public class Funnel {
 				if (DataMgr.getPlayerData(target).settings.ShowEffect_MainWeaponInk()) {
 					if (target.getWorld() == position.getWorld()) {
 						if (target.getLocation().distanceSquared(position) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED) {
-							org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(player).team.getTeamColor()
-									.getWool().createBlockData();
+							org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(player).team.getTeamColor().wool
+									.createBlockData();
 							target.spawnParticle(Particle.BLOCK_DUST, position, 1, 0, 0, 0, 1, bd);
 						}
 					}
@@ -107,7 +106,7 @@ public class Funnel {
 								if (as.getCustomName().equals("SplashShield")) {
 									SplashShieldData ssdata = DataMgr
 											.getSplashShieldDataFromArmorStand((ArmorStand) as);
-									if (DataMgr.getPlayerData(ssdata.getPlayer()).team != DataMgr
+									if (DataMgr.getPlayerData(ssdata.player).team != DataMgr
 											.getPlayerData(player).team) {
 										ArmorStandMgr.giveDamageArmorStand((ArmorStand) as, damage, player);
 										as.getWorld().playSound(as.getLocation(), Sound.ENTITY_PLAYER_HURT, 0.8F, 1.2F);
@@ -115,7 +114,7 @@ public class Funnel {
 									}
 								} else if (as.getCustomName().equals("Kasa")) {
 									KasaData ssdata = DataMgr.getKasaDataFromArmorStand((ArmorStand) as);
-									if (DataMgr.getPlayerData(ssdata.getPlayer()).team != DataMgr
+									if (DataMgr.getPlayerData(ssdata.player).team != DataMgr
 											.getPlayerData(player).team) {
 										ArmorStandMgr.giveDamageArmorStand((ArmorStand) as, damage, player);
 										as.getWorld().playSound(as.getLocation(), Sound.ENTITY_PLAYER_HURT, 0.8F, 1.2F);
@@ -232,18 +231,17 @@ public class Funnel {
 								((CraftPlayer) o_player).getHandle().playerConnection.sendPacket(
 										new PacketPlayOutEntityEquipment(list.get(2).getEntityId(), EnumItemSlot.HEAD,
 												CraftItemStack.asNMSCopy(new ItemStack(Material.getMaterial(
-														team.getTeamColor().getGlass().toString() + "_PANE")))));
+														team.getTeamColor().glass.toString() + "_PANE")))));
 								((CraftPlayer) o_player).getHandle().playerConnection.sendPacket(
 										new PacketPlayOutEntityEquipment(list.get(1).getEntityId(), EnumItemSlot.HEAD,
 												CraftItemStack.asNMSCopy(new ItemStack(Material.getMaterial(
-														team.getTeamColor().getGlass().toString() + "_PANE")))));
-								((CraftPlayer) o_player).getHandle().playerConnection
-										.sendPacket(new PacketPlayOutEntityEquipment(list.get(0).getEntityId(),
-												EnumItemSlot.HEAD, CraftItemStack
-														.asNMSCopy(new ItemStack(team.getTeamColor().getWool()))));
+														team.getTeamColor().glass.toString() + "_PANE")))));
+								((CraftPlayer) o_player).getHandle().playerConnection.sendPacket(
+										new PacketPlayOutEntityEquipment(list.get(0).getEntityId(), EnumItemSlot.HEAD,
+												CraftItemStack.asNMSCopy(new ItemStack(team.getTeamColor().wool))));
 							}
 							list6.add(as3);
-							kdata.setDamage(0);
+							kdata.damage = 0;
 							kdata.setArmorStandList(list);
 							cancel();
 						}
@@ -287,18 +285,17 @@ public class Funnel {
 								((CraftPlayer) o_player).getHandle().playerConnection.sendPacket(
 										new PacketPlayOutEntityEquipment(list1.get(2).getEntityId(), EnumItemSlot.HEAD,
 												CraftItemStack.asNMSCopy(new ItemStack(Material.getMaterial(
-														team.getTeamColor().getGlass().toString() + "_PANE")))));
+														team.getTeamColor().glass.toString() + "_PANE")))));
 								((CraftPlayer) o_player).getHandle().playerConnection.sendPacket(
 										new PacketPlayOutEntityEquipment(list1.get(1).getEntityId(), EnumItemSlot.HEAD,
 												CraftItemStack.asNMSCopy(new ItemStack(Material.getMaterial(
-														team.getTeamColor().getGlass().toString() + "_PANE")))));
-								((CraftPlayer) o_player).getHandle().playerConnection
-										.sendPacket(new PacketPlayOutEntityEquipment(list1.get(0).getEntityId(),
-												EnumItemSlot.HEAD, CraftItemStack
-														.asNMSCopy(new ItemStack(team.getTeamColor().getWool()))));
+														team.getTeamColor().glass.toString() + "_PANE")))));
+								((CraftPlayer) o_player).getHandle().playerConnection.sendPacket(
+										new PacketPlayOutEntityEquipment(list1.get(0).getEntityId(), EnumItemSlot.HEAD,
+												CraftItemStack.asNMSCopy(new ItemStack(team.getTeamColor().wool))));
 							}
 							list6.add(as13);
-							kdata1.setDamage(0);
+							kdata1.damage = 0;
 							kdata1.setArmorStandList(list1);
 							cancel();
 						}
@@ -342,18 +339,17 @@ public class Funnel {
 								((CraftPlayer) o_player).getHandle().playerConnection.sendPacket(
 										new PacketPlayOutEntityEquipment(list2.get(2).getEntityId(), EnumItemSlot.HEAD,
 												CraftItemStack.asNMSCopy(new ItemStack(Material.getMaterial(
-														team.getTeamColor().getGlass().toString() + "_PANE")))));
+														team.getTeamColor().glass.toString() + "_PANE")))));
 								((CraftPlayer) o_player).getHandle().playerConnection.sendPacket(
 										new PacketPlayOutEntityEquipment(list2.get(1).getEntityId(), EnumItemSlot.HEAD,
 												CraftItemStack.asNMSCopy(new ItemStack(Material.getMaterial(
-														team.getTeamColor().getGlass().toString() + "_PANE")))));
-								((CraftPlayer) o_player).getHandle().playerConnection
-										.sendPacket(new PacketPlayOutEntityEquipment(list2.get(0).getEntityId(),
-												EnumItemSlot.HEAD, CraftItemStack
-														.asNMSCopy(new ItemStack(team.getTeamColor().getWool()))));
+														team.getTeamColor().glass.toString() + "_PANE")))));
+								((CraftPlayer) o_player).getHandle().playerConnection.sendPacket(
+										new PacketPlayOutEntityEquipment(list2.get(0).getEntityId(), EnumItemSlot.HEAD,
+												CraftItemStack.asNMSCopy(new ItemStack(team.getTeamColor().wool))));
 							}
 							list6.add(as23);
-							kdata2.setDamage(0);
+							kdata2.damage = 0;
 							kdata2.setArmorStandList(list2);
 							cancel();
 						}
@@ -404,9 +400,9 @@ public class Funnel {
 						kdata.setArmorStandList(list);
 						kdata1.setArmorStandList(list1);
 						kdata2.setArmorStandList(list2);
-						kdata.setDamage(0);
-						kdata1.setDamage(0);
-						kdata2.setDamage(0);
+						kdata.damage = 0;
+						kdata1.damage = 0;
+						kdata2.damage = 0;
 						for (ArmorStand as : list) {
 							DataMgr.setKasaDataWithARmorStand(as, kdata);
 						}
@@ -433,15 +429,14 @@ public class Funnel {
 								((CraftPlayer) o_player).getHandle().playerConnection.sendPacket(
 										new PacketPlayOutEntityEquipment(aslist.get(1).getEntityId(), EnumItemSlot.HEAD,
 												CraftItemStack.asNMSCopy(new ItemStack(Material.getMaterial(
-														team.getTeamColor().getGlass().toString() + "_PANE")))));
+														team.getTeamColor().glass.toString() + "_PANE")))));
 								((CraftPlayer) o_player).getHandle().playerConnection.sendPacket(
 										new PacketPlayOutEntityEquipment(aslist.get(2).getEntityId(), EnumItemSlot.HEAD,
 												CraftItemStack.asNMSCopy(new ItemStack(Material.getMaterial(
-														team.getTeamColor().getGlass().toString() + "_PANE")))));
-								((CraftPlayer) o_player).getHandle().playerConnection
-										.sendPacket(new PacketPlayOutEntityEquipment(aslist.get(0).getEntityId(),
-												EnumItemSlot.HEAD, CraftItemStack
-														.asNMSCopy(new ItemStack(team.getTeamColor().getWool()))));
+														team.getTeamColor().glass.toString() + "_PANE")))));
+								((CraftPlayer) o_player).getHandle().playerConnection.sendPacket(
+										new PacketPlayOutEntityEquipment(aslist.get(0).getEntityId(), EnumItemSlot.HEAD,
+												CraftItemStack.asNMSCopy(new ItemStack(team.getTeamColor().wool))));
 							}
 						}
 						taskcheck.runTaskLater(Sclat.getPlugin(), 20);
@@ -449,17 +444,17 @@ public class Funnel {
 					if (i >= 0) {
 						// ファンネル破壊時の復活処理
 						if (p.getGameMode() == GameMode.SPECTATOR) {
-							if (kdata.getDamage() <= FunnelMaxHP) {
-								kdata.setDamage(1024);
+							if (kdata.damage <= FunnelMaxHP) {
+								kdata.damage = 1024;
 							}
-							if (kdata1.getDamage() <= FunnelMaxHP) {
-								kdata1.setDamage(1024);
+							if (kdata1.damage <= FunnelMaxHP) {
+								kdata1.damage = 1024;
 							}
-							if (kdata2.getDamage() <= FunnelMaxHP) {
-								kdata2.setDamage(1024);
+							if (kdata2.damage <= FunnelMaxHP) {
+								kdata2.damage = 1024;
 							}
 						}
-						if (kdata.getDamage() > FunnelMaxHP && kdata.getDamage() < 9999) {
+						if (kdata.damage > FunnelMaxHP && kdata.damage < 9999) {
 							ArmorStand kasaStand = kdata.getArmorStandList().get(0);
 							data.subArmorlist(kasaStand);
 							if (HashPlayer.containsKey(kasaStand)) {
@@ -472,18 +467,18 @@ public class Funnel {
 								HashArmorstand.remove(kasaStand);
 							} else {
 								list6.remove(kasaStand);
-								if (kdata.getDamage() == 1024) {
+								if (kdata.damage == 1024) {
 									listremove.runTaskLater(Sclat.getPlugin(), 110);
 								} else {
 									listremove.runTaskLater(Sclat.getPlugin(), 160);
 								}
 							}
-							kdata.setDamage(10000);
+							kdata.damage = 10000;
 							for (ArmorStand as : kdata.getArmorStandList()) {
 								as.remove();
 							}
 						}
-						if (kdata1.getDamage() > FunnelMaxHP && kdata1.getDamage() < 9999) {
+						if (kdata1.damage > FunnelMaxHP && kdata1.damage < 9999) {
 							ArmorStand kasaStand1 = kdata1.getArmorStandList().get(0);
 							data.subArmorlist(kasaStand1);
 							if (HashPlayer.containsKey(kasaStand1)) {
@@ -496,18 +491,18 @@ public class Funnel {
 								HashArmorstand.remove(kasaStand1);
 							} else {
 								list6.remove(kasaStand1);
-								if (kdata1.getDamage() == 1024) {
+								if (kdata1.damage == 1024) {
 									listremove1.runTaskLater(Sclat.getPlugin(), 110);
 								} else {
 									listremove1.runTaskLater(Sclat.getPlugin(), 160);
 								}
 							}
-							kdata1.setDamage(10000);
+							kdata1.damage = 10000;
 							for (ArmorStand as : kdata1.getArmorStandList()) {
 								as.remove();
 							}
 						}
-						if (kdata2.getDamage() > FunnelMaxHP && kdata2.getDamage() < 9999) {
+						if (kdata2.damage > FunnelMaxHP && kdata2.damage < 9999) {
 							ArmorStand kasaStand2 = kdata2.getArmorStandList().get(0);
 							data.subArmorlist(kasaStand2);
 							if (HashPlayer.containsKey(kasaStand2)) {
@@ -520,13 +515,13 @@ public class Funnel {
 								HashArmorstand.remove(kasaStand2);
 							} else {
 								list6.remove(kasaStand2);
-								if (kdata2.getDamage() == 1024) {
+								if (kdata2.damage == 1024) {
 									listremove2.runTaskLater(Sclat.getPlugin(), 110);
 								} else {
 									listremove2.runTaskLater(Sclat.getPlugin(), 160);
 								}
 							}
-							kdata2.setDamage(10000);
+							kdata2.damage = 10000;
 							for (ArmorStand as : kdata2.getArmorStandList()) {
 								as.remove();
 							}
@@ -580,8 +575,8 @@ public class Funnel {
 										if ((HashPlayer.get(aslistget0).getGameMode() == GameMode.SPECTATOR
 												|| !DataMgr.getPlayerData(HashPlayer.get(aslistget0)).isInMatch()
 												|| !HashPlayer.get(aslistget0).isOnline())
-												&& kdata.getDamage() < FunnelMaxHP) {
-											kdata.setDamage(FunnelMaxHP + 1);
+												&& kdata.damage < FunnelMaxHP) {
+											kdata.damage = FunnelMaxHP + 1;
 											kdataReset = i + 3;
 										}
 									} else if (HashArmorstand.containsKey(aslistget0)) {
@@ -607,7 +602,7 @@ public class Funnel {
 										}
 										if (!HashArmorstand.get(aslistget0).isVisible()) {
 											kdataReset = i + 3;
-											kdata.setDamage(FunnelMaxHP + 1);
+											kdata.damage = FunnelMaxHP + 1;
 										}
 									}
 									if (i % 20 == 0) {
@@ -617,18 +612,16 @@ public class Funnel {
 													new PacketPlayOutEntityEquipment(aslist.get(2).getEntityId(),
 															EnumItemSlot.HEAD,
 															CraftItemStack.asNMSCopy(new ItemStack(Material.getMaterial(
-																	team.getTeamColor().getGlass().toString()
-																			+ "_PANE")))));
+																	team.getTeamColor().glass.toString() + "_PANE")))));
 											((CraftPlayer) o_player).getHandle().playerConnection.sendPacket(
 													new PacketPlayOutEntityEquipment(aslist.get(1).getEntityId(),
 															EnumItemSlot.HEAD,
 															CraftItemStack.asNMSCopy(new ItemStack(Material.getMaterial(
-																	team.getTeamColor().getGlass().toString()
-																			+ "_PANE")))));
+																	team.getTeamColor().glass.toString() + "_PANE")))));
 											((CraftPlayer) o_player).getHandle().playerConnection.sendPacket(
 													new PacketPlayOutEntityEquipment(aslist.get(0).getEntityId(),
 															EnumItemSlot.HEAD, CraftItemStack.asNMSCopy(
-																	new ItemStack(team.getTeamColor().getWool()))));
+																	new ItemStack(team.getTeamColor().wool))));
 										}
 									}
 								} else {
@@ -666,9 +659,9 @@ public class Funnel {
 										if ((HashPlayer.get(aslistget0).getGameMode() == GameMode.SPECTATOR
 												|| !DataMgr.getPlayerData(HashPlayer.get(aslistget0)).isInMatch()
 												|| !HashPlayer.get(aslistget0).isOnline())
-												&& kdata1.getDamage() < FunnelMaxHP) {
+												&& kdata1.damage < FunnelMaxHP) {
 											kdataReset1 = i + 3;
-											kdata1.setDamage(FunnelMaxHP + 1);
+											kdata1.damage = FunnelMaxHP + 1;
 										}
 									} else if (HashArmorstand.containsKey(aslistget0)) {
 										Location las = aslistget0.getLocation();
@@ -693,7 +686,7 @@ public class Funnel {
 										}
 										if (!HashArmorstand.get(aslistget0).isVisible()) {
 											kdataReset1 = i + 3;
-											kdata1.setDamage(FunnelMaxHP + 1);
+											kdata1.damage = FunnelMaxHP + 1;
 										}
 									}
 									if (i % 20 == 0) {
@@ -703,18 +696,16 @@ public class Funnel {
 													new PacketPlayOutEntityEquipment(aslist.get(2).getEntityId(),
 															EnumItemSlot.HEAD,
 															CraftItemStack.asNMSCopy(new ItemStack(Material.getMaterial(
-																	team.getTeamColor().getGlass().toString()
-																			+ "_PANE")))));
+																	team.getTeamColor().glass.toString() + "_PANE")))));
 											((CraftPlayer) o_player).getHandle().playerConnection.sendPacket(
 													new PacketPlayOutEntityEquipment(aslist.get(1).getEntityId(),
 															EnumItemSlot.HEAD,
 															CraftItemStack.asNMSCopy(new ItemStack(Material.getMaterial(
-																	team.getTeamColor().getGlass().toString()
-																			+ "_PANE")))));
+																	team.getTeamColor().glass.toString() + "_PANE")))));
 											((CraftPlayer) o_player).getHandle().playerConnection.sendPacket(
 													new PacketPlayOutEntityEquipment(aslist.get(0).getEntityId(),
 															EnumItemSlot.HEAD, CraftItemStack.asNMSCopy(
-																	new ItemStack(team.getTeamColor().getWool()))));
+																	new ItemStack(team.getTeamColor().wool))));
 										}
 									}
 								} else {
@@ -752,9 +743,9 @@ public class Funnel {
 										if ((HashPlayer.get(aslistget0).getGameMode() == GameMode.SPECTATOR
 												|| !DataMgr.getPlayerData(HashPlayer.get(aslistget0)).isInMatch()
 												|| !HashPlayer.get(aslistget0).isOnline())
-												&& kdata2.getDamage() < FunnelMaxHP) {
+												&& kdata2.damage < FunnelMaxHP) {
 											kdataReset2 = i + 3;
-											kdata2.setDamage(FunnelMaxHP + 1);
+											kdata2.damage = FunnelMaxHP + 1;
 										}
 									} else if (HashArmorstand.containsKey(aslistget0)) {
 										Location las = aslistget0.getLocation();
@@ -779,7 +770,7 @@ public class Funnel {
 										}
 										if (!HashArmorstand.get(aslistget0).isVisible()) {
 											kdataReset2 = i + 3;
-											kdata2.setDamage(FunnelMaxHP + 1);
+											kdata2.damage = FunnelMaxHP + 1;
 										}
 									}
 									// 残数表記
@@ -801,18 +792,16 @@ public class Funnel {
 													new PacketPlayOutEntityEquipment(aslist.get(2).getEntityId(),
 															EnumItemSlot.HEAD,
 															CraftItemStack.asNMSCopy(new ItemStack(Material.getMaterial(
-																	team.getTeamColor().getGlass().toString()
-																			+ "_PANE")))));
+																	team.getTeamColor().glass.toString() + "_PANE")))));
 											((CraftPlayer) o_player).getHandle().playerConnection.sendPacket(
 													new PacketPlayOutEntityEquipment(aslist.get(1).getEntityId(),
 															EnumItemSlot.HEAD,
 															CraftItemStack.asNMSCopy(new ItemStack(Material.getMaterial(
-																	team.getTeamColor().getGlass().toString()
-																			+ "_PANE")))));
+																	team.getTeamColor().glass.toString() + "_PANE")))));
 											((CraftPlayer) o_player).getHandle().playerConnection.sendPacket(
 													new PacketPlayOutEntityEquipment(aslist.get(0).getEntityId(),
 															EnumItemSlot.HEAD, CraftItemStack.asNMSCopy(
-																	new ItemStack(team.getTeamColor().getWool()))));
+																	new ItemStack(team.getTeamColor().wool))));
 										}
 									}
 								} else {
@@ -854,7 +843,7 @@ public class Funnel {
 										if (player.getLocation()
 												.distanceSquared(position) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED) {
 											org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(player).team
-													.getTeamColor().getWool().createBlockData();
+													.getTeamColor().wool.createBlockData();
 											player.spawnParticle(org.bukkit.Particle.BLOCK_DUST, position, 1, 0, 0, 0,
 													1, bd);
 										}
@@ -879,8 +868,8 @@ public class Funnel {
 												HashPlayer.put(as3, target);
 												GlowingAPI.setGlowing(as3, player, true);
 												GlowingAPI.setGlowing(as3, target, true);
-												if (kdata.getDamage() < FunnelMaxHP2) {
-													kdata.setDamage(FunnelMaxHP2);
+												if (kdata.damage < FunnelMaxHP2) {
+													kdata.damage = FunnelMaxHP2;
 												}
 												as3.setGravity(true);
 												kdataReset = i + 210;
@@ -892,8 +881,8 @@ public class Funnel {
 												HashPlayer.put(as13, target);
 												GlowingAPI.setGlowing(as13, player, true);
 												GlowingAPI.setGlowing(as13, target, true);
-												if (kdata1.getDamage() < FunnelMaxHP2) {
-													kdata1.setDamage(FunnelMaxHP2);
+												if (kdata1.damage < FunnelMaxHP2) {
+													kdata1.damage = FunnelMaxHP2;
 												}
 												as13.setGravity(true);
 												kdataReset1 = i + 210;
@@ -905,8 +894,8 @@ public class Funnel {
 												HashPlayer.put(as23, target);
 												GlowingAPI.setGlowing(as23, player, true);
 												GlowingAPI.setGlowing(as23, target, true);
-												if (kdata2.getDamage() < FunnelMaxHP2) {
-													kdata2.setDamage(FunnelMaxHP2);
+												if (kdata2.damage < FunnelMaxHP2) {
+													kdata2.damage = FunnelMaxHP2;
 												}
 												as23.setGravity(true);
 												kdataReset2 = i + 210;
@@ -928,13 +917,13 @@ public class Funnel {
 											if (as.getCustomName().equals("SplashShield")) {
 												// SplashShieldData ssdata =
 												// DataMgr.getSplashShieldDataFromArmorStand((ArmorStand)as);
-												// if(DataMgr.getPlayerData(ssdata.getPlayer()).getTeam() !=
+												// if(DataMgr.getPlayerData(ssdata.player).getTeam() !=
 												// DataMgr.getPlayerData(player).getTeam()){
 												// break loop;
 												// }
 											} else if (as.getCustomName().equals("Kasa")) {
 												// KasaData ssdata = DataMgr.getKasaDataFromArmorStand((ArmorStand)as);
-												// if(DataMgr.getPlayerData(ssdata.getPlayer()).getTeam() !=
+												// if(DataMgr.getPlayerData(ssdata.player).getTeam() !=
 												// DataMgr.getPlayerData(player).getTeam()){
 												// break loop;
 												// }
@@ -954,8 +943,8 @@ public class Funnel {
 																Sound.BLOCK_NOTE_BLOCK_DIDGERIDOO, 1.0f, 2);
 														HashArmorstand.put(as3, (ArmorStand) as);
 														GlowingAPI.setGlowing(as3, player, true);
-														if (kdata.getDamage() < FunnelMaxHP2) {
-															kdata.setDamage(FunnelMaxHP2);
+														if (kdata.damage < FunnelMaxHP2) {
+															kdata.damage = FunnelMaxHP2;
 														}
 														as3.setGravity(true);
 														kdataReset = i + 210;
@@ -967,8 +956,8 @@ public class Funnel {
 																Sound.BLOCK_NOTE_BLOCK_DIDGERIDOO, 1.0f, 2);
 														HashArmorstand.put(as13, (ArmorStand) as);
 														GlowingAPI.setGlowing(as13, player, true);
-														if (kdata1.getDamage() < FunnelMaxHP2) {
-															kdata1.setDamage(FunnelMaxHP2);
+														if (kdata1.damage < FunnelMaxHP2) {
+															kdata1.damage = FunnelMaxHP2;
 														}
 														as13.setGravity(true);
 														kdataReset1 = i + 210;
@@ -980,8 +969,8 @@ public class Funnel {
 																Sound.BLOCK_NOTE_BLOCK_DIDGERIDOO, 1.0f, 2);
 														HashArmorstand.put(as23, (ArmorStand) as);
 														GlowingAPI.setGlowing(as23, player, true);
-														if (kdata2.getDamage() < FunnelMaxHP2) {
-															kdata2.setDamage(FunnelMaxHP2);
+														if (kdata2.damage < FunnelMaxHP2) {
+															kdata2.damage = FunnelMaxHP2;
 														}
 														as23.setGravity(true);
 														kdataReset2 = i + 210;

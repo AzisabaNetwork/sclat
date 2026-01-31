@@ -39,17 +39,17 @@ public class SubWeaponMgr {
 
 		switch (data.getWeaponClass().getSubWeaponName()) {
 			case "スプラッシュボム" :
-				is = new ItemStack(data.team.getTeamColor().getGlass());
+				is = new ItemStack(data.team.getTeamColor().glass);
 				ism = is.getItemMeta();
 				ism.setDisplayName("スプラッシュボム");
 				break;
 			case "クイックボム" :
-				is = new ItemStack(data.team.getTeamColor().getWool());
+				is = new ItemStack(data.team.getTeamColor().wool);
 				ism = is.getItemMeta();
 				ism.setDisplayName("クイックボム");
 				break;
 			case "フローターボム" :
-				is = new ItemStack(data.team.getTeamColor().getWool());
+				is = new ItemStack(data.team.getTeamColor().wool);
 				ism = is.getItemMeta();
 				ism.setDisplayName("フローターボム");
 				break;
@@ -69,7 +69,7 @@ public class SubWeaponMgr {
 				ism.setDisplayName("ポイズン");
 				break;
 			case "キューバンボム" :
-				is = new ItemStack(data.team.getTeamColor().getConcrete());
+				is = new ItemStack(data.team.getTeamColor().concrete);
 				ism = is.getItemMeta();
 				ism.setDisplayName("キューバンボム");
 				break;

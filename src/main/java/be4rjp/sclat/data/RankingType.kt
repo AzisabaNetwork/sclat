@@ -1,5 +1,5 @@
-package be4rjp.sclat.data;
+package be4rjp.sclat.data
 
-public enum RankingType {
-	TOTAL, KILL, PAINT
+enum class RankingType {
+    TOTAL, KILL, PAINT
 }

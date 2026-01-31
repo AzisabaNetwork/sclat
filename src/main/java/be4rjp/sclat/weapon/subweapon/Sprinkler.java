@@ -148,11 +148,11 @@ public class Sprinkler {
 						continue;
 					((CraftPlayer) target).getHandle().playerConnection.sendPacket(new PacketPlayOutEntityEquipment(
 							as.getEntityId(), EnumItemSlot.HEAD, CraftItemStack.asNMSCopy(
-									new ItemStack(DataMgr.getPlayerData(player).team.getTeamColor().getGlass()))));
+									new ItemStack(DataMgr.getPlayerData(player).team.getTeamColor().glass))));
 				}
 				as.getWorld().playSound(as.getLocation(), Sound.ITEM_ARMOR_EQUIP_GENERIC, 1F, 1F);
 				// as.setHelmet(new
-				// ItemStack(DataMgr.getPlayerData(player).getTeam().getTeamColor().getGlass()));
+				// ItemStack(DataMgr.getPlayerData(player).getTeam().getTeamColor().glass));
 			}
 		};
 		delay.runTaskLater(Sclat.getPlugin(), 10);

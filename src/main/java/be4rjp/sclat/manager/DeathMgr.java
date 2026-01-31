@@ -8,6 +8,7 @@ import be4rjp.sclat.api.player.PlayerData;
 import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.weapon.Gear;
 import be4rjp.sclat.weapon.spweapon.SuperArmor;
+import java.util.List;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -20,8 +21,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
-
-import java.util.List;
 
 /**
  *
@@ -38,7 +37,7 @@ public class DeathMgr {
 		Item drop1 = target.getWorld().dropItem(target.getEyeLocation(),
 				DataMgr.getPlayerData(target).getWeaponClass().getMainWeapon().getWeaponIteamStack());
 		Item drop2 = target.getWorld().dropItem(target.getEyeLocation(),
-				DataMgr.getPlayerData(target).team.getTeamColor().getBougu());
+				DataMgr.getPlayerData(target).team.getTeamColor().bougu);
 		final double random = 0.4;
 		drop1.setVelocity(
 				new Vector(Math.random() * random - random / 2, random * 2 / 3, Math.random() * random - random / 2));
@@ -148,8 +147,8 @@ public class DeathMgr {
 						if (i == 80)
 							t.sendTitle(ChatColor.GREEN + "復活まであと: 1秒", msg, 0, 18, 2);
 						// t.sendTitle("", sdata.getTeam().getTeamColor().getColorCode() +
-						// s.getDisplayName() + ChatColor.RESET + "に" + ChatColor.BOLD +
-						// sdata.getWeaponClass().getMainWeapon().getWeaponIteamStack().getItemMeta().getDisplayName()
+						// s.displayName + ChatColor.RESET + "に" + ChatColor.BOLD +
+						// sdata.getWeaponClass().getMainWeapon().getWeaponIteamStack().getItemMeta().displayName
 						// + ChatColor.RESET + "でやられた！", 0, 5, 2);
 						if (i == 100) {
 							DataMgr.getPlayerData(target).setIsDead(false);
@@ -213,8 +212,8 @@ public class DeathMgr {
 						if (i == 80)
 							t.sendTitle(ChatColor.GREEN + "復活まであと: 1秒", msg, 0, 18, 2);
 						// t.sendTitle("", sdata.getTeam().getTeamColor().getColorCode() +
-						// s.getDisplayName() + ChatColor.RESET + "に" + ChatColor.BOLD +
-						// sdata.getWeaponClass().getMainWeapon().getWeaponIteamStack().getItemMeta().getDisplayName()
+						// s.displayName + ChatColor.RESET + "に" + ChatColor.BOLD +
+						// sdata.getWeaponClass().getMainWeapon().getWeaponIteamStack().getItemMeta().displayName
 						// + ChatColor.RESET + "でやられた！", 0, 5, 2);
 						if (i == 100) {
 							DataMgr.getPlayerData(target).setIsDead(false);
@@ -278,8 +277,8 @@ public class DeathMgr {
 						if (i == 80)
 							t.sendTitle(ChatColor.GREEN + "復活まであと: 1秒", msg, 0, 18, 2);
 						// t.sendTitle("", sdata.getTeam().getTeamColor().getColorCode() +
-						// s.getDisplayName() + ChatColor.RESET + "に" + ChatColor.BOLD +
-						// sdata.getWeaponClass().getMainWeapon().getWeaponIteamStack().getItemMeta().getDisplayName()
+						// s.displayName + ChatColor.RESET + "に" + ChatColor.BOLD +
+						// sdata.getWeaponClass().getMainWeapon().getWeaponIteamStack().getItemMeta().displayName
 						// + ChatColor.RESET + "でやられた！", 0, 5, 2);
 						if (i == 100) {
 							DataMgr.getPlayerData(target).setIsDead(false);
@@ -319,8 +318,8 @@ public class DeathMgr {
 								for (Player player : Sclat.getPlugin(Sclat.class).getServer().getOnlinePlayers()) {
 									// player.sendMessage(
 									// DataMgr.getPlayerData(t).getTeam().getTeamColor().getColorCode() +
-									// t.getDisplayName() + ChatColor.RESET + "は" + ChatColor.RESET
-									// +sdata.getTeam().getTeamColor().getColorCode() + splayer.getDisplayName() +
+									// t.displayName + ChatColor.RESET + "は" + ChatColor.RESET
+									// +sdata.getTeam().getTeamColor().getColorCode() + splayer.displayName +
 									// ChatColor.RESET+ "に突き落とされてしまった！");
 									player.sendMessage(sdata.team.getTeamColor().getColorCode()
 											+ splayer.getDisplayName() + ChatColor.RESET + "は" + ChatColor.RESET
@@ -378,8 +377,8 @@ public class DeathMgr {
 								PlayerData sdata = DataMgr.getPlayerData(splayer);
 								for (Player player : Sclat.getPlugin(Sclat.class).getServer().getOnlinePlayers()) {
 									// player.sendMessage(DataMgr.getPlayerData(t).getTeam().getTeamColor().getColorCode()
-									// + t.getDisplayName() + ChatColor.RESET + "は" + ChatColor.RESET +
-									// sdata.getTeam().getTeamColor().getColorCode() + splayer.getDisplayName() +
+									// + t.displayName + ChatColor.RESET + "は" + ChatColor.RESET +
+									// sdata.getTeam().getTeamColor().getColorCode() + splayer.displayName +
 									// ChatColor.RESET + "に突き落とされてしまった！");
 									player.sendMessage(sdata.team.getTeamColor().getColorCode()
 											+ splayer.getDisplayName() + ChatColor.RESET + "は" + ChatColor.RESET
@@ -467,7 +466,7 @@ public class DeathMgr {
 					if (DataMgr.getPlayerData(o_player).settings.ShowEffect_SPWeapon() && !o_player.equals(player)) {
 						Particle.DustOptions dustOptions = new Particle.DustOptions(
 								data.team.getTeamColor().getBukkitColor(), 1);
-						org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).team.getTeamColor().getWool()
+						org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).team.getTeamColor().wool
 								.createBlockData();
 						for (Location e_loc : s_locs)
 							if (o_player.getWorld() == e_loc.getWorld())

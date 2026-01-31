@@ -10,6 +10,7 @@ import be4rjp.sclat.data.KasaData;
 import be4rjp.sclat.data.SplashShieldData;
 import be4rjp.sclat.manager.ArmorStandMgr;
 import be4rjp.sclat.manager.PaintMgr;
+import java.util.ArrayList;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -25,8 +26,6 @@ import org.bukkit.entity.Snowball;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
-
-import java.util.ArrayList;
 
 /**
  *
@@ -84,12 +83,12 @@ public class Roller {
 						Vector vec = new Vector(locvec.getX(), 0, locvec.getZ()).normalize();
 						// RayTrace rayTrace1 = new RayTrace(front.toVector(), vec1);
 						// ArrayList<Vector> positions1 =
-						// rayTrace1.traverse(data.getWeaponClass().getMainWeapon().getRollerWidth(),
+						// rayTrace1.traverse(data.getWeaponClass().getMainWeapon().rollerWidth,
 						// 0.5);
 						Location front = eloc.add(vec.getX() * 2.5, -0.9, vec.getZ() * 2.5);
-						if (data.getWeaponClass().getMainWeapon().getIsHude())
+						if (data.getWeaponClass().getMainWeapon().isHude)
 							front = eloc.add(vec.getX() * 1.5, -0.9, vec.getZ() * 1.5);
-						org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).team.getTeamColor().getWool()
+						org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).team.getTeamColor().wool
 								.createBlockData();
 						for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 							if (DataMgr.getPlayerData(target).settings.ShowEffect_MainWeaponInk())
@@ -102,7 +101,7 @@ public class Roller {
 						Vector vec2 = new Vector(vec.getZ(), 0, vec.getX() * -1);
 
 						// 筆系武器
-						if (data.getWeaponClass().getMainWeapon().getIsHude()) {
+						if (data.getWeaponClass().getMainWeapon().isHude) {
 							Location position = p.getLocation();
 							PaintMgr.PaintHightestBlock(front, p, false, true);
 							p.getLocation().getWorld().spawnParticle(org.bukkit.Particle.BLOCK_DUST, position, 2, 0, 0,
@@ -152,7 +151,7 @@ public class Roller {
 						// 法線ベクトルでロール部分の取得
 						RayTrace rayTrace1 = new RayTrace(front.toVector(), vec1);
 						ArrayList<Vector> positions1 = rayTrace1
-								.traverse(data.getWeaponClass().getMainWeapon().getRollerWidth(), 0.5);
+								.traverse(data.getWeaponClass().getMainWeapon().rollerWidth, 0.5);
 						loop : for (Vector vector : positions1) {
 							Location position = vector.toLocation(p.getLocation().getWorld());
 							Block block = p.getLocation().getWorld().getBlockAt(position);
@@ -181,15 +180,15 @@ public class Roller {
 												if (as.getCustomName().equals("Kasa")) {
 													KasaData kasaData = DataMgr
 															.getKasaDataFromArmorStand((ArmorStand) as);
-													if (DataMgr.getPlayerData(kasaData.getPlayer()).team != DataMgr
+													if (DataMgr.getPlayerData(kasaData.player).team != DataMgr
 															.getPlayerData(p).team) {
 														break loop;
 													}
 												} else if (as.getCustomName().equals("SplashShield")) {
 													SplashShieldData splashShieldData = DataMgr
 															.getSplashShieldDataFromArmorStand((ArmorStand) as);
-													if (DataMgr.getPlayerData(splashShieldData
-															.getPlayer()).team != DataMgr.getPlayerData(p).team) {
+													if (DataMgr.getPlayerData(splashShieldData.player).team != DataMgr
+															.getPlayerData(p).team) {
 														break loop;
 													}
 												}
@@ -207,7 +206,7 @@ public class Roller {
 										&& target.getGameMode().equals(GameMode.ADVENTURE)) {
 									if (target.getLocation().distanceSquared(position) <= maxDistSquad) {
 										if (rayTrace1.intersects(new BoundingBox((Entity) target),
-												data.getWeaponClass().getMainWeapon().getRollerWidth(), 0.05)) {
+												data.getWeaponClass().getMainWeapon().rollerWidth, 0.05)) {
 
 											double damage = DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon()
 													.getRollerDamage();
@@ -245,7 +244,7 @@ public class Roller {
 
 						RayTrace rayTrace2 = new RayTrace(front.toVector(), vec2);
 						ArrayList<Vector> positions2 = rayTrace2
-								.traverse(data.getWeaponClass().getMainWeapon().getRollerWidth(), 0.5);
+								.traverse(data.getWeaponClass().getMainWeapon().rollerWidth, 0.5);
 						loop : for (Vector vector : positions2) {
 							Location position = vector.toLocation(p.getLocation().getWorld());
 							Block block = p.getLocation().getWorld().getBlockAt(position);
@@ -271,15 +270,15 @@ public class Roller {
 												if (as.getCustomName().equals("Kasa")) {
 													KasaData kasaData = DataMgr
 															.getKasaDataFromArmorStand((ArmorStand) as);
-													if (DataMgr.getPlayerData(kasaData.getPlayer()).team != DataMgr
+													if (DataMgr.getPlayerData(kasaData.player).team != DataMgr
 															.getPlayerData(p).team) {
 														break loop;
 													}
 												} else if (as.getCustomName().equals("SplashShield")) {
 													SplashShieldData splashShieldData = DataMgr
 															.getSplashShieldDataFromArmorStand((ArmorStand) as);
-													if (DataMgr.getPlayerData(splashShieldData
-															.getPlayer()).team != DataMgr.getPlayerData(p).team) {
+													if (DataMgr.getPlayerData(splashShieldData.player).team != DataMgr
+															.getPlayerData(p).team) {
 														break loop;
 													}
 												}
@@ -296,7 +295,7 @@ public class Roller {
 								if (DataMgr.getPlayerData(p).team != DataMgr.getPlayerData(target).team
 										&& target.getGameMode().equals(GameMode.ADVENTURE)) {
 									if (rayTrace1.intersects(new BoundingBox((Entity) target),
-											data.getWeaponClass().getMainWeapon().getRollerWidth(), 0.05)) {
+											data.getWeaponClass().getMainWeapon().rollerWidth, 0.05)) {
 										if (target.getLocation().distanceSquared(position) <= maxDistSquad) {
 
 											double damage = DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon()
@@ -340,7 +339,7 @@ public class Roller {
 				}
 			}
 		};
-		if (DataMgr.getPlayerData(player).getWeaponClass().getMainWeapon().getIsHude())
+		if (DataMgr.getPlayerData(player).getWeaponClass().getMainWeapon().isHude)
 			task.runTaskTimer(Sclat.getPlugin(), 0, 1);
 		else
 			task.runTaskTimer(Sclat.getPlugin(), 0, 5);
@@ -374,7 +373,7 @@ public class Roller {
 				boolean sound = false;
 				for (int i = 0; i < data.getWeaponClass().getMainWeapon().getRollerShootQuantity(); i++) {
 					boolean is;
-					if (data.getWeaponClass().getMainWeapon().getIsHude()) {
+					if (data.getWeaponClass().getMainWeapon().isHude) {
 						is = Roller.Shoot(p, vec);
 					} else {
 						is = Roller.Shoot(p, null);
@@ -425,14 +424,14 @@ public class Roller {
 				/ Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)));
 		Snowball ball = player.launchProjectile(Snowball.class);
 		((CraftSnowball) ball).getHandle().setItem(
-				CraftItemStack.asNMSCopy(new ItemStack(DataMgr.getPlayerData(player).team.getTeamColor().getWool())));
+				CraftItemStack.asNMSCopy(new ItemStack(DataMgr.getPlayerData(player).team.getTeamColor().wool)));
 		Vector vec = player.getLocation().getDirection()
 				.multiply(DataMgr.getPlayerData(player).getWeaponClass().getMainWeapon().getShootSpeed());
 		if (v != null)
 			vec = v;
-		double random = DataMgr.getPlayerData(player).getWeaponClass().getMainWeapon().getRandom();
+		double random = DataMgr.getPlayerData(player).getWeaponClass().getMainWeapon().random;
 		int distick = DataMgr.getPlayerData(player).getWeaponClass().getMainWeapon().getDistanceTick();
-		if (!data.getWeaponClass().getMainWeapon().getIsHude()) {
+		if (!data.getWeaponClass().getMainWeapon().isHude) {
 			if (player.isOnGround())
 				vec.add(new Vector(Math.random() * random - random / 2, Math.random() * random / 4 - random / 8,
 						Math.random() * random - random / 2));
@@ -479,7 +478,7 @@ public class Roller {
 							continue;
 						if (!DataMgr.getPlayerData(target).settings.ShowEffect_MainWeaponInk())
 							continue;
-						org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).team.getTeamColor().getWool()
+						org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).team.getTeamColor().wool
 								.createBlockData();
 						target.spawnParticle(org.bukkit.Particle.BLOCK_DUST, inkball.getLocation(), 1, 0, 0, 0, 1, bd);
 					}

@@ -13,6 +13,8 @@ import be4rjp.sclat.manager.BungeeCordMgr;
 import be4rjp.sclat.manager.PathMgr;
 import be4rjp.sclat.manager.PlayerStatusMgr;
 import be4rjp.sclat.server.StatusClient;
+import java.util.ArrayList;
+import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -32,10 +34,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import static be4rjp.sclat.Sclat.conf;
 
 public class Tutorial {
@@ -347,8 +345,8 @@ public class Tutorial {
 					// ------------------------------------------------------------
 					for (PaintData data : DataMgr.getBlockDataMap().values()) {
 						data.getBlock().setType(data.getOriginalType());
-						if (data.getBlockData() != null)
-							data.getBlock().setBlockData(data.getBlockData());
+						if (data.blockData != null)
+							data.getBlock().setBlockData(data.blockData);
 						data = null;
 					}
 					DataMgr.getBlockDataMap().clear();
@@ -375,11 +373,11 @@ public class Tutorial {
 					for (Block block : blocks) {
 						if (block.getType().equals(Material.WHITE_STAINED_GLASS)) {
 							PaintData pdata = new PaintData(block);
-							pdata.setMatch(match);
-							pdata.setTeam(match.getTeam0());
+							pdata.match = (match);
+							pdata.team = (match.team0);
 							pdata.setOrigianlType(block.getType());
 							DataMgr.setPaintDataFromBlock(block, pdata);
-							block.setType(match.getTeam0().getTeamColor().getGlass());
+							block.setType(match.team0.getTeamColor().glass);
 						}
 					}
 

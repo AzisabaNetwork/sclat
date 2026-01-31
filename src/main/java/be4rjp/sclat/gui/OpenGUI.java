@@ -12,6 +12,8 @@ import be4rjp.sclat.manager.PlayerStatusMgr;
 import be4rjp.sclat.manager.RankMgr;
 import be4rjp.sclat.tutorial.Tutorial;
 import be4rjp.sclat.weapon.Gear;
+import java.util.ArrayList;
+import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -22,10 +24,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import static be4rjp.sclat.Sclat.conf;
 
 /**
@@ -274,7 +272,7 @@ public class OpenGUI {
 	public static void SuperJumpGUI(Player player) {
 		Inventory inv = Bukkit.createInventory(null, 18, "Chose Target");
 
-		ItemStack is = new ItemStack(DataMgr.getPlayerData(player).team.getTeamColor().getGlass());
+		ItemStack is = new ItemStack(DataMgr.getPlayerData(player).team.getTeamColor().glass);
 		ItemMeta ism = is.getItemMeta();
 		ism.setDisplayName(Sclat.tutorial ? "§r§6ロビーへジャンプ" : "§r§6リスポーン地点へジャンプ");
 		is.setItemMeta(ism);
@@ -358,7 +356,7 @@ public class OpenGUI {
 					|| DataMgr.getWeaponClass(ClassName).getMainWeapon().getWeaponType().equals("Burst")
 					|| DataMgr.getWeaponClass(ClassName).getMainWeapon().getWeaponType().equals("Blaster")
 					|| DataMgr.getWeaponClass(ClassName).getMainWeapon().getWeaponType().equals("Spinner"))) {
-				if (DataMgr.getWeaponClass(ClassName).getMainWeapon().getMoney() == 0) {
+				if (DataMgr.getWeaponClass(ClassName).getMainWeapon().money == 0) {
 					shooter.setItem(slotnum, item);
 					slotnum++;
 				} else if (PlayerStatusMgr.haveWeapon(player, ClassName)) {
@@ -389,7 +387,7 @@ public class OpenGUI {
 					if (shop) {
 						lores.add("");
 						lores.add("§r§bMoney : "
-								+ String.valueOf(DataMgr.getWeaponClass(ClassName).getMainWeapon().getMoney()));
+								+ String.valueOf(DataMgr.getWeaponClass(ClassName).getMainWeapon().money));
 					}
 					itemm.setLore(lores);
 					item.setItemMeta(itemm);
@@ -411,12 +409,12 @@ public class OpenGUI {
 					}
 					if (weaponType.equals("Hude")
 							&& DataMgr.getWeaponClass(ClassName).getMainWeapon().getWeaponType().equals("Roller")) {
-						if (DataMgr.getWeaponClass(ClassName).getMainWeapon().getIsHude())
+						if (DataMgr.getWeaponClass(ClassName).getMainWeapon().isHude)
 							equals = true;
 					}
 					if (weaponType.equals("Roller")
 							&& DataMgr.getWeaponClass(ClassName).getMainWeapon().getWeaponType().equals("Roller")) {
-						if (DataMgr.getWeaponClass(ClassName).getMainWeapon().getIsHude())
+						if (DataMgr.getWeaponClass(ClassName).getMainWeapon().isHude)
 							equals = false;
 					}
 					if (weaponType.equals("Burst")
@@ -427,7 +425,7 @@ public class OpenGUI {
 
 					if (weaponType.equals("Maneu")
 							&& DataMgr.getWeaponClass(ClassName).getMainWeapon().getWeaponType().equals("Shooter")) {
-						if (DataMgr.getWeaponClass(ClassName).getMainWeapon().getIsManeuver())
+						if (DataMgr.getWeaponClass(ClassName).getMainWeapon().isManeuver)
 							equals = true;
 					}
 					if (weaponType.equals("Swapper")
@@ -437,24 +435,24 @@ public class OpenGUI {
 					}
 					if (weaponType.equals("Shooter")
 							&& DataMgr.getWeaponClass(ClassName).getMainWeapon().getWeaponType().equals("Shooter")) {
-						if (DataMgr.getWeaponClass(ClassName).getMainWeapon().getIsManeuver()
+						if (DataMgr.getWeaponClass(ClassName).getMainWeapon().isManeuver
 								|| DataMgr.getWeaponClass(ClassName).getMainWeapon().getIsSwap())
 							equals = false;
 					}
 
 					if (slotnum <= 52 && equals) {
 						if (shop) {
-							if (DataMgr.getWeaponClass(ClassName).getMainWeapon().getMoney() != 0
+							if (DataMgr.getWeaponClass(ClassName).getMainWeapon().money != 0
 									&& !PlayerStatusMgr.haveWeapon(player, ClassName)) {
-								if (DataMgr.getWeaponClass(ClassName).getMainWeapon().getLevel() > PlayerStatusMgr
+								if (DataMgr.getWeaponClass(ClassName).getMainWeapon().level > PlayerStatusMgr
 										.getLv(player)) {
 									ItemStack glass = new ItemStack(Material.BLACK_STAINED_GLASS_PANE);
 									ItemMeta gmeta = glass.getItemMeta();
 									gmeta.setDisplayName("§6レベル§c"
-											+ DataMgr.getWeaponClass(ClassName).getMainWeapon().getLevel() + "§6で解禁");
+											+ DataMgr.getWeaponClass(ClassName).getMainWeapon().level + "§6で解禁");
 									glass.setItemMeta(gmeta);
 									shooter.setItem(slotnum, glass);
-								} else if (DataMgr.getWeaponClass(ClassName).getMainWeapon().getIslootbox()) {
+								} else if (DataMgr.getWeaponClass(ClassName).getMainWeapon().islootbox) {
 									ItemStack glass = new ItemStack(Material.BLACK_STAINED_GLASS_PANE);
 									ItemMeta gmeta = glass.getItemMeta();
 									gmeta.setDisplayName("§6ガチャ武器です");
@@ -466,14 +464,14 @@ public class OpenGUI {
 								slotnum++;
 							}
 						} else {
-							if (DataMgr.getWeaponClass(ClassName).getMainWeapon().getMoney() == 0
+							if (DataMgr.getWeaponClass(ClassName).getMainWeapon().money == 0
 									|| conf.getConfig().getString("WorkMode").equals("Trial")) {
-								if (DataMgr.getWeaponClass(ClassName).getMainWeapon().getLevel() > PlayerStatusMgr
+								if (DataMgr.getWeaponClass(ClassName).getMainWeapon().level > PlayerStatusMgr
 										.getLv(player)) {
 									ItemStack glass = new ItemStack(Material.BLACK_STAINED_GLASS_PANE);
 									ItemMeta gmeta = glass.getItemMeta();
 									gmeta.setDisplayName("§6レベル§c"
-											+ DataMgr.getWeaponClass(ClassName).getMainWeapon().getLevel() + "§6で解禁");
+											+ DataMgr.getWeaponClass(ClassName).getMainWeapon().level + "§6で解禁");
 									glass.setItemMeta(gmeta);
 									shooter.setItem(slotnum, glass);
 								} else {

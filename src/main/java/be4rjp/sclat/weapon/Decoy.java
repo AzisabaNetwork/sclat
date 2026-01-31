@@ -120,7 +120,7 @@ public class Decoy {
 					block = location.getBlock().getRelative(BlockFace.DOWN);
 					if (DataMgr.getBlockDataMap().containsKey(block)) {
 						if (block.getType().toString().contains("WOOL")) {
-							if (block.getType() != data.team.getTeamColor().getWool()) {
+							if (block.getType() != data.team.getTeamColor().wool) {
 								ika = true;
 							}
 						}
@@ -149,8 +149,8 @@ public class Decoy {
 								EnumItemSlot.MAINHAND, CraftItemStack.asNMSCopy(DataMgr.getPlayerData(player)
 										.getWeaponClass().getMainWeapon().getWeaponIteamStack())));
 						connection.sendPacket(new PacketPlayOutEntityEquipment(npc.getBukkitEntity().getEntityId(),
-								EnumItemSlot.HEAD, CraftItemStack
-										.asNMSCopy(DataMgr.getPlayerData(player).team.getTeamColor().getBougu())));
+								EnumItemSlot.HEAD,
+								CraftItemStack.asNMSCopy(DataMgr.getPlayerData(player).team.getTeamColor().bougu)));
 						connection.sendPacket(new PacketPlayOutAnimation(npc, 0));
 					}
 
@@ -159,7 +159,7 @@ public class Decoy {
 					block = location.getBlock().getRelative(BlockFace.DOWN);
 					if (DataMgr.getBlockDataMap().containsKey(block)) {
 						if (block.getType().toString().contains("WOOL")) {
-							ika = block.getType() != data.team.getTeamColor().getWool();
+							ika = block.getType() != data.team.getTeamColor().wool;
 						} else {
 							ika = false;
 						}

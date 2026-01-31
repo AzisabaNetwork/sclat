@@ -6,15 +6,14 @@ import be4rjp.sclat.api.Sphere;
 import be4rjp.sclat.api.player.PlayerData;
 import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.manager.SPWeaponMgr;
+import java.util.ArrayList;
+import java.util.List;
 import net.minecraft.server.v1_14_R1.EntityArmorStand;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  *
@@ -48,7 +47,7 @@ public class Barrier {
 					if (DataMgr.getPlayerData(o_player).settings.ShowEffect_SPWeapon() && !o_player.equals(player)) {
 						Particle.DustOptions dustOptions = new Particle.DustOptions(
 								data.team.getTeamColor().getBukkitColor(), 1);
-						org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).team.getTeamColor().getWool()
+						org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).team.getTeamColor().wool
 								.createBlockData();
 						for (Location e_loc : s_locs)
 							if (o_player.getWorld() == e_loc.getWorld())

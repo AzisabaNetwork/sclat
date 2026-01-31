@@ -4,6 +4,8 @@ import be4rjp.sclat.api.MessageType;
 import be4rjp.sclat.api.SclatUtil;
 import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.manager.PlayerStatusMgr;
+import java.util.ArrayList;
+import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -12,10 +14,6 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.ItemMeta;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import static be4rjp.sclat.Sclat.conf;
 
 public class LootBox {
@@ -34,8 +32,8 @@ public class LootBox {
 		double nextLootSeed = 0;
 		String name = "";
 		for (String ClassName : conf.getClassConfig().getConfigurationSection("WeaponClass").getKeys(false)) {
-			if (DataMgr.getWeaponClass(ClassName).getMainWeapon().getIslootbox()) {
-				double lootpro = DataMgr.getWeaponClass(ClassName).getMainWeapon().getLootpro();
+			if (DataMgr.getWeaponClass(ClassName).getMainWeapon().islootbox) {
+				double lootpro = DataMgr.getWeaponClass(ClassName).getMainWeapon().lootpro;
 				if (nextLootSeed <= LootSeed && LootSeed < lootpro + nextLootSeed) {
 					isHit = true;
 					if (!PlayerStatusMgr.haveWeapon(player, ClassName)) {
@@ -80,8 +78,8 @@ public class LootBox {
 		int slotnum = 0;
 		double nextLootpro = 0;
 		for (String ClassName : conf.getClassConfig().getConfigurationSection("WeaponClass").getKeys(false)) {
-			if (DataMgr.getWeaponClass(ClassName).getMainWeapon().getIslootbox()) {
-				double Lootpro = DataMgr.getWeaponClass(ClassName).getMainWeapon().getLootpro();
+			if (DataMgr.getWeaponClass(ClassName).getMainWeapon().islootbox) {
+				double Lootpro = DataMgr.getWeaponClass(ClassName).getMainWeapon().lootpro;
 				if (Lootpro != 0) {
 					ItemStack item = new ItemStack(
 							DataMgr.getWeaponClass(ClassName).getMainWeapon().getWeaponIteamStack());
@@ -176,10 +174,10 @@ public class LootBox {
 		}
 	}
 	public static void changeteam(Player player) {
-		if (DataMgr.getPlayerData(player).team == DataMgr.getPlayerData(player).match.getTeam1()) {
-			DataMgr.getPlayerData(player).team = DataMgr.getPlayerData(player).match.getTeam0();
+		if (DataMgr.getPlayerData(player).team == DataMgr.getPlayerData(player).match.team1) {
+			DataMgr.getPlayerData(player).team = DataMgr.getPlayerData(player).match.team0;
 		} else {
-			DataMgr.getPlayerData(player).team = DataMgr.getPlayerData(player).match.getTeam1();
+			DataMgr.getPlayerData(player).team = DataMgr.getPlayerData(player).match.team1;
 		}
 	}
 

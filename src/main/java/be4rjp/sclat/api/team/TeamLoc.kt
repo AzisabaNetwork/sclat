@@ -8,13 +8,15 @@ import java.util.Collections
  *
  * @author Be4rJP
  */
-class TeamLoc(val map: MapData) {
+class TeamLoc(
+    val map: MapData,
+) {
     private val list0: MutableList<Location?>? = null
 
     private val list1: MutableList<Location?>? = null
 
-    fun SetupTeam0Loc() {
-        val l = map.getTeam0Loc()
+    fun setupTeam0Loc() {
+        val l = map.team0Loc
         // l.setX(l.getBlockX() + 0.5D);
         // l.setZ(l.getBlockZ() + 0.5D);
         // Location l1 = new Location(l.getWorld(), l.getBlockX() + 1D, l.getBlockY(),
@@ -32,8 +34,8 @@ class TeamLoc(val map: MapData) {
         Collections.shuffle(list0)
     }
 
-    fun SetupTeam1Loc() {
-        val l = map.getTeam1Loc()
+    fun setupTeam1Loc() {
+        val l = map.team1Loc!!
         l.setX(l.getBlockX() + 0.5)
         l.setZ(l.getBlockZ() + 0.5)
         val l1 = Location(l.getWorld(), l.getBlockX() + 1.0, l.getBlockY().toDouble(), l.getBlockZ() + 1.0)
@@ -47,11 +49,7 @@ class TeamLoc(val map: MapData) {
         Collections.shuffle(list1)
     }
 
-    fun getTeam0Loc(i: Int): Location? {
-        return list0!!.get(i)
-    }
+    fun getTeam0Loc(i: Int): Location? = list0!!.get(i)
 
-    fun getTeam1Loc(i: Int): Location? {
-        return list1!!.get(i)
-    }
+    fun getTeam1Loc(i: Int): Location? = list1!!.get(i)
 }

@@ -10,7 +10,6 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-
 import static be4rjp.sclat.Sclat.conf;
 
 /**
@@ -41,7 +40,7 @@ public class WeaponClassMgr {
 			main.addEnchantment(Sclat.glow, 1);
 		}
 		player.getInventory().setItem(0, main);
-		if (data.getWeaponClass().getMainWeapon().getIsManeuver())
+		if (data.getWeaponClass().getMainWeapon().isManeuver)
 			player.getInventory().setItem(40, data.getWeaponClass().getMainWeapon().getWeaponIteamStack().clone());
 		ItemStack is = SubWeaponMgr.getSubWeapon(player);
 		player.getInventory().setItem(2, is);
@@ -51,7 +50,7 @@ public class WeaponClassMgr {
 		co.setItemMeta(meta);
 		player.getInventory().setItem(6, co);
 		if (!data.getIsSquid())
-			player.getEquipment().setHelmet(DataMgr.getPlayerData(player).team.getTeamColor().getBougu());
+			player.getEquipment().setHelmet(DataMgr.getPlayerData(player).team.getTeamColor().bougu);
 
 		if (data.getSPGauge() == 100)
 			SPWeaponMgr.setSPWeapon(player);

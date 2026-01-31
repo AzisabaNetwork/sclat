@@ -10,6 +10,10 @@ import be4rjp.sclat.manager.ArmorStandMgr;
 import be4rjp.sclat.manager.PaintMgr;
 import be4rjp.sclat.manager.SPWeaponMgr;
 import be4rjp.sclat.manager.WeaponClassMgr;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import net.minecraft.server.v1_14_R1.EntityArmorStand;
 import net.minecraft.server.v1_14_R1.EntitySquid;
 import net.minecraft.server.v1_14_R1.EntityTypes;
@@ -38,11 +42,6 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  *
@@ -265,7 +264,7 @@ public class MultiMissile {
 			public void run() {
 				if (c == 0) {
 					drop = shooter.getWorld().dropItem(t.getLocation().add(0, 40, 0),
-							new ItemStack(DataMgr.getPlayerData(s).team.getTeamColor().getWool()));
+							new ItemStack(DataMgr.getPlayerData(s).team.getTeamColor().wool));
 					drop.setGravity(false);
 					ball = (Snowball) s.getWorld().spawnEntity(drop.getLocation(), EntityType.SNOWBALL);
 					ball.setGravity(false);
@@ -312,7 +311,7 @@ public class MultiMissile {
 				else
 					drop.setVelocity(drop.getVelocity().add(new Vector(0, -0.1, 0)));
 
-				org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(s).team.getTeamColor().getWool()
+				org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(s).team.getTeamColor().wool
 						.createBlockData();
 				for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 					if (o_player.getWorld() == drop.getLocation().getWorld()) {

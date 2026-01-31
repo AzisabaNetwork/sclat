@@ -9,6 +9,8 @@ import be4rjp.sclat.data.ServerStatus;
 import be4rjp.sclat.manager.PlayerStatusMgr;
 import be4rjp.sclat.manager.RankMgr;
 import be4rjp.sclat.manager.ServerStatusManager;
+import java.util.ArrayList;
+import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -17,9 +19,6 @@ import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.ScoreboardManager;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class LobbyScoreboardRunnable extends BukkitRunnable {
 
@@ -69,20 +68,20 @@ public class LobbyScoreboardRunnable extends BukkitRunnable {
 
 			String line = "";
 			if (serverStatus.getRunningMatch()) {
-				long time = System.currentTimeMillis() / 1000 - serverStatus.getMatchStartTime();
+				long time = System.currentTimeMillis() / 1000 - serverStatus.matchStartTime;
 				String min = String.format("%02d", time % 60);
 				line = serverStatus.getPlayerCount() + "§e人が試合中"
 						+ (time < 10000 ? " §r(" + time / 60 + ":" + min + ")" : "");
 			} else {
-				if (serverStatus.getWaitingEndTime() != 0) {
+				if (serverStatus.waitingEndTime != 0) {
 					line = serverStatus.getPlayerCount() + "§a人が待機中" + " §r(§b"
-							+ (serverStatus.getWaitingEndTime() - (System.currentTimeMillis() / 1000) + "§r秒後に開始)");
+							+ (serverStatus.waitingEndTime - (System.currentTimeMillis() / 1000) + "§r秒後に開始)");
 				} else {
 					line = serverStatus.getPlayerCount() + "§a人が待機中";
 				}
 			}
 
-			lines.add(" " + serverStatus.getDisplayName() + ": §r" + line);
+			lines.add(" " + serverStatus.displayName + ": §r" + line);
 		}
 		lines.add("  ");
 		lines.add("§a§lNews »");

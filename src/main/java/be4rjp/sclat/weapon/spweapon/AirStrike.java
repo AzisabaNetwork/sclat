@@ -11,6 +11,8 @@ import be4rjp.sclat.manager.MapKitMgr;
 import be4rjp.sclat.manager.PaintMgr;
 import be4rjp.sclat.manager.SPWeaponMgr;
 import be4rjp.sclat.manager.WeaponClassMgr;
+import java.util.ArrayList;
+import java.util.List;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -27,9 +29,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  *
@@ -134,7 +133,7 @@ public class AirStrike {
 			@Override
 			public void run() {
 				if (c == 0) {
-					ItemStack bom = new ItemStack(DataMgr.getPlayerData(p).team.getTeamColor().getWool()).clone();
+					ItemStack bom = new ItemStack(DataMgr.getPlayerData(p).team.getTeamColor().wool).clone();
 					ItemMeta bom_m = bom.getItemMeta();
 					bom_m.setLocalizedName(String.valueOf(Sclat.getNotDuplicateNumber()));
 					bom.setItemMeta(bom_m);

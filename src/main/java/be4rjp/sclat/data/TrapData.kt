@@ -1,270 +1,323 @@
-package be4rjp.sclat.data;
+package be4rjp.sclat.data
 
-import be4rjp.sclat.Sclat;
-import be4rjp.sclat.api.SclatUtil;
-import be4rjp.sclat.api.Sphere;
-import be4rjp.sclat.api.team.Team;
-import be4rjp.sclat.manager.ArmorStandMgr;
-import be4rjp.sclat.manager.PaintMgr;
-import be4rjp.sclat.weapon.Gear;
-import java.util.List;
-import org.bukkit.Color;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
-import org.bukkit.Particle;
-import org.bukkit.Sound;
-import org.bukkit.block.Block;
-import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
-import org.bukkit.scheduler.BukkitRunnable;
+import be4rjp.sclat.Sclat
+import be4rjp.sclat.api.SclatUtil.createInkExplosionEffect
+import be4rjp.sclat.api.SclatUtil.giveDamage
+import be4rjp.sclat.api.SclatUtil.repelBarrier
+import be4rjp.sclat.api.Sphere.getSphere
+import be4rjp.sclat.api.Sphere.getXZCircle
+import be4rjp.sclat.api.team.Team
+import be4rjp.sclat.manager.ArmorStandMgr
+import be4rjp.sclat.manager.PaintMgr
+import be4rjp.sclat.weapon.Gear
+import org.bukkit.Color
+import org.bukkit.GameMode
+import org.bukkit.Location
+import org.bukkit.Particle
+import org.bukkit.Sound
+import org.bukkit.entity.ArmorStand
+import org.bukkit.entity.Player
+import org.bukkit.potion.PotionEffect
+import org.bukkit.potion.PotionEffectType
+import org.bukkit.scheduler.BukkitRunnable
 
-public class TrapData {
+class TrapData(
+    private val location: Location,
+    private val player: Player,
+    private val team: Team?,
+    number: Int,
+) {
+    private val task: BukkitRunnable
+    private val effect: BukkitRunnable
 
-	private final Location location;
-	private final Player player;
-	private final Team team;
+    var number: Int = 0
+        private set
+    private var near = false
 
-	private final BukkitRunnable task;
-	private final BukkitRunnable effect;
+    init {
+        this.number = number
 
-	private int number = 0;
-	private boolean near = false;
+        this.effect =
+            object : BukkitRunnable() {
+                override fun run() {
+                    val sLocs: MutableList<Location> = getXZCircle(location.clone().add(0.0, 1.0, 0.0), 3.0, 2.0, 40)
+                    for (oPlayer in Sclat.getPlugin().getServer().getOnlinePlayers()) {
+                        if (DataMgr.getPlayerData(oPlayer)?.settings?.ShowEffect_Bomb()!!) {
+                            for (loc in sLocs) {
+                                if (oPlayer.getWorld() === loc.getWorld()) {
+                                    if (oPlayer.getLocation().distanceSquared(loc) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED &&
+                                        (DataMgr.getPlayerData(oPlayer)?.team!! == team || near)
+                                    ) {
+                                        val dustOptions =
+                                            Particle.DustOptions(
+                                                if (near) {
+                                                    DataMgr
+                                                        .getPlayerData(player)
+                                                        ?.team
+                                                        ?.teamColor
+                                                        ?.bukkitColor!!
+                                                } else {
+                                                    Color.BLACK
+                                                },
+                                                1f,
+                                            )
+                                        oPlayer.spawnParticle<Particle.DustOptions?>(
+                                            Particle.REDSTONE,
+                                            loc,
+                                            1,
+                                            0.0,
+                                            0.0,
+                                            0.0,
+                                            5.0,
+                                            dustOptions,
+                                        )
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        effect.runTaskTimer(Sclat.getPlugin(), 0, 5)
 
-	public TrapData(Location location, Player player, Team team, int number) {
-		this.location = location;
-		this.player = player;
-		this.team = team;
-		this.number = number;
+        this.task =
+            object : BukkitRunnable() {
+                override fun run() {
+                    val block = location.getBlock()
+                    if (DataMgr.blockDataMap.containsKey(block)) {
+                        val pdata = DataMgr.getPaintDataFromBlock(block)
+                        if (team != pdata?.team!!) explosion()
+                    }
 
-		this.effect = new BukkitRunnable() {
-			@Override
-			public void run() {
-				List<Location> s_locs = Sphere.getXZCircle(location.clone().add(0, 1, 0), 3, 2, 40);
-				for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
-					if (DataMgr.getPlayerData(o_player).settings.ShowEffect_Bomb()) {
-						for (Location loc : s_locs) {
-							if (o_player.getWorld() == loc.getWorld() && DataMgr.getPlayerData(o_player).team != null) {
-								if (o_player.getLocation().distanceSquared(loc) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED
-										&& (DataMgr.getPlayerData(o_player).team == team || near)) {
-									Particle.DustOptions dustOptions = new Particle.DustOptions(near
-											? DataMgr.getPlayerData(player).team.getTeamColor().getBukkitColor()
-											: Color.BLACK, 1);
-									o_player.spawnParticle(Particle.REDSTONE, loc, 1, 0, 0, 0, 5, dustOptions);
-								}
-							}
-						}
-					}
-				}
-			}
-		};
-		effect.runTaskTimer(Sclat.getPlugin(), 0, 5);
+                    if (number + 2 < DataMgr.getPlayerData(player)?.trapCount!!) explosion()
 
-		this.task = new BukkitRunnable() {
-			@Override
-			public void run() {
-				Block block = location.getBlock();
-				if (DataMgr.getBlockDataMap().containsKey(block)) {
-					PaintData pdata = DataMgr.getPaintDataFromBlock(block);
-					if (team != pdata.getTeam())
-						Explosion();
-				}
+                    for (target in Sclat.getPlugin().getServer().getOnlinePlayers()) {
+                        if (!DataMgr
+                                .getPlayerData(target)
+                                ?.isInMatch()!! || target.getWorld() !== location.getWorld()
+                        ) {
+                            continue
+                        }
+                        if (target.getGameMode() == GameMode.SPECTATOR) continue
+                        if (target.getLocation().distance(location) <= 3 && DataMgr.getPlayerData(target)?.team!! != team) {
+                            explosion()
+                        }
+                    }
 
-				if (number + 2 < DataMgr.getPlayerData(player).trapCount)
-					Explosion();
+                    for (`as` in player.getWorld().getEntities()) {
+                        if (`as` is ArmorStand && `as`.getLocation().distanceSquared(location) <= 9) { // 3^2
+                            if (`as`.getCustomName() != null) {
+                                if (`as`.getCustomName() == null) continue
+                                if ((`as`.getCustomName() != "Path") && (`as`.getCustomName() != "21") && (`as`.getCustomName() != "100") &&
+                                    (`as`.getCustomName() != "SplashShield") &&
+                                    (`as`.getCustomName() != "Kasa")
+                                ) {
+                                    explosion()
+                                }
+                            }
+                        }
+                    }
 
-				for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
-					if (!DataMgr.getPlayerData(target).isInMatch() || target.getWorld() != location.getWorld())
-						continue;
-					if (target.getGameMode() == GameMode.SPECTATOR)
-						continue;
-					if (target.getLocation().distance(location) <= 3 && DataMgr.getPlayerData(target).team != team) {
-						Explosion();
-					}
-				}
+                    if (!DataMgr.getPlayerData(player)?.isInMatch!! || !player.isOnline()) {
+                        task.cancel()
+                        effect.cancel()
+                    }
+                }
+            }
+        task.runTaskTimer(Sclat.getPlugin(), 0, 2)
+    }
 
-				for (Entity as : player.getWorld().getEntities()) {
-					if (as instanceof ArmorStand && as.getLocation().distanceSquared(location) <= 9 /* 3^2 */) {
-						if (as.getCustomName() != null) {
-							if (as.getCustomName() == null)
-								continue;
-							if (!as.getCustomName().equals("Path") && !as.getCustomName().equals("21")
-									&& !as.getCustomName().equals("100") && !as.getCustomName().equals("SplashShield")
-									&& !as.getCustomName().equals("Kasa")) {
-								Explosion();
-							}
-						}
-					}
-				}
+    fun explosion() {
+        near = true
+        task.cancel()
 
-				if (!DataMgr.getPlayerData(player).isInMatch() || !player.isOnline()) {
-					task.cancel();
-					effect.cancel();
-				}
-			}
-		};
-		task.runTaskTimer(Sclat.getPlugin(), 0, 2);
-	}
+        val ex: BukkitRunnable =
+            object : BukkitRunnable() {
+                var i: Int = 0
 
-	public void Explosion() {
-		near = true;
-		task.cancel();
+                override fun run() {
+                    if (i >= 0 && i <= 4) {
+                        if (i % 2 == 0) player.getWorld().playSound(location, Sound.BLOCK_NOTE_BLOCK_PLING, 1.1f, 1.8f)
+                    }
 
-		BukkitRunnable ex = new BukkitRunnable() {
-			int i = 0;
-			@Override
-			public void run() {
-				if (i >= 0 && i <= 4) {
-					if (i % 2 == 0)
-						player.getWorld().playSound(location, Sound.BLOCK_NOTE_BLOCK_PLING, 1.1F, 1.8F);
-				}
+                    if (i == 20) {
+                        // 半径
+                        val maxDist = 4.0
+                        val maxDistSquared = 16.0 // 4^2
 
-				if (i == 20) {
-					// 半径
-					double maxDist = 4;
-					double maxDistSquared = 16; /* 4^2 */
+                        // 爆発音
+                        player.getWorld().playSound(location, Sound.ENTITY_FIREWORK_ROCKET_BLAST, 1f, 1f)
 
-					// 爆発音
-					player.getWorld().playSound(location, Sound.ENTITY_FIREWORK_ROCKET_BLAST, 1, 1);
+                        // 爆発エフェクト
+                        createInkExplosionEffect(location, maxDist, 15, player)
 
-					// 爆発エフェクト
-					SclatUtil.createInkExplosionEffect(location, maxDist, 15, player);
+                        // バリアをはじく
+                        repelBarrier(location, maxDist, player)
 
-					// バリアをはじく
-					SclatUtil.repelBarrier(location, maxDist, player);
+                        // センサーエフェクト
+                        val sLocs = getSphere(location, maxDist + 1, 25)
+                        for (o_player in Sclat.getPlugin().getServer().getOnlinePlayers()) {
+                            if (DataMgr.getPlayerData(o_player)?.settings?.ShowEffect_BombEx()!!) {
+                                for (loc in sLocs) {
+                                    if (o_player.getWorld() === loc.getWorld()) {
+                                        if (o_player
+                                                .getLocation()
+                                                .distanceSquared(loc) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED
+                                        ) {
+                                            val dustOptions = Particle.DustOptions(Color.BLACK, 1f)
+                                            o_player.spawnParticle<Particle.DustOptions?>(
+                                                Particle.REDSTONE,
+                                                loc,
+                                                1,
+                                                0.0,
+                                                0.0,
+                                                0.0,
+                                                1.0,
+                                                dustOptions,
+                                            )
+                                        }
+                                    }
+                                }
+                            }
+                        }
 
-					// センサーエフェクト
-					List<Location> s_locs = Sphere.getSphere(location, maxDist + 1, 25);
-					for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
-						if (DataMgr.getPlayerData(o_player).settings.ShowEffect_BombEx()) {
-							for (Location loc : s_locs) {
-								if (o_player.getWorld() == loc.getWorld()) {
-									if (o_player.getLocation()
-											.distanceSquared(loc) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED) {
-										Particle.DustOptions dustOptions = new Particle.DustOptions(Color.BLACK, 1);
-										o_player.spawnParticle(Particle.REDSTONE, loc, 1, 0, 0, 0, 1, dustOptions);
-									}
-								}
-							}
-						}
-					}
+                        // 塗る
+                        run {
+                            var i = 0
+                            while (i <= maxDist) {
+                                val pLocs = getSphere(location, i.toDouble(), 20)
+                                for (loc in pLocs) {
+                                    PaintMgr.Paint(loc, player, false)
+                                }
+                                i++
+                            }
+                        }
 
-					// 塗る
-					for (int i = 0; i <= maxDist; i++) {
-						List<Location> p_locs = Sphere.getSphere(location, i, 20);
-						for (Location loc : p_locs) {
-							PaintMgr.Paint(loc, player, false);
-						}
-					}
+                        // 発光効果
+                        for (target in Sclat.getPlugin().getServer().getOnlinePlayers()) {
+                            if (!DataMgr
+                                    .getPlayerData(target)
+                                    ?.isInMatch()!! || target.getWorld() !== player.getWorld()
+                            ) {
+                                continue
+                            }
+                            if (target.getLocation().distance(location) <= maxDist + 1) {
+                                if (DataMgr.getPlayerData(player)?.team!!.iD !=
+                                    DataMgr
+                                        .getPlayerData(target)
+                                        ?.team!!
+                                        .iD
+                                ) {
+                                    target.addPotionEffect(PotionEffect(PotionEffectType.GLOWING, 200, 1))
+                                }
+                            }
+                        }
 
-					// 発光効果
-					for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
-						if (!DataMgr.getPlayerData(target).isInMatch() || target.getWorld() != player.getWorld())
-							continue;
-						if (target.getLocation().distance(location) <= maxDist + 1) {
-							if (DataMgr.getPlayerData(player).team.getID() != DataMgr.getPlayerData(target).team
-									.getID()) {
-								target.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 200, 1));
-							}
+                        for (`as` in player.getWorld().getEntities()) {
+                            if (`as` is ArmorStand && `as`.getLocation().distance(location) <= maxDist + 1) {
+                                if (`as`.getCustomName() != null) {
+                                    if ((`as`.getCustomName() != "Path") && (`as`.getCustomName() != "21") &&
+                                        (`as`.getCustomName() != "100") &&
+                                        (`as`.getCustomName() != "SplashShield") &&
+                                        (`as`.getCustomName() != "Kasa")
+                                    ) {
+                                        `as`
+                                            .addPotionEffect(PotionEffect(PotionEffectType.GLOWING, 200, 1))
+                                    }
+                                }
+                            }
+                        }
 
-						}
-					}
+                        // 攻撃判定の処理
+                        for (`as` in player.getWorld().getEntities()) {
+                            if (`as` is ArmorStand) {
+                                if (`as`.getLocation().distanceSquared(location) <= maxDistSquared) {
+                                    if (`as`.getCustomName() != null) {
+                                        try {
+                                            if (`as`.getCustomName() == "Kasa") {
+                                                val kasaData = DataMgr.getKasaDataFromArmorStand(`as`)
+                                                if (DataMgr.getPlayerData(kasaData?.player!!)?.team!! !=
+                                                    DataMgr
+                                                        .getPlayerData(
+                                                            player,
+                                                        )?.team!!
+                                                ) {
+                                                    cancel()
+                                                }
+                                            } else if (`as`.getCustomName() == "SplashShield") {
+                                                val splashShieldData = DataMgr.getSplashShieldDataFromArmorStand(`as`)
+                                                if (DataMgr.getPlayerData(splashShieldData?.player!!)?.team!! !=
+                                                    DataMgr
+                                                        .getPlayerData(
+                                                            player,
+                                                        )?.team!!
+                                                ) {
+                                                    cancel()
+                                                }
+                                            }
+                                        } catch (e: Exception) {
+                                        }
+                                    }
+                                }
+                            }
+                        }
 
-					for (Entity as : player.getWorld().getEntities()) {
-						if (as instanceof ArmorStand && as.getLocation().distance(location) <= maxDist + 1) {
-							if (as.getCustomName() != null) {
-								if (!as.getCustomName().equals("Path") && !as.getCustomName().equals("21")
-										&& !as.getCustomName().equals("100")
-										&& !as.getCustomName().equals("SplashShield")
-										&& !as.getCustomName().equals("Kasa")) {
-									((ArmorStand) as)
-											.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 200, 1));
-								}
-							}
-						}
-					}
+                        for (target in Sclat.getPlugin().getServer().getOnlinePlayers()) {
+                            if (!DataMgr
+                                    .getPlayerData(target)
+                                    ?.isInMatch()!! || target.getWorld() !== player.getWorld()
+                            ) {
+                                continue
+                            }
+                            if (target.getLocation().distanceSquared(location) <= maxDistSquared) {
+                                val damage = (
+                                    (maxDist - target.getLocation().distance(location)) * 5.0 *
+                                        Gear.getGearInfluence(player, Gear.Type.SUB_SPEC_UP)
+                                    )
+                                if (DataMgr.getPlayerData(player)?.team!! != DataMgr.getPlayerData(target)?.team!! &&
+                                    target.getGameMode() == GameMode.ADVENTURE
+                                ) {
+                                    giveDamage(player, target, damage, "subWeapon")
 
-					// 攻撃判定の処理
-					for (Entity as : player.getWorld().getEntities()) {
-						if (as instanceof ArmorStand) {
-							if (as.getLocation().distanceSquared(location) <= maxDistSquared) {
-								if (as.getCustomName() != null) {
-									try {
-										if (as.getCustomName().equals("Kasa")) {
-											KasaData kasaData = DataMgr.getKasaDataFromArmorStand((ArmorStand) as);
-											if (DataMgr.getPlayerData(kasaData.getPlayer()).team != DataMgr
-													.getPlayerData(player).team) {
-												cancel();
-											}
-										} else if (as.getCustomName().equals("SplashShield")) {
-											SplashShieldData splashShieldData = DataMgr
-													.getSplashShieldDataFromArmorStand((ArmorStand) as);
-											if (DataMgr.getPlayerData(splashShieldData.getPlayer()).team != DataMgr
-													.getPlayerData(player).team) {
-												cancel();
-											}
-										}
-									} catch (Exception e) {
-									}
-								}
-							}
-						}
-					}
+                                    // AntiNoDamageTime
+                                    val task: BukkitRunnable =
+                                        object : BukkitRunnable() {
+                                            var p: Player = target
 
-					for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
-						if (!DataMgr.getPlayerData(target).isInMatch() || target.getWorld() != player.getWorld())
-							continue;
-						if (target.getLocation().distanceSquared(location) <= maxDistSquared) {
-							double damage = (maxDist - target.getLocation().distance(location)) * 5.0
-									* Gear.getGearInfluence(player, Gear.Type.SUB_SPEC_UP);
-							if (DataMgr.getPlayerData(player).team != DataMgr.getPlayerData(target).team
-									&& target.getGameMode().equals(GameMode.ADVENTURE)) {
-								SclatUtil.giveDamage(player, target, damage, "subWeapon");
+                                            override fun run() {
+                                                target.setNoDamageTicks(0)
+                                            }
+                                        }
+                                    task.runTaskLater(Sclat.getPlugin(), 1)
+                                }
+                            }
+                        }
 
-								// AntiNoDamageTime
-								BukkitRunnable task = new BukkitRunnable() {
-									Player p = target;
+                        for (`as` in player.getWorld().getEntities()) {
+                            if (`as` is ArmorStand) {
+                                if (`as`.getLocation().distanceSquared(location) <= maxDistSquared) {
+                                    val damage = (
+                                        (maxDist - `as`.getLocation().distance(location)) * 2.5 *
+                                            Gear.getGearInfluence(player, Gear.Type.SUB_SPEC_UP)
+                                        )
+                                    ArmorStandMgr.giveDamageArmorStand(`as`, damage, player)
+                                    if (`as`.getCustomName() != null) {
+                                        if (`as`.getCustomName() == "SplashShield" || `as`.getCustomName() == "Kasa") break
+                                    }
+                                }
+                            }
+                        }
 
-									@Override
-									public void run() {
-										target.setNoDamageTicks(0);
-									}
-								};
-								task.runTaskLater(Sclat.getPlugin(), 1);
-							}
-						}
-					}
+                        effect.cancel()
+                        cancel()
+                    }
+                    i++
+                }
+            }
+        ex.runTaskTimer(Sclat.getPlugin(), 0, 1)
+    }
 
-					for (Entity as : player.getWorld().getEntities()) {
-						if (as instanceof ArmorStand) {
-							if (as.getLocation().distanceSquared(location) <= maxDistSquared) {
-								double damage = (maxDist - as.getLocation().distance(location)) * 2.5
-										* Gear.getGearInfluence(player, Gear.Type.SUB_SPEC_UP);
-								ArmorStandMgr.giveDamageArmorStand((ArmorStand) as, damage, player);
-								if (as.getCustomName() != null) {
-									if (as.getCustomName().equals("SplashShield") || as.getCustomName().equals("Kasa"))
-										break;
-								}
-							}
-						}
-					}
-
-					effect.cancel();
-					cancel();
-				}
-				i++;
-			}
-		};
-		ex.runTaskTimer(Sclat.getPlugin(), 0, 1);
-	}
-
-	public int getNumber() {
-		return this.number;
-	}
-
-	public void addNumber() {
-		this.number++;
-	}
+    fun addNumber() {
+        this.number++
+    }
 }

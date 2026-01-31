@@ -105,7 +105,7 @@ object SclatUtil {
 
         for (player in Sclat.getPlugin().getServer().getOnlinePlayers()) {
             BungeeCordMgr.PlayerSendServer(player, "sclat")
-            DataMgr.getPlayerData(player).setServerName("Sclat")
+            DataMgr.getPlayerData(player)?.setServerName("Sclat")
         }
         val task: BukkitRunnable =
             object : BukkitRunnable() {
@@ -123,7 +123,7 @@ object SclatUtil {
         commands.add(
             (
                 "map " + Sclat.conf.getServers().getString("ServerName") + " " +
-                    DataMgr.getMapRandom(if (MatchMgr.mapcount == 0) 0 else MatchMgr.mapcount - 1).getMapName()
+                    DataMgr.getMapRandom(if (MatchMgr.mapcount == 0) 0 else MatchMgr.mapcount - 1)?.mapName!!
                 ),
         )
         commands.add("stop")
@@ -179,8 +179,7 @@ object SclatUtil {
         buff.append(message)
         if (type == MessageType.TEAM) {
             for (player in Sclat.getPlugin().getServer().getOnlinePlayers()) {
-                val playerTeam = DataMgr.getPlayerData(player).team
-                if (playerTeam == null) continue
+                val playerTeam = DataMgr.getPlayerData(player)?.team ?: continue
                 if (team == null) continue
                 if (playerTeam != team) continue
                 player.sendMessage(buff.toString())
@@ -228,7 +227,7 @@ object SclatUtil {
                 override fun run() {
                     try {
                         BungeeCordMgr.PlayerSendServer(player, "sclat")
-                        DataMgr.getPlayerData(player).setServerName("Sclat")
+                        DataMgr.getPlayerData(player)?.setServerName("Sclat")
                     } catch (e: Exception) {
                     }
                 }
@@ -243,20 +242,20 @@ object SclatUtil {
         accuracy: Int,
         player: Player?,
     ) {
-        val s_locs: MutableList<Location> = getSphere(center, radius - 0.5, accuracy)
+        val sLocs: MutableList<Location> = getSphere(center, radius - 0.5, accuracy)
         val bd =
             DataMgr
                 .getPlayerData(player)
-                .team
-                .teamColor!!
-                .getWool()
+                ?.team
+                ?.teamColor!!
+                .wool!!
                 .createBlockData()
-        for (o_player in Sclat.getPlugin().getServer().getOnlinePlayers()) {
-            if (DataMgr.getPlayerData(o_player).settings.ShowEffect_BombEx()) {
-                for (loc in s_locs) {
-                    if (o_player.getWorld() === loc.getWorld()) {
-                        if (o_player.getLocation().distanceSquared(loc) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED) {
-                            o_player.spawnParticle<BlockData?>(
+        for (oPlayer in Sclat.getPlugin().getServer().getOnlinePlayers()) {
+            if (DataMgr.getPlayerData(oPlayer)?.settings?.ShowEffect_BombEx()!!) {
+                for (loc in sLocs) {
+                    if (oPlayer.getWorld() === loc.getWorld()) {
+                        if (oPlayer.getLocation().distanceSquared(loc) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED) {
+                            oPlayer.spawnParticle<BlockData?>(
                                 Particle.BLOCK_DUST,
                                 loc,
                                 0,
@@ -283,9 +282,9 @@ object SclatUtil {
             val playerData = DataMgr.getPlayerData(player)
 
             if (player.getWorld() !== center.getWorld()) continue
-            if (playerData.armor < 10000.0) continue
+            if (playerData?.armor!! < 10000.0) continue
             if (player.getGameMode() == GameMode.SPECTATOR) continue
-            if (playerData.team == DataMgr.getPlayerData(shooter).team) continue
+            if (playerData.team!! == DataMgr.getPlayerData(shooter)?.team!!) continue
 
             val distance = player.getLocation().distance(center)
 
@@ -319,13 +318,13 @@ object SclatUtil {
      *
      * //攻撃判定の処理 for (Player target :
      * Main.getPlugin().getServer().getOnlinePlayers()) {
-     * if(!DataMgr.getPlayerData(target).isInMatch() || target.getWorld() !=
+     * if(!DataMgr.getPlayerData(target)?.isInMatch!! || target.getWorld() !=
      * player.getWorld()) continue; if (target.getLocation().distance(center) <=
      * radius) { double gear = SclatDamageType.SUB_WEAPON == type ?
      * Gear.getGearInfluence(player, Gear.Type.SUB_SPEC_UP) : 1.0; double damage =
      * (radius - target.getLocation().distance(center)) * damageRate * gear;
-     * if(DataMgr.getPlayerData(player).getTeam() !=
-     * DataMgr.getPlayerData(target).getTeam() &&
+     * if(DataMgr.getPlayerData(player)?.team!! !=
+     * DataMgr.getPlayerData(target)?.team!! &&
      * target.getGameMode().equals(GameMode.ADVENTURE)){ Sclat.giveDamage(player,
      * target, damage, type.getName());
      *
@@ -348,7 +347,7 @@ object SclatUtil {
         damageType: String?,
     ): Boolean {
         var damage = damage
-        val targetData = DataMgr.getPlayerData(target)
+        val targetData = DataMgr.getPlayerData(target)!!
         val playerData = DataMgr.getPlayerData(player)
         if (target.hasPotionEffect(PotionEffectType.FIRE_RESISTANCE)) {
             damage = damage * 0.6

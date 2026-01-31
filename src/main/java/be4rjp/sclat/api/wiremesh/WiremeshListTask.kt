@@ -26,7 +26,7 @@ class WiremeshListTask(
 
     init {
         // 先に対象のブロックとそのBlockDataを取得して保存しておく
-        val list = RegionBlocks(firstPoint, secondPoint).getBlocks()
+        val list = RegionBlocks(firstPoint, secondPoint).blocks
 
         for (block in list) {
             if (!blockList.contains(block) && (

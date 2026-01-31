@@ -7,6 +7,7 @@ import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.data.KasaData;
 import be4rjp.sclat.data.Path;
 import be4rjp.sclat.data.SplashShieldData;
+import java.util.List;
 import net.minecraft.server.v1_14_R1.EnumItemSlot;
 import net.minecraft.server.v1_14_R1.PacketPlayOutEntityDestroy;
 import net.minecraft.server.v1_14_R1.PacketPlayOutEntityEquipment;
@@ -18,6 +19,7 @@ import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.craftbukkit.v1_14_R1.entity.CraftArmorStand;
 import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_14_R1.inventory.CraftItemStack;
@@ -32,9 +34,6 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
-
-import java.util.List;
-
 import static be4rjp.sclat.Sclat.conf;
 import static org.bukkit.Bukkit.getServer;
 
@@ -253,7 +252,7 @@ public class ArmorStandMgr {
 								((CraftPlayer) player).getHandle().playerConnection
 										.sendPacket(new PacketPlayOutEntityEquipment(as.getEntityId(),
 												EnumItemSlot.HEAD, CraftItemStack.asNMSCopy(new ItemStack(
-														DataMgr.getPlayerData(p).team.getTeamColor().getGlass()))));
+														DataMgr.getPlayerData(p).team.getTeamColor().glass))));
 							}
 						}
 					}
@@ -339,10 +338,10 @@ public class ArmorStandMgr {
 
 		if (as.getCustomName().equals("SplashShield")) {
 			SplashShieldData ssdata = DataMgr.getSplashShieldDataFromArmorStand(as);
-			if (DataMgr.getPlayerData(ssdata.getPlayer()).team != DataMgr.getPlayerData(shooter).team) {
-				ssdata.setDamage(ssdata.getDamage() + damage);
-				// ssdata.setDamage(ssdata.getDamage() +
-				// DataMgr.getPlayerData(shooter).getWeaponClass().getMainWeapon().getDamage());
+			if (DataMgr.getPlayerData(ssdata.player).team != DataMgr.getPlayerData(shooter).team) {
+				ssdata.damage = (ssdata.damage + damage);
+				// ssdata.setDamage(ssdata.damage +
+				// DataMgr.getPlayerData(shooter).getWeaponClass().getMainWeapon().damage);
 				as.getWorld().playSound(as.getLocation(), Sound.ENTITY_PLAYER_HURT, 0.8F, 1.2F);
 			}
 			return;
@@ -350,9 +349,9 @@ public class ArmorStandMgr {
 
 		if (as.getCustomName().equals("Kasa")) {
 			KasaData ssdata = DataMgr.getKasaDataFromArmorStand(as);
-			if (DataMgr.getPlayerData(ssdata.getPlayer()).team != DataMgr.getPlayerData(shooter).team) {
-				ssdata.setDamage(ssdata.getDamage() + damage);
-				if (ssdata.getDamage() > 200)
+			if (DataMgr.getPlayerData(ssdata.player).team != DataMgr.getPlayerData(shooter).team) {
+				ssdata.damage = (ssdata.damage + damage);
+				if (ssdata.damage > 200)
 					as.getWorld().playSound(as.getLocation(), Sound.ENTITY_ITEM_BREAK, 0.8F, 0.8F);
 				as.getWorld().playSound(as.getLocation(), Sound.ENTITY_PLAYER_HURT, 0.8F, 1.2F);
 			}
@@ -393,10 +392,8 @@ public class ArmorStandMgr {
 					drop4.setVelocity(new Vector(Math.random() * random - random / 2, random * 2 / 3,
 							Math.random() * random - random / 2));
 
-					org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(shooter).team.getTeamColor().getWool()
-							.createBlockData();
-					as.getWorld().spawnParticle(org.bukkit.Particle.BLOCK_DUST, as.getEyeLocation(), 15, 1, 1, 1, 1,
-							bd);
+					BlockData bd = DataMgr.getPlayerData(shooter).team.getTeamColor().wool.createBlockData();
+					as.getWorld().spawnParticle(Particle.BLOCK_DUST, as.getEyeLocation(), 15, 1, 1, 1, 1, bd);
 
 					as.setCustomNameVisible(false);
 					as.setVisible(false);

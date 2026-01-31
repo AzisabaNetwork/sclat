@@ -72,7 +72,7 @@ public class NPCMgr {
 						connection.sendPacket(new PacketPlayOutEntityEquipment(npc.getBukkitEntity().getEntityId(),
 								EnumItemSlot.MAINHAND, CraftItemStack.asNMSCopy(DataMgr.getPlayerData(player)
 										.getWeaponClass().getMainWeapon().getWeaponIteamStack())));
-						if (DataMgr.getPlayerData(player).getWeaponClass().getMainWeapon().getIsManeuver())
+						if (DataMgr.getPlayerData(player).getWeaponClass().getMainWeapon().isManeuver)
 							connection.sendPacket(new PacketPlayOutEntityEquipment(npc.getBukkitEntity().getEntityId(),
 									EnumItemSlot.OFFHAND, CraftItemStack.asNMSCopy(DataMgr.getPlayerData(player)
 											.getWeaponClass().getMainWeapon().getWeaponIteamStack())));

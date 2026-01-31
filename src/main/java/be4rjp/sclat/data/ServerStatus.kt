@@ -1,186 +1,123 @@
-package be4rjp.sclat.data;
+package be4rjp.sclat.data
 
-import be4rjp.sclat.Sclat;
-import be4rjp.sclat.api.MineStat;
-import org.bukkit.block.Block;
-import org.bukkit.block.Sign;
-import org.bukkit.scheduler.BukkitRunnable;
+import be4rjp.sclat.Sclat
+import be4rjp.sclat.api.MineStat
+import org.bukkit.block.Block
+import org.bukkit.block.Sign
+import org.bukkit.scheduler.BukkitRunnable
 
-import java.util.ArrayList;
-import java.util.List;
+class ServerStatus(
+    @JvmField val serverName: String?,
+    displayName: String,
+    host: String?,
+    port: Int,
+    maxPlayer: Int,
+    period: Int,
+    sign: Block,
+    info: String?,
+) {
+    @JvmField
+    val displayName: String?
+    private val host: String?
+    private val port: Int
+    private val period: Int
+    private val task: BukkitRunnable
 
-public class ServerStatus {
+    @JvmField
+    val maxPlayer: Int
+    private val task2: BukkitRunnable
 
-	private final String serverName;
-	private final String displayName;
-	private final String host;
-	private final int port;
-	private final int period;
-	private final BukkitRunnable task;
-	private final int maxPlayer;
-	private final BukkitRunnable task2;
-	private final Block sign;
-	private final String info;
+    @JvmField
+    val sign: Block?
 
-	private int playerCount = 0;
-	private boolean online = false;
-	private boolean runningMatch = false;
-	private boolean restartingServer = false;
-	private String mapName = "";
-	private boolean maintenance = false;
-	private List<String> uuidList;
-	private long waitingEndTime = 0;
-	private long matchStartTime = 0;
+    @JvmField
+    val info: String?
 
-	private MatchServerRunnable matchServerRunnable;
+    var playerCount: Int = 0
+        private set
+    var isOnline: Boolean = false
+        private set
+    var runningMatch: Boolean = false
+    var restartingServer: Boolean = false
 
-	public ServerStatus(String serverName, String displayName, String host, int port, int maxPlayer, int period,
-			Block sign, String info) {
-		this.serverName = serverName;
-		this.displayName = displayName;
-		this.host = host;
-		this.port = port;
-		this.period = period;
-		this.maxPlayer = maxPlayer;
-		this.sign = sign;
-		this.info = info;
-		this.uuidList = new ArrayList<>();
+    @JvmField
+    var mapName: String? = ""
+    var isMaintenance: Boolean = false
+    val uUIDList: MutableList<String?>?
 
-		this.matchServerRunnable = new MatchServerRunnable(this);
+    @JvmField
+    var waitingEndTime: Long = 0
 
-		this.task = new BukkitRunnable() {
-			@Override
-			public void run() {
-				if (maintenance) {
-					online = false;
-				} else {
-					try {
-						// Todo: migrate to PluginMessaging
-						MineStat ms = new MineStat(host, port);
-						playerCount = Integer.parseInt(ms.currentPlayers);
-						online = ms.isServerUp();
-						if (!online) {
-							runningMatch = false;
-						}
-					} catch (Exception e) {
-						online = false;
-						runningMatch = false;
-					}
-				}
-			}
-		};
-		task.runTaskTimerAsynchronously(Sclat.getPlugin(), 0, this.period);
+    @JvmField
+    var matchStartTime: Long = 0
 
-		this.task2 = new BukkitRunnable() {
-			@Override
-			public void run() {
-				try {
-					if (sign.getType().toString().contains("SIGN")) {
-						Sign signState = (Sign) sign.getState();
-						signState.setLine(0, displayName);
-						if (online) {
-							signState.setLine(1, "§a" + playerCount + " / " + maxPlayer);
-							if (runningMatch)
-								signState.setLine(2, "§cIN MATCH");
-							else
-								signState.setLine(2, "§aINACTIVE");
-							signState.setLine(3, "§b" + mapName);
-						} else {
-							signState.setLine(1, maintenance ? "§cMAINTENANCE" : "§cOFFLINE");
-							signState.setLine(2, "");
-							signState.setLine(3, "");
-						}
-						signState.update();
-					}
-				} catch (Exception e) {
-				}
-			}
-		};
-		task2.runTaskTimer(Sclat.getPlugin(), 5, this.period);
-	}
+    private val matchServerRunnable: MatchServerRunnable?
 
-	public int getPlayerCount() {
-		return this.playerCount;
-	}
+    init {
+        this.displayName = displayName
+        this.host = host
+        this.port = port
+        this.period = period
+        this.maxPlayer = maxPlayer
+        this.sign = sign
+        this.info = info
+        this.uUIDList = ArrayList<String?>()
 
-	public int getMaxPlayer() {
-		return this.maxPlayer;
-	}
+        this.matchServerRunnable = MatchServerRunnable(this)
 
-	public String getServerName() {
-		return this.serverName;
-	}
+        this.task =
+            object : BukkitRunnable() {
+                override fun run() {
+                    if (isMaintenance) {
+                        isOnline = false
+                    } else {
+                        try {
+                            // Todo: migrate to PluginMessaging
+                            val ms = MineStat(host, port)
+                            playerCount = ms.currentPlayers!!.toInt()
+                            isOnline = ms.isServerUp
+                            if (!isOnline) {
+                                runningMatch = false
+                            }
+                        } catch (e: Exception) {
+                            isOnline = false
+                            runningMatch = false
+                        }
+                    }
+                }
+            }
+        task.runTaskTimerAsynchronously(Sclat.getPlugin(), 0, this.period.toLong())
 
-	public String getDisplayName() {
-		return this.displayName;
-	}
+        this.task2 =
+            object : BukkitRunnable() {
+                override fun run() {
+                    try {
+                        if (sign.getType().toString().contains("SIGN")) {
+                            val signState = sign.getState() as Sign
+                            signState.setLine(0, displayName)
+                            if (isOnline) {
+                                signState.setLine(1, "§a" + playerCount + " / " + maxPlayer)
+                                if (runningMatch) {
+                                    signState.setLine(2, "§cIN MATCH")
+                                } else {
+                                    signState.setLine(2, "§aINACTIVE")
+                                }
+                                signState.setLine(3, "§b" + mapName)
+                            } else {
+                                signState.setLine(1, if (isMaintenance) "§cMAINTENANCE" else "§cOFFLINE")
+                                signState.setLine(2, "")
+                                signState.setLine(3, "")
+                            }
+                            signState.update()
+                        }
+                    } catch (e: Exception) {
+                    }
+                }
+            }
+        task2.runTaskTimer(Sclat.getPlugin(), 5, this.period.toLong())
+    }
 
-	public boolean getRunningMatch() {
-		return this.runningMatch;
-	}
-
-	public boolean getRestartingServer() {
-		return this.restartingServer;
-	}
-
-	public String getMapName() {
-		return this.mapName;
-	}
-
-	public Block getSign() {
-		return this.sign;
-	}
-
-	public String getInfo() {
-		return this.info;
-	}
-
-	public List<String> getUUIDList() {
-		return uuidList;
-	}
-
-	public long getMatchStartTime() {
-		return matchStartTime;
-	}
-
-	public long getWaitingEndTime() {
-		return waitingEndTime;
-	}
-
-	public boolean isMaintenance() {
-		return this.maintenance;
-	}
-
-	public boolean isOnline() {
-		return this.online;
-	}
-
-	public void setRunningMatch(boolean is) {
-		this.runningMatch = is;
-	}
-
-	public void setRestartingServer(boolean is) {
-		this.restartingServer = is;
-	}
-
-	public void setMapName(String name) {
-		this.mapName = name;
-	}
-
-	public void setMaintenance(boolean is) {
-		this.maintenance = is;
-	}
-
-	public void setMatchStartTime(long matchStartTime) {
-		this.matchStartTime = matchStartTime;
-	}
-
-	public void setWaitingEndTime(long waitingEndTime) {
-		this.waitingEndTime = waitingEndTime;
-	}
-
-	public void stopTask() {
-		this.task.cancel();
-	}
-
+    fun stopTask() {
+        this.task.cancel()
+    }
 }

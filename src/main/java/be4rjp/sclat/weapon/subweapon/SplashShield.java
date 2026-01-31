@@ -8,6 +8,8 @@ import be4rjp.sclat.api.raytrace.RayTrace;
 import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.data.SplashShieldData;
 import be4rjp.sclat.manager.PaintMgr;
+import java.util.ArrayList;
+import java.util.List;
 import net.minecraft.server.v1_14_R1.EnumItemSlot;
 import net.minecraft.server.v1_14_R1.PacketPlayOutEntityEquipment;
 import org.bukkit.ChatColor;
@@ -27,9 +29,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.EulerAngle;
 import org.bukkit.util.Vector;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  *
@@ -84,10 +83,10 @@ public class SplashShield {
 						loc.setYaw(yaw);
 						try {
 							for (SplashShieldData ssdata : DataMgr.getSplashShieldDataMapWithPlayer().values()) {
-								if (ssdata.getPlayer() == p) {
+								if (ssdata.player == p) {
 									for (ArmorStand as : ssdata.getArmorStandList())
 										as.remove();
-									ssdata.getTask().cancel();
+									ssdata.task.cancel();
 								}
 							}
 						} catch (Exception e) {
@@ -286,7 +285,7 @@ public class SplashShield {
 						list.add(as14);
 
 						ssdata.setArmorStandList(list);
-						ssdata.setIsDeploy(false);
+						ssdata.isDeploy = (false);
 
 						int i = 1;
 						for (ArmorStand a : list) {
@@ -303,7 +302,7 @@ public class SplashShield {
 									((CraftPlayer) target).getHandle().playerConnection
 											.sendPacket(new PacketPlayOutEntityEquipment(a.getEntityId(),
 													EnumItemSlot.HEAD, CraftItemStack.asNMSCopy(new ItemStack(
-															DataMgr.getPlayerData(p).team.getTeamColor().getGlass()))));
+															DataMgr.getPlayerData(p).team.getTeamColor().glass))));
 							}
 							i++;
 						}
@@ -324,7 +323,7 @@ public class SplashShield {
 					}
 
 					if (c == 15) {
-						ssdata.setIsDeploy(true);
+						ssdata.isDeploy = (true);
 						for (ArmorStand a : list) {
 							a.setMarker(false);
 						}
@@ -342,7 +341,7 @@ public class SplashShield {
 
 						Vector sv = pv.clone().multiply(-0.25);
 
-						BlockData bd = DataMgr.getPlayerData(p).team.getTeamColor().getWool().createBlockData();
+						BlockData bd = DataMgr.getPlayerData(p).team.getTeamColor().wool.createBlockData();
 						ray : for (int i = 0; i < positions1.size() - 4; i++) {
 							Location position = positions1.get(i).toLocation(p.getLocation().getWorld());
 							PaintMgr.PaintHightestBlock(position, p, false, false);
@@ -425,7 +424,7 @@ public class SplashShield {
 						}
 					}
 
-					if (c > 200 || !DataMgr.getPlayerData(p).isInMatch() || ssdata.getDamage() > 80) {
+					if (c > 200 || !DataMgr.getPlayerData(p).isInMatch() || ssdata.damage > 80) {
 						for (ArmorStand a : list)
 							a.remove();
 						list.get(0).getWorld().playSound(list.get(0).getLocation(), Sound.ENTITY_ITEM_BREAK, 0.8F,
@@ -442,7 +441,7 @@ public class SplashShield {
 			}
 		};
 		task.runTaskTimer(Sclat.getPlugin(), 0, 1);
-		ssdata.setTask(task);
+		ssdata.task = task;
 		DataMgr.setSplashShieldDataWithPlayer(player, ssdata);
 	}
 }

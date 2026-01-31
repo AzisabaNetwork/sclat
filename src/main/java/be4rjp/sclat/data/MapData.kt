@@ -1,213 +1,72 @@
-package be4rjp.sclat.data;
+package be4rjp.sclat.data
 
-import be4rjp.sclat.api.wiremesh.WiremeshListTask;
-import org.bukkit.Location;
-
-import java.util.ArrayList;
-import java.util.List;
+import be4rjp.sclat.api.wiremesh.WiremeshListTask
+import org.bukkit.Location
 
 /**
  *
  * @author Be4rJP
  */
-public class MapData {
-	private String mapname;
+class MapData(
+    val mapName: String?,
+) {
+    var team0Loc: Location? = null
 
-	private Location teamloc0;
+    var team1Loc: Location? = null
 
-	private Location teamloc1;
+    var intro: Location? = null
 
-	private Location Intro;
+    var isUsed: Boolean = false
 
-	private boolean isUsed;
+    var worldName: String? = null
 
-	private String worldname;
+    var team0Intro: Location? = null
 
-	private Location team0intro;
+    var team1Intro: Location? = null
 
-	private Location team1intro;
+    var resultLoc: Location? = null
 
-	private Location resultloc;
+    var introMoveX: Double = 0.0
 
-	private double intromovex;
+    var introMoveY: Double = 0.0
 
-	private double intromovey;
+    var introMoveZ: Double = 0.0
 
-	private double intromovez;
+    private var canpaintBBlock = false
 
-	private boolean canpaintBBlock = false;
+    var taikibayso: Location? = null
+        private set
 
-	private Location taikibasyo;
+    var noBlockLocation: Location? = null
 
-	private Location noBlockLoc;
+    var canAreaBattle: Boolean = false
+        set(v) {
+            field = `v`
+        }
 
-	private boolean canAreaBattle = false;
+    val pathList: MutableList<Path?> = ArrayList<Path?>()
 
-	private List<Path> path = new ArrayList<>();
+    val areaList: MutableList<Area?> = ArrayList<Area?>()
 
-	private List<Area> areas = new ArrayList<>();
+    var wiremeshListTask: WiremeshListTask? = null
 
-	private WiremeshListTask wmlTask;
+    var voidY: Int = 0
 
-	private int VoidY = 0;
+    fun canPaintBBlock(): Boolean = this.canpaintBBlock
 
-	public MapData(String mapname) {
-		this.mapname = mapname;
-	}
+    fun setCanPaintBBlock(v: Boolean) {
+        this.canpaintBBlock = v
+    }
 
-	public String getMapName() {
-		return this.mapname;
-	}
+    fun setTaikibasyo(basyo: Location?) {
+        this.taikibayso = basyo
+    }
 
-	public Location getIntro() {
-		return this.Intro;
-	}
+    fun addPath(path: Path?) {
+        this.pathList.add(path)
+    }
 
-	public boolean isUsed() {
-		return this.isUsed;
-	}
-
-	public String getWorldName() {
-		return this.worldname;
-	}
-
-	public Location getTeam0Loc() {
-		return this.teamloc0;
-	}
-
-	public Location getTeam1Loc() {
-		return this.teamloc1;
-	}
-
-	public Location getTeam0Intro() {
-		return this.team0intro;
-	}
-
-	public Location getTeam1Intro() {
-		return this.team1intro;
-	}
-
-	public Location getResultLoc() {
-		return this.resultloc;
-	}
-
-	public double getIntroMoveX() {
-		return this.intromovex;
-	}
-
-	public double getIntroMoveY() {
-		return this.intromovey;
-	}
-
-	public double getIntroMoveZ() {
-		return this.intromovez;
-	}
-
-	public Boolean canPaintBBlock() {
-		return this.canpaintBBlock;
-	}
-
-	public Location getTaikibayso() {
-		return this.taikibasyo;
-	}
-
-	public Location getNoBlockLocation() {
-		return this.noBlockLoc;
-	}
-
-	public boolean getCanAreaBattle() {
-		return this.canAreaBattle;
-	}
-
-	public List<Path> getPathList() {
-		return this.path;
-	}
-
-	public List<Area> getAreaList() {
-		return this.areas;
-	}
-
-	public WiremeshListTask getWiremeshListTask() {
-		return this.wmlTask;
-	}
-
-	public int getVoidY() {
-		return this.VoidY;
-	}
-
-	public void setIntro(Location l) {
-		this.Intro = l;
-	}
-
-	public void setIsUsed(boolean used) {
-		this.isUsed = used;
-	}
-
-	public void setWorldName(String name) {
-		this.worldname = name;
-	}
-
-	public void setTeam0Loc(Location l) {
-		this.teamloc0 = l;
-	}
-
-	public void setTeam1Loc(Location l) {
-		this.teamloc1 = l;
-	}
-
-	public void setTeam0Intro(Location l) {
-		this.team0intro = l;
-	}
-
-	public void setTeam1Intro(Location l) {
-		this.team1intro = l;
-	}
-
-	public void setResultLoc(Location l) {
-		this.resultloc = l;
-	}
-
-	public void setIntroMoveX(double x) {
-		this.intromovex = x;
-	}
-
-	public void setIntroMoveY(double y) {
-		this.intromovey = y;
-	}
-
-	public void setIntroMoveZ(double z) {
-		this.intromovez = z;
-	}
-
-	public void setCanPaintBBlock(boolean is) {
-		this.canpaintBBlock = is;
-	}
-
-	public void setTaikibasyo(Location basyo) {
-		this.taikibasyo = basyo;
-	}
-
-	public void setNoBlockLocation(Location loc) {
-		this.noBlockLoc = loc;
-	}
-
-	public void setCanAreaBattle(boolean is) {
-		this.canAreaBattle = is;
-	}
-
-	public void setWiremeshListTask(WiremeshListTask wmlListTask) {
-		this.wmlTask = wmlListTask;
-	}
-
-	public void setVoidY(int y) {
-		this.VoidY = y;
-	}
-
-	public void addPath(Path path) {
-		this.path.add(path);
-	}
-
-	public void addArea(Area area) {
-		this.areas.add(area);
-	}
+    fun addArea(area: Area?) {
+        this.areaList.add(area)
+    }
 }

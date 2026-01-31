@@ -14,6 +14,8 @@ import be4rjp.sclat.manager.PaintMgr;
 import be4rjp.sclat.manager.SPWeaponMgr;
 import be4rjp.sclat.manager.SuperJumpMgr;
 import be4rjp.sclat.manager.WeaponClassMgr;
+import java.util.ArrayList;
+import java.util.List;
 import net.minecraft.server.v1_14_R1.EntityArmorStand;
 import net.minecraft.server.v1_14_R1.PacketPlayOutEntityDestroy;
 import net.minecraft.server.v1_14_R1.PacketPlayOutSpawnEntityLiving;
@@ -40,9 +42,6 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  *
@@ -155,7 +154,7 @@ public class JetPack {
 				if (i != 0) {
 					// effect
 					// org.bukkit.block.data.BlockData bd =
-					// DataMgr.getPlayerData(player).getTeam().getTeamColor().getWool().createBlockData();
+					// DataMgr.getPlayerData(player).getTeam().getTeamColor().wool.createBlockData();
 					Location position = loc2.clone().add(0, -0.2, 0);
 					Location position2 = loc3.clone().add(0, -0.2, 0);
 					for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
@@ -169,7 +168,7 @@ public class JetPack {
 									o_player.spawnParticle(Particle.ITEM_CRACK, position, 0,
 											Math.random() * random - random / 2, -0.13,
 											Math.random() * random - random / 2, 10,
-											new ItemStack(DataMgr.getPlayerData(player).team.getTeamColor().getWool()));
+											new ItemStack(DataMgr.getPlayerData(player).team.getTeamColor().wool));
 									// o_player.spawnParticle(org.bukkit.Particle.BLOCK_DUST, position, 0, 0, -2, 0,
 									// 10, bd);
 								}
@@ -181,7 +180,7 @@ public class JetPack {
 									o_player.spawnParticle(Particle.ITEM_CRACK, position, 0,
 											Math.random() * random - random / 2, -0.13,
 											Math.random() * random - random / 2, 10,
-											new ItemStack(DataMgr.getPlayerData(player).team.getTeamColor().getWool()));
+											new ItemStack(DataMgr.getPlayerData(player).team.getTeamColor().wool));
 								}
 							}
 						}
@@ -196,8 +195,8 @@ public class JetPack {
 					 * random = 0.015; o_player.spawnParticle(Particle.ITEM_CRACK, position, 0,
 					 * Math.random() * random - random/2, -0.13, Math.random() * random - random/2,
 					 * 10, new
-					 * ItemStack(DataMgr.getPlayerData(player).getTeam().getTeamColor().getWool()));
-					 * } } } }
+					 * ItemStack(DataMgr.getPlayerData(player).getTeam().getTeamColor().wool)); } }
+					 * } }
 					 * 
 					 */
 				}
@@ -305,7 +304,7 @@ public class JetPack {
 								1.2F);
 						p.getWorld().playSound(p.getLocation(), Sound.ENTITY_WITHER_SHOOT, 0.2F, 2F);
 						p_vec = p.getEyeLocation().getDirection();
-						ItemStack bom = new ItemStack(DataMgr.getPlayerData(p).team.getTeamColor().getWool()).clone();
+						ItemStack bom = new ItemStack(DataMgr.getPlayerData(p).team.getTeamColor().wool).clone();
 						ItemMeta bom_m = bom.getItemMeta();
 						bom_m.setLocalizedName(String.valueOf(Sclat.getNotDuplicateNumber()));
 						bom.setItemMeta(bom_m);
@@ -339,8 +338,8 @@ public class JetPack {
 						if (target.getWorld() == ball.getWorld()) {
 							if (target.getLocation()
 									.distanceSquared(ball.getLocation()) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED) {
-								org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).team.getTeamColor()
-										.getWool().createBlockData();
+								org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).team.getTeamColor().wool
+										.createBlockData();
 								target.spawnParticle(org.bukkit.Particle.BLOCK_DUST, ball.getLocation(), 1, 0, 0, 0, 1,
 										bd);
 							}

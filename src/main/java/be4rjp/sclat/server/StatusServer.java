@@ -9,7 +9,6 @@ import be4rjp.sclat.manager.PlayerReturnManager;
 import be4rjp.sclat.manager.PlayerStatusMgr;
 import be4rjp.sclat.manager.RankMgr;
 import be4rjp.sclat.manager.ServerStatusManager;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -137,10 +136,10 @@ class EchoThread extends Thread {
 						case "started" : {
 							if (args.length == 3) {
 								for (ServerStatus ss : ServerStatusManager.serverList) {
-									if (ss.getServerName().equals(args[1])) {
+									if (ss.serverName.equals(args[1])) {
 										ss.setRunningMatch(true);
-										ss.setWaitingEndTime(0);
-										ss.setMatchStartTime(Long.parseLong(args[2]));
+										ss.waitingEndTime = 0;
+										ss.matchStartTime = Long.parseLong(args[2]);
 									}
 								}
 							}
@@ -149,12 +148,12 @@ class EchoThread extends Thread {
 						case "cd" : {
 							if (args.length == 3) {
 								for (ServerStatus ss : ServerStatusManager.serverList) {
-									if (ss.getServerName().equals(args[1])) {
-										ss.setWaitingEndTime(Long.parseLong(args[2]));
-										SclatUtil.sendMessage(ss.getDisplayName() + "§aの試合待機が開始されました！",
+									if (ss.serverName.equals(args[1])) {
+										ss.waitingEndTime = Long.parseLong(args[2]);
+										SclatUtil.sendMessage(ss.displayName + "§aの試合待機が開始されました！",
 												MessageType.ALL_PLAYER);
 										SclatUtil.sendMessage(
-												"§a§l" + (ss.getWaitingEndTime() - (System.currentTimeMillis() / 1000))
+												"§a§l" + (ss.waitingEndTime - (System.currentTimeMillis() / 1000))
 														+ "§b秒後に開始されます",
 												MessageType.ALL_PLAYER);
 										Sclat.getPlugin().getServer().getOnlinePlayers()
@@ -167,8 +166,8 @@ class EchoThread extends Thread {
 						case "cdc" : {
 							if (args.length == 2) {
 								for (ServerStatus ss : ServerStatusManager.serverList) {
-									if (ss.getServerName().equals(args[1])) {
-										ss.setWaitingEndTime(0);
+									if (ss.serverName.equals(args[1])) {
+										ss.waitingEndTime = 0;
 									}
 								}
 							}
@@ -177,9 +176,9 @@ class EchoThread extends Thread {
 						case "stopped" : {
 							if (args.length == 2) {
 								for (ServerStatus ss : ServerStatusManager.serverList) {
-									if (ss.getServerName().equals(args[1])) {
+									if (ss.serverName.equals(args[1])) {
 										ss.setRunningMatch(false);
-										ss.setMatchStartTime(0);
+										ss.matchStartTime = 0;
 									}
 								}
 							}
@@ -188,7 +187,7 @@ class EchoThread extends Thread {
 						case "restart" : {
 							if (args.length == 2) {
 								for (ServerStatus ss : ServerStatusManager.serverList) {
-									if (ss.getServerName().equals(args[1])) {
+									if (ss.serverName.equals(args[1])) {
 										ss.setRestartingServer(true);
 									}
 								}
@@ -198,7 +197,7 @@ class EchoThread extends Thread {
 						case "restarted" : {
 							if (args.length == 2) {
 								for (ServerStatus ss : ServerStatusManager.serverList) {
-									if (ss.getServerName().equals(args[1])) {
+									if (ss.serverName.equals(args[1])) {
 										ss.setRestartingServer(false);
 									}
 								}
@@ -208,8 +207,8 @@ class EchoThread extends Thread {
 						case "map" : {
 							if (args.length == 3) {
 								for (ServerStatus ss : ServerStatusManager.serverList) {
-									if (ss.getServerName().equals(args[1])) {
-										ss.setMapName(args[2]);
+									if (ss.serverName.equals(args[1])) {
+										ss.mapName = args[2];
 									}
 								}
 							}

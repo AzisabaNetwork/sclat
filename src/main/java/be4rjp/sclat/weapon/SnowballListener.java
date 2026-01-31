@@ -10,6 +10,8 @@ import be4rjp.sclat.data.SplashShieldData;
 import be4rjp.sclat.manager.ArmorStandMgr;
 import be4rjp.sclat.manager.PaintMgr;
 import be4rjp.sclat.manager.SPWeaponMgr;
+import java.util.Timer;
+import java.util.TimerTask;
 import net.minecraft.server.v1_14_R1.PacketPlayOutEntityDestroy;
 import net.minecraft.server.v1_14_R1.PlayerConnection;
 import org.bukkit.GameMode;
@@ -31,9 +33,6 @@ import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
-
-import java.util.Timer;
-import java.util.TimerTask;
 
 /**
  *
@@ -165,8 +164,7 @@ public class SnowballListener implements Listener {
 									dmgDouble = DataMgr.getPlayerData(shooter).getWeaponClass().getMainWeapon()
 											.getDecreaseRate();
 								}
-								double damage = DataMgr.getPlayerData(shooter).getWeaponClass().getMainWeapon()
-										.getDamage();
+								double damage = DataMgr.getPlayerData(shooter).getWeaponClass().getMainWeapon().damage;
 								if (dmgDouble != 1.0) {
 									damage = damage * dmgDouble;
 								} else {
@@ -300,7 +298,7 @@ public class SnowballListener implements Listener {
 							shooter.playSound(shooter.getLocation(), Sound.ENTITY_PLAYER_HURT, 0.5F, 1F);
 						}
 					}
-					double damage = DataMgr.getPlayerData(shooter).getWeaponClass().getMainWeapon().getDamage();
+					double damage = DataMgr.getPlayerData(shooter).getWeaponClass().getMainWeapon().damage;
 					if (dmgDouble != 1.0) {
 						damage = damage * dmgDouble;
 					} else {
@@ -319,14 +317,14 @@ public class SnowballListener implements Listener {
 							if (as.getCustomName() != null) {
 								if (as.getCustomName().equals("Kasa")) {
 									KasaData kasaData = DataMgr.getKasaDataFromArmorStand((ArmorStand) as);
-									if (DataMgr.getPlayerData(kasaData.getPlayer()).team != DataMgr
+									if (DataMgr.getPlayerData(kasaData.player).team != DataMgr
 											.getPlayerData(shooter).team) {
 										Blaster.Explode(shooter, as.getLocation().add(new Vector(0, 1.0, 0)));
 									}
 								} else if (as.getCustomName().equals("SplashShield")) {
 									SplashShieldData splashShieldData = DataMgr
 											.getSplashShieldDataFromArmorStand((ArmorStand) as);
-									if (DataMgr.getPlayerData(splashShieldData.getPlayer()).team != DataMgr
+									if (DataMgr.getPlayerData(splashShieldData.player).team != DataMgr
 											.getPlayerData(shooter).team) {
 										Blaster.Explode(shooter, as.getLocation().add(new Vector(0, 1.0, 0)));
 									}
@@ -407,11 +405,11 @@ public class SnowballListener implements Listener {
 											.getSplashShieldDataFromArmorStand((ArmorStand) event.getHitEntity());
 									Snowball ball = (Snowball) event.getEntity();
 									Player shooter = (Player) ball.getShooter();
-									// if(DataMgr.getPlayerData(ssdata.getPlayer()).getTeam() !=
+									// if(DataMgr.getPlayerData(ssdata.player).getTeam() !=
 									// DataMgr.getPlayerData(shooter).getTeam())
-									// ssdata.setDamage(ssdata.getDamage() +
-									// DataMgr.getPlayerData(shooter).getWeaponClass().getMainWeapon().getDamage());
-									if (DataMgr.getPlayerData(ssdata.getPlayer()).team != DataMgr
+									// ssdata.setDamage(ssdata.damage +
+									// DataMgr.getPlayerData(shooter).getWeaponClass().getMainWeapon().damage);
+									if (DataMgr.getPlayerData(ssdata.player).team != DataMgr
 											.getPlayerData(shooter).team)
 										return;
 									Vector vec = ball.getVelocity();
@@ -420,8 +418,8 @@ public class SnowballListener implements Listener {
 											new Location(loc.getWorld(), loc.getX() + vec.getX(),
 													loc.getY() + vec.getY(), loc.getZ() + vec.getZ()),
 											EntityType.SNOWBALL);
-									((CraftSnowball) ball2).getHandle().setItem(CraftItemStack.asNMSCopy(new ItemStack(
-											DataMgr.getPlayerData(shooter).team.getTeamColor().getWool())));
+									((CraftSnowball) ball2).getHandle().setItem(CraftItemStack.asNMSCopy(
+											new ItemStack(DataMgr.getPlayerData(shooter).team.getTeamColor().wool)));
 									ball2.setShooter(shooter);
 									ball2.setVelocity(vec);
 									ball2.setCustomName(ball.getCustomName());
@@ -434,11 +432,11 @@ public class SnowballListener implements Listener {
 											.getKasaDataFromArmorStand((ArmorStand) event.getHitEntity());
 									Snowball ball = (Snowball) event.getEntity();
 									Player shooter = (Player) ball.getShooter();
-									// if(DataMgr.getPlayerData(ssdata.getPlayer()).getTeam() !=
+									// if(DataMgr.getPlayerData(ssdata.player).getTeam() !=
 									// DataMgr.getPlayerData(shooter).getTeam())
-									// ssdata.setDamage(ssdata.getDamage() +
-									// DataMgr.getPlayerData(shooter).getWeaponClass().getMainWeapon().getDamage());
-									if (DataMgr.getPlayerData(ssdata.getPlayer()).team != DataMgr
+									// ssdata.setDamage(ssdata.damage +
+									// DataMgr.getPlayerData(shooter).getWeaponClass().getMainWeapon().damage);
+									if (DataMgr.getPlayerData(ssdata.player).team != DataMgr
 											.getPlayerData(shooter).team)
 										return;
 									Vector vec = ball.getVelocity();
@@ -447,8 +445,8 @@ public class SnowballListener implements Listener {
 											new Location(loc.getWorld(), loc.getX() + vec.getX(),
 													loc.getY() + vec.getY(), loc.getZ() + vec.getZ()),
 											EntityType.SNOWBALL);
-									((CraftSnowball) ball2).getHandle().setItem(CraftItemStack.asNMSCopy(new ItemStack(
-											DataMgr.getPlayerData(shooter).team.getTeamColor().getWool())));
+									((CraftSnowball) ball2).getHandle().setItem(CraftItemStack.asNMSCopy(
+											new ItemStack(DataMgr.getPlayerData(shooter).team.getTeamColor().wool)));
 									ball2.setShooter(shooter);
 									ball2.setVelocity(vec);
 									ball2.setCustomName(ball.getCustomName());
@@ -598,9 +596,8 @@ public class SnowballListener implements Listener {
 														 * Sound.ENTITY_PLAYER_HURT, 0.5F, 1F);
 														 * Sclat.giveDamage(shooter, target,
 														 * DataMgr.getPlayerData(shooter).getWeaponClass().getMainWeapon
-														 * ().getDamage(), "killed"); } } //AntiNoDamageTime
-														 * BukkitRunnable task = new BukkitRunnable(){ Player p =
-														 * target;
+														 * ().damage, "killed"); } } //AntiNoDamageTime BukkitRunnable
+														 * task = new BukkitRunnable(){ Player p = target;
 														 * 
 														 * @Override public void run(){ target.setNoDamageTicks(0); } };
 														 * task.runTaskLater(Main.getPlugin(), 1);
@@ -698,7 +695,7 @@ public class SnowballListener implements Listener {
 					}
 				}
 
-				double damage = DataMgr.getPlayerData(shooter).getWeaponClass().getMainWeapon().getDamage();
+				double damage = DataMgr.getPlayerData(shooter).getWeaponClass().getMainWeapon().damage;
 				if (dmgDouble != 1.0) {
 					damage = damage * dmgDouble;
 				} else {

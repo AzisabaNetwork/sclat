@@ -70,8 +70,8 @@ public class Bucket {
 		};
 		if (data.getCanRollerShoot()) {
 			// delay.runTaskLater(Main.getPlugin(),
-			// data.getWeaponClass().getMainWeapon().getDelay());
-			delay2.runTaskTimer(Sclat.getPlugin(), 0, data.getWeaponClass().getMainWeapon().getDelay());
+			// data.getWeaponClass().getMainWeapon().delay);
+			delay2.runTaskTimer(Sclat.getPlugin(), 0, data.getWeaponClass().getMainWeapon().delay);
 			data.setCanRollerShoot(false);
 		}
 	}
@@ -93,12 +93,12 @@ public class Bucket {
 				/ Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)));
 		Snowball ball = player.launchProjectile(Snowball.class);
 		((CraftSnowball) ball).getHandle().setItem(
-				CraftItemStack.asNMSCopy(new ItemStack(DataMgr.getPlayerData(player).team.getTeamColor().getWool())));
+				CraftItemStack.asNMSCopy(new ItemStack(DataMgr.getPlayerData(player).team.getTeamColor().wool)));
 		Vector vec = player.getLocation().getDirection()
 				.multiply(DataMgr.getPlayerData(player).getWeaponClass().getMainWeapon().getShootSpeed());
 		if (v != null)
 			vec = v;
-		double random = DataMgr.getPlayerData(player).getWeaponClass().getMainWeapon().getRandom();
+		double random = DataMgr.getPlayerData(player).getWeaponClass().getMainWeapon().random;
 		int distick = DataMgr.getPlayerData(player).getWeaponClass().getMainWeapon().getDistanceTick();
 		vec.add(new Vector(Math.random() * random - random / 2, Math.random() * random / 1.5 - random / 3,
 				Math.random() * random - random / 2));
@@ -135,8 +135,8 @@ public class Bucket {
 						if (target.getWorld() == inkball.getWorld()) {
 							if (target.getLocation()
 									.distanceSquared(inkball.getLocation()) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED) {
-								org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).team.getTeamColor()
-										.getWool().createBlockData();
+								org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).team.getTeamColor().wool
+										.createBlockData();
 								target.spawnParticle(org.bukkit.Particle.BLOCK_DUST, inkball.getLocation(), 1, 0, 0, 0,
 										1, bd);
 							}

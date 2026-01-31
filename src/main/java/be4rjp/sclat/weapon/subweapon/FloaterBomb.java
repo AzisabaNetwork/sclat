@@ -11,6 +11,7 @@ import be4rjp.sclat.data.SplashShieldData;
 import be4rjp.sclat.manager.ArmorStandMgr;
 import be4rjp.sclat.manager.PaintMgr;
 import be4rjp.sclat.weapon.Gear;
+import java.util.List;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -25,8 +26,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
-
-import java.util.List;
 
 /**
  *
@@ -60,7 +59,7 @@ public class FloaterBomb {
 						}
 						if (!DataMgr.getPlayerData(player).getIsBombRush())
 							p.setExp(p.getExp() - 0.47F);
-						ItemStack bom = new ItemStack(DataMgr.getPlayerData(p).team.getTeamColor().getWool()).clone();
+						ItemStack bom = new ItemStack(DataMgr.getPlayerData(p).team.getTeamColor().wool).clone();
 						ItemMeta bom_m = bom.getItemMeta();
 						bom_m.setLocalizedName(String.valueOf(Sclat.getNotDuplicateNumber()));
 						bom.setItemMeta(bom_m);
@@ -136,7 +135,7 @@ public class FloaterBomb {
 										try {
 											if (as.getCustomName().equals("Kasa")) {
 												KasaData kasaData = DataMgr.getKasaDataFromArmorStand((ArmorStand) as);
-												if (DataMgr.getPlayerData(kasaData.getPlayer()).team != DataMgr
+												if (DataMgr.getPlayerData(kasaData.player).team != DataMgr
 														.getPlayerData(p).team) {
 													drop.remove();
 													cancel();
@@ -144,7 +143,7 @@ public class FloaterBomb {
 											} else if (as.getCustomName().equals("SplashShield")) {
 												SplashShieldData splashShieldData = DataMgr
 														.getSplashShieldDataFromArmorStand((ArmorStand) as);
-												if (DataMgr.getPlayerData(splashShieldData.getPlayer()).team != DataMgr
+												if (DataMgr.getPlayerData(splashShieldData.player).team != DataMgr
 														.getPlayerData(p).team) {
 													drop.remove();
 													cancel();

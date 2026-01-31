@@ -9,6 +9,7 @@ import be4rjp.sclat.manager.ArmorStandMgr;
 import be4rjp.sclat.manager.PaintMgr;
 import be4rjp.sclat.manager.SPWeaponMgr;
 import be4rjp.sclat.manager.WeaponClassMgr;
+import java.util.List;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -19,8 +20,6 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
-
-import java.util.List;
 
 /**
  *
@@ -113,7 +112,7 @@ public class SuperTyakuti {
 										if (o_player.getLocation()
 												.distanceSquared(loc) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED) {
 											org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(player).team
-													.getTeamColor().getWool().createBlockData();
+													.getTeamColor().wool.createBlockData();
 											o_player.spawnParticle(org.bukkit.Particle.BLOCK_DUST, loc, 1, 0, 0, 0, 1,
 													bd);
 										}

@@ -12,6 +12,9 @@ import be4rjp.sclat.manager.ArmorStandMgr;
 import be4rjp.sclat.manager.PaintMgr;
 import be4rjp.sclat.manager.SPWeaponMgr;
 import be4rjp.sclat.manager.WeaponClassMgr;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -29,10 +32,6 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
 
 public class SwordMord {
 	public static void setSwordMord(Player player) {
@@ -261,7 +260,7 @@ public class SwordMord {
 								as3.teleport(r1.clone().add(0, -1.2, 0));
 								as4.teleport(l1.clone().add(0, -1.2, 0));
 							}
-							if (kdata.getDamage() > 0.1) {
+							if (kdata.damage > 0.1) {
 								RayTrace rayTrace = new RayTrace(as1.getLocation().toVector(), new Vector(0, 1, 0));
 								for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 									if (!DataMgr.getPlayerData(target).isInMatch())
@@ -293,9 +292,9 @@ public class SwordMord {
 							gurd = false;
 						}
 					}
-					if (p.getGameMode() != GameMode.SPECTATOR && p.isSneaking() && gurd && kdata.getDamage() != 0) {
+					if (p.getGameMode() != GameMode.SPECTATOR && p.isSneaking() && gurd && kdata.damage != 0) {
 						ShootCounter(player);
-						kdata.setDamage(0);
+						kdata.damage = (0);
 					}
 
 				} catch (Exception e) {
@@ -314,7 +313,7 @@ public class SwordMord {
 
 		Snowball ball = player.launchProjectile(Snowball.class);
 		((CraftSnowball) ball).getHandle().setItem(
-				CraftItemStack.asNMSCopy(new ItemStack(DataMgr.getPlayerData(player).team.getTeamColor().getWool())));
+				CraftItemStack.asNMSCopy(new ItemStack(DataMgr.getPlayerData(player).team.getTeamColor().wool)));
 		player.getWorld().playSound(player.getLocation(), Sound.ENTITY_PIG_STEP, 0.3F, 1F);
 		Vector vec = player.getLocation().getDirection().multiply(QuadroShootSpeed);
 		double random = 0.1;
@@ -349,7 +348,7 @@ public class SwordMord {
 				}
 
 				if (i != 0) {
-					org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).team.getTeamColor().getWool()
+					org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).team.getTeamColor().wool
 							.createBlockData();
 					for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 						if (DataMgr.getPlayerData(o_player).settings.ShowEffect_MainWeaponInk())

@@ -8,6 +8,7 @@ import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.data.KasaData;
 import be4rjp.sclat.data.SplashShieldData;
 import be4rjp.sclat.weapon.Gear;
+import java.util.ArrayList;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -21,8 +22,6 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
-
-import java.util.ArrayList;
 
 public class Blinder {
 	public static void BlinderRunnable(Player player) {
@@ -67,7 +66,7 @@ public class Blinder {
 					continue;
 				if (target.getWorld() == position.getWorld()) {
 					if (target.getLocation().distanceSquared(position) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED) {
-						org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(player).team.getTeamColor().getWool()
+						org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(player).team.getTeamColor().wool
 								.createBlockData();
 						target.spawnParticle(org.bukkit.Particle.BLOCK_DUST, position, 1, 0, 0, 0, 1, bd);
 					}
@@ -86,7 +85,7 @@ public class Blinder {
 									.getWeaponType();
 							int effecttime = 40;
 							if (Weapontype.equals("Charger") || Weapontype.equals("Spinner")
-									|| DataMgr.getPlayerData(target).getWeaponClass().getMainWeapon().getIsManeuver()) {
+									|| DataMgr.getPlayerData(target).getWeaponClass().getMainWeapon().isManeuver) {
 								effecttime += 25;
 							} else if (Weapontype.equals("Blaster") || Weapontype.equals("Hound")) {
 								effecttime += 10;
@@ -127,14 +126,14 @@ public class Blinder {
 								if (as.getCustomName().equals("SplashShield")) {
 									SplashShieldData ssdata = DataMgr
 											.getSplashShieldDataFromArmorStand((ArmorStand) as);
-									if (DataMgr.getPlayerData(ssdata.getPlayer()).team != DataMgr
+									if (DataMgr.getPlayerData(ssdata.player).team != DataMgr
 											.getPlayerData(player).team) {
 										as.getWorld().playSound(as.getLocation(), Sound.ENTITY_BLAZE_HURT, 0.8F, 1.2F);
 										break loop;
 									}
 								} else if (as.getCustomName().equals("Kasa")) {
 									KasaData ssdata = DataMgr.getKasaDataFromArmorStand((ArmorStand) as);
-									if (DataMgr.getPlayerData(ssdata.getPlayer()).team != DataMgr
+									if (DataMgr.getPlayerData(ssdata.player).team != DataMgr
 											.getPlayerData(player).team) {
 										as.getWorld().playSound(as.getLocation(), Sound.ENTITY_BLAZE_HURT, 0.8F, 1.2F);
 										break loop;

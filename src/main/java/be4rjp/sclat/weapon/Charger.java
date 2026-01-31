@@ -11,6 +11,7 @@ import be4rjp.sclat.data.KasaData;
 import be4rjp.sclat.data.SplashShieldData;
 import be4rjp.sclat.manager.ArmorStandMgr;
 import be4rjp.sclat.manager.PaintMgr;
+import java.util.ArrayList;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -26,8 +27,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.RayTraceResult;
 import org.bukkit.util.Vector;
-
-import java.util.ArrayList;
 
 /**
  *
@@ -54,7 +53,7 @@ public class Charger {
 					return;
 				}
 
-				if (keeping == data.getWeaponClass().getMainWeapon().getChargeKeepingTime()
+				if (keeping == data.getWeaponClass().getMainWeapon().chargeKeepingTime
 						&& data.getWeaponClass().getMainWeapon().getCanChargeKeep() && data.settings.doChargeKeep())
 					charge = 0;
 
@@ -151,7 +150,7 @@ public class Charger {
 									(int) ((double) charge
 											* (double) data.getWeaponClass().getMainWeapon().getChargeRatio()
 											* (double) data.getWeaponClass().getMainWeapon().getDistanceTick()),
-									data.getWeaponClass().getMainWeapon().getDamage() * charge,
+									data.getWeaponClass().getMainWeapon().damage * charge,
 									data.getWeaponClass().getMainWeapon().getDecreaseRate());
 						} else {
 							int reach = (int) (p.getExp() / data.getWeaponClass().getMainWeapon().getNeedInk());
@@ -167,7 +166,7 @@ public class Charger {
 										(int) ((double) reach
 												* (double) data.getWeaponClass().getMainWeapon().getChargeRatio()
 												* (double) data.getWeaponClass().getMainWeapon().getDistanceTick()),
-										data.getWeaponClass().getMainWeapon().getDamage() * reach,
+										data.getWeaponClass().getMainWeapon().damage * reach,
 										data.getWeaponClass().getMainWeapon().getDecreaseRate());
 							} else {
 								p.sendTitle("", ChatColor.RED + "インクが足りません", 0, 10, 2);
@@ -182,7 +181,7 @@ public class Charger {
 						Charger.Shoot(p,
 								(int) ((double) charge * (double) data.getWeaponClass().getMainWeapon().getChargeRatio()
 										* (double) data.getWeaponClass().getMainWeapon().getDistanceTick()),
-								data.getWeaponClass().getMainWeapon().getDamage() * charge,
+								data.getWeaponClass().getMainWeapon().damage * charge,
 								data.getWeaponClass().getMainWeapon().getDecreaseRate());
 					} else {
 						int reach = (int) (p.getExp() / data.getWeaponClass().getMainWeapon().getNeedInk());
@@ -198,7 +197,7 @@ public class Charger {
 									(int) ((double) reach
 											* (double) data.getWeaponClass().getMainWeapon().getChargeRatio()
 											* (double) data.getWeaponClass().getMainWeapon().getDistanceTick()),
-									data.getWeaponClass().getMainWeapon().getDamage() * reach,
+									data.getWeaponClass().getMainWeapon().damage * reach,
 									data.getWeaponClass().getMainWeapon().getDecreaseRate());
 						} else {
 							p.sendTitle("", ChatColor.RED + "インクが足りません", 0, 10, 2);
@@ -277,7 +276,7 @@ public class Charger {
 			// if (target.getLocation().distanceSquared(position) <
 			// Main.PARTICLE_RENDER_DISTANCE_SQUARED) {
 			// org.bukkit.block.data.BlockData bd =
-			// DataMgr.getPlayerData(player).getTeam().getTeamColor().getWool().createBlockData();
+			// DataMgr.getPlayerData(player).getTeam().getTeamColor().wool.createBlockData();
 			// target.spawnParticle(org.bukkit.Particle.BLOCK_DUST, position, 1, 0, 0, 0, 1,
 			// bd);
 			// }
@@ -286,7 +285,7 @@ public class Charger {
 			if (DataMgr.getPlayerData(player).settings.ShowEffect_MainWeaponInk()) {
 				if (player.getWorld() == position.getWorld()) {
 					if (player.getLocation().distanceSquared(position) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED) {
-						org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(player).team.getTeamColor().getWool()
+						org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(player).team.getTeamColor().wool
 								.createBlockData();
 						player.spawnParticle(org.bukkit.Particle.BLOCK_DUST, position, 1, 0, 0, 0, 1, bd);
 					}
@@ -337,7 +336,7 @@ public class Charger {
 								if (as.getCustomName().equals("SplashShield")) {
 									SplashShieldData ssdata = DataMgr
 											.getSplashShieldDataFromArmorStand((ArmorStand) as);
-									if (DataMgr.getPlayerData(ssdata.getPlayer()).team != DataMgr
+									if (DataMgr.getPlayerData(ssdata.player).team != DataMgr
 											.getPlayerData(player).team) {
 										ArmorStandMgr.giveDamageArmorStand((ArmorStand) as, damage, player);
 										as.getWorld().playSound(as.getLocation(), Sound.ENTITY_PLAYER_HURT, 0.8F, 1.2F);
@@ -345,7 +344,7 @@ public class Charger {
 									}
 								} else if (as.getCustomName().equals("Kasa")) {
 									KasaData ssdata = DataMgr.getKasaDataFromArmorStand((ArmorStand) as);
-									if (DataMgr.getPlayerData(ssdata.getPlayer()).team != DataMgr
+									if (DataMgr.getPlayerData(ssdata.player).team != DataMgr
 											.getPlayerData(player).team) {
 										ArmorStandMgr.giveDamageArmorStand((ArmorStand) as, damage, player);
 										as.getWorld().playSound(as.getLocation(), Sound.ENTITY_PLAYER_HURT, 0.8F, 1.2F);

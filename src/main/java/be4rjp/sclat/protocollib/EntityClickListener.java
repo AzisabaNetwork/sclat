@@ -26,7 +26,7 @@ public class EntityClickListener extends PacketAdapter {
 			final int EntityID = packet.getIntegers().readSafely(0);
 
 			try {
-				RankingHolograms rankingHolograms = Sclat.playerHolograms.get(event.getPlayer());
+				RankingHolograms rankingHolograms = Sclat.playerHolograms.get(player);
 				if (rankingHolograms == null)
 					return;
 				for (EntityArmorStand armorStand : rankingHolograms.armorStandList) {

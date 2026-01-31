@@ -9,6 +9,7 @@ import be4rjp.sclat.data.SplashShieldData;
 import be4rjp.sclat.manager.ArmorStandMgr;
 import be4rjp.sclat.manager.PaintMgr;
 import be4rjp.sclat.weapon.Gear;
+import java.util.List;
 import net.minecraft.server.v1_14_R1.EnumItemSlot;
 import net.minecraft.server.v1_14_R1.PacketPlayOutEntityEquipment;
 import org.bukkit.ChatColor;
@@ -26,8 +27,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
-
-import java.util.List;
 
 /**
  *
@@ -106,7 +105,7 @@ public class CurlingBomb {
 							((CraftPlayer) o_player).getHandle().playerConnection
 									.sendPacket(new PacketPlayOutEntityEquipment(as3.getEntityId(), EnumItemSlot.HEAD,
 											CraftItemStack.asNMSCopy(new ItemStack(
-													DataMgr.getPlayerData(player).team.getTeamColor().getWool()))));
+													DataMgr.getPlayerData(player).team.getTeamColor().wool))));
 					}
 
 					if (i >= 70 && i <= 80) {
@@ -116,7 +115,7 @@ public class CurlingBomb {
 
 					// エフェクト
 					if (i % 2 == 0) {
-						org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(player).team.getTeamColor().getWool()
+						org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(player).team.getTeamColor().wool
 								.createBlockData();
 						for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 							if (DataMgr.getPlayerData(target).settings.ShowEffect_Bomb())
@@ -195,7 +194,7 @@ public class CurlingBomb {
 										try {
 											if (as.getCustomName().equals("Kasa")) {
 												KasaData kasaData = DataMgr.getKasaDataFromArmorStand((ArmorStand) as);
-												if (DataMgr.getPlayerData(kasaData.getPlayer()).team != DataMgr
+												if (DataMgr.getPlayerData(kasaData.player).team != DataMgr
 														.getPlayerData(player).team) {
 													as1.remove();
 													as2.remove();
@@ -206,7 +205,7 @@ public class CurlingBomb {
 											} else if (as.getCustomName().equals("SplashShield")) {
 												SplashShieldData splashShieldData = DataMgr
 														.getSplashShieldDataFromArmorStand((ArmorStand) as);
-												if (DataMgr.getPlayerData(splashShieldData.getPlayer()).team != DataMgr
+												if (DataMgr.getPlayerData(splashShieldData.player).team != DataMgr
 														.getPlayerData(player).team) {
 													as1.remove();
 													as2.remove();

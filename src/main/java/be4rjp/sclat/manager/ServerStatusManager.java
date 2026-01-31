@@ -2,6 +2,8 @@ package be4rjp.sclat.manager;
 
 import be4rjp.sclat.Sclat;
 import be4rjp.sclat.data.ServerStatus;
+import java.util.ArrayList;
+import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -11,10 +13,6 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import static be4rjp.sclat.Sclat.conf;
 
 public class ServerStatusManager {
@@ -78,14 +76,14 @@ public class ServerStatusManager {
 					Material mt = Material.LIME_STAINED_GLASS;
 					if (ss.getRunningMatch())
 						mt = Material.YELLOW_STAINED_GLASS;
-					if (ss.getPlayerCount() >= ss.getMaxPlayer())
+					if (ss.getPlayerCount() >= ss.maxPlayer)
 						mt = Material.RED_STAINED_GLASS;
 					if (!ss.isOnline() || ss.getRestartingServer())
 						mt = Material.IRON_BARS;
 
 					ItemStack is = new ItemStack(mt);
 					ItemMeta itemMeta = is.getItemMeta();
-					itemMeta.setDisplayName(ss.getDisplayName());
+					itemMeta.setDisplayName(ss.displayName);
 					List<String> role = new ArrayList<>();
 					if (ss.getRestartingServer()) {
 						role.add("");
@@ -97,18 +95,18 @@ public class ServerStatusManager {
 								amount = ss.getPlayerCount();
 							is.setAmount(amount);
 							role.add("");
-							role.add("§r§7[Player]  §r§a" + ss.getPlayerCount() + "§r§7 / " + ss.getMaxPlayer());
+							role.add("§r§7[Player]  §r§a" + ss.getPlayerCount() + "§r§7 / " + ss.maxPlayer);
 							role.add("");
 							role.add("§r§7[Status]  §aONLINE");
 							role.add("");
 							role.add("§r§7[Match]  " + (ss.getRunningMatch() ? "§cACTIVE" : "§aINACTIVE"));
-							if (!ss.getMapName().isEmpty()) {
+							if (!ss.mapName.isEmpty()) {
 								role.add("");
-								role.add("§r§7[Map]  §f§l" + ss.getMapName());
+								role.add("§r§7[Map]  §f§l" + ss.mapName);
 							}
-							if (!ss.getInfo().isEmpty()) {
+							if (!ss.info.isEmpty()) {
 								role.add("");
-								role.add("§r§7[Info]  §f§l" + ss.getInfo());
+								role.add("§r§7[Info]  §f§l" + ss.info);
 							}
 						} else {
 							role.add("");

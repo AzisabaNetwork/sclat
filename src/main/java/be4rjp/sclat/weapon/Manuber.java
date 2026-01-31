@@ -4,6 +4,9 @@ import be4rjp.sclat.Sclat;
 import be4rjp.sclat.api.player.PlayerData;
 import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.data.SplashShieldData;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Predicate;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.World;
@@ -16,10 +19,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.BoundingBox;
 import org.bukkit.util.RayTraceResult;
 import org.bukkit.util.Vector;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Predicate;
 
 public class Manuber {
 	public static void ManeuverRunnable(Player player) {
@@ -67,7 +66,7 @@ public class Manuber {
 				// float ink = data.getWeaponClass().getMainWeapon().getSlideNeedINK();
 
 				// マニューバー系
-				if (data.getWeaponClass().getMainWeapon().getIsManeuver()) {
+				if (data.getWeaponClass().getMainWeapon().isManeuver) {
 					// if(p.getExp() >= ink) {
 					if (data.getIsSneaking() && sl_recharge_2 && !data.getIsSliding()
 							&& p.getInventory().getItemInMainHand().getType()
@@ -79,7 +78,7 @@ public class Manuber {
 						// p.setExp(p.getExp() - ink);
 
 						// エフェクト
-						org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(player).team.getTeamColor().getWool()
+						org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(player).team.getTeamColor().wool
 								.createBlockData();
 						double random = 1.0;
 
@@ -289,8 +288,7 @@ public class Manuber {
 			if (armorStand.getCustomName() != null) {
 				if (armorStand.getCustomName().equals("SplashShield")) {
 					SplashShieldData ssdata = DataMgr.getSplashShieldDataFromArmorStand(armorStand);
-					if (DataMgr.getPlayerData(p).team != DataMgr.getPlayerData(ssdata.getPlayer()).team
-							&& ssdata.getIsDeploy()) {
+					if (DataMgr.getPlayerData(p).team != DataMgr.getPlayerData(ssdata.player).team && ssdata.isDeploy) {
 						Location hitLocation = result.getHitPosition().toLocation(world);
 						distance2 = entityLocation.distance(hitLocation);
 						if (dist - distance2 > 0.7) {

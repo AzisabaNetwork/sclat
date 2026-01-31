@@ -8,6 +8,7 @@ import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.manager.ArmorStandMgr;
 import be4rjp.sclat.manager.PaintMgr;
 import be4rjp.sclat.weapon.Gear;
+import java.util.List;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -20,8 +21,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
-
-import java.util.List;
 
 /**
  *
@@ -41,7 +40,7 @@ public class SplashBomb {
 					if (c == 0) {
 						if (!DataMgr.getPlayerData(player).getIsBombRush())
 							p.setExp(p.getExp() - 0.59F);
-						ItemStack bom = new ItemStack(DataMgr.getPlayerData(p).team.getTeamColor().getGlass()).clone();
+						ItemStack bom = new ItemStack(DataMgr.getPlayerData(p).team.getTeamColor().glass).clone();
 						ItemMeta bom_m = bom.getItemMeta();
 						bom_m.setLocalizedName(String.valueOf(Sclat.getNotDuplicateNumber()));
 						bom.setItemMeta(bom_m);

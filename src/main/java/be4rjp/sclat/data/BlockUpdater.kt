@@ -1,168 +1,168 @@
+package be4rjp.sclat.data
 
-package be4rjp.sclat.data;
-
-import be4rjp.sclat.Sclat;
-import be4rjp.sclat.api.SclatUtil;
-import net.minecraft.server.v1_14_R1.PacketPlayOutMultiBlockChange;
-import org.bukkit.Chunk;
-import org.bukkit.Material;
-import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
-import org.bukkit.craftbukkit.v1_14_R1.CraftChunk;
-import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
-import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import be4rjp.sclat.Sclat
+import be4rjp.sclat.api.SclatUtil
+import net.minecraft.server.v1_14_R1.PacketPlayOutMultiBlockChange
+import org.bukkit.Chunk
+import org.bukkit.Material
+import org.bukkit.block.Block
+import org.bukkit.block.BlockFace
+import org.bukkit.craftbukkit.v1_14_R1.CraftChunk
+import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer
+import org.bukkit.scheduler.BukkitRunnable
 
 /**
  *
  * @author Be4rJP
  */
-public class BlockUpdater {
-	private Map<Block, Material> blocklist = new HashMap<>();
-	private List<Block> blocks = new ArrayList<>();
-	private BukkitRunnable task;
-	private int maxBlock = 30;
+class BlockUpdater {
+    private val blocklist: MutableMap<Block, Material> = mutableMapOf()
+    private val blocks: MutableList<Block> = mutableListOf()
+    private val task: BukkitRunnable
+    private var maxBlock = 30
 
-	public BlockUpdater() {
-		task = new BukkitRunnable() {
-			int c = 0;
-			int i = 0;
-			@Override
-			public void run() {
-				try {
-					List<Block> tb = blocks.subList(c, blocks.size());
+    init {
+        task =
+            object : BukkitRunnable() {
+                var c: Int = 0
+                var i: Int = 0
 
-					Map<Chunk, List<Block>> chunkBlockMap = new HashMap<>();
+                override fun run() {
+                    try {
+                        val tb = blocks.subList(c, blocks.size)
 
-					loop : for (Block block : tb) {
-						// Sclat.setBlockByNMS(block, blocklist.get(block), true);
-						if (block.getLocation().getChunk().isLoaded()) {
-							try {
-								// Sclat.setBlockByNMSChunk(block, blocklist.get(block), true);
+                        val chunkBlockMap: MutableMap<Chunk, MutableList<Block>> = mutableMapOf()
 
-								List<Block> list = new ArrayList<>();
-								Block up = block.getRelative(BlockFace.UP);
-								Block west = block.getRelative(BlockFace.WEST);
-								Block east = block.getRelative(BlockFace.EAST);
-								Block south = block.getRelative(BlockFace.SOUTH);
-								Block north = block.getRelative(BlockFace.NORTH);
-								Block down = block.getRelative(BlockFace.DOWN);
-								list.add(up);
-								list.add(west);
-								list.add(east);
-								list.add(south);
-								list.add(north);
-								list.add(down);
+                        loop@ for (block in tb) {
+                            // Sclat.setBlockByNMS(block, blocklist.get(block), true);
+                            if (block.getLocation().getChunk().isLoaded()) {
+                                try {
+                                    // Sclat.setBlockByNMSChunk(block, blocklist.get(block), true);
 
-								check : for (Block cb : list) {
-									if (cb.getType().equals(Material.AIR)) {
-										// Sclat.sendBlockChangeForAllPlayer(block, blocklist.get(block));
-										chunkBlockMap.computeIfAbsent(block.getChunk(), chunk -> new ArrayList<>())
-												.add(block);
-										continue;
-									}
-								}
-							} catch (Exception e) {
-							}
-						} else {
-						}
-						// block.setType(blocklist.get(block));
-						c++;
-						i++;
-						if (i == maxBlock) {
-							i = 0;
-							break;
-						}
-					}
+                                    val list: MutableList<Block> = ArrayList<Block>()
+                                    val up = block.getRelative(BlockFace.UP)
+                                    val west = block.getRelative(BlockFace.WEST)
+                                    val east = block.getRelative(BlockFace.EAST)
+                                    val south = block.getRelative(BlockFace.SOUTH)
+                                    val north = block.getRelative(BlockFace.NORTH)
+                                    val down = block.getRelative(BlockFace.DOWN)
+                                    list.add(up)
+                                    list.add(west)
+                                    list.add(east)
+                                    list.add(south)
+                                    list.add(north)
+                                    list.add(down)
 
-					// Use multi block change
-					for (Map.Entry<Chunk, List<Block>> entry : chunkBlockMap.entrySet()) {
-						Chunk chunk = entry.getKey();
-						List<Block> blocks = entry.getValue();
+                                    check@ for (cb in list) {
+                                        if (cb.getType() == Material.AIR) {
+                                            // Sclat.sendBlockChangeForAllPlayer(block, blocklist.get(block));
+                                            chunkBlockMap
+                                                .computeIfAbsent(block.chunk) { chunk: Chunk? -> mutableListOf() }
+                                                .add(block)
+                                            continue
+                                        }
+                                    }
+                                } catch (e: Exception) {
+                                }
+                            } else {
+                            }
+                            // block.setType(blocklist.get(block));
+                            c++
+                            i++
+                            if (i == maxBlock) {
+                                i = 0
+                                break
+                            }
+                        }
 
-						short[] positionArray = new short[blocks.size()];
-						int i = 0;
-						for (Block block : blocks) {
-							positionArray[i] = (short) ((block.getX() & 0xF) << 12 | (block.getZ() & 0xF) << 8
-									| block.getY());
-							i++;
-						}
-						PacketPlayOutMultiBlockChange packet = new PacketPlayOutMultiBlockChange(positionArray.length,
-								positionArray, ((CraftChunk) chunk).getHandle());
-						for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
-							if (target.getWorld() == chunk.getWorld()) {
-								((CraftPlayer) target).getHandle().playerConnection.sendPacket(packet);
-							}
-						}
-					}
+                        // Use multi block change
+                        for (entry in chunkBlockMap.entries) {
+                            val chunk: Chunk = entry.key
+                            val blocks: MutableList<Block> = entry.value
 
-				} catch (Exception e) {
-					cancel();
-				}
-			}
-		};
-	}
+                            val positionArray = ShortArray(blocks.size)
+                            var i = 0
+                            for (block in blocks) {
+                                positionArray[i] =
+                                    ((block.getX() and 0xF) shl 12 or ((block.getZ() and 0xF) shl 8) or block.getY()).toShort()
+                                i++
+                            }
+                            val packet =
+                                PacketPlayOutMultiBlockChange(
+                                    positionArray.size,
+                                    positionArray,
+                                    (chunk as CraftChunk).getHandle(),
+                                )
+                            for (target in Sclat.getPlugin().getServer().getOnlinePlayers()) {
+                                if (target.getWorld() === chunk.getWorld()) {
+                                    (target as CraftPlayer).getHandle().playerConnection.sendPacket(packet)
+                                }
+                            }
+                        }
+                    } catch (e: Exception) {
+                        cancel()
+                    }
+                }
+            }
+    }
 
-	public void setBlock(Block block, Material material) {
+    fun setBlock(
+        block: Block,
+        material: Material,
+    ) {
+        if (this.blocks.contains(block)) {
+            if (this.blocklist.get(block) == material) {
+                return
+            }
+        }
 
-		if (this.blocks.contains(block))
-			if (this.blocklist.get(block).equals(material))
-				return;
+        if (!this.blocks.contains(block)) {
+            this.blocklist.put(block, material)
+            this.blocks.add(block)
 
-		if (!this.blocks.contains(block)) {
-			this.blocklist.put(block, material);
-			this.blocks.add(block);
+            if (block.getLocation().getChunk().isLoaded()) {
+                try {
+                    SclatUtil.setBlockByNMSChunk(block, blocklist.get(block)!!, true)
+                } catch (e: Exception) {
+                }
+            } else {
+                try {
+                    SclatUtil.setBlockByNMS(block, blocklist.get(block)!!, true)
+                    // Main.getPlugin().getServer().broadcastMessage("ChangeBlockByNMS!!");
+                } catch (e: Exception) {
+                }
+            }
+        } else {
+            if (this.blocklist.get(block) != material) {
+                // this.blocklist.put(block, material);
+                this.blocklist.replace(block, material)
+                this.blocks.add(block)
 
-			if (block.getLocation().getChunk().isLoaded()) {
-				try {
-					SclatUtil.setBlockByNMSChunk(block, blocklist.get(block), true);
-				} catch (Exception e) {
-				}
-			} else {
-				try {
-					SclatUtil.setBlockByNMS(block, blocklist.get(block), true);
-					// Main.getPlugin().getServer().broadcastMessage("ChangeBlockByNMS!!");
-				} catch (Exception e) {
-				}
-			}
+                if (block.getLocation().getChunk().isLoaded()) {
+                    try {
+                        SclatUtil.setBlockByNMSChunk(block, blocklist.get(block)!!, true)
+                    } catch (e: Exception) {
+                    }
+                } else {
+                    try {
+                        SclatUtil.setBlockByNMS(block, blocklist.get(block)!!, true)
+                        // Main.getPlugin().getServer().broadcastMessage("ChangeBlockByNMS!!");
+                    } catch (e: Exception) {
+                    }
+                }
+            }
+        }
+    }
 
-		} else {
-			if (!this.blocklist.get(block).equals(material)) {
-				// this.blocklist.put(block, material);
-				this.blocklist.replace(block, material);
-				this.blocks.add(block);
+    fun start() {
+        task.runTaskTimer(Sclat.getPlugin(), 0, 2)
+    }
 
-				if (block.getLocation().getChunk().isLoaded()) {
-					try {
-						SclatUtil.setBlockByNMSChunk(block, blocklist.get(block), true);
-					} catch (Exception e) {
-					}
-				} else {
-					try {
-						SclatUtil.setBlockByNMS(block, blocklist.get(block), true);
-						// Main.getPlugin().getServer().broadcastMessage("ChangeBlockByNMS!!");
-					} catch (Exception e) {
-					}
-				}
+    fun stop() {
+        task.cancel()
+    }
 
-			}
-		}
-	}
-
-	public void start() {
-		task.runTaskTimer(Sclat.getPlugin(), 0, 2);
-	}
-
-	public void stop() {
-		task.cancel();
-	}
-
-	public void setMaxBlockInOneTick(int i) {
-		this.maxBlock = i;
-	}
+    fun setMaxBlockInOneTick(i: Int) {
+        this.maxBlock = i
+    }
 }

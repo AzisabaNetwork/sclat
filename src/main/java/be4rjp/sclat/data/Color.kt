@@ -1,94 +1,31 @@
+package be4rjp.sclat.data
 
-package be4rjp.sclat.data;
-
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
+import org.bukkit.ChatColor
+import org.bukkit.Color
+import org.bukkit.Material
+import org.bukkit.inventory.ItemStack
 
 /**
  *
  * @author Be4rJP
  */
-public class Color {
-	private String colorname;
-	private String colorcode;
-	private boolean isUsed = false;
-	private Material wool;
-	private org.bukkit.Color bukkitcolor;
-	private Material glass;
-	private Material concrete;
-	private ItemStack bougu;
-	private ChatColor cc;
+class Color(
+    val colorName: String?,
+) {
+    var colorCode: String? = null
+    var isUsed: Boolean = false
 
-	public Color(String colorname) {
-		this.colorname = colorname;
-	}
+    @JvmField
+    var wool: Material? = null
+    var bukkitColor: Color? = null
 
-	public String getColorCode() {
-		return colorcode;
-	}
+    @JvmField
+    var glass: Material? = null
 
-	public String getColorName() {
-		return colorname;
-	}
+    @JvmField
+    var concrete: Material? = null
 
-	public boolean getIsUsed() {
-		return isUsed;
-	}
-
-	public Material getWool() {
-		return wool;
-	}
-
-	public Material getGlass() {
-		return glass;
-	}
-
-	public Material getConcrete() {
-		return concrete;
-	}
-
-	public ItemStack getBougu() {
-		return bougu;
-	}
-
-	public org.bukkit.Color getBukkitColor() {
-		return bukkitcolor;
-	}
-
-	public ChatColor getChatColor() {
-		return this.cc;
-	}
-
-	public void setWool(Material Wool) {
-		wool = Wool;
-	}
-
-	public void setGlass(Material glass) {
-		this.glass = glass;
-	}
-
-	public void setIsUsed(boolean isused) {
-		isUsed = isused;
-	}
-
-	public void setColorCode(String code) {
-		colorcode = code;
-	}
-
-	public void setConcrete(Material conc) {
-		this.concrete = conc;
-	}
-
-	public void setBougu(ItemStack bougu) {
-		this.bougu = bougu;
-	}
-
-	public void setBukkitColor(org.bukkit.Color color) {
-		this.bukkitcolor = color;
-	}
-
-	public void setChatColor(ChatColor cc) {
-		this.cc = cc;
-	}
+    @JvmField
+    var bougu: ItemStack? = null
+    var chatColor: ChatColor? = null
 }

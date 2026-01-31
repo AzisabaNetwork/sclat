@@ -7,6 +7,8 @@ import be4rjp.sclat.api.player.PlayerData;
 import be4rjp.sclat.api.raytrace.RayTrace;
 import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.manager.PaintMgr;
+import java.util.ArrayList;
+import java.util.Random;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -24,10 +26,6 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
-
-import java.util.ArrayList;
-import java.util.Random;
-
 import static be4rjp.sclat.Sclat.conf;
 
 public class Reeler {
@@ -101,7 +99,7 @@ public class Reeler {
 					Vector jvec = (new Vector(vec.getX(), 0, vec.getZ())).normalize().multiply(3);
 					Vector ev = jvec.clone().normalize().multiply(-2);
 					// エフェクト
-					org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(player).team.getTeamColor().getWool()
+					org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(player).team.getTeamColor().wool
 							.createBlockData();
 					double random = 1.0;
 					for (int i = 0; i < 35; i++) {
@@ -324,8 +322,8 @@ public class Reeler {
 				if (it < 10) {
 					if (player.getWorld() == position.getWorld()) {
 						if (player.getLocation().distanceSquared(position) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED) {
-							org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(player).team.getTeamColor()
-									.getWool().createBlockData();
+							org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(player).team.getTeamColor().wool
+									.createBlockData();
 							player.spawnParticle(org.bukkit.Particle.BLOCK_DUST, position, 1, 0, 0, 0, 1, bd);
 						}
 					}
@@ -367,8 +365,8 @@ public class Reeler {
 				if (it < 10) {
 					if (player.getWorld() == position.getWorld()) {
 						if (player.getLocation().distanceSquared(position) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED) {
-							org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(player).team.getTeamColor()
-									.getWool().createBlockData();
+							org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(player).team.getTeamColor().wool
+									.createBlockData();
 							player.spawnParticle(org.bukkit.Particle.BLOCK_DUST, position, 1, 0, 0, 0, 1, bd);
 						}
 					}
@@ -385,13 +383,13 @@ public class Reeler {
 								if (as.getCustomName().equals("SplashShield")) {
 									// SplashShieldData ssdata =
 									// DataMgr.getSplashShieldDataFromArmorStand((ArmorStand)as);
-									// if(DataMgr.getPlayerData(ssdata.getPlayer()).getTeam() !=
+									// if(DataMgr.getPlayerData(ssdata.player).getTeam() !=
 									// DataMgr.getPlayerData(player).getTeam()){
 									// break loop;
 									// }
 								} else if (as.getCustomName().equals("Kasa")) {
 									// KasaData ssdata = DataMgr.getKasaDataFromArmorStand((ArmorStand)as);
-									// if(DataMgr.getPlayerData(ssdata.getPlayer()).getTeam() !=
+									// if(DataMgr.getPlayerData(ssdata.player).getTeam() !=
 									// DataMgr.getPlayerData(player).getTeam()){
 									// break loop;
 									// }
@@ -438,7 +436,7 @@ public class Reeler {
 		ArrayList<Vector> positions = rayTrace.traverse(data.getWeaponClass().getMainWeapon().getShootSpeed()
 				* data.getWeaponClass().getMainWeapon().getDistanceTick(), 0.7);
 		boolean isLockOnPlayer = false;
-		if (data.getWeaponClass().getMainWeapon().getMaxRandom() == 0) {
+		if (data.getWeaponClass().getMainWeapon().maxRandom == 0) {
 			check : for (Vector vector : positions) {
 				Location position = vector.toLocation(player.getLocation().getWorld());
 				for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
@@ -467,10 +465,10 @@ public class Reeler {
 
 		Snowball ball = player.launchProjectile(Snowball.class);
 		((CraftSnowball) ball).getHandle().setItem(
-				CraftItemStack.asNMSCopy(new ItemStack(DataMgr.getPlayerData(player).team.getTeamColor().getWool())));
+				CraftItemStack.asNMSCopy(new ItemStack(DataMgr.getPlayerData(player).team.getTeamColor().wool)));
 		player.getWorld().playSound(player.getLocation(), Sound.ENTITY_PIG_STEP, 0.3F, 1F);
 		Vector vec = player.getLocation().getDirection()
-				.multiply(DataMgr.getPlayerData(player).getWeaponClass().getMainWeapon().getSlideNeedINK());
+				.multiply(DataMgr.getPlayerData(player).getWeaponClass().getMainWeapon().slideNeedINK);
 		double random = data.getWeaponClass().getMainWeapon().getChargeRatio();
 		int distick = DataMgr.getPlayerData(player).getWeaponClass().getMainWeapon().getMaxCharge();
 		vec.add(new Vector(Math.random() * random - random / 2, 0, Math.random() * random - random / 2));
@@ -508,7 +506,7 @@ public class Reeler {
 				}
 
 				if (i != 0) {
-					org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).team.getTeamColor().getWool()
+					org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).team.getTeamColor().wool
 							.createBlockData();
 					for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 						if (DataMgr.getPlayerData(o_player).settings.ShowEffect_MainWeaponInk())

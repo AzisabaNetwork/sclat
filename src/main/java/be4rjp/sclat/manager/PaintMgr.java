@@ -7,20 +7,19 @@ import be4rjp.sclat.api.ServerType;
 import be4rjp.sclat.api.player.PlayerData;
 import be4rjp.sclat.api.team.Team;
 import be4rjp.sclat.data.DataMgr;
+import be4rjp.sclat.data.MainWeapon;
 import be4rjp.sclat.data.Match;
 import be4rjp.sclat.data.PaintData;
 import be4rjp.sclat.data.Sponge;
 import be4rjp.sclat.weapon.Gear;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
 import static be4rjp.sclat.Sclat.conf;
 
 /**
@@ -33,7 +32,7 @@ public class PaintMgr {
 		if (Sclat.type == ServerType.LOBBY)
 			return;
 
-		be4rjp.sclat.data.MainWeapon mw = DataMgr.getPlayerData(player).getWeaponClass().getMainWeapon();
+		MainWeapon mw = DataMgr.getPlayerData(player).getWeaponClass().getMainWeapon();
 		List<Block> blocks = new ArrayList<>();
 		blocks.add(location.getBlock());
 		if (sphere)
@@ -43,7 +42,7 @@ public class PaintMgr {
 
 		for (Block block : blocks) {
 
-			if (block.getType() == DataMgr.getPlayerData(player).team.getTeamColor().getWool())
+			if (block.getType() == DataMgr.getPlayerData(player).team.getTeamColor().wool)
 				continue;
 
 			try {
@@ -60,14 +59,14 @@ public class PaintMgr {
 					if (pdata.getWeaponClass().getMainWeapon().getWeaponType().equals("Charger"))
 						sponge.giveDamage(15, pdata.team);
 					else
-						sponge.giveDamage(pdata.getWeaponClass().getMainWeapon().getDamage(), pdata.team);
+						sponge.giveDamage(pdata.getWeaponClass().getMainWeapon().damage, pdata.team);
 				} else if (block.getType().equals(Material.WET_SPONGE)) {
 					Sponge sponge = new Sponge(block);
 					PlayerData pdata = DataMgr.getPlayerData(player);
-					sponge.setMatch(pdata.match);
-					sponge.setTeam(pdata.team);
+					sponge.match = (pdata.match);
+					sponge.team = (pdata.team);
 					DataMgr.setSpongeWithBlock(block, sponge);
-					sponge.giveDamage(pdata.getWeaponClass().getMainWeapon().getDamage(), pdata.team);
+					sponge.giveDamage(pdata.getWeaponClass().getMainWeapon().damage, pdata.team);
 				}
 			}
 
@@ -81,15 +80,15 @@ public class PaintMgr {
 						return;
 				if (DataMgr.getBlockDataMap().containsKey(block)) {
 					PaintData data = DataMgr.getPaintDataFromBlock(block);
-					Team BTeam = data.getTeam();
+					Team BTeam = data.team;
 					Team ATeam = DataMgr.getPlayerData(player).team;
 					if (BTeam != ATeam) {
-						data.setTeam(ATeam);
+						data.team = (ATeam);
 						BTeam.subtractPaintCount();
 						ATeam.addPaintCount();
-						// Sclat.setBlockByNMS(block, ATeam.getTeamColor().getWool(), false);
+						// Sclat.setBlockByNMS(block, ATeam.getTeamColor().wool, false);
 						DataMgr.getPlayerData(player).match.getBlockUpdater().setBlock(block,
-								ATeam.getTeamColor().getWool());
+								ATeam.getTeamColor().wool);
 						DataMgr.getPlayerData(player).addPaintCount();
 						if (new Random().nextInt((int) (12 / Gear.getGearInfluence(player, Gear.Type.SPECIAL_UP)
 								/ DataMgr.getPlayerData(player).getWeaponClass().getMainWeapon().getSPRate())) == 0
@@ -100,15 +99,14 @@ public class PaintMgr {
 					Team team = DataMgr.getPlayerData(player).team;
 					team.addPaintCount();
 					PaintData data = new PaintData(block);
-					data.setMatch(DataMgr.getPlayerData(player).match);
-					data.setTeam(team);
+					data.match = (DataMgr.getPlayerData(player).match);
+					data.team = (team);
 					data.setOrigianlType(block.getType());
-					data.setBlockData(block.getBlockData());
+					data.blockData = (block.getBlockData());
 					// data.setOriginalState(block.getState());
 					DataMgr.setPaintDataFromBlock(block, data);
-					// Sclat.setBlockByNMS(block, team.getTeamColor().getWool(), false);
-					DataMgr.getPlayerData(player).match.getBlockUpdater().setBlock(block,
-							team.getTeamColor().getWool());
+					// Sclat.setBlockByNMS(block, team.getTeamColor().wool, false);
+					DataMgr.getPlayerData(player).match.getBlockUpdater().setBlock(block, team.getTeamColor().wool);
 					DataMgr.getPlayerData(player).addPaintCount();
 					if (new Random().nextInt((int) (13 / Gear.getGearInfluence(player, Gear.Type.SPECIAL_UP)
 							/ DataMgr.getPlayerData(player).getWeaponClass().getMainWeapon().getSPRate())) == 0
@@ -132,7 +130,7 @@ public class PaintMgr {
 	}
 
 	public static void PaintByTeam(Block block, Team team, Match match) {
-		if (block.getType() == team.getTeamColor().getWool())
+		if (block.getType() == team.getTeamColor().wool)
 			return;
 
 		if (!(block.getType() == Material.AIR || block.getType() == Material.SHULKER_BOX
@@ -144,23 +142,23 @@ public class PaintMgr {
 				|| block.getType() == Material.OBSIDIAN || block.getType().toString().contains("SLAB"))) {
 			if (DataMgr.getBlockDataMap().containsKey(block)) {
 				PaintData data = DataMgr.getPaintDataFromBlock(block);
-				Team BTeam = data.getTeam();
+				Team BTeam = data.team;
 				Team ATeam = team;
 				if (BTeam != ATeam) {
-					data.setTeam(ATeam);
+					data.team = (ATeam);
 					BTeam.subtractPaintCount();
 					ATeam.addPaintCount();
-					match.getBlockUpdater().setBlock(block, ATeam.getTeamColor().getWool());
+					match.getBlockUpdater().setBlock(block, ATeam.getTeamColor().wool);
 				}
 			} else {
 				team.addPaintCount();
 				PaintData data = new PaintData(block);
-				data.setMatch(match);
-				data.setTeam(team);
+				data.match = (match);
+				data.team = (team);
 				data.setOrigianlType(block.getType());
-				data.setBlockData(block.getBlockData());
+				data.blockData = (block.getBlockData());
 				DataMgr.setPaintDataFromBlock(block, data);
-				match.getBlockUpdater().setBlock(block, team.getTeamColor().getWool());
+				match.getBlockUpdater().setBlock(block, team.getTeamColor().wool);
 			}
 		}
 	}
@@ -311,13 +309,13 @@ public class PaintMgr {
 		for (Block block : blocks) {
 			if (block.getType().equals(Material.WHITE_STAINED_GLASS)) {
 				PaintData data = new PaintData(block);
-				data.setMatch(match);
-				data.setTeam(match.getTeam0());
+				data.match = (match);
+				data.team = (match.team0);
 				data.setOrigianlType(block.getType());
 				DataMgr.setPaintDataFromBlock(block, data);
-				SclatUtil.setBlockByNMS(block, match.getTeam0().getTeamColor().getGlass(), false);
-				// block.setType(match.getTeam0().getTeamColor().getGlass());
-				match.getTeam0().addPaintCount();
+				SclatUtil.setBlockByNMS(block, match.team0.getTeamColor().glass, false);
+				// block.setType(match.team0.getTeamColor().glass);
+				match.team0.addPaintCount();
 			}
 		}
 
@@ -336,13 +334,13 @@ public class PaintMgr {
 		for (Block block : blocks1) {
 			if (block.getType().equals(Material.WHITE_STAINED_GLASS)) {
 				PaintData data = new PaintData(block);
-				data.setMatch(match);
-				data.setTeam(match.getTeam1());
+				data.match = (match);
+				data.team = (match.team1);
 				data.setOrigianlType(block.getType());
 				DataMgr.setPaintDataFromBlock(block, data);
-				SclatUtil.setBlockByNMS(block, match.getTeam1().getTeamColor().getGlass(), false);
-				// block.setType(match.getTeam1().getTeamColor().getGlass());
-				match.getTeam1().addPaintCount();
+				SclatUtil.setBlockByNMS(block, match.team1.getTeamColor().glass, false);
+				// block.setType(match.team1.getTeamColor().glass);
+				match.team1.addPaintCount();
 			}
 		}
 	}

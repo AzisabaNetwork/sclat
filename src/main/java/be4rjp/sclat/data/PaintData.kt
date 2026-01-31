@@ -1,75 +1,33 @@
+package be4rjp.sclat.data
 
-package be4rjp.sclat.data;
-
-import be4rjp.sclat.api.team.Team;
-import org.bukkit.Material;
-import org.bukkit.block.Block;
-import org.bukkit.block.BlockState;
-import org.bukkit.block.data.BlockData;
+import be4rjp.sclat.api.team.Team
+import org.bukkit.Material
+import org.bukkit.block.Block
+import org.bukkit.block.BlockState
+import org.bukkit.block.data.BlockData
 
 /**
  *
  * @author Be4rJP
  */
-public class PaintData {
+class PaintData(
+    val block: Block?,
+) {
+    @JvmField
+    var match: Match? = null
 
-	private Block paintedblock;
+    var originalType: Material? = null
+        private set
 
-	private Match match;
+    @JvmField
+    var team: Team? = null
 
-	private Material origtype;
+    var originalState: BlockState? = null
 
-	private Team team;
+    @JvmField
+    var blockData: BlockData? = null
 
-	private BlockState bs;
-
-	private BlockData blockData;
-
-	public PaintData(Block block) {
-		this.paintedblock = block;
-	}
-
-	public Match getMatch() {
-		return this.match;
-	}
-
-	public Block getBlock() {
-		return this.paintedblock;
-	}
-
-	public Material getOriginalType() {
-		return this.origtype;
-	}
-
-	public Team getTeam() {
-		return this.team;
-	}
-
-	public BlockState getOriginalState() {
-		return this.bs;
-	}
-
-	public BlockData getBlockData() {
-		return this.blockData;
-	}
-
-	public void setMatch(Match match) {
-		this.match = match;
-	}
-
-	public void setOrigianlType(Material material) {
-		this.origtype = material;
-	}
-
-	public void setTeam(Team team) {
-		this.team = team;
-	}
-
-	public void setOriginalState(BlockState bs) {
-		this.bs = bs;
-	}
-
-	public void setBlockData(BlockData blockData) {
-		this.blockData = blockData;
-	}
+    fun setOrigianlType(material: Material?) {
+        this.originalType = material
+    }
 }

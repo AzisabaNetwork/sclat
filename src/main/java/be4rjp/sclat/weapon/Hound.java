@@ -11,6 +11,7 @@ import be4rjp.sclat.data.KasaData;
 import be4rjp.sclat.data.SplashShieldData;
 import be4rjp.sclat.manager.ArmorStandMgr;
 import be4rjp.sclat.manager.PaintMgr;
+import java.util.List;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -20,8 +21,6 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
-
-import java.util.List;
 
 public class Hound {
 	public static void HoundRunnable(Player player) {
@@ -160,7 +159,7 @@ public class Hound {
 
 					// エフェクト
 					if (i % 2 == 0) {
-						org.bukkit.block.data.BlockData bd = data.team.getTeamColor().getWool().createBlockData();
+						org.bukkit.block.data.BlockData bd = data.team.getTeamColor().wool.createBlockData();
 						for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
 							// if (DataMgr.getPlayerData(target).getSettings().ShowEffect_Bomb()){
 							if (target.getWorld() == player.getWorld()) {
@@ -225,15 +224,14 @@ public class Hound {
 										try {
 											if (as.getCustomName().equals("Kasa")) {
 												KasaData kasaData = DataMgr.getKasaDataFromArmorStand((ArmorStand) as);
-												if (DataMgr.getPlayerData(kasaData.getPlayer()).team != data.team) {
+												if (DataMgr.getPlayerData(kasaData.player).team != data.team) {
 													as1.remove();
 													cancel();
 												}
 											} else if (as.getCustomName().equals("SplashShield")) {
 												SplashShieldData splashShieldData = DataMgr
 														.getSplashShieldDataFromArmorStand((ArmorStand) as);
-												if (DataMgr.getPlayerData(
-														splashShieldData.getPlayer()).team != data.team) {
+												if (DataMgr.getPlayerData(splashShieldData.player).team != data.team) {
 													as1.remove();
 													cancel();
 												}

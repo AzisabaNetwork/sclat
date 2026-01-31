@@ -1,283 +1,383 @@
+package be4rjp.sclat.data
 
-package be4rjp.sclat.data;
-
-import be4rjp.sclat.api.player.PlayerData;
-import be4rjp.sclat.api.team.Team;
-import be4rjp.sclat.api.team.TeamLoc;
-import org.bukkit.block.Block;
-import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Projectile;
-import org.bukkit.entity.Snowball;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import be4rjp.sclat.api.player.PlayerData
+import be4rjp.sclat.api.team.Team
+import be4rjp.sclat.api.team.TeamLoc
+import org.bukkit.block.Block
+import org.bukkit.entity.ArmorStand
+import org.bukkit.entity.Player
+import org.bukkit.entity.Projectile
+import org.bukkit.entity.Snowball
+import java.util.Collections
+import java.util.concurrent.ConcurrentHashMap
 
 /**
  *
  * @author Be4rJP
  */
-public class DataMgr {
-	private static Map<Player, PlayerData> playerdata = new ConcurrentHashMap<>();
-	private static Map<String, PlayerData> uuiddata = new HashMap<>();
-	private static Map<Integer, Match> matchdata = new HashMap<>();
-	private static Map<Integer, Team> teamdata = new HashMap<>();
-	private static Map<String, Color> colordata = new HashMap<>();
-	private static Map<String, WeaponClass> weaponclassdata = new HashMap<>();
-	private static Map<String, MainWeapon> weapondata = new HashMap<>();
-	private static Map<String, MapData> mapdata = new HashMap<>();
-	private static Map<MapData, TeamLoc> locdata = new HashMap<>();
-	private static Map<Block, PaintData> blockdata = new HashMap<>();
-	private static Map<String, Boolean> playerquit = new HashMap<>();
-	private static Map<ArmorStand, Player> armorstand = new HashMap<>();
-	private static Map<Player, ArmorStand> beacon = new HashMap<>();
-	private static Map<Player, ArmorStand> sprinkler = new HashMap<>();
-	private static Map<Projectile, Boolean> snowball = new HashMap<>();
-	private static Map<Projectile, Boolean> msnowball = new HashMap<>();
-	private static Map<Block, Sponge> spongemap = new HashMap<>();
-	private static Map<String, Snowball> sb = new HashMap<>();
-	private static Map<String, Snowball> msb = new HashMap<>();
-	private static Map<String, Integer> msbn = new HashMap<>();
-	private static Map<Player, SplashShieldData> sspm = new HashMap<>();
-	private static Map<ArmorStand, SplashShieldData> ssam = new HashMap<>();
-	private static Map<Player, KasaData> kpm = new HashMap<>();
-	private static Map<ArmorStand, KasaData> kam = new HashMap<>();
-	// private static Map<Match, PaintData> paintdata = new HashMap<>();
-	private static List<Color> list = new ArrayList<>();
-	public static Map<String, Integer> oto = new HashMap<>();
-	public static List<Block> rblist = new ArrayList<>();
-	public static List<ArmorStand> al = new ArrayList<>();
-	public static List<ArmorStand> ssa = new ArrayList<>();
-	public static List<String> mws = new ArrayList<>();
-	public static List<String> pul = new ArrayList<>();
-	public static List<String> tsl = new ArrayList<>();
-	public static List<MapData> maplist = new ArrayList<>();
-	public static List<String> uuids = new ArrayList<>();
-	public static List<Player> joinedList = new ArrayList<>();
+object DataMgr {
+    @JvmStatic
+    val playerDataMap: MutableMap<Player?, PlayerData?> = ConcurrentHashMap<Player?, PlayerData?>()
 
-	public static PlayerData getPlayerData(Player player) {
-		return playerdata.get(player);
-	}
-	public static PlayerData getUUIDData(String uuid) {
-		return uuiddata.get(uuid);
-	}
-	public static Match getMatchFromId(int id) {
-		return matchdata.get(id);
-	}
-	public static Team getTeamFromId(int id) {
-		return teamdata.get(id);
-	}
-	public static Color getColor(String name) {
-		return colordata.get(name);
-	}
-	public static WeaponClass getWeaponClass(String weaponclass) {
-		return weaponclassdata.get(weaponclass);
-	}
-	public static MainWeapon getWeapon(String name) {
-		return weapondata.get(name);
-	}
-	public static MapData getMap(String name) {
-		return mapdata.get(name);
-	}
-	public static TeamLoc getTeamLoc(MapData map) {
-		return locdata.get(map);
-	}
-	public static PaintData getPaintDataFromBlock(Block block) {
-		return blockdata.get(block);
-	}
-	public static boolean getPlayerIsQuit(String uuid) {
-		return playerquit.get(uuid);
-	}
-	public static Player getArmorStandPlayer(ArmorStand as) {
-		return armorstand.get(as);
-	}
-	public static boolean getSnowballIsHit(Projectile ball) {
-		return snowball.get(ball);
-	}
-	public static boolean getMainSnowballIsHit(Projectile ball) {
-		return msnowball.get(ball);
-	}
-	public static ArmorStand getBeaconFromplayer(Player player) {
-		return beacon.get(player);
-	}
-	public static ArmorStand getSprinklerFromplayer(Player player) {
-		return sprinkler.get(player);
-	}
-	public static Sponge getSpongeFromBlock(Block block) {
-		return spongemap.get(block);
-	}
-	public static SplashShieldData getSplashShieldDataFromPlayer(Player player) {
-		return sspm.get(player);
-	}
-	public static SplashShieldData getSplashShieldDataFromArmorStand(ArmorStand as) {
-		return ssam.get(as);
-	}
-	public static KasaData getKasaDataFromPlayer(Player player) {
-		return kpm.get(player);
-	}
-	public static KasaData getKasaDataFromArmorStand(ArmorStand as) {
-		return kam.get(as);
-	}
-	public static int getSnowballHitCount(String name) {
-		return msbn.get(name);
-	}
-	// public static PaintData getPaintDataFromMatch(Match match){return
-	// paintdata.get(match);}
+    @JvmStatic
+    val uUIDDataMap: MutableMap<String?, PlayerData?> = HashMap<String?, PlayerData?>()
+    private val matchdata: MutableMap<Int?, Match?> = HashMap<Int?, Match?>()
+    private val teamdata: MutableMap<Int?, Team?> = HashMap<Int?, Team?>()
+    private val colordata: MutableMap<String?, Color?> = HashMap<String?, Color?>()
+    private val weaponclassdata: MutableMap<String?, WeaponClass?> = HashMap<String?, WeaponClass?>()
+    private val weapondata: MutableMap<String?, MainWeapon?> = HashMap<String?, MainWeapon?>()
+    private val mapdata: MutableMap<String?, MapData?> = HashMap<String?, MapData?>()
+    private val locdata: MutableMap<MapData?, TeamLoc?> = HashMap<MapData?, TeamLoc?>()
 
-	public static void setPlayerData(Player player, PlayerData data) {
-		playerdata.put(player, data);
-	}
-	public static void setUUIDData(String uuid, PlayerData data) {
-		uuiddata.put(uuid, data);
-	}
-	public static void setMatch(int id, Match match) {
-		matchdata.put(id, match);
-	}
-	public static void setColor(String name, Color color) {
-		colordata.put(name, color);
-	}
-	public static void setTeam(int id, Team team) {
-		teamdata.put(id, team);
-	}
-	public static void setWeaponClass(String WCname, WeaponClass weaponclass) {
-		weaponclassdata.put(WCname, weaponclass);
-	}
-	public static void setMainWeapon(String MWname, MainWeapon mw) {
-		weapondata.put(MWname, mw);
-	}
-	public static void setMap(String Mname, MapData map) {
-		mapdata.put(Mname, map);
-	}
-	public static void setTeamLoc(MapData map, TeamLoc loc) {
-		locdata.put(map, loc);
-	}
-	public static void setPaintDataFromBlock(Block block, PaintData data) {
-		blockdata.put(block, data);
-	}
-	public static void setPlayerIsQuit(String uuid, boolean is) {
-		playerquit.put(uuid, is);
-	}
-	public static void setArmorStandPlayer(ArmorStand as, Player player) {
-		armorstand.put(as, player);
-	}
-	public static void setSnowballIsHit(Projectile ball, boolean is) {
-		snowball.put(ball, is);
-	}
-	public static void setMainSnowballIsHit(Projectile ball, boolean is) {
-		msnowball.put(ball, is);
-	}
-	public static void setBeaconFromPlayer(Player player, ArmorStand as) {
-		beacon.put(player, as);
-	}
-	public static void setSprinklerFromPlayer(Player player, ArmorStand as) {
-		sprinkler.put(player, as);
-	}
-	public static void setSpongeWithBlock(Block block, Sponge sponge) {
-		spongemap.put(block, sponge);
-	}
-	public static void setSplashShieldDataWithPlayer(Player player, SplashShieldData data) {
-		sspm.put(player, data);
-	}
-	public static void setSplashShieldDataWithARmorStand(ArmorStand as, SplashShieldData data) {
-		ssam.put(as, data);
-	}
-	public static void setKasaDataWithPlayer(Player player, KasaData data) {
-		kpm.put(player, data);
-	}
-	public static void setKasaDataWithARmorStand(ArmorStand as, KasaData data) {
-		kam.put(as, data);
-	}
-	public static void setSnowballHitCount(String name, int coount) {
-		msbn.putIfAbsent(name, coount);
-	}
+    // public static void setPaintDataFromMatch(Match match, PaintData
+    // data){paintdata.put(match, data);}
+    @JvmStatic
+    val blockDataMap: MutableMap<Block?, PaintData?> = HashMap<Block?, PaintData?>()
 
-	public static void addColorList(Color color) {
-		list.add(color);
-	}
-	public static void addPathArmorStandList(ArmorStand as) {
-		al.add(as);
-	}
-	public static void addMapList(MapData map) {
-		maplist.add(map);
-	}
-	public static void addSnowballHitCount(String name) {
-		msbn.put(name, getSnowballHitCount(name) + 1);
-	}
-	// public static void setPaintDataFromMatch(Match match, PaintData
-	// data){paintdata.put(match, data);}
+    @JvmStatic
+    val playerIsQuitMap: MutableMap<String?, Boolean?> = HashMap<String?, Boolean?>()
 
-	public static Map<Block, PaintData> getBlockDataMap() {
-		return blockdata;
-	}
-	public static Map<Player, PlayerData> getPlayerDataMap() {
-		return playerdata;
-	}
-	public static Map<String, PlayerData> getUUIDDataMap() {
-		return uuiddata;
-	}
-	public static Map<String, Boolean> getPlayerIsQuitMap() {
-		return playerquit;
-	}
-	public static Map<ArmorStand, Player> getArmorStandMap() {
-		return armorstand;
-	}
-	public static Map<Projectile, Boolean> getSnowballIsHitMap() {
-		return snowball;
-	}
-	public static Map<Projectile, Boolean> getMainSnowballIsHitMap() {
-		return msnowball;
-	}
-	public static Map<Player, ArmorStand> getBeaconMap() {
-		return beacon;
-	}
-	public static Map<Player, ArmorStand> getSprinklerMap() {
-		return sprinkler;
-	}
-	public static Map<Block, Sponge> getSpongeMap() {
-		return spongemap;
-	}
-	public static Map<String, Snowball> getSnowballNameMap() {
-		return sb;
-	}
-	public static Map<String, Snowball> getMainSnowballNameMap() {
-		return msb;
-	}
-	public static Map<Player, SplashShieldData> getSplashShieldDataMapWithPlayer() {
-		return sspm;
-	}
-	public static Map<ArmorStand, SplashShieldData> getSplashShieldDataMapWithArmorStand() {
-		return ssam;
-	}
-	public static Map<Player, KasaData> getKasaDataMapWithPlayer() {
-		return kpm;
-	}
-	public static Map<ArmorStand, KasaData> getKAsaDataMapWithArmorStand() {
-		return kam;
-	}
-	// public static Map<Match, PaintData> getPaintDataMap(){return paintdata;}
+    @JvmStatic
+    val armorStandMap: MutableMap<ArmorStand?, Player?> = HashMap<ArmorStand?, Player?>()
 
-	public static Color getColorRandom(int number) {
+    @JvmStatic
+    val beaconMap: MutableMap<Player?, ArmorStand?> = HashMap<Player?, ArmorStand?>()
 
-		Color color = list.get(number);
-		color.setIsUsed(true);
-		return color; // RandomColor
-	}
+    @JvmStatic
+    val sprinklerMap: MutableMap<Player?, ArmorStand?> = HashMap<Player?, ArmorStand?>()
 
-	public static void ColorShuffle() {
-		Collections.shuffle(list);
-	}
+    @JvmStatic
+    val snowballIsHitMap: MutableMap<Projectile?, Boolean?> = HashMap<Projectile?, Boolean?>()
 
-	public static void MapDataShuffle() {
-		Collections.shuffle(maplist);
-	}
+    @JvmStatic
+    val mainSnowballIsHitMap: MutableMap<Projectile?, Boolean?> = HashMap<Projectile?, Boolean?>()
 
-	public static MapData getMapRandom(int i) {
-		MapData map = maplist.get(i);
-		return map; // RandomMap
-	}
+    @JvmStatic
+    val spongeMap: MutableMap<Block?, Sponge?> = HashMap<Block?, Sponge?>()
 
+    @JvmStatic
+    val snowballNameMap: MutableMap<String?, Snowball?> = HashMap<String?, Snowball?>()
+
+    @JvmStatic
+    val mainSnowballNameMap: MutableMap<String?, Snowball?> = HashMap<String?, Snowball?>()
+    private val msbn: MutableMap<String?, Int?> = HashMap<String?, Int?>()
+
+    @JvmStatic
+    val splashShieldDataMapWithPlayer: MutableMap<Player?, SplashShieldData?> = HashMap<Player?, SplashShieldData?>()
+
+    @JvmStatic
+    val splashShieldDataMapWithArmorStand: MutableMap<ArmorStand?, SplashShieldData?> =
+        HashMap<ArmorStand?, SplashShieldData?>()
+
+    @JvmStatic
+    val kasaDataMapWithPlayer: MutableMap<Player?, KasaData?> = HashMap<Player?, KasaData?>()
+
+    @JvmStatic
+    val kAsaDataMapWithArmorStand: MutableMap<ArmorStand?, KasaData?> = HashMap<ArmorStand?, KasaData?>()
+
+    // private static Map<Match, PaintData> paintdata = new HashMap<>();
+    private val list: MutableList<Color> = ArrayList<Color>()
+
+    @JvmField
+    var oto: MutableMap<String?, Int?> = HashMap<String?, Int?>()
+    var rblist: MutableList<Block?> = ArrayList<Block?>()
+
+    @JvmField
+    var al: MutableList<ArmorStand?> = ArrayList<ArmorStand?>()
+
+    @JvmField
+    var ssa: MutableList<ArmorStand?> = ArrayList<ArmorStand?>()
+
+    @JvmField
+    var mws: MutableList<String?> = ArrayList<String?>()
+
+    @JvmField
+    var pul: MutableList<String?> = ArrayList<String?>()
+
+    @JvmField
+    var tsl: MutableList<String?> = ArrayList<String?>()
+
+    @JvmField
+    var maplist: MutableList<MapData> = ArrayList<MapData>()
+    var uuids: MutableList<String?> = ArrayList<String?>()
+
+    @JvmField
+    var joinedList: MutableList<Player?> = ArrayList<Player?>()
+
+    @JvmStatic
+    fun getPlayerData(player: Player?): PlayerData? = playerDataMap.get(player)
+
+    fun getUUIDData(uuid: String?): PlayerData? = uUIDDataMap.get(uuid)
+
+    @JvmStatic
+    fun getMatchFromId(id: Int): Match? = matchdata.get(id)
+
+    fun getTeamFromId(id: Int): Team? = teamdata.get(id)
+
+    fun getColor(name: String?): Color? = colordata.get(name)
+
+    @JvmStatic
+    fun getWeaponClass(weaponclass: String?): WeaponClass? = weaponclassdata.get(weaponclass)
+
+    @JvmStatic
+    fun getWeapon(name: String?): MainWeapon? = weapondata.get(name)
+
+    fun getMap(name: String?): MapData? = mapdata.get(name)
+
+    fun getTeamLoc(map: MapData?): TeamLoc? = locdata.get(map)
+
+    @JvmStatic
+    fun getPaintDataFromBlock(block: Block?): PaintData? = blockDataMap.get(block)
+
+    @JvmStatic
+    fun getPlayerIsQuit(uuid: String?): Boolean = playerIsQuitMap.get(uuid)!!
+
+    @JvmStatic
+    fun getArmorStandPlayer(`as`: ArmorStand?): Player? = armorStandMap.get(`as`)
+
+    @JvmStatic
+    fun getSnowballIsHit(ball: Projectile?): Boolean = snowballIsHitMap.get(ball)!!
+
+    fun getMainSnowballIsHit(ball: Projectile?): Boolean = mainSnowballIsHitMap.get(ball)!!
+
+    @JvmStatic
+    fun getBeaconFromplayer(player: Player?): ArmorStand? = beaconMap.get(player)
+
+    @JvmStatic
+    fun getSprinklerFromplayer(player: Player?): ArmorStand? = sprinklerMap.get(player)
+
+    @JvmStatic
+    fun getSpongeFromBlock(block: Block?): Sponge? = spongeMap.get(block)
+
+    fun getSplashShieldDataFromPlayer(player: Player?): SplashShieldData? = splashShieldDataMapWithPlayer.get(player)
+
+    @JvmStatic
+    fun getSplashShieldDataFromArmorStand(`as`: ArmorStand?): SplashShieldData? = splashShieldDataMapWithArmorStand.get(`as`)
+
+    fun getKasaDataFromPlayer(player: Player?): KasaData? = kasaDataMapWithPlayer.get(player)
+
+    @JvmStatic
+    fun getKasaDataFromArmorStand(`as`: ArmorStand?): KasaData? = kAsaDataMapWithArmorStand.get(`as`)
+
+    @JvmStatic
+    fun getSnowballHitCount(name: String?): Int = msbn.get(name)!!
+
+    // public static PaintData getPaintDataFromMatch(Match match){return
+    // paintdata.get(match);}
+    @JvmStatic
+    fun setPlayerData(
+        player: Player?,
+        data: PlayerData?,
+    ) {
+        playerDataMap.put(player, data)
+    }
+
+    @JvmStatic
+    fun setUUIDData(
+        uuid: String?,
+        data: PlayerData?,
+    ) {
+        uUIDDataMap.put(uuid, data)
+    }
+
+    @JvmStatic
+    fun setMatch(
+        id: Int,
+        match: Match?,
+    ) {
+        matchdata.put(id, match)
+    }
+
+    @JvmStatic
+    fun setColor(
+        name: String?,
+        color: Color?,
+    ) {
+        colordata.put(name, color)
+    }
+
+    @JvmStatic
+    fun setTeam(
+        id: Int,
+        team: Team?,
+    ) {
+        teamdata.put(id, team)
+    }
+
+    @JvmStatic
+    fun setWeaponClass(
+        WCname: String?,
+        weaponclass: WeaponClass?,
+    ) {
+        weaponclassdata.put(WCname, weaponclass)
+    }
+
+    @JvmStatic
+    fun setMainWeapon(
+        MWname: String?,
+        mw: MainWeapon?,
+    ) {
+        weapondata.put(MWname, mw)
+    }
+
+    fun setMap(
+        Mname: String?,
+        map: MapData?,
+    ) {
+        mapdata.put(Mname, map)
+    }
+
+    fun setTeamLoc(
+        map: MapData?,
+        loc: TeamLoc?,
+    ) {
+        locdata.put(map, loc)
+    }
+
+    @JvmStatic
+    fun setPaintDataFromBlock(
+        block: Block?,
+        data: PaintData?,
+    ) {
+        blockDataMap.put(block, data)
+    }
+
+    @JvmStatic
+    fun setPlayerIsQuit(
+        uuid: String?,
+        `is`: Boolean,
+    ) {
+        playerIsQuitMap.put(uuid, `is`)
+    }
+
+    @JvmStatic
+    fun setArmorStandPlayer(
+        `as`: ArmorStand?,
+        player: Player?,
+    ) {
+        armorStandMap.put(`as`, player)
+    }
+
+    @JvmStatic
+    fun setSnowballIsHit(
+        ball: Projectile?,
+        `is`: Boolean,
+    ) {
+        snowballIsHitMap.put(ball, `is`)
+    }
+
+    fun setMainSnowballIsHit(
+        ball: Projectile?,
+        `is`: Boolean,
+    ) {
+        mainSnowballIsHitMap.put(ball, `is`)
+    }
+
+    @JvmStatic
+    fun setBeaconFromPlayer(
+        player: Player?,
+        `as`: ArmorStand?,
+    ) {
+        beaconMap.put(player, `as`)
+    }
+
+    @JvmStatic
+    fun setSprinklerFromPlayer(
+        player: Player?,
+        `as`: ArmorStand?,
+    ) {
+        sprinklerMap.put(player, `as`)
+    }
+
+    @JvmStatic
+    fun setSpongeWithBlock(
+        block: Block?,
+        sponge: Sponge?,
+    ) {
+        spongeMap.put(block, sponge)
+    }
+
+    @JvmStatic
+    fun setSplashShieldDataWithPlayer(
+        player: Player?,
+        data: SplashShieldData?,
+    ) {
+        splashShieldDataMapWithPlayer.put(player, data)
+    }
+
+    @JvmStatic
+    fun setSplashShieldDataWithARmorStand(
+        `as`: ArmorStand?,
+        data: SplashShieldData?,
+    ) {
+        splashShieldDataMapWithArmorStand.put(`as`, data)
+    }
+
+    @JvmStatic
+    fun setKasaDataWithPlayer(
+        player: Player?,
+        data: KasaData?,
+    ) {
+        kasaDataMapWithPlayer.put(player, data)
+    }
+
+    @JvmStatic
+    fun setKasaDataWithARmorStand(
+        `as`: ArmorStand?,
+        data: KasaData?,
+    ) {
+        kAsaDataMapWithArmorStand.put(`as`, data)
+    }
+
+    @JvmStatic
+    fun setSnowballHitCount(
+        name: String?,
+        coount: Int,
+    ) {
+        msbn.putIfAbsent(name, coount)
+    }
+
+    @JvmStatic
+    fun addColorList(color: Color?) {
+        list.add(color!!)
+    }
+
+    @JvmStatic
+    fun addPathArmorStandList(`as`: ArmorStand?) {
+        al.add(`as`)
+    }
+
+    @JvmStatic
+    fun addMapList(map: MapData?) {
+        maplist.add(map!!)
+    }
+
+    @JvmStatic
+    fun addSnowballHitCount(name: String?) {
+        msbn.put(name, getSnowballHitCount(name) + 1)
+    }
+
+    // public static Map<Match, PaintData> getPaintDataMap(){return paintdata;}
+    @JvmStatic
+    fun getColorRandom(number: Int): Color {
+        val color = list.get(number)
+        color.isUsed = true
+        return color // RandomColor
+    }
+
+    @JvmStatic
+    fun ColorShuffle() {
+        Collections.shuffle(list)
+    }
+
+    @JvmStatic
+    fun MapDataShuffle() {
+        Collections.shuffle(maplist)
+    }
+
+    @JvmStatic
+    fun getMapRandom(i: Int): MapData? {
+        val map = maplist.get(i)
+        return map // RandomMap
+    }
 }

@@ -30,7 +30,6 @@ import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.ScoreboardManager;
 import org.bukkit.scoreboard.Team;
 import org.bukkit.util.Vector;
-
 import static be4rjp.sclat.Sclat.conf;
 
 /**
@@ -89,7 +88,7 @@ public class SquidMgr {
 					p.setVelocity(new Vector(0, 0.5, 0));
 				}
 
-				if (data.getWeaponClass().getMainWeapon().getIsManeuver()) {
+				if (data.getWeaponClass().getMainWeapon().isManeuver) {
 					if (p.getInventory().getItemInMainHand().getType()
 							.equals(data.getWeaponClass().getMainWeapon().getWeaponIteamStack().getType())) {
 						if (!p.getInventory().getItemInOffHand().getType()
@@ -103,7 +102,7 @@ public class SquidMgr {
 
 				Block down = p.getLocation().getBlock().getRelative(BlockFace.DOWN);
 				if (DataMgr.getBlockDataMap().containsKey(down) && p.getGameMode().equals(GameMode.ADVENTURE)) {
-					if (DataMgr.getBlockDataMap().get(down).getTeam() != data.team) {
+					if (DataMgr.getBlockDataMap().get(down).team != data.team) {
 						if (data.armor <= 0 && !data.getIsPoisonCoolTime()) {
 							p.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 200, 3));
 						}
@@ -113,7 +112,7 @@ public class SquidMgr {
 					}
 				} else {
 					if (Sclat.tutorial && down.getType().toString().contains("WOOL")) {
-						if (down.getType() != data.team.getTeamColor().getWool()) {
+						if (down.getType() != data.team.getTeamColor().wool) {
 							if (data.armor <= 0 && !data.getIsPoisonCoolTime()) {
 								p.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 200, 3));
 							}
@@ -129,9 +128,9 @@ public class SquidMgr {
 				i++;
 				/*
 				 * if(Main.tutorial && down.getType().toString().contains("WOOL")){
-				 * if(down.getType() != data.getTeam().getTeamColor().getWool()){
-				 * if(data.getArmor() <= 0 && !data.getIsPoisonCoolTime()){
-				 * p.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 200, 3)); } } }
+				 * if(down.getType() != data.getTeam().getTeamColor().wool){ if(data.getArmor()
+				 * <= 0 && !data.getIsPoisonCoolTime()){ p.addPotionEffect(new
+				 * PotionEffect(PotionEffectType.POISON, 200, 3)); } } }
 				 */
 
 				if (data.getIsPoisonCoolTime())
@@ -163,7 +162,7 @@ public class SquidMgr {
 						gro = loc;
 					if (loc.getX() != gro.getX() || loc.getX() != gro.getX() || loc.getX() != gro.getX()) {
 						p.setSprinting(true);
-						org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).team.getTeamColor().getWool()
+						org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).team.getTeamColor().wool
 								.createBlockData();
 						p.getLocation().getWorld().spawnParticle(org.bukkit.Particle.BLOCK_DUST, p.getLocation(), 2,
 								0.1, 0.1, 0.1, 1, bd);
@@ -368,7 +367,7 @@ public class SquidMgr {
 						if (data.getWeaponClass().getMainWeapon().getWeaponType().equals("Buckler")) {
 							p.getInventory().setItem(40, new ItemStack(Material.AIR));
 						}
-						if (data.getWeaponClass().getMainWeapon().getIsManeuver())
+						if (data.getWeaponClass().getMainWeapon().isManeuver)
 							p.getInventory().setItem(40, new ItemStack(Material.AIR));
 					}
 					p.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 200, 1));
@@ -376,11 +375,11 @@ public class SquidMgr {
 					is3 = false;
 					if (!is4) {
 						is4 = true;
-						p.getEquipment().setHelmet(DataMgr.getPlayerData(p).team.getTeamColor().getBougu());
+						p.getEquipment().setHelmet(DataMgr.getPlayerData(p).team.getTeamColor().bougu);
 						if (data.getWeaponClass().getMainWeapon().getWeaponType().equals("Buckler")) {
 							p.getInventory().setItem(40, new ItemStack(Material.SLIME_BALL));
 						}
-						if (data.getWeaponClass().getMainWeapon().getIsManeuver())
+						if (data.getWeaponClass().getMainWeapon().isManeuver)
 							p.getInventory().setItem(40, DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon()
 									.getWeaponIteamStack().clone());
 					}

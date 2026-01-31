@@ -219,7 +219,7 @@ class SclatCommandExecutor :
             if (sender is Player) {
                 val serverName: String? = args[1]
                 for (ss in ServerStatusManager.serverList) {
-                    if (ss.getServerName() == serverName) {
+                    if (ss.serverName == serverName) {
                         val commands: MutableList<String?> = ArrayList<String?>()
                         commands.add("mod " + sender.getName())
                         commands.add("stop")
@@ -240,8 +240,8 @@ class SclatCommandExecutor :
                             object : BukkitRunnable() {
                                 override fun run() {
                                     try {
-                                        BungeeCordMgr.PlayerSendServer(sender, ss.getServerName())
-                                        DataMgr.getPlayerData(sender).setServerName(ss.getDisplayName())
+                                        BungeeCordMgr.PlayerSendServer(sender, ss.serverName)
+                                        DataMgr.getPlayerData(sender)?.setServerName(ss.displayName)
                                     } catch (ignored: Exception) {
                                     }
                                 }
@@ -270,11 +270,11 @@ class SclatCommandExecutor :
             if (args[1] == "mt") {
                 val server: String? = args[2]
                 for (ss in ServerStatusManager.serverList) {
-                    if (ss.getServerName() == server) {
-                        ss.setMaintenance(args[3] == "true")
+                    if (ss.serverName == server) {
+                        ss.isMaintenance = (args[3] == "true")
                         sender.sendMessage(
                             (
-                                "Switched " + ss.getDisplayName() + " §rto " +
+                                "Switched " + ss.displayName + " §rto " +
                                     (if (args[3] == "true") "§cMAINTENANCE" else "§6NORMAL")
                                 ),
                         )
