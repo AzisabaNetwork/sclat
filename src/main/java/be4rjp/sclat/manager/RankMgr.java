@@ -3,16 +3,14 @@ package be4rjp.sclat.manager;
 
 import be4rjp.sclat.Sclat;
 import be4rjp.sclat.api.holo.RankingHolograms;
-import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
-
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-
+import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 import static be4rjp.sclat.Sclat.conf;
 
 /**
@@ -214,6 +212,6 @@ public class RankMgr {
 				}
 			}
 		};
-		task.runTaskTimer(Sclat.getPlugin(), 0, conf.getConfig().getInt("MakeRankingPeriod"));
+		task.runTaskTimer(Sclat.getPlugin(), 0, conf.config.getInt("MakeRankingPeriod"));
 	}
 }

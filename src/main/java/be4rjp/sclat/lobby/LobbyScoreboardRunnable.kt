@@ -34,9 +34,9 @@ class LobbyScoreboardRunnable(
 
         player.setScoreboard(scoreboard)
 
-        val text = ChatColor.translateAlternateColorCodes('&', Sclat.news.getConfig()!!.getString("news-message")!!)
+        val text = ChatColor.translateAlternateColorCodes('&', Sclat.news?.getConfig()!!!!.getString("news-message")!!)
 
-        this.textAnimation = TextAnimation(text, Sclat.news.getConfig()!!.getInt("scoreboard-length"))
+        this.textAnimation = TextAnimation(text, Sclat.news?.getConfig()!!!!.getInt("scoreboard-length"))
     }
 
     override fun run() {

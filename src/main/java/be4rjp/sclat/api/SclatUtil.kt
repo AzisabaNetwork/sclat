@@ -93,12 +93,12 @@ object SclatUtil {
     @JvmStatic
     fun restartServer() {
         val commands: MutableList<String?> = ArrayList<String?>()
-        commands.add("restart " + Sclat.conf.getServers().getString("ServerName"))
+        commands.add("restart " + Sclat.conf.servers!!.getString("ServerName"))
         commands.add("stop")
         val sc =
             StatusClient(
-                Sclat.conf.getConfig().getString("StatusShare.Host"),
-                Sclat.conf.getConfig().getInt("StatusShare.Port"),
+                Sclat.conf.config!!.getString("StatusShare.Host"),
+                Sclat.conf.config!!.getInt("StatusShare.Port"),
                 commands,
             )
         sc.startClient()
@@ -119,18 +119,18 @@ object SclatUtil {
     @JvmStatic
     fun sendRestartedServerInfo() {
         val commands: MutableList<String?> = ArrayList<String?>()
-        commands.add("restarted " + Sclat.conf.getServers().getString("ServerName"))
+        commands.add("restarted " + Sclat.conf.servers!!.getString("ServerName"))
         commands.add(
             (
-                "map " + Sclat.conf.getServers().getString("ServerName") + " " +
+                "map " + Sclat.conf.servers!!.getString("ServerName") + " " +
                     DataMgr.getMapRandom(if (MatchMgr.mapcount == 0) 0 else MatchMgr.mapcount - 1)?.mapName!!
                 ),
         )
         commands.add("stop")
         val sc =
             StatusClient(
-                Sclat.conf.getConfig().getString("StatusShare.Host"),
-                Sclat.conf.getConfig().getInt("StatusShare.Port"),
+                Sclat.conf.config!!.getString("StatusShare.Host"),
+                Sclat.conf.config!!.getInt("StatusShare.Port"),
                 commands,
             )
         sc.startClient()

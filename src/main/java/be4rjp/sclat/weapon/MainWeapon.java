@@ -117,7 +117,7 @@ public class MainWeapon implements Listener {
 			Player player = (Player) e.getEntity();
 			if (e.getCause() == DamageCause.VOID) {
 				e.setCancelled(true);
-				if (conf.getConfig().getString("WorkMode").equals("Trial")) {
+				if (conf.config.getString("WorkMode").equals("Trial")) {
 					player.teleport(Sclat.lobby);
 					return;
 				}

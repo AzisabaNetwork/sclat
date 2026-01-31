@@ -147,10 +147,10 @@ public class SquidMgr {
 					if (data.getIsUsingJetPack())
 						p.setFlySpeed(0.1F);
 
-					if (p.getExp() <= (0.99F - (float) (conf.getConfig().getDouble("SquidRecovery")
+					if (p.getExp() <= (0.99F - (float) (conf.config.getDouble("SquidRecovery")
 							* Gear.getGearInfluence(p, Gear.Type.INK_RECOVERY_UP)))) {
 						if (data.getCanUseSubWeapon())
-							p.setExp(p.getExp() + (float) (conf.getConfig().getDouble("SquidRecovery")
+							p.setExp(p.getExp() + (float) (conf.config.getDouble("SquidRecovery")
 									* Gear.getGearInfluence(p, Gear.Type.INK_RECOVERY_UP)));
 					}
 					p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 200, 3));
@@ -170,7 +170,7 @@ public class SquidMgr {
 						p.setSprinting(false);
 					}
 
-					double speed = conf.getConfig().getDouble("SquidSpeed")
+					double speed = conf.config.getDouble("SquidSpeed")
 							* Gear.getGearInfluence(p, Gear.Type.IKA_SPEED_UP);
 
 					if (data.speed != 0)
@@ -201,14 +201,14 @@ public class SquidMgr {
 						speed = (double) data.getWeaponClass().getMainWeapon().getInHoldSpeed()
 								* Gear.getGearInfluence(p, Gear.Type.HITO_SPEED_UP);
 					else
-						speed = conf.getConfig().getDouble("PlayerWalkSpeed")
+						speed = conf.config.getDouble("PlayerWalkSpeed")
 								* Gear.getGearInfluence(p, Gear.Type.HITO_SPEED_UP);
 
 					if (data.speed != 0)
 						speed = data.speed;
 
-					if (p.getExp() <= (0.99F - (float) conf.getConfig().getDouble("NormalRecovery"))) {
-						p.setExp(p.getExp() + (float) conf.getConfig().getDouble("NormalRecovery"));
+					if (p.getExp() <= (0.99F - (float) conf.config.getDouble("NormalRecovery"))) {
+						p.setExp(p.getExp() + (float) conf.config.getDouble("NormalRecovery"));
 					}
 
 					if (data.getIsHolding() && data.getCanPaint()
@@ -292,7 +292,7 @@ public class SquidMgr {
 					((LivingEntity) es.getBukkitEntity()).setCollidable(false);
 					// data.getTeam().getTeam().addEntry(es.getBukkitEntity().getUniqueId().toString());
 
-					if (conf.getConfig().getString("WorkMode").equals("Trial")) {
+					if (conf.config.getString("WorkMode").equals("Trial")) {
 
 						ScoreboardManager manager = Bukkit.getScoreboardManager();
 						Scoreboard scoreboard = manager.getNewScoreboard();

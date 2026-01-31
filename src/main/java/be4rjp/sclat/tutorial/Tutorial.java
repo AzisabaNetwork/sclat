@@ -43,7 +43,7 @@ public class Tutorial {
 	public static int clearPlayerCount = 0;
 
 	public static void setupTutorial(Match match) {
-		final int time = Sclat.conf.getConfig().getInt("InkResetPeriod");
+		final int time = Sclat.conf.config.getInt("InkResetPeriod");
 		bar = Sclat.getPlugin().getServer().createBossBar("§a§lインクリセットまで残り §c§l" + time + " §a§l秒", BarColor.WHITE,
 				BarStyle.SOLID, BarFlag.CREATE_FOG);
 		PathMgr.setupPath(match);
@@ -84,18 +84,18 @@ public class Tutorial {
 			@Override
 			public void run() {
 				if (i == 0) {
-					String WorldName = conf.getConfig().getString("Train.LFrom.WorldName");
+					String WorldName = conf.config.getString("Train.LFrom.WorldName");
 					World w = Bukkit.getWorld(WorldName);
-					int ix = conf.getConfig().getInt("Train.LFrom.X");
-					int iy = conf.getConfig().getInt("Train.LFrom.Y");
-					int iz = conf.getConfig().getInt("Train.LFrom.Z");
+					int ix = conf.config.getInt("Train.LFrom.X");
+					int iy = conf.config.getInt("Train.LFrom.Y");
+					int iz = conf.config.getInt("Train.LFrom.Z");
 					from = new Location(w, ix + 0.5, iy, iz + 0.5);
 
-					String WorldName1 = conf.getConfig().getString("Train.LTo.WorldName");
+					String WorldName1 = conf.config.getString("Train.LTo.WorldName");
 					World w1 = Bukkit.getWorld(WorldName);
-					int ix1 = conf.getConfig().getInt("Train.LTo.X");
-					int iy1 = conf.getConfig().getInt("Train.LTo.Y");
-					int iz1 = conf.getConfig().getInt("Train.LTo.Z");
+					int ix1 = conf.config.getInt("Train.LTo.X");
+					int iy1 = conf.config.getInt("Train.LTo.Y");
+					int iz1 = conf.config.getInt("Train.LTo.Z");
 					to = new Location(w1, ix1 + 0.5, iy1, iz1 + 0.5);
 
 					vec = new Vector(ix1 - ix, iy1 - iy, iz1 - iz).normalize();
@@ -135,18 +135,18 @@ public class Tutorial {
 			@Override
 			public void run() {
 				if (i == 0) {
-					String WorldName = conf.getConfig().getString("Train.RFrom.WorldName");
+					String WorldName = conf.config.getString("Train.RFrom.WorldName");
 					World w = Bukkit.getWorld(WorldName);
-					int ix = conf.getConfig().getInt("Train.RFrom.X");
-					int iy = conf.getConfig().getInt("Train.RFrom.Y");
-					int iz = conf.getConfig().getInt("Train.RFrom.Z");
+					int ix = conf.config.getInt("Train.RFrom.X");
+					int iy = conf.config.getInt("Train.RFrom.Y");
+					int iz = conf.config.getInt("Train.RFrom.Z");
 					from = new Location(w, ix + 0.5, iy, iz + 0.5);
 
-					String WorldName1 = conf.getConfig().getString("Train.RTo.WorldName");
+					String WorldName1 = conf.config.getString("Train.RTo.WorldName");
 					World w1 = Bukkit.getWorld(WorldName);
-					int ix1 = conf.getConfig().getInt("Train.RTo.X");
-					int iy1 = conf.getConfig().getInt("Train.RTo.Y");
-					int iz1 = conf.getConfig().getInt("Train.RTo.Z");
+					int ix1 = conf.config.getInt("Train.RTo.X");
+					int iy1 = conf.config.getInt("Train.RTo.Y");
+					int iz1 = conf.config.getInt("Train.RTo.Z");
 					to = new Location(w1, ix1 + 0.5, iy1, iz1 + 0.5);
 
 					vec = new Vector(ix1 - ix, iy1 - iy, iz1 - iz).normalize();
@@ -178,11 +178,11 @@ public class Tutorial {
 	}
 
 	public static void weaponRemoveRunnable() {
-		String WorldName = conf.getConfig().getString("WeaponRemove.WorldName");
+		String WorldName = conf.config.getString("WeaponRemove.WorldName");
 		World w = Bukkit.getWorld(WorldName);
-		int ix = conf.getConfig().getInt("WeaponRemove.X");
-		int iy = conf.getConfig().getInt("WeaponRemove.Y");
-		int iz = conf.getConfig().getInt("WeaponRemove.Z");
+		int ix = conf.config.getInt("WeaponRemove.X");
+		int iy = conf.config.getInt("WeaponRemove.Y");
+		int iz = conf.config.getInt("WeaponRemove.Z");
 		Location loc = new Location(w, ix + 0.5, iy, iz + 0.5);
 
 		BukkitRunnable task = new BukkitRunnable() {
@@ -203,11 +203,11 @@ public class Tutorial {
 	}
 
 	public static void clearRegionRunnable() {
-		String WorldName = conf.getConfig().getString("TutorialClear.WorldName");
+		String WorldName = conf.config.getString("TutorialClear.WorldName");
 		World w = Bukkit.getWorld(WorldName);
-		int ix = conf.getConfig().getInt("TutorialClear.X");
-		int iy = conf.getConfig().getInt("TutorialClear.Y");
-		int iz = conf.getConfig().getInt("TutorialClear.Z");
+		int ix = conf.config.getInt("TutorialClear.X");
+		int iy = conf.config.getInt("TutorialClear.Y");
+		int iz = conf.config.getInt("TutorialClear.Z");
 		Location loc = new Location(w, ix + 0.5, iy, iz + 0.5);
 
 		BukkitRunnable task = new BukkitRunnable() {
@@ -218,11 +218,11 @@ public class Tutorial {
 						continue;
 					if (player.getLocation().distance(loc) < 5) {
 						Tutorial.clearList.remove(player);
-						String WorldName = conf.getConfig().getString("LobbyJump.WorldName");
+						String WorldName = conf.config.getString("LobbyJump.WorldName");
 						World w = Bukkit.getWorld(WorldName);
-						int ix = conf.getConfig().getInt("LobbyJump.X");
-						int iy = conf.getConfig().getInt("LobbyJump.Y");
-						int iz = conf.getConfig().getInt("LobbyJump.Z");
+						int ix = conf.config.getInt("LobbyJump.X");
+						int iy = conf.config.getInt("LobbyJump.Y");
+						int iz = conf.config.getInt("LobbyJump.Z");
 						Location loc = new Location(w, ix + 0.5, iy, iz + 0.5);
 						player.teleport(loc);
 					}
@@ -233,11 +233,11 @@ public class Tutorial {
 	}
 
 	public static void lobbyRegionRunnable() {
-		String WorldName = conf.getConfig().getString("LobbyJump.WorldName");
+		String WorldName = conf.config.getString("LobbyJump.WorldName");
 		World w = Bukkit.getWorld(WorldName);
-		int ix = conf.getConfig().getInt("LobbyJump.X");
-		int iy = conf.getConfig().getInt("LobbyJump.Y");
-		int iz = conf.getConfig().getInt("LobbyJump.Z");
+		int ix = conf.config.getInt("LobbyJump.X");
+		int iy = conf.config.getInt("LobbyJump.Y");
+		int iz = conf.config.getInt("LobbyJump.Z");
 		Location loc = new Location(w, ix + 0.5, iy, iz + 0.5);
 
 		BukkitRunnable task = new BukkitRunnable() {
@@ -258,11 +258,11 @@ public class Tutorial {
 	}
 
 	public static void lobbySetStatusRunnable() {
-		String WorldName = conf.getConfig().getString("TutorialClear.WorldName");
+		String WorldName = conf.config.getString("TutorialClear.WorldName");
 		World w = Bukkit.getWorld(WorldName);
-		int ix = conf.getConfig().getInt("TutorialClear.X");
-		int iy = conf.getConfig().getInt("TutorialClear.Y");
-		int iz = conf.getConfig().getInt("TutorialClear.Z");
+		int ix = conf.config.getInt("TutorialClear.X");
+		int iy = conf.config.getInt("TutorialClear.Y");
+		int iz = conf.config.getInt("TutorialClear.Z");
 		Location loc = new Location(w, ix + 0.5, iy, iz + 0.5);
 
 		BukkitRunnable task = new BukkitRunnable() {
@@ -303,8 +303,8 @@ public class Tutorial {
 		List<String> commands = new ArrayList<>();
 		commands.add("tutorial " + player.getUniqueId().toString());
 		commands.add("stop");
-		StatusClient sc = new StatusClient(conf.getConfig().getString("StatusShare.Host"),
-				conf.getConfig().getInt("StatusShare.Port"), commands);
+		StatusClient sc = new StatusClient(conf.config.getString("StatusShare.Host"),
+				conf.config.getInt("StatusShare.Port"), commands);
 		sc.startClient();
 
 		player.sendTitle("", "§7ロビーへ転送中...", 10, 40, 10);
@@ -355,8 +355,8 @@ public class Tutorial {
 					for (Player player : Sclat.getPlugin().getServer().getOnlinePlayers())
 						player.setExp(0.99F);
 					BlockUpdater bur = new BlockUpdater();
-					if (conf.getConfig().contains("BlockUpdateRate"))
-						bur.setMaxBlockInOneTick(conf.getConfig().getInt("BlockUpdateRate"));
+					if (conf.config.contains("BlockUpdateRate"))
+						bur.setMaxBlockInOneTick(conf.config.getInt("BlockUpdateRate"));
 					bur.start();
 					match.setBlockUpdater(bur);
 					List<Block> blocks = new ArrayList<>();

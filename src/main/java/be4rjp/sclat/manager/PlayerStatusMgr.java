@@ -3,6 +3,10 @@ package be4rjp.sclat.manager;
 
 import be4rjp.sclat.Sclat;
 import com.mojang.authlib.GameProfile;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import net.minecraft.server.v1_14_R1.DataWatcherRegistry;
 import net.minecraft.server.v1_14_R1.EntityArmorStand;
 import net.minecraft.server.v1_14_R1.EntityPlayer;
@@ -26,12 +30,6 @@ import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_14_R1.util.CraftChatMessage;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import static be4rjp.sclat.Sclat.conf;
 
 /**
@@ -59,7 +57,7 @@ public class PlayerStatusMgr {
 		conf.getPlayerStatus().set("Status." + player.getUniqueId().toString() + ".Lv", 0);
 		conf.getPlayerStatus().set("Status." + player.getUniqueId().toString() + ".Rank", 0);
 		List<String> wlist = new ArrayList<>();
-		wlist.add(conf.getConfig().getString("DefaultClass"));
+		wlist.add(conf.config.getString("DefaultClass"));
 		conf.getPlayerStatus().set("Status." + player.getUniqueId().toString() + ".WeaponClass", wlist);
 		List<Integer> glist = new ArrayList<>();
 		glist.add(0);
@@ -68,7 +66,7 @@ public class PlayerStatusMgr {
 		conf.getPlayerStatus().set("Status." + player.getUniqueId().toString() + ".Kill", 0);
 		conf.getPlayerStatus().set("Status." + player.getUniqueId().toString() + ".Paint", 0);
 		conf.getPlayerStatus().set("Status." + player.getUniqueId().toString() + ".EquiptClass",
-				conf.getConfig().getString("DefaultClass"));
+				conf.config.getString("DefaultClass"));
 		conf.getPlayerStatus().set("Status." + player.getUniqueId().toString() + ".Tutorial", 0);
 		// ガチャチケ用
 		conf.getPlayerStatus().set("Status." + player.getUniqueId().toString() + ".Ticket", 0);
@@ -77,11 +75,11 @@ public class PlayerStatusMgr {
 	}
 
 	public static void sendHologram(Player player) {
-		World w = Bukkit.getWorld(conf.getConfig().getString("Hologram.WorldName"));
-		int ix = conf.getConfig().getInt("Hologram.X");
-		int iy = conf.getConfig().getInt("Hologram.Y");
-		int iz = conf.getConfig().getInt("Hologram.Z");
-		int iyaw = conf.getConfig().getInt("Hologram.Yaw");
+		World w = Bukkit.getWorld(conf.config.getString("Hologram.WorldName"));
+		int ix = conf.config.getInt("Hologram.X");
+		int iy = conf.config.getInt("Hologram.Y");
+		int iz = conf.config.getInt("Hologram.Z");
+		int iyaw = conf.config.getInt("Hologram.Yaw");
 		Location location = new Location(w, ix + 0.5D, iy, iz + 0.5D);
 		location.setYaw(iyaw);
 
@@ -165,7 +163,7 @@ public class PlayerStatusMgr {
 				}
 			}
 		};
-		task.runTaskTimer(Sclat.getPlugin(), 0, conf.getConfig().getInt("HologramUpdatePeriod"));
+		task.runTaskTimer(Sclat.getPlugin(), 0, conf.config.getInt("HologramUpdatePeriod"));
 	}
 
 	public static void sendHologramUpdate(Player player) {

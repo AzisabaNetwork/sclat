@@ -48,7 +48,7 @@ public class OpenGUI {
 		ItemMeta joinmeta = join.getItemMeta();
 		joinmeta.setDisplayName("試合に参加 / JOIN THE MATCH");
 		join.setItemMeta(joinmeta);
-		if (!conf.getConfig().getString("WorkMode").equals("Trial"))
+		if (!conf.config.getString("WorkMode").equals("Trial"))
 			inv.setItem(10, join);
 
 		ItemStack setting = new ItemStack(Material.COMPARATOR);
@@ -74,10 +74,10 @@ public class OpenGUI {
 		ItemMeta rmeta = r.getItemMeta();
 		rmeta.setDisplayName("塗りをリセット / RESET INK");
 		r.setItemMeta(rmeta);
-		if (conf.getConfig().getString("WorkMode").equals("Trial"))
+		if (conf.config.getString("WorkMode").equals("Trial"))
 			inv.setItem(10, r);
 
-		if (conf.getConfig().getString("WorkMode").equals("Trial")) {
+		if (conf.config.getString("WorkMode").equals("Trial")) {
 			ItemStack b = new ItemStack(Material.OAK_DOOR);
 			ItemMeta bmeta = b.getItemMeta();
 			bmeta.setDisplayName("ロビーへ戻る / RETURN TO LOBBY");
@@ -170,7 +170,7 @@ public class OpenGUI {
 		} else {
 			for (int i = 0; i <= 9;) {
 
-				if (!(PlayerStatusMgr.haveGear(player, i) || conf.getConfig().getString("WorkMode").equals("Trial")
+				if (!(PlayerStatusMgr.haveGear(player, i) || conf.config.getString("WorkMode").equals("Trial")
 						|| !Sclat.shop)) {
 					ItemStack n = new ItemStack(Material.BLACK_STAINED_GLASS_PANE);
 					ItemMeta nmeta = n.getItemMeta();
@@ -277,7 +277,7 @@ public class OpenGUI {
 		ism.setDisplayName(Sclat.tutorial ? "§r§6ロビーへジャンプ" : "§r§6リスポーン地点へジャンプ");
 		is.setItemMeta(ism);
 		Location loc = Sclat.lobby.clone();
-		if (!conf.getConfig().getString("WorkMode").equals("Trial"))
+		if (!conf.config.getString("WorkMode").equals("Trial"))
 			loc = DataMgr.getPlayerData(player).getMatchLocation().clone();
 		if (loc.getWorld() == player.getWorld()) {
 			if (player.getLocation().distance(loc) > 10 && !Tutorial.clearList.contains(player))
@@ -465,7 +465,7 @@ public class OpenGUI {
 							}
 						} else {
 							if (DataMgr.getWeaponClass(ClassName).getMainWeapon().money == 0
-									|| conf.getConfig().getString("WorkMode").equals("Trial")) {
+									|| conf.config.getString("WorkMode").equals("Trial")) {
 								if (DataMgr.getWeaponClass(ClassName).getMainWeapon().level > PlayerStatusMgr
 										.getLv(player)) {
 									ItemStack glass = new ItemStack(Material.BLACK_STAINED_GLASS_PANE);

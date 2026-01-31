@@ -74,7 +74,7 @@ public class PaintMgr {
 				return;
 
 			if (canPaint(block)) {
-				if (!conf.getConfig().getString("WorkMode").equals("Trial"))
+				if (!conf.config.getString("WorkMode").equals("Trial"))
 					if (!DataMgr.getPlayerData(player).match.getMapData().canPaintBBlock()
 							&& block.getType() == Material.BARRIER)
 						return;

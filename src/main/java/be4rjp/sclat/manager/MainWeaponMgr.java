@@ -150,7 +150,7 @@ public class MainWeaponMgr {
 				mw.setInHoldSpeed(
 						(float) conf.getWeaponConfig().getDouble("MainWeapon." + weaponname + ".InHoldWalkSpeed"));
 			else
-				mw.setInHoldSpeed((float) conf.getConfig().getDouble("PlayerWalkSpeed"));
+				mw.setInHoldSpeed((float) conf.config.getDouble("PlayerWalkSpeed"));
 
 			if (conf.getWeaponConfig().contains("MainWeapon." + weaponname + ".IsLootBox")) {// ガチャ武器用
 				mw.islootbox = (conf.getWeaponConfig().getBoolean("MainWeapon." + weaponname + ".IsLootBox"));

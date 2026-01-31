@@ -40,11 +40,11 @@ class RankingHolograms(
     init {
         armorStandList = ArrayList<EntityArmorStand?>()
 
-        val WorldName = Sclat.conf.getConfig().getString("RankingHolograms.WorldName")
+        val WorldName = Sclat.conf?.config!!.getString("RankingHolograms.WorldName")
         val w = Bukkit.getWorld(WorldName!!)
-        val ix = Sclat.conf.getConfig().getDouble("RankingHolograms.X")
-        val iy = Sclat.conf.getConfig().getDouble("RankingHolograms.Y")
-        val iz = Sclat.conf.getConfig().getDouble("RankingHolograms.Z")
+        val ix = Sclat.conf?.config!!.getDouble("RankingHolograms.X")
+        val iy = Sclat.conf?.config!!.getDouble("RankingHolograms.Y")
+        val iz = Sclat.conf?.config!!.getDouble("RankingHolograms.Z")
         location = Location(w, ix + 0.5, iy, iz + 0.5)
 
         val nmsWorld = (location.getWorld() as CraftWorld).getHandle()
@@ -196,7 +196,7 @@ class RankingHolograms(
 
                             if (rankingType == RankingType.TOTAL) {
                                 val uuid = RankMgr.ranking.get(i)
-                                val mcid = Sclat.conf.getUUIDCash().getString(uuid)
+                                val mcid = Sclat.conf.uUIDCash.getString(uuid)
 
                                 val rank = PlayerStatusMgr.getRank(uuid)
 
@@ -216,7 +216,7 @@ class RankingHolograms(
 
                             if (rankingType == RankingType.KILL) {
                                 val uuid = RankMgr.killRanking.get(i)
-                                val mcid = Sclat.conf.getUUIDCash().getString(uuid)
+                                val mcid = Sclat.conf.uUIDCash.getString(uuid)
 
                                 val kill = PlayerStatusMgr.getKill(uuid)
 
@@ -233,7 +233,7 @@ class RankingHolograms(
 
                             if (rankingType == RankingType.PAINT) {
                                 val uuid = RankMgr.paintRanking.get(i)
-                                val mcid = Sclat.conf.getUUIDCash().getString(uuid)
+                                val mcid = Sclat.conf.uUIDCash.getString(uuid)
 
                                 val paint = PlayerStatusMgr.getPaint(uuid)
 

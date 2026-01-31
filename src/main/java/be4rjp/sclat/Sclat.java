@@ -137,30 +137,30 @@ public class Sclat extends JavaPlugin implements PluginMessageListener {
 		// --------------------------Load config------------------------------
 		getLogger().info("Loading config files...");
 		conf = new Config();
-		conf.LoadConfig();
+		conf.loadConfig();
 		for (String mapname : conf.getMapConfig().getConfigurationSection("Maps").getKeys(false)) {
 			String worldName = conf.getMapConfig().getString("Maps." + mapname + ".WorldName");
 			Bukkit.createWorld(new WorldCreator(worldName));
 			World world = Bukkit.getWorld(worldName);
 			world.setAutoSave(false);
 		}
-		if (conf.getConfig().contains("Tutorial"))
-			tutorial = conf.getConfig().getBoolean("Tutorial");
-		if (conf.getConfig().contains("Colors"))
-			colors = conf.getConfig().getStringList("Colors");
+		if (conf.config.contains("Tutorial"))
+			tutorial = conf.config.getBoolean("Tutorial");
+		if (conf.config.contains("Colors"))
+			colors = conf.config.getStringList("Colors");
 
-		PARTICLE_RENDER_DISTANCE = conf.getConfig().getDouble("ParticlesRenderDistance");
+		PARTICLE_RENDER_DISTANCE = conf.config.getDouble("ParticlesRenderDistance");
 		PARTICLE_RENDER_DISTANCE_SQUARED = Math.pow(PARTICLE_RENDER_DISTANCE, 2.0D);
 		// -------------------------------------------------------------------
 
 		// --------------------------Lobby location---------------------------
-		String WorldName = conf.getConfig().getString("Lobby.WorldName");
+		String WorldName = conf.config.getString("Lobby.WorldName");
 		Bukkit.createWorld(new WorldCreator(WorldName));
 		World w = Bukkit.getWorld(WorldName);
-		int ix = conf.getConfig().getInt("Lobby.X");
-		int iy = conf.getConfig().getInt("Lobby.Y");
-		int iz = conf.getConfig().getInt("Lobby.Z");
-		int iyaw = conf.getConfig().getInt("Lobby.Yaw");
+		int ix = conf.config.getInt("Lobby.X");
+		int iy = conf.config.getInt("Lobby.Y");
+		int iz = conf.config.getInt("Lobby.Z");
+		int iyaw = conf.config.getInt("Lobby.Yaw");
 		lobby = new Location(w, ix + 0.5, iy, iz + 0.5);
 		lobby.setYaw(iyaw);
 		// -------------------------------------------------------------------
@@ -206,11 +206,11 @@ public class Sclat extends JavaPlugin implements PluginMessageListener {
 		// -------------------------------------------------------------------
 
 		// ---------------------Enable mode message---------------------------
-		int length = conf.getConfig().getString("WorkMode").length();
+		int length = conf.config.getString("WorkMode").length();
 
 		StringBuilder buff = new StringBuilder();
 		buff.append("### This plugin started in [");
-		buff.append(conf.getConfig().getString("WorkMode"));
+		buff.append(conf.config.getString("WorkMode"));
 		buff.append("] mode! ");
 		for (int i = 0; i < 7 - length; i++) {
 			buff.append(" ");
@@ -225,7 +225,7 @@ public class Sclat extends JavaPlugin implements PluginMessageListener {
 		// -------------------------------------------------------------------
 
 		// ------------------------Only trial mode----------------------------
-		if (conf.getConfig().getString("WorkMode").equals("Trial")) {
+		if (conf.config.getString("WorkMode").equals("Trial")) {
 			ScoreboardManager manager = Bukkit.getScoreboardManager();
 			Scoreboard scoreboard = manager.getNewScoreboard();
 
@@ -261,8 +261,8 @@ public class Sclat extends JavaPlugin implements PluginMessageListener {
 		// -------------------------------------------------------------------
 
 		// --------------------------Server type------------------------------
-		if (conf.getConfig().contains("ServerType")) {
-			switch (conf.getConfig().getString("ServerType")) {
+		if (conf.config.contains("ServerType")) {
+			switch (conf.config.getString("ServerType")) {
 				case "NORMAL" :
 					type = ServerType.NORMAL;
 					break;
@@ -283,15 +283,15 @@ public class Sclat extends JavaPlugin implements PluginMessageListener {
 
 		// ----------------------Status server and client---------------------
 		if (type == ServerType.LOBBY) {
-			ss = new StatusServer(conf.getConfig().getInt("StatusShare.Port"));
+			ss = new StatusServer(conf.config.getInt("StatusShare.Port"));
 			ss.start();
 			getLogger().info("StatusServer is ready!");
 		}
 		// -------------------------------------------------------------------
 
 		// ----------------------Equip server and client----------------------
-		if (type == ServerType.MATCH || conf.getConfig().getString("WorkMode").equals("Trial")) {
-			es = new EquipmentServer(conf.getConfig().getInt("EquipShare.Port"));
+		if (type == ServerType.MATCH || conf.config.getString("WorkMode").equals("Trial")) {
+			es = new EquipmentServer(conf.config.getInt("EquipShare.Port"));
 			es.start();
 			getLogger().info("StatusServer is ready!");
 		}
@@ -302,18 +302,18 @@ public class Sclat extends JavaPlugin implements PluginMessageListener {
 		// -------------------------------------------------------------------
 
 		// --------------------Send restarted server info---------------------
-		if (conf.getConfig().contains("RestartMatchCount"))
+		if (conf.config.contains("RestartMatchCount"))
 			SclatUtil.sendRestartedServerInfo();
 		// -------------------------------------------------------------------
 
 		// -----------------------------Shop----------------------------------
-		if (conf.getConfig().contains("Shop"))
-			shop = conf.getConfig().getBoolean("Shop");
+		if (conf.config.contains("Shop"))
+			shop = conf.config.getBoolean("Shop");
 		// -------------------------------------------------------------------
 
 		// ----------------------------Tutorial-------------------------------
-		if (conf.getConfig().contains("Tutorial"))
-			tutorial = conf.getConfig().getBoolean("Tutorial");
+		if (conf.config.contains("Tutorial"))
+			tutorial = conf.config.getBoolean("Tutorial");
 		if (tutorial) {
 			Tutorial.setupTutorial(DataMgr.getMatchFromId(MatchMgr.matchcount));
 			Tutorial.clearRegionRunnable();
@@ -415,7 +415,7 @@ public class Sclat extends JavaPlugin implements PluginMessageListener {
 
 		for (ArmorStand as : DataMgr.getArmorStandMap().keySet())
 			as.remove();
-		conf.SaveConfig();
+		conf.saveConfig();
 
 		for (ArmorStand as : DataMgr.al)
 			as.remove();

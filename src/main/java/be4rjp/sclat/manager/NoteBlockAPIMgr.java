@@ -4,12 +4,10 @@ package be4rjp.sclat.manager;
 import be4rjp.sclat.data.NoteBlockSong;
 import com.xxmicloxx.NoteBlockAPI.model.Song;
 import com.xxmicloxx.NoteBlockAPI.utils.NBSDecoder;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
 import static be4rjp.sclat.Sclat.conf;
 
 /**
@@ -26,15 +24,15 @@ public class NoteBlockAPIMgr {
 	private static List<String> fsnList = new ArrayList<>();
 
 	public static void LoadSongFiles() {
-		for (String songname : conf.getConfig().getConfigurationSection("nBGM").getKeys(false)) {
-			Song song = NBSDecoder.parse(new File("plugins/Sclat/BGM", conf.getConfig().getString("nBGM." + songname)));
+		for (String songname : conf.config.getConfigurationSection("nBGM").getKeys(false)) {
+			Song song = NBSDecoder.parse(new File("plugins/Sclat/BGM", conf.config.getString("nBGM." + songname)));
 			nsList.add(song);
 			nsnList.add(songname);
 			nBgm_C++;
 		}
 
-		for (String songname : conf.getConfig().getConfigurationSection("fBGM").getKeys(false)) {
-			Song song = NBSDecoder.parse(new File("plugins/Sclat/BGM", conf.getConfig().getString("fBGM." + songname)));
+		for (String songname : conf.config.getConfigurationSection("fBGM").getKeys(false)) {
+			Song song = NBSDecoder.parse(new File("plugins/Sclat/BGM", conf.config.getString("fBGM." + songname)));
 			fsList.add(song);
 			fsnList.add(songname);
 			fBgm_C++;

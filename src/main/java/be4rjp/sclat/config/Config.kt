@@ -1,132 +1,109 @@
-package be4rjp.sclat.config;
+package be4rjp.sclat.config
 
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
-
-import java.io.File;
-import java.io.IOException;
-
-import static org.bukkit.Bukkit.getLogger;
+import org.bukkit.Bukkit
+import org.bukkit.configuration.file.FileConfiguration
+import org.bukkit.configuration.file.YamlConfiguration
+import java.io.File
+import java.io.IOException
 
 /**
  *
  * @author Be4rJP
  */
-public class Config {
-	private FileConfiguration ps;
-	private FileConfiguration conf;
-	private FileConfiguration weapon;
-	private FileConfiguration map;
-	private FileConfiguration playersettings;
-	private FileConfiguration as;
-	private FileConfiguration s;
-	private FileConfiguration servers;
-	private FileConfiguration idCash;
-	private FileConfiguration emblemItems;
-	private FileConfiguration emblemUserdata;
-	private File parent = new File("plugins/Sclat");
-	private File psf = new File(parent, "class.yml");
-	private File weaponf = new File(parent, "mainnweapon.yml");
-	private File mapf = new File(parent, "maps.yml");
-	private File conff = new File(parent, "config.yml");
-	private File playersettings_f = new File(parent, "settings.yml");
-	private File asf = new File(parent, "armorstand.yml");
-	private File sf = new File(parent, "status.yml");
-	private File serverFile = new File(parent, "servers.yml");
-	private File idCashFile = new File(parent, "UUIDCash.yml");
-	public File emblemsFile = new File(parent, "emblems.yml");
-	private File emblemItemsFile = new File(parent, "emblem_items.yml");
-	private File emblemUserDataFile = new File(parent, "emblem_userdata.yml");
+class Config {
+    var classConfig: FileConfiguration? = null
+        private set
 
-	public synchronized void LoadConfig() {
-		ps = YamlConfiguration.loadConfiguration(psf);
-		conf = YamlConfiguration.loadConfiguration(conff);
-		weapon = YamlConfiguration.loadConfiguration(weaponf);
-		map = YamlConfiguration.loadConfiguration(mapf);
-		playersettings = YamlConfiguration.loadConfiguration(playersettings_f);
-		as = YamlConfiguration.loadConfiguration(asf);
-		s = YamlConfiguration.loadConfiguration(sf);
-		servers = YamlConfiguration.loadConfiguration(serverFile);
-		idCash = YamlConfiguration.loadConfiguration(idCashFile);
-		tryCreateFile(emblemItemsFile);
-		tryCreateFile(emblemUserDataFile);
-		loadEmblemUserData();
-		loadEmblemLoreData();
-	}
+    @JvmField
+    var config: FileConfiguration? = null
+    var weaponConfig: FileConfiguration? = null
+        private set
+    var mapConfig: FileConfiguration? = null
+        private set
+    private var playersettings: FileConfiguration? = null
+    var armorStandSettings: FileConfiguration? = null
+        private set
+    private var s: FileConfiguration? = null
+    var servers: FileConfiguration? = null
+        private set
+    private var idCash: FileConfiguration? = null
+    var emblemItems: FileConfiguration? = null
+        private set
+    var emblemUserdata: FileConfiguration? = null
+        private set
+    private val parent = File("plugins/Sclat")
+    private val psf = File(parent, "class.yml")
+    private val weaponf = File(parent, "mainnweapon.yml")
+    private val mapf = File(parent, "maps.yml")
+    private val conff = File(parent, "config.yml")
+    private val playersettingsF = File(parent, "settings.yml")
+    private val asf = File(parent, "armorstand.yml")
+    private val sf = File(parent, "status.yml")
+    private val serverFile = File(parent, "servers.yml")
+    private val idCashFile = File(parent, "UUIDCash.yml")
+    var emblemsFile: File = File(parent, "emblems.yml")
+    private val emblemItemsFile = File(parent, "emblem_items.yml")
+    private val emblemUserDataFile = File(parent, "emblem_userdata.yml")
 
-	public synchronized void loadEmblemUserData() {
-		emblemUserdata = YamlConfiguration.loadConfiguration(emblemUserDataFile);
-	}
+    @Synchronized
+    fun loadConfig() {
+        this.classConfig = YamlConfiguration.loadConfiguration(psf)
+        this.config = YamlConfiguration.loadConfiguration(conff)
+        this.weaponConfig = YamlConfiguration.loadConfiguration(weaponf)
+        this.mapConfig = YamlConfiguration.loadConfiguration(mapf)
+        playersettings = YamlConfiguration.loadConfiguration(playersettingsF)
+        this.armorStandSettings = YamlConfiguration.loadConfiguration(asf)
+        s = YamlConfiguration.loadConfiguration(sf)
+        servers = YamlConfiguration.loadConfiguration(serverFile)
+        idCash = YamlConfiguration.loadConfiguration(idCashFile)
+        tryCreateFile(emblemItemsFile)
+        tryCreateFile(emblemUserDataFile)
+        loadEmblemUserData()
+        loadEmblemLoreData()
+    }
 
-	public synchronized void loadEmblemLoreData() {
-		emblemItems = YamlConfiguration.loadConfiguration(emblemItemsFile);
-	}
+    @Synchronized
+    fun loadEmblemUserData() {
+        emblemUserdata = YamlConfiguration.loadConfiguration(emblemUserDataFile)
+    }
 
-	private void tryCreateFile(File targetFile) {
-		try {
-			if (!targetFile.exists())
-				targetFile.createNewFile();
-		} catch (IOException e) {
-			getLogger().warning("Failed to create file: " + e);
-		}
-	}
+    @Synchronized
+    fun loadEmblemLoreData() {
+        emblemItems = YamlConfiguration.loadConfiguration(emblemItemsFile)
+    }
 
-	public synchronized void SaveConfig() {
-		try {
-			playersettings.save(playersettings_f);
-			s.save(sf);
-			idCash.save(idCashFile);
-			saveEmblemUserdata();
-		} catch (Exception e) {
-			getLogger().warning("Failed to save config files!");
-		}
-	}
+    private fun tryCreateFile(targetFile: File) {
+        try {
+            if (!targetFile.exists()) targetFile.createNewFile()
+        } catch (e: IOException) {
+            Bukkit.getLogger().warning("Failed to create file: " + e)
+        }
+    }
 
-	public synchronized void saveEmblemUserdata() throws IOException {
-		emblemUserdata.save(emblemUserDataFile);
-	}
+    @Synchronized
+    fun saveConfig() {
+        try {
+            playersettings!!.save(playersettingsF)
+            s!!.save(sf)
+            idCash!!.save(idCashFile)
+            saveEmblemUserdata()
+        } catch (e: Exception) {
+            Bukkit.getLogger().warning("Failed to save config files!")
+        }
+    }
 
-	public FileConfiguration getConfig() {
-		return conf;
-	}
+    @Synchronized
+    @Throws(IOException::class)
+    fun saveEmblemUserdata() {
+        emblemUserdata!!.save(emblemUserDataFile)
+    }
 
-	public FileConfiguration getClassConfig() {
-		return ps;
-	}
+    val playerSettings: FileConfiguration
+        get() = playersettings!!
 
-	public FileConfiguration getWeaponConfig() {
-		return weapon;
-	}
+    val playerStatus: FileConfiguration
+        get() = s!!
 
-	public FileConfiguration getMapConfig() {
-		return map;
-	}
-
-	public FileConfiguration getPlayerSettings() {
-		return playersettings;
-	}
-
-	public FileConfiguration getArmorStandSettings() {
-		return as;
-	}
-
-	public FileConfiguration getPlayerStatus() {
-		return s;
-	}
-
-	public FileConfiguration getServers() {
-		return servers;
-	}
-
-	public FileConfiguration getUUIDCash() {
-		return idCash;
-	}
-
-	public FileConfiguration getEmblemUserdata() {
-		return emblemUserdata;
-	}
-
-	public FileConfiguration getEmblemItems() {
-		return emblemItems;
-	}
+    val uUIDCash: FileConfiguration
+        get() = idCash!!
 }

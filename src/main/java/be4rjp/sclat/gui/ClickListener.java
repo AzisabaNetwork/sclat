@@ -124,8 +124,8 @@ public class ClickListener implements Listener {
 				MatchMgr.RollBack();
 				player.setExp(0.99F);
 				BlockUpdater bur = new BlockUpdater();
-				if (conf.getConfig().contains("BlockUpdateRate"))
-					bur.setMaxBlockInOneTick(conf.getConfig().getInt("BlockUpdateRate"));
+				if (conf.config.contains("BlockUpdateRate"))
+					bur.setMaxBlockInOneTick(conf.config.getInt("BlockUpdateRate"));
 				bur.start();
 				match.setBlockUpdater(bur);
 				List<Block> blocks = new ArrayList<>();
@@ -188,7 +188,7 @@ public class ClickListener implements Listener {
 				break;
 		}
 		if (name.equals("リソースパックをダウンロード / DOWNLOAD RESOURCEPACK"))
-			player.setResourcePack(conf.getConfig().getString("ResourcePackURL"));
+			player.setResourcePack(conf.config.getString("ResourcePackURL"));
 		if (event.getView().getTitle().equals("Gear")) {
 			for (int i = 0; i <= 9;) {
 				if (Gear.getGearName(i).equals(name)) {
@@ -318,7 +318,7 @@ public class ClickListener implements Listener {
 				return;
 			}
 			// 試しうちモード
-			if (conf.getConfig().getString("WorkMode").equals("Trial")) {
+			if (conf.config.getString("WorkMode").equals("Trial")) {
 
 				player.getInventory().clear();
 				DataMgr.getPlayerData(player).reset();
@@ -537,22 +537,22 @@ public class ClickListener implements Listener {
 		if (event.getView().getTitle().equals("Chose Target")) {
 			if (name.equals("§r§6リスポーン地点へジャンプ")) {
 				Location loc = Sclat.lobby.clone();
-				if (!conf.getConfig().getString("WorkMode").equals("Trial"))
+				if (!conf.config.getString("WorkMode").equals("Trial"))
 					loc = DataMgr.getPlayerData(player).getMatchLocation();
 				SuperJumpMgr.SuperJumpCollTime(player, loc, false);
 			}
 			if (name.equals("§r§6ロビーへジャンプ")) {
-				String WorldName = conf.getConfig().getString("LobbyJump.WorldName");
+				String WorldName = conf.config.getString("LobbyJump.WorldName");
 				World w = Bukkit.getWorld(WorldName);
-				int ix = conf.getConfig().getInt("LobbyJump.X");
-				int iy = conf.getConfig().getInt("LobbyJump.Y");
-				int iz = conf.getConfig().getInt("LobbyJump.Z");
+				int ix = conf.config.getInt("LobbyJump.X");
+				int iy = conf.config.getInt("LobbyJump.Y");
+				int iz = conf.config.getInt("LobbyJump.Z");
 				Location loc = new Location(w, ix + 0.5, iy, iz + 0.5);
 				SuperJumpMgr.SuperJumpCollTime(player, loc, true);
 			}
 			boolean nearspwan = true;
 			Location spawnloc = Sclat.lobby.clone();
-			if (!conf.getConfig().getString("WorkMode").equals("Trial"))
+			if (!conf.config.getString("WorkMode").equals("Trial"))
 				spawnloc = DataMgr.getPlayerData(player).getMatchLocation();
 			if (spawnloc.getWorld() == player.getWorld()) {
 				if (player.getLocation().distance(spawnloc) > 10 && !Tutorial.clearList.contains(player))

@@ -61,7 +61,7 @@ class SclatCommandExecutor :
 
             val num = args[1]
             if (isNumber(num)) {
-                Sclat.conf.getConfig().set("BlockUpdateRate", num.toInt())
+                Sclat.conf?.config!!.set("BlockUpdateRate", num.toInt())
                 sender.sendMessage("setConfig [BlockUpdateRate]  :  " + num)
                 return true
             } else {
@@ -147,7 +147,7 @@ class SclatCommandExecutor :
             for (_uuid in dataUuids) {
                 val userEmblems = oldData.getStringList(_uuid)
                 for (emblem in userEmblems) {
-                    Sclat.conf.getEmblemUserdata().set(_uuid + "." + emblem, 1)
+                    Sclat.conf.emblemUserdata!!.set(_uuid + "." + emblem, 1)
                 }
             }
             sender.sendMessage(ChatColor.GREEN.toString() + "Migration was succeeded!")
@@ -226,8 +226,8 @@ class SclatCommandExecutor :
                         // Todo: use redis. fallbacks PluginMessaging
                         val sc =
                             EquipmentClient(
-                                Sclat.conf.getConfig().getString("EquipShare." + serverName + ".Host"),
-                                Sclat.conf.getConfig().getInt("EquipShare." + serverName + ".Port"),
+                                Sclat.conf?.config!!.getString("EquipShare." + serverName + ".Host"),
+                                Sclat.conf?.config!!.getInt("EquipShare." + serverName + ".Port"),
                                 commands,
                             )
                         sc.startClient()
@@ -299,16 +299,16 @@ class SclatCommandExecutor :
             if (args[1] == "add") {
                 if (args.size < 3) return false
                 val server: String? = args[2]
-                val list = Sclat.tutorialServers.getConfig()!!.getStringList("server-list")
+                val list = Sclat.tutorialServers?.getConfig()!!!!.getStringList("server-list")
                 if (!list.contains(server)) {
                     list.add(server)
-                    Sclat.tutorialServers.getConfig()!!.set("server-list", list)
+                    Sclat.tutorialServers?.getConfig()!!.set("server-list", list)
                 } else {
                     sender.sendMessage(ChatColor.RED.toString() + "This server is already exist.")
                 }
                 return true
             } else if (args[1] == "list") {
-                val list = Sclat.tutorialServers.getConfig()!!.getStringList("server-list")
+                val list = Sclat.tutorialServers?.getConfig()!!.getStringList("server-list")
                 sender.sendMessage(list.toString())
                 return true
             } else if (args[1] == "reload") {

@@ -55,7 +55,7 @@ public class WeaponClassMgr {
 		if (data.getSPGauge() == 100)
 			SPWeaponMgr.setSPWeapon(player);
 
-		if (conf.getConfig().getString("WorkMode").equals("Trial") && !Sclat.tutorial) {
+		if (conf.config.getString("WorkMode").equals("Trial") && !Sclat.tutorial) {
 			ItemStack join = new ItemStack(Material.CHEST);
 			ItemMeta joinmeta = join.getItemMeta();
 			joinmeta.setDisplayName(ChatColor.GOLD + "右クリックでメインメニューを開く");

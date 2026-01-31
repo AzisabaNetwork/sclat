@@ -141,7 +141,7 @@ public class Reeler {
 						}
 					};
 					// リーラ―起動部分
-					if (!conf.getConfig().getString("WorkMode").equals("Trial")) {
+					if (!conf.config.getString("WorkMode").equals("Trial")) {
 						Player dest = grap(player);
 						if (dest != player) {
 							grapple(player, dest);
@@ -374,7 +374,7 @@ public class Reeler {
 			}
 
 			double maxDistSquad = 6 /* 2*2 */;
-			if (conf.getConfig().getString("WorkMode").equals("Trial")) {
+			if (conf.config.getString("WorkMode").equals("Trial")) {
 				for (Entity as : player.getWorld().getEntities()) {
 					if (as instanceof ArmorStand) {
 						if (as.getLocation().distanceSquared(position) <= maxDistSquad) {

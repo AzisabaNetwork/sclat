@@ -105,7 +105,7 @@ public class MatchMgr {
 			if (match.canJoin()) {
 				match.addPlayerCount();
 				int playercount = match.getPlayerCount();
-				if (match.getJoinedPlayerCount() < conf.getConfig().getInt("MaxPlayerCount")) {
+				if (match.getJoinedPlayerCount() < conf.config.getInt("MaxPlayerCount")) {
 					match.addJoinedPlayerCount();
 
 					data.match = match;
@@ -117,11 +117,11 @@ public class MatchMgr {
 							MessageType.ALL_PLAYER);
 
 					player.teleport(match.getMapData().getTaikibayso());
-					if (conf.getConfig().getBoolean("CanVoting")
+					if (conf.config.getBoolean("CanVoting")
 							&& !DataMgr.getPlayerIsQuit(player.getUniqueId().toString()))
 						OpenGUI.MatchTohyoGUI(player);
 
-					int startPlayerCount = conf.getConfig().getInt("StartPlayerCount");
+					int startPlayerCount = conf.config.getInt("StartPlayerCount");
 
 					if (match.getJoinedPlayerCount() < startPlayerCount) {
 						SclatUtil.sendMessage("§a人数が足りないため試合を開始することができません", MessageType.ALL_PLAYER);
@@ -151,9 +151,8 @@ public class MatchMgr {
 										List<String> commands = new ArrayList<>();
 										commands.add("cdc " + conf.getServers().getString("ServerName"));
 										commands.add("stop");
-										StatusClient sc = new StatusClient(
-												conf.getConfig().getString("StatusShare.Host"),
-												conf.getConfig().getInt("StatusShare.Port"), commands);
+										StatusClient sc = new StatusClient(conf.config.getString("StatusShare.Host"),
+												conf.config.getInt("StatusShare.Port"), commands);
 										sc.startClient();
 									}
 									cancel();
@@ -165,9 +164,8 @@ public class MatchMgr {
 										commands.add("cd " + conf.getServers().getString("ServerName") + " "
 												+ (System.currentTimeMillis() / 1000 + 30));
 										commands.add("stop");
-										StatusClient sc = new StatusClient(
-												conf.getConfig().getString("StatusShare.Host"),
-												conf.getConfig().getInt("StatusShare.Port"), commands);
+										StatusClient sc = new StatusClient(conf.config.getString("StatusShare.Host"),
+												conf.config.getInt("StatusShare.Port"), commands);
 										sc.startClient();
 									}
 									SclatUtil.sendMessage("§a試合開始まで後§c30§a秒", MessageType.ALL_PLAYER);
@@ -201,7 +199,7 @@ public class MatchMgr {
 
 									// ソート
 									List<Player> sortedMember = new ArrayList<>();
-									if (conf.getConfig().getBoolean("RateMatch")) {
+									if (conf.config.getBoolean("RateMatch")) {
 										Map<Integer, Player> treeMap = new TreeMap<>(playerMap);
 										/*
 										 * if(match.getJoinedPlayerCount() == 3){ List<Player> list = new ArrayList<>();
@@ -253,7 +251,7 @@ public class MatchMgr {
 									}
 
 									SclatUtil.sendMessage("§6試合が開始されました", MessageType.BROADCAST);
-									if (conf.getConfig().getBoolean("RateMatch")) {
+									if (conf.config.getBoolean("RateMatch")) {
 										SclatUtil.sendMessage("", MessageType.ALL_PLAYER);
 										SclatUtil.sendMessage(
 												"§b試合の総合レート : §r"
@@ -261,14 +259,14 @@ public class MatchMgr {
 												MessageType.ALL_PLAYER);
 									}
 									EquipmentServerManager.doCommands();
-									if (conf.getConfig().getBoolean("CanVoting")) {
+									if (conf.config.getBoolean("CanVoting")) {
 										if (match.getNawabariTCount() >= match.getTdmTCount()
 												&& match.getNawabariTCount() >= match.getGatiareaTCount()) {
-											conf.getConfig().set("WorkMode", "Normal");
+											conf.config.set("WorkMode", "Normal");
 										} else if (match.getTdmTCount() >= match.getGatiareaTCount()) {
-											conf.getConfig().set("WorkMode", "TDM");
+											conf.config.set("WorkMode", "TDM");
 										} else {
-											conf.getConfig().set("WorkMode", "Area");
+											conf.config.set("WorkMode", "Area");
 										}
 									}
 									StartMatch(match);
@@ -284,9 +282,8 @@ public class MatchMgr {
 										commands.add("started " + conf.getServers().getString("ServerName") + " "
 												+ System.currentTimeMillis() / 1000);
 										commands.add("stop");
-										StatusClient sc = new StatusClient(
-												conf.getConfig().getString("StatusShare.Host"),
-												conf.getConfig().getInt("StatusShare.Port"), commands);
+										StatusClient sc = new StatusClient(conf.config.getString("StatusShare.Host"),
+												conf.config.getInt("StatusShare.Port"), commands);
 										sc.startClient();
 									}
 
@@ -314,8 +311,8 @@ public class MatchMgr {
 
 	public static synchronized void MatchSetup() {
 		// 再起動オプション
-		if (conf.getConfig().contains("RestartMatchCount"))
-			if (conf.getConfig().getInt("RestartMatchCount") == matchcount)
+		if (conf.config.contains("RestartMatchCount"))
+			if (conf.config.getInt("RestartMatchCount") == matchcount)
 				SclatUtil.restartServer();
 
 		final int id = matchcount;
@@ -326,8 +323,8 @@ public class MatchMgr {
 		DataMgr.setTeam(id * 2 + 1, team1);
 
 		BlockUpdater bur = new BlockUpdater();
-		if (conf.getConfig().contains("BlockUpdateRate"))
-			bur.setMaxBlockInOneTick(conf.getConfig().getInt("BlockUpdateRate"));
+		if (conf.config.contains("BlockUpdateRate"))
+			bur.setMaxBlockInOneTick(conf.config.getInt("BlockUpdateRate"));
 		bur.start();
 		match.setBlockUpdater(bur);
 
@@ -382,7 +379,7 @@ public class MatchMgr {
 		// teamloc.SetupTeam1Loc();
 		// DataMgr.setTeamLoc(map, teamloc);
 
-		if (conf.getConfig().getString("WorkMode").equals("Trial")) {
+		if (conf.config.getString("WorkMode").equals("Trial")) {
 			ScoreboardManager manager = Bukkit.getScoreboardManager();
 			Scoreboard scoreboard = manager.getNewScoreboard();
 
@@ -408,7 +405,7 @@ public class MatchMgr {
 	}
 
 	public static void RollBack() {
-		if (!canRollback && conf.getConfig().getString("WorkMode").equals("Trial"))
+		if (!canRollback && conf.config.getString("WorkMode").equals("Trial"))
 			return;
 		for (PaintData data : DataMgr.getBlockDataMap().values()) {
 			data.getBlock().setType(data.getOriginalType());
@@ -491,14 +488,14 @@ public class MatchMgr {
 								}
 							});
 
-							if (conf.getConfig().getString("WorkMode").equals("Area")) {
+							if (conf.config.getString("WorkMode").equals("Area")) {
 								for (Area area : match.getMapData().getAreaList()) {
 									area.setup(match);
 								}
 							}
 						}
 
-						switch (conf.getConfig().getString("WorkMode")) {
+						switch (conf.config.getString("WorkMode")) {
 							case "Normal" :
 								SclatUtil.sendMessage("§6ゲームモード : §b§lナワバリバトル", MessageType.PLAYER, p);
 								SclatUtil.sendMessage("§f§l敵よりもたくさんナワバリを確保しろ！", MessageType.PLAYER, p);
@@ -574,9 +571,9 @@ public class MatchMgr {
 						p.teleport(introl);
 						Location location = DataMgr.getPlayerData(p).getMatchLocation();
 
-						if (conf.getConfig().getString("WorkMode").equals("TDM"))
+						if (conf.config.getString("WorkMode").equals("TDM"))
 							p.sendTitle("§l" + match.getMapData().getMapName(), "§7チームデスマッチ", 10, 70, 20);
-						else if (conf.getConfig().getString("WorkMode").equals("Area"))
+						else if (conf.config.getString("WorkMode").equals("Area"))
 							p.sendTitle("§l" + match.getMapData().getMapName(), "§7ガチエリア", 10, 70, 20);
 						else
 							p.sendTitle("§l" + match.getMapData().getMapName(), "§7ナワバリバトル", 10, 70, 20);
@@ -596,9 +593,9 @@ public class MatchMgr {
 						lines.add("§a§lマップ名 » §6" + DataMgr.getPlayerData(p).match.getMapData().getMapName());
 						lines.add(" ");
 
-						if (conf.getConfig().getString("WorkMode").equals("TDM"))
+						if (conf.config.getString("WorkMode").equals("TDM"))
 							lines.add(ChatColor.YELLOW + "§lゲームモード » §rチームデスマッチ");
-						else if (conf.getConfig().getString("WorkMode").equals("Area"))
+						else if (conf.config.getString("WorkMode").equals("Area"))
 							lines.add(ChatColor.YELLOW + "§lゲームモード » §rガチエリア");
 						else
 							lines.add(ChatColor.YELLOW + "§lゲームモード » §rナワバリバトル");
@@ -788,7 +785,7 @@ public class MatchMgr {
 						p.setExp(0.99F);
 						if (DataMgr.getPlayerData(p).getPlayerNumber() == 1) {
 							InMatchCounter(p);
-							if (conf.getConfig().getString("WorkMode").equals("Area")) {
+							if (conf.config.getString("WorkMode").equals("Area")) {
 								for (Area area : match.getMapData().getAreaList()) {
 									area.setupAreaTeam();
 								}
@@ -821,7 +818,7 @@ public class MatchMgr {
 								}
 							}
 							radio.setPlaying(true);
-							if (conf.getConfig().getString("WorkMode").equals("Area"))
+							if (conf.config.getString("WorkMode").equals("Area"))
 								StopMusic(radio, 6000, match);
 							else
 								StopMusic(radio, 2400, match);
@@ -829,7 +826,7 @@ public class MatchMgr {
 
 						if (DataMgr.getPlayerData(p).getPlayerNumber() == 1) {
 							PathMgr.setupPath(match);
-							if (conf.getConfig().getString("WorkMode").equals("Area")) {
+							if (conf.config.getString("WorkMode").equals("Area")) {
 								for (Area area : match.getMapData().getAreaList()) {
 									area.start();
 								}
@@ -958,9 +955,9 @@ public class MatchMgr {
 					lines.add("§a§lマップ名 » §6" + DataMgr.getPlayerData(p).match.getMapData().getMapName());
 					lines.add(" ");
 
-					if (conf.getConfig().getString("WorkMode").equals("TDM"))
+					if (conf.config.getString("WorkMode").equals("TDM"))
 						lines.add(ChatColor.YELLOW + "§lゲームモード » §6チームデスマッチ");
-					else if (conf.getConfig().getString("WorkMode").equals("Area"))
+					else if (conf.config.getString("WorkMode").equals("Area"))
 						lines.add(ChatColor.YELLOW + "§lゲームモード » §6ガチエリア");
 					else
 						lines.add(ChatColor.YELLOW + "§lゲームモード » §6ナワバリバトル");
@@ -972,7 +969,7 @@ public class MatchMgr {
 					boolean entyo = false;
 
 					// ガチエリアカウント
-					if (conf.getConfig().getString("WorkMode").equals("Area")) {
+					if (conf.config.getString("WorkMode").equals("Area")) {
 
 						List<Team> list = new ArrayList<>();
 						for (Area area : match.getMapData().getAreaList()) {
@@ -1101,7 +1098,7 @@ public class MatchMgr {
 
 					ObjectiveUtil.setLine(objective, lines);
 
-					if (s == 60 && !conf.getConfig().getString("WorkMode").equals("Area")) {
+					if (s == 60 && !conf.config.getString("WorkMode").equals("Area")) {
 						for (Player oplayer : Sclat.getPlugin(Sclat.class).getServer().getOnlinePlayers()) {
 							if (DataMgr.getPlayerData(oplayer).getIsJoined()) {
 								SclatUtil.sendMessage("§6§n残り1分！", MessageType.PLAYER, oplayer);
@@ -1188,7 +1185,7 @@ public class MatchMgr {
 								path.stop();
 								path.reset();
 							}
-							if (conf.getConfig().getString("WorkMode").equals("Area")) {
+							if (conf.config.getString("WorkMode").equals("Area")) {
 								for (Area area : DataMgr.getPlayerData(p).match.getMapData().getAreaList()) {
 									area.stop();
 								}
@@ -1262,7 +1259,7 @@ public class MatchMgr {
 						}
 					}
 					if (i == 46 && DataMgr.getPlayerData(p).getPlayerNumber() == 1) {
-						if (conf.getConfig().getString("WorkMode").equals("TDM")) {
+						if (conf.config.getString("WorkMode").equals("TDM")) {
 							Match match = DataMgr.getPlayerData(p).match;
 							int team0c;
 							int team1c;
@@ -1289,7 +1286,7 @@ public class MatchMgr {
 									Animation.tdmResultAnimation(oplayer, team0c, team1c, team0code, team1code, winteam,
 											hikiwake);
 							}
-						} else if (conf.getConfig().getString("WorkMode").equals("Area")) {
+						} else if (conf.config.getString("WorkMode").equals("Area")) {
 							Match match = DataMgr.getPlayerData(p).match;
 							int team0;
 							int team1;
@@ -1399,8 +1396,8 @@ public class MatchMgr {
 						List<String> commands = new ArrayList<>();
 						commands.add("return " + p.getUniqueId().toString());
 						commands.add("stop");
-						StatusClient sc = new StatusClient(conf.getConfig().getString("StatusShare.Host"),
-								conf.getConfig().getInt("StatusShare.Port"), commands);
+						StatusClient sc = new StatusClient(conf.config.getString("StatusShare.Host"),
+								conf.config.getInt("StatusShare.Port"), commands);
 						sc.startClient();
 					}
 
@@ -1505,7 +1502,7 @@ public class MatchMgr {
 						// data.getMatch().getIsHikiwake())
 						// pRank = 80 + (int)((double)data.getKillCount() * 2.2D +
 						// (double)data.getPaintCount() / 700D);
-						if (data.match.getJoinedPlayerCount() == 1 || !conf.getConfig().getBoolean("RateMatch"))
+						if (data.match.getJoinedPlayerCount() == 1 || !conf.config.getBoolean("RateMatch"))
 							pRank = 0;
 
 						int pMoveRank = RankMgr.IndicateRankPointmove(p, pRank);
@@ -1527,8 +1524,8 @@ public class MatchMgr {
 							commands.add("add kill " + data.getKillCount() + " " + p.getUniqueId().toString());
 							commands.add("add paint " + data.getPaintCount() + " " + p.getUniqueId().toString());
 							commands.add("stop");
-							StatusClient sc = new StatusClient(conf.getConfig().getString("StatusShare.Host"),
-									conf.getConfig().getInt("StatusShare.Port"), commands);
+							StatusClient sc = new StatusClient(conf.config.getString("StatusShare.Host"),
+									conf.config.getInt("StatusShare.Port"), commands);
 							sc.startClient();
 						}
 
@@ -1566,13 +1563,13 @@ public class MatchMgr {
 						 * p.sendMessage(ChatColor.GREEN + "##########################");
 						 */
 
-						String WorldName = conf.getConfig().getString("Lobby.WorldName");
+						String WorldName = conf.config.getString("Lobby.WorldName");
 						World w = getServer().getWorld(WorldName);
 
-						int ix = conf.getConfig().getInt("Lobby.X");
-						int iy = conf.getConfig().getInt("Lobby.Y");
-						int iz = conf.getConfig().getInt("Lobby.Z");
-						int iyaw = conf.getConfig().getInt("Lobby.Yaw");
+						int ix = conf.config.getInt("Lobby.X");
+						int iy = conf.config.getInt("Lobby.Y");
+						int iz = conf.config.getInt("Lobby.Z");
+						int iyaw = conf.config.getInt("Lobby.Yaw");
 						Location il = new Location(w, ix, iy, iz);
 						il.setYaw(iyaw);
 						WeaponClass wc = DataMgr.getPlayerData(p).getWeaponClass();
@@ -1601,8 +1598,8 @@ public class MatchMgr {
 								commands.add("map " + conf.getServers().getString("ServerName") + " " + DataMgr
 										.getMapRandom(MatchMgr.mapcount == 0 ? 0 : MatchMgr.mapcount - 1).getMapName());
 								commands.add("stop");
-								StatusClient sc = new StatusClient(conf.getConfig().getString("StatusShare.Host"),
-										conf.getConfig().getInt("StatusShare.Port"), commands);
+								StatusClient sc = new StatusClient(conf.config.getString("StatusShare.Host"),
+										conf.config.getInt("StatusShare.Port"), commands);
 								sc.startClient();
 							}
 

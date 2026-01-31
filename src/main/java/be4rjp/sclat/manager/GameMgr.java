@@ -103,7 +103,7 @@ public class GameMgr implements Listener {
 		String uuid = player.getUniqueId().toString();
 		PlayerSettings settings = new PlayerSettings(player);
 		data.settings = settings;
-		data.setWeaponClass(DataMgr.getWeaponClass(conf.getConfig().getString("DefaultClass")));
+		data.setWeaponClass(DataMgr.getWeaponClass(conf.config.getString("DefaultClass")));
 		DataMgr.setPlayerData(player, data);
 
 		// ((LivingEntity)player).setCollidable(false);
@@ -130,7 +130,7 @@ public class GameMgr implements Listener {
 			public void run() {
 				switch (i) {
 					case 0 : {// ----------------------------------------------------------------------------
-						if (!conf.getConfig().getString("WorkMode").equals("Trial") && Sclat.type != ServerType.MATCH)
+						if (!conf.config.getString("WorkMode").equals("Trial") && Sclat.type != ServerType.MATCH)
 							PlayerStatusMgr.sendHologram(player);
 					}
 					case 1 : {// ----------------------------------------------------------------------------
@@ -173,7 +173,7 @@ public class GameMgr implements Listener {
 		pipeline.addBefore("packet_handler", "SclatPacketInjector:" + player.getName(), packetHandler);
 
 		// 試し撃ちモード
-		if (conf.getConfig().getString("WorkMode").equals("Trial")) {
+		if (conf.config.getString("WorkMode").equals("Trial")) {
 			Match match = DataMgr.getMatchFromId(MatchMgr.matchcount);
 			data.match = match;
 			data.team = match.team0;
@@ -235,7 +235,7 @@ public class GameMgr implements Listener {
 								DataMgr.getPlayerData(p).setIsJoined(true);
 								DataMgr.getPlayerData(p).setMainItemGlow(false);
 								DataMgr.getPlayerData(p).tick = 10;
-								WeaponClass wc = DataMgr.getWeaponClass(conf.getConfig().getString("DefaultClass"));
+								WeaponClass wc = DataMgr.getWeaponClass(conf.config.getString("DefaultClass"));
 								DataMgr.getPlayerData(p).setWeaponClass(wc);
 								if (DataMgr.getPlayerData(p).getWeaponClass().getSubWeaponName().equals("ビーコン"))
 									ArmorStandMgr.BeaconArmorStandSetup(p);
@@ -394,12 +394,12 @@ public class GameMgr implements Listener {
 			player.teleport(Sclat.lobby);
 		} else {
 			if (PlayerStatusMgr.getTutorialState(player.getUniqueId().toString()) == 1) {
-				String WorldName = conf.getConfig().getString("Tutorial.WorldName");
+				String WorldName = conf.config.getString("Tutorial.WorldName");
 				World w = Bukkit.getWorld(WorldName);
-				int ix = conf.getConfig().getInt("Tutorial.X");
-				int iy = conf.getConfig().getInt("Tutorial.Y");
-				int iz = conf.getConfig().getInt("Tutorial.Z");
-				int iyaw = conf.getConfig().getInt("Tutorial.Yaw");
+				int ix = conf.config.getInt("Tutorial.X");
+				int iy = conf.config.getInt("Tutorial.Y");
+				int iz = conf.config.getInt("Tutorial.Z");
+				int iyaw = conf.config.getInt("Tutorial.Yaw");
 				Location tutorial = new Location(w, ix + 0.5, iy, iz + 0.5);
 				tutorial.setYaw(iyaw);
 				player.teleport(tutorial);
@@ -710,7 +710,7 @@ public class GameMgr implements Listener {
 					case "Click to Download" :
 						// player.setResourcePack(conf.getConfig().getString("ResourcePackURL"));
 						player.sendMessage("以下のURLからリソースパックをダウンロードしてください");
-						player.sendMessage(conf.getConfig().getString("ResourcePackURL"));
+						player.sendMessage(conf.config.getString("ResourcePackURL"));
 						break;
 					case "Click to Vote" :
 						// player.setResourcePack(conf.getConfig().getString("ResourcePackURL"));
@@ -718,7 +718,7 @@ public class GameMgr implements Listener {
 						player.sendMessage("https://minecraft.jp/servers/azisaba.net");
 						break;
 					case "Click To Download" :
-						player.setResourcePack(conf.getConfig().getString("ResourcePackURL"));
+						player.setResourcePack(conf.config.getString("ResourcePackURL"));
 						break;
 					case "Click to Return" :
 						BungeeCordMgr.PlayerSendServer(player, "lobby");
@@ -867,9 +867,8 @@ public class GameMgr implements Listener {
 								+ conf.getPlayerSettings().getString("Settings." + player.getUniqueId().toString())
 								+ " " + player.getUniqueId().toString());
 						commands.add("stop");
-						EquipmentClient sc = new EquipmentClient(
-								conf.getConfig().getString("EquipShare." + name + ".Host"),
-								conf.getConfig().getInt("EquipShare." + name + ".Port"), commands);
+						EquipmentClient sc = new EquipmentClient(conf.config.getString("EquipShare." + name + ".Host"),
+								conf.config.getInt("EquipShare." + name + ".Port"), commands);
 						sc.startClient();
 					}
 				}
@@ -883,8 +882,8 @@ public class GameMgr implements Listener {
 							+ conf.getPlayerSettings().getString("Settings." + player.getUniqueId().toString()) + " "
 							+ player.getUniqueId().toString());
 					commands.add("stop");
-					EquipmentClient sc = new EquipmentClient(conf.getConfig().getString("EquipShare.Trial.Host"),
-							conf.getConfig().getInt("EquipShare.Trial.Port"), commands);
+					EquipmentClient sc = new EquipmentClient(conf.config.getString("EquipShare.Trial.Host"),
+							conf.config.getInt("EquipShare.Trial.Port"), commands);
 					sc.startClient();
 				}
 			}

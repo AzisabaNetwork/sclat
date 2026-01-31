@@ -123,7 +123,7 @@ public class ArmorStandMgr {
 
 	public static void BeaconArmorStandSetup(Player player) {
 		Location al;
-		if (conf.getConfig().getString("WorkMode").equals("Trial"))
+		if (conf.config.getString("WorkMode").equals("Trial"))
 			al = Sclat.lobby;
 		else
 			al = DataMgr.getPlayerData(player).getMatchLocation();
@@ -223,7 +223,7 @@ public class ArmorStandMgr {
 
 	public static void SprinklerArmorStandSetup(Player player) {
 		Location al;
-		if (conf.getConfig().getString("WorkMode").equals("Trial"))
+		if (conf.config.getString("WorkMode").equals("Trial"))
 			al = Sclat.lobby;
 		else
 			al = DataMgr.getPlayerData(player).getMatchLocation();
