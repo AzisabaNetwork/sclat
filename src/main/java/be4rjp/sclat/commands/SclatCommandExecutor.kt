@@ -196,11 +196,11 @@ class SclatCommandExecutor :
                 return true
             }
 
-            val dataMap = EmblemManager.getDataMap()
+            val dataMap = EmblemManager.dataMap
             for (_key in dataMap.keys) {
                 sender.sendMessage(_key)
                 val playerUuids = dataMap.getOrDefault(_key, HashMap<String?, Int?>())
-                playerUuids.forEach { (k: String?, v: Int?) -> sender.sendMessage("- " + k + ": " + v) }
+                playerUuids.forEach { (k: String?, v: Int?) -> sender.sendMessage("- $k: $v") }
             }
         }
 

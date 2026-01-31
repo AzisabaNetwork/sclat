@@ -1,110 +1,114 @@
-package be4rjp.sclat.emblem;
+package be4rjp.sclat.emblem
 
-import be4rjp.sclat.manager.PlayerStatusMgr;
-import org.bukkit.Material;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
+import be4rjp.sclat.Sclat
+import be4rjp.sclat.manager.PlayerStatusMgr
+import org.bukkit.Material
+import org.bukkit.entity.Player
+import org.bukkit.inventory.Inventory
+import org.bukkit.inventory.ItemStack
+import java.util.function.Consumer
+import java.util.function.Function
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.StringJoiner;
-import java.util.function.Function;
+object EmblemManager {
+    private fun newEmblemStack(
+        displayName: String,
+        lore: MutableList<String>,
+        amount: Int,
+    ): ItemStack {
+        val stack = ItemStack(Material.EGG, amount)
+        val meta = stack.getItemMeta()
+        meta!!.setDisplayName(displayName)
+        meta.setLore(lore)
+        stack.setItemMeta(meta)
+        return stack
+    }
 
-import static be4rjp.sclat.Sclat.conf;
+    var emblems: MutableList<EmblemData> = ArrayList()
 
-public class EmblemManager {
-	private static ItemStack newEmblemStack(String displayName, List<String> lore, int amount) {
-		ItemStack stack = new ItemStack(Material.EGG, amount);
-		ItemMeta meta = stack.getItemMeta();
-		meta.setDisplayName(displayName);
-		meta.setLore(lore);
-		stack.setItemMeta(meta);
-		return stack;
-	}
+    fun addEmblem(
+        itemName: String,
+        condition: Function<Player, Boolean>,
+    ) {
+        emblems.add(EmblemData(itemName, condition))
+    }
 
-	public static List<EmblemData> emblems = new ArrayList<>();
+    @JvmStatic
+    fun handleInv(
+        inventory: Inventory,
+        player: Player,
+    ) {
+        val strUuid = player.uniqueId.toString()
+        val userSection = Sclat.conf.emblemUserdata.getConfigurationSection(strUuid)
+        var cache: MutableSet<String> = HashSet()
+        if (userSection != null) {
+            cache = userSection.getKeys(false)
+        }
 
-	public static void addEmblem(String itemName, Function<Player, Boolean> condition) {
-		emblems.add(new EmblemData(itemName, condition));
-	}
+        val newEmblems: MutableList<String> = ArrayList()
+        for (emblem in emblems) {
+            // === Condition check
+            if (!cache.contains(emblem.itemName)) {
+                // non-cached
+                if (!emblem.condition.apply(player)) {
+                    // non-matched
+                    continue
+                }
+                // add new emblem
+                newEmblems.add(emblem.itemName)
+            }
 
-	public static void handleInv(Inventory inventory, Player player) {
-		String strUuid = player.getUniqueId().toString();
-		ConfigurationSection userSection = conf.getEmblemUserdata().getConfigurationSection(strUuid);
-		Set<String> cache = new HashSet<>();
-		if (userSection != null) {
-			cache = userSection.getKeys(false);
-		}
+            // get lore of item
+            val lore = Sclat.conf.emblemItems.getStringList(emblem.itemName)
 
-		List<String> newEmblems = new ArrayList<>();
-		for (EmblemData emblem : emblems) {
-			// === Condition check
-			if (!cache.contains(emblem.itemName)) {
-				// non-cached
-				if (!emblem.condition.apply(player)) {
-					// non-matched
-					continue;
-				}
-				// add new emblem
-				newEmblems.add(emblem.itemName);
-			}
+            val amount = Sclat.conf.emblemUserdata.getInt(strUuid + "." + emblem.itemName, 1)
 
-			// get lore of item
-			List<String> lore = conf.getEmblemItems().getStringList(emblem.itemName);
+            // add emblem to inventory
+            inventory.addItem(newEmblemStack(emblem.itemName, lore, amount))
+        }
 
-			int amount = conf.getEmblemUserdata().getInt(strUuid + "." + emblem.itemName, 1);
+        // On new emblem
+        if (!newEmblems.isEmpty()) {
+            // update cache
+            newEmblems.forEach(
+                Consumer { emblem: String? ->
+                    Sclat.conf.emblemUserdata.set("$strUuid.$emblem", 1)
+                },
+            )
 
-			// add emblem to inventory
-			inventory.addItem(newEmblemStack(emblem.itemName, lore, amount));
-		}
+            // player feedback
+            player.sendMessage("${newEmblems.joinToString(", ")} の称号を手に入れました！")
+        }
+    }
 
-		// On new emblem
-		if (!newEmblems.isEmpty()) {
-			// update cache
-			newEmblems.forEach(_emblem -> conf.getEmblemUserdata().set(strUuid + "." + _emblem, 1));
+    val dataMap: MutableMap<String, MutableMap<String, Int>>
+        get() {
+            val dataMap =
+                HashMap<String, MutableMap<String, Int>>()
+            for (uuid in Sclat.conf.getEmblemUserdata().getKeys(false)) {
+                val targetSection =
+                    Sclat.conf.getEmblemUserdata().getConfigurationSection(uuid) ?: continue
+                for (emblemName in targetSection.getKeys(false)) {
+                    if (!dataMap.containsKey(emblemName)) {
+                        dataMap[emblemName] = HashMap()
+                    }
+                    dataMap.get(emblemName)!![uuid] = targetSection.getInt(emblemName, 1)
+                }
+            }
+            return dataMap
+        }
 
-			// player feedback
-			StringJoiner sj = new StringJoiner(", ");
-			newEmblems.forEach(sj::add);
-			player.sendMessage(sj + " の称号を手に入れました！");
-		}
-	}
+    init {
+        addEmblem("撃墜王") { p -> PlayerStatusMgr.getKill(p) >= 10000 }
 
-	public static Map<String, Map<String, Integer>> getDataMap() {
-		HashMap<String, Map<String, Integer>> dataMap = new HashMap<>();
-		for (String uuid : conf.getEmblemUserdata().getKeys(false)) {
-			ConfigurationSection targetSection = conf.getEmblemUserdata().getConfigurationSection(uuid);
-			if (targetSection == null)
-				continue;
-			for (String _emblemName : targetSection.getKeys(false)) {
-				if (!dataMap.containsKey(_emblemName)) {
-					dataMap.put(_emblemName, new HashMap<>());
-				}
-				dataMap.get(_emblemName).put(uuid, targetSection.getInt(_emblemName, 1));
-			}
-		}
-		return dataMap;
-	}
+        addEmblem("エース") { p -> PlayerStatusMgr.getKill(p) >= 1000 }
 
-	static {
-		addEmblem("撃墜王", p -> PlayerStatusMgr.getKill(p) >= 10000);
+        addEmblem("100人斬り") { p -> PlayerStatusMgr.getKill(p) >= 100 }
 
-		addEmblem("エース", p -> PlayerStatusMgr.getKill(p) >= 1000);
+        // マイクラスクエア2025関連
+        addEmblem("§a§lマイクラスクエア§2§l2025 §7§lSupportMedal") { p -> false }
 
-		addEmblem("100人斬り", p -> PlayerStatusMgr.getKill(p) >= 100);
+        addEmblem("§a§lマイクラスクエア§2§l2025 §e§lSupportMedal") { p -> false }
 
-		// マイクラスクエア2025関連
-		addEmblem("§a§lマイクラスクエア§2§l2025 §7§lSupportMedal", p -> false);
-
-		addEmblem("§a§lマイクラスクエア§2§l2025 §e§lSupportMedal", p -> false);
-
-		addEmblem("§a§lマイクラスクエア§2§l2025 §b§lSupportMedal", p -> false);
-	}
+        addEmblem("§a§lマイクラスクエア§2§l2025 §b§lSupportMedal") { p -> false }
+    }
 }
