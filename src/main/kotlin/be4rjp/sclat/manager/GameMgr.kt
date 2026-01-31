@@ -31,9 +31,8 @@ import be4rjp.sclat.server.EquipmentClient
 import be4rjp.sclat.server.EquipmentServerManager.doCommands
 import be4rjp.sclat.tutorial.Tutorial
 import be4rjp.sclat.tutorial.Tutorial.setInkResetTimer
-import be4rjp.sclat.weapon.Brush.HoldRunnable
-import be4rjp.sclat.weapon.Brush.RollPaintRunnable
-import be4rjp.sclat.weapon.Bucket.BucketHealRunnable
+import be4rjp.sclat.weapon.Brush
+import be4rjp.sclat.weapon.Bucket.bucketHealRunnable
 import be4rjp.sclat.weapon.Buckler.BucklerRunnable
 import be4rjp.sclat.weapon.Charger.ChargerRunnable
 import be4rjp.sclat.weapon.Decoy.DecoyRunnable
@@ -44,8 +43,7 @@ import be4rjp.sclat.weapon.Kasa.kasaRunnable
 import be4rjp.sclat.weapon.Manuber
 import be4rjp.sclat.weapon.Reeler.reelerRunnable
 import be4rjp.sclat.weapon.Reeler.reelerShootRunnable
-import be4rjp.sclat.weapon.Roller.holdRunnable
-import be4rjp.sclat.weapon.Roller.rollPaintRunnable
+import be4rjp.sclat.weapon.Roller
 import be4rjp.sclat.weapon.Shooter
 import be4rjp.sclat.weapon.Shooter.maneuverShootRunnable
 import be4rjp.sclat.weapon.Shooter.shooterRunnable
@@ -120,7 +118,7 @@ class GameMgr : Listener {
                     .config!!
                     .getString("DefaultClass"),
             )
-            )
+        )
         setPlayerData(player, data)
 
         // ((LivingEntity)player).setCollidable(false);
@@ -153,7 +151,8 @@ class GameMgr : Listener {
                                 // ----------------------------------------------------------------------------
                                 if (Sclat.Companion.conf!!
                                         .config!!
-                                        .getString("WorkMode") != "Trial" && Sclat.type != ServerType.MATCH
+                                        .getString("WorkMode") != "Trial" &&
+                                    Sclat.type != ServerType.MATCH
                                 ) {
                                     PlayerStatusMgr.sendHologram(
                                         player,
@@ -182,7 +181,7 @@ class GameMgr : Listener {
                                     if (Sclat.modList.contains(player.getName())) {
                                         Sclat.modList.remove(player.getName())
                                     } else {
-                                        MatchMgr.PlayerJoinMatch(player)
+                                        MatchMgr.playerJoinMatch(player)
                                     }
                                 }
                             }
@@ -212,7 +211,7 @@ class GameMgr : Listener {
                                     if (Sclat.modList.contains(player.getName())) {
                                         Sclat.modList.remove(player.getName())
                                     } else {
-                                        MatchMgr.PlayerJoinMatch(player)
+                                        MatchMgr.playerJoinMatch(player)
                                     }
                                 }
                             }
@@ -239,7 +238,7 @@ class GameMgr : Listener {
                                     if (Sclat.modList.contains(player.getName())) {
                                         Sclat.modList.remove(player.getName())
                                     } else {
-                                        MatchMgr.PlayerJoinMatch(player)
+                                        MatchMgr.playerJoinMatch(player)
                                     }
                                 }
                             }
@@ -340,12 +339,12 @@ class GameMgr : Listener {
                                             )
                                         getPlayerData(p)!!.weaponClass = (wc)
                                         if (getPlayerData(p)!!.weaponClass!!.subWeaponName == "ビーコン") {
-                                            ArmorStandMgr.BeaconArmorStandSetup(
+                                            ArmorStandMgr.beaconArmorStandSetup(
                                                 p,
                                             )
                                         }
                                         if (getPlayerData(p)!!.weaponClass!!.subWeaponName == "スプリンクラー") {
-                                            ArmorStandMgr.SprinklerArmorStandSetup(
+                                            ArmorStandMgr.sprinklerArmorStandSetup(
                                                 p,
                                             )
                                         }
@@ -382,13 +381,13 @@ class GameMgr : Listener {
                                             BucklerRunnable(p)
                                         }
                                         if (getPlayerData(p)!!.weaponClass!!.mainWeapon!!.weaponType == "Bucket") {
-                                            BucketHealRunnable(
+                                            bucketHealRunnable(
                                                 p,
                                                 1,
                                             )
                                         }
                                         if (getPlayerData(p)!!.weaponClass!!.mainWeapon!!.weaponType == "Slosher") {
-                                            BucketHealRunnable(
+                                            bucketHealRunnable(
                                                 p,
                                                 0,
                                             )
@@ -404,11 +403,11 @@ class GameMgr : Listener {
                                         }
                                         if (getPlayerData(p)!!.weaponClass!!.mainWeapon!!.weaponType == "Roller") {
                                             if (getPlayerData(p)!!.weaponClass!!.mainWeapon!!.isHude) {
-                                                HoldRunnable(p)
-                                                RollPaintRunnable(p)
+                                                Brush.holdRunnable(p)
+                                                Brush.rollPaintRunnable(p)
                                             } else {
-                                                holdRunnable(p)
-                                                rollPaintRunnable(p)
+                                                Roller.holdRunnable(p)
+                                                Roller.rollPaintRunnable(p)
                                             }
                                         }
 
@@ -445,7 +444,7 @@ class GameMgr : Listener {
             val armor: BukkitRunnable =
                 object : BukkitRunnable() {
                     override fun run() {
-                        ArmorStandMgr.ArmorStandSetup(player)
+                        ArmorStandMgr.armorStandSetup(player)
                     }
                 }
             if (ArmorStandMgr.isSpawned) return
@@ -496,11 +495,11 @@ class GameMgr : Listener {
             player.teleport(Sclat.lobby!!)
         } else {
             if (PlayerStatusMgr.getTutorialState(player.getUniqueId().toString()) == 1) {
-                val WorldName =
+                val worldName =
                     Sclat.Companion.conf!!
                         .config!!
                         .getString("Tutorial.WorldName")
-                val w = Bukkit.getWorld(WorldName!!)
+                val w = Bukkit.getWorld(worldName!!)
                 val ix =
                     Sclat.Companion.conf!!
                         .config!!
@@ -590,45 +589,45 @@ class GameMgr : Listener {
                 (
                     ChatColor.BOLD.toString() + "目次\n\n" + ChatColor.RESET + "目次:P1\n\n" + "試合に参加するには:P2\n\n" +
                         "試合中の操作方法:P3~5\n\n" + "ロビーでの操作方法:P6~7\n\n" + "武器種紹介:P8~21\n\n" + "その他コラム:P22~25"
-                    ),
+                ),
             )
             bookMeta.addPage(
                 (
                     ChatColor.BOLD.toString() + "試合に参加するには\n\n" + ChatColor.RESET + "正面にあるタワーの中にある\n" +
                         "看板を右クリックすると試合ロビーに移動できます\n" + "※試合がすでに始まっている場合や再起動中の鯖には参加できません"
-                    ),
+                ),
             )
             bookMeta.addPage(
                 (
                     ChatColor.BOLD.toString() + "試合中の操作方法①\n\n" + ChatColor.RESET + "・試合が始まると武器が支給されます。\n\n" +
                         "・一番左のアイテムがメイン武器で右クリックで射撃できます。\n\n" + "・経験値バーがインクゲージとなっていて、これを消費し、射撃します。"
-                    ),
+                ),
             )
             bookMeta.addPage(
                 (
                     ChatColor.BOLD.toString() + "試合中の操作方法②\n\n" + ChatColor.RESET +
                         "・消費したインクゲージはイカになって自分のチームの色の床や壁に触れることで回復します。\n\n" + "・イカになるには手にアイテムを何も持たないとイカになります。\n\n" +
                         "・イカの状態では自分のチーム色の壁や床を移動できます。"
-                    ),
+                ),
             )
             bookMeta.addPage(
                 (
                     ChatColor.BOLD.toString() + "試合中の操作方法③\n\n" + ChatColor.RESET +
                         "・アイテムスロットの左から3番目のアイテムを右クリックでサブウェポンを使用できます。\n\n" +
                         "・画面上部のゲージがMAXの状態でアイテムスロットの真ん中のアイテムを右クリックでスペシャルを使用できます。"
-                    ),
+                ),
             )
             bookMeta.addPage(
                 (
                     ChatColor.BOLD.toString() + "ロビーでの操作方法①\n\n" + ChatColor.RESET + "・アイテムスロットのチェストを右クリックでメニューを開けます。\n\n" +
                         "・カーソルを合わせて左クリックで各項目を選択できます。"
-                    ),
+                ),
             )
             bookMeta.addPage(
                 (
                     ChatColor.BOLD.toString() + "ロビーでの操作方法②\n\n" + ChatColor.RESET +
                         "・メニューからは装備の購入・変更、テクスチャのインストールなどが可能です。\n\n" + "・インベントリを閉じることでメニューを閉じることができます"
-                    ),
+                ),
             )
             bookMeta.addPage(
                 ChatColor.BOLD.toString() + "武器紹介「シューター」\n" + ChatColor.RESET + "右クリックで射撃\n" + "汎用性に長けていてクセもなく、使い勝手がよい。",
@@ -637,31 +636,31 @@ class GameMgr : Listener {
                 (
                     ChatColor.BOLD.toString() + "武器紹介「ブラスター」\n" + ChatColor.RESET + "右クリックで爆発する弾を発射する。\n" +
                         "爆風でダメージを入れやすく、\n" + "弾を直撃させることで大ダメージを与えることができる。"
-                    ),
+                ),
             )
             bookMeta.addPage(
                 (
                     ChatColor.BOLD.toString() + "武器紹介「バーストシューター」\n" + ChatColor.RESET + "一度の右クリックで弾を数発射撃する。\n" +
                         "射撃に間隔が開くため外すと隙ができるが、高い瞬間火力を誇る。"
-                    ),
+                ),
             )
             bookMeta.addPage(
                 (
                     ChatColor.BOLD.toString() + "武器紹介「ローラー」\n" + ChatColor.RESET + "右クリックで横広に弾をばら撒く。\n" +
                         "射撃の瞬間に空中にいると縦に広く弾をばら撒く。\n" + "右クリックを長押しすることで足元を塗りながら移動できる。"
-                    ),
+                ),
             )
             bookMeta.addPage(
                 (
                     ChatColor.BOLD.toString() + "武器紹介「ブラシ」\n" + ChatColor.RESET + "右クリックで少量の弾をばら撒く。\n" +
                         "右クリックを長押しすることで足元を塗りながら高速で移動できる。"
-                    ),
+                ),
             )
             bookMeta.addPage(
                 (
                     ChatColor.BOLD.toString() + "武器紹介「シェルター」\n" + ChatColor.RESET + "右クリックで大量の弾をばら撒く。\n" +
                         "シフトで盾を作り、離すか一定時間経過で盾を前進させる。"
-                    ),
+                ),
             )
             bookMeta.addPage(
                 ChatColor.BOLD.toString() + "武器紹介「スロッシャー」\n" + ChatColor.RESET + "右クリックで弾をばら撒く。\n" + "シフトで一定時間追加HPを獲得する。",
@@ -670,25 +669,25 @@ class GameMgr : Listener {
                 (
                     ChatColor.BOLD.toString() + "武器紹介「チャージャー」\n" + ChatColor.RESET + "右クリック長押しでチャージし離すと射撃。\n" +
                         "敵の背後から攻撃することでダメージが上昇する。\n" + "シフトでデコイを作ることができる。"
-                    ),
+                ),
             )
             bookMeta.addPage(
                 (
                     ChatColor.BOLD.toString() + "武器紹介「スピナー」\n" + ChatColor.RESET + "右クリック長押しでチャージし離すと射撃。\n" +
                         "射程と射撃時間がチャージの量で変化する。"
-                    ),
+                ),
             )
             bookMeta.addPage(
                 (
                     ChatColor.BOLD.toString() + "武器紹介「マニューバ」\n" + ChatColor.RESET + "右クリックで射撃。\n" +
                         "シフトで2回ブリンク可能、ブリンク後に移動するまで火力と連射力が上がる。\n" + "その代わり通常時の性能が著しく低い。"
-                    ),
+                ),
             )
             bookMeta.addPage(
                 (
                     ChatColor.BOLD.toString() + "武器紹介「ハウンド」\n" + ChatColor.RESET + "右クリックで壁を登る弾を発射。\n" +
                         "シフトで起爆し、弾が射撃地点より高い場所であればあるほど火力と範囲が上がる。\n" + "逆に、低い場所で起爆させると火力と範囲が下がる"
-                    ),
+                ),
             )
             bookMeta.addPage(
                 ChatColor.BOLD.toString() + "武器紹介「スワッパー」\n" + ChatColor.RESET + "右クリックで射撃。\n" + "シフトで変形し、武器の性能が変化する。",
@@ -697,39 +696,39 @@ class GameMgr : Listener {
                 (
                     ChatColor.BOLD.toString() + "武器紹介「ドラグーン」\n" + ChatColor.RESET + "右クリックで射撃。\n" +
                         "シフトでタレットに敵を追尾させ、自動で攻撃する。\n" + "射撃命中時にタレットが追撃する。\n" + "タレットが追尾中の敵は追撃の火力が上がる。"
-                    ),
+                ),
             )
             bookMeta.addPage(
                 (
                     ChatColor.BOLD.toString() + "武器紹介「リーラ―」\n" + ChatColor.RESET + "右クリックで射撃。\n" + "シフトで敵に向かって飛ぶ事ができる。\n" +
                         "チャクチするまでの間武器の性能が変化する。\n" + "敵をキルすることでスキルがリチャージされる。"
-                    ),
+                ),
             )
             bookMeta.addPage(
                 (
                     ChatColor.BOLD.toString() + "その他コラム①\n\n" + ChatColor.RESET +
                         "・武器によってはシフト(キーコンフィグを変更している場合はしゃがむ)で固有のスキルを使用することができます。\n\n" +
                         "・試合中左クリックでもサブウェポンを使用でき、武器を持っていたりイカになっていても使用できます。"
-                    ),
+                ),
             )
             bookMeta.addPage(
                 (
                     ChatColor.BOLD.toString() + "その他コラム②\n\n" + ChatColor.RESET +
                         "・てきとうなアイテムを持ってQキーでもスペシャルを使うことができます。\n\n" + "・爆風は壁を貫通してダメージを与える事ができます。"
-                    ),
+                ),
             )
             bookMeta.addPage(
                 (
                     ChatColor.BOLD.toString() + "その他コラム③\n\n" + ChatColor.RESET + "・チャージャーのバックスタブの判定はかなり広い。\n\n" +
                         "・敵のドラグーンのタレットは破壊可能。"
-                    ),
+                ),
             )
             bookMeta.addPage(
                 (
                     ChatColor.BOLD.toString() + "その他コラム④\n\n" + ChatColor.RESET +
                         "・マニューバはSclatメニューの設定のチャージキープをDisableにすることで飛距離が変化しにくい方式に変わります。\n\n" +
                         "・Optifineを導入することでバリエーション違いの武器の見た目が変化する"
-                    ),
+                ),
             )
 
             // 作成したBookMetaを設定
@@ -761,7 +760,7 @@ class GameMgr : Listener {
     @EventHandler
     fun onPlayerSwapHandItems(event: PlayerSwapHandItemsEvent) {
         val player = event.getPlayer()
-        if (getPlayerData(player)!!.isInMatch) OpenGUI.SuperJumpGUI(player)
+        if (getPlayerData(player)!!.isInMatch) OpenGUI.superJumpGUI(player)
         event.setCancelled(true)
     }
 
@@ -820,13 +819,13 @@ class GameMgr : Listener {
     // @EventHandler(priority = EventPriority.LOWEST)
     fun onPlayerChat(event: AsyncPlayerChatEvent?) {
         // event.setCancelled(true);
-        /*
-         * if(!Main.LunaChat){ Player player = event.getPlayer();
-         * if(DataMgr.getPlayerData(player).getIsJoined()) event.setFormat("<" +
-         * DataMgr.getPlayerData(player).getTeam().getTeamColor().getColorCode() +
-         * player.getName() + "§r> " + event.getMessage()); else event.setFormat("<" +
-         * player.getName() + "> " + event.getMessage()); }
-         */
+//        /*
+//         * if(!Main.LunaChat){ Player player = event.getPlayer();
+//         * if(DataMgr.getPlayerData(player).getIsJoined()) event.setFormat("<" +
+//         * DataMgr.getPlayerData(player).getTeam().getTeamColor().getColorCode() +
+//         * player.getName() + "§r> " + event.getMessage()); else event.setFormat("<" +
+//         * player.getName() + "> " + event.getMessage()); }
+//         */
     }
 
     @EventHandler
@@ -941,7 +940,7 @@ class GameMgr : Listener {
                         if (Sclat.type == ServerType.LOBBY) {
                             ServerStatusManager.openServerList(player)
                         } else {
-                            MatchMgr.PlayerJoinMatch(player)
+                            MatchMgr.playerJoinMatch(player)
                         }
                     }
 
@@ -1019,15 +1018,15 @@ class GameMgr : Listener {
                     }
 
                     "[ LootBoxInfo ]" -> {
-                        LootBox.LootBoxInfo(player)
+                        LootBox.lootBoxInfo(player)
                     }
 
                     "[ GiftForYou ]" -> {
-                        LootBox.GiftWeapon(player, "お年玉[巳]")
+                        LootBox.giftWeapon(player, "お年玉[巳]")
                     }
 
                     "[ EasterEgg ]" -> {
-                        LootBox.Giftbook(player)
+                        LootBox.giftbook(player)
                     }
 
                     "[ ChangeTeam ]" -> {
@@ -1170,7 +1169,7 @@ class GameMgr : Listener {
                                         .playerSettings
                                         .getString("Settings." + player.getUniqueId()) +
                                     " " + player.getUniqueId()
-                                ),
+                            ),
                         )
                         commands.add("stop")
                         val sc =
@@ -1197,7 +1196,7 @@ class GameMgr : Listener {
                                     .playerSettings
                                     .getString("Settings." + player.getUniqueId()) +
                                 " " + player.getUniqueId()
-                            ),
+                        ),
                     )
                     commands.add("stop")
                     val sc =

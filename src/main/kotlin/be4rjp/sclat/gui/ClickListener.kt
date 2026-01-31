@@ -16,13 +16,13 @@ import be4rjp.sclat.data.DataMgr.getWeaponClass
 import be4rjp.sclat.data.DataMgr.setPaintDataFromBlock
 import be4rjp.sclat.data.DataMgr.sprinklerMap
 import be4rjp.sclat.data.PaintData
-import be4rjp.sclat.manager.ArmorStandMgr.BeaconArmorStandSetup
-import be4rjp.sclat.manager.ArmorStandMgr.SprinklerArmorStandSetup
+import be4rjp.sclat.manager.ArmorStandMgr.beaconArmorStandSetup
+import be4rjp.sclat.manager.ArmorStandMgr.sprinklerArmorStandSetup
 import be4rjp.sclat.manager.BungeeCordMgr
 import be4rjp.sclat.manager.BungeeCordMgr.PlayerSendServer
 import be4rjp.sclat.manager.MatchMgr
-import be4rjp.sclat.manager.MatchMgr.PlayerJoinMatch
-import be4rjp.sclat.manager.MatchMgr.RollBack
+import be4rjp.sclat.manager.MatchMgr.playerJoinMatch
+import be4rjp.sclat.manager.MatchMgr.rollBack
 import be4rjp.sclat.manager.PlayerStatusMgr.addGear
 import be4rjp.sclat.manager.PlayerStatusMgr.addWeapon
 import be4rjp.sclat.manager.PlayerStatusMgr.getMoney
@@ -38,9 +38,8 @@ import be4rjp.sclat.manager.SuperJumpMgr.SuperJumpCollTime
 import be4rjp.sclat.manager.WeaponClassMgr.setWeaponClass
 import be4rjp.sclat.plugin
 import be4rjp.sclat.tutorial.Tutorial
-import be4rjp.sclat.weapon.Brush.HoldRunnable
-import be4rjp.sclat.weapon.Brush.RollPaintRunnable
-import be4rjp.sclat.weapon.Bucket.BucketHealRunnable
+import be4rjp.sclat.weapon.Brush
+import be4rjp.sclat.weapon.Bucket.bucketHealRunnable
 import be4rjp.sclat.weapon.Buckler.BucklerRunnable
 import be4rjp.sclat.weapon.Charger.ChargerRunnable
 import be4rjp.sclat.weapon.Decoy.DecoyRunnable
@@ -53,8 +52,7 @@ import be4rjp.sclat.weapon.Kasa.kasaRunnable
 import be4rjp.sclat.weapon.Manuber
 import be4rjp.sclat.weapon.Reeler.reelerRunnable
 import be4rjp.sclat.weapon.Reeler.reelerShootRunnable
-import be4rjp.sclat.weapon.Roller.holdRunnable
-import be4rjp.sclat.weapon.Roller.rollPaintRunnable
+import be4rjp.sclat.weapon.Roller
 import be4rjp.sclat.weapon.Shooter
 import be4rjp.sclat.weapon.Shooter.maneuverShootRunnable
 import be4rjp.sclat.weapon.Shooter.shooterRunnable
@@ -84,7 +82,9 @@ import org.bukkit.scheduler.BukkitRunnable
 class ClickListener : Listener {
     @EventHandler
     fun onGUIClick(event: InventoryClickEvent) {
-        if (event.getCurrentItem() == null || event.getCurrentItem()!!.getItemMeta() == null || event
+        if (event.getCurrentItem() == null ||
+            event.getCurrentItem()!!.getItemMeta() == null ||
+            event
                 .getCurrentItem()
                 ?.getItemMeta()
                 ?.getDisplayName() == null
@@ -112,7 +112,7 @@ class ClickListener : Listener {
                 if (Sclat.type == ServerType.LOBBY) {
                     openServerList(player)
                 } else {
-                    PlayerJoinMatch(player)
+                    playerJoinMatch(player)
                 }
             }
 
@@ -152,7 +152,7 @@ class ClickListener : Listener {
                 }
                 val match = getPlayerData(player)!!.match
                 match!!.blockUpdater!!.stop()
-                RollBack()
+                rollBack()
                 player.setExp(0.99f)
                 val bur = BlockUpdater()
                 if (Sclat.Companion.conf!!
@@ -317,11 +317,23 @@ class ClickListener : Listener {
         }
 
         if (event.getView().getTitle() == "武器選択") {
-            if (name == "装備選択へ戻る" || name == "戻る" || name == "シューター" || name == "ローラー" ||
-                name == "チャージャー" || name == "ブラスター" || name == "バーストシューター" ||
-                name == "スロッシャー" || name == "シェルター" || name == "ブラシ" || name == "スピナー" ||
-                name == "マニューバー" || name == "ハウンド" || name == "スワッパー" || name == "ドラグーン" ||
-                name == "リーラー" || name == "バックラー"
+            if (name == "装備選択へ戻る" ||
+                name == "戻る" ||
+                name == "シューター" ||
+                name == "ローラー" ||
+                name == "チャージャー" ||
+                name == "ブラスター" ||
+                name == "バーストシューター" ||
+                name == "スロッシャー" ||
+                name == "シェルター" ||
+                name == "ブラシ" ||
+                name == "スピナー" ||
+                name == "マニューバー" ||
+                name == "ハウンド" ||
+                name == "スワッパー" ||
+                name == "ドラグーン" ||
+                name == "リーラー" ||
+                name == "バックラー"
             ) {
                 when (name) {
                     "シューター" -> OpenGUI.openWeaponSelect(player, "Weapon", "Shooter", false)
@@ -377,9 +389,9 @@ class ClickListener : Listener {
                             getPlayerData(p)!!.tick = 10
                             val wc = getWeaponClass(name)
                             getPlayerData(p)!!.weaponClass = (wc)
-                            if (getPlayerData(p)!!.weaponClass!!.subWeaponName == "ビーコン") BeaconArmorStandSetup(p)
+                            if (getPlayerData(p)!!.weaponClass!!.subWeaponName == "ビーコン") beaconArmorStandSetup(p)
                             if (getPlayerData(p)!!.weaponClass!!.subWeaponName == "スプリンクラー") {
-                                SprinklerArmorStandSetup(
+                                sprinklerArmorStandSetup(
                                     p,
                                 )
                             }
@@ -418,11 +430,11 @@ class ClickListener : Listener {
                             if (getPlayerData(p)!!.weaponClass!!.mainWeapon!!.weaponType == "Spinner") spinnerRunnable(p)
                             if (getPlayerData(p)!!.weaponClass!!.mainWeapon!!.weaponType == "Roller") {
                                 if (getPlayerData(p)!!.weaponClass!!.mainWeapon!!.isHude) {
-                                    HoldRunnable(p)
-                                    RollPaintRunnable(p)
+                                    Brush.holdRunnable(p)
+                                    Brush.rollPaintRunnable(p)
                                 } else {
-                                    holdRunnable(p)
-                                    rollPaintRunnable(p)
+                                    Roller.holdRunnable(p)
+                                    Roller.rollPaintRunnable(p)
                                 }
                             }
 
@@ -440,10 +452,10 @@ class ClickListener : Listener {
                                 BucklerRunnable(p)
                             }
                             if (getPlayerData(p)!!.weaponClass!!.mainWeapon!!.weaponType == "Bucket") {
-                                BucketHealRunnable(p, 1)
+                                bucketHealRunnable(p, 1)
                             }
                             if (getPlayerData(p)!!.weaponClass!!.mainWeapon!!.weaponType == "Slosher") {
-                                BucketHealRunnable(p, 0)
+                                bucketHealRunnable(p, 0)
                             }
                             if (getPlayerData(p)!!.weaponClass!!.mainWeapon!!.weaponType == "Hound") {
                                 houndRunnable(p)
@@ -474,11 +486,23 @@ class ClickListener : Listener {
         }
 
         if (event.getView().getTitle() == "Shop") {
-            if (name == "装備選択へ戻る" || name == "戻る" || name == "シューター" || name == "ローラー" ||
-                name == "チャージャー" || name == "ブラスター" || name == "バーストシューター" ||
-                name == "スロッシャー" || name == "シェルター" || name == "ブラシ" || name == "スピナー" ||
-                name == "マニューバー" || name == "ハウンド" || name == "スワッパー" || name == "ドラグーン" ||
-                name == "リーラー" || name == "バックラー"
+            if (name == "装備選択へ戻る" ||
+                name == "戻る" ||
+                name == "シューター" ||
+                name == "ローラー" ||
+                name == "チャージャー" ||
+                name == "ブラスター" ||
+                name == "バーストシューター" ||
+                name == "スロッシャー" ||
+                name == "シェルター" ||
+                name == "ブラシ" ||
+                name == "スピナー" ||
+                name == "マニューバー" ||
+                name == "ハウンド" ||
+                name == "スワッパー" ||
+                name == "ドラグーン" ||
+                name == "リーラー" ||
+                name == "バックラー"
             ) {
                 when (name) {
                     "シューター" -> OpenGUI.openWeaponSelect(player, "Weapon", "Shooter", true)
@@ -540,11 +564,11 @@ class ClickListener : Listener {
                 SuperJumpMgr.SuperJumpCollTime(player, loc!!, false)
             }
             if (name == "§r§6ロビーへジャンプ") {
-                val WorldName =
+                val worldName =
                     Sclat.Companion.conf!!
                         .config!!
                         .getString("LobbyJump.WorldName")
-                val w = Bukkit.getWorld(WorldName!!)
+                val w = Bukkit.getWorld(worldName!!)
                 val ix =
                     Sclat.Companion.conf!!
                         .config!!
@@ -572,7 +596,8 @@ class ClickListener : Listener {
             if (spawnloc!!.getWorld() === player.getWorld()) {
                 if (player
                         .getLocation()
-                        .distance(spawnloc) > 10 && !Tutorial.clearList.contains(player)
+                        .distance(spawnloc) > 10 &&
+                    !Tutorial.clearList.contains(player)
                 ) {
                     if (!Sclat.tutorial) {
                         nearspwan = false
@@ -611,39 +636,39 @@ class ClickListener : Listener {
             }
 
             when (name) {
-                "メインウエポンのインクエフェクト" -> getPlayerData(player)!!.settings!!.S_ShowEffect_MainWeaponInk()
-                "チャージャーのレーザー" -> getPlayerData(player)!!.settings!!.S_ShowEffect_ChargerLine()
-                "スペシャルウエポンのエフェクト" -> getPlayerData(player)!!.settings!!.S_ShowEffect_SPWeapon()
-                "スペシャルウエポンの範囲エフェクト" -> getPlayerData(player)!!.settings!!.S_ShowEffect_SPWeaponRegion()
-                "弾の表示" -> getPlayerData(player)!!.settings!!.S_ShowSnowBall()
-                "BGM" -> getPlayerData(player)!!.settings!!.S_PlayBGM()
-                "投擲武器の視認用エフェクト" -> getPlayerData(player)!!.settings!!.S_ShowEffect_Bomb()
-                "爆発エフェクト" -> getPlayerData(player)!!.settings!!.S_ShowEffect_BombEx()
-                "チャージキープ" -> getPlayerData(player)!!.settings!!.S_doChargeKeep()
+                "メインウエポンのインクエフェクト" -> getPlayerData(player)!!.settings!!.sShowEffectMainWeaponInk()
+                "チャージャーのレーザー" -> getPlayerData(player)!!.settings!!.sShowEffectChargerLine()
+                "スペシャルウエポンのエフェクト" -> getPlayerData(player)!!.settings!!.sShowEffectSPWeapon()
+                "スペシャルウエポンの範囲エフェクト" -> getPlayerData(player)!!.settings!!.sShowEffectSPWeaponRegion()
+                "弾の表示" -> getPlayerData(player)!!.settings!!.sShowSnowBall()
+                "BGM" -> getPlayerData(player)!!.settings!!.sPlayBGM()
+                "投擲武器の視認用エフェクト" -> getPlayerData(player)!!.settings!!.sShowEffectBomb()
+                "爆発エフェクト" -> getPlayerData(player)!!.settings!!.sShowEffectBombEx()
+                "チャージキープ" -> getPlayerData(player)!!.settings!!.sDoChargeKeep()
             }
 
             OpenGUI.openSettingsUI(player)
 
             player.playNote(player.getLocation(), Instrument.STICKS, Note.flat(1, Note.Tone.C))
 
-            val B = if (getPlayerData(player)!!.settings!!.PlayBGM()) "1" else "0"
-            val E_S = if (getPlayerData(player)!!.settings!!.ShowEffect_MainWeaponInk()) "1" else "0"
-            val E_CL = if (getPlayerData(player)!!.settings!!.ShowEffect_ChargerLine()) "1" else "0"
-            val E_CS = if (getPlayerData(player)!!.settings!!.ShowEffect_SPWeapon()) "1" else "0"
-            val E_RR = if (getPlayerData(player)!!.settings!!.ShowEffect_SPWeaponRegion()) "1" else "0"
-            val E_RS = if (getPlayerData(player)!!.settings!!.ShowSnowBall()) "1" else "0"
+            val b = if (getPlayerData(player)!!.settings!!.playBGM()) "1" else "0"
+            val eS = if (getPlayerData(player)!!.settings!!.showEffectMainWeaponInk()) "1" else "0"
+            val eCL = if (getPlayerData(player)!!.settings!!.showEffectChargerLine()) "1" else "0"
+            val eCS = if (getPlayerData(player)!!.settings!!.showEffectSPWeapon()) "1" else "0"
+            val eRR = if (getPlayerData(player)!!.settings!!.showEffectSPWeaponRegion()) "1" else "0"
+            val eRS = if (getPlayerData(player)!!.settings!!.showSnowBall()) "1" else "0"
             // String E_BGM = DataMgr.getPlayerData(player).getSettings().PlayBGM() ? "1" :
             // "0";
-            val E_B = if (getPlayerData(player)!!.settings!!.ShowEffect_Bomb()) "1" else "0"
-            val E_BEx = if (getPlayerData(player)!!.settings!!.ShowEffect_BombEx()) "1" else "0"
+            val eB = if (getPlayerData(player)!!.settings!!.showEffectBomb()) "1" else "0"
+            val eBEx = if (getPlayerData(player)!!.settings!!.showEffectBombEx()) "1" else "0"
             val ck = if (getPlayerData(player)!!.settings!!.doChargeKeep()) "1" else "0"
 
-            val s_data = B + E_S + E_CL + E_CS + E_RR + E_RS + E_B + E_BEx + ck
+            val sData = b + eS + eCL + eCS + eRR + eRS + eB + eBEx + ck
 
             val uuid: String = player.getUniqueId().toString()
             Sclat.Companion.conf!!
                 .playerSettings
-                .set("Settings." + uuid, s_data)
+                .set("Settings." + uuid, sData)
         }
 
         if (player.getGameMode() != GameMode.CREATIVE) event.setCancelled(true)
@@ -657,7 +682,8 @@ class ClickListener : Listener {
         if (player
                 .getInventory()
                 .getItemInMainHand()
-                .getItemMeta() == null || player
+                .getItemMeta() == null ||
+            player
                 .getInventory()
                 .getItemInMainHand()
                 .getItemMeta()
@@ -666,8 +692,10 @@ class ClickListener : Listener {
             return
         }
 
-        if (action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK ||
-            action == Action.LEFT_CLICK_AIR || action == Action.LEFT_CLICK_BLOCK
+        if (action == Action.RIGHT_CLICK_AIR ||
+            action == Action.RIGHT_CLICK_BLOCK ||
+            action == Action.LEFT_CLICK_AIR ||
+            action == Action.LEFT_CLICK_BLOCK
         ) {
             if (player.getInventory().getItemInMainHand().getType() == Material.CHEST) OpenGUI.openMenu(player)
             when (
@@ -678,7 +706,7 @@ class ClickListener : Listener {
                     .getDisplayName()
             ) {
                 "スーパージャンプ" -> {
-                    OpenGUI.SuperJumpGUI(player)
+                    OpenGUI.superJumpGUI(player)
                 }
 
                 "§c§n右クリックで退出" -> {
@@ -687,7 +715,7 @@ class ClickListener : Listener {
                 }
 
                 "§a§n右クリックで参加" -> {
-                    PlayerJoinMatch(player)
+                    playerJoinMatch(player)
                 }
             }
             if (player
@@ -696,7 +724,7 @@ class ClickListener : Listener {
                     .getItemMeta()!!
                     .getDisplayName() == "スーパージャンプ"
             ) {
-                OpenGUI.SuperJumpGUI(player)
+                OpenGUI.superJumpGUI(player)
             }
         }
     }

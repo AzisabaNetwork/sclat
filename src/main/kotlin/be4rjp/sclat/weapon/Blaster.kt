@@ -37,7 +37,7 @@ import org.bukkit.util.Vector
  */
 object Blaster {
     @JvmStatic
-    fun ShootBlaster(player: Player) {
+    fun shootBlaster(player: Player) {
         val data = getPlayerData(player)
         val delay1: BukkitRunnable =
             object : BukkitRunnable() {
@@ -64,7 +64,7 @@ object Blaster {
                 var p: Player? = player
 
                 override fun run() {
-                    Shoot(player)
+                    shoot(player)
                 }
             }
         if (data.canRollerShoot) {
@@ -80,7 +80,7 @@ object Blaster {
         }
     }
 
-    fun Shoot(player: Player) {
+    fun shoot(player: Player) {
         if (player.gameMode == GameMode.SPECTATOR) return
 
         val data = getPlayerData(player)
@@ -90,7 +90,7 @@ object Blaster {
                 data.weaponClass?.mainWeapon!!.needInk
                     * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) /
                     Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)
-                ).toFloat()
+            ).toFloat()
         ) {
             player.sendTitle("", ChatColor.RED.toString() + "インクが足りません", 0, 5, 2)
             player.playSound(player.location, Sound.UI_BUTTON_CLICK, 1f, 1.63f)
@@ -101,7 +101,7 @@ object Blaster {
                 data.weaponClass?.mainWeapon!!.needInk
                     * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) /
                     Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)
-                ).toFloat()
+            ).toFloat()
         val ball = player.launchProjectile<Snowball>(Snowball::class.java)
         (ball as CraftSnowball).handle.setItem(CraftItemStack.asNMSCopy(ItemStack(getPlayerData(player)!!.team?.teamColor!!.wool!!)))
         player.world.playSound(player.location, Sound.ENTITY_PIG_STEP, 0.3f, 1f)
@@ -161,7 +161,7 @@ object Blaster {
                             .wool!!
                             .createBlockData()
                     for (o_player in plugin.server.onlinePlayers) {
-                        if (getPlayerData(o_player)!!.settings?.ShowEffect_MainWeaponInk()!!) {
+                        if (getPlayerData(o_player)!!.settings?.showEffectMainWeaponInk()!!) {
                             if (o_player.world ===
                                 inkball!!.world
                             ) {
@@ -201,8 +201,8 @@ object Blaster {
                         run {
                             var i = 0
                             while (i <= maxDist - 1) {
-                                val p_locs = getSphere(inkball!!.location, i.toDouble(), 20)
-                                for (loc in p_locs) {
+                                val pLocs = getSphere(inkball!!.location, i.toDouble(), 20)
+                                for (loc in pLocs) {
                                     PaintMgr.paint(loc, p, false)
                                     PaintMgr.paintHightestBlock(loc, p, false, false)
                                 }
@@ -253,7 +253,7 @@ object Blaster {
                                     damage = (
                                         (maxDist + 1 - target.location.distance(inkball!!.location)) *
                                             data.weaponClass?.mainWeapon!!.blasterExDamage
-                                        )
+                                    )
                                 }
                                 if (damage > data.weaponClass?.mainWeapon!!.damage) {
                                     damage = data.weaponClass?.mainWeapon!!.damage
@@ -285,7 +285,7 @@ object Blaster {
                                     var damage = (
                                         (maxDist + 1 - `as`.location.distance(inkball!!.location)) *
                                             data.weaponClass?.mainWeapon!!.blasterExDamage
-                                        )
+                                    )
                                     if (damage > data.weaponClass?.mainWeapon!!.damage) {
                                         damage = data.weaponClass?.mainWeapon!!.damage
                                     }
@@ -304,7 +304,7 @@ object Blaster {
         task.runTaskTimer(plugin, 0, 1)
     }
 
-    fun Explode(
+    fun explode(
         player: Player,
         blastcenter: Location,
     ) {
@@ -324,8 +324,8 @@ object Blaster {
         // 塗る
         var i = 0
         while (i <= maxDist - 1) {
-            val p_locs = getSphere(blastcenter, i.toDouble(), 20)
-            for (loc in p_locs) {
+            val pLocs = getSphere(blastcenter, i.toDouble(), 20)
+            for (loc in pLocs) {
                 PaintMgr.paint(loc, player, false)
                 PaintMgr.paintHightestBlock(loc, player, false, false)
             }
@@ -369,7 +369,7 @@ object Blaster {
                     damage = (
                         (maxDist - target.location.distance(blastcenter)) *
                             data.weaponClass?.mainWeapon!!.blasterExDamage * 0.4
-                        )
+                    )
                 }
                 if (damage > data.weaponClass?.mainWeapon!!.damage) {
                     damage = data.weaponClass?.mainWeapon!!.damage
@@ -403,7 +403,7 @@ object Blaster {
                         var damage = (
                             (maxDist + 1 - `as`.location.distance(blastcenter)) *
                                 data.weaponClass?.mainWeapon!!.blasterExDamage
-                            )
+                        )
                         if (damage > data.weaponClass?.mainWeapon!!.damage) {
                             damage = data.weaponClass?.mainWeapon!!.damage
                         }

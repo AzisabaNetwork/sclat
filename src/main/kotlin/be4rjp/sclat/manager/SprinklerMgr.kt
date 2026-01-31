@@ -60,7 +60,7 @@ object SprinklerMgr {
                             .wool!!
                             .createBlockData()
                     for (o_player in plugin.getServer().getOnlinePlayers()) {
-                        if (getPlayerData(o_player)!!.settings!!.ShowEffect_MainWeaponInk()) {
+                        if (getPlayerData(o_player)!!.settings!!.showEffectMainWeaponInk()) {
                             o_player.spawnParticle<BlockData?>(
                                 Particle.BLOCK_DUST,
                                 inkball.getLocation(),

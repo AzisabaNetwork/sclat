@@ -22,25 +22,37 @@ object NoteBlockAPIMgr {
     private val fsnList: MutableList<String?> = ArrayList<String?>()
 
     fun LoadSongFiles() {
-        for (songname in Sclat.Companion.conf!!.config!!.getConfigurationSection("nBGM")!!.getKeys(false)) {
-            val song = NBSDecoder.parse(
-                File(
-                    "plugins/Sclat/BGM",
-                    Sclat.Companion.conf!!.config!!.getString("nBGM." + songname),
-                ),
-            )
+        for (songname in Sclat.Companion.conf!!
+            .config!!
+            .getConfigurationSection("nBGM")!!
+            .getKeys(false)) {
+            val song =
+                NBSDecoder.parse(
+                    File(
+                        "plugins/Sclat/BGM",
+                        Sclat.Companion.conf!!
+                            .config!!
+                            .getString("nBGM." + songname),
+                    ),
+                )
             nsList.add(song)
             nsnList.add(songname)
             nBgm_C++
         }
 
-        for (songname in Sclat.Companion.conf!!.config!!.getConfigurationSection("fBGM")!!.getKeys(false)) {
-            val song = NBSDecoder.parse(
-                File(
-                    "plugins/Sclat/BGM",
-                    Sclat.Companion.conf!!.config!!.getString("fBGM." + songname),
-                ),
-            )
+        for (songname in Sclat.Companion.conf!!
+            .config!!
+            .getConfigurationSection("fBGM")!!
+            .getKeys(false)) {
+            val song =
+                NBSDecoder.parse(
+                    File(
+                        "plugins/Sclat/BGM",
+                        Sclat.Companion.conf!!
+                            .config!!
+                            .getString("fBGM." + songname),
+                    ),
+                )
             fsList.add(song)
             fsnList.add(songname)
             fBgm_C++

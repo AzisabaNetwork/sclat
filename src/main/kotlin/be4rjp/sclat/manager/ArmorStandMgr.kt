@@ -43,7 +43,7 @@ import org.bukkit.util.Vector
 object ArmorStandMgr {
     var isSpawned: Boolean = false
 
-    fun ArmorStandEquipPacketSender(world: World) {
+    fun armorStandEquipPacketSender(world: World) {
         val task: BukkitRunnable =
             object : BukkitRunnable() {
                 val c: Int = 0
@@ -53,7 +53,9 @@ object ArmorStandMgr {
                         if (`as` is ArmorStand) {
                             if (`as`.getCustomName() == null) continue
                             if (!`as`.isVisible()) continue
-                            if ((`as`.getCustomName() != "Path") && (`as`.getCustomName() != "21") && (`as`.getCustomName() != "100") &&
+                            if ((`as`.getCustomName() != "Path") &&
+                                (`as`.getCustomName() != "21") &&
+                                (`as`.getCustomName() != "100") &&
                                 (`as`.getCustomName() != "SplashShield") &&
                                 (`as`.getCustomName() != "Kasa")
                             ) {
@@ -95,7 +97,7 @@ object ArmorStandMgr {
         task.runTaskTimer(plugin, 0, 20)
     }
 
-    fun ArmorStandSetup(player: Player) {
+    fun armorStandSetup(player: Player) {
         for (e in player.getWorld().getEntities()) {
             if (e is ArmorStand || e is Snowball) {
                 if (e.getCustomName() == null) continue
@@ -148,7 +150,7 @@ object ArmorStandMgr {
     }
 
     @JvmStatic
-    fun BeaconArmorStandSetup(player: Player) {
+    fun beaconArmorStandSetup(player: Player) {
         val al: Location?
         if (Sclat.Companion.conf!!
                 .config!!
@@ -222,7 +224,9 @@ object ArmorStandMgr {
                                 if (as1.getLocation().distance(`as`.getLocation()) <= distance) {
                                     if (as1.getCustomName() != null) {
                                         if (as1.getCustomName() == null) continue
-                                        if (as1 is ArmorStand && (as1.getCustomName() != "Path") && (as1.getCustomName() != "21") &&
+                                        if (as1 is ArmorStand &&
+                                            (as1.getCustomName() != "Path") &&
+                                            (as1.getCustomName() != "21") &&
                                             (as1.getCustomName() != "100") &&
                                             (as1.getCustomName() != "SplashShield") &&
                                             (as1.getCustomName() != "Kasa")
@@ -273,7 +277,7 @@ object ArmorStandMgr {
     }
 
     @JvmStatic
-    fun SprinklerArmorStandSetup(player: Player) {
+    fun sprinklerArmorStandSetup(player: Player) {
         val al: Location?
         if (Sclat.Companion.conf!!
                 .config!!
@@ -524,8 +528,8 @@ object ArmorStandMgr {
                     // 塗る
                     var i = 0
                     while (i <= maxDist) {
-                        val p_locs: MutableList<Location> = getSphere(`as`.getLocation(), i.toDouble(), 20)
-                        for (loc in p_locs) {
+                        val pLocs: MutableList<Location> = getSphere(`as`.getLocation(), i.toDouble(), 20)
+                        for (loc in pLocs) {
                             PaintMgr.paint(loc, shooter, false)
                         }
                         i++

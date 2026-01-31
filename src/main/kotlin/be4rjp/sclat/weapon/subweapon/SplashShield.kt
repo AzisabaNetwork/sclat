@@ -59,7 +59,7 @@ object SplashShield {
                         }
 
                         for (o_player in plugin.server.onlinePlayers) {
-                            if (getPlayerData(o_player)!!.settings!!.ShowEffect_Bomb()) {
+                            if (getPlayerData(o_player)!!.settings!!.showEffectBomb()) {
                                 if (drop!!.world === o_player.world) {
                                     if (o_player
                                             .location
@@ -90,9 +90,11 @@ object SplashShield {
                             cancel()
                         }
 
-                        if (drop!!.location.y < 0 || drop!!.location.y < p
+                        if (drop!!.location.y < 0 ||
+                            drop!!.location.y < p
                                 .location
-                                .y - 100 || drop!!.isDead
+                                .y - 100 ||
+                            drop!!.isDead
                         ) {
                             cancel()
                         }

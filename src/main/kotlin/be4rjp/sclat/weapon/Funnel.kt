@@ -69,7 +69,7 @@ object Funnel {
                 break
             }
             for (target in plugin.server.onlinePlayers) {
-                if (getPlayerData(target)!!.settings!!.ShowEffect_MainWeaponInk()) {
+                if (getPlayerData(target)!!.settings!!.showEffectMainWeaponInk()) {
                     if (target.world === position.world) {
                         if (target.location.distanceSquared(position) < Sclat.particleRenderDistanceSquared) {
                             val bd =
@@ -796,8 +796,9 @@ object Funnel {
                                                     .gameMode == GameMode.SPECTATOR ||
                                                     !getPlayerData(
                                                         hashPlayer.get(aslistget0),
-                                                    )!!.isInMatch || !hashPlayer.get(aslistget0)!!.isOnline
-                                                ) &&
+                                                    )!!.isInMatch ||
+                                                    !hashPlayer.get(aslistget0)!!.isOnline
+                                            ) &&
                                             kdata.damage < funnelMaxHP
                                         ) {
                                             kdata.damage = (funnelMaxHP + 1).toDouble()
@@ -926,8 +927,9 @@ object Funnel {
                                                     .gameMode == GameMode.SPECTATOR ||
                                                     !getPlayerData(
                                                         hashPlayer.get(aslistget0),
-                                                    )!!.isInMatch || !hashPlayer.get(aslistget0)!!.isOnline
-                                                ) &&
+                                                    )!!.isInMatch ||
+                                                    !hashPlayer.get(aslistget0)!!.isOnline
+                                            ) &&
                                             kdata1.damage < funnelMaxHP
                                         ) {
                                             kdataReset1 = i + 3
@@ -1056,8 +1058,9 @@ object Funnel {
                                                     .gameMode == GameMode.SPECTATOR ||
                                                     !getPlayerData(
                                                         hashPlayer.get(aslistget0),
-                                                    )!!.isInMatch || !hashPlayer.get(aslistget0)!!.isOnline
-                                                ) &&
+                                                    )!!.isInMatch ||
+                                                    !hashPlayer.get(aslistget0)!!.isOnline
+                                            ) &&
                                             kdata2.damage < funnelMaxHP
                                         ) {
                                             kdataReset2 = i + 3
@@ -1196,7 +1199,7 @@ object Funnel {
                                 if (block.type != Material.AIR) {
                                     break
                                 }
-                                if (getPlayerData(player)!!.settings!!.ShowEffect_MainWeaponInk()) {
+                                if (getPlayerData(player)!!.settings!!.showEffectMainWeaponInk()) {
                                     if (it < 10) {
                                         if (player.world === position.world) {
                                             if (player
@@ -1491,7 +1494,7 @@ object Funnel {
                                 }
                                 for (target in plugin.server.onlinePlayers) {
                                     if (target == p ||
-                                        getPlayerData(target)!!.settings!!.ShowEffect_ChargerLine()
+                                        getPlayerData(target)!!.settings!!.showEffectChargerLine()
                                     ) {
                                         if (target.world === p.world) {
                                             if (target
@@ -1594,7 +1597,7 @@ object Funnel {
                                 }
                                 for (target in plugin.server.onlinePlayers) {
                                     if (target == p ||
-                                        getPlayerData(target)!!.settings!!.ShowEffect_ChargerLine()
+                                        getPlayerData(target)!!.settings!!.showEffectChargerLine()
                                     ) {
                                         if (target.world === p.world) {
                                             if (target

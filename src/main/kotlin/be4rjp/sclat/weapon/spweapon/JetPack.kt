@@ -187,7 +187,7 @@ object JetPack {
                         val position = loc2.clone().add(0.0, -0.2, 0.0)
                         val position2 = loc3.clone().add(0.0, -0.2, 0.0)
                         for (o_player in plugin.server.onlinePlayers) {
-                            if (!getPlayerData(o_player)!!.settings!!.ShowEffect_SPWeapon()) continue
+                            if (!getPlayerData(o_player)!!.settings!!.showEffectSPWeapon()) continue
                             if (o_player.world === position.world) {
                                 if (o_player
                                         .location
@@ -291,7 +291,9 @@ object JetPack {
                     // sv.getZ()));
                     btl = p.location
 
-                    if (i == 170 || p.gameMode == GameMode.SPECTATOR || !getPlayerData(p)!!.isInMatch ||
+                    if (i == 170 ||
+                        p.gameMode == GameMode.SPECTATOR ||
+                        !getPlayerData(p)!!.isInMatch ||
                         getPlayerData(
                             p,
                         )!!.isDead
@@ -387,21 +389,23 @@ object JetPack {
 
                         if (!drop!!.isOnGround &&
                             !(
-                                drop!!.velocity.getX() == 0.0 && drop!!
-                                    .velocity
-                                    .getZ() != 0.0
-                                ) &&
+                                drop!!.velocity.getX() == 0.0 &&
+                                    drop!!
+                                        .velocity
+                                        .getZ() != 0.0
+                            ) &&
                             !(
-                                drop!!.velocity.getX() != 0.0 && drop!!
-                                    .velocity
-                                    .getZ() == 0.0
-                                )
+                                drop!!.velocity.getX() != 0.0 &&
+                                    drop!!
+                                        .velocity
+                                        .getZ() == 0.0
+                            )
                         ) {
                             ball!!.velocity = drop!!.velocity
                         }
 
                         for (target in plugin.server.onlinePlayers) {
-                            if (!getPlayerData(target)!!.settings!!.ShowEffect_SPWeapon()) {
+                            if (!getPlayerData(target)!!.settings!!.showEffectSPWeapon()) {
                                 continue
                             }
                             if (target.world === ball!!.world) {

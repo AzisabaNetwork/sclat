@@ -81,7 +81,7 @@ object SuperTyakuti {
 
                         if (i >= 5 && i <= 23) {
                             for (o_player in plugin.server.onlinePlayers) {
-                                if (getPlayerData(o_player)!!.settings!!.ShowEffect_SPWeapon() &&
+                                if (getPlayerData(o_player)!!.settings!!.showEffectSPWeapon() &&
                                     o_player != player
                                 ) {
                                     if (o_player.world === player.world) {
@@ -134,7 +134,7 @@ object SuperTyakuti {
                             }
                             val sLocs = getXZCircle(bloc.add(0.0, 1.0, 0.0), 7.0, 3.0, 40)
                             for (o_player in plugin.server.onlinePlayers) {
-                                if (getPlayerData(o_player)!!.settings!!.ShowEffect_SPWeaponRegion()) {
+                                if (getPlayerData(o_player)!!.settings!!.showEffectSPWeaponRegion()) {
                                     for (loc in sLocs) {
                                         if (o_player.world === loc.world) {
                                             if (o_player
@@ -227,7 +227,7 @@ object SuperTyakuti {
                                             val damage = (
                                                 (maxDist - `as`.location.distance(player.location)) *
                                                     15
-                                                )
+                                            )
                                             ArmorStandMgr.giveDamageArmorStand(`as`, damage, player)
                                         }
                                     }
@@ -239,10 +239,12 @@ object SuperTyakuti {
                             cancel()
                         }
 
-                        if (i == 500 || player.gameMode == GameMode.SPECTATOR ||
+                        if (i == 500 ||
+                            player.gameMode == GameMode.SPECTATOR ||
                             !getPlayerData(player)!!.isInMatch
                         ) {
-                            if (i == 500 && player.gameMode == GameMode.ADVENTURE &&
+                            if (i == 500 &&
+                                player.gameMode == GameMode.ADVENTURE &&
                                 getPlayerData(player)!!.isInMatch
                             ) {
                                 WeaponClassMgr.setWeaponClass(player)

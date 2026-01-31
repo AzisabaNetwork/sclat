@@ -53,7 +53,7 @@ class LobbyScoreboardRunnable(
             (
                 "§b RANK: §r" + RankMgr.toABCRank(PlayerStatusMgr.getRank(player)) + " [" +
                     PlayerStatusMgr.getRank(player) + "]"
-                ),
+            ),
         )
         lines.add(" ")
         lines.add("§9§lサーバー »")
@@ -68,13 +68,13 @@ class LobbyScoreboardRunnable(
                 line = (
                     serverStatus.playerCount.toString() + "§e人が試合中" +
                         (if (time < 10000) " §r(" + time / 60 + ":" + min + ")" else "")
-                    )
+                )
             } else {
                 if (serverStatus.waitingEndTime != 0L) {
                     line = (
                         serverStatus.playerCount.toString() + "§a人が待機中" + " §r(§b" +
                             ((serverStatus.waitingEndTime - (System.currentTimeMillis() / 1000)).toString() + "§r秒後に開始)")
-                        )
+                    )
                 } else {
                     line = serverStatus.playerCount.toString() + "§a人が待機中"
                 }

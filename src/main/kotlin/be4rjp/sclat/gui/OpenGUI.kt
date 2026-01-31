@@ -59,9 +59,9 @@ object OpenGUI {
         }
 
         val setting = ItemStack(Material.COMPARATOR)
-        val setting_m = setting.getItemMeta()
-        setting_m!!.setDisplayName("設定 / SETTINGS")
-        setting.setItemMeta(setting_m)
+        val settingM = setting.getItemMeta()
+        settingM!!.setDisplayName("設定 / SETTINGS")
+        setting.setItemMeta(settingM)
         inv.setItem(14, setting)
 
         val w = ItemStack(Material.LEATHER_CHESTPLATE)
@@ -120,7 +120,7 @@ object OpenGUI {
                 (
                     "§r§6Rank : §r" + getRank(player) + " [ §b" +
                         toABCRank(getRank(player)) + " §r]"
-                    ),
+                ),
             )
             lores.add("§r§6Lv : §r" + getLv(player))
             lores.add("§r§bKill(s) : §r" + getKill(player))
@@ -194,11 +194,12 @@ object OpenGUI {
                 var i = 0
                 while (i <= 9) {
                     if (!(
-                            haveGear(player, i) || Sclat.conf!!
-                                .config!!
-                                .getString("WorkMode") == "Trial" ||
+                            haveGear(player, i) ||
+                                Sclat.conf!!
+                                    .config!!
+                                    .getString("WorkMode") == "Trial" ||
                                 !Sclat.shop
-                            )
+                        )
                     ) {
                         val n = ItemStack(Material.BLACK_STAINED_GLASS_PANE)
                         val nmeta = n.getItemMeta()
@@ -273,7 +274,7 @@ object OpenGUI {
         player.openInventory(inv)
     }
 
-    fun MatchTohyoGUI(player: Player) {
+    fun matchTohyoGUI(player: Player) {
         val inv = Bukkit.createInventory(null, 18, "Chose a Gamemode")
 
         var i = 0
@@ -308,7 +309,7 @@ object OpenGUI {
         player.openInventory(inv)
     }
 
-    fun SuperJumpGUI(player: Player) {
+    fun superJumpGUI(player: Player) {
         val inv = Bukkit.createInventory(null, 18, "Chose Target")
 
         val `is` = ItemStack(getPlayerData(player)!!.team!!.teamColor!!.glass!!)
@@ -326,7 +327,8 @@ object OpenGUI {
         if (loc.getWorld() === player.getWorld()) {
             if (player
                     .getLocation()
-                    .distance(loc) > 10 && !Tutorial.clearList.contains(player)
+                    .distance(loc) > 10 &&
+                !Tutorial.clearList.contains(player)
             ) {
                 if (!Sclat.tutorial) {
                     inv.setItem(0, `is`)
@@ -411,12 +413,13 @@ object OpenGUI {
             )
             itemm.setLore(lores)
             item.setItemMeta(itemm)
-            if (slotnum <= 44 && (
+            if (slotnum <= 44 &&
+                (
                     getWeaponClass(ClassName)!!.mainWeapon!!.weaponType == "Shooter" ||
                         getWeaponClass(ClassName)!!.mainWeapon!!.weaponType == "Burst" ||
                         getWeaponClass(ClassName)!!.mainWeapon!!.weaponType == "Blaster" ||
                         getWeaponClass(ClassName)!!.mainWeapon!!.weaponType == "Spinner"
-                    )
+                )
             ) {
                 if (getWeaponClass(ClassName)!!.mainWeapon!!.money == 0) {
                     shooter.setItem(slotnum, item)
@@ -708,328 +711,328 @@ object OpenGUI {
         inv.setItem(35, `is`)
 
         val shooter = ItemStack(Material.WOODEN_HOE)
-        val shooter_m = shooter.getItemMeta()
-        shooter_m!!.setDisplayName("メインウエポンのインクエフェクト")
-        val shooter_r = ArrayList<String?>()
-        if (getPlayerData(player)!!.settings!!.ShowEffect_MainWeaponInk()) {
-            shooter_r.add("§a§l[Enable]")
+        val shooterM = shooter.getItemMeta()
+        shooterM!!.setDisplayName("メインウエポンのインクエフェクト")
+        val shooterR = ArrayList<String?>()
+        if (getPlayerData(player)!!.settings!!.showEffectMainWeaponInk()) {
+            shooterR.add("§a§l[Enable]")
         } else {
-            shooter_r.add("§7§l[Disable]")
+            shooterR.add("§7§l[Disable]")
         }
-        shooter_r.add("")
-        shooter_r.add("§b[INFO]§r")
-        shooter_r.add("メインウエポンの弾の軌跡にインクのエフェクトを描画します。")
-        shooter_r.add("無効化するとクライアントのパーティクル描画負担と")
-        shooter_r.add("通信量を削減することができます。")
-        shooter_m.setLore(shooter_r)
-        shooter.setItemMeta(shooter_m)
+        shooterR.add("")
+        shooterR.add("§b[INFO]§r")
+        shooterR.add("メインウエポンの弾の軌跡にインクのエフェクトを描画します。")
+        shooterR.add("無効化するとクライアントのパーティクル描画負担と")
+        shooterR.add("通信量を削減することができます。")
+        shooterM.setLore(shooterR)
+        shooter.setItemMeta(shooterM)
         inv.setItem(9, shooter)
 
-        val shooter_p: ItemStack?
-        if (getPlayerData(player)!!.settings!!.ShowEffect_MainWeaponInk()) {
-            shooter_p = ItemStack(Material.LIME_DYE)
+        val shooterP: ItemStack?
+        if (getPlayerData(player)!!.settings!!.showEffectMainWeaponInk()) {
+            shooterP = ItemStack(Material.LIME_DYE)
         } else {
-            shooter_p = ItemStack(Material.GUNPOWDER)
+            shooterP = ItemStack(Material.GUNPOWDER)
         }
-        val shooter_p_m = shooter_p.getItemMeta()
-        shooter_p_m!!.setDisplayName("メインウエポンのインクエフェクト")
-        val shooter_p_r = ArrayList<String?>()
-        if (getPlayerData(player)!!.settings!!.ShowEffect_MainWeaponInk()) {
-            shooter_p_r.add("§a§l[Enable]")
+        val shooterPM = shooterP.getItemMeta()
+        shooterPM!!.setDisplayName("メインウエポンのインクエフェクト")
+        val shooterPR = ArrayList<String?>()
+        if (getPlayerData(player)!!.settings!!.showEffectMainWeaponInk()) {
+            shooterPR.add("§a§l[Enable]")
         } else {
-            shooter_p_r.add("§7§l[Disable]")
+            shooterPR.add("§7§l[Disable]")
         }
-        shooter_p_m.setLore(shooter_p_r)
-        shooter_p.setItemMeta(shooter_p_m)
-        inv.setItem(18, shooter_p)
+        shooterPM.setLore(shooterPR)
+        shooterP.setItemMeta(shooterPM)
+        inv.setItem(18, shooterP)
 
         val charger = ItemStack(Material.WOODEN_SWORD)
-        val charger_m = charger.getItemMeta()
-        charger_m!!.setDisplayName("チャージャーのレーザー")
-        val charger_r = ArrayList<String?>()
-        if (getPlayerData(player)!!.settings!!.ShowEffect_ChargerLine()) {
-            charger_r.add("§a§l[Enable]")
+        val chargerM = charger.getItemMeta()
+        chargerM!!.setDisplayName("チャージャーのレーザー")
+        val chargerR = ArrayList<String?>()
+        if (getPlayerData(player)!!.settings!!.showEffectChargerLine()) {
+            chargerR.add("§a§l[Enable]")
         } else {
-            charger_r.add("§7§l[Disable]")
+            chargerR.add("§7§l[Disable]")
         }
-        charger_r.add("")
-        charger_r.add("§b[INFO]§r")
-        charger_r.add("他のプレイヤーがチャージして狙っているときに")
-        charger_r.add("方向と射撃距離を表すレーザーを描画します。")
-        charger_r.add("無効化するとクライアントのパーティクル描画負担と")
-        charger_r.add("通信量を削減することができます。")
-        charger_m.setLore(charger_r)
-        charger.setItemMeta(charger_m)
+        chargerR.add("")
+        chargerR.add("§b[INFO]§r")
+        chargerR.add("他のプレイヤーがチャージして狙っているときに")
+        chargerR.add("方向と射撃距離を表すレーザーを描画します。")
+        chargerR.add("無効化するとクライアントのパーティクル描画負担と")
+        chargerR.add("通信量を削減することができます。")
+        chargerM.setLore(chargerR)
+        charger.setItemMeta(chargerM)
         inv.setItem(10, charger)
 
-        val charger_p: ItemStack?
-        if (getPlayerData(player)!!.settings!!.ShowEffect_ChargerLine()) {
-            charger_p = ItemStack(Material.LIME_DYE)
+        val chargerP: ItemStack?
+        if (getPlayerData(player)!!.settings!!.showEffectChargerLine()) {
+            chargerP = ItemStack(Material.LIME_DYE)
         } else {
-            charger_p = ItemStack(Material.GUNPOWDER)
+            chargerP = ItemStack(Material.GUNPOWDER)
         }
-        val charger_p_m = charger_p.getItemMeta()
-        charger_p_m!!.setDisplayName("チャージャーのレーザー")
-        val charger_p_r = ArrayList<String?>()
-        if (getPlayerData(player)!!.settings!!.ShowEffect_ChargerLine()) {
-            charger_p_r.add("§a§l[Enable]")
+        val chargerPM = chargerP.getItemMeta()
+        chargerPM!!.setDisplayName("チャージャーのレーザー")
+        val chargerPR = ArrayList<String?>()
+        if (getPlayerData(player)!!.settings!!.showEffectChargerLine()) {
+            chargerPR.add("§a§l[Enable]")
         } else {
-            charger_p_r.add("§7§l[Disable]")
+            chargerPR.add("§7§l[Disable]")
         }
-        charger_p_m.setLore(charger_p_r)
-        charger_p.setItemMeta(charger_p_m)
-        inv.setItem(19, charger_p)
+        chargerPM.setLore(chargerPR)
+        chargerP.setItemMeta(chargerPM)
+        inv.setItem(19, chargerP)
 
         val chargerS = ItemStack(Material.END_CRYSTAL)
-        val chargerS_m = chargerS.getItemMeta()
-        chargerS_m!!.setDisplayName("スペシャルウエポンのエフェクト")
-        val chargerS_r = ArrayList<String?>()
-        if (getPlayerData(player)!!.settings!!.ShowEffect_SPWeapon()) {
-            chargerS_r.add("§a§l[Enable]")
+        val chargersM = chargerS.getItemMeta()
+        chargersM!!.setDisplayName("スペシャルウエポンのエフェクト")
+        val chargersR = ArrayList<String?>()
+        if (getPlayerData(player)!!.settings!!.showEffectSPWeapon()) {
+            chargersR.add("§a§l[Enable]")
         } else {
-            chargerS_r.add("§7§l[Disable]")
+            chargersR.add("§7§l[Disable]")
         }
-        chargerS_r.add("")
-        chargerS_r.add("§b[INFO]§r")
-        chargerS_r.add("プレイヤーがスペシャルウエポンを使用しているときに")
-        chargerS_r.add("演出用のエフェクトを描画します。")
-        chargerS_r.add("無効化するとクライアントのパーティクル描画負担と")
-        chargerS_r.add("通信量を削減することができます。")
-        chargerS_m.setLore(chargerS_r)
-        chargerS.setItemMeta(chargerS_m)
+        chargersR.add("")
+        chargersR.add("§b[INFO]§r")
+        chargersR.add("プレイヤーがスペシャルウエポンを使用しているときに")
+        chargersR.add("演出用のエフェクトを描画します。")
+        chargersR.add("無効化するとクライアントのパーティクル描画負担と")
+        chargersR.add("通信量を削減することができます。")
+        chargersM.setLore(chargersR)
+        chargerS.setItemMeta(chargersM)
         inv.setItem(11, chargerS)
 
-        val chargerS_p: ItemStack?
-        if (getPlayerData(player)!!.settings!!.ShowEffect_SPWeapon()) {
-            chargerS_p = ItemStack(Material.LIME_DYE)
+        val chargersP: ItemStack?
+        if (getPlayerData(player)!!.settings!!.showEffectSPWeapon()) {
+            chargersP = ItemStack(Material.LIME_DYE)
         } else {
-            chargerS_p = ItemStack(Material.GUNPOWDER)
+            chargersP = ItemStack(Material.GUNPOWDER)
         }
-        val chargerS_p_m = chargerS_p.getItemMeta()
-        chargerS_p_m!!.setDisplayName("スペシャルウエポンのエフェクト")
-        val chargerS_p_r = ArrayList<String?>()
-        if (getPlayerData(player)!!.settings!!.ShowEffect_SPWeapon()) {
-            chargerS_p_r.add("§a§l[Enable]")
+        val chargersPM = chargersP.getItemMeta()
+        chargersPM!!.setDisplayName("スペシャルウエポンのエフェクト")
+        val chargersPR = ArrayList<String?>()
+        if (getPlayerData(player)!!.settings!!.showEffectSPWeapon()) {
+            chargersPR.add("§a§l[Enable]")
         } else {
-            chargerS_p_r.add("§7§l[Disable]")
+            chargersPR.add("§7§l[Disable]")
         }
-        chargerS_p_m.setLore(chargerS_p_r)
-        chargerS_p.setItemMeta(chargerS_p_m)
-        inv.setItem(20, chargerS_p)
+        chargersPM.setLore(chargersPR)
+        chargersP.setItemMeta(chargersPM)
+        inv.setItem(20, chargersP)
 
         val rollaerL = ItemStack(Material.SHULKER_SHELL)
-        val rollaerL_m = rollaerL.getItemMeta()
-        rollaerL_m!!.setDisplayName("スペシャルウエポンの範囲エフェクト")
-        val rollaerL_r = ArrayList<String?>()
-        if (getPlayerData(player)!!.settings!!.ShowEffect_SPWeaponRegion()) {
-            rollaerL_r.add("§a§l[Enable]")
+        val rollaerlM = rollaerL.getItemMeta()
+        rollaerlM!!.setDisplayName("スペシャルウエポンの範囲エフェクト")
+        val rollaerlR = ArrayList<String?>()
+        if (getPlayerData(player)!!.settings!!.showEffectSPWeaponRegion()) {
+            rollaerlR.add("§a§l[Enable]")
         } else {
-            rollaerL_r.add("§7§l[Disable]")
+            rollaerlR.add("§7§l[Disable]")
         }
-        rollaerL_r.add("")
-        rollaerL_r.add("§b[INFO]§r")
-        rollaerL_r.add("プレイヤーがスペシャルウエポンを使用しているときに")
-        rollaerL_r.add("スペシャルウエポンの効果範囲を表すエフェクトを描画します。")
-        rollaerL_r.add("無効化するとクライアントのパーティクル描画負担と")
-        rollaerL_r.add("通信量を削減することができますが")
-        rollaerL_r.add("スペシャルウエポンの効果範囲を把握しづらくなります。")
-        rollaerL_m.setLore(rollaerL_r)
-        rollaerL.setItemMeta(rollaerL_m)
+        rollaerlR.add("")
+        rollaerlR.add("§b[INFO]§r")
+        rollaerlR.add("プレイヤーがスペシャルウエポンを使用しているときに")
+        rollaerlR.add("スペシャルウエポンの効果範囲を表すエフェクトを描画します。")
+        rollaerlR.add("無効化するとクライアントのパーティクル描画負担と")
+        rollaerlR.add("通信量を削減することができますが")
+        rollaerlR.add("スペシャルウエポンの効果範囲を把握しづらくなります。")
+        rollaerlM.setLore(rollaerlR)
+        rollaerL.setItemMeta(rollaerlM)
         inv.setItem(12, rollaerL)
 
-        val rollaerL_p: ItemStack?
-        if (getPlayerData(player)!!.settings!!.ShowEffect_SPWeaponRegion()) {
-            rollaerL_p = ItemStack(Material.LIME_DYE)
+        val rollaerlP: ItemStack?
+        if (getPlayerData(player)!!.settings!!.showEffectSPWeaponRegion()) {
+            rollaerlP = ItemStack(Material.LIME_DYE)
         } else {
-            rollaerL_p = ItemStack(Material.GUNPOWDER)
+            rollaerlP = ItemStack(Material.GUNPOWDER)
         }
-        val rollaerL_p_m = rollaerL_p.getItemMeta()
-        rollaerL_p_m!!.setDisplayName("スペシャルウエポンの範囲エフェクト")
-        val rollaerL_p_r = ArrayList<String?>()
-        if (getPlayerData(player)!!.settings!!.ShowEffect_SPWeaponRegion()) {
-            rollaerL_p_r.add("§a§l[Enable]")
+        val rollaerlPM = rollaerlP.getItemMeta()
+        rollaerlPM!!.setDisplayName("スペシャルウエポンの範囲エフェクト")
+        val rollaerlPR = ArrayList<String?>()
+        if (getPlayerData(player)!!.settings!!.showEffectSPWeaponRegion()) {
+            rollaerlPR.add("§a§l[Enable]")
         } else {
-            rollaerL_p_r.add("§7§l[Disable]")
+            rollaerlPR.add("§7§l[Disable]")
         }
-        rollaerL_p_m.setLore(rollaerL_p_r)
-        rollaerL_p.setItemMeta(rollaerL_p_m)
-        inv.setItem(21, rollaerL_p)
+        rollaerlPM.setLore(rollaerlPR)
+        rollaerlP.setItemMeta(rollaerlPM)
+        inv.setItem(21, rollaerlP)
 
         val rollerS = ItemStack(Material.SNOWBALL)
-        val rollerS_m = rollerS.getItemMeta()
-        rollerS_m!!.setDisplayName("弾の表示")
-        val rollerS_r = ArrayList<String?>()
-        if (getPlayerData(player)!!.settings!!.ShowSnowBall()) {
-            rollerS_r.add("§a§l[Enable]")
+        val rollersM = rollerS.getItemMeta()
+        rollersM!!.setDisplayName("弾の表示")
+        val rollersR = ArrayList<String?>()
+        if (getPlayerData(player)!!.settings!!.showSnowBall()) {
+            rollersR.add("§a§l[Enable]")
         } else {
-            rollerS_r.add("§7§l[Disable]")
+            rollersR.add("§7§l[Disable]")
         }
-        rollerS_r.add("")
-        rollerS_r.add("§b[INFO]§r")
-        rollerS_r.add("メインウエポンから発射された弾を描画します。")
-        rollerS_r.add("無効化するとクライアントのエンティティ描画負担と")
-        rollerS_r.add("通信量を削減することができます。")
-        rollerS_m.setLore(rollerS_r)
-        rollerS.setItemMeta(rollerS_m)
+        rollersR.add("")
+        rollersR.add("§b[INFO]§r")
+        rollersR.add("メインウエポンから発射された弾を描画します。")
+        rollersR.add("無効化するとクライアントのエンティティ描画負担と")
+        rollersR.add("通信量を削減することができます。")
+        rollersM.setLore(rollersR)
+        rollerS.setItemMeta(rollersM)
         inv.setItem(13, rollerS)
 
-        val rollerS_p: ItemStack?
-        if (getPlayerData(player)!!.settings!!.ShowSnowBall()) {
-            rollerS_p = ItemStack(Material.LIME_DYE)
+        val rollersP: ItemStack?
+        if (getPlayerData(player)!!.settings!!.showSnowBall()) {
+            rollersP = ItemStack(Material.LIME_DYE)
         } else {
-            rollerS_p = ItemStack(Material.GUNPOWDER)
+            rollersP = ItemStack(Material.GUNPOWDER)
         }
-        val rollerS_p_m = rollerS_p.getItemMeta()
-        rollerS_p_m!!.setDisplayName("弾の表示")
-        val rollerS_p_r = ArrayList<String?>()
-        if (getPlayerData(player)!!.settings!!.ShowSnowBall()) {
-            rollerS_p_r.add("§a§l[Enable]")
+        val rollersPM = rollersP.getItemMeta()
+        rollersPM!!.setDisplayName("弾の表示")
+        val rollersPR = ArrayList<String?>()
+        if (getPlayerData(player)!!.settings!!.showSnowBall()) {
+            rollersPR.add("§a§l[Enable]")
         } else {
-            rollerS_p_r.add("§7§l[Disable]")
+            rollersPR.add("§7§l[Disable]")
         }
-        rollerS_p_m.setLore(rollerS_p_r)
-        rollerS_p.setItemMeta(rollerS_p_m)
-        inv.setItem(22, rollerS_p)
+        rollersPM.setLore(rollersPR)
+        rollersP.setItemMeta(rollersPM)
+        inv.setItem(22, rollersP)
 
-        val bgm_p: ItemStack?
-        if (getPlayerData(player)!!.settings!!.PlayBGM()) {
-            bgm_p = ItemStack(Material.LIME_DYE)
+        val bgmP: ItemStack?
+        if (getPlayerData(player)!!.settings!!.playBGM()) {
+            bgmP = ItemStack(Material.LIME_DYE)
         } else {
-            bgm_p = ItemStack(Material.GUNPOWDER)
+            bgmP = ItemStack(Material.GUNPOWDER)
         }
-        val bgm_p_m = bgm_p.getItemMeta()
-        bgm_p_m!!.setDisplayName("BGM")
-        val bgm_p_r = ArrayList<String?>()
-        if (getPlayerData(player)!!.settings!!.PlayBGM()) {
-            bgm_p_r.add("§a§l[Enable]")
+        val bgmPM = bgmP.getItemMeta()
+        bgmPM!!.setDisplayName("BGM")
+        val bgmPR = ArrayList<String?>()
+        if (getPlayerData(player)!!.settings!!.playBGM()) {
+            bgmPR.add("§a§l[Enable]")
         } else {
-            bgm_p_r.add("§7§l[Disable]")
+            bgmPR.add("§7§l[Disable]")
         }
-        bgm_p_m.setLore(bgm_p_r)
-        bgm_p.setItemMeta(bgm_p_m)
+        bgmPM.setLore(bgmPR)
+        bgmP.setItemMeta(bgmPM)
 
         // if(Main.NoteBlockAPI)
         // inv.setItem(26, bgm_p);
         val bgm = ItemStack(Material.MUSIC_DISC_13)
-        val bgm_m = bgm.getItemMeta()
-        bgm_m!!.setDisplayName("BGM")
-        val bgm_r = ArrayList<String?>()
-        if (getPlayerData(player)!!.settings!!.PlayBGM()) {
-            bgm_r.add("§a§l[Enable]")
+        val bgmM = bgm.getItemMeta()
+        bgmM!!.setDisplayName("BGM")
+        val bgmR = ArrayList<String?>()
+        if (getPlayerData(player)!!.settings!!.playBGM()) {
+            bgmR.add("§a§l[Enable]")
         } else {
-            bgm_r.add("§7§l[Disable]")
+            bgmR.add("§7§l[Disable]")
         }
-        bgm_m.setLore(bgm_r)
-        bgm.setItemMeta(bgm_m)
+        bgmM.setLore(bgmR)
+        bgm.setItemMeta(bgmM)
 
         // if(Main.NoteBlockAPI)
         // inv.setItem(17, bgm);
         val bomb = ItemStack(Material.WHITE_STAINED_GLASS)
-        val bomb_m = bomb.getItemMeta()
-        bomb_m!!.setDisplayName("投擲武器の視認用エフェクト")
-        val bomb_r = ArrayList<String?>()
-        if (getPlayerData(player)!!.settings!!.ShowEffect_Bomb()) {
-            bomb_r.add("§a§l[Enable]")
+        val bombM = bomb.getItemMeta()
+        bombM!!.setDisplayName("投擲武器の視認用エフェクト")
+        val bombR = ArrayList<String?>()
+        if (getPlayerData(player)!!.settings!!.showEffectBomb()) {
+            bombR.add("§a§l[Enable]")
         } else {
-            bomb_r.add("§7§l[Disable]")
+            bombR.add("§7§l[Disable]")
         }
-        bomb_r.add("")
-        bomb_r.add("§b[INFO]§r")
-        bomb_r.add("サブウエポン等の投擲武器の軌跡にエフェクトを描画します。")
-        bomb_r.add("無効化するとクライアントのパーティクル描画負担と")
-        bomb_r.add("通信量を削減することができます。")
-        bomb_m.setLore(bomb_r)
-        bomb.setItemMeta(bomb_m)
+        bombR.add("")
+        bombR.add("§b[INFO]§r")
+        bombR.add("サブウエポン等の投擲武器の軌跡にエフェクトを描画します。")
+        bombR.add("無効化するとクライアントのパーティクル描画負担と")
+        bombR.add("通信量を削減することができます。")
+        bombM.setLore(bombR)
+        bomb.setItemMeta(bombM)
         inv.setItem(14, bomb)
 
-        val bomb_p: ItemStack?
-        if (getPlayerData(player)!!.settings!!.ShowEffect_Bomb()) {
-            bomb_p = ItemStack(Material.LIME_DYE)
+        val bombP: ItemStack?
+        if (getPlayerData(player)!!.settings!!.showEffectBomb()) {
+            bombP = ItemStack(Material.LIME_DYE)
         } else {
-            bomb_p = ItemStack(Material.GUNPOWDER)
+            bombP = ItemStack(Material.GUNPOWDER)
         }
-        val bomb_p_m = bomb_p.getItemMeta()
-        bomb_p_m!!.setDisplayName("投擲武器の視認用エフェクト")
-        val bomb_p_r = ArrayList<String?>()
-        if (getPlayerData(player)!!.settings!!.ShowEffect_Bomb()) {
-            bomb_p_r.add("§a§l[Enable]")
+        val bombPM = bombP.getItemMeta()
+        bombPM!!.setDisplayName("投擲武器の視認用エフェクト")
+        val bombPR = ArrayList<String?>()
+        if (getPlayerData(player)!!.settings!!.showEffectBomb()) {
+            bombPR.add("§a§l[Enable]")
         } else {
-            bomb_p_r.add("§7§l[Disable]")
+            bombPR.add("§7§l[Disable]")
         }
-        bomb_p_m.setLore(bomb_p_r)
-        bomb_p.setItemMeta(bomb_p_m)
-        inv.setItem(23, bomb_p)
+        bombPM.setLore(bombPR)
+        bombP.setItemMeta(bombPM)
+        inv.setItem(23, bombP)
 
         val bombEx = ItemStack(Material.TNT)
-        val bombEx_m = bombEx.getItemMeta()
-        bombEx_m!!.setDisplayName("爆発エフェクト")
-        val bombEx_r = ArrayList<String?>()
-        if (getPlayerData(player)!!.settings!!.ShowEffect_BombEx()) {
-            bombEx_r.add("§a§l[Enable]")
+        val bombexM = bombEx.getItemMeta()
+        bombexM!!.setDisplayName("爆発エフェクト")
+        val bombexR = ArrayList<String?>()
+        if (getPlayerData(player)!!.settings!!.showEffectBombEx()) {
+            bombexR.add("§a§l[Enable]")
         } else {
-            bombEx_r.add("§7§l[Disable]")
+            bombexR.add("§7§l[Disable]")
         }
-        bombEx_r.add("")
-        bombEx_r.add("§b[INFO]§r")
-        bombEx_r.add("ボム等の爆発エフェクトを描画します。")
-        bombEx_r.add("無効化するとクライアントのパーティクル描画負担と")
-        bombEx_r.add("通信量を削減することができます。")
-        bombEx_m.setLore(bombEx_r)
-        bombEx.setItemMeta(bombEx_m)
+        bombexR.add("")
+        bombexR.add("§b[INFO]§r")
+        bombexR.add("ボム等の爆発エフェクトを描画します。")
+        bombexR.add("無効化するとクライアントのパーティクル描画負担と")
+        bombexR.add("通信量を削減することができます。")
+        bombexM.setLore(bombexR)
+        bombEx.setItemMeta(bombexM)
         inv.setItem(15, bombEx)
 
-        val bombEx_p: ItemStack?
-        if (getPlayerData(player)!!.settings!!.ShowEffect_BombEx()) {
-            bombEx_p = ItemStack(Material.LIME_DYE)
+        val bombexP: ItemStack?
+        if (getPlayerData(player)!!.settings!!.showEffectBombEx()) {
+            bombexP = ItemStack(Material.LIME_DYE)
         } else {
-            bombEx_p = ItemStack(Material.GUNPOWDER)
+            bombexP = ItemStack(Material.GUNPOWDER)
         }
-        val bombEx_p_m = bombEx_p.getItemMeta()
-        bombEx_p_m!!.setDisplayName("爆発エフェクト")
-        val bombEx_p_r = ArrayList<String?>()
-        if (getPlayerData(player)!!.settings!!.ShowEffect_BombEx()) {
-            bombEx_p_r.add("§a§l[Enable]")
+        val bombexPM = bombexP.getItemMeta()
+        bombexPM!!.setDisplayName("爆発エフェクト")
+        val bombexPR = ArrayList<String?>()
+        if (getPlayerData(player)!!.settings!!.showEffectBombEx()) {
+            bombexPR.add("§a§l[Enable]")
         } else {
-            bombEx_p_r.add("§7§l[Disable]")
+            bombexPR.add("§7§l[Disable]")
         }
-        bombEx_p_m.setLore(bombEx_p_r)
-        bombEx_p.setItemMeta(bombEx_p_m)
-        inv.setItem(24, bombEx_p)
+        bombexPM.setLore(bombexPR)
+        bombexP.setItemMeta(bombexPM)
+        inv.setItem(24, bombexP)
 
         val ck = ItemStack(Material.GOLDEN_SWORD)
-        val ck_m = ck.getItemMeta()
-        ck_m!!.setDisplayName("チャージキープ")
-        val ck_r = ArrayList<String?>()
+        val ckM = ck.getItemMeta()
+        ckM!!.setDisplayName("チャージキープ")
+        val ckR = ArrayList<String?>()
         if (getPlayerData(player)!!.settings!!.doChargeKeep()) {
-            ck_r.add("§a§l[Enable]")
+            ckR.add("§a§l[Enable]")
         } else {
-            ck_r.add("§7§l[Disable]")
+            ckR.add("§7§l[Disable]")
         }
-        ck_r.add("")
-        ck_r.add("§b[INFO]§r")
-        ck_r.add("チャージャー等のチャージキープ機能を発動できるようになります。")
-        ck_r.add("(チャージキープは十分チャージした後にイカ状態に切り替えると発動します。)")
-        ck_m.setLore(ck_r)
-        ck.setItemMeta(ck_m)
+        ckR.add("")
+        ckR.add("§b[INFO]§r")
+        ckR.add("チャージャー等のチャージキープ機能を発動できるようになります。")
+        ckR.add("(チャージキープは十分チャージした後にイカ状態に切り替えると発動します。)")
+        ckM.setLore(ckR)
+        ck.setItemMeta(ckM)
         inv.setItem(16, ck)
 
-        val ck_p: ItemStack?
+        val ckP: ItemStack?
         if (getPlayerData(player)!!.settings!!.doChargeKeep()) {
-            ck_p = ItemStack(Material.LIME_DYE)
+            ckP = ItemStack(Material.LIME_DYE)
         } else {
-            ck_p = ItemStack(Material.GUNPOWDER)
+            ckP = ItemStack(Material.GUNPOWDER)
         }
-        val ck_p_m = ck_p.getItemMeta()
-        ck_p_m!!.setDisplayName("チャージキープ")
-        val ck_p_r = ArrayList<String?>()
+        val ckPM = ckP.getItemMeta()
+        ckPM!!.setDisplayName("チャージキープ")
+        val ckPR = ArrayList<String?>()
         if (getPlayerData(player)!!.settings!!.doChargeKeep()) {
-            ck_p_r.add("§a§l[Enable]")
+            ckPR.add("§a§l[Enable]")
         } else {
-            ck_p_r.add("§7§l[Disable]")
+            ckPR.add("§7§l[Disable]")
         }
-        ck_p_m.setLore(ck_p_r)
-        ck_p.setItemMeta(ck_p_m)
-        inv.setItem(25, ck_p)
+        ckPM.setLore(ckPR)
+        ckP.setItemMeta(ckPM)
+        inv.setItem(25, ckP)
 
         player.openInventory(inv)
     }

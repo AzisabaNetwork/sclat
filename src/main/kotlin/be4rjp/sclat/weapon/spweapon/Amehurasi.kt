@@ -77,7 +77,7 @@ object Amehurasi {
 
                         // 視認用エフェクト
                         for (o_player in plugin.server.onlinePlayers) {
-                            if (getPlayerData(o_player)!!.settings!!.ShowEffect_Bomb()) {
+                            if (getPlayerData(o_player)!!.settings!!.showEffectBomb()) {
                                 if (o_player.world === drop!!.world) {
                                     if (o_player
                                             .location
@@ -150,7 +150,7 @@ object Amehurasi {
                         // 雲エフェクト
                         if (c % 2 == 0) {
                             for (o_player in plugin.server.onlinePlayers) {
-                                if (getPlayerData(o_player)!!.settings!!.ShowEffect_SPWeapon()) {
+                                if (getPlayerData(o_player)!!.settings!!.showEffectSPWeapon()) {
                                     for (loc in locList) {
                                         if (Random().nextInt(3) == 1) {
                                             if (o_player.world === loc.world) {
@@ -225,7 +225,8 @@ object Amehurasi {
                                     if (`as` is ArmorStand &&
                                         `as`
                                             .location
-                                            .distanceSquared(position) <= maxDistSquared && Random().nextInt(100) == 0
+                                            .distanceSquared(position) <= maxDistSquared &&
+                                        Random().nextInt(100) == 0
                                     ) {
                                         ArmorStandMgr.giveDamageArmorStand(`as`, damage, player)
                                     }
@@ -274,7 +275,7 @@ object Amehurasi {
                                 .wool!!
                                 .createBlockData()
                         for (o_player in plugin.server.onlinePlayers) {
-                            if (getPlayerData(o_player)!!.settings!!.ShowEffect_SPWeapon()) {
+                            if (getPlayerData(o_player)!!.settings!!.showEffectSPWeapon()) {
                                 if (o_player.world ===
                                     inkball.world
                                 ) {

@@ -139,7 +139,7 @@ internal class EchoThread(
                                             (
                                                 "§a§l" + (ss.waitingEndTime - (System.currentTimeMillis() / 1000)) +
                                                     "§b秒後に開始されます"
-                                                ),
+                                            ),
                                             MessageType.ALL_PLAYER,
                                         )
                                         plugin

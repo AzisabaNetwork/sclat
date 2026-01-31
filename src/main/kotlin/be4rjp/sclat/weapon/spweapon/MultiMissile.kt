@@ -72,7 +72,9 @@ object MultiMissile {
                             getPlayerData(p)!!.isUsingMM = true
                             val nmsWorld = (p.world as CraftWorld).handle
                             for (op in plugin.server.onlinePlayers) {
-                                if (getPlayerData(op)!!.isInMatch && op.world === p.world && (op.name != p.name) &&
+                                if (getPlayerData(op)!!.isInMatch &&
+                                    op.world === p.world &&
+                                    (op.name != p.name) &&
                                     getPlayerData(
                                         p,
                                     )!!.team != getPlayerData(op)!!.team
@@ -94,7 +96,8 @@ object MultiMissile {
                                 if (e is ArmorStand) {
                                     val `as` = e
                                     if (`as`.customName == null) continue
-                                    if ((`as`.customName != "Path") && (`as`.customName != "21") &&
+                                    if ((`as`.customName != "Path") &&
+                                        (`as`.customName != "21") &&
                                         (`as`.customName != "100") &&
                                         (`as`.customName != "SplashShield") &&
                                         (`as`.customName != "Kasa")
@@ -123,7 +126,9 @@ object MultiMissile {
                         }
                         if (c != 0) {
                             for (op in plugin.server.onlinePlayers) {
-                                if (getPlayerData(op)!!.isInMatch && op.world === p.world && (op.name != p.name) &&
+                                if (getPlayerData(op)!!.isInMatch &&
+                                    op.world === p.world &&
+                                    (op.name != p.name) &&
                                     getPlayerData(
                                         p,
                                     )!!.team != getPlayerData(op)!!.team
@@ -142,7 +147,8 @@ object MultiMissile {
                                 if (e is ArmorStand) {
                                     val `as` = e
                                     if (`as`.customName == null) continue
-                                    if ((`as`.customName != "Path") && (`as`.customName != "21") &&
+                                    if ((`as`.customName != "Path") &&
+                                        (`as`.customName != "21") &&
                                         (`as`.customName != "100") &&
                                         (`as`.customName != "SplashShield") &&
                                         (`as`.customName != "Kasa")
@@ -163,7 +169,9 @@ object MultiMissile {
                             val targetList: MutableList<Entity> = ArrayList<Entity>()
                             var count = 0
                             for (op in plugin.server.onlinePlayers) {
-                                if (getPlayerData(op)!!.isInMatch && op.world === p.world && (op.name != p.name) &&
+                                if (getPlayerData(op)!!.isInMatch &&
+                                    op.world === p.world &&
+                                    (op.name != p.name) &&
                                     getPlayerData(
                                         p,
                                     )!!.team != getPlayerData(op)!!.team
@@ -186,7 +194,8 @@ object MultiMissile {
                                 if (e is ArmorStand) {
                                     val `as` = e
                                     if (`as`.customName == null) continue
-                                    if ((`as`.customName != "Path") && (`as`.customName != "21") &&
+                                    if ((`as`.customName != "Path") &&
+                                        (`as`.customName != "21") &&
                                         (`as`.customName != "100") &&
                                         (`as`.customName != "SplashShield") &&
                                         (`as`.customName != "Kasa")
@@ -359,7 +368,7 @@ object MultiMissile {
                                     .location
                                     .distanceSquared(drop!!.location) < Sclat.particleRenderDistanceSquared
                             ) {
-                                if (getPlayerData(o_player)!!.settings!!.ShowEffect_SPWeapon()) {
+                                if (getPlayerData(o_player)!!.settings!!.showEffectSPWeapon()) {
                                     o_player.spawnParticle<BlockData?>(
                                         Particle.BLOCK_DUST,
                                         drop!!.location,

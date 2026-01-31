@@ -122,7 +122,7 @@ object SuperJumpMgr {
                     val py = (
                         (abs((positions.size / 2) - i).toDouble().pow(2.0) * -1 * coef) +
                             ((positions.size / 2).toDouble().pow(2.0) * coef)
-                        )
+                    )
                     val y = if (py > 100) 100 + py / 2.8 else py
                     val tloc = Location(p.getWorld(), position.getX(), y + position.getY(), position.getZ())
                     val pvec =

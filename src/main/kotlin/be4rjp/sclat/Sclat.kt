@@ -146,7 +146,7 @@ class Sclat :
         logger.info("SetupColor...")
         ColorMgr.SetupColor()
         logger.info("SetupMainWeapon...")
-        MainWeaponMgr.SetupMainWeapon()
+        MainWeaponMgr.setupMainWeapon()
         logger.info("WeaponClassSetup...")
         WeaponClassMgr.WeaponClassSetup()
         logger.info("Setup Map...")
@@ -156,7 +156,7 @@ class Sclat :
         logger.info("------------------------------------------")
         logger.info("")
         logger.info("MatchSetup...")
-        MatchMgr.MatchSetup()
+        MatchMgr.matchSetup()
         logger.info("Setup is finished!")
 
         // -------------------------------------------------------------------
@@ -207,7 +207,7 @@ class Sclat :
             match.team0!!.team = bteam0
             match.team1!!.team = bteam1
 
-            ArmorStandMgr.ArmorStandEquipPacketSender(w!!)
+            ArmorStandMgr.armorStandEquipPacketSender(w!!)
         }
 
         // -------------------------------------------------------------------

@@ -380,7 +380,9 @@ class SnowballListener : Listener {
                         }
                     }
                     if (armorStand!!.customName != null) {
-                        if ((armorStand.customName != "Path") && (armorStand.customName != "21") && (armorStand.customName != "100") &&
+                        if ((armorStand.customName != "Path") &&
+                            (armorStand.customName != "21") &&
+                            (armorStand.customName != "100") &&
                             (armorStand.customName != "SplashShield") &&
                             (armorStand.customName != "Kasa")
                         ) {
@@ -409,7 +411,7 @@ class SnowballListener : Listener {
                                         getPlayerData(shooter)!!
                                             .team
                                     ) {
-                                        Blaster.Explode(shooter, armorStand.location.add(Vector(0.0, 1.0, 0.0)))
+                                        Blaster.explode(shooter, armorStand.location.add(Vector(0.0, 1.0, 0.0)))
                                     }
                                 } else if (armorStand.customName == "SplashShield") {
                                     val splashShieldData = getSplashShieldDataFromArmorStand(armorStand)
@@ -417,7 +419,7 @@ class SnowballListener : Listener {
                                         getPlayerData(shooter)!!
                                             .team
                                     ) {
-                                        Blaster.Explode(shooter, armorStand.location.add(Vector(0.0, 1.0, 0.0)))
+                                        Blaster.explode(shooter, armorStand.location.add(Vector(0.0, 1.0, 0.0)))
                                     }
                                 }
                             }
@@ -425,7 +427,9 @@ class SnowballListener : Listener {
                         }
                     }
                     if (type == "Funnel") {
-                        if (armorStand.customName != null && (armorStand.customName != "Path") && (armorStand.customName != "21") &&
+                        if (armorStand.customName != null &&
+                            (armorStand.customName != "Path") &&
+                            (armorStand.customName != "21") &&
                             (armorStand.customName != "100") &&
                             (armorStand.customName != "SplashShield") &&
                             (armorStand.customName != "Kasa")
@@ -842,7 +846,9 @@ class SnowballListener : Listener {
                     }
                 }
                 if (`as`.customName != null) {
-                    if ((`as`.customName != "Path") && (`as`.customName != "21") && (`as`.customName != "100") &&
+                    if ((`as`.customName != "Path") &&
+                        (`as`.customName != "21") &&
+                        (`as`.customName != "100") &&
                         (`as`.customName != "SplashShield") &&
                         (`as`.customName != "Kasa")
                     ) {
@@ -864,7 +870,9 @@ class SnowballListener : Listener {
                     damage -= damage * (ticksLived / 100)
                 }
                 if (type == "Funnel") {
-                    if (`as`.customName != null && (`as`.customName != "Path") && (`as`.customName != "21") &&
+                    if (`as`.customName != null &&
+                        (`as`.customName != "Path") &&
+                        (`as`.customName != "21") &&
                         (`as`.customName != "100") &&
                         (`as`.customName != "SplashShield") &&
                         (`as`.customName != "Kasa")

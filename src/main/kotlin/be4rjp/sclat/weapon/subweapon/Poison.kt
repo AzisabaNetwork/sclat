@@ -69,15 +69,17 @@ object Poison {
 
                         if (!drop!!.isOnGround &&
                             !(
-                                drop!!.velocity.getX() == 0.0 && drop!!
-                                    .velocity
-                                    .getZ() != 0.0
-                                ) &&
+                                drop!!.velocity.getX() == 0.0 &&
+                                    drop!!
+                                        .velocity
+                                        .getZ() != 0.0
+                            ) &&
                             !(
-                                drop!!.velocity.getX() != 0.0 && drop!!
-                                    .velocity
-                                    .getZ() == 0.0
-                                )
+                                drop!!.velocity.getX() != 0.0 &&
+                                    drop!!
+                                        .velocity
+                                        .getZ() == 0.0
+                            )
                         ) {
                             ball!!.velocity = drop!!.velocity
                         }
@@ -93,7 +95,7 @@ object Poison {
                             // 爆発エフェクト
                             val sLocs = getSphere(drop!!.location, maxDist, 15)
                             for (o_player in plugin.server.onlinePlayers) {
-                                if (getPlayerData(o_player)!!.settings!!.ShowEffect_BombEx()) {
+                                if (getPlayerData(o_player)!!.settings!!.showEffectBombEx()) {
                                     for (loc in sLocs) {
                                         if (o_player.world === loc.world) {
                                             if (o_player
@@ -137,7 +139,9 @@ object Poison {
                                 if (`as`.location.distance(drop!!.location) <= maxDist) {
                                     if (`as`.customName != null) {
                                         if (`as`.customName == null) continue
-                                        if (`as` is ArmorStand && (`as`.customName != "Path") && (`as`.customName != "21") &&
+                                        if (`as` is ArmorStand &&
+                                            (`as`.customName != "Path") &&
+                                            (`as`.customName != "21") &&
                                             (`as`.customName != "100") &&
                                             (`as`.customName != "SplashShield") &&
                                             (`as`.customName != "Kasa")
@@ -156,7 +160,7 @@ object Poison {
 
                         // ボムの視認用エフェクト
                         for (o_player in plugin.server.onlinePlayers) {
-                            if (getPlayerData(o_player)!!.settings!!.ShowEffect_Bomb()) {
+                            if (getPlayerData(o_player)!!.settings!!.showEffectBomb()) {
                                 if (o_player.world === drop!!.location.world) {
                                     if (o_player
                                             .location

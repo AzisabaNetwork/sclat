@@ -34,7 +34,7 @@ import org.bukkit.util.Vector
  */
 object Brush {
     @JvmStatic
-    fun HoldRunnable(player: Player) {
+    fun holdRunnable(player: Player) {
         val task: BukkitRunnable =
             object : BukkitRunnable() {
                 var p: Player = player
@@ -63,7 +63,7 @@ object Brush {
     }
 
     @JvmStatic
-    fun RollPaintRunnable(player: Player) {
+    fun rollPaintRunnable(player: Player) {
         val task: BukkitRunnable =
             object : BukkitRunnable() {
                 var p: Player = player
@@ -73,15 +73,18 @@ object Brush {
                         val data = getPlayerData(p)
                         if (!data!!.isInMatch || !p.isOnline) cancel()
 
-                        if (data.isHolding && data.canPaint && data.isInMatch &&
-                            Sclat.dadadaCheckerAPI!!.getPlayerClickType(p) != ClickType.RENDA && p.gameMode != GameMode.SPECTATOR
+                        if (data.isHolding &&
+                            data.canPaint &&
+                            data.isInMatch &&
+                            Sclat.dadadaCheckerAPI!!.getPlayerClickType(p) != ClickType.RENDA &&
+                            p.gameMode != GameMode.SPECTATOR
                         ) {
                             if (player.exp <=
                                 (
                                     data.weaponClass?.mainWeapon!!.rollerNeedInk
                                         * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) /
                                         Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)
-                                    ).toFloat()
+                                ).toFloat()
                             ) {
                                 player.sendTitle("", ChatColor.RED.toString() + "インクが足りません", 0, 13, 2)
                                 player.playSound(player.location, Sound.UI_BUTTON_CLICK, 1f, 1.63f)
@@ -92,7 +95,7 @@ object Brush {
                                     data.weaponClass?.mainWeapon!!.rollerNeedInk
                                         * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) /
                                         Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)
-                                    ).toFloat()
+                                ).toFloat()
                             val locvec = p.eyeLocation.direction
                             val eloc = p.eyeLocation
                             val vec = Vector(locvec.getX(), 0.0, locvec.getZ()).normalize()
@@ -112,7 +115,7 @@ object Brush {
                                     .wool!!
                                     .createBlockData()
                             for (target in plugin.server.onlinePlayers) {
-                                if (getPlayerData(target)!!.settings?.ShowEffect_MainWeaponInk()!!) {
+                                if (getPlayerData(target)!!.settings?.showEffectMainWeaponInk()!!) {
                                     if (target.world ===
                                         p.world
                                     ) {
@@ -153,7 +156,7 @@ object Brush {
                                 )
 
                                 for (target in plugin.server.onlinePlayers) {
-                                    if (getPlayerData(target)!!.settings?.ShowEffect_MainWeaponInk()!!) {
+                                    if (getPlayerData(target)!!.settings?.showEffectMainWeaponInk()!!) {
                                         if (target.world ===
                                             p.world
                                         ) {
@@ -212,7 +215,7 @@ object Brush {
                                     (
                                         data.weaponClass?.mainWeapon!!.usingWalkSpeed
                                             * Gear.getGearInfluence(p, Gear.Type.MAIN_SPEC_UP)
-                                        ).toFloat()
+                                    ).toFloat()
                                 return
                             }
                             PaintMgr.paintHightestBlock(eloc, p, false, true)
@@ -220,7 +223,7 @@ object Brush {
                                 (
                                     data.weaponClass?.mainWeapon!!.usingWalkSpeed
                                         * Gear.getGearInfluence(p, Gear.Type.MAIN_SPEC_UP)
-                                    ).toFloat()
+                                ).toFloat()
                         }
                     } catch (e: Exception) {
                         cancel()
@@ -235,7 +238,7 @@ object Brush {
     }
 
     @JvmStatic
-    fun ShootPaintRunnable(player: Player) {
+    fun shootPaintRunnable(player: Player) {
         val pdata = getPlayerData(player)
         val task: BukkitRunnable =
             object : BukkitRunnable() {
@@ -248,7 +251,8 @@ object Brush {
                         return
                     }
                     data!!.canRollerShoot = true
-                    if (p.gameMode != GameMode.ADVENTURE || p
+                    if (p.gameMode != GameMode.ADVENTURE ||
+                        p
                             .inventory
                             .itemInMainHand
                             .type == Material.AIR
@@ -277,9 +281,9 @@ object Brush {
                     )
                     for (i in 0..<data!!.weaponClass?.mainWeapon!!.rollerShootQuantity) {
                         if (data!!.weaponClass?.mainWeapon!!.isHude) {
-                            Shoot(p, vec)
+                            shoot(p, vec)
                         } else {
-                            Shoot(p, null)
+                            shoot(p, null)
                         }
                     }
                     // ShootRunnable(p);
@@ -299,7 +303,7 @@ object Brush {
         }
     }
 
-    fun ShootRunnable(player: Player?) {
+    fun shootRunnable(player: Player?) {
         val data = getPlayerData(player)
         val task: BukkitRunnable =
             object : BukkitRunnable() {
@@ -317,7 +321,7 @@ object Brush {
         )
     }
 
-    fun Shoot(
+    fun shoot(
         player: Player,
         v: Vector?,
     ) {
@@ -329,7 +333,7 @@ object Brush {
                 data!!.weaponClass?.mainWeapon!!.needInk
                     * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) /
                     Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)
-                ).toFloat()
+            ).toFloat()
         ) {
             player.sendTitle("", ChatColor.RED.toString() + "インクが足りません", 0, 13, 2)
             player.playSound(player.location, Sound.UI_BUTTON_CLICK, 1f, 1.63f)
@@ -340,7 +344,7 @@ object Brush {
                 data.weaponClass?.mainWeapon!!.needInk
                     * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) /
                     Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)
-                ).toFloat()
+            ).toFloat()
         val ball = player.launchProjectile<Snowball>(Snowball::class.java)
         (ball as CraftSnowball).handle.setItem(CraftItemStack.asNMSCopy(ItemStack(getPlayerData(player)!!.team?.teamColor!!.wool!!)))
         var vec: Vector? =
@@ -422,7 +426,7 @@ object Brush {
                     if (i != 0) {
                         for (target in plugin.server.onlinePlayers) {
                             if (target.world !== p.world) continue
-                            if (!getPlayerData(target)!!.settings?.ShowEffect_MainWeaponInk()!!) continue
+                            if (!getPlayerData(target)!!.settings?.showEffectMainWeaponInk()!!) continue
                             val bd =
                                 getPlayerData(p)!!
                                     .team

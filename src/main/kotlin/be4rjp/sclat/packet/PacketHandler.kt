@@ -44,7 +44,7 @@ class PacketHandler(
             val entityTypes = k.get(packet) as EntityTypes<*>?
 
             if (entityTypes === EntityTypes.SNOWBALL) {
-                if (!playerSettings.ShowSnowBall()) return
+                if (!playerSettings.showSnowBall()) return
             }
         }
 

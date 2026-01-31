@@ -37,7 +37,7 @@ object Animation {
                             (
                                 g.toString() + "% [" + GaugeAPI.toGauge(g, 50, team0color, "§7") +
                                     GaugeAPI.toGauge(50 - g, 50, "§7", team1color) + "] " + g.toString() + "%"
-                                ),
+                            ),
                             0,
                             40,
                             0,
@@ -66,7 +66,7 @@ object Animation {
                                         team0point.toString() + "% [" +
                                             GaugeAPI.toGauge(team0point, 100, team0color, team1color) + "] " +
                                             (100 - team0point).toString() + "%"
-                                        ),
+                                    ),
                                     0,
                                     40,
                                     10,
@@ -78,7 +78,7 @@ object Animation {
                                         team0point.toString() + "% [" +
                                             GaugeAPI.toGauge(team0point, 100, team0color, team1color) + "] " +
                                             (100 - team0point).toString() + "%"
-                                        ),
+                                    ),
                                     0,
                                     40,
                                     10,
@@ -124,7 +124,7 @@ object Animation {
                             (
                                 g.toString() + "% [" + GaugeAPI.toGauge(g, 50, team0color, "§7") +
                                     GaugeAPI.toGauge(50 - g, 50, "§7", team1color) + "] " + g.toString() + "%"
-                                ),
+                            ),
                             0,
                             40,
                             0,
@@ -139,7 +139,7 @@ object Animation {
                                     team0point.toString() + "% [" +
                                         GaugeAPI.toGauge(team0point, 100, team0color, team1color) + "] " +
                                         (100 - team0point).toString() + "%"
-                                    ),
+                                ),
                                 0,
                                 40,
                                 10,
@@ -151,7 +151,7 @@ object Animation {
                                     team0point.toString() + "% [" +
                                         GaugeAPI.toGauge(team0point, 100, team0color, team1color) + "] " +
                                         (100 - team0point).toString() + "%"
-                                    ),
+                                ),
                                 0,
                                 40,
                                 10,
@@ -210,7 +210,7 @@ object Animation {
                                         ?.teamColor
                                         ?.colorName!! + "Team" +
                                     ChatColor.RESET + " : " + Random().nextInt(10).toString() + " Kill"
-                                ),
+                            ),
                             0,
                             40,
                             0,
@@ -242,7 +242,7 @@ object Animation {
                                             ?.teamColor
                                             ?.colorName!! +
                                         "Team" + ChatColor.RESET + " : " + team1point.toString() + " Kill"
-                                    ),
+                                ),
                                 0,
                                 40,
                                 10,
@@ -267,7 +267,7 @@ object Animation {
                                                 ?.teamColor
                                                 ?.colorName!! +
                                             "Team" + ChatColor.RESET + " : " + team1point.toString() + " Kill"
-                                        ),
+                                    ),
                                     0,
                                     40,
                                     10,
@@ -291,7 +291,7 @@ object Animation {
                                                 ?.teamColor
                                                 ?.colorName!! +
                                             "Team" + ChatColor.RESET + " : " + team1point.toString() + " Kill"
-                                        ),
+                                    ),
                                     0,
                                     40,
                                     10,

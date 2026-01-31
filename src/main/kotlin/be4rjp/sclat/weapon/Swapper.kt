@@ -25,7 +25,9 @@ object Swapper {
                     }
                     // スワッパ―系
                     if (data.weaponClass?.mainWeapon!!.getIsSwap()) {
-                        if (data.isSneaking && sw_recharge && (
+                        if (data.isSneaking &&
+                            sw_recharge &&
+                            (
                                 p.inventory.itemInMainHand.type
                                     ==
                                     data
@@ -33,7 +35,7 @@ object Swapper {
                                         ?.mainWeapon!!
                                         .weaponIteamStack!!
                                         .type
-                                )
+                            )
                         ) {
                             data.stoprun = true
                             player.inventory.clear()

@@ -103,7 +103,7 @@ object SwordMord {
                                 .multiply(2.4),
                         )
                 for (target in plugin.server.onlinePlayers) {
-                    if (getPlayerData(target)!!.settings!!.ShowEffect_Bomb()) {
+                    if (getPlayerData(target)!!.settings!!.showEffectBomb()) {
                         if (target.world ===
                             player.world
                         ) {
@@ -184,12 +184,14 @@ object SwordMord {
                         val data = getPlayerData(p)
                         if (!data!!.isInMatch || !p.isOnline || !getPlayerData(player)!!.isUsingSP) cancel()
 
-                        if (p.hasPotionEffect(PotionEffectType.LUCK) && p.gameMode != GameMode.SPECTATOR && (
+                        if (p.hasPotionEffect(PotionEffectType.LUCK) &&
+                            p.gameMode != GameMode.SPECTATOR &&
+                            (
                                 p
                                     .inventory
                                     .itemInMainHand
                                     .type != Material.AIR
-                                )
+                            )
                         ) {
                             val locvec = p.eyeLocation.direction
                             val eloc = p.eyeLocation
@@ -409,7 +411,7 @@ object SwordMord {
                                 .wool!!
                                 .createBlockData()
                         for (o_player in plugin.server.onlinePlayers) {
-                            if (getPlayerData(o_player)!!.settings!!.ShowEffect_MainWeaponInk()) {
+                            if (getPlayerData(o_player)!!.settings!!.showEffectMainWeaponInk()) {
                                 if (o_player.world ===
                                     inkball!!.world
                                 ) {

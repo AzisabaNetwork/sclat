@@ -108,8 +108,8 @@ object PaintMgr {
                                     (
                                         12 / getGearInfluence(player, Gear.Type.SPECIAL_UP) /
                                             getPlayerData(player)!!.weaponClass!!.mainWeapon!!.sPRate
-                                        )
-                                    ).toInt(),
+                                    )
+                                ).toInt(),
                             ) == 0 &&
                             !getPlayerData(player)!!.isUsingSP
                         ) {
@@ -134,8 +134,8 @@ object PaintMgr {
                                 (
                                     13 / getGearInfluence(player, Gear.Type.SPECIAL_UP) /
                                         getPlayerData(player)!!.weaponClass!!.mainWeapon!!.sPRate
-                                    )
-                                ).toInt(),
+                                )
+                            ).toInt(),
                         ) == 0 &&
                         !getPlayerData(player)!!.isUsingSP
                     ) {
@@ -148,24 +148,31 @@ object PaintMgr {
 
     fun canPaint(block: Block): Boolean =
         !(
-            block.getType() == Material.AIR || block.getType() == Material.SHULKER_BOX || block.getType() == Material.IRON_BARS ||
+            block.getType() == Material.AIR ||
+                block.getType() == Material.SHULKER_BOX ||
+                block.getType() == Material.IRON_BARS ||
                 block.getType() == Material.VINE ||
                 block
                     .getType()
                     .toString()
-                    .contains("SIGN") || block.getType().toString().contains("GLASS") ||
-                block.getType().toString().contains("CARPET") || block.getType().toString().contains("POWDER") ||
-                block.getType().toString().contains("FENCE") || block.getType().toString().contains("STAIR") ||
+                    .contains("SIGN") ||
+                block.getType().toString().contains("GLASS") ||
+                block.getType().toString().contains("CARPET") ||
+                block.getType().toString().contains("POWDER") ||
+                block.getType().toString().contains("FENCE") ||
+                block.getType().toString().contains("STAIR") ||
                 block
                     .getType()
                     .toString()
-                    .contains("PLATE") || block.getType() == Material.WATER || block.getType() == Material.OBSIDIAN ||
+                    .contains("PLATE") ||
+                block.getType() == Material.WATER ||
+                block.getType() == Material.OBSIDIAN ||
                 block
                     .getType()
                     .toString()
                     .contains("SLAB") ||
                 block.getType().toString().contains("DOOR")
-            )
+        )
 
     fun paintByTeam(
         block: Block,
@@ -177,23 +184,30 @@ object PaintMgr {
         if (block.getType() == team.teamColor!!.wool) return
 
         if (!(
-                block.getType() == Material.AIR || block.getType() == Material.SHULKER_BOX || block.getType() == Material.IRON_BARS ||
+                block.getType() == Material.AIR ||
+                    block.getType() == Material.SHULKER_BOX ||
+                    block.getType() == Material.IRON_BARS ||
                     block.getType() == Material.VINE ||
                     block
                         .getType()
                         .toString()
-                        .contains("SIGN") || block.getType().toString().contains("GLASS") ||
-                    block.getType().toString().contains("CARPET") || block.getType().toString().contains("POWDER") ||
-                    block.getType().toString().contains("FENCE") || block.getType().toString().contains("STAIR") ||
+                        .contains("SIGN") ||
+                    block.getType().toString().contains("GLASS") ||
+                    block.getType().toString().contains("CARPET") ||
+                    block.getType().toString().contains("POWDER") ||
+                    block.getType().toString().contains("FENCE") ||
+                    block.getType().toString().contains("STAIR") ||
                     block
                         .getType()
                         .toString()
-                        .contains("PLATE") || block.getType() == Material.WATER || block.getType() == Material.OBSIDIAN ||
+                        .contains("PLATE") ||
+                    block.getType() == Material.WATER ||
+                    block.getType() == Material.OBSIDIAN ||
                     block
                         .getType()
                         .toString()
                         .contains("SLAB")
-                )
+            )
         ) {
             if (blockDataMap.containsKey(block)) {
                 val data = getPaintDataFromBlock(block)

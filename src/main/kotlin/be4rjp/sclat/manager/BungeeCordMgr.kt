@@ -10,7 +10,10 @@ import org.bukkit.entity.Player
  */
 object BungeeCordMgr {
     @JvmStatic
-    fun PlayerSendServer(player: Player, servername: String) {
+    fun PlayerSendServer(
+        player: Player,
+        servername: String,
+    ) {
         val out = ByteStreams.newDataOutput()
         out.writeUTF("Connect")
         out.writeUTF(servername)

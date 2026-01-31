@@ -43,7 +43,7 @@ class TrapData(
                 override fun run() {
                     val sLocs: MutableList<Location> = getXZCircle(location.clone().add(0.0, 1.0, 0.0), 3.0, 2.0, 40)
                     for (oPlayer in plugin.server.onlinePlayers) {
-                        if (DataMgr.getPlayerData(oPlayer)?.settings?.ShowEffect_Bomb()!!) {
+                        if (DataMgr.getPlayerData(oPlayer)?.settings?.showEffectBomb()!!) {
                             for (loc in sLocs) {
                                 if (oPlayer.world === loc.world) {
                                     if (oPlayer.location.distanceSquared(loc) < Sclat.particleRenderDistanceSquared &&
@@ -95,7 +95,8 @@ class TrapData(
                     for (target in plugin.server.onlinePlayers) {
                         if (!DataMgr
                                 .getPlayerData(target)
-                                ?.isInMatch!! || target.world !== location.world
+                                ?.isInMatch!! ||
+                            target.world !== location.world
                         ) {
                             continue
                         }
@@ -109,7 +110,9 @@ class TrapData(
                         if (`as` is ArmorStand && `as`.location.distanceSquared(location) <= 9) { // 3^2
                             if (`as`.customName != null) {
                                 if (`as`.customName == null) continue
-                                if ((`as`.customName != "Path") && (`as`.customName != "21") && (`as`.customName != "100") &&
+                                if ((`as`.customName != "Path") &&
+                                    (`as`.customName != "21") &&
+                                    (`as`.customName != "100") &&
                                     (`as`.customName != "SplashShield") &&
                                     (`as`.customName != "Kasa")
                                 ) {
@@ -158,7 +161,7 @@ class TrapData(
                         // センサーエフェクト
                         val sLocs = getSphere(location, maxDist + 1, 25)
                         for (o_player in plugin.server.onlinePlayers) {
-                            if (DataMgr.getPlayerData(o_player)?.settings?.ShowEffect_BombEx()!!) {
+                            if (DataMgr.getPlayerData(o_player)?.settings?.showEffectBombEx()!!) {
                                 for (loc in sLocs) {
                                     if (o_player.world === loc.world) {
                                         if (o_player
@@ -198,7 +201,8 @@ class TrapData(
                         for (target in plugin.server.onlinePlayers) {
                             if (!DataMgr
                                     .getPlayerData(target)
-                                    ?.isInMatch!! || target.world !== player.world
+                                    ?.isInMatch!! ||
+                                target.world !== player.world
                             ) {
                                 continue
                             }
@@ -217,7 +221,8 @@ class TrapData(
                         for (`as` in player.world.entities) {
                             if (`as` is ArmorStand && `as`.location.distance(location) <= maxDist + 1) {
                                 if (`as`.customName != null) {
-                                    if ((`as`.customName != "Path") && (`as`.customName != "21") &&
+                                    if ((`as`.customName != "Path") &&
+                                        (`as`.customName != "21") &&
                                         (`as`.customName != "100") &&
                                         (`as`.customName != "SplashShield") &&
                                         (`as`.customName != "Kasa")
@@ -266,7 +271,8 @@ class TrapData(
                         for (target in plugin.server.onlinePlayers) {
                             if (!DataMgr
                                     .getPlayerData(target)
-                                    ?.isInMatch!! || target.world !== player.world
+                                    ?.isInMatch!! ||
+                                target.world !== player.world
                             ) {
                                 continue
                             }
@@ -274,7 +280,7 @@ class TrapData(
                                 val damage = (
                                     (maxDist - target.location.distance(location)) * 5.0 *
                                         Gear.getGearInfluence(player, Gear.Type.SUB_SPEC_UP)
-                                    )
+                                )
                                 if (DataMgr.getPlayerData(player)?.team!! != DataMgr.getPlayerData(target)?.team!! &&
                                     target.gameMode == GameMode.ADVENTURE
                                 ) {
@@ -300,7 +306,7 @@ class TrapData(
                                     val damage = (
                                         (maxDist - `as`.location.distance(location)) * 2.5 *
                                             Gear.getGearInfluence(player, Gear.Type.SUB_SPEC_UP)
-                                        )
+                                    )
                                     ArmorStandMgr.giveDamageArmorStand(`as`, damage, player)
                                     if (`as`.customName != null) {
                                         if (`as`.customName == "SplashShield" || `as`.customName == "Kasa") break

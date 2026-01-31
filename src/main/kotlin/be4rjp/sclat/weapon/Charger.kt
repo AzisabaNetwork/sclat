@@ -44,7 +44,9 @@ object Charger {
 
                     data!!.tick = data.tick + 1
 
-                    if (data.isUsingMM || data.isUsingJetPack || data.isUsingTyakuti ||
+                    if (data.isUsingMM ||
+                        data.isUsingJetPack ||
+                        data.isUsingTyakuti ||
                         data.isUsingSS
                     ) {
                         charge = 0
@@ -52,7 +54,8 @@ object Charger {
                         return
                     }
 
-                    if (keeping == data.weaponClass?.mainWeapon!!.chargeKeepingTime && data.weaponClass?.mainWeapon!!.canChargeKeep &&
+                    if (keeping == data.weaponClass?.mainWeapon!!.chargeKeepingTime &&
+                        data.weaponClass?.mainWeapon!!.canChargeKeep &&
                         data.settings?.doChargeKeep()!!
                     ) {
                         charge =
@@ -89,7 +92,7 @@ object Charger {
                             (
                                 wm.displayName + "§7[" +
                                     toGauge(charge, max, data.team?.teamColor!!.colorCode, "§7") + "]"
-                                ),
+                            ),
                         )
                         w.itemMeta = wm
                         p.inventory.setItem(0, w)
@@ -102,7 +105,7 @@ object Charger {
                                             ?.mainWeapon!!
                                             .distanceTick
                                             .toDouble()
-                                    ).toInt()
+                                ).toInt()
                                     .toDouble(),
                                 0.7,
                             )
@@ -167,7 +170,7 @@ object Charger {
                             if (p.exp > (
                                     data.weaponClass?.mainWeapon!!.needInk
                                         * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) * charge
-                                    ) / 2
+                                ) / 2
                             ) {
                                 p.exp = p.exp -
                                     (
@@ -177,7 +180,7 @@ object Charger {
                                                 player,
                                                 Gear.Type.MAIN_INK_EFFICIENCY_UP,
                                             ) * charge
-                                        ).toFloat()
+                                    ).toFloat()
                                 Shoot(
                                     p,
                                     (
@@ -186,7 +189,7 @@ object Charger {
                                                 ?.mainWeapon!!
                                                 .distanceTick
                                                 .toDouble()
-                                        ).toInt(),
+                                    ).toInt(),
                                     data.weaponClass?.mainWeapon!!.damage * charge,
                                     data.weaponClass?.mainWeapon!!.decreaseRate,
                                 )
@@ -208,7 +211,7 @@ object Charger {
                                                     ?.mainWeapon!!
                                                     .distanceTick
                                                     .toDouble()
-                                            ).toInt(),
+                                        ).toInt(),
                                         data.weaponClass?.mainWeapon!!.damage * reach,
                                         data.weaponClass?.mainWeapon!!.decreaseRate,
                                     )
@@ -220,7 +223,7 @@ object Charger {
                         } else if (p.exp > (
                                 data.weaponClass?.mainWeapon!!.needInk * charge
                                     * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP)
-                                )
+                            )
                         ) {
                             p.exp = p.exp -
                                 (
@@ -230,7 +233,7 @@ object Charger {
                                             player,
                                             Gear.Type.MAIN_INK_EFFICIENCY_UP,
                                         ) * charge
-                                    ).toFloat()
+                                ).toFloat()
                             Shoot(
                                 p,
                                 (
@@ -239,7 +242,7 @@ object Charger {
                                             ?.mainWeapon!!
                                             .distanceTick
                                             .toDouble()
-                                    ).toInt(),
+                                ).toInt(),
                                 data.weaponClass?.mainWeapon!!.damage * charge,
                                 data.weaponClass?.mainWeapon!!.decreaseRate,
                             )
@@ -261,7 +264,7 @@ object Charger {
                                                 ?.mainWeapon!!
                                                 .distanceTick
                                                 .toDouble()
-                                        ).toInt(),
+                                    ).toInt(),
                                     data.weaponClass?.mainWeapon!!.damage * reach,
                                     data.weaponClass?.mainWeapon!!.decreaseRate,
                                 )
@@ -355,7 +358,7 @@ object Charger {
             // }
             // }
             // }
-            if (getPlayerData(player)!!.settings?.ShowEffect_MainWeaponInk()!!) {
+            if (getPlayerData(player)!!.settings?.showEffectMainWeaponInk()!!) {
                 if (player.world === position.world) {
                     if (player.location.distanceSquared(position) < Sclat.particleRenderDistanceSquared) {
                         val bd =

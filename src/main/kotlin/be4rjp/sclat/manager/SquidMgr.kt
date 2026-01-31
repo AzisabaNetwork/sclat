@@ -173,8 +173,8 @@ object SquidMgr {
                                             .config!!
                                             .getDouble("SquidRecovery") *
                                             getGearInfluence(p, Gear.Type.INK_RECOVERY_UP)
-                                        ).toFloat()
-                                )
+                                    ).toFloat()
+                            )
                         ) {
                             if (data.canUseSubWeapon) {
                                 p.setExp(
@@ -184,7 +184,7 @@ object SquidMgr {
                                                 .config!!
                                                 .getDouble("SquidRecovery") *
                                                 getGearInfluence(p, Gear.Type.INK_RECOVERY_UP)
-                                            ).toFloat(),
+                                        ).toFloat(),
                                 )
                             }
                         }
@@ -221,7 +221,7 @@ object SquidMgr {
                                 .config!!
                                 .getDouble("SquidSpeed") *
                                 getGearInfluence(p, Gear.Type.IKA_SPEED_UP)
-                            )
+                        )
 
                         if (data.speed != 0.0) speed = data.speed
 
@@ -265,7 +265,7 @@ object SquidMgr {
                                     .config!!
                                     .getDouble("PlayerWalkSpeed") *
                                     getGearInfluence(p, Gear.Type.HITO_SPEED_UP)
-                                )
+                            )
                         }
 
                         if (data.speed != 0.0) speed = data.speed
@@ -276,7 +276,7 @@ object SquidMgr {
                                         .config!!
                                         .getDouble("NormalRecovery")
                                         .toFloat()
-                                )
+                            )
                         ) {
                             p.setExp(
                                 p.getExp() +
@@ -299,7 +299,7 @@ object SquidMgr {
                                                 p,
                                                 Gear.Type.PENA_DOWN,
                                             ) - speed / 3
-                                        ).toFloat(),
+                                    ).toFloat(),
                                 )
                             }
                         }

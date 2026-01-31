@@ -35,14 +35,14 @@ import org.bukkit.util.Vector
  */
 object FloaterBomb {
     @JvmStatic
-    fun FloaterBombRunnable(player: Player) {
+    fun floaterBombRunnable(player: Player) {
         val task: BukkitRunnable =
             object : BukkitRunnable() {
                 var p: Player = player
-                var p_vec: Vector? = null
+                var pVec: Vector? = null
                 var x: Double = 0.0
                 var z: Double = 0.0
-                var block_check: Boolean = false
+                var blockCheck: Boolean = false
                 var c: Int = 0
                 var drop: Item? = null
                 var ball: Snowball? = null
@@ -54,19 +54,19 @@ object FloaterBomb {
                         if (c == 0) {
                             turn = false
                             onground = player.isOnGround
-                            p_vec = p.eyeLocation.direction
+                            pVec = p.eyeLocation.direction
                             if (!onground) {
-                                p_vec = p_vec!!.normalize().multiply(1.1)
+                                pVec = pVec!!.normalize().multiply(1.1)
                             } else {
-                                p_vec = p_vec!!.normalize().multiply(0.95)
+                                pVec = pVec!!.normalize().multiply(0.95)
                             }
                             if (!getPlayerData(player)!!.isBombRush) p.exp = p.exp - 0.47f
                             val bom = ItemStack(getPlayerData(p)!!.team!!.teamColor!!.wool!!).clone()
-                            val bom_m = bom.itemMeta
-                            bom_m!!.setLocalizedName(notDuplicateNumber.toString())
-                            bom.itemMeta = bom_m
+                            val bomM = bom.itemMeta
+                            bomM!!.setLocalizedName(notDuplicateNumber.toString())
+                            bom.itemMeta = bomM
                             drop = p.world.dropItem(p.eyeLocation, bom)
-                            drop!!.velocity = p_vec!!.clone()
+                            drop!!.velocity = pVec!!.clone()
                             // 雪玉をスポーンさせた瞬間にプレイヤーに雪玉がデスポーンした偽のパケットを送信する
                             ball = player.launchProjectile<Snowball>(Snowball::class.java)
                             ball!!.velocity = Vector(0, 0, 0)
@@ -78,44 +78,46 @@ object FloaterBomb {
                                 // connection.sendPacket(new PacketPlayOutEntityDestroy(ball.getEntityId()));
                                 sendDestroyEntities(o_player, ball!!.entityId)
                             }
-                            p_vec = p.eyeLocation.direction
+                            pVec = p.eyeLocation.direction
                         }
 
                         if (!drop!!.isOnGround &&
                             !(
-                                drop!!.velocity.getX() == 0.0 && drop!!
-                                    .velocity
-                                    .getZ() != 0.0
-                                ) &&
+                                drop!!.velocity.getX() == 0.0 &&
+                                    drop!!
+                                        .velocity
+                                        .getZ() != 0.0
+                            ) &&
                             !(
-                                drop!!.velocity.getX() != 0.0 && drop!!
-                                    .velocity
-                                    .getZ() == 0.0
-                                )
+                                drop!!.velocity.getX() != 0.0 &&
+                                    drop!!
+                                        .velocity
+                                        .getZ() == 0.0
+                            )
                         ) {
                             ball!!.velocity = drop!!.velocity
                         }
                         if (c == 9 && onground) {
-                            p_vec =
+                            pVec =
                                 p
                                     .eyeLocation
                                     .direction
                                     .normalize()
                                     .multiply(0.8)
-                            drop!!.velocity = p_vec!!
-                            ball!!.velocity = p_vec!!
+                            drop!!.velocity = pVec!!
+                            ball!!.velocity = pVec!!
                             turn = true
                             player.world.playSound(drop!!.location, Sound.BLOCK_NOTE_BLOCK_SNARE, 1f, 1f)
                         }
                         if (c == 12 && !onground) {
-                            p_vec =
+                            pVec =
                                 p
                                     .eyeLocation
                                     .direction
                                     .normalize()
                                     .multiply(0.6)
-                            drop!!.velocity = p_vec!!
-                            ball!!.velocity = p_vec!!
+                            drop!!.velocity = pVec!!
+                            ball!!.velocity = pVec!!
                             turn = true
                             player.world.playSound(drop!!.location, Sound.BLOCK_NOTE_BLOCK_SNARE, 1f, 1f)
                         }
@@ -128,7 +130,7 @@ object FloaterBomb {
                                 maxDist = 2.0
                             }
                             // 爆発ダメージ
-                            val ExDamage = 4.0
+                            val exDamage = 4.0
 
                             // if(onground) {
                             // ExDamage = 4.0;
@@ -146,8 +148,8 @@ object FloaterBomb {
                             // 塗る
                             var i = 0
                             while (i <= maxDist) {
-                                val p_locs: MutableList<Location> = getSphere(drop!!.location, i.toDouble(), 20)
-                                for (loc in p_locs) {
+                                val pLocs: MutableList<Location> = getSphere(drop!!.location, i.toDouble(), 20)
+                                for (loc in pLocs) {
                                     PaintMgr.paint(loc, p, false)
                                 }
                                 i++
@@ -190,8 +192,8 @@ object FloaterBomb {
                                 if (target.location.distance(drop!!.location) <= maxDist) {
                                     var damage = (
                                         (maxDist - target.location.distance(drop!!.location) * 0.7) *
-                                            ExDamage * Gear.getGearInfluence(player, Gear.Type.SUB_SPEC_UP)
-                                        )
+                                            exDamage * Gear.getGearInfluence(player, Gear.Type.SUB_SPEC_UP)
+                                    )
                                     if (!turn) {
                                         damage = damage * 0.9
                                     }
@@ -219,8 +221,8 @@ object FloaterBomb {
                                     if (`as` is ArmorStand) {
                                         var damage = (
                                             (maxDist - `as`.location.distance(drop!!.location) * 0.7) *
-                                                ExDamage * Gear.getGearInfluence(p, Gear.Type.SUB_SPEC_UP)
-                                            )
+                                                exDamage * Gear.getGearInfluence(p, Gear.Type.SUB_SPEC_UP)
+                                        )
                                         if (!turn) {
                                             damage = damage * 0.9
                                         }
@@ -242,7 +244,7 @@ object FloaterBomb {
 
                         // ボムの視認用エフェクト
                         for (o_player in plugin.server.onlinePlayers) {
-                            if (getPlayerData(o_player)!!.settings!!.ShowEffect_Bomb()) {
+                            if (getPlayerData(o_player)!!.settings!!.showEffectBomb()) {
                                 if (o_player.world === drop!!.location.world) {
                                     if (o_player
                                             .location

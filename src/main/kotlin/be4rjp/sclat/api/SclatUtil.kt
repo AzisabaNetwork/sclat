@@ -125,7 +125,7 @@ object SclatUtil {
             (
                 "map " + Sclat.conf?.servers!!.getString("ServerName") + " " +
                     DataMgr.getMapRandom(if (MatchMgr.mapcount == 0) 0 else MatchMgr.mapcount - 1).mapName!!
-                ),
+            ),
         )
         commands.add("stop")
         val sc =
@@ -251,7 +251,7 @@ object SclatUtil {
                 .wool!!
                 .createBlockData()
         for (oPlayer in plugin.server.onlinePlayers) {
-            if (DataMgr.getPlayerData(oPlayer)?.settings?.ShowEffect_BombEx()!!) {
+            if (DataMgr.getPlayerData(oPlayer)?.settings?.showEffectBombEx()!!) {
                 for (loc in sLocs) {
                     if (oPlayer.world === loc.world) {
                         if (oPlayer.location.distanceSquared(loc) < Sclat.particleRenderDistanceSquared) {

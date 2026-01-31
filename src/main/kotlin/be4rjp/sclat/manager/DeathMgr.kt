@@ -129,7 +129,7 @@ object DeathMgr {
                                         .getItemMeta()!!
                                         .getDisplayName() +
                                     ChatColor.RESET + "でやられた！"
-                                )
+                            )
                             if (i == 0) {
                                 t.sendTitle(ChatColor.GREEN.toString() + "復活まであと: 5秒", msg, 0, 21, 0)
                                 for (player in plugin.getServer().getOnlinePlayers()) {
@@ -144,7 +144,7 @@ object DeathMgr {
                                                     .getItemMeta()!!
                                                     .getDisplayName() +
                                                 ChatColor.RESET + "で倒した！"
-                                            ),
+                                        ),
                                     )
                                     s.spigot().sendMessage(
                                         ChatMessageType.ACTION_BAR,
@@ -152,7 +152,7 @@ object DeathMgr {
                                             (
                                                 getPlayerData(t)!!.team!!.teamColor!!.colorCode +
                                                     t.getDisplayName() + ChatColor.RESET + "を倒した！"
-                                                ),
+                                            ),
                                         ),
                                     )
                                     s.playSound(s.getLocation(), Sound.ENTITY_ARROW_HIT_PLAYER, 1f, 10f)
@@ -209,7 +209,7 @@ object DeathMgr {
                                 sdata!!.team!!.teamColor!!.colorCode + s.getDisplayName() + ChatColor.RESET +
                                     "に" + ChatColor.BOLD + sdata.weaponClass!!.subWeaponName + ChatColor.RESET +
                                     "でやられた！"
-                                )
+                            )
                             if (i == 0) {
                                 t.sendTitle(ChatColor.GREEN.toString() + "復活まであと: 5秒", msg, 0, 21, 0)
                                 for (player in plugin.getServer().getOnlinePlayers()) {
@@ -219,7 +219,7 @@ object DeathMgr {
                                                 "が" + getPlayerData(t)!!.team!!.teamColor!!.colorCode +
                                                 t.getDisplayName() + ChatColor.RESET + "を" + ChatColor.BOLD +
                                                 sdata.weaponClass!!.subWeaponName + ChatColor.RESET + "で倒した！"
-                                            ),
+                                        ),
                                     )
                                     s.spigot().sendMessage(
                                         ChatMessageType.ACTION_BAR,
@@ -227,7 +227,7 @@ object DeathMgr {
                                             (
                                                 getPlayerData(t)!!.team!!.teamColor!!.colorCode +
                                                     t.getDisplayName() + ChatColor.RESET + "を倒した！"
-                                                ),
+                                            ),
                                         ),
                                     )
                                     s.playSound(s.getLocation(), Sound.ENTITY_ARROW_HIT_PLAYER, 1f, 10f)
@@ -284,7 +284,7 @@ object DeathMgr {
                                 sdata!!.team!!.teamColor!!.colorCode + s.getDisplayName() + ChatColor.RESET +
                                     "に" + ChatColor.BOLD + sdata.weaponClass!!.sPWeaponName + ChatColor.RESET +
                                     "でやられた！"
-                                )
+                            )
                             if (i == 0) {
                                 t.sendTitle(ChatColor.GREEN.toString() + "復活まであと: 5秒", msg, 0, 21, 0)
                                 for (player in plugin.getServer().getOnlinePlayers()) {
@@ -294,7 +294,7 @@ object DeathMgr {
                                                 "が" + getPlayerData(t)!!.team!!.teamColor!!.colorCode +
                                                 t.getDisplayName() + ChatColor.RESET + "を" + ChatColor.BOLD +
                                                 sdata.weaponClass!!.sPWeaponName + ChatColor.RESET + "で倒した！"
-                                            ),
+                                        ),
                                     )
                                     s.spigot().sendMessage(
                                         ChatMessageType.ACTION_BAR,
@@ -302,7 +302,7 @@ object DeathMgr {
                                             (
                                                 getPlayerData(t)!!.team!!.teamColor!!.colorCode +
                                                     t.getDisplayName() + ChatColor.RESET + "を倒した！"
-                                                ),
+                                            ),
                                         ),
                                     )
                                     s.playSound(s.getLocation(), Sound.ENTITY_ARROW_HIT_PLAYER, 1f, 10f)
@@ -357,7 +357,7 @@ object DeathMgr {
                                             (
                                                 getPlayerData(t)!!.team!!.teamColor!!.colorCode +
                                                     t.getDisplayName() + ChatColor.RESET + "は溺れてしまった！"
-                                                ),
+                                            ),
                                         )
                                     }
                                 } else {
@@ -377,7 +377,7 @@ object DeathMgr {
                                                     splayer!!.getDisplayName() + ChatColor.RESET + "は" + ChatColor.RESET +
                                                     getPlayerData(t)!!.team!!.teamColor!!.colorCode +
                                                     t.getDisplayName() + ChatColor.RESET + "を水中に落とした！"
-                                                ),
+                                            ),
                                         )
                                     }
                                 }
@@ -469,7 +469,7 @@ object DeathMgr {
                                             (
                                                 getPlayerData(t)!!.team!!.teamColor!!.colorCode +
                                                     t.getDisplayName() + ChatColor.RESET + "は奈落に落ちてしまった！"
-                                                ),
+                                            ),
                                         )
                                     }
                                 } else {
@@ -488,7 +488,7 @@ object DeathMgr {
                                                     splayer!!.getDisplayName() + ChatColor.RESET + "は" + ChatColor.RESET +
                                                     getPlayerData(t)!!.team!!.teamColor!!.colorCode +
                                                     t.getDisplayName() + ChatColor.RESET + "を奈落に落とした！"
-                                                ),
+                                            ),
                                         )
                                     }
                                 }
@@ -611,7 +611,7 @@ object DeathMgr {
 
                     val sLocs = getSphere(loc, 2.0, 23)
                     for (o_player in plugin.getServer().getOnlinePlayers()) {
-                        if (getPlayerData(o_player)!!.settings!!.ShowEffect_SPWeapon() && o_player != player) {
+                        if (getPlayerData(o_player)!!.settings!!.showEffectSPWeapon() && o_player != player) {
                             val dustOptions =
                                 Particle.DustOptions(
                                     data.team!!.teamColor!!.bukkitColor!!,

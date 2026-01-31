@@ -194,7 +194,7 @@ object MegaLaser {
                                 if (eloc.distanceSquared(target.location) < Sclat.particleRenderDistanceSquared) {
                                     val targetData = getPlayerData(target)
                                     if (targetData == null) continue
-                                    if (targetData.settings!!.ShowEffect_SPWeaponRegion()) {
+                                    if (targetData.settings!!.showEffectSPWeaponRegion()) {
                                         val dustOptions =
                                             Particle.DustOptions(
                                                 playerData.team!!.teamColor!!.bukkitColor!!,
@@ -295,7 +295,8 @@ object MegaLaser {
 
                             sync {
                                 for (`as` in player.world.entities) {
-                                    if (`as` is ArmorStand && `as`
+                                    if (`as` is ArmorStand &&
+                                        `as`
                                             .location
                                             .distanceSquared(position.clone().add(0.0, -1.0, 0.0)) <= maxDistSquared
                                     ) {

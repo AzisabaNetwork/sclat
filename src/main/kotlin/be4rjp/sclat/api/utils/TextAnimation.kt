@@ -1,6 +1,9 @@
 package be4rjp.sclat.api.utils
 
-class TextAnimation(text: String, private val length: Int) {
+class TextAnimation(
+    text: String,
+    private val length: Int,
+) {
     private val text: String
 
     private var index = 0
@@ -33,8 +36,9 @@ class TextAnimation(text: String, private val length: Int) {
     }
 
     companion object {
-        private val SMALLS: MutableSet<Char?> = HashSet<Char?>(
-            mutableListOf<Char?>('.', '|', 'i', '!', '！', '/', '1', ' ', 'l'),
-        )
+        private val SMALLS: MutableSet<Char?> =
+            HashSet<Char?>(
+                mutableListOf<Char?>('.', '|', 'i', '!', '！', '/', '1', ' ', 'l'),
+            )
     }
 }

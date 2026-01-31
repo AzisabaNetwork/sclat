@@ -46,7 +46,7 @@ object SuperArmor {
                         cancel()
                     }
                     for (o_player in plugin.server.onlinePlayers) {
-                        if (getPlayerData(o_player)!!.settings!!.ShowEffect_SPWeapon() && o_player != player) {
+                        if (getPlayerData(o_player)!!.settings!!.showEffectSPWeapon() && o_player != player) {
                             if (o_player.world === player.world) {
                                 if (o_player
                                         .location
@@ -151,7 +151,7 @@ object SuperArmor {
                         cancel()
                     }
                     for (o_player in plugin.server.onlinePlayers) {
-                        if (getPlayerData(o_player)!!.settings!!.ShowEffect_SPWeapon() && o_player != player) {
+                        if (getPlayerData(o_player)!!.settings!!.showEffectSPWeapon() && o_player != player) {
                             if (o_player.world === player.world) {
                                 if (o_player
                                         .location

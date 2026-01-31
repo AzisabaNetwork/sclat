@@ -10,7 +10,7 @@ import be4rjp.sclat.weapon.spweapon.SwordMord.attackSword
 import be4rjp.sclat.weapon.subweapon.Beacon.setBeacon
 import be4rjp.sclat.weapon.subweapon.Boomerang.boomerangRunnable
 import be4rjp.sclat.weapon.subweapon.CurlingBomb.curlingBombRunnable
-import be4rjp.sclat.weapon.subweapon.FloaterBomb.FloaterBombRunnable
+import be4rjp.sclat.weapon.subweapon.FloaterBomb.floaterBombRunnable
 import be4rjp.sclat.weapon.subweapon.KBomb.kBomRunnable
 import be4rjp.sclat.weapon.subweapon.Poison.poisonRunnable
 import be4rjp.sclat.weapon.subweapon.QuickBomb.quickBomRunnable
@@ -159,7 +159,7 @@ object SubWeaponMgr {
             }
 
             "右クリックで射撃!" -> {
-                if (data.settings!!.ShowEffect_ChargerLine()) {
+                if (data.settings!!.showEffectChargerLine()) {
                     shootLitterFiveG(player)
                     data.canUseSubWeapon = (false)
                 } else {
@@ -183,7 +183,7 @@ object SubWeaponMgr {
             }
 
             "フローターボム" -> {
-                FloaterBombRunnable(player)
+                floaterBombRunnable(player)
                 data.canUseSubWeapon = (false)
             }
 

@@ -18,14 +18,15 @@ object PlayerReturnManager {
     }
 
     fun runRemoveTask() {
-        val task: BukkitRunnable = object : BukkitRunnable() {
-            override fun run() {
-                try {
-                    list.removeIf { pr: PlayerReturn? -> !pr!!.flag }
-                } catch (e: Exception) {
+        val task: BukkitRunnable =
+            object : BukkitRunnable() {
+                override fun run() {
+                    try {
+                        list.removeIf { pr: PlayerReturn? -> !pr!!.flag }
+                    } catch (e: Exception) {
+                    }
                 }
             }
-        }
         task.runTaskTimer(plugin, 0, 200)
     }
 

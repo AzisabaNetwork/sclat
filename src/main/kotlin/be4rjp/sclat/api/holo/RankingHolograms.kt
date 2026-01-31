@@ -201,7 +201,7 @@ class RankingHolograms(
                                             (
                                                 "§e" + (i + 1).toString() + "位 §f" + mcid +
                                                     "  §6Rank : §r" + rank + " [§b " + RankMgr.toABCRank(rank) + " §f]"
-                                                ),
+                                            ),
                                         )
                                 } else {
                                     armorStand.customName = CraftChatMessage.fromStringOrNull("--")
@@ -260,7 +260,7 @@ class RankingHolograms(
                                     (
                                         "§aYou ->> §e" + (if (rank == 0) "-" else ranking) +
                                             "位 §f" + mcid + "  §6Rank : §r" + rank + " [§b " + RankMgr.toABCRank(rank) + " §f]"
-                                        ),
+                                    ),
                                 )
                         }
 
@@ -279,7 +279,7 @@ class RankingHolograms(
                                     (
                                         "§aYou ->> §e" + (if (kill == 0) "-" else ranking) +
                                             "位 §f" + mcid + "  §6Kill(s) : §r" + kill
-                                        ),
+                                    ),
                                 )
                         }
 
@@ -298,7 +298,7 @@ class RankingHolograms(
                                     (
                                         "§aYou ->> §e" +
                                             (if (paint == 0) "-" else ranking) + "位 §f" + mcid + "  §6Paint(s) : §r" + paint
-                                        ),
+                                    ),
                                 )
                         }
                         list.add(you)

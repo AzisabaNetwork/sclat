@@ -30,7 +30,7 @@ import org.bukkit.util.Vector
  */
 object Bucket {
     @JvmStatic
-    fun ShootBucket(player: Player) {
+    fun shootBucket(player: Player) {
         val data = getPlayerData(player)
         val delay1: BukkitRunnable =
             object : BukkitRunnable() {
@@ -56,7 +56,7 @@ object Bucket {
             override fun run() {
                 var sound = false
                 for (i in 0..<data.weaponClass?.mainWeapon!!.rollerShootQuantity) {
-                    val `is` = Shoot(player, null)
+                    val `is` = shoot(player, null)
                     if (`is`) sound = true
                 }
                 if (sound) player.playSound(player.location, Sound.UI_BUTTON_CLICK, 1f, 1.63f)
@@ -72,7 +72,7 @@ object Bucket {
                     c++
                     val q = 2
                     for (i in 0..<data.weaponClass?.mainWeapon!!.rollerShootQuantity) {
-                        val `is` = Shoot(player, null)
+                        val `is` = shoot(player, null)
                         if (`is`) sound = true
                     }
                     if (sound) player.playSound(player.location, Sound.UI_BUTTON_CLICK, 1f, 1.63f)
@@ -95,7 +95,7 @@ object Bucket {
         }
     }
 
-    fun Shoot(
+    fun shoot(
         player: Player,
         v: Vector?,
     ): Boolean {
@@ -107,7 +107,7 @@ object Bucket {
                 data!!.weaponClass?.mainWeapon!!.needInk
                     * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) /
                     Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)
-                ).toFloat()
+            ).toFloat()
         ) {
             player.sendTitle("", ChatColor.RED.toString() + "インクが足りません", 0, 13, 2)
             return true
@@ -117,7 +117,7 @@ object Bucket {
                 data.weaponClass?.mainWeapon!!.needInk
                     * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) /
                     Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)
-                ).toFloat()
+            ).toFloat()
         val ball = player.launchProjectile<Snowball>(Snowball::class.java)
         (ball as CraftSnowball).handle.setItem(CraftItemStack.asNMSCopy(ItemStack(getPlayerData(player)!!.team?.teamColor!!.wool!!)))
         var vec: Vector? =
@@ -166,7 +166,7 @@ object Bucket {
                     if (i != 0) {
                         for (target in plugin.server.onlinePlayers) {
                             if (target.world !== p.world) continue
-                            if (!getPlayerData(target)!!.settings?.ShowEffect_MainWeaponInk()!!) continue
+                            if (!getPlayerData(target)!!.settings?.showEffectMainWeaponInk()!!) continue
                             if (target.world === inkball!!.world) {
                                 if (target
                                         .location
@@ -212,37 +212,37 @@ object Bucket {
     }
 
     @JvmStatic
-    fun BucketHealRunnable(
+    fun bucketHealRunnable(
         player: Player,
         level: Int,
     ) {
         val delay3: BukkitRunnable =
             object : BukkitRunnable() {
                 var p: Player = player
-                var Ctime: Int = 200
-                var bh_recharge: Boolean = true
+                var cTime: Int = 200
+                var bhRecharge: Boolean = true
 
                 override fun run() {
                     val data = getPlayerData(p)
                     if (level >= 1) {
-                        Ctime = 100
+                        cTime = 100
                     }
                     if (!data!!.isInMatch || !p.isOnline) {
                         cancel()
                         return
                     }
-                    if (data.isSneaking && bh_recharge && player.gameMode == GameMode.ADVENTURE) {
-                        p.addPotionEffect(PotionEffect(PotionEffectType.ABSORPTION, Ctime, level))
+                    if (data.isSneaking && bhRecharge && player.gameMode == GameMode.ADVENTURE) {
+                        p.addPotionEffect(PotionEffect(PotionEffectType.ABSORPTION, cTime, level))
                         p.world.playSound(p.location, Sound.ITEM_TRIDENT_RETURN, 1.4f, 1.5f)
-                        bh_recharge = false
+                        bhRecharge = false
                         val healtask: BukkitRunnable =
                             object : BukkitRunnable() {
                                 // クールタイムを管理しています
                                 override fun run() {
-                                    bh_recharge = true
+                                    bhRecharge = true
                                 }
                             }
-                        healtask.runTaskLater(plugin, Ctime.toLong())
+                        healtask.runTaskLater(plugin, cTime.toLong())
                     }
                 }
             }

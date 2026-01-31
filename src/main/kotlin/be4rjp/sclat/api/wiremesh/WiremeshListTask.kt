@@ -29,11 +29,12 @@ class WiremeshListTask(
         val list = RegionBlocks(firstPoint, secondPoint).blocks
 
         for (block in list) {
-            if (!blockList.contains(block) && (
+            if (!blockList.contains(block) &&
+                (
                     (block.type == Material.IRON_TRAPDOOR && trapDoor) ||
                         (block.type == Material.IRON_BARS && ironBars) ||
                         (block.type.toString().contains("FENCE") && fence)
-                    )
+                )
             ) {
                 val bData = block.blockData
                 blockDataMap.put(block, bData)

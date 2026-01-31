@@ -376,7 +376,7 @@ object QuadroArms {
                                 .wool!!
                                 .createBlockData()
                         for (o_player in plugin.server.onlinePlayers) {
-                            if (getPlayerData(o_player)!!.settings!!.ShowEffect_MainWeaponInk()) {
+                            if (getPlayerData(o_player)!!.settings!!.showEffectMainWeaponInk()) {
                                 if (o_player.world ===
                                     inkball!!.world
                                 ) {
@@ -465,7 +465,7 @@ object QuadroArms {
 
                     if (i != 0) {
                         for (target in plugin.server.onlinePlayers) {
-                            if (!getPlayerData(target)!!.settings!!.ShowEffect_MainWeaponInk()) continue
+                            if (!getPlayerData(target)!!.settings!!.showEffectMainWeaponInk()) continue
                             if (target.world === inkball!!.world) {
                                 if (target
                                         .location
@@ -555,7 +555,7 @@ object QuadroArms {
                             setSnowballHitCount(name, 0)
                         }
                         for (target in plugin.server.onlinePlayers) {
-                            if (!getPlayerData(target)!!.settings!!.ShowEffect_MainWeaponInk()) continue
+                            if (!getPlayerData(target)!!.settings!!.showEffectMainWeaponInk()) continue
                             if (target.world === inkball!!.world) {
                                 if (target
                                         .location
@@ -622,7 +622,7 @@ object QuadroArms {
                                     val damage = (
                                         (1 + maxDist - target.location.distance(inkball!!.location)) *
                                             blasterExDamage
-                                        )
+                                    )
                                     if (getPlayerData(player)!!.team != getPlayerData(target)!!.team &&
                                         target.gameMode == GameMode.ADVENTURE
                                     ) {
@@ -648,7 +648,7 @@ object QuadroArms {
                                         val damage = (
                                             (1 + maxDist - `as`.location.distance(inkball!!.location)) *
                                                 blasterExDamage
-                                            )
+                                        )
                                         ArmorStandMgr.giveDamageArmorStand(`as`, damage, p)
                                     }
                                 }
@@ -705,15 +705,17 @@ object QuadroArms {
 
                         if (!drop!!.isOnGround &&
                             !(
-                                drop!!.velocity.getX() == 0.0 && drop!!
-                                    .velocity
-                                    .getZ() != 0.0
-                                ) &&
+                                drop!!.velocity.getX() == 0.0 &&
+                                    drop!!
+                                        .velocity
+                                        .getZ() != 0.0
+                            ) &&
                             !(
-                                drop!!.velocity.getX() != 0.0 && drop!!
-                                    .velocity
-                                    .getZ() == 0.0
-                                )
+                                drop!!.velocity.getX() != 0.0 &&
+                                    drop!!
+                                        .velocity
+                                        .getZ() == 0.0
+                            )
                         ) {
                             ball!!.velocity = drop!!.velocity
                         }
@@ -729,7 +731,7 @@ object QuadroArms {
                             // 爆発エフェクト
                             val sLocs = getSphere(drop!!.location, maxDist, 15)
                             for (o_player in plugin.server.onlinePlayers) {
-                                if (getPlayerData(o_player)!!.settings!!.ShowEffect_BombEx()) {
+                                if (getPlayerData(o_player)!!.settings!!.showEffectBombEx()) {
                                     for (loc in sLocs) {
                                         if (o_player.world === loc.world) {
                                             if (o_player
@@ -771,7 +773,9 @@ object QuadroArms {
                                 if (`as`.location.distance(drop!!.location) <= maxDist) {
                                     if (`as`.customName != null) {
                                         if (`as`.customName == null) continue
-                                        if (`as` is ArmorStand && (`as`.customName != "Path") && (`as`.customName != "21") &&
+                                        if (`as` is ArmorStand &&
+                                            (`as`.customName != "Path") &&
+                                            (`as`.customName != "21") &&
                                             (`as`.customName != "100") &&
                                             (`as`.customName != "SplashShield") &&
                                             (`as`.customName != "Kasa")
@@ -790,7 +794,7 @@ object QuadroArms {
 
                         // ボムの視認用エフェクト
                         for (o_player in plugin.server.onlinePlayers) {
-                            if (getPlayerData(o_player)!!.settings!!.ShowEffect_Bomb()) {
+                            if (getPlayerData(o_player)!!.settings!!.showEffectBomb()) {
                                 if (o_player.world === drop!!.location.world) {
                                     if (o_player
                                             .location

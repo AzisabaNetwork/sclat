@@ -166,7 +166,7 @@ object CurlingBomb {
                                     .wool!!
                                     .createBlockData()
                             for (target in plugin.server.onlinePlayers) {
-                                if (getPlayerData(target)!!.settings!!.ShowEffect_Bomb()) {
+                                if (getPlayerData(target)!!.settings!!.showEffectBomb()) {
                                     if (target.world ===
                                         player.world
                                     ) {
@@ -190,7 +190,7 @@ object CurlingBomb {
                             }
                             // 攻撃判定
                             for (target in plugin.server.onlinePlayers) {
-                                if (getPlayerData(target)!!.settings!!.ShowEffect_Bomb()) {
+                                if (getPlayerData(target)!!.settings!!.showEffectBomb()) {
                                     if (target.world === player.world) {
                                         if (target.location.distance(as1l) <= 1.2) {
                                             val damage = 2.0
@@ -301,7 +301,7 @@ object CurlingBomb {
                                     val damage = (
                                         (maxDist - target.location.distance(as1l)) * 4 *
                                             Gear.getGearInfluence(player, Gear.Type.SUB_SPEC_UP)
-                                        )
+                                    )
                                     if (getPlayerData(player)!!.team != getPlayerData(target)!!.team &&
                                         target.gameMode == GameMode.ADVENTURE
                                     ) {

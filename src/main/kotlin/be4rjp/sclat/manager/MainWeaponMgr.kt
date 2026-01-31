@@ -5,12 +5,12 @@ import be4rjp.sclat.Sclat
 import be4rjp.sclat.data.DataMgr.getPlayerData
 import be4rjp.sclat.data.DataMgr.setMainWeapon
 import be4rjp.sclat.data.MainWeapon
-import be4rjp.sclat.weapon.Blaster.ShootBlaster
-import be4rjp.sclat.weapon.Brush.ShootPaintRunnable
-import be4rjp.sclat.weapon.Bucket.ShootBucket
+import be4rjp.sclat.weapon.Blaster.shootBlaster
+import be4rjp.sclat.weapon.Brush
+import be4rjp.sclat.weapon.Bucket.shootBucket
 import be4rjp.sclat.weapon.Burst.BurstCooltime
 import be4rjp.sclat.weapon.Kasa.shootKasa
-import be4rjp.sclat.weapon.Roller.shootPaintRunnable
+import be4rjp.sclat.weapon.Roller
 import be4rjp.sclat.weapon.Slosher.shootSlosher
 import org.bukkit.Material
 import org.bukkit.entity.Player
@@ -22,16 +22,16 @@ import org.bukkit.inventory.ItemStack
  */
 object MainWeaponMgr {
     @Synchronized
-    fun SetupMainWeapon() {
+    fun setupMainWeapon() {
         for (weaponname in Sclat.Companion.conf!!
             .weaponConfig!!
             .getConfigurationSection("MainWeapon")!!
             .getKeys(false)) {
-            val WeaponType =
+            val weaponType =
                 Sclat.Companion.conf!!
                     .weaponConfig!!
                     .getString("MainWeapon." + weaponname + ".WeaponType")
-            val WeaponMaterial =
+            val weaponMaterial =
                 Material
                     .getMaterial(
                         Sclat.Companion.conf!!
@@ -208,12 +208,12 @@ object MainWeaponMgr {
                         Sclat.Companion.conf!!
                             .weaponConfig!!
                             .getDouble("MainWeapon." + weaponname + ".SlideNeedInk")
-                        ).toFloat()
+                    ).toFloat()
             }
 
             val mw = MainWeapon(weaponname)
-            mw.weaponType = (WeaponType)
-            val `is` = ItemStack(WeaponMaterial!!)
+            mw.weaponType = (weaponType)
+            val `is` = ItemStack(weaponMaterial!!)
             val itemMeta = `is`.getItemMeta()
             itemMeta!!.setDisplayName(weaponname)
             `is`.setItemMeta(itemMeta)
@@ -266,7 +266,7 @@ object MainWeaponMgr {
                         Sclat.Companion.conf!!
                             .weaponConfig!!
                             .getDouble("MainWeapon." + weaponname + ".MaxRandom")
-                        )
+                    )
             }
 
             if (Sclat.Companion.conf!!
@@ -278,7 +278,7 @@ object MainWeaponMgr {
                         Sclat.Companion.conf!!
                             .weaponConfig!!
                             .getInt("MainWeapon." + weaponname + ".MaxRandomCount")
-                        )
+                    )
             }
 
             if (Sclat.Companion.conf!!
@@ -322,7 +322,7 @@ object MainWeaponMgr {
                         Sclat.Companion.conf!!
                             .weaponConfig!!
                             .getInt("MainWeapon." + weaponname + ".Money")
-                        )
+                    )
             } else {
                 mw.money = (0)
             }
@@ -336,7 +336,7 @@ object MainWeaponMgr {
                         Sclat.Companion.conf!!
                             .weaponConfig!!
                             .getInt("MainWeapon." + weaponname + ".Level")
-                        )
+                    )
             } else {
                 mw.level = (0)
             }
@@ -367,7 +367,7 @@ object MainWeaponMgr {
                         Sclat.Companion.conf!!
                             .weaponConfig!!
                             .getBoolean("MainWeapon." + weaponname + ".IsLootBox")
-                        )
+                    )
             }
             if (Sclat.Companion.conf!!
                     .weaponConfig!!
@@ -377,7 +377,7 @@ object MainWeaponMgr {
                     Sclat.Companion.conf!!
                         .weaponConfig!!
                         .getDouble("MainWeapon." + weaponname + ".LootPro")
-                    )
+                )
             }
             if (Sclat.Companion.conf!!
                     .weaponConfig!!
@@ -397,7 +397,7 @@ object MainWeaponMgr {
                     Sclat.Companion.conf!!
                         .weaponConfig!!
                         .getString("MainWeapon." + weaponname + ".SwapWeapon")
-                    )
+                )
             }
             setMainWeapon(weaponname, mw)
         }
@@ -434,7 +434,7 @@ object MainWeaponMgr {
         }
     }
 
-    fun UseMainWeapon(player: Player) {
+    fun useMainWeapon(player: Player) {
         if (equalWeapon(player)) {
             Sclat.dadadaCheckerAPI!!.fireClickEvent(player)
 
@@ -446,22 +446,22 @@ object MainWeaponMgr {
                 data.isHolding =
                     true
             }
-            if (data.weaponClass!!.mainWeapon!!.weaponType == "Blaster") ShootBlaster(player)
+            if (data.weaponClass!!.mainWeapon!!.weaponType == "Blaster") shootBlaster(player)
             if (data.weaponClass!!.mainWeapon!!.weaponType == "Burst") BurstCooltime(player)
             if (data.weaponClass!!.mainWeapon!!.weaponType == "Roller") {
                 if (data.weaponClass!!.mainWeapon!!.isHude) {
                     if (data.canShoot || clickType == ClickType.RENDA) {
                         data.canShoot = false
-                        ShootPaintRunnable(player)
+                        Brush.shootPaintRunnable(player)
                     }
                 } else {
                     if (data.canShoot) {
                         data.canShoot = false
-                        shootPaintRunnable(player)
+                        Roller.shootPaintRunnable(player)
                     }
                 }
             }
-            if (data.weaponClass!!.mainWeapon!!.weaponType == "Bucket") ShootBucket(player)
+            if (data.weaponClass!!.mainWeapon!!.weaponType == "Bucket") shootBucket(player)
             if (data.weaponClass!!.mainWeapon!!.weaponType == "Slosher") shootSlosher(player)
             if (data.weaponClass!!.mainWeapon!!.weaponType == "Kasa" ||
                 data.weaponClass!!.mainWeapon!!.weaponType == "Camping"

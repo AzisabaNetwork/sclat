@@ -276,7 +276,7 @@ object Decoy {
                         }
 
                         // デコイショットの視認用エフェクト
-                        if (getPlayerData(player)!!.settings?.ShowEffect_Bomb()!!) {
+                        if (getPlayerData(player)!!.settings?.showEffectBomb()!!) {
                             if (player.world === as1!!.location.world) {
                                 if (player
                                         .location

@@ -25,7 +25,5 @@ class BoundingBox {
         max = Vector(bb.maxX, bb.maxY, bb.maxZ)
     }
 
-    fun midPoint(): Vector {
-        return max.clone().add(min).multiply(0.5)
-    }
+    fun midPoint(): Vector = max.clone().add(min).multiply(0.5)
 }

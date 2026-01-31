@@ -6,95 +6,77 @@ import org.bukkit.entity.Player
  *
  * @author Be4rJP
  */
-class PlayerSettings(val player: Player?) {
-    private var ShowEffect_MainWeaponInk = true
-    private var ShowEffect_ChargerLine = true
-    private var ShowEffect_SPWeapon = true
-    private var ShowEffect_SPWeaponRegion = true
-    private var ShowSnowBall = true
-    private var ShowEffect_Squid = true
-    private var ShowEffect_BombEx = true
-    private var ShowEffect_Bomb = true
-    private var PlayBGM = true
+class PlayerSettings(
+    val player: Player?,
+) {
+    private var showEffectMainWeaponInk = true
+    private var showEffectChargerLine = true
+    private var showEffectSPWeapon = true
+    private var showEffectSPWeaponRegion = true
+    private var showSnowBall = true
+    private var showEffectSquid = true
+    private var showEffectBombEx = true
+    private var showEffectBomb = true
+    private var playBGM = true
     private var doChargeKeep = true
 
-    fun ShowEffect_MainWeaponInk(): Boolean {
-        return this.ShowEffect_MainWeaponInk
+    fun showEffectMainWeaponInk(): Boolean = this.showEffectMainWeaponInk
+
+    fun showEffectChargerLine(): Boolean = this.showEffectChargerLine
+
+    fun showEffectSPWeapon(): Boolean = this.showEffectSPWeapon
+
+    fun showEffectSPWeaponRegion(): Boolean = this.showEffectSPWeaponRegion
+
+    fun showSnowBall(): Boolean = this.showSnowBall
+
+    fun showEffectSquid(): Boolean = this.showEffectSquid
+
+    fun showEffectBombEx(): Boolean = this.showEffectBombEx
+
+    fun showEffectBomb(): Boolean = this.showEffectBomb
+
+    fun playBGM(): Boolean = this.playBGM
+
+    fun doChargeKeep(): Boolean = this.doChargeKeep
+
+    fun sShowEffectMainWeaponInk() {
+        this.showEffectMainWeaponInk = !showEffectMainWeaponInk
     }
 
-    fun ShowEffect_ChargerLine(): Boolean {
-        return this.ShowEffect_ChargerLine
+    fun sShowEffectChargerLine() {
+        this.showEffectChargerLine = !showEffectChargerLine
     }
 
-    fun ShowEffect_SPWeapon(): Boolean {
-        return this.ShowEffect_SPWeapon
+    fun sShowEffectSPWeapon() {
+        this.showEffectSPWeapon = !showEffectSPWeapon
     }
 
-    fun ShowEffect_SPWeaponRegion(): Boolean {
-        return this.ShowEffect_SPWeaponRegion
+    fun sShowEffectSPWeaponRegion() {
+        this.showEffectSPWeaponRegion = !showEffectSPWeaponRegion
     }
 
-    fun ShowSnowBall(): Boolean {
-        return this.ShowSnowBall
+    fun sShowSnowBall() {
+        this.showSnowBall = !showSnowBall
     }
 
-    fun ShowEffect_Squid(): Boolean {
-        return this.ShowEffect_Squid
+    fun sShowEffectSquid() {
+        this.showEffectSquid = !showEffectSquid
     }
 
-    fun ShowEffect_BombEx(): Boolean {
-        return this.ShowEffect_BombEx
+    fun sShowEffectBombEx() {
+        this.showEffectBombEx = !showEffectBombEx
     }
 
-    fun ShowEffect_Bomb(): Boolean {
-        return this.ShowEffect_Bomb
+    fun sShowEffectBomb() {
+        this.showEffectBomb = !showEffectBomb
     }
 
-    fun PlayBGM(): Boolean {
-        return this.PlayBGM
+    fun sPlayBGM() {
+        this.playBGM = !playBGM
     }
 
-    fun doChargeKeep(): Boolean {
-        return this.doChargeKeep
-    }
-
-    fun S_ShowEffect_MainWeaponInk() {
-        this.ShowEffect_MainWeaponInk = !ShowEffect_MainWeaponInk
-    }
-
-    fun S_ShowEffect_ChargerLine() {
-        this.ShowEffect_ChargerLine = !ShowEffect_ChargerLine
-    }
-
-    fun S_ShowEffect_SPWeapon() {
-        this.ShowEffect_SPWeapon = !ShowEffect_SPWeapon
-    }
-
-    fun S_ShowEffect_SPWeaponRegion() {
-        this.ShowEffect_SPWeaponRegion = !ShowEffect_SPWeaponRegion
-    }
-
-    fun S_ShowSnowBall() {
-        this.ShowSnowBall = !ShowSnowBall
-    }
-
-    fun S_ShowEffect_Squid() {
-        this.ShowEffect_Squid = !ShowEffect_Squid
-    }
-
-    fun S_ShowEffect_BombEx() {
-        this.ShowEffect_BombEx = !ShowEffect_BombEx
-    }
-
-    fun S_ShowEffect_Bomb() {
-        this.ShowEffect_Bomb = !ShowEffect_Bomb
-    }
-
-    fun S_PlayBGM() {
-        this.PlayBGM = !PlayBGM
-    }
-
-    fun S_doChargeKeep() {
+    fun sDoChargeKeep() {
         this.doChargeKeep = !doChargeKeep
     }
 }

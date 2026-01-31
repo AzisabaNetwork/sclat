@@ -63,7 +63,7 @@ object Shooter {
                             data.tick = (
                                 data.tick +
                                     getPlayerData(p)!!.weaponClass!!.mainWeapon!!.shootTick
-                                )
+                            )
                             if (data.weaponClass?.mainWeapon!!.maxRandom != 0.0 &&
                                 maxRandomCount <= data.weaponClass?.mainWeapon!!.maxRandomCount * 2
                             ) {
@@ -111,7 +111,7 @@ object Shooter {
                             data.tick = (
                                 data.tick +
                                     getPlayerData(p)!!.weaponClass!!.mainWeapon!!.shootTick
-                                )
+                            )
                         }
                     }
                 }
@@ -175,7 +175,10 @@ object Shooter {
                     // マニューバー系
                     if (data.weaponClass?.mainWeapon!!.isManeuver) {
                         // if(p.getExp() >= ink) {
-                        if (data.isSneaking && slRecharge2 && !data.isSliding && (
+                        if (data.isSneaking &&
+                            slRecharge2 &&
+                            !data.isSliding &&
+                            (
                                 p
                                     .inventory
                                     .itemInMainHand
@@ -186,7 +189,7 @@ object Shooter {
                                         .mainWeapon!!
                                         .weaponIteamStack!!
                                         .type
-                                )
+                            )
                         ) { // slをsl_recharge_2に変更することで優先順位が低い方のスライドが残っている時のみ使えるようにしました
                             val jvec = (Vector(vec.getX(), 0.0, vec.getZ())).normalize().multiply(3)
                             val ev = jvec.clone().normalize().multiply(-2)
@@ -211,7 +214,7 @@ object Shooter {
                                     )
                                 val erv = ev.clone().add(randomVector)
                                 for (o_player in plugin.server.onlinePlayers) {
-                                    if (getPlayerData(o_player)!!.settings!!.ShowEffect_BombEx()) {
+                                    if (getPlayerData(o_player)!!.settings!!.showEffectBombEx()) {
                                         if (o_player.world === location.world) {
                                             if (o_player
                                                     .location
@@ -367,7 +370,7 @@ object Shooter {
                 data!!.weaponClass!!.mainWeapon!!.needInk
                     * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) /
                     Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)
-                ).toFloat()
+            ).toFloat()
         ) {
             player.sendTitle("", ChatColor.RED.toString() + "インクが足りません", 0, 5, 2)
             player.playSound(player.location, Sound.UI_BUTTON_CLICK, 1f, 1.63f)
@@ -378,7 +381,7 @@ object Shooter {
                 data.weaponClass?.mainWeapon!!.needInk
                     * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) /
                     Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)
-                ).toFloat()
+            ).toFloat()
         val rayTrace = RayTrace(player.eyeLocation.toVector(), player.eyeLocation.direction)
         val positions =
             rayTrace.traverse(
@@ -479,7 +482,7 @@ object Shooter {
                                 .wool!!
                                 .createBlockData()
                         for (o_player in plugin.server.onlinePlayers) {
-                            if (getPlayerData(o_player)!!.settings!!.ShowEffect_MainWeaponInk()) {
+                            if (getPlayerData(o_player)!!.settings!!.showEffectMainWeaponInk()) {
                                 if (o_player.world ===
                                     inkball!!.world
                                 ) {

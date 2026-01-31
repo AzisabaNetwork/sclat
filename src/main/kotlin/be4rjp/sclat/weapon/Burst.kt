@@ -114,7 +114,7 @@ object Burst {
                 data!!.weaponClass?.mainWeapon!!.needInk
                     * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) /
                     Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)
-                ).toFloat()
+            ).toFloat()
         ) {
             player.sendTitle("", ChatColor.RED.toString() + "インクが足りません", 0, 5, 2)
             player.playSound(player.location, Sound.UI_BUTTON_CLICK, 1f, 1.63f)
@@ -125,7 +125,7 @@ object Burst {
                 data.weaponClass?.mainWeapon!!.needInk
                     * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) /
                     Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)
-                ).toFloat()
+            ).toFloat()
 
         PaintMgr.paintHightestBlock(player.location, player, true, true)
 
@@ -181,7 +181,7 @@ object Burst {
                                 .wool!!
                                 .createBlockData()
                         for (o_player in plugin.server.onlinePlayers) {
-                            if (getPlayerData(o_player)!!.settings?.ShowEffect_MainWeaponInk()!!) {
+                            if (getPlayerData(o_player)!!.settings?.showEffectMainWeaponInk()!!) {
                                 if (o_player.world ===
                                     inkball!!.world
                                 ) {

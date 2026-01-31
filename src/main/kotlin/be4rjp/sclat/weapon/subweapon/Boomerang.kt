@@ -204,7 +204,7 @@ object Boomerang {
                                     .wool!!
                                     .createBlockData()
                             for (target in plugin.server.onlinePlayers) {
-                                if (getPlayerData(target)!!.settings!!.ShowEffect_Bomb()) {
+                                if (getPlayerData(target)!!.settings!!.showEffectBomb()) {
                                     if (target.world ===
                                         player.world
                                     ) {
@@ -228,7 +228,7 @@ object Boomerang {
                             }
                             // 攻撃判定
                             for (target in plugin.server.onlinePlayers) {
-                                if (getPlayerData(target)!!.settings!!.ShowEffect_Bomb()) {
+                                if (getPlayerData(target)!!.settings!!.showEffectBomb()) {
                                     if (target.world === player.world) {
                                         if (target.location.distance(as1l) <= 1.2) {
                                             val damage = 0.2
@@ -339,7 +339,7 @@ object Boomerang {
                                     val damage = (
                                         (maxDist - target.location.distance(as1l)) * 1 *
                                             Gear.getGearInfluence(player, Gear.Type.SUB_SPEC_UP)
-                                        )
+                                    )
                                     if (getPlayerData(player)!!.team != getPlayerData(target)!!.team &&
                                         target.gameMode == GameMode.ADVENTURE
                                     ) {
@@ -365,7 +365,7 @@ object Boomerang {
                                         val damage = (
                                             (maxDist - `as`.location.distance(as1l)) * 1 *
                                                 Gear.getGearInfluence(player, Gear.Type.SUB_SPEC_UP)
-                                            )
+                                        )
                                         ArmorStandMgr.giveDamageArmorStand(`as`, damage, player)
                                         if (`as`.customName != null) {
                                             if (`as`.customName == "SplashShield" ||

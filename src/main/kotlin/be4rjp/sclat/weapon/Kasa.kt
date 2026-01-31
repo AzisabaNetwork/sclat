@@ -111,7 +111,7 @@ object Kasa {
                 data!!.weaponClass!!.mainWeapon!!.needInk
                     * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) /
                     Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)
-                ).toFloat()
+            ).toFloat()
         ) {
             player.sendTitle("", ChatColor.RED.toString() + "インクが足りません", 0, 13, 2)
             return true
@@ -121,7 +121,7 @@ object Kasa {
                 data.weaponClass?.mainWeapon!!.needInk
                     * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) /
                     Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)
-                ).toFloat()
+            ).toFloat()
         val ball = player.launchProjectile<Snowball>(Snowball::class.java)
         (ball as CraftSnowball).handle.setItem(CraftItemStack.asNMSCopy(ItemStack(getPlayerData(player)!!.team!!.teamColor!!.wool!!)))
         var vec: Vector? =
@@ -170,7 +170,7 @@ object Kasa {
 
                     if (i != 0) {
                         for (target in plugin.server.onlinePlayers) {
-                            if (!getPlayerData(target)!!.settings!!.ShowEffect_MainWeaponInk()) continue
+                            if (!getPlayerData(target)!!.settings!!.showEffectMainWeaponInk()) continue
                             if (target.world === inkball!!.world) {
                                 if (target
                                         .location
@@ -351,7 +351,9 @@ object Kasa {
                         }
 
                         if (i != 0) {
-                            if (p.isSneaking && kdata.damage <= 200 && weapon &&
+                            if (p.isSneaking &&
+                                kdata.damage <= 200 &&
+                                weapon &&
                                 p.gameMode == GameMode.ADVENTURE
                             ) {
                                 as1!!.teleport(rl.clone().add(0.0, 0.2, 0.0))
@@ -697,7 +699,8 @@ object Kasa {
                                         .wool!!
                                         .createBlockData()
                                 for (target in plugin.server.onlinePlayers) {
-                                    if (getPlayerData(target)!!.settings!!.ShowEffect_MainWeaponInk() && target.world === p.world &&
+                                    if (getPlayerData(target)!!.settings!!.showEffectMainWeaponInk() &&
+                                        target.world === p.world &&
                                         target
                                             .location
                                             .distanceSquared(asl) < Sclat.particleRenderDistanceSquared
@@ -897,8 +900,12 @@ object Kasa {
                                 p
                                     .inventory
                                     .itemInMainHand
-                                    .type == Material.AIR || !p.isSneaking || p.gameMode == GameMode.SPECTATOR
-                                ) && squid && i < 39
+                                    .type == Material.AIR ||
+                                    !p.isSneaking ||
+                                    p.gameMode == GameMode.SPECTATOR
+                            ) &&
+                            squid &&
+                            i < 39
                         ) {
                             squid = false
                             i = 39

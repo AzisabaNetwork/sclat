@@ -81,7 +81,7 @@ object Roller {
                                     data.weaponClass?.mainWeapon!!.rollerNeedInk
                                         * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) /
                                         Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)
-                                    ).toFloat()
+                                ).toFloat()
                             ) {
                                 player.sendTitle("", ChatColor.RED.toString() + "インクが足りません", 0, 13, 2)
                                 player.playSound(player.location, Sound.UI_BUTTON_CLICK, 1f, 1.63f)
@@ -92,7 +92,7 @@ object Roller {
                                     data.weaponClass?.mainWeapon!!.rollerNeedInk
                                         * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) /
                                         Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)
-                                    ).toFloat()
+                                ).toFloat()
                             val locvec = p.eyeLocation.direction
                             val eloc = p.eyeLocation
                             val vec = Vector(locvec.getX(), 0.0, locvec.getZ()).normalize()
@@ -112,7 +112,7 @@ object Roller {
                                     .wool!!
                                     .createBlockData()
                             for (target in plugin.server.onlinePlayers) {
-                                if (getPlayerData(target)!!.settings!!.ShowEffect_MainWeaponInk()) {
+                                if (getPlayerData(target)!!.settings!!.showEffectMainWeaponInk()) {
                                     if (target.world ===
                                         p.world
                                     ) {
@@ -153,7 +153,7 @@ object Roller {
                                 )
 
                                 for (target in plugin.server.onlinePlayers) {
-                                    if (getPlayerData(target)!!.settings!!.ShowEffect_MainWeaponInk()) {
+                                    if (getPlayerData(target)!!.settings!!.showEffectMainWeaponInk()) {
                                         if (target.world ===
                                             p.world
                                         ) {
@@ -212,7 +212,7 @@ object Roller {
                                     (
                                         data.weaponClass?.mainWeapon!!.usingWalkSpeed
                                             * Gear.getGearInfluence(p, Gear.Type.MAIN_SPEC_UP)
-                                        ).toFloat()
+                                    ).toFloat()
                                 return
                             }
 
@@ -245,7 +245,7 @@ object Roller {
                                 )
 
                                 for (target in plugin.server.onlinePlayers) {
-                                    if (getPlayerData(target)!!.settings!!.ShowEffect_MainWeaponInk()) {
+                                    if (getPlayerData(target)!!.settings!!.showEffectMainWeaponInk()) {
                                         if (target.world ===
                                             p.world
                                         ) {
@@ -372,7 +372,7 @@ object Roller {
                                 if (block.type != Material.AIR) break
                                 PaintMgr.paintHightestBlock(position, p, false, true)
                                 for (target in plugin.server.onlinePlayers) {
-                                    if (getPlayerData(target)!!.settings!!.ShowEffect_MainWeaponInk()) {
+                                    if (getPlayerData(target)!!.settings!!.showEffectMainWeaponInk()) {
                                         if (target.world ===
                                             p.world
                                         ) {
@@ -484,7 +484,7 @@ object Roller {
                                 (
                                     data.weaponClass?.mainWeapon!!.usingWalkSpeed
                                         * Gear.getGearInfluence(p, Gear.Type.MAIN_SPEC_UP)
-                                    ).toFloat()
+                                ).toFloat()
                         }
                     } catch (e: Exception) {
                         cancel()
@@ -512,7 +512,8 @@ object Roller {
                         return
                     }
                     data!!.canRollerShoot = true
-                    if (p.gameMode != GameMode.ADVENTURE || p
+                    if (p.gameMode != GameMode.ADVENTURE ||
+                        p
                             .inventory
                             .itemInMainHand
                             .type == Material.AIR
@@ -600,7 +601,7 @@ object Roller {
                 data!!.weaponClass!!.mainWeapon!!.needInk
                     * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) /
                     Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)
-                ).toFloat()
+            ).toFloat()
         ) {
             player.sendTitle("", ChatColor.RED.toString() + "インクが足りません", 0, 13, 2)
             return true
@@ -610,7 +611,7 @@ object Roller {
                 data.weaponClass?.mainWeapon!!.needInk
                     * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) /
                     Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)
-                ).toFloat()
+            ).toFloat()
         val ball = player.launchProjectile<Snowball>(Snowball::class.java)
         (ball as CraftSnowball).handle.setItem(CraftItemStack.asNMSCopy(ItemStack(getPlayerData(player)!!.team!!.teamColor!!.wool!!)))
         var vec: Vector? =
@@ -692,7 +693,7 @@ object Roller {
                     if (i != 0) {
                         for (target in plugin.server.onlinePlayers) {
                             if (target.world !== p.world) continue
-                            if (!getPlayerData(target)!!.settings!!.ShowEffect_MainWeaponInk()) continue
+                            if (!getPlayerData(target)!!.settings!!.showEffectMainWeaponInk()) continue
                             val bd =
                                 getPlayerData(p)!!
                                     .team!!

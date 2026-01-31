@@ -38,9 +38,8 @@ import be4rjp.sclat.gui.OpenGUI
 import be4rjp.sclat.plugin
 import be4rjp.sclat.server.EquipmentServerManager.doCommands
 import be4rjp.sclat.server.StatusClient
-import be4rjp.sclat.weapon.Brush.HoldRunnable
-import be4rjp.sclat.weapon.Brush.RollPaintRunnable
-import be4rjp.sclat.weapon.Bucket.BucketHealRunnable
+import be4rjp.sclat.weapon.Brush
+import be4rjp.sclat.weapon.Bucket.bucketHealRunnable
 import be4rjp.sclat.weapon.Buckler.BucklerRunnable
 import be4rjp.sclat.weapon.Charger.ChargerRunnable
 import be4rjp.sclat.weapon.Decoy.DecoyRunnable
@@ -53,8 +52,7 @@ import be4rjp.sclat.weapon.Kasa.kasaRunnable
 import be4rjp.sclat.weapon.Manuber
 import be4rjp.sclat.weapon.Reeler.reelerRunnable
 import be4rjp.sclat.weapon.Reeler.reelerShootRunnable
-import be4rjp.sclat.weapon.Roller.holdRunnable
-import be4rjp.sclat.weapon.Roller.rollPaintRunnable
+import be4rjp.sclat.weapon.Roller
 import be4rjp.sclat.weapon.Shooter
 import be4rjp.sclat.weapon.Shooter.maneuverShootRunnable
 import be4rjp.sclat.weapon.Shooter.shooterRunnable
@@ -104,7 +102,7 @@ object MatchMgr {
     var matchedPlayerList: MutableList<String?> = ArrayList<String?>()
 
     @JvmStatic
-    fun PlayerJoinMatch(player: Player) {
+    fun playerJoinMatch(player: Player) {
         val data = getPlayerData(player)
 
         /*
@@ -140,7 +138,7 @@ object MatchMgr {
                             .getBoolean("CanVoting") &&
                         !getPlayerIsQuit(player.getUniqueId().toString())
                     ) {
-                        OpenGUI.MatchTohyoGUI(player)
+                        OpenGUI.matchTohyoGUI(player)
                     }
 
                     val startPlayerCount =
@@ -211,7 +209,7 @@ object MatchMgr {
                                                             .servers!!
                                                             .getString("ServerName") + " " +
                                                         (System.currentTimeMillis() / 1000 + 30)
-                                                    ),
+                                                ),
                                             )
                                             commands.add("stop")
                                             val sc =
@@ -338,7 +336,7 @@ object MatchMgr {
                                                     .set("WorkMode", "Area")
                                             }
                                         }
-                                        MatchMgr.StartMatch(match)
+                                        MatchMgr.startMatch(match)
                                         for (entity in p.getWorld().getEntities()) {
                                             if (entity !is Player && entity !is FallingBlock) {
                                                 entity.remove()
@@ -355,7 +353,7 @@ object MatchMgr {
                                                             .servers!!
                                                             .getString("ServerName") + " " +
                                                         System.currentTimeMillis() / 1000
-                                                    ),
+                                                ),
                                             )
                                             commands.add("stop")
                                             val sc =
@@ -393,7 +391,7 @@ object MatchMgr {
     }
 
     @Synchronized
-    fun MatchSetup() {
+    fun matchSetup() {
         // 再起動オプション
         if (Sclat.Companion.conf!!
                 .config!!
@@ -454,25 +452,25 @@ object MatchMgr {
 
         // lobby待機者用
         val id2 = Int.Companion.MAX_VALUE
-        val lobby_m = Match(id2)
-        val lobby_t0 = Team(id2)
-        val lobby_t1 = Team(id2 - 1)
-        setTeam(id2, lobby_t0)
-        setTeam(id2 - 1, lobby_t1)
+        val lobbyM = Match(id2)
+        val lobbyT0 = Team(id2)
+        val lobbyT1 = Team(id2 - 1)
+        setTeam(id2, lobbyT0)
+        setTeam(id2 - 1, lobbyT1)
 
         ColorShuffle()
         val lc0 = getColorRandom(0)
         val lc1 = getColorRandom(1)
-        lobby_t0.teamColor = lc0
-        lobby_t1.teamColor = lc1
+        lobbyT0.teamColor = lc0
+        lobbyT1.teamColor = lc1
 
-        lobby_m.team0 = (lobby_t0)
-        lobby_m.team1 = (lobby_t1)
+        lobbyM.team0 = (lobbyT0)
+        lobbyM.team1 = (lobbyT1)
 
         val map1 = getMapRandom(0)
-        lobby_m.mapData = map1
+        lobbyM.mapData = map1
 
-        setMatch(id2, lobby_m)
+        setMatch(id2, lobbyM)
 
         // TeamLoc teamloc = new TeamLoc(map);
         // teamloc.SetupTeam0Loc();
@@ -515,8 +513,9 @@ object MatchMgr {
     }
 
     @JvmStatic
-    fun RollBack() {
-        if (!canRollback && Sclat.Companion.conf!!
+    fun rollBack() {
+        if (!canRollback &&
+            Sclat.Companion.conf!!
                 .config!!
                 .getString("WorkMode") == "Trial"
         ) {
@@ -545,7 +544,7 @@ object MatchMgr {
         task.runTaskLater(plugin, 3600)
     }
 
-    fun StartCount(player: Player) {
+    fun startCount(player: Player) {
         val task: BukkitRunnable =
             object : BukkitRunnable() {
                 val p: Player = player
@@ -565,7 +564,7 @@ object MatchMgr {
         task.runTaskTimer(plugin, 230, 1)
     }
 
-    fun MatchRunnable(
+    fun matchRunnable(
         player: Player,
         match: Match,
     ) {
@@ -772,7 +771,7 @@ object MatchMgr {
                                 p.sendTitle("§l" + match.mapData!!.mapName, "§7ナワバリバトル", 10, 70, 20)
                             }
 
-                            StartCount(p)
+                            startCount(p)
 
                             val manager = Bukkit.getScoreboardManager()
                             val scoreboard = manager!!.getNewScoreboard()
@@ -926,12 +925,12 @@ object MatchMgr {
 
                             // playerclass
                             if (getPlayerData(p)!!.weaponClass!!.subWeaponName == "ビーコン") {
-                                ArmorStandMgr.BeaconArmorStandSetup(
+                                ArmorStandMgr.beaconArmorStandSetup(
                                     p,
                                 )
                             }
                             if (getPlayerData(p)!!.weaponClass!!.subWeaponName == "スプリンクラー") {
-                                ArmorStandMgr.SprinklerArmorStandSetup(
+                                ArmorStandMgr.sprinklerArmorStandSetup(
                                     p,
                                 )
                             }
@@ -970,13 +969,13 @@ object MatchMgr {
                                 BucklerRunnable(p)
                             }
                             if (getPlayerData(p)!!.weaponClass!!.mainWeapon!!.weaponType == "Bucket") {
-                                BucketHealRunnable(
+                                bucketHealRunnable(
                                     p,
                                     1,
                                 )
                             }
                             if (getPlayerData(p)!!.weaponClass!!.mainWeapon!!.weaponType == "Slosher") {
-                                BucketHealRunnable(
+                                bucketHealRunnable(
                                     p,
                                     0,
                                 )
@@ -988,11 +987,11 @@ object MatchMgr {
                             if (getPlayerData(p)!!.weaponClass!!.mainWeapon!!.weaponType == "Spinner") spinnerRunnable(p)
                             if (getPlayerData(p)!!.weaponClass!!.mainWeapon!!.weaponType == "Roller") {
                                 if (getPlayerData(p)!!.weaponClass!!.mainWeapon!!.isHude) {
-                                    HoldRunnable(p)
-                                    RollPaintRunnable(p)
+                                    Brush.holdRunnable(p)
+                                    Brush.rollPaintRunnable(p)
                                 } else {
-                                    holdRunnable(p)
-                                    rollPaintRunnable(p)
+                                    Roller.holdRunnable(p)
+                                    Roller.rollPaintRunnable(p)
                                 }
                             }
 
@@ -1030,7 +1029,7 @@ object MatchMgr {
                             getPlayerData(p)!!.isInMatch = (true)
                             p.setExp(0.99f)
                             if (getPlayerData(p)!!.playerNumber == 1) {
-                                InMatchCounter(p)
+                                inMatchCounter(p)
                                 if (Sclat.Companion.conf!!
                                         .config!!
                                         .getString("WorkMode") == "Area"
@@ -1059,7 +1058,7 @@ object MatchMgr {
                                 val radio = RadioSongPlayer(song)
                                 radio.setVolume(volume)
                                 for (oplayer in plugin.getServer().getOnlinePlayers()) {
-                                    if (getPlayerData(oplayer)!!.settings!!.PlayBGM() &&
+                                    if (getPlayerData(oplayer)!!.settings!!.playBGM() &&
                                         getPlayerData(oplayer)!!.isJoined
                                     ) {
                                         radio.addPlayer(oplayer)
@@ -1074,13 +1073,13 @@ object MatchMgr {
                                         .config!!
                                         .getString("WorkMode") == "Area"
                                 ) {
-                                    StopMusic(
+                                    stopMusic(
                                         radio,
                                         6000,
                                         match,
                                     )
                                 } else {
-                                    StopMusic(radio, 2400, match)
+                                    stopMusic(radio, 2400, match)
                                 }
                             }
 
@@ -1116,7 +1115,7 @@ object MatchMgr {
         task.runTaskTimer(plugin, 0, 1)
     }
 
-    fun StopMusic(
+    fun stopMusic(
         radio: RadioSongPlayer,
         delay: Long,
         match: Match,
@@ -1142,11 +1141,11 @@ object MatchMgr {
         task2.runTaskTimer(plugin, 0, 1)
     }
 
-    fun StartMatch(match: Match) {
+    fun startMatch(match: Match) {
         for (player in plugin.getServer().getOnlinePlayers()) {
             val data = getPlayerData(player)
             if (data!!.match == match) {
-                MatchRunnable(player, match)
+                matchRunnable(player, match)
                 data.lastAttack = player
             }
         }
@@ -1157,7 +1156,7 @@ object MatchMgr {
          */
     }
 
-    fun InMatchCounter(player: Player) {
+    fun inMatchCounter(player: Player) {
         val manager = Bukkit.getScoreboardManager()
         val scoreboard = manager!!.getNewScoreboard()
 
@@ -1330,7 +1329,7 @@ object MatchMgr {
                                         " : " + (100 - match.team0!!.gatiCount) + "  " +
                                         match.team1!!.teamColor!!.colorCode + match.team1!!.teamColor!!.colorName +
                                         " : " + (100 - match.team1!!.gatiCount)
-                                    ),
+                                ),
                             )
 
                             if (isgc) {
@@ -1353,10 +1352,10 @@ object MatchMgr {
                                     if (getPlayerData(oplayer)!!.isJoined && p !== oplayer) {
                                         oplayer.setScoreboard(Bukkit.getScoreboardManager()!!.getNewScoreboard())
                                         oplayer.getInventory().clear()
-                                        FinishMatch(oplayer)
+                                        finishMatch(oplayer)
                                     }
                                 }
-                                FinishMatch(p)
+                                finishMatch(p)
                                 cancel()
                             }
                             if ((match.team0!!.gatiCount == 95 && !team0nokori) ||
@@ -1377,7 +1376,8 @@ object MatchMgr {
 
                         ObjectiveUtil.setLine(objective!!, lines)
 
-                        if (s == 60 && Sclat.Companion.conf!!
+                        if (s == 60 &&
+                            Sclat.Companion.conf!!
                                 .config!!
                                 .getString("WorkMode") != "Area"
                         ) {
@@ -1392,7 +1392,7 @@ object MatchMgr {
                                 val radio = RadioSongPlayer(song)
                                 radio.setVolume(volume)
                                 for (oplayer in plugin.getServer().getOnlinePlayers()) {
-                                    if (getPlayerData(oplayer)!!.settings!!.PlayBGM() &&
+                                    if (getPlayerData(oplayer)!!.settings!!.playBGM() &&
                                         getPlayerData(oplayer)!!.isJoined
                                     ) {
                                         radio.addPlayer(oplayer)
@@ -1403,7 +1403,7 @@ object MatchMgr {
                                     }
                                 }
                                 radio.setPlaying(true)
-                                MatchMgr.StopMusic(radio, 1200, match)
+                                MatchMgr.stopMusic(radio, 1200, match)
                             }
                         }
                         if (s <= 0 && !entyo) {
@@ -1411,10 +1411,10 @@ object MatchMgr {
                                 if (getPlayerData(oplayer)!!.isJoined && p !== oplayer) {
                                     oplayer.setScoreboard(Bukkit.getScoreboardManager()!!.getNewScoreboard())
                                     oplayer.getInventory().clear()
-                                    FinishMatch(oplayer)
+                                    finishMatch(oplayer)
                                 }
                             }
-                            FinishMatch(p)
+                            finishMatch(p)
                             cancel()
                         }
 
@@ -1423,10 +1423,10 @@ object MatchMgr {
                                 if (getPlayerData(oplayer)!!.isJoined && p !== oplayer) {
                                     oplayer.setScoreboard(Bukkit.getScoreboardManager()!!.getNewScoreboard())
                                     oplayer.getInventory().clear()
-                                    FinishMatch(oplayer)
+                                    finishMatch(oplayer)
                                 }
                             }
-                            FinishMatch(p)
+                            finishMatch(p)
                             cancel()
                         }
 
@@ -1455,7 +1455,7 @@ object MatchMgr {
         task.runTaskTimer(plugin, 0, 20)
     }
 
-    fun FinishMatch(player: Player) {
+    fun finishMatch(player: Player) {
         val task: BukkitRunnable =
             object : BukkitRunnable() {
                 val p: Player = player
@@ -1770,7 +1770,7 @@ object MatchMgr {
                                                     op.getDisplayName() + "§l ]" + ChatColor.RESET + "Kills : " +
                                                     ChatColor.YELLOW + odata.killCount + "   " + ChatColor.RESET + "Points : " +
                                                     ChatColor.YELLOW + odata.paintCount
-                                                ),
+                                            ),
                                             MessageType.PLAYER,
                                             p,
                                         )
@@ -1785,7 +1785,7 @@ object MatchMgr {
                                                     op.getDisplayName() + " ]" + ChatColor.RESET + "Kills : " +
                                                     ChatColor.YELLOW + odata.killCount + "   " + ChatColor.RESET + "Points : " +
                                                     ChatColor.YELLOW + odata.paintCount
-                                                ),
+                                            ),
                                             MessageType.PLAYER,
                                             p,
                                         )
@@ -1814,7 +1814,7 @@ object MatchMgr {
                                                     op.getDisplayName() + "§l ]" + ChatColor.RESET + "Kills : " +
                                                     ChatColor.YELLOW + odata.killCount + "   " + ChatColor.RESET + "Points : " +
                                                     ChatColor.YELLOW + odata.paintCount
-                                                ),
+                                            ),
                                             MessageType.PLAYER,
                                             p,
                                         )
@@ -1829,7 +1829,7 @@ object MatchMgr {
                                                     op.getDisplayName() + " ]" + ChatColor.RESET + "Kills : " +
                                                     ChatColor.YELLOW + odata.killCount + "   " + ChatColor.RESET + "Points : " +
                                                     ChatColor.YELLOW + odata.paintCount
-                                                ),
+                                            ),
                                             MessageType.PLAYER,
                                             p,
                                         )
@@ -1917,7 +1917,7 @@ object MatchMgr {
                                     ChatColor.GREEN.toString() + " Money : " + ChatColor.RESET + "+" + pMoney +
                                         ChatColor.AQUA + "  Lv : " + ChatColor.RESET + "+" + pLv + ChatColor.GOLD +
                                         " Ticket : " + ChatColor.RESET + pTicket
-                                    ),
+                                ),
                                 MessageType.PLAYER,
                                 p,
                             )
@@ -1932,8 +1932,8 @@ object MatchMgr {
                                                 } else {
                                                     ""
                                                 }
-                                                )
-                                        ),
+                                            )
+                                    ),
                                     MessageType.PLAYER,
                                     p,
                                 )
@@ -1947,8 +1947,8 @@ object MatchMgr {
                                                 } else {
                                                     ""
                                                 }
-                                                )
-                                        ),
+                                            )
+                                    ),
                                     MessageType.PLAYER,
                                     p,
                                 )
@@ -1963,11 +1963,11 @@ object MatchMgr {
                          * p.sendMessage(ChatColor.GOLD + "     Points : " + ChatColor.YELLOW + paint);
                          * p.sendMessage(ChatColor.GREEN + "##########################");
                          */
-                            val WorldName =
+                            val worldName =
                                 Sclat.Companion.conf!!
                                     .config!!
                                     .getString("Lobby.WorldName")
-                            val w = Bukkit.getServer().getWorld(WorldName!!)
+                            val w = Bukkit.getServer().getWorld(worldName!!)
 
                             val ix =
                                 Sclat.Companion.conf!!
@@ -2001,9 +2001,9 @@ object MatchMgr {
                             PlayerStatusMgr.sendHologram(p)
 
                             if (getPlayerData(p)!!.playerNumber == 1) {
-                                RollBack()
+                                rollBack()
                                 matchcount++
-                                MatchSetup()
+                                matchSetup()
 
                                 // Send match status
                                 if (Sclat.type == ServerType.MATCH) {

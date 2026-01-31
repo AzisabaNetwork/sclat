@@ -25,7 +25,9 @@ object Buckler {
                         cancel()
                         return
                     }
-                    if (data.isSneaking && bk_recharge && player.gameMode == GameMode.ADVENTURE &&
+                    if (data.isSneaking &&
+                        bk_recharge &&
+                        player.gameMode == GameMode.ADVENTURE &&
                         (
                             p.inventory.itemInMainHand.type
                                 ==
@@ -34,7 +36,7 @@ object Buckler {
                                     ?.mainWeapon!!
                                     .weaponIteamStack!!
                                     .type
-                            )
+                        )
                     ) {
                         p.addPotionEffect(PotionEffect(PotionEffectType.FIRE_RESISTANCE, Etime, 0))
                         p.addPotionEffect(PotionEffect(PotionEffectType.SLOW, Ctime, 0))

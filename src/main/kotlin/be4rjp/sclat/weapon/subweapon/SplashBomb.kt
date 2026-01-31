@@ -85,7 +85,7 @@ object SplashBomb {
                                     val damage = (
                                         (maxDist - target.location.distance(drop!!.location)) * 14 *
                                             Gear.getGearInfluence(player, Gear.Type.SUB_SPEC_UP)
-                                        )
+                                    )
                                     if (getPlayerData(player)!!.team != getPlayerData(target)!!.team &&
                                         target.gameMode == GameMode.ADVENTURE
                                     ) {
@@ -122,7 +122,7 @@ object SplashBomb {
 
                         // ボムの視認用エフェクト
                         for (o_player in plugin.server.onlinePlayers) {
-                            if (getPlayerData(o_player)!!.settings!!.ShowEffect_Bomb()) {
+                            if (getPlayerData(o_player)!!.settings!!.showEffectBomb()) {
                                 if (o_player.world === drop!!.location.world) {
                                     if (o_player
                                             .location

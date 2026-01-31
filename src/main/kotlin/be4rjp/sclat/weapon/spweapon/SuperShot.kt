@@ -172,7 +172,7 @@ object SuperShot {
                                     .wool!!
                                     .createBlockData()
                             for (o_player in plugin.server.onlinePlayers) {
-                                if (getPlayerData(o_player)!!.settings!!.ShowEffect_SPWeapon()) {
+                                if (getPlayerData(o_player)!!.settings!!.showEffectSPWeapon()) {
                                     if (o_player.world ===
                                         ball!!.world
                                     ) {

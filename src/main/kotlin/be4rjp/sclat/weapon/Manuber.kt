@@ -69,7 +69,10 @@ object Manuber {
                     // マニューバー系
                     if (data.weaponClass?.mainWeapon!!.isManeuver) {
                         // if(p.getExp() >= ink) {
-                        if (data.isSneaking && slRecharge2 && !data.isSliding && (
+                        if (data.isSneaking &&
+                            slRecharge2 &&
+                            !data.isSliding &&
+                            (
                                 p
                                     .inventory
                                     .itemInMainHand
@@ -80,7 +83,7 @@ object Manuber {
                                         .mainWeapon!!
                                         .weaponIteamStack!!
                                         .type
-                                )
+                            )
                         ) { // slをsl_recharge_2に変更することで優先順位が低い方のスライドが残っている時のみ使えるようにしました
                             val jvec = (Vector(vec.getX(), 0.0, vec.getZ())).normalize()
                             val ev = jvec.clone().normalize().multiply(-2)
@@ -130,7 +133,7 @@ object Manuber {
                                     )
                                 val erv = ev.clone().add(randomVector)
                                 for (o_player in plugin.server.onlinePlayers) {
-                                    if (getPlayerData(o_player)!!.settings!!.ShowEffect_BombEx()) {
+                                    if (getPlayerData(o_player)!!.settings!!.showEffectBombEx()) {
                                         if (o_player.world === location.world) {
                                             if (o_player
                                                     .location

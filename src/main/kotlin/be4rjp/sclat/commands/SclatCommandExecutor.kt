@@ -277,7 +277,7 @@ class SclatCommandExecutor :
                             (
                                 "Switched " + ss.displayName + " §rto " +
                                     (if (args[3] == "true") "§cMAINTENANCE" else "§6NORMAL")
-                                ),
+                            ),
                         )
                         return true
                     }

@@ -64,7 +64,7 @@ object Blinder {
             // PaintMgr.PaintHightestBlock(position, player, false, true);
             // }
             for (target in plugin.server.onlinePlayers) {
-                if (!getPlayerData(target)!!.settings!!.ShowEffect_MainWeaponInk()) continue
+                if (!getPlayerData(target)!!.settings!!.showEffectMainWeaponInk()) continue
                 if (target.world === position.world) {
                     if (target.location.distanceSquared(position) < Sclat.particleRenderDistanceSquared) {
                         val bd =
@@ -92,13 +92,15 @@ object Blinder {
                                     .mainWeapon!!
                                     .weaponType
                             var effecttime = 40
-                            if (weaponType == "Charger" || weaponType == "Spinner" ||
+                            if (weaponType == "Charger" ||
+                                weaponType == "Spinner" ||
                                 getPlayerData(target)!!.weaponClass!!.mainWeapon!!.isManeuver
                             ) {
                                 effecttime += 25
                             } else if (weaponType == "Blaster" || weaponType == "Hound") {
                                 effecttime += 10
-                            } else if (weaponType == "Roller" || weaponType == "Slosher" ||
+                            } else if (weaponType == "Roller" ||
+                                weaponType == "Slosher" ||
                                 weaponType == "Bucket"
                             ) {
                                 effecttime -= 10

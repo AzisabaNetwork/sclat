@@ -57,7 +57,7 @@ object Reeler {
                             data.tick = (
                                 data.tick +
                                     getPlayerData(p)!!.weaponClass!!.mainWeapon!!.shootTick
-                                )
+                            )
                         }
                     }
                 }
@@ -110,7 +110,11 @@ object Reeler {
                         grRecharge = 100
                         killcount = data.killCount
                     }
-                    if (data.isSneaking && grRecharge >= 100 && slRecharge1 && !data.isSliding && (
+                    if (data.isSneaking &&
+                        grRecharge >= 100 &&
+                        slRecharge1 &&
+                        !data.isSliding &&
+                        (
                             p
                                 .inventory
                                 .itemInMainHand
@@ -121,7 +125,7 @@ object Reeler {
                                     .mainWeapon!!
                                     .weaponIteamStack!!
                                     .type
-                            )
+                        )
                     ) {
                         val jvec = (Vector(vec.getX(), 0.0, vec.getZ())).normalize().multiply(3)
                         val ev = jvec.clone().normalize().multiply(-2)
@@ -142,7 +146,7 @@ object Reeler {
                                 )
                             val erv = ev.clone().add(randomVector)
                             for (o_player in plugin.server.onlinePlayers) {
-                                if (getPlayerData(o_player)!!.settings!!.ShowEffect_BombEx()) {
+                                if (getPlayerData(o_player)!!.settings!!.showEffectBombEx()) {
                                     if (o_player.world === location.world) {
                                         if (o_player
                                                 .location
@@ -263,7 +267,9 @@ object Reeler {
 
                 override fun run() {
                     if (i == 7) {
-                        if (!getPlayerData(p)!!.isInMatch || !p.isOnline || !getPlayerData(target)!!.isInMatch ||
+                        if (!getPlayerData(p)!!.isInMatch ||
+                            !p.isOnline ||
+                            !getPlayerData(target)!!.isInMatch ||
                             !target.isOnline
                         ) {
                             cancel()
@@ -272,7 +278,9 @@ object Reeler {
                         beforeploc = p.location
                     }
                     if (i == 8) {
-                        if (!getPlayerData(p)!!.isInMatch || !p.isOnline || !getPlayerData(target)!!.isInMatch ||
+                        if (!getPlayerData(p)!!.isInMatch ||
+                            !p.isOnline ||
+                            !getPlayerData(target)!!.isInMatch ||
                             !target.isOnline
                         ) {
                             cancel()
@@ -393,7 +401,7 @@ object Reeler {
             if (block.type != Material.AIR) {
                 break
             }
-            if (getPlayerData(player)!!.settings!!.ShowEffect_MainWeaponInk()) {
+            if (getPlayerData(player)!!.settings!!.showEffectMainWeaponInk()) {
                 if (it < 10) {
                     if (player.world === position.world) {
                         if (player.location.distanceSquared(position) < Sclat.particleRenderDistanceSquared) {
@@ -440,7 +448,7 @@ object Reeler {
             if (block.type != Material.AIR) {
                 break
             }
-            if (getPlayerData(player)!!.settings!!.ShowEffect_MainWeaponInk()) {
+            if (getPlayerData(player)!!.settings!!.showEffectMainWeaponInk()) {
                 if (it < 10) {
                     if (player.world === position.world) {
                         if (player.location.distanceSquared(position) < Sclat.particleRenderDistanceSquared) {
@@ -519,7 +527,7 @@ object Reeler {
                 data!!.weaponClass!!.mainWeapon!!.needInk
                     * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) /
                     Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)
-                ).toFloat()
+            ).toFloat()
         ) {
             player.sendTitle("", ChatColor.RED.toString() + "インクが足りません", 0, 5, 2)
             player.playSound(player.location, Sound.UI_BUTTON_CLICK, 1f, 1.63f)
@@ -530,7 +538,7 @@ object Reeler {
                 data.weaponClass?.mainWeapon!!.needInk
                     * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) /
                     Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)
-                ).toFloat()
+            ).toFloat()
         val rayTrace = RayTrace(player.eyeLocation.toVector(), player.eyeLocation.direction)
         val positions =
             rayTrace.traverse(
@@ -625,7 +633,7 @@ object Reeler {
                                 .wool!!
                                 .createBlockData()
                         for (o_player in plugin.server.onlinePlayers) {
-                            if (getPlayerData(o_player)!!.settings!!.ShowEffect_MainWeaponInk()) {
+                            if (getPlayerData(o_player)!!.settings!!.showEffectMainWeaponInk()) {
                                 if (o_player.world ===
                                     inkball!!.world
                                 ) {

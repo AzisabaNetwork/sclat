@@ -9,7 +9,10 @@ import java.io.InputStreamReader
 import java.nio.charset.StandardCharsets
 import java.util.logging.Level
 
-class CustomConfig(private val plugin: Plugin, private val file: String) {
+class CustomConfig(
+    private val plugin: Plugin,
+    private val file: String,
+) {
     private var config: FileConfiguration? = null
     private val configFile: File
 

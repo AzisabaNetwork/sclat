@@ -90,7 +90,7 @@ object Slosher {
                 data!!.weaponClass!!.mainWeapon!!.needInk
                     * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) /
                     Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)
-                ).toFloat()
+            ).toFloat()
         ) {
             player.sendTitle("", ChatColor.RED.toString() + "インクが足りません", 0, 13, 2)
             player.playSound(player.location, Sound.UI_BUTTON_CLICK, 1f, 1.63f)
@@ -101,7 +101,7 @@ object Slosher {
                 data.weaponClass?.mainWeapon!!.needInk
                     * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) /
                     Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)
-                ).toFloat()
+            ).toFloat()
         val ball = player.launchProjectile<Snowball>(Snowball::class.java)
         (ball as CraftSnowball).handle.setItem(CraftItemStack.asNMSCopy(ItemStack(getPlayerData(player)!!.team!!.teamColor!!.wool!!)))
         var vec: Vector? =
@@ -149,7 +149,7 @@ object Slosher {
                             setSnowballHitCount(name, 0)
                         }
                         for (target in plugin.server.onlinePlayers) {
-                            if (!getPlayerData(target)!!.settings!!.ShowEffect_MainWeaponInk()) continue
+                            if (!getPlayerData(target)!!.settings!!.showEffectMainWeaponInk()) continue
                             if (target.world === inkball!!.world) {
                                 if (target
                                         .location
@@ -216,7 +216,7 @@ object Slosher {
                                     val damage = (
                                         (maxDist - target.location.distance(inkball!!.location)) *
                                             data.weaponClass?.mainWeapon!!.blasterExDamage
-                                        )
+                                    )
                                     if (getPlayerData(player)!!.team != getPlayerData(target)!!.team &&
                                         target.gameMode == GameMode.ADVENTURE
                                     ) {
@@ -242,7 +242,7 @@ object Slosher {
                                         val damage = (
                                             (maxDist - `as`.location.distance(inkball!!.location)) *
                                                 data.weaponClass?.mainWeapon!!.blasterExDamage
-                                            )
+                                        )
                                         ArmorStandMgr.giveDamageArmorStand(`as`, damage, p)
                                     }
                                 }

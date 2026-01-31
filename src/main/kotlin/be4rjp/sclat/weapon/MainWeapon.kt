@@ -33,7 +33,7 @@ class MainWeapon : Listener {
 
         val action = e.getAction()
         if (action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK) {
-            MainWeaponMgr.UseMainWeapon(player)
+            MainWeaponMgr.useMainWeapon(player)
         }
         if (action == Action.LEFT_CLICK_AIR || action == Action.LEFT_CLICK_BLOCK) {
             if (getPlayerData(player)!!.isInMatch) {
@@ -70,7 +70,7 @@ class MainWeapon : Listener {
 
         if (!getPlayerData(player)!!.isInMatch) return
 
-        MainWeaponMgr.UseMainWeapon(player)
+        MainWeaponMgr.useMainWeapon(player)
 
         if (getPlayerData(player)!!.isInMatch) {
             SPWeaponMgr.UseSPWeapon(
@@ -91,7 +91,7 @@ class MainWeapon : Listener {
         }
         if (!getPlayerData(player)!!.isInMatch) return
 
-        MainWeaponMgr.UseMainWeapon(player)
+        MainWeaponMgr.useMainWeapon(player)
 
         if (getPlayerData(player)!!.isInMatch) {
             SPWeaponMgr.UseSPWeapon(
@@ -113,7 +113,7 @@ class MainWeapon : Listener {
         }
         if (!getPlayerData(player)!!.isInMatch) return
 
-        MainWeaponMgr.UseMainWeapon(player)
+        MainWeaponMgr.useMainWeapon(player)
 
         if (getPlayerData(player)!!.isInMatch) {
             SPWeaponMgr.UseSPWeapon(

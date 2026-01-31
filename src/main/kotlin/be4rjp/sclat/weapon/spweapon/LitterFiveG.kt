@@ -132,7 +132,7 @@ object LitterFiveG {
                             bar.removeAll()
                             cancel()
                         }
-                        if (data.settings!!.ShowEffect_ChargerLine()) {
+                        if (data.settings!!.showEffectChargerLine()) {
                             if (Hash_charge.get(p)!! < MAX_CHARGE) {
                                 Hash_charge.replace(p, Hash_charge.get(p)!! + Hash_cps.get(p)!!)
                             }
@@ -222,7 +222,7 @@ object LitterFiveG {
 
             if (block.type != Material.AIR) {
                 for (o_player in plugin.server.onlinePlayers) {
-                    if (getPlayerData(o_player)!!.settings!!.ShowEffect_MainWeaponInk()) {
+                    if (getPlayerData(o_player)!!.settings!!.showEffectMainWeaponInk()) {
                         // 爆発音
                         player.world.playSound(position, Sound.ENTITY_GENERIC_EXPLODE, 1f, 1f)
 
@@ -245,7 +245,7 @@ object LitterFiveG {
             }
             // PaintMgr.PaintHightestBlock(position, player, false, true);
             for (target in plugin.server.onlinePlayers) {
-                if (!getPlayerData(target)!!.settings!!.ShowEffect_MainWeaponInk()) continue
+                if (!getPlayerData(target)!!.settings!!.showEffectMainWeaponInk()) continue
                 if (target.world === position.world) {
                     if (target.location.distanceSquared(position) < Sclat.particleRenderDistanceSquared) {
                         val bd =
@@ -360,7 +360,7 @@ object LitterFiveG {
                     getPlayerData(p)!!.canUseSubWeapon = true
                 }
             }
-        if (getPlayerData(player)!!.settings!!.ShowEffect_ChargerLine()) {
+        if (getPlayerData(player)!!.settings!!.showEffectChargerLine()) {
             task2.runTaskLater(plugin, 8)
         }
     }

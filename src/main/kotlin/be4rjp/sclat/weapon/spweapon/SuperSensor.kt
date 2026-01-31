@@ -27,7 +27,9 @@ object SuperSensor {
         }
         for (`as` in player.world.entities) {
             if (`as`.customName != null) {
-                if (`as` is ArmorStand && (`as`.customName != "Path") && (`as`.customName != "21") &&
+                if (`as` is ArmorStand &&
+                    (`as`.customName != "Path") &&
+                    (`as`.customName != "21") &&
                     (`as`.customName != "100") &&
                     (`as`.customName != "SplashShield") &&
                     (`as`.customName != "Kasa")

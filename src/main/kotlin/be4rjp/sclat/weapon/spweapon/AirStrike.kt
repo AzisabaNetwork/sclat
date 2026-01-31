@@ -246,7 +246,7 @@ object AirStrike {
 
                     // ボムの視認用エフェクト
                     for (o_player in plugin.server.onlinePlayers) {
-                        if (getPlayerData(o_player)!!.settings!!.ShowEffect_SPWeapon()) {
+                        if (getPlayerData(o_player)!!.settings!!.showEffectSPWeapon()) {
                             val dustOptions =
                                 Particle.DustOptions(
                                     getPlayerData(p)!!.team!!.teamColor!!.bukkitColor!!,

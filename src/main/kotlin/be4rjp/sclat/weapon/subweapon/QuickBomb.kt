@@ -73,15 +73,17 @@ object QuickBomb {
 
                         if (!drop!!.isOnGround &&
                             !(
-                                drop!!.velocity.getX() == 0.0 && drop!!
-                                    .velocity
-                                    .getZ() != 0.0
-                                ) &&
+                                drop!!.velocity.getX() == 0.0 &&
+                                    drop!!
+                                        .velocity
+                                        .getZ() != 0.0
+                            ) &&
                             !(
-                                drop!!.velocity.getX() != 0.0 && drop!!
-                                    .velocity
-                                    .getZ() == 0.0
-                                )
+                                drop!!.velocity.getX() != 0.0 &&
+                                    drop!!
+                                        .velocity
+                                        .getZ() == 0.0
+                            )
                         ) {
                             ball!!.velocity = drop!!.velocity
                         }
@@ -148,7 +150,7 @@ object QuickBomb {
                                     val damage = (
                                         (maxDist - target.location.distance(drop!!.location)) * 5 *
                                             Gear.getGearInfluence(player, Gear.Type.SUB_SPEC_UP)
-                                        )
+                                    )
                                     if (getPlayerData(player)!!.team != getPlayerData(target)!!.team &&
                                         target.gameMode == GameMode.ADVENTURE
                                     ) {
@@ -174,7 +176,7 @@ object QuickBomb {
                                         val damage = (
                                             (maxDist - `as`.location.distance(drop!!.location)) * 5 *
                                                 Gear.getGearInfluence(p, Gear.Type.SUB_SPEC_UP)
-                                            )
+                                        )
                                         ArmorStandMgr.giveDamageArmorStand(`as`, damage, p)
                                         if (`as`.customName != null) {
                                             if (`as`.customName == "SplashShield" ||
@@ -193,7 +195,7 @@ object QuickBomb {
 
                         // ボムの視認用エフェクト
                         for (o_player in plugin.server.onlinePlayers) {
-                            if (getPlayerData(o_player)!!.settings!!.ShowEffect_Bomb()) {
+                            if (getPlayerData(o_player)!!.settings!!.showEffectBomb()) {
                                 if (o_player.world === drop!!.location.world) {
                                     if (o_player
                                             .location

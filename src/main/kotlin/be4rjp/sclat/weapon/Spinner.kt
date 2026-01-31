@@ -43,7 +43,8 @@ object Spinner {
 
                     data!!.tick = data.tick + 1
 
-                    if (keeping == data.weaponClass?.mainWeapon!!.chargeKeepingTime && data.weaponClass?.mainWeapon!!.canChargeKeep &&
+                    if (keeping == data.weaponClass?.mainWeapon!!.chargeKeepingTime &&
+                        data.weaponClass?.mainWeapon!!.canChargeKeep &&
                         data.settings!!.doChargeKeep()
                     ) {
                         charge =
@@ -71,7 +72,7 @@ object Spinner {
                             (
                                 wm.displayName + "§7[" +
                                     toGauge(charge, max, data.team!!.teamColor!!.colorCode, "§7") + "]"
-                                ),
+                            ),
                         )
                         w.itemMeta = wm
                         p.inventory.setItem(0, w)
@@ -146,7 +147,9 @@ object Spinner {
                         cancel()
                     }
                     val data = getPlayerData(p)
-                    if (data!!.isUsingMM || data.isUsingJetPack || data.isUsingTyakuti ||
+                    if (data!!.isUsingMM ||
+                        data.isUsingJetPack ||
+                        data.isUsingTyakuti ||
                         data.isUsingSS
                     ) {
                         cancel()
@@ -181,7 +184,7 @@ object Spinner {
                 data!!.weaponClass!!.mainWeapon!!.needInk
                     * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) /
                     Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)
-                ).toFloat()
+            ).toFloat()
         ) {
             player.sendTitle("", ChatColor.RED.toString() + "インクが足りません", 0, 5, 2)
             player.playSound(player.location, Sound.UI_BUTTON_CLICK, 1f, 1.63f)
@@ -192,7 +195,7 @@ object Spinner {
                 data.weaponClass?.mainWeapon!!.needInk
                     * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) /
                     Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)
-                ).toFloat()
+            ).toFloat()
         val ball = player.launchProjectile<Snowball>(Snowball::class.java)
         (ball as CraftSnowball).handle.setItem(CraftItemStack.asNMSCopy(ItemStack(getPlayerData(player)!!.team!!.teamColor!!.wool!!)))
         player.world.playSound(player.location, Sound.ENTITY_PIG_STEP, 0.3f, 1.1f)
@@ -250,7 +253,7 @@ object Spinner {
                                 .wool!!
                                 .createBlockData()
                         for (o_player in plugin.server.onlinePlayers) {
-                            if (getPlayerData(o_player)!!.settings!!.ShowEffect_MainWeaponInk()) {
+                            if (getPlayerData(o_player)!!.settings!!.showEffectMainWeaponInk()) {
                                 if (o_player.world ===
                                     inkball!!.world
                                 ) {

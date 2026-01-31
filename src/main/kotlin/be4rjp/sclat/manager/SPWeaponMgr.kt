@@ -105,7 +105,7 @@ object SPWeaponMgr {
                                     data.weaponClass!!.sPWeaponName == "クアドロアームズ" ||
                                     data.weaponClass!!.sPWeaponName == "セイバーモード" ||
                                     data.weaponClass!!.sPWeaponName == "リッター5G"
-                                )
+                            )
                         ) {
                             p.getInventory().setItem(
                                 4,

@@ -81,7 +81,8 @@ object WeaponClassMgr {
 
         if (Sclat.Companion.conf!!
                 .config!!
-                .getString("WorkMode") == "Trial" && !Sclat.tutorial
+                .getString("WorkMode") == "Trial" &&
+            !Sclat.tutorial
         ) {
             val join = ItemStack(Material.CHEST)
             val joinmeta = join.getItemMeta()

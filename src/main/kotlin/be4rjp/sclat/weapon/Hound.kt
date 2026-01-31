@@ -144,7 +144,7 @@ object Hound {
                                     data.weaponClass?.mainWeapon!!.needInk
                                         * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) /
                                         Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)
-                                    ).toFloat()
+                                ).toFloat()
 
                             as1 =
                                 player.world.spawn<ArmorStand>(
@@ -221,11 +221,16 @@ object Hound {
                             }
                         }
 
-                        if (i == explodetick || !player.isOnline || !data.isInMatch || (
-                                data.isSneaking && data.getArmorlist(
-                                    0,
-                                ) === as1 && !data.isSliding
-                                )
+                        if (i == explodetick ||
+                            !player.isOnline ||
+                            !data.isInMatch ||
+                            (
+                                data.isSneaking &&
+                                    data.getArmorlist(
+                                        0,
+                                    ) === as1 &&
+                                    !data.isSliding
+                            )
                         ) {
                             if (data.isSneaking) {
                                 data.isSliding = true
@@ -366,7 +371,7 @@ object Hound {
                 data.weaponClass?.mainWeapon!!.needInk
                     * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) /
                     Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)
-                ).toFloat()
+            ).toFloat()
         ) {
             task.runTaskTimer(plugin, 0, 1)
         } else {
