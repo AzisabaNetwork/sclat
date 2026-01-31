@@ -46,7 +46,7 @@ object Tutorial {
     fun setupTutorial(match: Match) {
         val time = Sclat.conf?.config!!.getInt("InkResetPeriod")
         bar =
-            plugin.getServer().createBossBar(
+            plugin.server.createBossBar(
                 "§a§lインクリセットまで残り §c§l" + time + " §a§l秒",
                 BarColor.WHITE,
                 BarStyle.SOLID,
@@ -65,11 +65,11 @@ object Tutorial {
                 override fun run() {
                     if (clearPlayerCount >= 1) trainLightRunRunnable()
                     if (i % 20 == 0) {
-                        for (`as` in Sclat.lobby!!.getWorld()!!.getEntities()) {
+                        for (`as` in Sclat.lobby!!.world!!.entities) {
                             if (`as` is ArmorStand) {
-                                if (`as`.getCustomName() == null) {
+                                if (`as`.customName == null) {
                                     `as`.remove()
-                                } else if (`as`.getCustomName()!!.isEmpty()) {
+                                } else if (`as`.customName!!.isEmpty()) {
                                     `as`.remove()
                                 }
                             }
@@ -99,7 +99,7 @@ object Tutorial {
                         val iz = Sclat.conf?.config!!.getInt("Train.LFrom.Z")
                         from = Location(w, ix + 0.5, iy.toDouble(), iz + 0.5)
 
-                        val worldName1 = Sclat.conf?.config!!.getString("Train.LTo.WorldName") // Todo: why unused?
+                        Sclat.conf?.config!!.getString("Train.LTo.WorldName") // Todo: why unused?
                         val w1 = Bukkit.getWorld(worldName)
                         val ix1 = Sclat.conf?.config!!.getInt("Train.LTo.X")
                         val iy1 = Sclat.conf?.config!!.getInt("Train.LTo.Y")
@@ -113,22 +113,22 @@ object Tutorial {
                                 from!!,
                                 ArmorStand::class.java,
                                 Consumer { armorStand: ArmorStand ->
-                                    armorStand.setVisible(false)
+                                    armorStand.isVisible = false
                                     armorStand.setBasePlate(false)
                                     armorStand.setHelmet(ItemStack(Material.SEA_LANTERN))
                                 },
                             )
                     }
 
-                    `as`!!.setVelocity(vec!!)
+                    `as`!!.velocity = vec!!
 
-                    if (`as`!!.isDead() || `as`!!.isOnGround() || i == 100 || clearPlayerCount == 0) {
+                    if (`as`!!.isDead || `as`!!.isOnGround || i == 100 || clearPlayerCount == 0) {
                         `as`!!.remove()
                         cancel()
                     }
 
-                    if (`as`!!.getWorld() === to!!.getWorld()) {
-                        if (`as`!!.getLocation().distance(to!!) <= 3) {
+                    if (`as`!!.world === to!!.world) {
+                        if (`as`!!.location.distance(to!!) <= 3) {
                             `as`!!.remove()
                             cancel()
                         }
@@ -155,7 +155,7 @@ object Tutorial {
                         val iz = Sclat.conf?.config!!.getInt("Train.RFrom.Z")
                         from = Location(w, ix + 0.5, iy.toDouble(), iz + 0.5)
 
-                        val worldName1 = Sclat.conf?.config!!.getString("Train.RTo.WorldName")
+                        Sclat.conf?.config!!.getString("Train.RTo.WorldName")
                         val w1 = Bukkit.getWorld(worldName)
                         val ix1 = Sclat.conf?.config!!.getInt("Train.RTo.X")
                         val iy1 = Sclat.conf?.config!!.getInt("Train.RTo.Y")
@@ -169,22 +169,22 @@ object Tutorial {
                                 from!!,
                                 ArmorStand::class.java,
                                 Consumer { armorStand: ArmorStand ->
-                                    armorStand.setVisible(false)
+                                    armorStand.isVisible = false
                                     armorStand.setBasePlate(false)
                                     armorStand.setHelmet(ItemStack(Material.SEA_LANTERN))
                                 },
                             )
                     }
 
-                    `as`!!.setVelocity(vec!!)
+                    `as`!!.velocity = vec!!
 
-                    if (`as`!!.isDead() || `as`!!.isOnGround() || i == 100 || clearPlayerCount == 0) {
+                    if (`as`!!.isDead || `as`!!.isOnGround || i == 100 || clearPlayerCount == 0) {
                         `as`!!.remove()
                         cancel()
                     }
 
-                    if (`as`!!.getWorld() === to!!.getWorld()) {
-                        if (`as`!!.getLocation().distance(to!!) <= 3) {
+                    if (`as`!!.world === to!!.world) {
+                        if (`as`!!.location.distance(to!!) <= 3) {
                             `as`!!.remove()
                             cancel()
                         }
@@ -207,12 +207,12 @@ object Tutorial {
         val task: BukkitRunnable =
             object : BukkitRunnable() {
                 override fun run() {
-                    for (player in plugin.getServer().getOnlinePlayers()) {
-                        if (player.getWorld() !== w) continue
-                        if (player.getLocation().distance(loc) < 8) {
-                            player.getInventory().clear()
-                            getPlayerData(player)!!.setIsInMatch(false)
-                            getPlayerData(player)!!.setIsJoined(false)
+                    for (player in plugin.server.onlinePlayers) {
+                        if (player.world !== w) continue
+                        if (player.location.distance(loc) < 8) {
+                            player.inventory.clear()
+                            getPlayerData(player)!!.isInMatch = false
+                            getPlayerData(player)!!.isJoined = false
                         }
                     }
                 }
@@ -232,9 +232,9 @@ object Tutorial {
         val task: BukkitRunnable =
             object : BukkitRunnable() {
                 override fun run() {
-                    for (player in plugin.getServer().getOnlinePlayers()) {
-                        if (player.getWorld() !== w) continue
-                        if (player.getLocation().distance(loc) < 5) {
+                    for (player in plugin.server.onlinePlayers) {
+                        if (player.world !== w) continue
+                        if (player.location.distance(loc) < 5) {
                             clearList.remove(player)
                             val worldName = Sclat.conf?.config!!.getString("LobbyJump.WorldName")
                             val w = Bukkit.getWorld(worldName!!)
@@ -264,9 +264,9 @@ object Tutorial {
                 var list: MutableList<Player?> = ArrayList<Player?>()
 
                 override fun run() {
-                    for (player in plugin.getServer().getOnlinePlayers()) {
-                        if (player.getWorld() !== w) continue
-                        if (player.getLocation().distance(loc) < 5 && !list.contains(player)) {
+                    for (player in plugin.server.onlinePlayers) {
+                        if (player.world !== w) continue
+                        if (player.location.distance(loc) < 5 && !list.contains(player)) {
                             list.add(player)
                             sendPlayerRunnable(player)
                         }
@@ -288,18 +288,18 @@ object Tutorial {
         val task: BukkitRunnable =
             object : BukkitRunnable() {
                 override fun run() {
-                    for (player in plugin.getServer().getOnlinePlayers()) {
-                        if (player.getWorld() !== w) continue
-                        if (player.getLocation().distance(loc) < 10) {
-                            if (PlayerStatusMgr.getTutorialState(player.getUniqueId().toString()) == 1) {
-                                PlayerStatusMgr.setTutorialState(player.getUniqueId().toString(), 2)
+                    for (player in plugin.server.onlinePlayers) {
+                        if (player.world !== w) continue
+                        if (player.location.distance(loc) < 10) {
+                            if (PlayerStatusMgr.getTutorialState(player.uniqueId.toString()) == 1) {
+                                PlayerStatusMgr.setTutorialState(player.uniqueId.toString(), 2)
 
                                 val join = ItemStack(Material.CHEST)
-                                val joinmeta = join.getItemMeta()
+                                val joinmeta = join.itemMeta
                                 joinmeta!!.setDisplayName(ChatColor.GOLD.toString() + "右クリックでメインメニューを開く")
-                                join.setItemMeta(joinmeta)
-                                player.getInventory().clear()
-                                player.getInventory().setItem(0, join)
+                                join.itemMeta = joinmeta
+                                player.inventory.clear()
+                                player.inventory.setItem(0, join)
 
                                 sendMessage("§6Sclatへようこそ！", MessageType.PLAYER, player)
                                 player.sendMessage("§aチェストをもって右クリックするとメインメニューを開くことができます。")
@@ -323,7 +323,7 @@ object Tutorial {
         clearPlayerCount++
 
         val commands: MutableList<String?> = ArrayList<String?>()
-        commands.add("tutorial " + player.getUniqueId().toString())
+        commands.add("tutorial " + player.uniqueId.toString())
         commands.add("stop")
         val sc =
             StatusClient(
@@ -340,11 +340,11 @@ object Tutorial {
                 var i: Int = 0
 
                 override fun run() {
-                    if (!player.isOnline()) {
+                    if (!player.isOnline) {
                         clearPlayerCount--
                         cancel()
                     }
-                    player.playSound(player.getLocation(), Sound.ENTITY_MINECART_INSIDE, 0.7f, 1f)
+                    player.playSound(player.location, Sound.ENTITY_MINECART_INSIDE, 0.7f, 1f)
                     if (i == 2) {
                         BungeeCordMgr.PlayerSendServer(player, "sclat")
                         getPlayerData(player)!!.setServerName("Sclat")
@@ -366,7 +366,7 @@ object Tutorial {
 
                 override fun run() {
                     bar!!.setTitle("§a§lインクリセットまで残り §c§l" + (period - time) + " §a§l秒")
-                    bar!!.setProgress(((period - time).toDouble()) / (period.toDouble()))
+                    bar!!.progress = ((period - time).toDouble()) / (period.toDouble())
 
                     if (time == period) {
                         for (path in match.mapData!!.pathList) {
@@ -377,14 +377,14 @@ object Tutorial {
                         // ------------------------------------------------------------
                         for (data in blockDataMap.values) {
                             var data = data
-                            data!!.block!!.setType(data.originalType!!)
+                            data!!.block!!.type = data.originalType!!
                             if (data.blockData != null) data.block.setBlockData(data.blockData!!)
                             data = null
                         }
                         blockDataMap.clear()
                         spongeMap.clear()
                         // ------------------------------------------------------------
-                        for (player in plugin.getServer().getOnlinePlayers()) player.setExp(0.99f)
+                        for (player in plugin.server.onlinePlayers) player.exp = 0.99f
                         val bur = BlockUpdater()
                         if (Sclat.conf?.config!!.contains("BlockUpdateRate")) {
                             bur.setMaxBlockInOneTick(
@@ -396,7 +396,7 @@ object Tutorial {
                         bur.start()
                         match.blockUpdater = bur
                         val blocks: MutableList<Block> = ArrayList<Block>()
-                        val b0 = Sclat.lobby!!.getBlock().getRelative(BlockFace.DOWN)
+                        val b0 = Sclat.lobby!!.block.getRelative(BlockFace.DOWN)
                         blocks.add(b0)
                         blocks.add(b0.getRelative(BlockFace.EAST))
                         blocks.add(b0.getRelative(BlockFace.NORTH))
@@ -407,18 +407,18 @@ object Tutorial {
                         blocks.add(b0.getRelative(BlockFace.SOUTH_EAST))
                         blocks.add(b0.getRelative(BlockFace.SOUTH_WEST))
                         for (block in blocks) {
-                            if (block.getType() == Material.WHITE_STAINED_GLASS) {
+                            if (block.type == Material.WHITE_STAINED_GLASS) {
                                 val pdata = PaintData(block)
                                 pdata.match = (match)
                                 pdata.team = (match.team0)
-                                pdata.setOrigianlType(block.getType())
+                                pdata.setOrigianlType(block.type)
                                 setPaintDataFromBlock(block, pdata)
-                                block.setType(match.team0!!.teamColor!!.glass!!)
+                                block.type = match.team0!!.teamColor!!.glass!!
                             }
                         }
 
                         sendMessage("§a§lインクがリセットされました！", MessageType.ALL_PLAYER)
-                        for (op in plugin.getServer().getOnlinePlayers()) playGameSound(op, SoundType.SUCCESS)
+                        for (op in plugin.server.onlinePlayers) playGameSound(op, SoundType.SUCCESS)
                         time = 0
                     }
                     time++

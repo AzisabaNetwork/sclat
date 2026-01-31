@@ -6,7 +6,6 @@ import be4rjp.sclat.api.SclatUtil.createInkExplosionEffect
 import be4rjp.sclat.api.SclatUtil.giveDamage
 import be4rjp.sclat.api.SclatUtil.repelBarrier
 import be4rjp.sclat.api.Sphere.getSphere
-import be4rjp.sclat.data.DataMgr
 import be4rjp.sclat.data.DataMgr.getKasaDataFromArmorStand
 import be4rjp.sclat.data.DataMgr.getPlayerData
 import be4rjp.sclat.data.DataMgr.getSnowballIsHit
@@ -52,59 +51,59 @@ object QuickBomb {
                 override fun run() {
                     try {
                         if (c == 0) {
-                            p_vec = p.getEyeLocation().getDirection()
-                            if (!getPlayerData(player)!!.getIsBombRush()) p.setExp(p.getExp() - 0.39f)
+                            p_vec = p.eyeLocation.direction
+                            if (!getPlayerData(player)!!.isBombRush) p.exp = p.exp - 0.39f
                             val bom = ItemStack(getPlayerData(p)!!.team.teamColor!!.wool!!).clone()
-                            val bom_m = bom.getItemMeta()
+                            val bom_m = bom.itemMeta
                             bom_m!!.setLocalizedName(notDuplicateNumber.toString())
-                            bom.setItemMeta(bom_m)
-                            drop = p.getWorld().dropItem(p.getEyeLocation(), bom)
-                            drop!!.setVelocity(p_vec!!.clone())
+                            bom.itemMeta = bom_m
+                            drop = p.world.dropItem(p.eyeLocation, bom)
+                            drop!!.velocity = p_vec!!.clone()
                             // 雪玉をスポーンさせた瞬間にプレイヤーに雪玉がデスポーンした偽のパケットを送信する
                             ball = player.launchProjectile<Snowball>(Snowball::class.java)
-                            ball!!.setVelocity(Vector(0, 0, 0))
+                            ball!!.velocity = Vector(0, 0, 0)
                             setSnowballIsHit(ball, false)
 
-                            for (o_player in plugin.getServer().getOnlinePlayers()) {
-                                val connection = (o_player as CraftPlayer).getHandle().playerConnection
-                                connection.sendPacket(PacketPlayOutEntityDestroy(ball!!.getEntityId()))
+                            for (o_player in plugin.server.onlinePlayers) {
+                                val connection = (o_player as CraftPlayer).handle.playerConnection
+                                connection.sendPacket(PacketPlayOutEntityDestroy(ball!!.entityId))
                             }
-                            p_vec = p.getEyeLocation().getDirection()
+                            p_vec = p.eyeLocation.direction
                         }
 
-                        if (!drop!!.isOnGround() &&
+                        if (!drop!!.isOnGround &&
                             !(
-                                drop!!.getVelocity().getX() == 0.0 && drop!!
-                                    .getVelocity()
+                                drop!!.velocity.getX() == 0.0 && drop!!
+                                    .velocity
                                     .getZ() != 0.0
                                 ) &&
                             !(
-                                drop!!.getVelocity().getX() != 0.0 && drop!!
-                                    .getVelocity()
+                                drop!!.velocity.getX() != 0.0 && drop!!
+                                    .velocity
                                     .getZ() == 0.0
                                 )
                         ) {
-                            ball!!.setVelocity(drop!!.getVelocity())
+                            ball!!.velocity = drop!!.velocity
                         }
 
-                        if (getSnowballIsHit(ball) || drop!!.isOnGround()) {
+                        if (getSnowballIsHit(ball) || drop!!.isOnGround) {
                             // 半径
 
                             val maxDist = 3.0
 
                             // 爆発音
-                            player.getWorld().playSound(drop!!.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_BLAST, 1f, 1f)
+                            player.world.playSound(drop!!.location, Sound.ENTITY_FIREWORK_ROCKET_BLAST, 1f, 1f)
 
                             // 爆発エフェクト
-                            createInkExplosionEffect(drop!!.getLocation(), maxDist, 15, player)
+                            createInkExplosionEffect(drop!!.location, maxDist, 15, player)
 
                             // バリアをはじく
-                            repelBarrier(drop!!.getLocation(), maxDist, player)
+                            repelBarrier(drop!!.location, maxDist, player)
 
                             // 塗る
                             var i = 0
                             while (i <= maxDist) {
-                                val p_locs: MutableList<Location> = getSphere(drop!!.getLocation(), i.toDouble(), 20)
+                                val p_locs: MutableList<Location> = getSphere(drop!!.location, i.toDouble(), 20)
                                 for (loc in p_locs) {
                                     PaintMgr.Paint(loc, p, false)
                                 }
@@ -112,26 +111,24 @@ object QuickBomb {
                             }
 
                             // 攻撃判定の処理
-                            for (`as` in player.getWorld().getEntities()) {
-                                if (`as`.getLocation().distance(drop!!.getLocation()) <= maxDist) {
+                            for (`as` in player.world.entities) {
+                                if (`as`.location.distance(drop!!.location) <= maxDist) {
                                     if (`as` is ArmorStand) {
-                                        if (`as`.getCustomName() != null) {
+                                        if (`as`.customName != null) {
                                             try {
-                                                if (`as`.getCustomName() == "Kasa") {
+                                                if (`as`.customName == "Kasa") {
                                                     val kasaData = getKasaDataFromArmorStand(`as`)
                                                     if (getPlayerData(kasaData!!.player)!!.team !=
-                                                        DataMgr
-                                                            .getPlayerData(p)!!
+                                                        getPlayerData(p)!!
                                                             .team
                                                     ) {
                                                         drop!!.remove()
                                                         cancel()
                                                     }
-                                                } else if (`as`.getCustomName() == "SplashShield") {
+                                                } else if (`as`.customName == "SplashShield") {
                                                     val splashShieldData = getSplashShieldDataFromArmorStand(`as`)
                                                     if (getPlayerData(splashShieldData!!.player)!!.team !=
-                                                        DataMgr
-                                                            .getPlayerData(p)!!
+                                                        getPlayerData(p)!!
                                                             .team
                                                     ) {
                                                         drop!!.remove()
@@ -145,15 +142,15 @@ object QuickBomb {
                                 }
                             }
 
-                            for (target in plugin.getServer().getOnlinePlayers()) {
-                                if (!getPlayerData(target)!!.isInMatch() || target.getWorld() !== p.getWorld()) continue
-                                if (target.getLocation().distance(drop!!.getLocation()) <= maxDist) {
+                            for (target in plugin.server.onlinePlayers) {
+                                if (!getPlayerData(target)!!.isInMatch || target.world !== p.world) continue
+                                if (target.location.distance(drop!!.location) <= maxDist) {
                                     val damage = (
-                                        (maxDist - target.getLocation().distance(drop!!.getLocation())) * 5 *
+                                        (maxDist - target.location.distance(drop!!.location)) * 5 *
                                             Gear.getGearInfluence(player, Gear.Type.SUB_SPEC_UP)
                                         )
                                     if (getPlayerData(player)!!.team != getPlayerData(target)!!.team &&
-                                        target.getGameMode() == GameMode.ADVENTURE
+                                        target.gameMode == GameMode.ADVENTURE
                                     ) {
                                         giveDamage(player, target, damage, "subWeapon")
 
@@ -163,7 +160,7 @@ object QuickBomb {
                                                 var p: Player = target
 
                                                 override fun run() {
-                                                    target.setNoDamageTicks(0)
+                                                    target.noDamageTicks = 0
                                                 }
                                             }
                                         task.runTaskLater(plugin, 1)
@@ -171,17 +168,17 @@ object QuickBomb {
                                 }
                             }
 
-                            for (`as` in player.getWorld().getEntities()) {
-                                if (`as`.getLocation().distance(drop!!.getLocation()) <= maxDist) {
+                            for (`as` in player.world.entities) {
+                                if (`as`.location.distance(drop!!.location) <= maxDist) {
                                     if (`as` is ArmorStand) {
                                         val damage = (
-                                            (maxDist - `as`.getLocation().distance(drop!!.getLocation())) * 5 *
+                                            (maxDist - `as`.location.distance(drop!!.location)) * 5 *
                                                 Gear.getGearInfluence(p, Gear.Type.SUB_SPEC_UP)
                                             )
                                         ArmorStandMgr.giveDamageArmorStand(`as`, damage, p)
-                                        if (`as`.getCustomName() != null) {
-                                            if (`as`.getCustomName() == "SplashShield" ||
-                                                `as`.getCustomName() == "Kasa"
+                                        if (`as`.customName != null) {
+                                            if (`as`.customName == "SplashShield" ||
+                                                `as`.customName == "Kasa"
                                             ) {
                                                 break
                                             }
@@ -195,12 +192,12 @@ object QuickBomb {
                         }
 
                         // ボムの視認用エフェクト
-                        for (o_player in plugin.getServer().getOnlinePlayers()) {
+                        for (o_player in plugin.server.onlinePlayers) {
                             if (getPlayerData(o_player)!!.settings.ShowEffect_Bomb()) {
-                                if (o_player.getWorld() === drop!!.getLocation().getWorld()) {
+                                if (o_player.world === drop!!.location.world) {
                                     if (o_player
-                                            .getLocation()
-                                            .distanceSquared(drop!!.getLocation()) < Sclat.particleRenderDistanceSquared
+                                            .location
+                                            .distanceSquared(drop!!.location) < Sclat.particleRenderDistanceSquared
                                     ) {
                                         val dustOptions =
                                             Particle.DustOptions(
@@ -209,7 +206,7 @@ object QuickBomb {
                                             )
                                         o_player.spawnParticle<Particle.DustOptions?>(
                                             Particle.REDSTONE,
-                                            drop!!.getLocation(),
+                                            drop!!.location,
                                             1,
                                             0.0,
                                             0.0,
@@ -223,8 +220,8 @@ object QuickBomb {
                         }
 
                         c++
-                        x = drop!!.getLocation().getX()
-                        z = drop!!.getLocation().getZ()
+                        x = drop!!.location.x
+                        z = drop!!.location.z
 
                         if (c > 1000) {
                             drop!!.remove()
@@ -234,7 +231,7 @@ object QuickBomb {
                     } catch (e: Exception) {
                         drop!!.remove()
                         cancel()
-                        plugin.getLogger().warning(e.message)
+                        plugin.logger.warning(e.message)
                     }
                 }
             }
@@ -242,16 +239,16 @@ object QuickBomb {
         val cooltime: BukkitRunnable =
             object : BukkitRunnable() {
                 override fun run() {
-                    getPlayerData(player)!!.setCanUseSubWeapon(true)
+                    getPlayerData(player)!!.canUseSubWeapon = true
                 }
             }
         cooltime.runTaskLater(plugin, 10)
 
-        if (player.getExp() > 0.4 || getPlayerData(player)!!.getIsBombRush()) {
+        if (player.exp > 0.4 || getPlayerData(player)!!.isBombRush) {
             task.runTaskTimer(plugin, 0, 1)
         } else {
             player.sendTitle("", ChatColor.RED.toString() + "インクが足りません", 0, 5, 2)
-            player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1f, 1.63f)
+            player.playSound(player.location, Sound.UI_BUTTON_CLICK, 1f, 1.63f)
         }
     }
 }

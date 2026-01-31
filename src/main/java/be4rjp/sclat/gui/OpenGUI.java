@@ -153,7 +153,7 @@ public class OpenGUI {
 				nmeta.setDisplayName(Gear.getGearName(i));
 				List<String> list = new ArrayList<>();
 				list.add("");
-				list.add("§r§bMoney : " + String.valueOf(Gear.getGearPrice(i)));
+				list.add("§r§bMoney : " + Gear.getGearPrice(i));
 				nmeta.setLore(list);
 				n.setItemMeta(nmeta);
 				inv.setItem(i, n);
@@ -386,8 +386,7 @@ public class OpenGUI {
 							+ conf.getClassConfig().getString("WeaponClass." + ClassName + ".SPWeaponName"));
 					if (shop) {
 						lores.add("");
-						lores.add("§r§bMoney : "
-								+ String.valueOf(DataMgr.getWeaponClass(ClassName).getMainWeapon().money));
+						lores.add("§r§bMoney : " + DataMgr.getWeaponClass(ClassName).getMainWeapon().money);
 					}
 					itemm.setLore(lores);
 					item.setItemMeta(itemm);

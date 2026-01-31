@@ -17,10 +17,10 @@ class RegionBlocks(
 
     init {
         Validate.isTrue(
-            firstPoint.getWorld() != null && firstPoint.getWorld() == secondPoint.getWorld(),
+            firstPoint.world != null && firstPoint.world == secondPoint.world,
             "World can't be null or different.",
         )
-        world = firstPoint.getWorld()
+        world = firstPoint.world
         val firstVector = firstPoint.toVector()
         val secondVector = secondPoint.toVector()
         maximum = Vector.getMaximum(firstVector, secondVector)

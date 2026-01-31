@@ -17,11 +17,11 @@ class SPWeapon : Listener {
     fun onClickSPWeapon(event: PlayerInteractEvent) {
         val player = event.getPlayer()
         val action = event.getAction()
-        val data = getPlayerData(player)
+        getPlayerData(player)
 
-        if (player.getInventory().getItemInMainHand() == null || player.getInventory().getItemInMainHand()
-                .getItemMeta() == null || player.getInventory().getItemInMainHand().getItemMeta()!!
-                .getDisplayName() == null
+        if (player.inventory.itemInMainHand == null || player.inventory.itemInMainHand
+                .itemMeta == null || player.inventory.itemInMainHand.itemMeta!!
+                .displayName == null
         ) {
             return
         }
@@ -29,7 +29,7 @@ class SPWeapon : Listener {
         if (action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK) {
             SPWeaponMgr.UseSPWeapon(
                 player,
-                player.getInventory().getItemInMainHand().getItemMeta()!!.getDisplayName(),
+                player.inventory.itemInMainHand.itemMeta!!.displayName,
             )
         }
     }

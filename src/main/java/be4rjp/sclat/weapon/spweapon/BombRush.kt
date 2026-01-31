@@ -14,15 +14,15 @@ object BombRush {
     @JvmStatic
     fun BombRushRunnable(player: Player?) {
         val data = getPlayerData(player)
-        data!!.setIsBombRush(true)
-        data.setIsUsingSP(true)
+        data!!.isBombRush = true
+        data.isUsingSP = true
         SPWeaponMgr.setSPCoolTimeAnimation(player, 120)
         val task: BukkitRunnable =
             object : BukkitRunnable() {
                 override fun run() {
-                    data.setIsBombRush(false)
+                    data.isBombRush = false
                     // player.playSound(player.getLocation(), Sound.BLOCK_CHEST_CLOSE, 1, 2);
-                    data.setIsUsingSP(false)
+                    data.isUsingSP = false
                 }
             }
         task.runTaskLater(plugin, 120)

@@ -126,8 +126,7 @@ public class MatchMgr {
 
 					if (match.getJoinedPlayerCount() < startPlayerCount) {
 						SclatUtil.sendMessage("§a人数が足りないため試合を開始することができません", MessageType.ALL_PLAYER);
-						SclatUtil.sendMessage(
-								"§aあと§c" + String.valueOf(startPlayerCount - match.getJoinedPlayerCount()) + "§a人必要です",
+						SclatUtil.sendMessage("§aあと§c" + (startPlayerCount - match.getJoinedPlayerCount()) + "§a人必要です",
 								MessageType.ALL_PLAYER);
 					}
 
@@ -136,14 +135,13 @@ public class MatchMgr {
 						match.isStartedCount = (true);
 						BukkitRunnable task = new BukkitRunnable() {
 							int s = 0;
-							Player p = player;
+							final Player p = player;
 							@Override
 							public void run() {
 								if (match.getJoinedPlayerCount() < startPlayerCount) {
 									SclatUtil.sendMessage("§a人数が足りないため試合を開始することができません", MessageType.ALL_PLAYER);
 									SclatUtil.sendMessage(
-											"§aあと§c" + String.valueOf(startPlayerCount - match.getJoinedPlayerCount())
-													+ "§a人必要です",
+											"§aあと§c" + (startPlayerCount - match.getJoinedPlayerCount()) + "§a人必要です",
 											MessageType.ALL_PLAYER);
 									match.isStartedCount = (false);
 									match.isStarted = (false);
@@ -434,7 +432,7 @@ public class MatchMgr {
 
 	public static void StartCount(Player player) {
 		BukkitRunnable task = new BukkitRunnable() {
-			Player p = player;
+			final Player p = player;
 			int i = 0;
 			@Override
 			public void run() {
@@ -462,8 +460,8 @@ public class MatchMgr {
 		BukkitRunnable task;
 		task = new BukkitRunnable() {
 			int s = 0;
-			Player p = player;
-			World w = VariablesKt.getPlugin().getServer().getWorld(match.getMapData().getWorldName());
+			final Player p = player;
+			final World w = VariablesKt.getPlugin().getServer().getWorld(match.getMapData().getWorldName());
 			Location intromove;
 			// EntitySquid squid;
 
@@ -841,7 +839,7 @@ public class MatchMgr {
 							}
 						}
 
-						((LivingEntity) p).setCollidable(true);
+						p.setCollidable(true);
 
 						cancel();
 					}
@@ -930,10 +928,10 @@ public class MatchMgr {
 		}
 
 		BukkitRunnable task = new BukkitRunnable() {
-			Scoreboard sb = scoreboard;
+			final Scoreboard sb = scoreboard;
 			Objective objective = sb.registerNewObjective("match", "run", "§6§lSclat§r " + Sclat.VERSION);
 			int s = 180;
-			Player p = player;
+			final Player p = player;
 
 			boolean team0nokori = false;
 			boolean team1nokori = false;
@@ -1047,9 +1045,9 @@ public class MatchMgr {
 						lines.add("   ");
 						lines.add("§lカウント » ");
 						lines.add(match.team0.getTeamColor().getColorCode() + match.team0.getTeamColor().getColorName()
-								+ " : " + String.valueOf(100 - match.team0.getGatiCount()) + "  "
+								+ " : " + (100 - match.team0.getGatiCount()) + "  "
 								+ match.team1.getTeamColor().getColorCode() + match.team1.getTeamColor().getColorName()
-								+ " : " + String.valueOf(100 - match.team1.getGatiCount()));
+								+ " : " + (100 - match.team1.getGatiCount()));
 
 						if (isgc) {
 							Team ngcteam = match.team0;
@@ -1167,7 +1165,7 @@ public class MatchMgr {
 
 	public static void FinishMatch(Player player) {
 		BukkitRunnable task = new BukkitRunnable() {
-			Player p = player;
+			final Player p = player;
 			Location loc;
 			Team winteam = DataMgr.getPlayerData(player).match.team0;
 			int i = 0;
@@ -1395,7 +1393,7 @@ public class MatchMgr {
 					if (i == 80) {
 						PlayerData data = DataMgr.getPlayerData(p);
 						List<String> commands = new ArrayList<>();
-						commands.add("return " + p.getUniqueId().toString());
+						commands.add("return " + p.getUniqueId());
 						commands.add("stop");
 						StatusClient sc = new StatusClient(conf.config.getString("StatusShare.Host"),
 								conf.config.getInt("StatusShare.Port"), commands);
@@ -1518,12 +1516,12 @@ public class MatchMgr {
 
 						if (Sclat.type == ServerType.MATCH) {
 							List<String> commands = new ArrayList<>();
-							commands.add("add money " + pMoney + " " + p.getUniqueId().toString());
-							commands.add("add level " + pLv + " " + p.getUniqueId().toString());
-							commands.add("add ticket " + pTicket + " " + p.getUniqueId().toString());
-							commands.add("add rank " + pRank + " " + p.getUniqueId().toString());
-							commands.add("add kill " + data.getKillCount() + " " + p.getUniqueId().toString());
-							commands.add("add paint " + data.getPaintCount() + " " + p.getUniqueId().toString());
+							commands.add("add money " + pMoney + " " + p.getUniqueId());
+							commands.add("add level " + pLv + " " + p.getUniqueId());
+							commands.add("add ticket " + pTicket + " " + p.getUniqueId());
+							commands.add("add rank " + pRank + " " + p.getUniqueId());
+							commands.add("add kill " + data.getKillCount() + " " + p.getUniqueId());
+							commands.add("add paint " + data.getPaintCount() + " " + p.getUniqueId());
 							commands.add("stop");
 							StatusClient sc = new StatusClient(conf.config.getString("StatusShare.Host"),
 									conf.config.getInt("StatusShare.Port"), commands);
@@ -1534,25 +1532,21 @@ public class MatchMgr {
 						SclatUtil.sendMessage("§a----------<< Match bonus >>----------", MessageType.PLAYER, p);
 
 						SclatUtil.sendMessage("", MessageType.PLAYER, p);
-						SclatUtil.sendMessage(
-								ChatColor.GREEN + " Money : " + ChatColor.RESET + "+" + String.valueOf(pMoney)
-										+ ChatColor.AQUA + "  Lv : " + ChatColor.RESET + "+" + String.valueOf(pLv)
-										+ ChatColor.GOLD + " Ticket : " + ChatColor.RESET + String.valueOf(pTicket),
-								MessageType.PLAYER, p);
+						SclatUtil.sendMessage(ChatColor.GREEN + " Money : " + ChatColor.RESET + "+" + pMoney
+								+ ChatColor.AQUA + "  Lv : " + ChatColor.RESET + "+" + pLv + ChatColor.GOLD
+								+ " Ticket : " + ChatColor.RESET + pTicket, MessageType.PLAYER, p);
 						SclatUtil.sendMessage("", MessageType.PLAYER, p);
 						if (pRank < 0)
-							SclatUtil.sendMessage(
-									ChatColor.GOLD + " RankPoint : " + ChatColor.RESET + String.valueOf(pRank)
-											+ (Sclat.type == ServerType.NORMAL
-													? "  [ §b" + RankMgr.toABCRank(getRank(player)) + " §r]"
-													: ""),
+							SclatUtil.sendMessage(ChatColor.GOLD + " RankPoint : " + ChatColor.RESET + pRank
+									+ (Sclat.type == ServerType.NORMAL
+											? "  [ §b" + RankMgr.toABCRank(getRank(player)) + " §r]"
+											: ""),
 									MessageType.PLAYER, p);
 						else
-							SclatUtil.sendMessage(
-									ChatColor.GOLD + " RankPoint : " + ChatColor.RESET + "+" + String.valueOf(pMoveRank)
-											+ (Sclat.type == ServerType.NORMAL
-													? "  [ §b" + RankMgr.toABCRank(getRank(player)) + " §r]"
-													: ""),
+							SclatUtil.sendMessage(ChatColor.GOLD + " RankPoint : " + ChatColor.RESET + "+" + pMoveRank
+									+ (Sclat.type == ServerType.NORMAL
+											? "  [ §b" + RankMgr.toABCRank(getRank(player)) + " §r]"
+											: ""),
 									MessageType.PLAYER, p);
 						SclatUtil.sendMessage("", MessageType.PLAYER, p);
 						SclatUtil.sendMessage("§a-----------------------------------", MessageType.PLAYER, p);

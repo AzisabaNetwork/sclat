@@ -13,7 +13,7 @@ object ObjectiveUtil {
         for (line in list) {
             index -= 1
             val score = objective.getScore(line)
-            score.setScore(index)
+            score.score = index
         }
     }
 }

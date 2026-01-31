@@ -48,16 +48,16 @@ object Roller {
 
                     data!!.tick = data.tick + 1
 
-                    if (!data.isInMatch() || !p.isOnline()) {
+                    if (!data.isInMatch || !p.isOnline) {
                         cancel()
                         return
                     }
 
-                    if (data.tick >= 6 && data.isInMatch()) {
+                    if (data.tick >= 6 && data.isInMatch) {
                         data.tick = 7
                         data.setIsHolding(false)
-                        data.setCanPaint(false)
-                        data.setCanShoot(true)
+                        data.canPaint = false
+                        data.canShoot = true
                     }
                 }
             }
@@ -73,37 +73,35 @@ object Roller {
                 override fun run() {
                     try {
                         val data = getPlayerData(p)
-                        if (!data!!.isInMatch() || !p.isOnline()) cancel()
+                        if (!data!!.isInMatch || !p.isOnline) cancel()
 
-                        if (data.getIsHolding() && data.getCanPaint() && data.isInMatch()) {
-                            if (player.getExp() <=
+                        if (data.getIsHolding() && data.canPaint && data.isInMatch) {
+                            if (player.exp <=
                                 (
-                                    data.getWeaponClass().mainWeapon!!.rollerNeedInk
+                                    data.weaponClass.mainWeapon!!.rollerNeedInk
                                         * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) /
                                         Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)
                                     ).toFloat()
                             ) {
                                 player.sendTitle("", ChatColor.RED.toString() + "インクが足りません", 0, 13, 2)
-                                player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1f, 1.63f)
+                                player.playSound(player.location, Sound.UI_BUTTON_CLICK, 1f, 1.63f)
                                 return
                             }
-                            p.setExp(
-                                p.getExp() -
-                                    (
-                                        data.getWeaponClass().mainWeapon!!.rollerNeedInk
-                                            * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) /
-                                            Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)
-                                        ).toFloat(),
-                            )
-                            val locvec = p.getEyeLocation().getDirection()
-                            val eloc = p.getEyeLocation()
+                            p.exp = p.exp -
+                                (
+                                    data.weaponClass.mainWeapon!!.rollerNeedInk
+                                        * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) /
+                                        Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)
+                                    ).toFloat()
+                            val locvec = p.eyeLocation.direction
+                            val eloc = p.eyeLocation
                             val vec = Vector(locvec.getX(), 0.0, locvec.getZ()).normalize()
                             // RayTrace rayTrace1 = new RayTrace(front.toVector(), vec1);
                             // ArrayList<Vector> positions1 =
                             // rayTrace1.traverse(data.getWeaponClass().getMainWeapon().rollerWidth,
                             // 0.5);
                             var front = eloc.add(vec.getX() * 2.5, -0.9, vec.getZ() * 2.5)
-                            if (data.getWeaponClass().mainWeapon!!.isHude) {
+                            if (data.weaponClass.mainWeapon!!.isHude) {
                                 front =
                                     eloc.add(vec.getX() * 1.5, -0.9, vec.getZ() * 1.5)
                             }
@@ -112,13 +110,13 @@ object Roller {
                                     .team.teamColor!!
                                     .wool!!
                                     .createBlockData()
-                            for (target in plugin.getServer().getOnlinePlayers()) {
+                            for (target in plugin.server.onlinePlayers) {
                                 if (getPlayerData(target)!!.settings.ShowEffect_MainWeaponInk()) {
-                                    if (target.getWorld() ===
-                                        p.getWorld()
+                                    if (target.world ===
+                                        p.world
                                     ) {
                                         if (target
-                                                .getLocation()
+                                                .location
                                                 .distanceSquared(front) < Sclat.particleRenderDistanceSquared
                                         ) {
                                             target.spawnParticle<BlockData?>(
@@ -139,10 +137,10 @@ object Roller {
                             val vec2 = Vector(vec.getZ(), 0.0, vec.getX() * -1)
 
                             // 筆系武器
-                            if (data.getWeaponClass().mainWeapon!!.isHude) {
-                                val position = p.getLocation()
+                            if (data.weaponClass.mainWeapon!!.isHude) {
+                                val position = p.location
                                 PaintMgr.PaintHightestBlock(front, p, false, true)
-                                p.getLocation().getWorld()!!.spawnParticle<BlockData?>(
+                                p.location.world!!.spawnParticle<BlockData?>(
                                     Particle.BLOCK_DUST,
                                     position,
                                     2,
@@ -153,13 +151,13 @@ object Roller {
                                     bd,
                                 )
 
-                                for (target in plugin.getServer().getOnlinePlayers()) {
+                                for (target in plugin.server.onlinePlayers) {
                                     if (getPlayerData(target)!!.settings.ShowEffect_MainWeaponInk()) {
-                                        if (target.getWorld() ===
-                                            p.getWorld()
+                                        if (target.world ===
+                                            p.world
                                         ) {
                                             if (target
-                                                    .getLocation()
+                                                    .location
                                                     .distanceSquared(position) < Sclat.particleRenderDistanceSquared
                                             ) {
                                                 target.spawnParticle<BlockData?>(
@@ -178,15 +176,15 @@ object Roller {
                                 }
 
                                 val maxDistSquad = 4.0 // 2*2
-                                for (target in plugin.getServer().getOnlinePlayers()) {
-                                    if (!getPlayerData(target)!!.isInMatch()) continue
-                                    if (target.getLocation().distanceSquared(position) <= maxDistSquad) {
+                                for (target in plugin.server.onlinePlayers) {
+                                    if (!getPlayerData(target)!!.isInMatch) continue
+                                    if (target.location.distanceSquared(position) <= maxDistSquad) {
                                         if (getPlayerData(p)!!.team != getPlayerData(target)!!.team &&
-                                            target.getGameMode() == GameMode.ADVENTURE
+                                            target.gameMode == GameMode.ADVENTURE
                                         ) {
                                             val damage =
                                                 getPlayerData(p)!!
-                                                    .getWeaponClass()
+                                                    .weaponClass
                                                     .mainWeapon!!
                                                     .rollerDamage
 
@@ -195,13 +193,13 @@ object Roller {
                                     }
                                 }
 
-                                for (`as` in player.getWorld().getEntities()) {
+                                for (`as` in player.world.entities) {
                                     if (`as` is ArmorStand) {
-                                        if (`as`.getCustomName() != null) {
-                                            if (`as`.getLocation().distanceSquared(position) <= maxDistSquad) {
+                                        if (`as`.customName != null) {
+                                            if (`as`.location.distanceSquared(position) <= maxDistSquad) {
                                                 val damage =
                                                     getPlayerData(p)!!
-                                                        .getWeaponClass()
+                                                        .weaponClass
                                                         .mainWeapon!!
                                                         .rollerDamage
                                                 ArmorStandMgr.giveDamageArmorStand(`as`, damage, player)
@@ -209,12 +207,10 @@ object Roller {
                                         }
                                     }
                                 }
-                                p.setWalkSpeed(
-                                    (
-                                        data.getWeaponClass().mainWeapon!!.usingWalkSpeed
-                                            * Gear.getGearInfluence(p, Gear.Type.MAIN_SPEC_UP)
-                                        ).toFloat(),
-                                )
+                                p.walkSpeed = (
+                                    data.weaponClass.mainWeapon!!.usingWalkSpeed
+                                        * Gear.getGearInfluence(p, Gear.Type.MAIN_SPEC_UP)
+                                    ).toFloat()
                                 return
                             }
 
@@ -224,18 +220,18 @@ object Roller {
                                 rayTrace1
                                     .traverse(
                                         data
-                                            .getWeaponClass()
+                                            .weaponClass
                                             .mainWeapon!!
                                             .rollerWidth
                                             .toDouble(),
                                         0.5,
                                     )
                             loop@ for (vector in positions1) {
-                                val position = vector.toLocation(p.getLocation().getWorld()!!)
-                                val block = p.getLocation().getWorld()!!.getBlockAt(position)
-                                if (block.getType() != Material.AIR) break
+                                val position = vector.toLocation(p.location.world!!)
+                                val block = p.location.world!!.getBlockAt(position)
+                                if (block.type != Material.AIR) break
                                 PaintMgr.PaintHightestBlock(position, p, false, true)
-                                p.getLocation().getWorld()!!.spawnParticle<BlockData?>(
+                                p.location.world!!.spawnParticle<BlockData?>(
                                     Particle.BLOCK_DUST,
                                     position,
                                     2,
@@ -246,13 +242,13 @@ object Roller {
                                     bd,
                                 )
 
-                                for (target in plugin.getServer().getOnlinePlayers()) {
+                                for (target in plugin.server.onlinePlayers) {
                                     if (getPlayerData(target)!!.settings.ShowEffect_MainWeaponInk()) {
-                                        if (target.getWorld() ===
-                                            p.getWorld()
+                                        if (target.world ===
+                                            p.world
                                         ) {
                                             if (target
-                                                    .getLocation()
+                                                    .location
                                                     .distanceSquared(position) < Sclat.particleRenderDistanceSquared
                                             ) {
                                                 target.spawnParticle<BlockData?>(
@@ -272,25 +268,23 @@ object Roller {
 
                                 val maxDistSquad = 4.0 // 2*2
 
-                                for (`as` in p.getWorld().getEntities()) {
+                                for (`as` in p.world.entities) {
                                     if (`as` is ArmorStand) {
-                                        if (`as`.getCustomName() != null) {
-                                            if (`as`.getLocation().distanceSquared(position) <= maxDistSquad) {
+                                        if (`as`.customName != null) {
+                                            if (`as`.location.distanceSquared(position) <= maxDistSquad) {
                                                 try {
-                                                    if (`as`.getCustomName() == "Kasa") {
+                                                    if (`as`.customName == "Kasa") {
                                                         val kasaData = getKasaDataFromArmorStand(`as`)
                                                         if (getPlayerData(kasaData!!.player)!!.team !=
-                                                            DataMgr
-                                                                .getPlayerData(p)!!
+                                                            getPlayerData(p)!!
                                                                 .team
                                                         ) {
                                                             break@loop
                                                         }
-                                                    } else if (`as`.getCustomName() == "SplashShield") {
+                                                    } else if (`as`.customName == "SplashShield") {
                                                         val splashShieldData = getSplashShieldDataFromArmorStand(`as`)
                                                         if (getPlayerData(splashShieldData!!.player)!!.team !=
-                                                            DataMgr
-                                                                .getPlayerData(p)!!
+                                                            getPlayerData(p)!!
                                                                 .team
                                                         ) {
                                                             break@loop
@@ -303,16 +297,16 @@ object Roller {
                                     }
                                 }
 
-                                for (target in plugin.getServer().getOnlinePlayers()) {
-                                    if (!getPlayerData(target)!!.isInMatch()) continue
+                                for (target in plugin.server.onlinePlayers) {
+                                    if (!getPlayerData(target)!!.isInMatch) continue
                                     if (getPlayerData(p)!!.team != getPlayerData(target)!!.team &&
-                                        target.getGameMode() == GameMode.ADVENTURE
+                                        target.gameMode == GameMode.ADVENTURE
                                     ) {
-                                        if (target.getLocation().distanceSquared(position) <= maxDistSquad) {
+                                        if (target.location.distanceSquared(position) <= maxDistSquad) {
                                             if (rayTrace1.intersects(
                                                     BoundingBox(target as Entity),
                                                     data
-                                                        .getWeaponClass()
+                                                        .weaponClass
                                                         .mainWeapon!!
                                                         .rollerWidth
                                                         .toDouble(),
@@ -321,7 +315,7 @@ object Roller {
                                             ) {
                                                 val damage =
                                                     getPlayerData(p)!!
-                                                        .getWeaponClass()
+                                                        .weaponClass
                                                         .mainWeapon!!
                                                         .rollerDamage
 
@@ -333,7 +327,7 @@ object Roller {
                                                         var p: Player = target
 
                                                         override fun run() {
-                                                            target.setNoDamageTicks(0)
+                                                            target.noDamageTicks = 0
                                                         }
                                                     }
                                                 task.runTaskLater(plugin, 1)
@@ -343,13 +337,13 @@ object Roller {
                                     }
                                 }
 
-                                for (`as` in player.getWorld().getEntities()) {
+                                for (`as` in player.world.entities) {
                                     if (`as` is ArmorStand) {
-                                        if (`as`.getCustomName() != null) {
-                                            if (`as`.getLocation().distanceSquared(position) <= maxDistSquad) {
+                                        if (`as`.customName != null) {
+                                            if (`as`.location.distanceSquared(position) <= maxDistSquad) {
                                                 val damage =
                                                     getPlayerData(p)!!
-                                                        .getWeaponClass()
+                                                        .weaponClass
                                                         .mainWeapon!!
                                                         .rollerDamage
                                                 ArmorStandMgr.giveDamageArmorStand(`as`, damage, player)
@@ -364,24 +358,24 @@ object Roller {
                                 rayTrace2
                                     .traverse(
                                         data
-                                            .getWeaponClass()
+                                            .weaponClass
                                             .mainWeapon!!
                                             .rollerWidth
                                             .toDouble(),
                                         0.5,
                                     )
                             loop@ for (vector in positions2) {
-                                val position = vector.toLocation(p.getLocation().getWorld()!!)
-                                val block = p.getLocation().getWorld()!!.getBlockAt(position)
-                                if (block.getType() != Material.AIR) break
+                                val position = vector.toLocation(p.location.world!!)
+                                val block = p.location.world!!.getBlockAt(position)
+                                if (block.type != Material.AIR) break
                                 PaintMgr.PaintHightestBlock(position, p, false, true)
-                                for (target in plugin.getServer().getOnlinePlayers()) {
+                                for (target in plugin.server.onlinePlayers) {
                                     if (getPlayerData(target)!!.settings.ShowEffect_MainWeaponInk()) {
-                                        if (target.getWorld() ===
-                                            p.getWorld()
+                                        if (target.world ===
+                                            p.world
                                         ) {
                                             if (target
-                                                    .getLocation()
+                                                    .location
                                                     .distanceSquared(position) < Sclat.particleRenderDistanceSquared
                                             ) {
                                                 target.spawnParticle<BlockData?>(
@@ -401,25 +395,23 @@ object Roller {
 
                                 val maxDistSquad = 4.0 // 2*2
 
-                                for (`as` in p.getWorld().getEntities()) {
+                                for (`as` in p.world.entities) {
                                     if (`as` is ArmorStand) {
-                                        if (`as`.getCustomName() != null) {
-                                            if (`as`.getLocation().distanceSquared(position) <= maxDistSquad) {
+                                        if (`as`.customName != null) {
+                                            if (`as`.location.distanceSquared(position) <= maxDistSquad) {
                                                 try {
-                                                    if (`as`.getCustomName() == "Kasa") {
+                                                    if (`as`.customName == "Kasa") {
                                                         val kasaData = getKasaDataFromArmorStand(`as`)
                                                         if (getPlayerData(kasaData!!.player)!!.team !=
-                                                            DataMgr
-                                                                .getPlayerData(p)!!
+                                                            getPlayerData(p)!!
                                                                 .team
                                                         ) {
                                                             break@loop
                                                         }
-                                                    } else if (`as`.getCustomName() == "SplashShield") {
+                                                    } else if (`as`.customName == "SplashShield") {
                                                         val splashShieldData = getSplashShieldDataFromArmorStand(`as`)
                                                         if (getPlayerData(splashShieldData!!.player)!!.team !=
-                                                            DataMgr
-                                                                .getPlayerData(p)!!
+                                                            getPlayerData(p)!!
                                                                 .team
                                                         ) {
                                                             break@loop
@@ -432,25 +424,25 @@ object Roller {
                                     }
                                 }
 
-                                for (target in plugin.getServer().getOnlinePlayers()) {
-                                    if (!getPlayerData(target)!!.isInMatch()) continue
+                                for (target in plugin.server.onlinePlayers) {
+                                    if (!getPlayerData(target)!!.isInMatch) continue
                                     if (getPlayerData(p)!!.team != getPlayerData(target)!!.team &&
-                                        target.getGameMode() == GameMode.ADVENTURE
+                                        target.gameMode == GameMode.ADVENTURE
                                     ) {
                                         if (rayTrace1.intersects(
                                                 BoundingBox(target as Entity),
                                                 data
-                                                    .getWeaponClass()
+                                                    .weaponClass
                                                     .mainWeapon!!
                                                     .rollerWidth
                                                     .toDouble(),
                                                 0.05,
                                             )
                                         ) {
-                                            if (target.getLocation().distanceSquared(position) <= maxDistSquad) {
+                                            if (target.location.distanceSquared(position) <= maxDistSquad) {
                                                 val damage =
                                                     getPlayerData(p)!!
-                                                        .getWeaponClass()
+                                                        .weaponClass
                                                         .mainWeapon!!
                                                         .rollerDamage
 
@@ -462,7 +454,7 @@ object Roller {
                                                         var p: Player = target
 
                                                         override fun run() {
-                                                            target.setNoDamageTicks(0)
+                                                            target.noDamageTicks = 0
                                                         }
                                                     }
                                                 task.runTaskLater(plugin, 1)
@@ -472,12 +464,12 @@ object Roller {
                                     }
                                 }
 
-                                for (`as` in player.getWorld().getEntities()) {
+                                for (`as` in player.world.entities) {
                                     if (`as` is ArmorStand) {
-                                        if (`as`.getLocation().distance(position) <= maxDistSquad) {
+                                        if (`as`.location.distance(position) <= maxDistSquad) {
                                             val damage =
                                                 getPlayerData(p)!!
-                                                    .getWeaponClass()
+                                                    .weaponClass
                                                     .mainWeapon!!
                                                     .rollerDamage
                                             ArmorStandMgr.giveDamageArmorStand(`as`, damage, p)
@@ -486,19 +478,17 @@ object Roller {
                                 }
                             }
                             PaintMgr.PaintHightestBlock(eloc, p, false, true)
-                            p.setWalkSpeed(
-                                (
-                                    data.getWeaponClass().mainWeapon!!.usingWalkSpeed
-                                        * Gear.getGearInfluence(p, Gear.Type.MAIN_SPEC_UP)
-                                    ).toFloat(),
-                            )
+                            p.walkSpeed = (
+                                data.weaponClass.mainWeapon!!.usingWalkSpeed
+                                    * Gear.getGearInfluence(p, Gear.Type.MAIN_SPEC_UP)
+                                ).toFloat()
                         }
                     } catch (e: Exception) {
                         cancel()
                     }
                 }
             }
-        if (getPlayerData(player)!!.getWeaponClass().mainWeapon!!.isHude) {
+        if (getPlayerData(player)!!.weaponClass.mainWeapon!!.isHude) {
             task.runTaskTimer(plugin, 0, 1)
         } else {
             task.runTaskTimer(plugin, 0, 5)
@@ -514,31 +504,31 @@ object Roller {
                 var data: PlayerData? = pdata
 
                 override fun run() {
-                    if (!getPlayerData(p)!!.isInMatch() || !p.isOnline()) {
+                    if (!getPlayerData(p)!!.isInMatch || !p.isOnline) {
                         cancel()
                         return
                     }
-                    data!!.setCanRollerShoot(true)
-                    if (p.getGameMode() != GameMode.ADVENTURE || p
-                            .getInventory()
-                            .getItemInMainHand()
+                    data!!.canRollerShoot = true
+                    if (p.gameMode != GameMode.ADVENTURE || p
+                            .inventory
+                            .itemInMainHand
                             .type == Material.AIR
                     ) {
                         return
                     }
-                    if (p.getExp() >= data!!.getWeaponClass().mainWeapon!!.needInk) {
+                    if (p.exp >= data!!.weaponClass.mainWeapon!!.needInk) {
                         p
-                            .getWorld()
-                            .playSound(p.getLocation(), Sound.ITEM_BUCKET_EMPTY, 1f, 1f)
+                            .world
+                            .playSound(p.location, Sound.ITEM_BUCKET_EMPTY, 1f, 1f)
                     } else {
                         return
                     }
                     val vec =
                         p
-                            .getLocation()
-                            .getDirection()
-                            .multiply(getPlayerData(player)!!.getWeaponClass().mainWeapon!!.shootSpeed)
-                    val random = data!!.getWeaponClass().mainWeapon!!.hudeRandom
+                            .location
+                            .direction
+                            .multiply(getPlayerData(player)!!.weaponClass.mainWeapon!!.shootSpeed)
+                    val random = data!!.weaponClass.mainWeapon!!.hudeRandom
                     vec.add(
                         Vector(
                             Math.random() * random - random / 2,
@@ -548,9 +538,9 @@ object Roller {
                     )
 
                     var sound = false
-                    for (i in 0..<data!!.getWeaponClass().mainWeapon!!.rollerShootQuantity) {
+                    for (i in 0..<data!!.weaponClass.mainWeapon!!.rollerShootQuantity) {
                         val `is`: Boolean
-                        if (data!!.getWeaponClass().mainWeapon!!.isHude) {
+                        if (data!!.weaponClass.mainWeapon!!.isHude) {
                             `is` = Shoot(p, vec)
                         } else {
                             `is` = Shoot(p, null)
@@ -558,22 +548,22 @@ object Roller {
                         if (`is`) sound = true
                     }
                     if (sound) {
-                        p.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1f, 1.63f)
+                        p.playSound(player.location, Sound.UI_BUTTON_CLICK, 1f, 1.63f)
                     }
                     // ShootRunnable(p);
-                    data!!.setCanPaint(true)
+                    data!!.canPaint = true
                 }
             }
-        if (pdata!!.getCanRollerShoot()) {
+        if (pdata!!.canRollerShoot) {
             task.runTaskLater(
                 plugin,
                 pdata
-                    .getWeaponClass()
+                    .weaponClass
                     .mainWeapon!!
                     .shootTick
                     .toLong(),
             )
-            pdata.setCanRollerShoot(false)
+            pdata.canRollerShoot = false
         }
     }
 
@@ -582,13 +572,13 @@ object Roller {
         val task: BukkitRunnable =
             object : BukkitRunnable() {
                 override fun run() {
-                    data!!.setCanRollerShoot(true)
+                    data!!.canRollerShoot = true
                 }
             }
         task.runTaskLater(
             plugin,
             data!!
-                .getWeaponClass()
+                .weaponClass
                 .mainWeapon!!
                 .shootTick
                 .toLong(),
@@ -599,12 +589,12 @@ object Roller {
         player: Player,
         v: Vector?,
     ): Boolean {
-        if (player.getGameMode() == GameMode.SPECTATOR) return false
+        if (player.gameMode == GameMode.SPECTATOR) return false
 
         val data = getPlayerData(player)
-        if (player.getExp() <=
+        if (player.exp <=
             (
-                data!!.getWeaponClass().mainWeapon!!.needInk
+                data!!.weaponClass.mainWeapon!!.needInk
                     * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) /
                     Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)
                 ).toFloat()
@@ -612,28 +602,24 @@ object Roller {
             player.sendTitle("", ChatColor.RED.toString() + "インクが足りません", 0, 13, 2)
             return true
         }
-        player.setExp(
-            player.getExp() -
-                (
-                    data.getWeaponClass().mainWeapon!!.needInk
-                        * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) /
-                        Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)
-                    ).toFloat(),
-        )
+        player.exp = player.exp -
+            (
+                data.weaponClass.mainWeapon!!.needInk
+                    * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) /
+                    Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)
+                ).toFloat()
         val ball = player.launchProjectile<Snowball>(Snowball::class.java)
-        (ball as CraftSnowball).getHandle().setItem(
-            CraftItemStack.asNMSCopy(ItemStack(getPlayerData(player)!!.team.teamColor!!.wool!!)),
-        )
+        (ball as CraftSnowball).handle.item = CraftItemStack.asNMSCopy(ItemStack(getPlayerData(player)!!.team.teamColor!!.wool!!))
         var vec: Vector? =
             player
-                .getLocation()
-                .getDirection()
-                .multiply(getPlayerData(player)!!.getWeaponClass().mainWeapon!!.shootSpeed)
+                .location
+                .direction
+                .multiply(getPlayerData(player)!!.weaponClass.mainWeapon!!.shootSpeed)
         if (v != null) vec = v
-        val random = getPlayerData(player)!!.getWeaponClass().mainWeapon!!.random
-        val distick = getPlayerData(player)!!.getWeaponClass().mainWeapon!!.distanceTick
-        if (!data.getWeaponClass().mainWeapon!!.isHude) {
-            if (player.isOnGround()) {
+        val random = getPlayerData(player)!!.weaponClass.mainWeapon!!.random
+        val distick = getPlayerData(player)!!.weaponClass.mainWeapon!!.distanceTick
+        if (!data.weaponClass.mainWeapon!!.isHude) {
+            if (player.isOnGround) {
                 vec!!.add(
                     Vector(
                         Math.random() * random - random / 2,
@@ -642,8 +628,8 @@ object Roller {
                     ),
                 )
             }
-            if (!player.isOnGround()) {
-                if (data.getWeaponClass().mainWeapon!!.canTatehuri) {
+            if (!player.isOnGround) {
+                if (data.weaponClass.mainWeapon!!.canTatehuri) {
                     vec!!.add(
                         Vector(
                             Math.random() * random / 4 - random / 8,
@@ -652,7 +638,7 @@ object Roller {
                         ),
                     )
                 }
-                if (!data.getWeaponClass().mainWeapon!!.canTatehuri) {
+                if (!data.weaponClass.mainWeapon!!.canTatehuri) {
                     vec!!.add(
                         Vector(
                             Math.random() * random - random / 2,
@@ -672,11 +658,11 @@ object Roller {
                 ),
             )
         }
-        ball.setVelocity(vec!!)
-        ball.setShooter(player)
+        ball.velocity = vec!!
+        ball.shooter = player
         val name = notDuplicateNumber.toString()
         DataMgr.mws.add(name)
-        ball.setCustomName(name)
+        ball.customName = name
         mainSnowballNameMap.put(name, ball)
         setSnowballHitCount(name, 0)
         val task: BukkitRunnable =
@@ -688,10 +674,10 @@ object Roller {
                 var addedFallVec: Boolean = false
                 var fallvec: Vector =
                     Vector(
-                        inkball!!.getVelocity().getX(),
-                        inkball!!.getVelocity().getY(),
-                        inkball!!.getVelocity().getZ(),
-                    ).multiply(getPlayerData(p)!!.getWeaponClass().mainWeapon!!.shootSpeed / 17)
+                        inkball!!.velocity.getX(),
+                        inkball!!.velocity.getY(),
+                        inkball!!.velocity.getZ(),
+                    ).multiply(getPlayerData(p)!!.weaponClass.mainWeapon!!.shootSpeed / 17)
 
                 override fun run() {
                     inkball = mainSnowballNameMap.get(name)
@@ -701,8 +687,8 @@ object Roller {
                         setSnowballHitCount(name, 0)
                     }
                     if (i != 0) {
-                        for (target in plugin.getServer().getOnlinePlayers()) {
-                            if (target.getWorld() !== p.getWorld()) continue
+                        for (target in plugin.server.onlinePlayers) {
+                            if (target.world !== p.world) continue
                             if (!getPlayerData(target)!!.settings.ShowEffect_MainWeaponInk()) continue
                             val bd =
                                 getPlayerData(p)!!
@@ -711,7 +697,7 @@ object Roller {
                                     .createBlockData()
                             target.spawnParticle<BlockData?>(
                                 Particle.BLOCK_DUST,
-                                inkball!!.getLocation(),
+                                inkball!!.location,
                                 1,
                                 0.0,
                                 0.0,
@@ -723,16 +709,14 @@ object Roller {
                     }
 
                     if (i >= tick && !addedFallVec) {
-                        inkball!!.setVelocity(fallvec)
+                        inkball!!.velocity = fallvec
                         addedFallVec = true
                     }
                     if (i >= tick && i <= tick + 15) {
-                        inkball!!.setVelocity(
-                            inkball!!.getVelocity().add(Vector(0.0, -0.1, 0.0)),
-                        )
+                        inkball!!.velocity = inkball!!.velocity.add(Vector(0.0, -0.1, 0.0))
                     }
-                    if (i != tick) PaintMgr.PaintHightestBlock(inkball!!.getLocation(), p, true, true)
-                    if (inkball!!.isDead()) cancel()
+                    if (i != tick) PaintMgr.PaintHightestBlock(inkball!!.location, p, true, true)
+                    if (inkball!!.isDead) cancel()
 
                     i++
                 }

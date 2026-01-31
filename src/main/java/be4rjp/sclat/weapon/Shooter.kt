@@ -44,33 +44,33 @@ object Shooter {
                 override fun run() {
                     val data = getPlayerData(p)
 
-                    if (!data!!.isInMatch() || !p.isOnline() || data.stoprun) {
+                    if (!data!!.isInMatch || !p.isOnline || data.stoprun) {
                         cancel()
                         return
                     }
 
-                    if (!data.getIsUsingManeuver() && data.getCanShoot()) {
+                    if (!data.getIsUsingManeuver() && data.canShoot) {
                         val clickType = Sclat.dadadaCheckerAPI!!.getPlayerClickType(player)
                         if ((clickType == ClickType.FIRST_CLICK || clickType == ClickType.RENDA || clickType == ClickType.NAGAOSI) &&
-                            data.isInMatch()
+                            data.isInMatch
                         ) {
                             Shoot(
                                 p,
                                 false,
                                 false,
-                                maxRandomCount >= data.getWeaponClass().mainWeapon!!.maxRandomCount,
+                                maxRandomCount >= data.weaponClass.mainWeapon!!.maxRandomCount,
                             )
                             data.tick = (
                                 data.tick +
-                                    getPlayerData(p)!!.getWeaponClass().mainWeapon!!.shootTick
+                                    getPlayerData(p)!!.weaponClass.mainWeapon!!.shootTick
                                 )
-                            if (data.getWeaponClass().mainWeapon!!.maxRandom != 0.0 &&
-                                maxRandomCount <= data.getWeaponClass().mainWeapon!!.maxRandomCount * 2
+                            if (data.weaponClass.mainWeapon!!.maxRandom != 0.0 &&
+                                maxRandomCount <= data.weaponClass.mainWeapon!!.maxRandomCount * 2
                             ) {
                                 maxRandomCount++
                             }
                         } else {
-                            if (data.getWeaponClass().mainWeapon!!.maxRandom != 0.0 && maxRandomCount >= 0) maxRandomCount -= 2
+                            if (data.weaponClass.mainWeapon!!.maxRandom != 0.0 && maxRandomCount >= 0) maxRandomCount -= 2
                         }
                     }
                 }
@@ -79,7 +79,7 @@ object Shooter {
             plugin,
             0,
             getPlayerData(player)!!
-                .getWeaponClass()
+                .weaponClass
                 .mainWeapon!!
                 .shootTick
                 .toLong(),
@@ -97,7 +97,7 @@ object Shooter {
                 override fun run() {
                     val data = getPlayerData(p)
 
-                    if (!data!!.isInMatch() || !p.isOnline()) {
+                    if (!data!!.isInMatch || !p.isOnline) {
                         cancel()
                         return
                     }
@@ -105,12 +105,12 @@ object Shooter {
                     if (data.getIsUsingManeuver()) {
                         val clickType = Sclat.dadadaCheckerAPI!!.getPlayerClickType(player)
                         if ((clickType == ClickType.FIRST_CLICK || clickType == ClickType.RENDA || clickType == ClickType.NAGAOSI) &&
-                            data.isInMatch()
+                            data.isInMatch
                         ) {
                             Shoot(p, true, false, false)
                             data.tick = (
                                 data.tick +
-                                    getPlayerData(p)!!.getWeaponClass().mainWeapon!!.shootTick
+                                    getPlayerData(p)!!.weaponClass.mainWeapon!!.shootTick
                                 )
                         }
                     }
@@ -120,7 +120,7 @@ object Shooter {
             plugin,
             0,
             getPlayerData(player)!!
-                .getWeaponClass()
+                .weaponClass
                 .mainWeapon!!
                 .slidingShootTick
                 .toLong(),
@@ -132,9 +132,9 @@ object Shooter {
         val delay: BukkitRunnable =
             object : BukkitRunnable() {
                 var p: Player = player
-                var loc: Location = player.getLocation()
-                var before: Location = player.getLocation()
-                var before_2: Location = player.getLocation()
+                var loc: Location = player.location
+                var before: Location = player.location
+                var before_2: Location = player.location
 
                 // int sl = 0;
                 // スライドの仕様改変
@@ -146,23 +146,23 @@ object Shooter {
 
                 override fun run() {
                     val data = getPlayerData(p)
-                    val ploc = p.getLocation()
+                    val ploc = p.location
 
-                    if (!data!!.isInMatch() || !p.isOnline()) {
+                    if (!data!!.isInMatch || !p.isOnline) {
                         cancel()
                         return
                     }
 
-                    val location = p.getLocation()
+                    val location = p.location
 
-                    var x = location.getX() - before.getX()
-                    var z = location.getZ() - before.getZ()
-                    var vec = p.getEyeLocation().getDirection()
+                    var x = location.x - before.x
+                    var z = location.z - before.z
+                    var vec = p.eyeLocation.direction
                     if (x != 0.0 || z != 0.0) {
                         vec = Vector(x, 0.0, z)
                     } else {
-                        x = location.getX() - before_2.getX()
-                        z = location.getZ() - before_2.getZ()
+                        x = location.x - before_2.x
+                        z = location.z - before_2.z
                         if (x != 0.0 || z != 0.0) {
                             vec = Vector(x, 0.0, z)
                         }
@@ -173,19 +173,19 @@ object Shooter {
                     // float ink = data.getWeaponClass().getMainWeapon().getSlideNeedINK();
 
                     // マニューバー系
-                    if (data.getWeaponClass().mainWeapon!!.isManeuver) {
+                    if (data.weaponClass.mainWeapon!!.isManeuver) {
                         // if(p.getExp() >= ink) {
-                        if (data.getIsSneaking() && sl_recharge_2 && !data.getIsSliding() && (
+                        if (data.isSneaking && sl_recharge_2 && !data.isSliding && (
                                 p
-                                    .getInventory()
-                                    .getItemInMainHand()
-                                    .getType()
+                                    .inventory
+                                    .itemInMainHand
+                                    .type
                                     ==
                                     data
-                                        .getWeaponClass()
+                                        .weaponClass
                                         .mainWeapon!!
                                         .weaponIteamStack!!
-                                        .getType()
+                                        .type
                                 )
                         ) { // slをsl_recharge_2に変更することで優先順位が低い方のスライドが残っている時のみ使えるようにしました
                             val jvec = (Vector(vec.getX(), 0.0, vec.getZ())).normalize().multiply(3)
@@ -209,11 +209,11 @@ object Shooter {
                                         Math.random() * random - random / 2,
                                     )
                                 val erv = ev.clone().add(randomVector)
-                                for (o_player in plugin.getServer().getOnlinePlayers()) {
+                                for (o_player in plugin.server.onlinePlayers) {
                                     if (getPlayerData(o_player)!!.settings.ShowEffect_BombEx()) {
-                                        if (o_player.getWorld() === location.getWorld()) {
+                                        if (o_player.world === location.world) {
                                             if (o_player
-                                                    .getLocation()
+                                                    .location
                                                     .distanceSquared(location) < Sclat.particleRenderDistanceSquared
                                             ) {
                                                 o_player.spawnParticle<BlockData?>(
@@ -239,12 +239,12 @@ object Shooter {
                             if (getPlayerData(player)!!.armor > 9999) {
                                 getPlayerData(player)!!.armor = 0.0
                             }
-                            p.getWorld().playSound(p.getLocation(), Sound.ITEM_ARMOR_EQUIP_GENERIC, 1.4f, 1.5f)
+                            p.world.playSound(p.location, Sound.ITEM_ARMOR_EQUIP_GENERIC, 1.4f, 1.5f)
 
-                            p.setVelocity(jvec.clone().setY(if (p.isOnGround()) 0.0 else -0.4))
-                            data.setIsSneaking(false)
-                            data.setIsSliding(true)
-                            data.setCanShoot(false)
+                            p.velocity = jvec.clone().setY(if (p.isOnGround) 0.0 else -0.4)
+                            data.isSneaking = false
+                            data.isSliding = true
+                            data.canShoot = false
                             // 優先順位が高い方のスライドがFalseだった場合に低い方をFalseにするようにしました高い方がtrueであった場合は高い方がFalseになります
                             if (!sl_recharge_1) {
                                 sl_recharge_2 = false
@@ -258,14 +258,14 @@ object Shooter {
 
                                     override fun run() {
                                         if (i == 3) {
-                                            p.setVelocity(Vector(0, 0, 0))
+                                            p.velocity = Vector(0, 0, 0)
                                             data.setIsUsingManeuver(true)
-                                            data.setCanShoot(true)
+                                            data.canShoot = true
                                         }
 
                                         if (i == 10) {
                                             data.setIsUsingManeuver(false)
-                                            loc = p.getLocation()
+                                            loc = p.location
                                             cancel()
                                         }
                                         i++
@@ -276,7 +276,7 @@ object Shooter {
                             val task1: BukkitRunnable =
                                 object : BukkitRunnable() {
                                     override fun run() {
-                                        data.setIsSliding(false)
+                                        data.isSliding = false
                                     }
                                 }
                             task1.runTaskLater(plugin, 10)
@@ -313,8 +313,8 @@ object Shooter {
                         // }
                     }
 
-                    if (!data.getIsSliding()) {
-                        if (loc.getX() == ploc.getX() && loc.getZ() == ploc.getZ()) {
+                    if (!data.isSliding) {
+                        if (loc.x == ploc.x && loc.z == ploc.z) {
                             data.setIsUsingManeuver(true)
                         } else {
                             if (check) {
@@ -358,52 +358,50 @@ object Shooter {
         maxRandom: Boolean,
     ) {
         var maxRandom = maxRandom
-        if (player.getGameMode() == GameMode.SPECTATOR) return
+        if (player.gameMode == GameMode.SPECTATOR) return
 
         val data = getPlayerData(player)
-        if (player.getExp() <=
+        if (player.exp <=
             (
-                data!!.getWeaponClass().mainWeapon!!.needInk
+                data!!.weaponClass.mainWeapon!!.needInk
                     * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) /
                     Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)
                 ).toFloat()
         ) {
             player.sendTitle("", ChatColor.RED.toString() + "インクが足りません", 0, 5, 2)
-            player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1f, 1.63f)
+            player.playSound(player.location, Sound.UI_BUTTON_CLICK, 1f, 1.63f)
             return
         }
-        player.setExp(
-            player.getExp() -
-                (
-                    data.getWeaponClass().mainWeapon!!.needInk
-                        * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) /
-                        Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)
-                    ).toFloat(),
-        )
-        val rayTrace = RayTrace(player.getEyeLocation().toVector(), player.getEyeLocation().getDirection())
+        player.exp = player.exp -
+            (
+                data.weaponClass.mainWeapon!!.needInk
+                    * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) /
+                    Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)
+                ).toFloat()
+        val rayTrace = RayTrace(player.eyeLocation.toVector(), player.eyeLocation.direction)
         val positions =
             rayTrace.traverse(
-                data.getWeaponClass().mainWeapon!!.shootSpeed
-                    * data.getWeaponClass().mainWeapon!!.distanceTick,
+                data.weaponClass.mainWeapon!!.shootSpeed
+                    * data.weaponClass.mainWeapon!!.distanceTick,
                 0.7,
             )
         var isLockOnPlayer = false
-        if (data.getWeaponClass().mainWeapon!!.maxRandom == 0.0) {
+        if (data.weaponClass.mainWeapon!!.maxRandom == 0.0) {
             check@ for (vector in positions) {
-                val position = vector.toLocation(player.getLocation().getWorld()!!)
-                for (target in plugin.getServer().getOnlinePlayers()) {
-                    if (player !== target && player.getWorld() === target.getWorld()) {
-                        if (target.getLocation().distance(position) < 2) {
+                val position = vector.toLocation(player.location.world!!)
+                for (target in plugin.server.onlinePlayers) {
+                    if (player !== target && player.world === target.world) {
+                        if (target.location.distance(position) < 2) {
                             isLockOnPlayer = true
                             break@check
                         }
                     }
                 }
 
-                for (`as` in player.getWorld().getEntities()) {
+                for (`as` in player.world.entities) {
                     if (`as` is ArmorStand) {
-                        if (`as`.getCustomName() != null) {
-                            if (`as`.getLocation().distanceSquared(position) <= 4 /* 2*2 */) {
+                        if (`as`.customName != null) {
+                            if (`as`.location.distanceSquared(position) <= 4 /* 2*2 */) {
                                 isLockOnPlayer = true
                                 break@check
                             }
@@ -412,29 +410,27 @@ object Shooter {
                 }
             }
         } else {
-            if (!player.isOnGround()) maxRandom = true
+            if (!player.isOnGround) maxRandom = true
         }
 
-        PaintMgr.PaintHightestBlock(player.getLocation(), player, true, true)
+        PaintMgr.PaintHightestBlock(player.location, player, true, true)
 
         val ball = player.launchProjectile<Snowball>(Snowball::class.java)
-        (ball as CraftSnowball).getHandle().setItem(
-            CraftItemStack.asNMSCopy(ItemStack(getPlayerData(player)!!.team.teamColor!!.wool!!)),
-        )
-        player.getWorld().playSound(player.getLocation(), Sound.ENTITY_PIG_STEP, 0.3f, 1f)
+        (ball as CraftSnowball).handle.item = CraftItemStack.asNMSCopy(ItemStack(getPlayerData(player)!!.team.teamColor!!.wool!!))
+        player.world.playSound(player.location, Sound.ENTITY_PIG_STEP, 0.3f, 1f)
         val vec =
             player
-                .getLocation()
-                .getDirection()
-                .multiply(getPlayerData(player)!!.getWeaponClass().mainWeapon!!.shootSpeed)
-        var random = data.getWeaponClass().mainWeapon!!.random
-        if (maxRandom) random = data.getWeaponClass().mainWeapon!!.maxRandom
+                .location
+                .direction
+                .multiply(getPlayerData(player)!!.weaponClass.mainWeapon!!.shootSpeed)
+        var random = data.weaponClass.mainWeapon!!.random
+        if (maxRandom) random = data.weaponClass.mainWeapon!!.maxRandom
         if (isLockOnPlayer) random /= 2.0
         if (slided) random /= 10.0
-        val distick = getPlayerData(player)!!.getWeaponClass().mainWeapon!!.distanceTick
+        val distick = getPlayerData(player)!!.weaponClass.mainWeapon!!.distanceTick
         vec.add(Vector(Math.random() * random - random / 2, 0.0, Math.random() * random - random / 2))
-        ball.setVelocity(vec)
-        ball.setShooter(player)
+        ball.velocity = vec
+        ball.shooter = player
         // スライド時かどうかをSnowballListenerに渡すためのnameの改変
         val originName = notDuplicateNumber.toString()
         val buf = StringBuilder()
@@ -446,7 +442,7 @@ object Shooter {
         // String name = String.valueOf(Main.getNotDuplicateNumber());//ここで改変終わり
         DataMgr.mws.add(name)
         if (sound || slided) DataMgr.tsl.add(name)
-        ball.setCustomName(name)
+        ball.customName = name
         mainSnowballNameMap.put(name, ball)
         setSnowballHitCount(name, 0)
         val task: BukkitRunnable =
@@ -461,10 +457,10 @@ object Shooter {
                 var p: Player = player
                 var fallvec: Vector =
                     Vector(
-                        inkball!!.getVelocity().getX(),
-                        inkball!!.getVelocity().getY(),
-                        inkball!!.getVelocity().getZ(),
-                    ).multiply(getPlayerData(p)!!.getWeaponClass().mainWeapon!!.shootSpeed / 17)
+                        inkball!!.velocity.getX(),
+                        inkball!!.velocity.getY(),
+                        inkball!!.velocity.getZ(),
+                    ).multiply(getPlayerData(p)!!.weaponClass.mainWeapon!!.shootSpeed / 17)
 
                 override fun run() {
                     inkball = mainSnowballNameMap.get(name)
@@ -480,18 +476,18 @@ object Shooter {
                                 .team.teamColor!!
                                 .wool!!
                                 .createBlockData()
-                        for (o_player in plugin.getServer().getOnlinePlayers()) {
+                        for (o_player in plugin.server.onlinePlayers) {
                             if (getPlayerData(o_player)!!.settings.ShowEffect_MainWeaponInk()) {
-                                if (o_player.getWorld() ===
-                                    inkball!!.getWorld()
+                                if (o_player.world ===
+                                    inkball!!.world
                                 ) {
                                     if (o_player
-                                            .getLocation()
-                                            .distanceSquared(inkball!!.getLocation()) < Sclat.particleRenderDistanceSquared
+                                            .location
+                                            .distanceSquared(inkball!!.location) < Sclat.particleRenderDistanceSquared
                                     ) {
                                         o_player.spawnParticle<BlockData?>(
                                             Particle.BLOCK_DUST,
-                                            inkball!!.getLocation(),
+                                            inkball!!.location,
                                             0,
                                             0.0,
                                             -1.0,
@@ -506,17 +502,15 @@ object Shooter {
                     }
 
                     if (i >= tick && !addedFallVec) {
-                        inkball!!.setVelocity(fallvec)
+                        inkball!!.velocity = fallvec
                         addedFallVec = true
                     }
                     if (i >= tick && i <= tick + 15) {
-                        inkball!!.setVelocity(
-                            inkball!!.getVelocity().add(Vector(0.0, -0.1, 0.0)),
-                        )
+                        inkball!!.velocity = inkball!!.velocity.add(Vector(0.0, -0.1, 0.0))
                     }
                     // if(i != tick)
-                    if ((Random().nextInt(7)) == 0) PaintMgr.PaintHightestBlock(inkball!!.getLocation(), p, false, true)
-                    if (inkball!!.isDead()) cancel()
+                    if ((Random().nextInt(7)) == 0) PaintMgr.PaintHightestBlock(inkball!!.location, p, false, true)
+                    if (inkball!!.isDead) cancel()
 
                     i++
                 }

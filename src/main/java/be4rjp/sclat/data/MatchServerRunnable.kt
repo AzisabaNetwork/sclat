@@ -21,14 +21,14 @@ class MatchServerRunnable(
         )
         sendMessage("§a30秒後にマッチングを開始します", MessageType.ALL_PLAYER)
         plugin
-            .getServer()
-            .getOnlinePlayers()
+            .server
+            .onlinePlayers
             .forEach { player: Player -> playGameSound(player, SoundType.SUCCESS) }
     }
 
     override fun run() {
         if (waitTime == 30) {
-            for (player in plugin.getServer().getOnlinePlayers()) {
+            for (player in plugin.server.onlinePlayers) {
                 BungeeCordMgr.PlayerSendServer(player, serverStatus.serverName)
                 DataMgr.getPlayerData(player)?.setServerName(serverStatus.displayName)
             }

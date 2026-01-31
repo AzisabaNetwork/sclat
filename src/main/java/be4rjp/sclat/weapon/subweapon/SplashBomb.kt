@@ -39,39 +39,39 @@ object SplashBomb {
                 override fun run() {
                     try {
                         if (c == 0) {
-                            if (!getPlayerData(player)!!.getIsBombRush()) p.setExp(p.getExp() - 0.59f)
+                            if (!getPlayerData(player)!!.isBombRush) p.exp = p.exp - 0.59f
                             val bom = ItemStack(getPlayerData(p)!!.team.teamColor!!.glass!!).clone()
-                            val bom_m = bom.getItemMeta()
+                            val bom_m = bom.itemMeta
                             bom_m!!.setLocalizedName(notDuplicateNumber.toString())
-                            bom.setItemMeta(bom_m)
-                            drop = p.getWorld().dropItem(p.getEyeLocation(), bom)
-                            drop!!.setVelocity(p.getEyeLocation().getDirection())
+                            bom.itemMeta = bom_m
+                            drop = p.world.dropItem(p.eyeLocation, bom)
+                            drop!!.velocity = p.eyeLocation.direction
                         }
 
                         if (gc >= 10 && gc < 20) {
                             if (gc % 2 == 0) {
                                 player
-                                    .getWorld()
-                                    .playSound(drop!!.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1f, 1.6f)
+                                    .world
+                                    .playSound(drop!!.location, Sound.BLOCK_NOTE_BLOCK_PLING, 1f, 1.6f)
                             }
                         }
 
                         if (gc == 30) {
                             // 爆発音
-                            player.getWorld().playSound(drop!!.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_BLAST, 1f, 1f)
+                            player.world.playSound(drop!!.location, Sound.ENTITY_FIREWORK_ROCKET_BLAST, 1f, 1f)
 
                             // 爆発エフェクト
-                            createInkExplosionEffect(drop!!.getLocation(), 5.0, 15, player)
+                            createInkExplosionEffect(drop!!.location, 5.0, 15, player)
 
                             val maxDist = 4.0
 
                             // バリアをはじく
-                            repelBarrier(drop!!.getLocation(), maxDist, player)
+                            repelBarrier(drop!!.location, maxDist, player)
 
                             // 塗る
                             var i = 0
                             while (i <= maxDist) {
-                                val p_locs: MutableList<Location> = getSphere(drop!!.getLocation(), i.toDouble(), 14)
+                                val p_locs: MutableList<Location> = getSphere(drop!!.location, i.toDouble(), 14)
                                 for (loc in p_locs) {
                                     PaintMgr.Paint(loc, p, false)
                                 }
@@ -79,15 +79,15 @@ object SplashBomb {
                             }
 
                             // 攻撃判定の処理
-                            for (target in plugin.getServer().getOnlinePlayers()) {
-                                if (!getPlayerData(target)!!.isInMatch() || target.getWorld() !== p.getWorld()) continue
-                                if (target.getLocation().distance(drop!!.getLocation()) <= maxDist) {
+                            for (target in plugin.server.onlinePlayers) {
+                                if (!getPlayerData(target)!!.isInMatch || target.world !== p.world) continue
+                                if (target.location.distance(drop!!.location) <= maxDist) {
                                     val damage = (
-                                        (maxDist - target.getLocation().distance(drop!!.getLocation())) * 14 *
+                                        (maxDist - target.location.distance(drop!!.location)) * 14 *
                                             Gear.getGearInfluence(player, Gear.Type.SUB_SPEC_UP)
                                         )
                                     if (getPlayerData(player)!!.team != getPlayerData(target)!!.team &&
-                                        target.getGameMode() == GameMode.ADVENTURE
+                                        target.gameMode == GameMode.ADVENTURE
                                     ) {
                                         giveDamage(player, target, damage, "subWeapon")
 
@@ -97,7 +97,7 @@ object SplashBomb {
                                                 var p: Player = target
 
                                                 override fun run() {
-                                                    target.setNoDamageTicks(0)
+                                                    target.noDamageTicks = 0
                                                 }
                                             }
                                         task.runTaskLater(plugin, 1)
@@ -105,11 +105,11 @@ object SplashBomb {
                                 }
                             }
 
-                            for (`as` in player.getWorld().getEntities()) {
-                                if (`as`.getLocation().distance(drop!!.getLocation()) <= maxDist) {
+                            for (`as` in player.world.entities) {
+                                if (`as`.location.distance(drop!!.location) <= maxDist) {
                                     if (`as` is ArmorStand) {
-                                        if (`as`.getCustomName() != null) {
-                                            val damage = (maxDist - `as`.getLocation().distance(drop!!.getLocation())) * 12
+                                        if (`as`.customName != null) {
+                                            val damage = (maxDist - `as`.location.distance(drop!!.location)) * 12
                                             ArmorStandMgr.giveDamageArmorStand(`as`, damage, p)
                                         }
                                     }
@@ -121,12 +121,12 @@ object SplashBomb {
                         }
 
                         // ボムの視認用エフェクト
-                        for (o_player in plugin.getServer().getOnlinePlayers()) {
+                        for (o_player in plugin.server.onlinePlayers) {
                             if (getPlayerData(o_player)!!.settings.ShowEffect_Bomb()) {
-                                if (o_player.getWorld() === drop!!.getLocation().getWorld()) {
+                                if (o_player.world === drop!!.location.world) {
                                     if (o_player
-                                            .getLocation()
-                                            .distanceSquared(drop!!.getLocation()) < Sclat.particleRenderDistanceSquared
+                                            .location
+                                            .distanceSquared(drop!!.location) < Sclat.particleRenderDistanceSquared
                                     ) {
                                         val dustOptions =
                                             Particle.DustOptions(
@@ -135,7 +135,7 @@ object SplashBomb {
                                             )
                                         o_player.spawnParticle<Particle.DustOptions?>(
                                             Particle.REDSTONE,
-                                            drop!!.getLocation(),
+                                            drop!!.location,
                                             1,
                                             0.0,
                                             0.0,
@@ -156,11 +156,11 @@ object SplashBomb {
                             return
                         }
 
-                        if (drop!!.isOnGround()) gc++
+                        if (drop!!.isOnGround) gc++
                     } catch (e: Exception) {
                         drop!!.remove()
                         cancel()
-                        plugin.getLogger().warning(e.message)
+                        plugin.logger.warning(e.message)
                     }
                 }
             }
@@ -168,16 +168,16 @@ object SplashBomb {
         val cooltime: BukkitRunnable =
             object : BukkitRunnable() {
                 override fun run() {
-                    getPlayerData(player)!!.setCanUseSubWeapon(true)
+                    getPlayerData(player)!!.canUseSubWeapon = true
                 }
             }
         cooltime.runTaskLater(plugin, 10)
 
-        if (player.getExp() > 0.6 || getPlayerData(player)!!.getIsBombRush()) {
+        if (player.exp > 0.6 || getPlayerData(player)!!.isBombRush) {
             task.runTaskTimer(plugin, 0, 1)
         } else {
             player.sendTitle("", ChatColor.RED.toString() + "インクが足りません", 0, 5, 2)
-            player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1f, 1.63f)
+            player.playSound(player.location, Sound.UI_BUTTON_CLICK, 1f, 1.63f)
         }
     }
 }

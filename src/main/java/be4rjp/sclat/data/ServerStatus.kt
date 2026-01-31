@@ -92,8 +92,8 @@ class ServerStatus(
             object : BukkitRunnable() {
                 override fun run() {
                     try {
-                        if (sign.getType().toString().contains("SIGN")) {
-                            val signState = sign.getState() as Sign
+                        if (sign.type.toString().contains("SIGN")) {
+                            val signState = sign.state as Sign
                             signState.setLine(0, displayName)
                             if (isOnline) {
                                 signState.setLine(1, "§a" + playerCount + " / " + maxPlayer)

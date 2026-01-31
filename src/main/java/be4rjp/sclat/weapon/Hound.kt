@@ -36,19 +36,19 @@ object Hound {
                 override fun run() {
                     val data = getPlayerData(p)
 
-                    if (!data!!.isInMatch() || !p.isOnline()) {
+                    if (!data!!.isInMatch || !p.isOnline) {
                         cancel()
                         return
                     }
 
-                    if (!data.getIsUsingManeuver() && data.getCanShoot()) {
+                    if (!data.getIsUsingManeuver() && data.canShoot) {
                         val clickType = Sclat.dadadaCheckerAPI!!.getPlayerClickType(player)
                         if ((clickType == ClickType.FIRST_CLICK || clickType == ClickType.RENDA || clickType == ClickType.NAGAOSI) &&
-                            data.isInMatch() &&
-                            data.getCanRollerShoot()
+                            data.isInMatch &&
+                            data.canRollerShoot
                         ) {
                             Shoot(p)
-                            data.setCanRollerShoot(false)
+                            data.canRollerShoot = false
                             HoundCooltime(p)
                         }
                     }
@@ -58,7 +58,7 @@ object Hound {
             plugin,
             0,
             getPlayerData(player)!!
-                .getWeaponClass()
+                .weaponClass
                 .mainWeapon!!
                 .shootTick
                 .toLong(),
@@ -73,13 +73,13 @@ object Hound {
 
                 override fun run() {
                     val data = getPlayerData(player)
-                    data!!.setCanRollerShoot(true)
+                    data!!.canRollerShoot = true
                 }
             }
         delay1.runTaskLater(
             plugin,
             data!!
-                .getWeaponClass()
+                .weaponClass
                 .mainWeapon!!
                 .coolTime
                 .toLong(),
@@ -95,14 +95,14 @@ object Hound {
 
                 override fun run() {
                     try {
-                        if (!data!!.isInMatch() || !p.isOnline()) {
-                            data!!.setIsSliding(false)
+                        if (!data!!.isInMatch || !p.isOnline) {
+                            data!!.isSliding = false
                             cancel()
                             return
                         }
-                        if (!data!!.getIsSneaking() && data!!.getIsSliding()) {
-                            data!!.setIsSneaking(false)
-                            data!!.setIsSliding(false)
+                        if (!data!!.isSneaking && data!!.isSliding) {
+                            data!!.isSneaking = false
+                            data!!.isSliding = false
                         }
                     } catch (e: Exception) {
                         cancel()
@@ -113,14 +113,14 @@ object Hound {
     }
 
     fun Shoot(player: Player) {
-        if (player.getGameMode() == GameMode.SPECTATOR) return
+        if (player.gameMode == GameMode.SPECTATOR) return
 
         val data = getPlayerData(player)
-        val pVector = player.getEyeLocation().getDirection()
+        val pVector = player.eyeLocation.direction
         val vec =
             Vector(pVector.getX(), 0.0, pVector.getZ())
                 .normalize()
-                .multiply(data!!.getWeaponClass().mainWeapon!!.shootSpeed)
+                .multiply(data!!.weaponClass.mainWeapon!!.shootSpeed)
         val task: BukkitRunnable =
             object : BukkitRunnable() {
                 var aVec: Vector = vec.clone()
@@ -132,42 +132,40 @@ object Hound {
                 // 半径
                 var maxDist: Double = 1.0
                 var saveY: Double = 0.0
-                var explodetick: Int = data.getWeaponClass().mainWeapon!!.rollerShootQuantity
-                var climbSpeed: Float = getPlayerData(player)!!.getWeaponClass().mainWeapon!!.rollerNeedInk
+                var explodetick: Int = data.weaponClass.mainWeapon!!.rollerShootQuantity
+                var climbSpeed: Float = getPlayerData(player)!!.weaponClass.mainWeapon!!.rollerNeedInk
 
                 override fun run() {
                     try {
                         if (i == 0) {
-                            saveY = player.getLocation().getY()
-                            player.setExp(
-                                player.getExp() -
-                                    (
-                                        data.getWeaponClass().mainWeapon!!.needInk
-                                            * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) /
-                                            Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)
-                                        ).toFloat(),
-                            )
+                            saveY = player.location.y
+                            player.exp = player.exp -
+                                (
+                                    data.weaponClass.mainWeapon!!.needInk
+                                        * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) /
+                                        Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)
+                                    ).toFloat()
 
                             as1 =
-                                player.getWorld().spawn<ArmorStand>(
-                                    player.getLocation(),
+                                player.world.spawn<ArmorStand>(
+                                    player.location,
                                     ArmorStand::class.java,
                                     Consumer { armorStand: ArmorStand ->
-                                        armorStand.setVisible(false)
-                                        armorStand.setSmall(true)
+                                        armorStand.isVisible = false
+                                        armorStand.isSmall = true
                                     },
                                 )
                             GlowingAPI.setGlowing(as1!!, player, true)
                             data.setArmorlist(as1)
                         }
 
-                        val aloc = as1!!.getLocation().add(0.0, -0.4, 0.0)
-                        aloc.setYaw(90f)
-                        val as1l = as1!!.getLocation()
+                        val aloc = as1!!.location.add(0.0, -0.4, 0.0)
+                        aloc.yaw = 90f
+                        val as1l = as1!!.location
 
                         if (i >= 5) {
-                            if ((bloc!!.getX() == as1l.getX() || bloc!!.getZ() == as1l.getZ())) {
-                                if (Hound.EntityWallHit(as1!!, pVector)) {
+                            if ((bloc!!.x == as1l.x || bloc!!.z == as1l.z)) {
+                                if (EntityWallHit(as1!!, pVector)) {
                                     aVec = Vector(pVector.getX() * 0.03, climbSpeed.toDouble(), pVector.getZ() * 0.03)
                                 } else {
                                     aVec = Vector(vec.getX(), -0.4, vec.getZ())
@@ -179,21 +177,21 @@ object Hound {
                                         PaintMgr.Paint(loc, player, false)
                                     }
                                 }
-                            } else if (aVec.getY() > 0 && !Hound.EntityWallHit(as1!!, pVector)) {
+                            } else if (aVec.getY() > 0 && !EntityWallHit(as1!!, pVector)) {
                                 aVec = Vector(vec.getX(), 0.0, vec.getZ())
-                            } else if (!as1!!.isOnGround()) {
+                            } else if (!as1!!.isOnGround) {
                                 aVec = Vector(vec.getX(), -0.4, vec.getZ())
                             }
                         }
 
-                        as1!!.setVelocity(aVec)
+                        as1!!.velocity = aVec
 
                         PaintMgr.PaintHightestBlock(as1l, player, false, true)
 
                         bloc = as1l.clone()
 
                         if (i >= explodetick - 20 && i <= explodetick - 10) {
-                            if (i % 2 == 0) player.getWorld().playSound(as1l, Sound.BLOCK_NOTE_BLOCK_PLING, 1f, 1.6f)
+                            if (i % 2 == 0) player.world.playSound(as1l, Sound.BLOCK_NOTE_BLOCK_PLING, 1f, 1.6f)
                         }
 
                         // エフェクト
@@ -202,10 +200,10 @@ object Hound {
                                 data.team.teamColor!!
                                     .wool!!
                                     .createBlockData()
-                            for (target in plugin.getServer().getOnlinePlayers()) {
+                            for (target in plugin.server.onlinePlayers) {
                                 // if (DataMgr.getPlayerData(target).getSettings().ShowEffect_Bomb()){
-                                if (target.getWorld() === player.getWorld()) {
-                                    if (target.getLocation().distanceSquared(as1l) < Sclat.particleRenderDistanceSquared) {
+                                if (target.world === player.world) {
+                                    if (target.location.distanceSquared(as1l) < Sclat.particleRenderDistanceSquared) {
                                         target.spawnParticle<BlockData?>(
                                             Particle.BLOCK_DUST,
                                             as1l,
@@ -222,29 +220,29 @@ object Hound {
                             }
                         }
 
-                        if (i == explodetick || !player.isOnline() || !data.isInMatch() || (
-                                data.getIsSneaking() && data.getArmorlist(
+                        if (i == explodetick || !player.isOnline || !data.isInMatch || (
+                                data.isSneaking && data.getArmorlist(
                                     0,
-                                ) === as1 && !data.getIsSliding()
+                                ) === as1 && !data.isSliding
                                 )
                         ) {
-                            if (data.getIsSneaking()) {
-                                data.setIsSliding(true)
+                            if (data.isSneaking) {
+                                data.isSliding = true
                             }
-                            heightdiff = as1!!.getLocation().getY() - saveY
+                            heightdiff = as1!!.location.y - saveY
                             if (heightdiff > 7.9) {
-                                maxDist = data.getWeaponClass().mainWeapon!!.blasterExHankei + 2
+                                maxDist = data.weaponClass.mainWeapon!!.blasterExHankei + 2
                             } else if (1.8 < heightdiff && heightdiff <= 7.9) {
-                                maxDist = data.getWeaponClass().mainWeapon!!.blasterExHankei + 1
+                                maxDist = data.weaponClass.mainWeapon!!.blasterExHankei + 1
                             } else if (-1.5 <= heightdiff && heightdiff <= 1.8) {
-                                maxDist = data.getWeaponClass().mainWeapon!!.blasterExHankei
+                                maxDist = data.weaponClass.mainWeapon!!.blasterExHankei
                             } else if (-10 <= heightdiff && heightdiff < -1.5) {
-                                maxDist = data.getWeaponClass().mainWeapon!!.blasterExHankei - 1
+                                maxDist = data.weaponClass.mainWeapon!!.blasterExHankei - 1
                                 if (maxDist <= 0) {
                                     maxDist = 1.0
                                 }
                             } else if (heightdiff < -10) {
-                                maxDist = data.getWeaponClass().mainWeapon!!.blasterExHankei - 2
+                                maxDist = data.weaponClass.mainWeapon!!.blasterExHankei - 2
                                 if (maxDist <= 0) {
                                     maxDist = 1.0
                                 }
@@ -253,7 +251,7 @@ object Hound {
                             data.subArmorlist(as1)
 
                             // 爆発音
-                            player.getWorld().playSound(as1l, Sound.ENTITY_FIREWORK_ROCKET_BLAST, 1f, 1f)
+                            player.world.playSound(as1l, Sound.ENTITY_FIREWORK_ROCKET_BLAST, 1f, 1f)
 
                             // 爆発エフェクト
                             createInkExplosionEffect(as1l, maxDist, 15, player)
@@ -274,18 +272,18 @@ object Hound {
                             }
 
                             // 攻撃判定の処理
-                            for (`as` in player.getWorld().getEntities()) {
-                                if (`as`.getLocation().distance(as1l) <= maxDist) {
+                            for (`as` in player.world.entities) {
+                                if (`as`.location.distance(as1l) <= maxDist) {
                                     if (`as` is ArmorStand) {
-                                        if (`as`.getCustomName() != null) {
+                                        if (`as`.customName != null) {
                                             try {
-                                                if (`as`.getCustomName() == "Kasa") {
+                                                if (`as`.customName == "Kasa") {
                                                     val kasaData = getKasaDataFromArmorStand(`as`)
                                                     if (getPlayerData(kasaData!!.player)!!.team != data.team) {
                                                         as1!!.remove()
                                                         cancel()
                                                     }
-                                                } else if (`as`.getCustomName() == "SplashShield") {
+                                                } else if (`as`.customName == "SplashShield") {
                                                     val splashShieldData = getSplashShieldDataFromArmorStand(`as`)
                                                     if (getPlayerData(splashShieldData!!.player)!!.team != data.team) {
                                                         as1!!.remove()
@@ -299,18 +297,18 @@ object Hound {
                                 }
                             }
 
-                            for (target in plugin.getServer().getOnlinePlayers()) {
-                                if (!getPlayerData(target)!!.isInMatch() || target.getWorld() !== player.getWorld()) continue
-                                if (target.getLocation().distance(as1l) <= maxDist) {
+                            for (target in plugin.server.onlinePlayers) {
+                                if (!getPlayerData(target)!!.isInMatch || target.world !== player.world) continue
+                                if (target.location.distance(as1l) <= maxDist) {
                                     val damage =
                                         exdamage(
                                             heightdiff,
-                                            maxDist - target.getLocation().distance(as1l),
-                                            data.getWeaponClass().mainWeapon!!.blasterExDamage
+                                            maxDist - target.location.distance(as1l),
+                                            data.weaponClass.mainWeapon!!.blasterExDamage
                                                 * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP),
                                         )
                                     if (data.team != getPlayerData(target)!!.team &&
-                                        target.getGameMode() == GameMode.ADVENTURE
+                                        target.gameMode == GameMode.ADVENTURE
                                     ) {
                                         giveDamage(player, target, damage, "killed")
 
@@ -320,7 +318,7 @@ object Hound {
                                                 var p: Player = target
 
                                                 override fun run() {
-                                                    target.setNoDamageTicks(0)
+                                                    target.noDamageTicks = 0
                                                 }
                                             }
                                         task.runTaskLater(plugin, 1)
@@ -328,20 +326,20 @@ object Hound {
                                 }
                             }
 
-                            for (`as` in player.getWorld().getEntities()) {
-                                if (`as`.getLocation().distance(as1l) <= maxDist) {
+                            for (`as` in player.world.entities) {
+                                if (`as`.location.distance(as1l) <= maxDist) {
                                     if (`as` is ArmorStand) {
                                         val damage =
                                             exdamage(
                                                 heightdiff,
-                                                maxDist - `as`.getLocation().distance(as1l),
-                                                data.getWeaponClass().mainWeapon!!.blasterExDamage
+                                                maxDist - `as`.location.distance(as1l),
+                                                data.weaponClass.mainWeapon!!.blasterExDamage
                                                     * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP),
                                             )
                                         ArmorStandMgr.giveDamageArmorStand(`as`, damage, player)
-                                        if (`as`.getCustomName() != null) {
-                                            if (`as`.getCustomName() == "SplashShield" ||
-                                                `as`.getCustomName() == "Kasa"
+                                        if (`as`.customName != null) {
+                                            if (`as`.customName == "SplashShield" ||
+                                                `as`.customName == "Kasa"
                                             ) {
                                                 break
                                             }
@@ -362,9 +360,9 @@ object Hound {
                     }
                 }
             }
-        if (player.getExp() >
+        if (player.exp >
             (
-                data.getWeaponClass().mainWeapon!!.needInk
+                data.weaponClass.mainWeapon!!.needInk
                     * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) /
                     Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)
                 ).toFloat()
@@ -372,7 +370,7 @@ object Hound {
             task.runTaskTimer(plugin, 0, 1)
         } else {
             player.sendTitle("", ChatColor.RED.toString() + "インクが足りません", 0, 5, 2)
-            player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1f, 1.63f)
+            player.playSound(player.location, Sound.UI_BUTTON_CLICK, 1f, 1.63f)
         }
 
         // BukkitRunnable cooltime = new BukkitRunnable(){
@@ -388,12 +386,12 @@ object Hound {
         stand: ArmorStand,
         direction: Vector,
     ): Boolean {
-        val entityLocation = stand.getLocation().clone().add(Vector(0.0, 0.3, 0.0))
+        val entityLocation = stand.location.clone().add(Vector(0.0, 0.3, 0.0))
         val distance = 0.7 // レイの長さ
         // if (result != null && result.getHitBlockFace() != null) {
         // 壁に接触している場合の処理
         // 壁に接触していない場合の処理
-        return stand.getWorld().rayTraceBlocks(entityLocation, direction, distance) != null
+        return stand.world.rayTraceBlocks(entityLocation, direction, distance) != null
     }
 
     private fun exdamage(

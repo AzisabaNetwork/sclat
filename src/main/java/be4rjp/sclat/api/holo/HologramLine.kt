@@ -35,18 +35,18 @@ class HologramLine(
     fun sendSpawn(player: Player) {
         // Spawn Packet (1.14.4 ArmorStand ID is 1)
         val spawn = Packets.createPacket(PacketType.Play.Server.SPAWN_ENTITY_LIVING)
-        spawn.getIntegers().write(0, entityId)
-        spawn.getUUIDs().write(0, uuid)
-        spawn.getIntegers().write(1, 1)
+        spawn.integers.write(0, entityId)
+        spawn.uuiDs.write(0, uuid)
+        spawn.integers.write(1, 1)
         spawn
-            .getDoubles()
-            .write(0, location.getX())
-            .write(1, location.getY())
-            .write(2, location.getZ())
+            .doubles
+            .write(0, location.x)
+            .write(1, location.y)
+            .write(2, location.z)
 
         // Metadata Packet
         val meta = Packets.createPacket(PacketType.Play.Server.ENTITY_METADATA)
-        meta.getIntegers().write(0, entityId)
+        meta.integers.write(0, entityId)
 
         val watcher = WrappedDataWatcher()
         watcher.setObject(0, WrappedDataWatcher.Registry.get(Byte::class.java), 0x20.toByte()) // Invisible
@@ -58,7 +58,7 @@ class HologramLine(
         watcher.setObject(3, WrappedDataWatcher.Registry.get(Boolean::class.java), visible as Any)
         watcher.setObject(14, WrappedDataWatcher.Registry.get(Byte::class.java), 0x01.toByte()) // Small
 
-        meta.getWatchableCollectionModifier().write(0, watcher.getWatchableObjects())
+        meta.watchableCollectionModifier.write(0, watcher.watchableObjects)
 
         Packets.sendServerPacket(player, spawn)
         Packets.sendServerPacket(player, meta)
@@ -69,7 +69,7 @@ class HologramLine(
             ProtocolLibrary
                 .getProtocolManager()
                 .createPacket(PacketType.Play.Server.ENTITY_DESTROY)
-        destroy.getIntegerArrays().write(0, intArrayOf(entityId))
+        destroy.integerArrays.write(0, intArrayOf(entityId))
         try {
             ProtocolLibrary.getProtocolManager().sendServerPacket(player, destroy)
         } catch (e: Exception) {

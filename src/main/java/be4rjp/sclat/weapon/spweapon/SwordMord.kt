@@ -42,7 +42,7 @@ import java.util.Random
 object SwordMord {
     @JvmStatic
     fun setSwordMord(player: Player) {
-        getPlayerData(player)!!.setIsUsingSP(true)
+        getPlayerData(player)!!.isUsingSP = true
         getPlayerData(player)!!.setIsUsingSS(true)
         SPWeaponMgr.setSPCoolTimeAnimation(player, 160)
 
@@ -51,16 +51,16 @@ object SwordMord {
                 var p: Player = player
 
                 override fun run() {
-                    player.getInventory().clear()
+                    player.inventory.clear()
                     player.updateInventory()
 
                     val item = ItemStack(Material.WHEAT)
-                    val meta = item.getItemMeta()
+                    val meta = item.itemMeta
                     meta!!.setDisplayName("右クリックで斬撃、シフトで防御")
-                    item.setItemMeta(meta)
+                    item.itemMeta = meta
                     for (count in 0..8) {
-                        player.getInventory().setItem(count, item)
-                        if (count % 2 != 0) player.getInventory().setItem(count, ItemStack(Material.AIR))
+                        player.inventory.setItem(count, item)
+                        if (count % 2 != 0) player.inventory.setItem(count, ItemStack(Material.AIR))
                     }
                     player.updateInventory()
                     player.addPotionEffect(PotionEffect(PotionEffectType.LUCK, 161, 1))
@@ -76,10 +76,10 @@ object SwordMord {
                 var p: Player = player
 
                 override fun run() {
-                    if (getPlayerData(p)!!.isInMatch()) {
-                        getPlayerData(p)!!.setIsUsingSP(false)
+                    if (getPlayerData(p)!!.isInMatch) {
+                        getPlayerData(p)!!.isUsingSP = false
                         getPlayerData(p)!!.setIsUsingSS(false)
-                        player.getInventory().clear()
+                        player.inventory.clear()
                         WeaponClassMgr.setWeaponClass(p)
                     }
                 }
@@ -90,25 +90,25 @@ object SwordMord {
     @JvmStatic
     fun AttackSword(player: Player) {
         if (player.hasPotionEffect(PotionEffectType.LUCK)) {
-            if (!player.isSneaking()) {
-                player.getWorld().playSound(player.getLocation(), Sound.ENTITY_PLAYER_ATTACK_SWEEP, 1.4f, 1.5f)
+            if (!player.isSneaking) {
+                player.world.playSound(player.location, Sound.ENTITY_PLAYER_ATTACK_SWEEP, 1.4f, 1.5f)
                 val vec =
                     player
-                        .getLocation()
+                        .location
                         .add(
                             player
-                                .getEyeLocation()
-                                .getDirection()
+                                .eyeLocation
+                                .direction
                                 .normalize()
                                 .multiply(2.4),
                         )
-                for (target in plugin.getServer().getOnlinePlayers()) {
+                for (target in plugin.server.onlinePlayers) {
                     if (getPlayerData(target)!!.settings.ShowEffect_Bomb()) {
-                        if (target.getWorld() ===
-                            player.getWorld()
+                        if (target.world ===
+                            player.world
                         ) {
                             if (target
-                                    .getLocation()
+                                    .location
                                     .distance(vec) < Sclat.particleRenderDistance
                             ) {
                                 if (target == player) {
@@ -129,12 +129,12 @@ object SwordMord {
                     }
                 }
 
-                for (target in plugin.getServer().getOnlinePlayers()) {
-                    if (!getPlayerData(target)!!.isInMatch()) continue
-                    if (target.getLocation().distance(vec) <= maxDist) {
+                for (target in plugin.server.onlinePlayers) {
+                    if (!getPlayerData(target)!!.isInMatch) continue
+                    if (target.location.distance(vec) <= maxDist) {
                         val damage = 15.1
                         if (getPlayerData(player)!!.team != getPlayerData(target)!!.team &&
-                            target.getGameMode() == GameMode.ADVENTURE
+                            target.gameMode == GameMode.ADVENTURE
                         ) {
                             giveDamage(player, target, damage, "spWeapon")
 
@@ -144,7 +144,7 @@ object SwordMord {
                                     var p: Player = target
 
                                     override fun run() {
-                                        target.setNoDamageTicks(0)
+                                        target.noDamageTicks = 0
                                     }
                                 }
                             task.runTaskLater(plugin, 1)
@@ -152,9 +152,9 @@ object SwordMord {
                     }
                 }
 
-                for (`as` in player.getWorld().getEntities()) {
+                for (`as` in player.world.entities) {
                     if (`as` is ArmorStand) {
-                        if (`as`.getLocation().distanceSquared(vec) <= (maxDist + 1) * (maxDist + 1)) {
+                        if (`as`.location.distanceSquared(vec) <= (maxDist + 1) * (maxDist + 1)) {
                             val damage = 15.1
                             ArmorStandMgr.giveDamageArmorStand(`as`, damage, player)
                         }
@@ -167,7 +167,7 @@ object SwordMord {
                     var p: Player = player
 
                     override fun run() {
-                        getPlayerData(p)!!.setCanUseSubWeapon(true)
+                        getPlayerData(p)!!.canUseSubWeapon = true
                     }
                 }
             task2.runTaskLater(plugin, 7)
@@ -182,17 +182,17 @@ object SwordMord {
                 override fun run() {
                     try {
                         val data = getPlayerData(p)
-                        if (!data!!.isInMatch() || !p.isOnline() || !getPlayerData(player)!!.getIsUsingSP()) cancel()
+                        if (!data!!.isInMatch || !p.isOnline || !getPlayerData(player)!!.isUsingSP) cancel()
 
-                        if (p.hasPotionEffect(PotionEffectType.LUCK) && p.getGameMode() != GameMode.SPECTATOR && (
+                        if (p.hasPotionEffect(PotionEffectType.LUCK) && p.gameMode != GameMode.SPECTATOR && (
                                 p
-                                    .getInventory()
-                                    .getItemInMainHand()
-                                    .getType() != Material.AIR
+                                    .inventory
+                                    .itemInMainHand
+                                    .type != Material.AIR
                                 )
                         ) {
-                            val locvec = p.getEyeLocation().getDirection()
-                            val eloc = p.getEyeLocation()
+                            val locvec = p.eyeLocation.direction
+                            val eloc = p.eyeLocation
                             val vec = Vector(locvec.getX(), 0.0, locvec.getZ()).normalize()
                             val front = eloc.add(vec.getX() * 0.5, -0.9, vec.getZ() * 0.5)
                             PaintMgr.PaintHightestBlock(front, p, false, true)
@@ -216,8 +216,8 @@ object SwordMord {
                 var c: Int = 0
                 var gurd: Boolean = false
                 var p: Player = player
-                var eloc: Location = p.getEyeLocation()
-                var pv: Vector = p.getEyeLocation().getDirection().normalize()
+                var eloc: Location = p.eyeLocation
+                var pv: Vector = p.eyeLocation.direction.normalize()
                 var vec3: Vector = Vector(pv.getX(), 0.0, pv.getZ()).normalize()
                 var vec1: Vector = Vector(vec3.getZ() * -1, 0.0, vec3.getX())
                 var vec2: Vector = Vector(vec3.getZ(), 0.0, vec3.getX() * -1)
@@ -230,7 +230,7 @@ object SwordMord {
                         c++
                         if (c % 2 == 0) {
                             val data = getPlayerData(p)
-                            if (!data!!.isInMatch() || !p.isOnline() || !getPlayerData(player)!!.getIsUsingSP()) {
+                            if (!data!!.isInMatch || !p.isOnline || !getPlayerData(player)!!.isUsingSP) {
                                 as1!!.remove()
                                 as2!!.remove()
                                 as3!!.remove()
@@ -238,9 +238,9 @@ object SwordMord {
                                 cancel()
                             }
                             // 防具立て召喚
-                            if (p.hasPotionEffect(PotionEffectType.LUCK) && p.getGameMode() != GameMode.SPECTATOR && p.isSneaking()) {
-                                eloc = p.getEyeLocation()
-                                pv = eloc.getDirection().normalize()
+                            if (p.hasPotionEffect(PotionEffectType.LUCK) && p.gameMode != GameMode.SPECTATOR && p.isSneaking) {
+                                eloc = p.eyeLocation
+                                pv = eloc.direction.normalize()
                                 vec3 = Vector(pv.getX(), 0.0, pv.getZ()).normalize()
                                 vec1 = Vector(vec3.getZ() * -1, 0.0, vec3.getX())
                                 vec2 = Vector(vec3.getZ(), 0.0, vec3.getX() * -1)
@@ -252,39 +252,39 @@ object SwordMord {
                                     setKasaDataWithPlayer(player, kdata)
                                     val list: MutableList<ArmorStand> = ArrayList<ArmorStand>()
                                     as1 =
-                                        player.getWorld().spawn<ArmorStand>(
+                                        player.world.spawn<ArmorStand>(
                                             m1.clone().add(0.0, -1.8, 0.0),
                                             ArmorStand::class.java,
                                             Consumer { armorStand: ArmorStand ->
                                                 armorStand.setGravity(false)
-                                                armorStand.setVisible(false)
+                                                armorStand.isVisible = false
                                             },
                                         )
                                     as2 =
-                                        player.getWorld().spawn<ArmorStand>(
+                                        player.world.spawn<ArmorStand>(
                                             m1.clone().add(0.0, -0.8, 0.0),
                                             ArmorStand::class.java,
                                             Consumer { armorStand: ArmorStand ->
                                                 armorStand.setGravity(false)
-                                                armorStand.setVisible(false)
+                                                armorStand.isVisible = false
                                             },
                                         )
                                     as3 =
-                                        player.getWorld().spawn<ArmorStand>(
+                                        player.world.spawn<ArmorStand>(
                                             r1.clone().add(0.0, -1.2, 0.0),
                                             ArmorStand::class.java,
                                             Consumer { armorStand: ArmorStand ->
                                                 armorStand.setGravity(false)
-                                                armorStand.setVisible(false)
+                                                armorStand.isVisible = false
                                             },
                                         )
                                     as4 =
-                                        player.getWorld().spawn<ArmorStand>(
+                                        player.world.spawn<ArmorStand>(
                                             l1.clone().add(0.0, -1.2, 0.0),
                                             ArmorStand::class.java,
                                             Consumer { armorStand: ArmorStand ->
                                                 armorStand.setGravity(false)
-                                                armorStand.setVisible(false)
+                                                armorStand.isVisible = false
                                             },
                                         )
                                     gurd = true
@@ -299,7 +299,7 @@ object SwordMord {
                                         `as`.setBasePlate(false)
                                         // as.setVisible(false);
                                         // as.setGravity(false);
-                                        `as`.setCustomName("Kasa")
+                                        `as`.customName = "Kasa"
                                         setKasaDataWithARmorStand(`as`, kdata)
                                     }
                                 } else {
@@ -309,11 +309,11 @@ object SwordMord {
                                     as4!!.teleport(l1.clone().add(0.0, -1.2, 0.0))
                                 }
                                 if (kdata.damage > 0.1) {
-                                    val rayTrace = RayTrace(as1!!.getLocation().toVector(), Vector(0, 1, 0))
-                                    for (target in plugin.getServer().getOnlinePlayers()) {
-                                        if (!getPlayerData(target)!!.isInMatch()) continue
+                                    val rayTrace = RayTrace(as1!!.location.toVector(), Vector(0, 1, 0))
+                                    for (target in plugin.server.onlinePlayers) {
+                                        if (!getPlayerData(target)!!.isInMatch) continue
                                         if (getPlayerData(player)!!.team != getPlayerData(target)!!.team &&
-                                            target.getGameMode() == GameMode.ADVENTURE
+                                            target.gameMode == GameMode.ADVENTURE
                                         ) {
                                             if (rayTrace.intersects(BoundingBox(target as Entity), 5.0, 0.05)) {
                                                 giveDamage(player, target, 6.0, "spWeapon")
@@ -324,7 +324,7 @@ object SwordMord {
                                                         var p: Player = target
 
                                                         override fun run() {
-                                                            target.setNoDamageTicks(0)
+                                                            target.noDamageTicks = 0
                                                         }
                                                     }
                                                 taskdamage.runTaskLater(plugin, 1)
@@ -340,7 +340,7 @@ object SwordMord {
                                 gurd = false
                             }
                         }
-                        if (p.getGameMode() != GameMode.SPECTATOR && p.isSneaking() && gurd && kdata.damage != 0.0) {
+                        if (p.gameMode != GameMode.SPECTATOR && p.isSneaking && gurd && kdata.damage != 0.0) {
                             ShootCounter(player)
                             kdata.damage = (0).toDouble()
                         }
@@ -354,23 +354,21 @@ object SwordMord {
 
     fun ShootCounter(player: Player) {
         val QuadroShootSpeed = 1.0
-        if (player.getGameMode() == GameMode.SPECTATOR) return
-        PaintMgr.PaintHightestBlock(player.getLocation(), player, true, true)
+        if (player.gameMode == GameMode.SPECTATOR) return
+        PaintMgr.PaintHightestBlock(player.location, player, true, true)
 
         val ball = player.launchProjectile<Snowball>(Snowball::class.java)
-        (ball as CraftSnowball).getHandle().setItem(
-            CraftItemStack.asNMSCopy(ItemStack(getPlayerData(player)!!.team.teamColor!!.wool!!)),
-        )
-        player.getWorld().playSound(player.getLocation(), Sound.ENTITY_PIG_STEP, 0.3f, 1f)
-        val vec = player.getLocation().getDirection().multiply(QuadroShootSpeed)
+        (ball as CraftSnowball).handle.item = CraftItemStack.asNMSCopy(ItemStack(getPlayerData(player)!!.team.teamColor!!.wool!!))
+        player.world.playSound(player.location, Sound.ENTITY_PIG_STEP, 0.3f, 1f)
+        val vec = player.location.direction.multiply(QuadroShootSpeed)
         val random = 0.1
         vec.add(Vector(Math.random() * random - random / 2, 0.0, Math.random() * random - random / 2))
-        ball.setVelocity(vec)
-        ball.setShooter(player)
+        ball.velocity = vec
+        ball.shooter = player
         val originName = notDuplicateNumber.toString()
         val name = originName + "#QuadroArmsShotgunCounterShot"
         DataMgr.mws.add(name) //
-        ball.setCustomName(name)
+        ball.customName = name
         mainSnowballNameMap.put(name, ball)
         setSnowballHitCount(name, 0)
         val SpinnerTask: BukkitRunnable =
@@ -384,15 +382,15 @@ object SwordMord {
                 var p: Player = player
                 var speedvec: Vector =
                     Vector(
-                        inkball!!.getVelocity().getX(),
-                        inkball!!.getVelocity().getY(),
-                        inkball!!.getVelocity().getZ(),
+                        inkball!!.velocity.getX(),
+                        inkball!!.velocity.getY(),
+                        inkball!!.velocity.getZ(),
                     ).multiply(5.0)
                 var fallvec: Vector =
                     Vector(
-                        inkball!!.getVelocity().getX(),
-                        inkball!!.getVelocity().getY(),
-                        inkball!!.getVelocity().getZ(),
+                        inkball!!.velocity.getX(),
+                        inkball!!.velocity.getY(),
+                        inkball!!.velocity.getZ(),
                     ).multiply(QuadroShootSpeed / 35)
 
                 override fun run() {
@@ -409,18 +407,18 @@ object SwordMord {
                                 .team.teamColor!!
                                 .wool!!
                                 .createBlockData()
-                        for (o_player in plugin.getServer().getOnlinePlayers()) {
+                        for (o_player in plugin.server.onlinePlayers) {
                             if (getPlayerData(o_player)!!.settings.ShowEffect_MainWeaponInk()) {
-                                if (o_player.getWorld() ===
-                                    inkball!!.getWorld()
+                                if (o_player.world ===
+                                    inkball!!.world
                                 ) {
                                     if (o_player
-                                            .getLocation()
-                                            .distanceSquared(inkball!!.getLocation()) < Sclat.particleRenderDistanceSquared
+                                            .location
+                                            .distanceSquared(inkball!!.location) < Sclat.particleRenderDistanceSquared
                                     ) {
                                         o_player.spawnParticle<BlockData?>(
                                             Particle.BLOCK_DUST,
-                                            inkball!!.getLocation(),
+                                            inkball!!.location,
                                             0,
                                             0.0,
                                             -1.0,
@@ -434,20 +432,18 @@ object SwordMord {
                         }
                     }
                     if (i < tick && !addedFallVec && i >= 1) {
-                        inkball!!.setVelocity(speedvec)
+                        inkball!!.velocity = speedvec
                     }
                     if (i >= tick && !addedFallVec) {
-                        inkball!!.setVelocity(fallvec)
+                        inkball!!.velocity = fallvec
                         addedFallVec = true
                     }
                     if (i >= tick && i <= tick + 15) {
-                        inkball!!.setVelocity(
-                            inkball!!.getVelocity().add(Vector(0.0, -0.1, 0.0)),
-                        )
+                        inkball!!.velocity = inkball!!.velocity.add(Vector(0.0, -0.1, 0.0))
                     }
                     // if(i != tick)
-                    if ((Random().nextInt(7)) == 0) PaintMgr.PaintHightestBlock(inkball!!.getLocation(), p, false, true)
-                    if (inkball!!.isDead()) cancel()
+                    if ((Random().nextInt(7)) == 0) PaintMgr.PaintHightestBlock(inkball!!.location, p, false, true)
+                    if (inkball!!.isDead) cancel()
 
                     i++
                 }

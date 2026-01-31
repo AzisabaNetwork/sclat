@@ -28,10 +28,10 @@ object Sphere {
                 val z = r * sin(Math.toRadians(i.toDouble())) * s
                 val sphereLoc =
                     Location(
-                        baseLoc.getWorld(),
-                        baseLoc.getX() + x,
-                        baseLoc.getY() + y,
-                        baseLoc.getZ() + z,
+                        baseLoc.world,
+                        baseLoc.x + x,
+                        baseLoc.y + y,
+                        baseLoc.z + z,
                     )
                 tempList.add(sphereLoc)
                 count++
@@ -56,7 +56,7 @@ object Sphere {
             while (t < 360) {
                 val x = tr * sin(Math.toRadians(t.toDouble()))
                 val z = tr * cos(Math.toRadians(t.toDouble()))
-                val loc = Location(baseLoc.getWorld(), baseLoc.getX() + x, baseLoc.getY(), baseLoc.getZ() + z)
+                val loc = Location(baseLoc.world, baseLoc.x + x, baseLoc.y, baseLoc.z + z)
                 tempList.add(loc)
                 t += accuracy / tr
             }

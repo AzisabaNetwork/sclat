@@ -43,7 +43,7 @@ object Reeler {
                 override fun run() {
                     val data = getPlayerData(p)
 
-                    if (!data!!.isInMatch() || !p.isOnline()) {
+                    if (!data!!.isInMatch || !p.isOnline) {
                         cancel()
                         return
                     }
@@ -51,12 +51,12 @@ object Reeler {
                     if (data.getIsUsingManeuver()) {
                         val clickType = Sclat.dadadaCheckerAPI!!.getPlayerClickType(player)
                         if ((clickType == ClickType.FIRST_CLICK || clickType == ClickType.RENDA || clickType == ClickType.NAGAOSI) &&
-                            data.isInMatch()
+                            data.isInMatch
                         ) {
                             ReelerShoot(p)
                             data.tick = (
                                 data.tick +
-                                    getPlayerData(p)!!.getWeaponClass().mainWeapon!!.shootTick
+                                    getPlayerData(p)!!.weaponClass.mainWeapon!!.shootTick
                                 )
                         }
                     }
@@ -66,7 +66,7 @@ object Reeler {
             plugin,
             0,
             getPlayerData(player)!!
-                .getWeaponClass()
+                .weaponClass
                 .mainWeapon!!
                 .slidingShootTick
                 .toLong(),
@@ -78,12 +78,12 @@ object Reeler {
         val delay: BukkitRunnable =
             object : BukkitRunnable() {
                 var p: Player = player
-                var loc: Location = player.getLocation()
+                var loc: Location = player.location
 
                 // int sl = 0;
                 // スライドの仕様改変
                 var sl_recharge_1: Boolean = true
-                var killcount: Int = getPlayerData(p)!!.getKillCount()
+                var killcount: Int = getPlayerData(p)!!.killCount
                 var gr_recharge: Int = 100
 
                 // スライドに使う変数の定義Trueの時は使用可能Falseの時は使用不可能を表している
@@ -91,36 +91,36 @@ object Reeler {
 
                 override fun run() {
                     val data = getPlayerData(p)
-                    val ploc = p.getLocation()
+                    p.location
 
-                    if (!data!!.isInMatch() || !p.isOnline()) {
+                    if (!data!!.isInMatch || !p.isOnline) {
                         cancel()
                         return
                     }
 
-                    val location = p.getLocation()
+                    val location = p.location
 
-                    val vec = p.getEyeLocation().getDirection()
+                    val vec = p.eyeLocation.direction
 
                     // float ink = data.getWeaponClass().getMainWeapon().getSlideNeedINK();
                     if (gr_recharge <= 100) {
                         gr_recharge++
                     }
-                    if (killcount < data.getKillCount()) {
+                    if (killcount < data.killCount) {
                         gr_recharge = 100
-                        killcount = data.getKillCount()
+                        killcount = data.killCount
                     }
-                    if (data.getIsSneaking() && gr_recharge >= 100 && sl_recharge_1 && !data.getIsSliding() && (
+                    if (data.isSneaking && gr_recharge >= 100 && sl_recharge_1 && !data.isSliding && (
                             p
-                                .getInventory()
-                                .getItemInMainHand()
-                                .getType()
+                                .inventory
+                                .itemInMainHand
+                                .type
                                 ==
                                 data
-                                    .getWeaponClass()
+                                    .weaponClass
                                     .mainWeapon!!
                                     .weaponIteamStack!!
-                                    .getType()
+                                    .type
                             )
                     ) {
                         val jvec = (Vector(vec.getX(), 0.0, vec.getZ())).normalize().multiply(3)
@@ -140,11 +140,11 @@ object Reeler {
                                     Math.random() * random - random / 2,
                                 )
                             val erv = ev.clone().add(randomVector)
-                            for (o_player in plugin.getServer().getOnlinePlayers()) {
+                            for (o_player in plugin.server.onlinePlayers) {
                                 if (getPlayerData(o_player)!!.settings.ShowEffect_BombEx()) {
-                                    if (o_player.getWorld() === location.getWorld()) {
+                                    if (o_player.world === location.world) {
                                         if (o_player
-                                                .getLocation()
+                                                .location
                                                 .distanceSquared(location) < Sclat.particleRenderDistanceSquared
                                         ) {
                                             o_player.spawnParticle<BlockData?>(
@@ -166,12 +166,12 @@ object Reeler {
                                 }
                             }
                         }
-                        p.getWorld().playSound(p.getLocation(), Sound.ITEM_ARMOR_EQUIP_GENERIC, 1.4f, 1.5f)
+                        p.world.playSound(p.location, Sound.ITEM_ARMOR_EQUIP_GENERIC, 1.4f, 1.5f)
 
                         val task1: BukkitRunnable =
                             object : BukkitRunnable() {
                                 override fun run() {
-                                    data.setIsSliding(true)
+                                    data.isSliding = true
                                 }
                             }
                         val task: BukkitRunnable =
@@ -180,14 +180,14 @@ object Reeler {
 
                                 override fun run() {
                                     if (i == 3) {
-                                        data.setCanShoot(true)
+                                        data.canShoot = true
                                         cancel()
                                     }
                                     i++
                                 }
                             }
                         // リーラ―起動部分
-                        if (Sclat.Companion.conf!!
+                        if (Sclat.conf!!
                                 .config!!
                                 .getString("WorkMode") != "Trial"
                         ) {
@@ -195,7 +195,7 @@ object Reeler {
                             if (dest !== player) {
                                 grapple(player, dest)
                                 gr_recharge = 0
-                                data.setCanShoot(false)
+                                data.canShoot = false
                                 task1.runTaskLater(plugin, 9)
                                 task.runTaskTimer(plugin, 0, 1)
                             }
@@ -205,12 +205,12 @@ object Reeler {
                             if (destarm != null) {
                                 grappletest(player, destarm)
                                 gr_recharge = 0
-                                data.setCanShoot(false)
+                                data.canShoot = false
                                 task1.runTaskLater(plugin, 9)
                                 task.runTaskTimer(plugin, 0, 1)
                             }
                         }
-                        data.setIsSneaking(false)
+                        data.isSneaking = false
                         // 優先順位が高い方のスライドがFalseだった場合に低い方をFalseにするようにしました高い方がtrueであった場合は高い方がFalseになります
                         sl_recharge_1 = false
                         // sl++;
@@ -236,10 +236,10 @@ object Reeler {
                     // p.sendTitle("", ChatColor.RED + "インクが足りません", 0, 10, 2);
                     // player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1F, 1.63F);
                     // }
-                    if (data.getIsSliding()) {
-                        if (p.isOnGround()) {
+                    if (data.isSliding) {
+                        if (p.isOnGround) {
                             data.setIsUsingManeuver(false)
-                            data.setIsSliding(false)
+                            data.isSliding = false
                         } else {
                             data.setIsUsingManeuver(true)
                         }
@@ -257,55 +257,55 @@ object Reeler {
     ) {
         val graptask: BukkitRunnable =
             object : BukkitRunnable() {
-                var beforeploc: Location = p.getLocation()
+                var beforeploc: Location = p.location
                 var i: Int = 1
 
                 override fun run() {
                     if (i == 7) {
-                        if (!getPlayerData(p)!!.isInMatch() || !p.isOnline() || !getPlayerData(target)!!.isInMatch() ||
-                            !target.isOnline()
+                        if (!getPlayerData(p)!!.isInMatch || !p.isOnline || !getPlayerData(target)!!.isInMatch ||
+                            !target.isOnline
                         ) {
                             cancel()
                             return
                         }
-                        beforeploc = p.getLocation()
+                        beforeploc = p.location
                     }
                     if (i == 8) {
-                        if (!getPlayerData(p)!!.isInMatch() || !p.isOnline() || !getPlayerData(target)!!.isInMatch() ||
-                            !target.isOnline()
+                        if (!getPlayerData(p)!!.isInMatch || !p.isOnline || !getPlayerData(target)!!.isInMatch ||
+                            !target.isOnline
                         ) {
                             cancel()
                             return
                         }
-                        val tl = target.getLocation()
-                        val pl = p.getLocation()
+                        val tl = target.location
+                        val pl = p.location
                         // Vector eye = p.getEyeLocation().getDirection().normalize().multiply(2);
                         val shot =
                             Vector(
-                                tl.getX() - pl.getX(),
-                                (tl.getY() - pl.getY()) * (0.93),
-                                tl.getZ() - pl.getZ(),
+                                tl.x - pl.x,
+                                (tl.y - pl.y) * (0.93),
+                                tl.z - pl.z,
                             )
                         shot.multiply(0.2)
-                        if (pl.getX() - beforeploc.getX() != 0.0 || pl.getZ() - beforeploc.getZ() != 0.0) {
+                        if (pl.x - beforeploc.x != 0.0 || pl.z - beforeploc.z != 0.0) {
                             shot.add(
-                                Vector(pl.getX() - beforeploc.getX(), 0.0, pl.getZ() - beforeploc.getZ())
+                                Vector(pl.x - beforeploc.x, 0.0, pl.z - beforeploc.z)
                                     .normalize()
                                     .multiply(shot.length() * 0.4),
                             )
                         }
                         // shot.add(new Vector(eye.getX(),0,eye.getZ()).multiply(shot.length()*0.2));
-                        if (p.getGameMode() == GameMode.ADVENTURE && target.getGameMode() == GameMode.ADVENTURE) {
-                            if (p.isOnGround()) {
+                        if (p.gameMode == GameMode.ADVENTURE && target.gameMode == GameMode.ADVENTURE) {
+                            if (p.isOnGround) {
                                 shot.multiply(0.68)
                                 shot.add(Vector(0.0, 0.6 - shot.getY(), 0.0))
                             } else {
                                 shot.multiply(0.5)
                                 shot.add(Vector(0.0, 0.5, 0.0))
                             }
-                            p.setVelocity(shot)
+                            p.velocity = shot
                             val pdata = getPlayerData(p)
-                            pdata!!.setIsSliding(true)
+                            pdata!!.isSliding = true
                             pdata.setIsUsingManeuver(true)
                             if (pdata.armor > 9999) {
                                 pdata.armor = 0.0
@@ -326,51 +326,51 @@ object Reeler {
     ) {
         val graptask: BukkitRunnable =
             object : BukkitRunnable() {
-                var beforeploc: Location = p.getLocation()
+                var beforeploc: Location = p.location
                 var i: Int = 1
 
                 override fun run() {
                     if (i == 7) {
-                        if (!getPlayerData(p)!!.isInMatch() || !p.isOnline()) {
+                        if (!getPlayerData(p)!!.isInMatch || !p.isOnline) {
                             cancel()
                             return
                         }
-                        beforeploc = p.getLocation()
+                        beforeploc = p.location
                     }
                     if (i == 8) {
-                        if (!getPlayerData(p)!!.isInMatch() || !p.isOnline()) {
+                        if (!getPlayerData(p)!!.isInMatch || !p.isOnline) {
                             cancel()
                             return
                         }
-                        val tl = target.getLocation()
-                        val pl = p.getLocation()
+                        val tl = target.location
+                        val pl = p.location
                         // Vector eye = p.getEyeLocation().getDirection().normalize().multiply(2);
                         val shot =
                             Vector(
-                                tl.getX() - pl.getX(),
-                                (tl.getY() - pl.getY()) * (0.93),
-                                tl.getZ() - pl.getZ(),
+                                tl.x - pl.x,
+                                (tl.y - pl.y) * (0.93),
+                                tl.z - pl.z,
                             )
                         shot.multiply(0.2)
-                        if (pl.getX() - beforeploc.getX() != 0.0 || pl.getZ() - beforeploc.getZ() != 0.0) {
+                        if (pl.x - beforeploc.x != 0.0 || pl.z - beforeploc.z != 0.0) {
                             shot.add(
-                                Vector(pl.getX() - beforeploc.getX(), 0.0, pl.getZ() - beforeploc.getZ())
+                                Vector(pl.x - beforeploc.x, 0.0, pl.z - beforeploc.z)
                                     .normalize()
                                     .multiply(shot.length() * 0.4),
                             )
                         }
                         // shot.add(new Vector(eye.getX(), 0, eye.getZ()).multiply(shot.length() *
                         // 0.2));
-                        if (p.getGameMode() == GameMode.ADVENTURE) {
-                            if (p.isOnGround()) {
+                        if (p.gameMode == GameMode.ADVENTURE) {
+                            if (p.isOnGround) {
                                 shot.multiply(0.68)
                                 shot.add(Vector(0.0, 0.6 - shot.getY(), 0.0))
                             } else {
                                 shot.multiply(0.5)
                                 shot.add(Vector(0.0, 0.5, 0.0))
                             }
-                            p.setVelocity(shot)
-                            getPlayerData(p)!!.setIsSliding(true)
+                            p.velocity = shot
+                            getPlayerData(p)!!.isSliding = true
                             getPlayerData(p)!!.setIsUsingManeuver(true)
                         }
                     }
@@ -382,20 +382,20 @@ object Reeler {
 
     fun grap(player: Player): Player {
         var dest = player
-        val rayTrace = RayTrace(player.getEyeLocation().toVector(), player.getEyeLocation().getDirection())
+        val rayTrace = RayTrace(player.eyeLocation.toVector(), player.eyeLocation.direction)
         val positions = rayTrace.traverse(20.0, 0.2)
 
         loop@ for (it in positions.indices) {
-            val position = positions.get(it).toLocation(player.getLocation().getWorld()!!)
-            val block = player.getLocation().getWorld()!!.getBlockAt(position)
+            val position = positions.get(it).toLocation(player.location.world!!)
+            val block = player.location.world!!.getBlockAt(position)
 
-            if (block.getType() != Material.AIR) {
+            if (block.type != Material.AIR) {
                 break
             }
             if (getPlayerData(player)!!.settings.ShowEffect_MainWeaponInk()) {
                 if (it < 10) {
-                    if (player.getWorld() === position.getWorld()) {
-                        if (player.getLocation().distanceSquared(position) < Sclat.particleRenderDistanceSquared) {
+                    if (player.world === position.world) {
+                        if (player.location.distanceSquared(position) < Sclat.particleRenderDistanceSquared) {
                             val bd =
                                 getPlayerData(player)!!
                                     .team.teamColor!!
@@ -408,16 +408,16 @@ object Reeler {
             }
 
             val maxDistSquad = 6.0 // 2*2
-            for (target in plugin.getServer().getOnlinePlayers()) {
-                if (!getPlayerData(target)!!.isInMatch()) continue
+            for (target in plugin.server.onlinePlayers) {
+                if (!getPlayerData(target)!!.isInMatch) continue
                 if (getPlayerData(player)!!.team != getPlayerData(target)!!.team &&
-                    target.getGameMode() == GameMode.ADVENTURE
+                    target.gameMode == GameMode.ADVENTURE
                 ) {
-                    if (target.getLocation().distanceSquared(position) <= maxDistSquad) {
+                    if (target.location.distanceSquared(position) <= maxDistSquad) {
                         // if(rayTrace.intersects(new BoundingBox((Entity)target), (30), 0.2)){
                         dest = target
                         target.addPotionEffect(PotionEffect(PotionEffectType.GLOWING, 10, 1))
-                        player.playSound(player.getLocation(), Sound.BLOCK_IRON_TRAPDOOR_CLOSE, 2.0f, 2f)
+                        player.playSound(player.location, Sound.BLOCK_IRON_TRAPDOOR_CLOSE, 2.0f, 2f)
                         break@loop
                         // }
                     }
@@ -429,19 +429,19 @@ object Reeler {
 
     fun graptest(player: Player): ArmorStand? {
         var dest: ArmorStand? = null
-        val rayTrace = RayTrace(player.getEyeLocation().toVector(), player.getEyeLocation().getDirection())
+        val rayTrace = RayTrace(player.eyeLocation.toVector(), player.eyeLocation.direction)
         val positions = rayTrace.traverse(20.0, 0.2)
         loop2@ for (it in positions.indices) {
-            val position = positions.get(it).toLocation(player.getLocation().getWorld()!!)
-            val block = player.getLocation().getWorld()!!.getBlockAt(position)
+            val position = positions.get(it).toLocation(player.location.world!!)
+            val block = player.location.world!!.getBlockAt(position)
 
-            if (block.getType() != Material.AIR) {
+            if (block.type != Material.AIR) {
                 break
             }
             if (getPlayerData(player)!!.settings.ShowEffect_MainWeaponInk()) {
                 if (it < 10) {
-                    if (player.getWorld() === position.getWorld()) {
-                        if (player.getLocation().distanceSquared(position) < Sclat.particleRenderDistanceSquared) {
+                    if (player.world === position.world) {
+                        if (player.location.distanceSquared(position) < Sclat.particleRenderDistanceSquared) {
                             val bd =
                                 getPlayerData(player)!!
                                     .team.teamColor!!
@@ -454,37 +454,37 @@ object Reeler {
             }
 
             val maxDistSquad = 6.0 // 2*2
-            if (Sclat.Companion.conf!!
+            if (Sclat.conf!!
                     .config!!
                     .getString("WorkMode") == "Trial"
             ) {
-                for (`as` in player.getWorld().getEntities()) {
+                for (`as` in player.world.entities) {
                     if (`as` is ArmorStand) {
-                        if (`as`.getLocation().distanceSquared(position) <= maxDistSquad) {
+                        if (`as`.location.distanceSquared(position) <= maxDistSquad) {
                             // if(rayTrace.intersects(new BoundingBox((Entity)as), (int)(30), 0.2)){
-                            if (`as`.getCustomName() != null) {
-                                if (`as`.getCustomName() == "SplashShield") {
+                            if (`as`.customName != null) {
+                                if (`as`.customName == "SplashShield") {
                                     // SplashShieldData ssdata =
                                     // DataMgr.getSplashShieldDataFromArmorStand((ArmorStand)as);
                                     // if(DataMgr.getPlayerData(ssdata.player).getTeam() !=
                                     // DataMgr.getPlayerData(player).getTeam()){
                                     // break loop;
                                     // }
-                                } else if (`as`.getCustomName() == "Kasa") {
+                                } else if (`as`.customName == "Kasa") {
                                     // KasaData ssdata = DataMgr.getKasaDataFromArmorStand((ArmorStand)as);
                                     // if(DataMgr.getPlayerData(ssdata.player).getTeam() !=
                                     // DataMgr.getPlayerData(player).getTeam()){
                                     // break loop;
                                     // }
                                 } else {
-                                    if (SclatUtil.isNumber(`as`.getCustomName()!!)) {
-                                        if (`as`.getCustomName() != "21" &&
-                                            `as`.getCustomName() != "100"
+                                    if (SclatUtil.isNumber(`as`.customName!!)) {
+                                        if (`as`.customName != "21" &&
+                                            `as`.customName != "100"
                                         ) {
-                                            if (`as`.isVisible()) {
+                                            if (`as`.isVisible) {
                                                 dest = `as`
                                                 player.playSound(
-                                                    player.getLocation(),
+                                                    player.location,
                                                     Sound.BLOCK_IRON_TRAPDOOR_CLOSE,
                                                     2.0f,
                                                     2f,
@@ -508,52 +508,50 @@ object Reeler {
     }
 
     fun ReelerShoot(player: Player) {
-        if (player.getGameMode() == GameMode.SPECTATOR) return
+        if (player.gameMode == GameMode.SPECTATOR) return
 
         val data = getPlayerData(player)
-        if (player.getExp() <=
+        if (player.exp <=
             (
-                data!!.getWeaponClass().mainWeapon!!.needInk
+                data!!.weaponClass.mainWeapon!!.needInk
                     * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) /
                     Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)
                 ).toFloat()
         ) {
             player.sendTitle("", ChatColor.RED.toString() + "インクが足りません", 0, 5, 2)
-            player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1f, 1.63f)
+            player.playSound(player.location, Sound.UI_BUTTON_CLICK, 1f, 1.63f)
             return
         }
-        player.setExp(
-            player.getExp() -
-                (
-                    data.getWeaponClass().mainWeapon!!.needInk
-                        * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) /
-                        Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)
-                    ).toFloat(),
-        )
-        val rayTrace = RayTrace(player.getEyeLocation().toVector(), player.getEyeLocation().getDirection())
+        player.exp = player.exp -
+            (
+                data.weaponClass.mainWeapon!!.needInk
+                    * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) /
+                    Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)
+                ).toFloat()
+        val rayTrace = RayTrace(player.eyeLocation.toVector(), player.eyeLocation.direction)
         val positions =
             rayTrace.traverse(
-                data.getWeaponClass().mainWeapon!!.shootSpeed
-                    * data.getWeaponClass().mainWeapon!!.distanceTick,
+                data.weaponClass.mainWeapon!!.shootSpeed
+                    * data.weaponClass.mainWeapon!!.distanceTick,
                 0.7,
             )
         var isLockOnPlayer = false
-        if (data.getWeaponClass().mainWeapon!!.maxRandom == 0.0) {
+        if (data.weaponClass.mainWeapon!!.maxRandom == 0.0) {
             check@ for (vector in positions) {
-                val position = vector.toLocation(player.getLocation().getWorld()!!)
-                for (target in plugin.getServer().getOnlinePlayers()) {
-                    if (player !== target && player.getWorld() === target.getWorld()) {
-                        if (target.getLocation().distance(position) < 2) {
+                val position = vector.toLocation(player.location.world!!)
+                for (target in plugin.server.onlinePlayers) {
+                    if (player !== target && player.world === target.world) {
+                        if (target.location.distance(position) < 2) {
                             isLockOnPlayer = true
                             break@check
                         }
                     }
                 }
 
-                for (`as` in player.getWorld().getEntities()) {
+                for (`as` in player.world.entities) {
                     if (`as` is ArmorStand) {
-                        if (`as`.getCustomName() != null) {
-                            if (`as`.getLocation().distanceSquared(position) <= 4 /* 2*2 */) {
+                        if (`as`.customName != null) {
+                            if (`as`.location.distanceSquared(position) <= 4 /* 2*2 */) {
                                 isLockOnPlayer = true
                                 break@check
                             }
@@ -563,30 +561,28 @@ object Reeler {
             }
         }
 
-        PaintMgr.PaintHightestBlock(player.getLocation(), player, true, true)
+        PaintMgr.PaintHightestBlock(player.location, player, true, true)
 
         val ball = player.launchProjectile<Snowball>(Snowball::class.java)
-        (ball as CraftSnowball).getHandle().setItem(
-            CraftItemStack.asNMSCopy(ItemStack(getPlayerData(player)!!.team.teamColor!!.wool!!)),
-        )
-        player.getWorld().playSound(player.getLocation(), Sound.ENTITY_PIG_STEP, 0.3f, 1f)
+        (ball as CraftSnowball).handle.item = CraftItemStack.asNMSCopy(ItemStack(getPlayerData(player)!!.team.teamColor!!.wool!!))
+        player.world.playSound(player.location, Sound.ENTITY_PIG_STEP, 0.3f, 1f)
         val vec =
             player
-                .getLocation()
-                .getDirection()
-                .multiply(getPlayerData(player)!!.getWeaponClass().mainWeapon!!.slideNeedINK)
-        val random = data.getWeaponClass().mainWeapon!!.chargeRatio
-        val distick = getPlayerData(player)!!.getWeaponClass().mainWeapon!!.maxCharge
+                .location
+                .direction
+                .multiply(getPlayerData(player)!!.weaponClass.mainWeapon!!.slideNeedINK)
+        val random = data.weaponClass.mainWeapon!!.chargeRatio
+        val distick = getPlayerData(player)!!.weaponClass.mainWeapon!!.maxCharge
         vec.add(Vector(Math.random() * random - random / 2, 0.0, Math.random() * random - random / 2))
-        ball.setVelocity(vec)
-        ball.setShooter(player)
+        ball.velocity = vec
+        ball.shooter = player
         // スライド時かどうかをSnowballListenerに渡すためのnameの改変
         val originName = notDuplicateNumber.toString()
         val name = originName + "#slided"
         // String name = String.valueOf(Main.getNotDuplicateNumber());//ここで改変終わり
         DataMgr.mws.add(name)
         DataMgr.tsl.add(name)
-        ball.setCustomName(name)
+        ball.customName = name
         mainSnowballNameMap.put(name, ball)
         setSnowballHitCount(name, 0)
         val task: BukkitRunnable =
@@ -605,9 +601,9 @@ object Reeler {
                 // inkball.getVelocity().getZ()).multiply(DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getShootSpeed()/17);
                 var fallvec: Vector =
                     Vector(
-                        inkball!!.getVelocity().getX(),
-                        inkball!!.getVelocity().getY(),
-                        inkball!!.getVelocity().getZ(),
+                        inkball!!.velocity.getX(),
+                        inkball!!.velocity.getY(),
+                        inkball!!.velocity.getZ(),
                     ).multiply(0.01)
 
                 override fun run() {
@@ -624,18 +620,18 @@ object Reeler {
                                 .team.teamColor!!
                                 .wool!!
                                 .createBlockData()
-                        for (o_player in plugin.getServer().getOnlinePlayers()) {
+                        for (o_player in plugin.server.onlinePlayers) {
                             if (getPlayerData(o_player)!!.settings.ShowEffect_MainWeaponInk()) {
-                                if (o_player.getWorld() ===
-                                    inkball!!.getWorld()
+                                if (o_player.world ===
+                                    inkball!!.world
                                 ) {
                                     if (o_player
-                                            .getLocation()
-                                            .distanceSquared(inkball!!.getLocation()) < Sclat.particleRenderDistanceSquared
+                                            .location
+                                            .distanceSquared(inkball!!.location) < Sclat.particleRenderDistanceSquared
                                     ) {
                                         o_player.spawnParticle<BlockData?>(
                                             Particle.BLOCK_DUST,
-                                            inkball!!.getLocation(),
+                                            inkball!!.location,
                                             0,
                                             0.0,
                                             -1.0,
@@ -650,17 +646,15 @@ object Reeler {
                     }
 
                     if (i >= tick && !addedFallVec) {
-                        inkball!!.setVelocity(fallvec)
+                        inkball!!.velocity = fallvec
                         addedFallVec = true
                     }
                     if (i >= tick && i <= tick + 15) {
-                        inkball!!.setVelocity(
-                            inkball!!.getVelocity().add(Vector(0.0, -0.1, 0.0)),
-                        )
+                        inkball!!.velocity = inkball!!.velocity.add(Vector(0.0, -0.1, 0.0))
                     }
                     // if(i != tick)
-                    if ((Random().nextInt(7)) == 0) PaintMgr.PaintHightestBlock(inkball!!.getLocation(), p, false, true)
-                    if (inkball!!.isDead()) cancel()
+                    if ((Random().nextInt(7)) == 0) PaintMgr.PaintHightestBlock(inkball!!.location, p, false, true)
+                    if (inkball!!.isDead) cancel()
 
                     i++
                 }

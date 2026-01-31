@@ -18,7 +18,7 @@ import org.bukkit.scheduler.BukkitRunnable
 object Barrier {
     @JvmStatic
     fun BarrierRunnable(player: Player) {
-        getPlayerData(player)!!.setIsUsingSP(true)
+        getPlayerData(player)!!.isUsingSP = true
         val data = getPlayerData(player)
         // data.setArmor(Double.MAX_VALUE);
         SPWeaponMgr.setSPCoolTimeAnimation(player, 100)
@@ -31,31 +31,30 @@ object Barrier {
                 var c: Int = 0
 
                 override fun run() {
-                    if (!data!!.isInMatch() || (player.getGameMode() != GameMode.ADVENTURE) || !p.isOnline()) {
+                    if (!data!!.isInMatch || (player.gameMode != GameMode.ADVENTURE) || !p.isOnline) {
                         data.armor = 0.0
-                        getPlayerData(player)!!.setIsUsingSP(false)
+                        getPlayerData(player)!!.isUsingSP = false
                         cancel()
                     }
-                    if (c == 0) data.armor = Double.Companion.MAX_VALUE
-                    val loc = p.getLocation().add(0.0, 0.5, 0.0)
+                    if (c == 0) data.armor = Double.MAX_VALUE
+                    val loc = p.location.add(0.0, 0.5, 0.0)
 
                     val s_locs = getSphere(loc, 2.0, 23)
-                    for (o_player in plugin.getServer().getOnlinePlayers()) {
+                    for (o_player in plugin.server.onlinePlayers) {
                         if (getPlayerData(o_player)!!.settings.ShowEffect_SPWeapon() && o_player != player) {
                             val dustOptions =
                                 Particle.DustOptions(
                                     data.team.teamColor!!.bukkitColor!!,
                                     1f,
                                 )
-                            val bd =
-                                getPlayerData(p)!!
-                                    .team.teamColor!!
-                                    .wool!!
-                                    .createBlockData()
+                            getPlayerData(p)!!
+                                .team.teamColor!!
+                                .wool!!
+                                .createBlockData()
                             for (e_loc in s_locs) {
-                                if (o_player.getWorld() === e_loc.getWorld()) {
+                                if (o_player.world === e_loc.world) {
                                     if (o_player
-                                            .getLocation()
+                                            .location
                                             .distanceSquared(e_loc) < Sclat.particleRenderDistanceSquared
                                     ) {
                                         o_player.spawnParticle<Particle.DustOptions?>(
@@ -76,7 +75,7 @@ object Barrier {
                     if (c == 25) {
                         data.armor = 0.0
                         // p.playSound(p.getLocation(), Sound.BLOCK_CHEST_CLOSE, 1, 2);
-                        getPlayerData(player)!!.setIsUsingSP(false)
+                        getPlayerData(player)!!.isUsingSP = false
                         cancel()
                     }
                     c++

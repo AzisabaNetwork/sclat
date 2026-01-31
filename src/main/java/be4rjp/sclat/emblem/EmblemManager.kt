@@ -16,10 +16,10 @@ object EmblemManager {
         amount: Int,
     ): ItemStack {
         val stack = ItemStack(Material.EGG, amount)
-        val meta = stack.getItemMeta()
+        val meta = stack.itemMeta
         meta!!.setDisplayName(displayName)
-        meta.setLore(lore)
-        stack.setItemMeta(meta)
+        meta.lore = lore
+        stack.itemMeta = meta
         return stack
     }
 

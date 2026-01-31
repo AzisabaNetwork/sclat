@@ -60,7 +60,7 @@ internal class EquipEchoThread(
             val reader = BufferedReader(InputStreamReader(socket!!.getInputStream()))
 
             // サーバーからクライアントへの送信用
-            val writer = PrintWriter(socket.getOutputStream(), true)
+            PrintWriter(socket.getOutputStream(), true)
 
             var cmd: String? = null
             // 命令受け取り用ループ
@@ -76,7 +76,7 @@ internal class EquipEchoThread(
 
                     EquipmentServerManager.addEquipmentCommand(cmd)
 
-                    val args: Array<String?>? = cmd!!.split(" ".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+                    val args: Array<String?> = cmd!!.split(" ".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
                     when (args!![0]) {
                         "setting" -> {
                             // setting [settingData] [uuid]

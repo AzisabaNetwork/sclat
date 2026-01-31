@@ -48,7 +48,7 @@ class Path(
                     .playerConnection
                     .sendPacket(
                         PacketPlayOutEntityEquipment(
-                            armorStand!!.getEntityId(),
+                            armorStand!!.entityId,
                             EnumItemSlot.HEAD,
                             CraftItemStack.asNMSCopy(ItemStack(team!!.teamColor!!.glass!!)),
                         ),
@@ -57,8 +57,8 @@ class Path(
         }
         if (t != null) {
             armorStand!!
-                .getWorld()
-                .playSound(armorStand!!.getLocation(), Sound.ITEM_ARMOR_EQUIP_GENERIC, 1f, 1f)
+                .world
+                .playSound(armorStand!!.location, Sound.ITEM_ARMOR_EQUIP_GENERIC, 1f, 1f)
         } else {
             return
         }

@@ -92,8 +92,8 @@ public class DeathMgr {
 		}
 
 		BukkitRunnable task = new BukkitRunnable() {
-			Player t = target;
-			Player s = shooter;
+			final Player t = target;
+			final Player s = shooter;
 			Location loc;
 			int i = 0;
 
@@ -453,7 +453,7 @@ public class DeathMgr {
 
 		// エフェクト
 		BukkitRunnable task = new BukkitRunnable() {
-			Player p = player;
+			final Player p = player;
 			int c = 0;
 			@Override
 			public void run() {

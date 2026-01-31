@@ -89,14 +89,14 @@ class Sclat :
         // -------------------------------------------------------------------
 
         // --------------------------Load config------------------------------
-        getLogger().info("Loading config files...")
+        logger.info("Loading config files...")
         conf = Config()
         conf!!.loadConfig()
         for (mapname in conf!!.mapConfig!!.getConfigurationSection("Maps")!!.getKeys(false)) {
             val worldName: String? = conf!!.mapConfig!!.getString("Maps." + mapname + ".WorldName")
             Bukkit.createWorld(WorldCreator(worldName!!))
             val world = Bukkit.getWorld(worldName)
-            world!!.setAutoSave(false)
+            world!!.isAutoSave = false
         }
         if (conf!!.config!!.contains("Tutorial")) tutorial = conf!!.config!!.getBoolean("Tutorial")
         if (conf!!.config!!.contains("Colors")) colors = conf!!.config!!.getStringList("Colors")
@@ -115,13 +115,13 @@ class Sclat :
         val iz: Int = conf!!.config!!.getInt("Lobby.Z")
         val iyaw: Int = conf!!.config!!.getInt("Lobby.Yaw")
         lobby = Location(w, ix + 0.5, iy.toDouble(), iz + 0.5)
-        lobby!!.setYaw(iyaw.toFloat())
+        lobby!!.yaw = iyaw.toFloat()
 
         // -------------------------------------------------------------------
 
         // ------------------------RegisteringEvents--------------------------
-        getLogger().info("Registering Events...")
-        val pm = getServer().getPluginManager()
+        logger.info("Registering Events...")
+        val pm = server.pluginManager
         pm.registerEvents(GameMgr(), this)
         pm.registerEvents(SquidListener(), this)
         pm.registerEvents(ClickListener(), this)
@@ -136,28 +136,28 @@ class Sclat :
         // -------------------------------------------------------------------
 
         // ------------------------RegisteringCommands------------------------
-        getLogger().info("Registering Commands...")
+        logger.info("Registering Commands...")
         getCommand("sclat")!!.setExecutor(SclatCommandExecutor())
-        getCommand("sclat")!!.setTabCompleter(SclatCommandExecutor())
+        getCommand("sclat")!!.tabCompleter = SclatCommandExecutor()
 
         // -------------------------------------------------------------------
 
         // ------------------------Setup from config--------------------------
-        getLogger().info("SetupColor...")
+        logger.info("SetupColor...")
         ColorMgr.SetupColor()
-        getLogger().info("SetupMainWeapon...")
+        logger.info("SetupMainWeapon...")
         MainWeaponMgr.SetupMainWeapon()
-        getLogger().info("WeaponClassSetup...")
+        logger.info("WeaponClassSetup...")
         WeaponClassMgr.WeaponClassSetup()
-        getLogger().info("Setup Map...")
-        getLogger().info("")
-        getLogger().info("-----------------MAP LIST-----------------")
+        logger.info("Setup Map...")
+        logger.info("")
+        logger.info("-----------------MAP LIST-----------------")
         MapDataMgr.SetupMap()
-        getLogger().info("------------------------------------------")
-        getLogger().info("")
-        getLogger().info("MatchSetup...")
+        logger.info("------------------------------------------")
+        logger.info("")
+        logger.info("MatchSetup...")
         MatchMgr.MatchSetup()
-        getLogger().info("Setup is finished!")
+        logger.info("Setup is finished!")
 
         // -------------------------------------------------------------------
 
@@ -173,32 +173,32 @@ class Sclat :
         }
         buff.append("###")
 
-        getLogger().info("##############################################")
-        getLogger().info("###                                        ###")
-        getLogger().info(buff.toString())
-        getLogger().info("###                                        ###")
-        getLogger().info("##############################################")
+        logger.info("##############################################")
+        logger.info("###                                        ###")
+        logger.info(buff.toString())
+        logger.info("###                                        ###")
+        logger.info("##############################################")
 
         // -------------------------------------------------------------------
 
         // ------------------------Only trial mode----------------------------
         if (conf!!.config!!.getString("WorkMode") == "Trial") {
             val manager = Bukkit.getScoreboardManager()
-            val scoreboard = manager!!.getNewScoreboard()
+            val scoreboard = manager!!.newScoreboard
 
             val match = getMatchFromId(MatchMgr.matchcount)
 
             val bteam0 = scoreboard.registerNewTeam(match!!.team0!!.teamColor!!.colorName!!)
-            bteam0.setColor(match.team0!!.teamColor!!.chatColor!!)
-            bteam0.setNameTagVisibility(NameTagVisibility.HIDE_FOR_OTHER_TEAMS)
+            bteam0.color = match.team0!!.teamColor!!.chatColor!!
+            bteam0.nameTagVisibility = NameTagVisibility.HIDE_FOR_OTHER_TEAMS
             bteam0.setOption(
                 Team.Option.COLLISION_RULE,
                 Team.OptionStatus.NEVER,
             )
 
             val bteam1 = scoreboard.registerNewTeam(match.team1!!.teamColor!!.colorName!!)
-            bteam1.setColor(match.team1!!.teamColor!!.chatColor!!)
-            bteam1.setNameTagVisibility(NameTagVisibility.HIDE_FOR_OTHER_TEAMS)
+            bteam1.color = match.team1!!.teamColor!!.chatColor!!
+            bteam1.nameTagVisibility = NameTagVisibility.HIDE_FOR_OTHER_TEAMS
             bteam1.setOption(
                 Team.Option.COLLISION_RULE,
                 Team.OptionStatus.NEVER,
@@ -213,8 +213,8 @@ class Sclat :
         // -------------------------------------------------------------------
 
         // ------------------------BungeeCord setup---------------------------
-        this.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord")
-        this.getServer().getMessenger().registerIncomingPluginChannel(this, "BungeeCord", this)
+        this.server.messenger.registerOutgoingPluginChannel(this, "BungeeCord")
+        this.server.messenger.registerIncomingPluginChannel(this, "BungeeCord", this)
 
         // -------------------------------------------------------------------
 
@@ -243,7 +243,7 @@ class Sclat :
         if (type == ServerType.LOBBY) {
             ss = StatusServer(conf!!.config!!.getInt("StatusShare.Port"))
             ss!!.start()
-            getLogger().info("StatusServer is ready!")
+            logger.info("StatusServer is ready!")
         }
 
         // -------------------------------------------------------------------
@@ -252,7 +252,7 @@ class Sclat :
         if (type == ServerType.MATCH || conf!!.config!!.getString("WorkMode") == "Trial") {
             es = EquipmentServer(conf!!.config!!.getInt("EquipShare.Port"))
             es!!.start()
-            getLogger().info("StatusServer is ready!")
+            logger.info("StatusServer is ready!")
         }
 
         // -------------------------------------------------------------------
@@ -305,7 +305,7 @@ class Sclat :
         // -------------------------------------------------------------------
 
         // ---------------------------BlockStudio-----------------------------
-        getLogger().info("Loading all object data...")
+        logger.info("Loading all object data...")
         val api = BlockStudio.getBlockStudioAPI()
         api.loadAllObjectData()
 
@@ -366,8 +366,8 @@ class Sclat :
 
         // 塗りリセット
         for (data in blockDataMap.values) {
-            data!!.block!!.setType(data.originalType!!)
-            if (data.blockData != null) data.block.setBlockData(data.blockData!!)
+            data!!.block!!.type = data.originalType!!
+            if (data.blockData != null) data.block.blockData = data.blockData!!
         }
         blockDataMap.clear()
 

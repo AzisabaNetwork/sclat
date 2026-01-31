@@ -21,24 +21,24 @@ object Buckler {
 
                 override fun run() {
                     val data = getPlayerData(p)
-                    if (!data!!.isInMatch() || !p.isOnline()) {
+                    if (!data!!.isInMatch || !p.isOnline) {
                         cancel()
                         return
                     }
-                    if (data.getIsSneaking() && bk_recharge && player.getGameMode() == GameMode.ADVENTURE &&
+                    if (data.isSneaking && bk_recharge && player.gameMode == GameMode.ADVENTURE &&
                         (
-                            p.getInventory().getItemInMainHand().getType()
+                            p.inventory.itemInMainHand.type
                                 ==
                                 data
-                                    .getWeaponClass()
+                                    .weaponClass
                                     .mainWeapon!!
                                     .weaponIteamStack!!
-                                    .getType()
+                                    .type
                             )
                     ) {
                         p.addPotionEffect(PotionEffect(PotionEffectType.FIRE_RESISTANCE, Etime, 0))
                         p.addPotionEffect(PotionEffect(PotionEffectType.SLOW, Ctime, 0))
-                        p.getWorld().playSound(p.getLocation(), Sound.BLOCK_ANVIL_LAND, 0.8f, 0.8f)
+                        p.world.playSound(p.location, Sound.BLOCK_ANVIL_LAND, 0.8f, 0.8f)
                         bk_recharge = false
                         val healtask: BukkitRunnable =
                             object : BukkitRunnable() {

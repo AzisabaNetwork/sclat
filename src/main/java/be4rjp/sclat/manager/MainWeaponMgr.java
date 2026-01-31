@@ -49,7 +49,7 @@ public class MainWeaponMgr {
 					.getDouble("MainWeapon." + weaponname + ".RollerNeedInk");
 			double exh = 0;
 			if (conf.getWeaponConfig().contains("MainWeapon." + weaponname + ".BlasterExHankei"))
-				exh = (double) conf.getWeaponConfig().getInt("MainWeapon." + weaponname + ".BlasterExHankei");
+				exh = conf.getWeaponConfig().getInt("MainWeapon." + weaponname + ".BlasterExHankei");
 			int delay = conf.getWeaponConfig().getInt("MainWeapon." + weaponname + ".Delay");
 			int cooltime = conf.getWeaponConfig().getInt("MainWeapon." + weaponname + ".Cooltime");
 			double exd = conf.getWeaponConfig().getDouble("MainWeapon." + weaponname + ".BlasterExDamage");

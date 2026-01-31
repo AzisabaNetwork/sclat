@@ -37,9 +37,6 @@ class MainWeapon(
     var rollerDamage: Double = 0.0
     var rollerNeedInk: Float = 0f
     var scope: Boolean = false
-        set(v) {
-            field = v
-        }
     var blasterExHankei: Double = 0.0
 
     @JvmField
@@ -60,16 +57,10 @@ class MainWeapon(
     var chargeRatio: Double = 1.0
     var inHoldSpeed: Float = 0.2f
     var canChargeKeep: Boolean = false
-        set(v) {
-            field = v
-        }
 
     @JvmField
     var chargeKeepingTime: Int = 0
     var hanbunCharge: Boolean = false
-        set(v) {
-            field = `v`
-        }
     var sPRate: Double = 1.0
 
     @JvmField

@@ -40,9 +40,6 @@ class MapData(
     var noBlockLocation: Location? = null
 
     var canAreaBattle: Boolean = false
-        set(v) {
-            field = `v`
-        }
 
     val pathList: MutableList<Path?> = ArrayList<Path?>()
 

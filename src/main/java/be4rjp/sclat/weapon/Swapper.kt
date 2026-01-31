@@ -19,40 +19,40 @@ object Swapper {
                 override fun run() {
                     val data = getPlayerData(p)
 
-                    if (!data!!.isInMatch() || !p.isOnline()) {
+                    if (!data!!.isInMatch || !p.isOnline) {
                         cancel()
                         return
                     }
                     // スワッパ―系
-                    if (data.getWeaponClass().mainWeapon!!.getIsSwap()) {
-                        if (data.getIsSneaking() && sw_recharge && (
-                                p.getInventory().getItemInMainHand().getType()
+                    if (data.weaponClass.mainWeapon!!.getIsSwap()) {
+                        if (data.isSneaking && sw_recharge && (
+                                p.inventory.itemInMainHand.type
                                     ==
                                     data
-                                        .getWeaponClass()
+                                        .weaponClass
                                         .mainWeapon!!
                                         .weaponIteamStack!!
-                                        .getType()
+                                        .type
                                 )
                         ) {
                             data.stoprun = true
-                            player.getInventory().clear()
-                            p.getWorld().playSound(p.getLocation(), Sound.ITEM_ARMOR_EQUIP_GENERIC, 1.4f, 1.5f)
+                            player.inventory.clear()
+                            p.world.playSound(p.location, Sound.ITEM_ARMOR_EQUIP_GENERIC, 1.4f, 1.5f)
                             sw_recharge = false
                             val swapset: BukkitRunnable =
                                 object : BukkitRunnable() {
                                     // チャージャーとローラーのみ対応
                                     override fun run() {
-                                        val swapname = data.getWeaponClass().mainWeapon!!.swap
+                                        val swapname = data.weaponClass.mainWeapon!!.swap
                                         data.stoprun = false
-                                        data.setWeaponClass(getWeaponClass(swapname))
-                                        data.setCanRollerShoot(true)
+                                        data.weaponClass = getWeaponClass(swapname)
+                                        data.canRollerShoot = true
                                         getPlayerData(p)!!.setIsUsingManeuver(false)
-                                        if (getPlayerData(p)!!.getWeaponClass().mainWeapon!!.weaponType
+                                        if (getPlayerData(p)!!.weaponClass.mainWeapon!!.weaponType
                                             == "Shooter"
                                         ) {
                                             if (getPlayerData(p)!!
-                                                    .getWeaponClass()
+                                                    .weaponClass
                                                     .mainWeapon!!
                                                     .slidingShootTick > 1
                                             ) {

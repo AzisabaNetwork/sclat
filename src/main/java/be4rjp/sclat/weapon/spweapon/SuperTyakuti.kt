@@ -29,10 +29,10 @@ import org.bukkit.util.Vector
 object SuperTyakuti {
     @JvmStatic
     fun SuperTyakutiRunnable(player: Player) {
-        player.getInventory().clear()
-        getPlayerData(player)!!.setIsUsingSP(true)
+        player.inventory.clear()
+        getPlayerData(player)!!.isUsingSP = true
         getPlayerData(player)!!.setIsUsingTyakuti(true)
-        player.getWorld().playSound(player.getLocation(), Sound.ENTITY_WITHER_SHOOT, 0.3f, 0.5f)
+        player.world.playSound(player.location, Sound.ENTITY_WITHER_SHOOT, 0.3f, 0.5f)
         SPWeaponMgr.setSPCoolTimeAnimation(player, 40)
         val task: BukkitRunnable =
             object : BukkitRunnable() {
@@ -40,7 +40,7 @@ object SuperTyakuti {
 
                 override fun run() {
                     try {
-                        player.getInventory().clear()
+                        player.inventory.clear()
                         var vec = Vector(0, 0, 0)
                         when (i) {
                             1 -> {
@@ -77,16 +77,16 @@ object SuperTyakuti {
 
                             else -> {}
                         }
-                        if (i <= 27) player.setVelocity(vec)
+                        if (i <= 27) player.velocity = vec
 
                         if (i >= 5 && i <= 23) {
-                            for (o_player in plugin.getServer().getOnlinePlayers()) {
+                            for (o_player in plugin.server.onlinePlayers) {
                                 if (getPlayerData(o_player)!!.settings.ShowEffect_SPWeapon() &&
                                     o_player != player
                                 ) {
-                                    if (o_player.getWorld() === player.getWorld()) {
-                                        if (o_player.getLocation().distanceSquared(
-                                                player.getLocation(),
+                                    if (o_player.world === player.world) {
+                                        if (o_player.location.distanceSquared(
+                                                player.location,
                                             ) < Sclat.particleRenderDistanceSquared
                                         ) {
                                             val dustOptions =
@@ -96,7 +96,7 @@ object SuperTyakuti {
                                                 )
                                             o_player.spawnParticle<Particle.DustOptions?>(
                                                 Particle.REDSTONE,
-                                                player.getEyeLocation().add(0.0, -0.5, 0.0),
+                                                player.eyeLocation.add(0.0, -0.5, 0.0),
                                                 5,
                                                 0.5,
                                                 0.4,
@@ -116,29 +116,29 @@ object SuperTyakuti {
                         if (i % 5 == 0) {
                             var bloc =
                                 player
-                                    .getWorld()
-                                    .getHighestBlockAt(player.getLocation().getBlockX(), player.getLocation().getBlockZ())
-                                    .getLocation()
-                            for (y in player.getLocation().getBlockY() downTo 1) {
+                                    .world
+                                    .getHighestBlockAt(player.location.blockX, player.location.blockZ)
+                                    .location
+                            for (y in player.location.blockY downTo 1) {
                                 val bl =
                                     Location(
-                                        player.getWorld(),
-                                        player.getLocation().getX(),
+                                        player.world,
+                                        player.location.x,
                                         y.toDouble(),
-                                        player.getLocation().getZ(),
+                                        player.location.z,
                                     )
-                                if (bl.getBlock().getType() != Material.AIR) {
+                                if (bl.block.type != Material.AIR) {
                                     bloc = bl
                                     break
                                 }
                             }
                             val s_locs = getXZCircle(bloc.add(0.0, 1.0, 0.0), 7.0, 3.0, 40)
-                            for (o_player in plugin.getServer().getOnlinePlayers()) {
+                            for (o_player in plugin.server.onlinePlayers) {
                                 if (getPlayerData(o_player)!!.settings.ShowEffect_SPWeaponRegion()) {
                                     for (loc in s_locs) {
-                                        if (o_player.getWorld() === loc.getWorld()) {
+                                        if (o_player.world === loc.world) {
                                             if (o_player
-                                                    .getLocation()
+                                                    .location
                                                     .distanceSquared(loc) < Sclat.particleRenderDistanceSquared
                                             ) {
                                                 val bd =
@@ -164,23 +164,23 @@ object SuperTyakuti {
                             }
                         }
 
-                        if (i >= 24 && player.isOnGround()) {
+                        if (i >= 24 && player.isOnGround) {
                             // 爆発音
-                            player.getWorld().playSound(
-                                player.getLocation(),
+                            player.world.playSound(
+                                player.location,
                                 Sound.ENTITY_FIREWORK_ROCKET_BLAST,
                                 1.2f,
                                 0.8f,
                             )
-                            player.getWorld().playSound(
-                                player.getLocation(),
+                            player.world.playSound(
+                                player.location,
                                 Sound.ENTITY_PLAYER_SPLASH_HIGH_SPEED,
                                 1.1f,
                                 0.9f,
                             )
 
                             // 爆発エフェクト
-                            createInkExplosionEffect(player.getLocation(), 7.0, 10, player)
+                            createInkExplosionEffect(player.location, 7.0, 10, player)
 
                             val maxDist = 8.0
                             val maxDistSquared = 64.0 // 8^2
@@ -188,7 +188,7 @@ object SuperTyakuti {
                             run {
                                 var i = 0
                                 while (i <= maxDist) {
-                                    val p_locs: MutableList<Location> = getSphere(player.getLocation(), i.toDouble(), 10)
+                                    val p_locs: MutableList<Location> = getSphere(player.location, i.toDouble(), 10)
                                     for (loc in p_locs) {
                                         PaintMgr.Paint(loc, player, false)
                                     }
@@ -197,12 +197,12 @@ object SuperTyakuti {
                             }
 
                             // 攻撃判定の処理
-                            for (target in plugin.getServer().getOnlinePlayers()) {
-                                if (!getPlayerData(target)!!.isInMatch() || target.getWorld() !== player.getWorld()) continue
-                                if (target.getLocation().distanceSquared(player.getLocation()) <= maxDistSquared) {
-                                    val damage = (maxDist - target.getLocation().distance(player.getLocation())) * 15
+                            for (target in plugin.server.onlinePlayers) {
+                                if (!getPlayerData(target)!!.isInMatch || target.world !== player.world) continue
+                                if (target.location.distanceSquared(player.location) <= maxDistSquared) {
+                                    val damage = (maxDist - target.location.distance(player.location)) * 15
                                     if (getPlayerData(player)!!.team != getPlayerData(target)!!.team &&
-                                        target.getGameMode() == GameMode.ADVENTURE
+                                        target.gameMode == GameMode.ADVENTURE
                                     ) {
                                         giveDamage(player, target, damage, "spWeapon")
 
@@ -212,7 +212,7 @@ object SuperTyakuti {
                                                 var p: Player = target
 
                                                 override fun run() {
-                                                    target.setNoDamageTicks(0)
+                                                    target.noDamageTicks = 0
                                                 }
                                             }
                                         task.runTaskLater(plugin, 1)
@@ -220,12 +220,12 @@ object SuperTyakuti {
                                 }
                             }
 
-                            for (`as` in player.getWorld().getEntities()) {
-                                if (`as`.getLocation().distanceSquared(player.getLocation()) <= maxDistSquared) {
+                            for (`as` in player.world.entities) {
+                                if (`as`.location.distanceSquared(player.location) <= maxDistSquared) {
                                     if (`as` is ArmorStand) {
-                                        if (`as`.getCustomName() != null) {
+                                        if (`as`.customName != null) {
                                             val damage = (
-                                                (maxDist - `as`.getLocation().distance(player.getLocation())) *
+                                                (maxDist - `as`.location.distance(player.location)) *
                                                     15
                                                 )
                                             ArmorStandMgr.giveDamageArmorStand(`as`, damage, player)
@@ -234,20 +234,20 @@ object SuperTyakuti {
                                 }
                             }
                             WeaponClassMgr.setWeaponClass(player)
-                            getPlayerData(player)!!.setIsUsingSP(false)
+                            getPlayerData(player)!!.isUsingSP = false
                             getPlayerData(player)!!.setIsUsingTyakuti(false)
                             cancel()
                         }
 
-                        if (i == 500 || player.getGameMode() == GameMode.SPECTATOR ||
-                            !getPlayerData(player)!!.isInMatch()
+                        if (i == 500 || player.gameMode == GameMode.SPECTATOR ||
+                            !getPlayerData(player)!!.isInMatch
                         ) {
-                            if (i == 500 && player.getGameMode() == GameMode.ADVENTURE &&
-                                getPlayerData(player)!!.isInMatch()
+                            if (i == 500 && player.gameMode == GameMode.ADVENTURE &&
+                                getPlayerData(player)!!.isInMatch
                             ) {
                                 WeaponClassMgr.setWeaponClass(player)
                             }
-                            getPlayerData(player)!!.setIsUsingSP(false)
+                            getPlayerData(player)!!.isUsingSP = false
                             getPlayerData(player)!!.setIsUsingTyakuti(false)
                             cancel()
                         }

@@ -38,31 +38,30 @@ object Bucket {
 
                 override fun run() {
                     val data = getPlayerData(player)
-                    data!!.setCanRollerShoot(true)
+                    data!!.canRollerShoot = true
                 }
             }
-        if (data!!.getCanRollerShoot()) {
+        if (data!!.canRollerShoot) {
             delay1.runTaskLater(
                 plugin,
                 data
-                    .getWeaponClass()
+                    .weaponClass
                     .mainWeapon!!
                     .coolTime
                     .toLong(),
             )
         }
 
-        val delay: BukkitRunnable =
-            object : BukkitRunnable() {
-                override fun run() {
-                    var sound = false
-                    for (i in 0..<data.getWeaponClass().mainWeapon!!.rollerShootQuantity) {
-                        val `is` = Shoot(player, null)
-                        if (`is`) sound = true
-                    }
-                    if (sound) player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1f, 1.63f)
+        object : BukkitRunnable() {
+            override fun run() {
+                var sound = false
+                for (i in 0..<data.weaponClass.mainWeapon!!.rollerShootQuantity) {
+                    val `is` = Shoot(player, null)
+                    if (`is`) sound = true
                 }
+                if (sound) player.playSound(player.location, Sound.UI_BUTTON_CLICK, 1f, 1.63f)
             }
+        }
         val delay2: BukkitRunnable =
             object : BukkitRunnable() {
                 var p: Player? = player
@@ -72,27 +71,27 @@ object Bucket {
                 override fun run() {
                     c++
                     val q = 2
-                    for (i in 0..<data.getWeaponClass().mainWeapon!!.rollerShootQuantity) {
+                    for (i in 0..<data.weaponClass.mainWeapon!!.rollerShootQuantity) {
                         val `is` = Shoot(player, null)
                         if (`is`) sound = true
                     }
-                    if (sound) player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1f, 1.63f)
+                    if (sound) player.playSound(player.location, Sound.UI_BUTTON_CLICK, 1f, 1.63f)
                     if (c == q) cancel()
                 }
             }
-        if (data.getCanRollerShoot()) {
+        if (data.canRollerShoot) {
             // delay.runTaskLater(Main.getPlugin(),
             // data.getWeaponClass().getMainWeapon().delay);
             delay2.runTaskTimer(
                 plugin,
                 0,
                 data
-                    .getWeaponClass()
+                    .weaponClass
                     .mainWeapon!!
                     .delay
                     .toLong(),
             )
-            data.setCanRollerShoot(false)
+            data.canRollerShoot = false
         }
     }
 
@@ -100,12 +99,12 @@ object Bucket {
         player: Player,
         v: Vector?,
     ): Boolean {
-        if (player.getGameMode() == GameMode.SPECTATOR) return false
+        if (player.gameMode == GameMode.SPECTATOR) return false
 
         val data = getPlayerData(player)
-        if (player.getExp() <=
+        if (player.exp <=
             (
-                data!!.getWeaponClass().mainWeapon!!.needInk
+                data!!.weaponClass.mainWeapon!!.needInk
                     * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) /
                     Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)
                 ).toFloat()
@@ -113,26 +112,22 @@ object Bucket {
             player.sendTitle("", ChatColor.RED.toString() + "インクが足りません", 0, 13, 2)
             return true
         }
-        player.setExp(
-            player.getExp() -
-                (
-                    data.getWeaponClass().mainWeapon!!.needInk
-                        * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) /
-                        Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)
-                    ).toFloat(),
-        )
+        player.exp = player.exp -
+            (
+                data.weaponClass.mainWeapon!!.needInk
+                    * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) /
+                    Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)
+                ).toFloat()
         val ball = player.launchProjectile<Snowball>(Snowball::class.java)
-        (ball as CraftSnowball).getHandle().setItem(
-            CraftItemStack.asNMSCopy(ItemStack(getPlayerData(player)!!.team.teamColor!!.wool!!)),
-        )
+        (ball as CraftSnowball).handle.item = CraftItemStack.asNMSCopy(ItemStack(getPlayerData(player)!!.team.teamColor!!.wool!!))
         var vec: Vector? =
             player
-                .getLocation()
-                .getDirection()
-                .multiply(getPlayerData(player)!!.getWeaponClass().mainWeapon!!.shootSpeed)
+                .location
+                .direction
+                .multiply(getPlayerData(player)!!.weaponClass.mainWeapon!!.shootSpeed)
         if (v != null) vec = v
-        val random = getPlayerData(player)!!.getWeaponClass().mainWeapon!!.random
-        val distick = getPlayerData(player)!!.getWeaponClass().mainWeapon!!.distanceTick
+        val random = getPlayerData(player)!!.weaponClass.mainWeapon!!.random
+        val distick = getPlayerData(player)!!.weaponClass.mainWeapon!!.distanceTick
         vec!!.add(
             Vector(
                 Math.random() * random - random / 2,
@@ -140,11 +135,11 @@ object Bucket {
                 Math.random() * random - random / 2,
             ),
         )
-        ball.setVelocity(vec)
-        ball.setShooter(player)
+        ball.velocity = vec
+        ball.shooter = player
         val name = notDuplicateNumber.toString()
         DataMgr.mws.add(name)
-        ball.setCustomName(name)
+        ball.customName = name
         mainSnowballNameMap.put(name, ball)
         setSnowballHitCount(name, 0)
         val task: BukkitRunnable =
@@ -156,10 +151,10 @@ object Bucket {
                 var addedFallVec: Boolean = false
                 var fallvec: Vector =
                     Vector(
-                        inkball!!.getVelocity().getX(),
-                        inkball!!.getVelocity().getY(),
-                        inkball!!.getVelocity().getZ(),
-                    ).multiply(getPlayerData(p)!!.getWeaponClass().mainWeapon!!.shootSpeed / 17)
+                        inkball!!.velocity.getX(),
+                        inkball!!.velocity.getY(),
+                        inkball!!.velocity.getZ(),
+                    ).multiply(getPlayerData(p)!!.weaponClass.mainWeapon!!.shootSpeed / 17)
 
                 override fun run() {
                     inkball = mainSnowballNameMap.get(name)
@@ -169,13 +164,13 @@ object Bucket {
                         setSnowballHitCount(name, 0)
                     }
                     if (i != 0) {
-                        for (target in plugin.getServer().getOnlinePlayers()) {
-                            if (target.getWorld() !== p.getWorld()) continue
+                        for (target in plugin.server.onlinePlayers) {
+                            if (target.world !== p.world) continue
                             if (!getPlayerData(target)!!.settings.ShowEffect_MainWeaponInk()) continue
-                            if (target.getWorld() === inkball!!.getWorld()) {
+                            if (target.world === inkball!!.world) {
                                 if (target
-                                        .getLocation()
-                                        .distanceSquared(inkball!!.getLocation()) < Sclat.particleRenderDistanceSquared
+                                        .location
+                                        .distanceSquared(inkball!!.location) < Sclat.particleRenderDistanceSquared
                                 ) {
                                     val bd =
                                         getPlayerData(p)!!
@@ -184,7 +179,7 @@ object Bucket {
                                             .createBlockData()
                                     target.spawnParticle<BlockData?>(
                                         Particle.BLOCK_DUST,
-                                        inkball!!.getLocation(),
+                                        inkball!!.location,
                                         1,
                                         0.0,
                                         0.0,
@@ -198,16 +193,14 @@ object Bucket {
                     }
 
                     if (i >= tick && !addedFallVec) {
-                        inkball!!.setVelocity(fallvec)
+                        inkball!!.velocity = fallvec
                         addedFallVec = true
                     }
                     if (i >= tick && i <= tick + 15) {
-                        inkball!!.setVelocity(
-                            inkball!!.getVelocity().add(Vector(0.0, -0.1, 0.0)),
-                        )
+                        inkball!!.velocity = inkball!!.velocity.add(Vector(0.0, -0.1, 0.0))
                     }
-                    if (i != tick) PaintMgr.PaintHightestBlock(inkball!!.getLocation(), p, true, true)
-                    if (inkball!!.isDead()) cancel()
+                    if (i != tick) PaintMgr.PaintHightestBlock(inkball!!.location, p, true, true)
+                    if (inkball!!.isDead) cancel()
 
                     i++
                 }
@@ -233,13 +226,13 @@ object Bucket {
                     if (level >= 1) {
                         Ctime = 100
                     }
-                    if (!data!!.isInMatch() || !p.isOnline()) {
+                    if (!data!!.isInMatch || !p.isOnline) {
                         cancel()
                         return
                     }
-                    if (data.getIsSneaking() && bh_recharge && player.getGameMode() == GameMode.ADVENTURE) {
+                    if (data.isSneaking && bh_recharge && player.gameMode == GameMode.ADVENTURE) {
                         p.addPotionEffect(PotionEffect(PotionEffectType.ABSORPTION, Ctime, level))
-                        p.getWorld().playSound(p.getLocation(), Sound.ITEM_TRIDENT_RETURN, 1.4f, 1.5f)
+                        p.world.playSound(p.location, Sound.ITEM_TRIDENT_RETURN, 1.4f, 1.5f)
                         bh_recharge = false
                         val healtask: BukkitRunnable =
                             object : BukkitRunnable() {

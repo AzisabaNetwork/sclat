@@ -55,7 +55,7 @@ object SclatUtil {
         b: Block,
         material: Material?,
     ) {
-        broadcastBlockChange(b.getLocation(), material)
+        broadcastBlockChange(b.location, material)
     }
 
     @JvmStatic
@@ -104,7 +104,7 @@ object SclatUtil {
             )
         sc.startClient()
 
-        for (player in plugin.getServer().getOnlinePlayers()) {
+        for (player in plugin.server.onlinePlayers) {
             BungeeCordMgr.PlayerSendServer(player, "sclat")
             DataMgr.getPlayerData(player)?.setServerName("Sclat")
         }
@@ -148,20 +148,20 @@ object SclatUtil {
         buff.append(message)
         when (type) {
             MessageType.ALL_PLAYER -> {
-                for (player in plugin.getServer().getOnlinePlayers()) {
+                for (player in plugin.server.onlinePlayers) {
                     player.sendMessage(buff.toString())
                 }
             }
 
             MessageType.CONSOLE -> {
                 plugin
-                    .getServer()
-                    .getLogger()
+                    .server
+                    .logger
                     .info(buff.toString())
             }
 
             MessageType.BROADCAST -> {
-                plugin.getServer().broadcastMessage(buff.toString())
+                plugin.server.broadcastMessage(buff.toString())
             }
 
             else -> {}
@@ -178,7 +178,7 @@ object SclatUtil {
         buff.append(sclat)
         buff.append(message)
         if (type == MessageType.TEAM) {
-            for (player in plugin.getServer().getOnlinePlayers()) {
+            for (player in plugin.server.onlinePlayers) {
                 val playerTeam = DataMgr.getPlayerData(player)?.team ?: continue
                 if (team == null) continue
                 if (playerTeam != team) continue
@@ -207,16 +207,16 @@ object SclatUtil {
     ) {
         when (type) {
             SoundType.ERROR -> {
-                player.playNote(player.getLocation(), Instrument.BASS_GUITAR, Note.flat(0, Note.Tone.G))
-                player.playNote(player.getLocation(), Instrument.BASS_GUITAR, Note.flat(0, Note.Tone.G))
+                player.playNote(player.location, Instrument.BASS_GUITAR, Note.flat(0, Note.Tone.G))
+                player.playNote(player.location, Instrument.BASS_GUITAR, Note.flat(0, Note.Tone.G))
             }
 
             SoundType.SUCCESS -> {
-                player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1f, 2f)
+                player.playSound(player.location, Sound.BLOCK_NOTE_BLOCK_PLING, 1f, 2f)
             }
 
             SoundType.CONGRATULATIONS -> {
-                player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1f, 1f)
+                player.playSound(player.location, Sound.ENTITY_PLAYER_LEVELUP, 1f, 1f)
             }
         }
     }
@@ -250,18 +250,18 @@ object SclatUtil {
                 ?.teamColor!!
                 .wool!!
                 .createBlockData()
-        for (oPlayer in plugin.getServer().getOnlinePlayers()) {
+        for (oPlayer in plugin.server.onlinePlayers) {
             if (DataMgr.getPlayerData(oPlayer)?.settings?.ShowEffect_BombEx()!!) {
                 for (loc in sLocs) {
-                    if (oPlayer.getWorld() === loc.getWorld()) {
-                        if (oPlayer.getLocation().distanceSquared(loc) < Sclat.particleRenderDistanceSquared) {
+                    if (oPlayer.world === loc.world) {
+                        if (oPlayer.location.distanceSquared(loc) < Sclat.particleRenderDistanceSquared) {
                             oPlayer.spawnParticle<BlockData?>(
                                 Particle.BLOCK_DUST,
                                 loc,
                                 0,
-                                loc.getX() - center.getX(),
-                                loc.getY() - center.getY(),
-                                loc.getZ() - center.getZ(),
+                                loc.x - center.x,
+                                loc.y - center.y,
+                                loc.z - center.z,
                                 1.0,
                                 bd,
                             )
@@ -278,28 +278,28 @@ object SclatUtil {
         radius: Double,
         shooter: Player?,
     ) {
-        for (player in plugin.getServer().getOnlinePlayers()) {
+        for (player in plugin.server.onlinePlayers) {
             val playerData = DataMgr.getPlayerData(player)
 
-            if (player.getWorld() !== center.getWorld()) continue
+            if (player.world !== center.world) continue
             if (playerData?.armor!! < 10000.0) continue
-            if (player.getGameMode() == GameMode.SPECTATOR) continue
+            if (player.gameMode == GameMode.SPECTATOR) continue
             if (playerData.team!! == DataMgr.getPlayerData(shooter)?.team!!) continue
 
-            val distance = player.getLocation().distance(center)
+            val distance = player.location.distance(center)
 
             if (distance > radius) continue
 
-            val loc = player.getLocation()
-            val vector = Vector(loc.getX() - center.getX(), 0.0, loc.getZ() - center.getZ())
+            val loc = player.location
+            val vector = Vector(loc.x - center.x, 0.0, loc.z - center.z)
 
             if (vector.lengthSquared() == 0.0) continue
 
             val nomVec = vector.normalize()
             val rate = ((radius - distance) / radius) * 2.5
 
-            player.setVelocity(nomVec.multiply(rate))
-            player.getWorld().playSound(player.getLocation(), Sound.ENTITY_SPLASH_POTION_BREAK, 1f, 1.5f)
+            player.velocity = nomVec.multiply(rate)
+            player.world.playSound(player.location, Sound.ENTITY_SPLASH_POTION_BREAK, 1f, 1.5f)
         }
     }
 
@@ -348,7 +348,7 @@ object SclatUtil {
     ): Boolean {
         var damage = damage
         val targetData = DataMgr.getPlayerData(target)!!
-        val playerData = DataMgr.getPlayerData(player)
+        DataMgr.getPlayerData(player)
         if (target.hasPotionEffect(PotionEffectType.FIRE_RESISTANCE)) {
             damage = damage * 0.6
         }
@@ -356,8 +356,8 @@ object SclatUtil {
         // if((target.getHealth()*2 + armorHealth*2 + target.getAbsorptionAmount() >
         // damage && armorHealth>=0.01 )||(target.getHealth() + armorHealth +
         // target.getAbsorptionAmount() > damage) && armorHealth<0.01){
-        if ((target.getHealth() + target.getAbsorptionAmount() > (damage - armorHealth) / 2 && armorHealth > 0.01) ||
-            ((target.getHealth() + target.getAbsorptionAmount() > damage) && armorHealth <= 0.01)
+        if ((target.health + target.absorptionAmount > (damage - armorHealth) / 2 && armorHealth > 0.01) ||
+            ((target.health + target.absorptionAmount > damage) && armorHealth <= 0.01)
         ) {
             targetData.lastAttack = player
             if (armorHealth > damage) {
@@ -371,7 +371,7 @@ object SclatUtil {
                 targetData.armor = 0.0
             }
         } else {
-            target.setGameMode(GameMode.SPECTATOR)
+            target.gameMode = GameMode.SPECTATOR
             DeathMgr.PlayerDeathRunnable(target, player, damageType)
             targetData.armor = 0.0
             return true

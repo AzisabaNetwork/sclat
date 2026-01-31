@@ -23,15 +23,15 @@ class SquidListener : Listener {
         val player = event.getPlayer()
         val data = getPlayerData(player)
         SquidListenerMgr.checkOnInk(player)
-        if (player.getInventory().getItem(event.getNewSlot()) == null) {
-            data!!.setIsSquid(true)
+        if (player.inventory.getItem(event.newSlot) == null) {
+            data!!.isSquid = true
             return
         }
-        data!!.setIsSquid(false)
+        data!!.isSquid = false
     }
 
     @EventHandler
     fun onFoodLevelChange(event: FoodLevelChangeEvent) {
-        event.setCancelled(true)
+        event.isCancelled = true
     }
 }

@@ -16,14 +16,14 @@ import org.bukkit.entity.Player
 object SquidListenerMgr {
     fun checkOnInk(player: Player) {
         val data = getPlayerData(player)
-        if (!data!!.isInMatch()) return
-        val loc = player.getLocation()
-        val playerblock = player.getLocation().getBlock()
-        val b1 = loc.add(0.0, -0.5, 0.0).getBlock()
-        val b2 = player.getLocation().getBlock().getRelative(BlockFace.NORTH)
-        val b3 = player.getLocation().getBlock().getRelative(BlockFace.EAST)
-        val b4 = player.getLocation().getBlock().getRelative(BlockFace.SOUTH)
-        val b5 = player.getLocation().getBlock().getRelative(BlockFace.WEST)
+        if (!data!!.isInMatch) return
+        val loc = player.location
+        val playerblock = player.location.block
+        val b1 = loc.add(0.0, -0.5, 0.0).block
+        val b2 = player.location.block.getRelative(BlockFace.NORTH)
+        val b3 = player.location.block.getRelative(BlockFace.EAST)
+        val b4 = player.location.block.getRelative(BlockFace.SOUTH)
+        val b5 = player.location.block.getRelative(BlockFace.WEST)
 
         val list: MutableList<Block> = ArrayList<Block>()
         list.add(b1)
@@ -32,7 +32,7 @@ object SquidListenerMgr {
         list.add(b4)
         list.add(b5)
 
-        if (playerblock.getType() == Material.WATER && player.getGameMode() == GameMode.ADVENTURE) {
+        if (playerblock.type == Material.WATER && player.gameMode == GameMode.ADVENTURE) {
             DeathMgr.PlayerDeathRunnable(
                 player,
                 player,
@@ -42,7 +42,7 @@ object SquidListenerMgr {
 
         try {
             if (data.match.mapData!!.voidY != 0) {
-                if (player.getLocation().getY() <= data.match.mapData!!.voidY) {
+                if (player.location.y <= data.match.mapData!!.voidY) {
                     DeathMgr.PlayerDeathRunnable(player, player, "fall")
                 }
             }
@@ -55,33 +55,32 @@ object SquidListenerMgr {
         // !DataMgr.getBlockDataMap().containsKey(b5) ||
         // !DataMgr.getBlockDataMap().containsKey(b1))
         // return;
-        val team = getPlayerData(player)!!.team
-        val p =
-            Material.getMaterial(
-                data.team.teamColor!!
-                    .concrete
-                    .toString() + "_POWDER",
-            )
+        getPlayerData(player)!!.team
+        Material.getMaterial(
+            data.team.teamColor!!
+                .concrete
+                .toString() + "_POWDER",
+        )
 
         for (block in list) {
             if (block != b1) {
                 if (blockDataMap.containsKey(block)) {
                     if (blockDataMap.get(block)!!.team == data.team) {
-                        if (!data.getIsSquid() || block.getType() == Material.AIR) continue
-                        data.setIsOnInk(true)
-                        player.setAllowFlight(true)
-                        player.setFlying(true)
+                        if (!data.isSquid || block.type == Material.AIR) continue
+                        data.isOnInk = true
+                        player.allowFlight = true
+                        player.isFlying = true
                         return
                     }
                 }
             } else {
                 if (blockDataMap.containsKey(block)) {
                     if (blockDataMap.get(block)!!.team == data.team) {
-                        if (!data.getIsSquid() || block.getType() == Material.AIR) continue
-                        data.setIsOnInk(true)
+                        if (!data.isSquid || block.type == Material.AIR) continue
+                        data.isOnInk = true
                         if (!data.getIsUsingJetPack()) {
-                            player.setAllowFlight(false)
-                            player.setFlying(false)
+                            player.allowFlight = false
+                            player.isFlying = false
                         }
                         return
                     }
@@ -89,10 +88,10 @@ object SquidListenerMgr {
             }
         }
 
-        data.setIsOnInk(false)
+        data.isOnInk = false
         if (!data.getIsUsingJetPack()) {
-            player.setAllowFlight(false)
-            player.setFlying(false)
+            player.allowFlight = false
+            player.isFlying = false
         }
     }
 }

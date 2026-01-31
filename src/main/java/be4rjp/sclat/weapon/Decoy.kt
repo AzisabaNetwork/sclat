@@ -50,12 +50,12 @@ object Decoy {
                 override fun run() {
                     val data = getPlayerData(p)
 
-                    if (!data!!.isInMatch() || !p.isOnline()) {
+                    if (!data!!.isInMatch || !p.isOnline) {
                         cancel()
                         return
                     }
 
-                    if (data.getIsSneaking() && dc_recharge && player.getGameMode() != GameMode.SPECTATOR) {
+                    if (data.isSneaking && dc_recharge && player.gameMode != GameMode.SPECTATOR) {
                         dc_recharge = false
                         // createDecoy(p, p.getName(), p.getLocation());
                         DecoyShot(p)
@@ -97,21 +97,21 @@ object Decoy {
                 override fun run() {
                     if (s == 0) {
                         ika = false
-                        location.setYaw(location1.getYaw())
+                        location.yaw = location1.yaw
 
-                        val nmsServer: MinecraftServer = (Bukkit.getServer() as CraftServer).getServer()
-                        val nmsWorld = (location.getWorld() as CraftWorld).getHandle()
-                        val gameProfile = GameProfile(player.getUniqueId(), npcName)
+                        val nmsServer: MinecraftServer = (Bukkit.getServer() as CraftServer).server
+                        val nmsWorld = (location.world as CraftWorld).handle
+                        val gameProfile = GameProfile(player.uniqueId, npcName)
 
                         npc = EntityPlayer(nmsServer, nmsWorld, gameProfile, PlayerInteractManager(nmsWorld))
 
                         // 見えないところにスポーンさせて、クライアントにスキンを先に読み込ませる
-                        yaw = player1.getEyeLocation().getYaw()
-                        npc!!.setLocation(location.getX(), location.getY() - 20, location.getZ(), yaw, 0f)
-                        npc!!.getDataWatcher().set<Byte?>(DataWatcherRegistry.a.a(15), 127.toByte())
+                        yaw = player1.eyeLocation.yaw
+                        npc!!.setLocation(location.x, location.y - 20, location.z, yaw, 0f)
+                        npc!!.dataWatcher.set<Byte?>(DataWatcherRegistry.a.a(15), 127.toByte())
 
-                        for (p in plugin.getServer().getOnlinePlayers()) {
-                            val connection = (p as CraftPlayer).getHandle().playerConnection
+                        for (p in plugin.server.onlinePlayers) {
+                            val connection = (p as CraftPlayer).handle.playerConnection
                             connection.sendPacket(
                                 PacketPlayOutPlayerInfo(
                                     PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER,
@@ -119,65 +119,65 @@ object Decoy {
                                 ),
                             )
                             connection.sendPacket(PacketPlayOutNamedEntitySpawn(npc))
-                            connection.sendPacket(PacketPlayOutEntityMetadata(npc!!.getId(), npc!!.getDataWatcher(), true))
+                            connection.sendPacket(PacketPlayOutEntityMetadata(npc!!.id, npc!!.dataWatcher, true))
                         }
                         es = EntitySquid(EntityTypes.SQUID, nmsWorld)
-                        es!!.setNoAI(true)
-                        es!!.setNoGravity(true)
+                        es!!.isNoAI = true
+                        es!!.isNoGravity = true
                         // es.setCustomName(CraftChatMessage.fromStringOrNull(player.getName()));
                         // es.setCustomNameVisible(false);
-                        (es!!.getBukkitEntity() as LivingEntity).setCollidable(false)
+                        (es!!.bukkitEntity as LivingEntity).isCollidable = false
                     }
                     if (s == 0) {
-                        block = location.getBlock().getRelative(BlockFace.DOWN)
+                        block = location.block.getRelative(BlockFace.DOWN)
                         if (blockDataMap.containsKey(block)) {
-                            if (block!!.getType().toString().contains("WOOL")) {
-                                if (block!!.getType() != data!!.team.teamColor!!.wool) {
+                            if (block!!.type.toString().contains("WOOL")) {
+                                if (block!!.type != data!!.team.teamColor!!.wool) {
                                     ika = true
                                 }
                             }
                         }
                         if (ika) {
-                            es!!.setLocation(location.getX(), location.getY(), location.getZ(), yaw, 0f)
+                            es!!.setLocation(location.x, location.y, location.z, yaw, 0f)
                             npc!!.setLocation(
-                                location.getX(),
-                                location.getY() - 20,
-                                location.getZ(),
-                                player1.getEyeLocation().getYaw(),
+                                location.x,
+                                location.y - 20,
+                                location.z,
+                                player1.eyeLocation.yaw,
                                 0f,
                             )
                         } else {
                             npc!!.setLocation(
-                                location.getX(),
-                                location.getY(),
-                                location.getZ(),
-                                player1.getEyeLocation().getYaw(),
+                                location.x,
+                                location.y,
+                                location.z,
+                                player1.eyeLocation.yaw,
                                 0f,
                             )
-                            es!!.setLocation(location.getX(), location.getY() - 20, location.getZ(), yaw, 0f)
+                            es!!.setLocation(location.x, location.y - 20, location.z, yaw, 0f)
                         }
                         val packet = PacketPlayOutSpawnEntityLiving(es)
-                        for (target in plugin.getServer().getOnlinePlayers()) {
-                            if (player.getWorld() === target.getWorld()) {
-                                (target as CraftPlayer).getHandle().playerConnection.sendPacket(packet)
+                        for (target in plugin.server.onlinePlayers) {
+                            if (player.world === target.world) {
+                                (target as CraftPlayer).handle.playerConnection.sendPacket(packet)
                             }
                         }
-                        for (p in plugin.getServer().getOnlinePlayers()) {
-                            val connection = (p as CraftPlayer).getHandle().playerConnection
+                        for (p in plugin.server.onlinePlayers) {
+                            val connection = (p as CraftPlayer).handle.playerConnection
                             connection.sendPacket(PacketPlayOutEntityTeleport(npc))
                             connection.sendPacket(
                                 PacketPlayOutEntityHeadRotation(
                                     npc,
-                                    ((player1.getEyeLocation().getYaw() * 256.0f) / 360.0f).toInt().toByte(),
+                                    ((player1.eyeLocation.yaw * 256.0f) / 360.0f).toInt().toByte(),
                                 ),
                             )
                             connection.sendPacket(
                                 PacketPlayOutEntityEquipment(
-                                    npc!!.getBukkitEntity().getEntityId(),
+                                    npc!!.bukkitEntity.entityId,
                                     EnumItemSlot.MAINHAND,
                                     CraftItemStack.asNMSCopy(
                                         getPlayerData(player)!!
-                                            .getWeaponClass()
+                                            .weaponClass
                                             .mainWeapon!!
                                             .weaponIteamStack,
                                     ),
@@ -185,7 +185,7 @@ object Decoy {
                             )
                             connection.sendPacket(
                                 PacketPlayOutEntityEquipment(
-                                    npc!!.getBukkitEntity().getEntityId(),
+                                    npc!!.bukkitEntity.entityId,
                                     EnumItemSlot.HEAD,
                                     CraftItemStack.asNMSCopy(getPlayerData(player)!!.team.teamColor!!.bougu),
                                 ),
@@ -194,10 +194,10 @@ object Decoy {
                         }
                     }
                     if (s != 0 || s != 15) {
-                        block = location.getBlock().getRelative(BlockFace.DOWN)
+                        block = location.block.getRelative(BlockFace.DOWN)
                         if (blockDataMap.containsKey(block)) {
-                            if (block!!.getType().toString().contains("WOOL")) {
-                                ika = block!!.getType() != data!!.team.teamColor!!.wool
+                            if (block!!.type.toString().contains("WOOL")) {
+                                ika = block!!.type != data!!.team.teamColor!!.wool
                             } else {
                                 ika = false
                             }
@@ -205,38 +205,38 @@ object Decoy {
                             ika = false
                         }
                         if (ika) {
-                            es!!.setLocation(location.getX(), location.getY(), location.getZ(), yaw, 0f)
-                            npc!!.setLocation(location.getX(), location.getY() - 20, location.getZ(), yaw, 0f)
+                            es!!.setLocation(location.x, location.y, location.z, yaw, 0f)
+                            npc!!.setLocation(location.x, location.y - 20, location.z, yaw, 0f)
                             if (s % 2 == 0) {
-                                player.getWorld().playSound(location, Sound.ENTITY_PLAYER_HURT, 1f, 1f)
+                                player.world.playSound(location, Sound.ENTITY_PLAYER_HURT, 1f, 1f)
                             }
                         } else {
-                            es!!.setLocation(location.getX(), location.getY() - 20, location.getZ(), yaw, 0f)
-                            npc!!.setLocation(location.getX(), location.getY(), location.getZ(), yaw, 0f)
+                            es!!.setLocation(location.x, location.y - 20, location.z, yaw, 0f)
+                            npc!!.setLocation(location.x, location.y, location.z, yaw, 0f)
                         }
                         val packet = PacketPlayOutEntityTeleport(es)
-                        for (target in plugin.getServer().getOnlinePlayers()) {
-                            if (player.getWorld() === target.getWorld()) {
-                                (target as CraftPlayer).getHandle().playerConnection.sendPacket(packet)
+                        for (target in plugin.server.onlinePlayers) {
+                            if (player.world === target.world) {
+                                (target as CraftPlayer).handle.playerConnection.sendPacket(packet)
                             }
                         }
-                        for (p in plugin.getServer().getOnlinePlayers()) {
-                            val connection = (p as CraftPlayer).getHandle().playerConnection
+                        for (p in plugin.server.onlinePlayers) {
+                            val connection = (p as CraftPlayer).handle.playerConnection
                             connection.sendPacket(PacketPlayOutEntityTeleport(npc))
                         }
                     }
                     if (s == 15) {
-                        for (p in plugin.getServer().getOnlinePlayers()) {
-                            val connection = (p as CraftPlayer).getHandle().playerConnection
-                            connection.sendPacket(PacketPlayOutEntityDestroy(npc!!.getBukkitEntity().getEntityId()))
+                        for (p in plugin.server.onlinePlayers) {
+                            val connection = (p as CraftPlayer).handle.playerConnection
+                            connection.sendPacket(PacketPlayOutEntityDestroy(npc!!.bukkitEntity.entityId))
                         }
                         val packet =
                             PacketPlayOutEntityDestroy(
-                                es!!.getBukkitEntity().getEntityId(),
+                                es!!.bukkitEntity.entityId,
                             )
-                        for (target in plugin.getServer().getOnlinePlayers()) {
-                            if (player.getWorld() === target.getWorld()) {
-                                (target as CraftPlayer).getHandle().playerConnection.sendPacket(packet)
+                        for (target in plugin.server.onlinePlayers) {
+                            if (player.world === target.world) {
+                                (target as CraftPlayer).handle.playerConnection.sendPacket(packet)
                             }
                         }
                         cancel()
@@ -259,29 +259,27 @@ object Decoy {
                     try {
                         if (c == 0) {
                             as1 =
-                                player.getWorld().spawn<ArmorStand>(
-                                    player.getLocation().add(0.0, 1.6, 0.0),
+                                player.world.spawn<ArmorStand>(
+                                    player.location.add(0.0, 1.6, 0.0),
                                     ArmorStand::class.java,
                                     Consumer { armorStand: ArmorStand ->
-                                        armorStand.setVisible(false)
-                                        armorStand.setSmall(true)
+                                        armorStand.isVisible = false
+                                        armorStand.isSmall = true
                                     },
                                 )
-                            as1!!.setVelocity(
-                                p
-                                    .getEyeLocation()
-                                    .getDirection()
-                                    .normalize()
-                                    .multiply(2.0),
-                            )
+                            as1!!.velocity = p
+                                .eyeLocation
+                                .direction
+                                .normalize()
+                                .multiply(2.0)
                         }
 
                         // デコイショットの視認用エフェクト
                         if (getPlayerData(player)!!.settings.ShowEffect_Bomb()) {
-                            if (player.getWorld() === as1!!.getLocation().getWorld()) {
+                            if (player.world === as1!!.location.world) {
                                 if (player
-                                        .getLocation()
-                                        .distanceSquared(as1!!.getLocation()) < Sclat.particleRenderDistanceSquared
+                                        .location
+                                        .distanceSquared(as1!!.location) < Sclat.particleRenderDistanceSquared
                                 ) {
                                     val dustOptions =
                                         Particle.DustOptions(
@@ -290,7 +288,7 @@ object Decoy {
                                         )
                                     player.spawnParticle<Particle.DustOptions?>(
                                         Particle.REDSTONE,
-                                        as1!!.getLocation(),
+                                        as1!!.location,
                                         1,
                                         0.0,
                                         0.0,
@@ -310,8 +308,8 @@ object Decoy {
                             return
                         }
 
-                        if (as1!!.isOnGround()) {
-                            createDecoy(p, p.getName(), as1!!.getLocation())
+                        if (as1!!.isOnGround) {
+                            createDecoy(p, p.name, as1!!.location)
                             as1!!.remove()
                             cancel()
                             return
@@ -319,7 +317,7 @@ object Decoy {
                     } catch (e: Exception) {
                         as1!!.remove()
                         cancel()
-                        plugin.getLogger().warning(e.message)
+                        plugin.logger.warning(e.message)
                     }
                 }
             }

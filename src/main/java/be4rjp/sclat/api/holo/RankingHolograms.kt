@@ -48,82 +48,82 @@ class RankingHolograms(
         val iz = Sclat.conf?.config!!.getDouble("RankingHolograms.Z")
         location = Location(w, ix + 0.5, iy, iz + 0.5)
 
-        val nmsWorld = (location.getWorld() as CraftWorld).getHandle()
+        val nmsWorld = (location.world as CraftWorld).handle
 
-        title = EntityArmorStand(nmsWorld, location.getX(), location.getY() + 2.5, location.getZ())
-        title.setNoGravity(true)
-        title.setPosition(location.getX(), location.getY() + 2.5, location.getZ())
+        title = EntityArmorStand(nmsWorld, location.x, location.y + 2.5, location.z)
+        title.isNoGravity = true
+        title.setPosition(location.x, location.y + 2.5, location.z)
         title.setBasePlate(false)
-        title.setInvisible(true)
-        title.setSmall(true)
-        title.setCustomName(CraftChatMessage.fromStringOrNull("§a----------- §b§lTotal Ranking §r§a-----------"))
-        title.setCustomNameVisible(true)
+        title.isInvisible = true
+        title.isSmall = true
+        title.customName = CraftChatMessage.fromStringOrNull("§a----------- §b§lTotal Ranking §r§a-----------")
+        title.customNameVisible = true
         armorStandList.add(title)
 
-        separator = EntityArmorStand(nmsWorld, location.getX(), location.getY() + 0.0, location.getZ())
-        separator.setNoGravity(true)
-        separator.setPosition(location.getX(), location.getY() + 0.0, location.getZ())
+        separator = EntityArmorStand(nmsWorld, location.x, location.y + 0.0, location.z)
+        separator.isNoGravity = true
+        separator.setPosition(location.x, location.y + 0.0, location.z)
         separator.setBasePlate(false)
-        separator.setInvisible(true)
-        separator.setSmall(true)
-        separator.setCustomName(CraftChatMessage.fromStringOrNull("§a-------------------------------------"))
-        separator.setCustomNameVisible(true)
+        separator.isInvisible = true
+        separator.isSmall = true
+        separator.customName = CraftChatMessage.fromStringOrNull("§a-------------------------------------")
+        separator.customNameVisible = true
         armorStandList.add(separator)
 
-        you = EntityArmorStand(nmsWorld, location.getX(), location.getY() - 0.4, location.getZ())
-        you.setNoGravity(true)
-        you.setPosition(location.getX(), location.getY() - 0.4, location.getZ())
+        you = EntityArmorStand(nmsWorld, location.x, location.y - 0.4, location.z)
+        you.isNoGravity = true
+        you.setPosition(location.x, location.y - 0.4, location.z)
         you.setBasePlate(false)
-        you.setInvisible(true)
-        you.setSmall(true)
-        you.setCustomName(CraftChatMessage.fromStringOrNull("--"))
-        you.setCustomNameVisible(true)
+        you.isInvisible = true
+        you.isSmall = true
+        you.customName = CraftChatMessage.fromStringOrNull("--")
+        you.customNameVisible = true
         armorStandList.add(you)
 
-        mode = EntityArmorStand(nmsWorld, location.getX(), location.getY() - 0.8, location.getZ())
-        mode.setNoGravity(true)
-        mode.setPosition(location.getX(), location.getY() - 0.8, location.getZ())
+        mode = EntityArmorStand(nmsWorld, location.x, location.y - 0.8, location.z)
+        mode.isNoGravity = true
+        mode.setPosition(location.x, location.y - 0.8, location.z)
         mode.setBasePlate(false)
-        mode.setInvisible(true)
-        mode.setSmall(true)
-        mode.setCustomName(CraftChatMessage.fromStringOrNull("§a§l[Total] §7§l[Kill] [Paint]"))
-        mode.setCustomNameVisible(true)
+        mode.isInvisible = true
+        mode.isSmall = true
+        mode.customName = CraftChatMessage.fromStringOrNull("§a§l[Total] §7§l[Kill] [Paint]")
+        mode.customNameVisible = true
         armorStandList.add(mode)
 
-        clickHit1 = EntityArmorStand(nmsWorld, location.getX() + 0.3, location.getY() + 0.0, location.getZ() + 0.3)
-        clickHit1.setNoGravity(true)
-        clickHit1.setPosition(location.getX() + 0.3, location.getY() + 0.0, location.getZ() + 0.3)
+        clickHit1 = EntityArmorStand(nmsWorld, location.x + 0.3, location.y + 0.0, location.z + 0.3)
+        clickHit1.isNoGravity = true
+        clickHit1.setPosition(location.x + 0.3, location.y + 0.0, location.z + 0.3)
         clickHit1.setBasePlate(false)
-        clickHit1.setInvisible(true)
-        clickHit1.setCustomName(CraftChatMessage.fromStringOrNull("clickHit1"))
-        clickHit1.setCustomNameVisible(false)
+        clickHit1.isInvisible = true
+        clickHit1.customName = CraftChatMessage.fromStringOrNull("clickHit1")
+        clickHit1.customNameVisible = false
         armorStandList.add(clickHit1)
 
-        clickHit2 = EntityArmorStand(nmsWorld, location.getX() + 0.3, location.getY() + 0.0, location.getZ() - 0.3)
-        clickHit2.setNoGravity(true)
-        clickHit2.setPosition(location.getX() + 0.3, location.getY() + 0.0, location.getZ() - 0.3)
+        clickHit2 = EntityArmorStand(nmsWorld, location.x + 0.3, location.y + 0.0, location.z - 0.3)
+        clickHit2.isNoGravity = true
+        clickHit2.setPosition(location.x + 0.3, location.y + 0.0, location.z - 0.3)
         clickHit2.setBasePlate(false)
-        clickHit2.setInvisible(true)
-        clickHit2.setCustomName(CraftChatMessage.fromStringOrNull("clickHit2"))
-        clickHit2.setCustomNameVisible(false)
+        clickHit2.isInvisible = true
+        clickHit2.customName = CraftChatMessage.fromStringOrNull("clickHit2")
+        clickHit2.customNameVisible = false
         armorStandList.add(clickHit2)
 
-        clickHit3 = EntityArmorStand(nmsWorld, location.getX() - 0.3, location.getY() + 0.0, location.getZ() - 0.3)
-        clickHit3.setNoGravity(true)
-        clickHit3.setPosition(location.getX() - 0.3, location.getY() + 0.0, location.getZ() - 0.3)
+        clickHit3 = EntityArmorStand(nmsWorld, location.x - 0.3, location.y + 0.0, location.z - 0.3)
+        clickHit3.isNoGravity = true
+        clickHit3.setPosition(location.x - 0.3, location.y + 0.0, location.z - 0.3)
         clickHit3.setBasePlate(false)
-        clickHit3.setInvisible(true)
-        clickHit3.setCustomName(CraftChatMessage.fromStringOrNull("clickHit3"))
-        clickHit3.setCustomNameVisible(false)
+        clickHit3.isInvisible = true
+        clickHit3.customName = CraftChatMessage.fromStringOrNull("clickHit3")
+        clickHit3.customNameVisible = false
         armorStandList.add(clickHit3)
 
-        clickHit4 = EntityArmorStand(nmsWorld, location.getX() - 0.3, location.getY() + 0.0, location.getZ() + 0.3)
-        clickHit4.setNoGravity(true)
-        clickHit4.setPosition(location.getX() - 0.3, location.getY() + 0.0, location.getZ() + 0.3)
+        clickHit4 = EntityArmorStand(nmsWorld, location.x - 0.3, location.y + 0.0, location.z + 0.3)
+        clickHit4.isNoGravity = true
+        clickHit4.setPosition(location.x - 0.3, location.y + 0.0, location.z + 0.3)
         clickHit4.setBasePlate(false)
-        clickHit4.setInvisible(true)
-        clickHit4.setCustomName(CraftChatMessage.fromStringOrNull("clickHit4"))
-        clickHit4.setCustomNameVisible(false)
+        clickHit4.isInvisible = true
+        clickHit4.customName = CraftChatMessage.fromStringOrNull("clickHit4")
+        clickHit4.customNameVisible = false
         armorStandList.add(clickHit4)
 
         rankArmorStands = ArrayList<EntityArmorStand>()
@@ -131,17 +131,17 @@ class RankingHolograms(
             val armorStand =
                 EntityArmorStand(
                     nmsWorld,
-                    location.getX(),
-                    location.getY() + 2.0 - (0.4 * i.toDouble()),
-                    location.getZ(),
+                    location.x,
+                    location.y + 2.0 - (0.4 * i.toDouble()),
+                    location.z,
                 )
-            armorStand.setNoGravity(true)
-            armorStand.setPosition(location.getX(), location.getY() + 2.0 - (0.4 * i.toDouble()), location.getZ())
+            armorStand.isNoGravity = true
+            armorStand.setPosition(location.x, location.y + 2.0 - (0.4 * i.toDouble()), location.z)
             armorStand.setBasePlate(false)
-            armorStand.setInvisible(true)
-            armorStand.setSmall(true)
-            armorStand.setCustomName(CraftChatMessage.fromStringOrNull("--"))
-            armorStand.setCustomNameVisible(true)
+            armorStand.isInvisible = true
+            armorStand.isSmall = true
+            armorStand.customName = CraftChatMessage.fromStringOrNull("--")
+            armorStand.customNameVisible = true
             rankArmorStands.add(armorStand)
             armorStandList.add(armorStand)
         }
@@ -153,29 +153,23 @@ class RankingHolograms(
         when (rankingType) {
             RankingType.TOTAL -> {
                 rankingType = RankingType.KILL
-                title.setCustomName(
-                    CraftChatMessage.fromStringOrNull("§a----------- §b§lKill Ranking §r§a-----------"),
-                )
-                separator.setCustomName(CraftChatMessage.fromStringOrNull("§a------------------------------------"))
-                mode.setCustomName(CraftChatMessage.fromStringOrNull("§7§l[Total] §a§l[Kill] §7§l[Paint]"))
+                title.customName = CraftChatMessage.fromStringOrNull("§a----------- §b§lKill Ranking §r§a-----------")
+                separator.customName = CraftChatMessage.fromStringOrNull("§a------------------------------------")
+                mode.customName = CraftChatMessage.fromStringOrNull("§7§l[Total] §a§l[Kill] §7§l[Paint]")
             }
 
             RankingType.KILL -> {
                 rankingType = RankingType.PAINT
-                title.setCustomName(
-                    CraftChatMessage.fromStringOrNull("§a----------- §b§lPaint Ranking §r§a-----------"),
-                )
-                separator.setCustomName(CraftChatMessage.fromStringOrNull("§a-------------------------------------"))
-                mode.setCustomName(CraftChatMessage.fromStringOrNull("§7§l[Total] [Kill] §a§l[Paint]"))
+                title.customName = CraftChatMessage.fromStringOrNull("§a----------- §b§lPaint Ranking §r§a-----------")
+                separator.customName = CraftChatMessage.fromStringOrNull("§a-------------------------------------")
+                mode.customName = CraftChatMessage.fromStringOrNull("§7§l[Total] [Kill] §a§l[Paint]")
             }
 
             RankingType.PAINT -> {
                 rankingType = RankingType.TOTAL
-                title.setCustomName(
-                    CraftChatMessage.fromStringOrNull("§a----------- §b§lTotal Ranking §r§a-----------"),
-                )
-                separator.setCustomName(CraftChatMessage.fromStringOrNull("§a-------------------------------------"))
-                mode.setCustomName(CraftChatMessage.fromStringOrNull("§a§l[Total] §7§l[Kill] [Paint]"))
+                title.customName = CraftChatMessage.fromStringOrNull("§a----------- §b§lTotal Ranking §r§a-----------")
+                separator.customName = CraftChatMessage.fromStringOrNull("§a-------------------------------------")
+                mode.customName = CraftChatMessage.fromStringOrNull("§a§l[Total] §7§l[Kill] [Paint]")
             }
         }
     }
@@ -202,16 +196,14 @@ class RankingHolograms(
                                 val rank = PlayerStatusMgr.getRank(uuid)
 
                                 if (rank != 0) {
-                                    armorStand.setCustomName(
-                                        CraftChatMessage.fromStringOrNull(
-                                            (
-                                                "§e" + (i + 1).toString() + "位 §f" + mcid +
-                                                    "  §6Rank : §r" + rank + " [§b " + RankMgr.toABCRank(rank) + " §f]"
-                                                ),
-                                        ),
+                                    armorStand.customName = CraftChatMessage.fromStringOrNull(
+                                        (
+                                            "§e" + (i + 1).toString() + "位 §f" + mcid +
+                                                "  §6Rank : §r" + rank + " [§b " + RankMgr.toABCRank(rank) + " §f]"
+                                            ),
                                     )
                                 } else {
-                                    armorStand.setCustomName(CraftChatMessage.fromStringOrNull("--"))
+                                    armorStand.customName = CraftChatMessage.fromStringOrNull("--")
                                 }
                             }
 
@@ -222,13 +214,11 @@ class RankingHolograms(
                                 val kill = PlayerStatusMgr.getKill(uuid)
 
                                 if (kill != 0) {
-                                    armorStand.setCustomName(
-                                        CraftChatMessage.fromStringOrNull(
-                                            "§e" + (i + 1).toString() + "位 §f" + mcid + "  §6Kill(s) : §r" + kill,
-                                        ),
+                                    armorStand.customName = CraftChatMessage.fromStringOrNull(
+                                        "§e" + (i + 1).toString() + "位 §f" + mcid + "  §6Kill(s) : §r" + kill,
                                     )
                                 } else {
-                                    armorStand.setCustomName(CraftChatMessage.fromStringOrNull("--"))
+                                    armorStand.customName = CraftChatMessage.fromStringOrNull("--")
                                 }
                             }
 
@@ -239,13 +229,11 @@ class RankingHolograms(
                                 val paint = PlayerStatusMgr.getPaint(uuid)
 
                                 if (paint != 0) {
-                                    armorStand.setCustomName(
-                                        CraftChatMessage.fromStringOrNull(
-                                            "§e" + (i + 1).toString() + "位 §f" + mcid + "  §6Paint(s) : §r" + paint,
-                                        ),
+                                    armorStand.customName = CraftChatMessage.fromStringOrNull(
+                                        "§e" + (i + 1).toString() + "位 §f" + mcid + "  §6Paint(s) : §r" + paint,
                                     )
                                 } else {
-                                    armorStand.setCustomName(CraftChatMessage.fromStringOrNull("--"))
+                                    armorStand.customName = CraftChatMessage.fromStringOrNull("--")
                                 }
                             }
                         } catch (e: Exception) {
@@ -255,62 +243,56 @@ class RankingHolograms(
 
                     try {
                         if (rankingType == RankingType.TOTAL) {
-                            val mcid = player.getName()
+                            val mcid = player.name
                             var ranking = 1
                             for (uuid in RankMgr.ranking) {
-                                if (uuid == player.getUniqueId().toString()) break
+                                if (uuid == player.uniqueId.toString()) break
                                 ranking++
                             }
 
-                            val rank = PlayerStatusMgr.getRank(player.getUniqueId().toString())
+                            val rank = PlayerStatusMgr.getRank(player.uniqueId.toString())
 
-                            you.setCustomName(
-                                CraftChatMessage.fromStringOrNull(
-                                    (
-                                        "§aYou ->> §e" + (if (rank == 0) "-" else ranking) +
-                                            "位 §f" + mcid + "  §6Rank : §r" + rank + " [§b " + RankMgr.toABCRank(rank) + " §f]"
-                                        ),
-                                ),
+                            you.customName = CraftChatMessage.fromStringOrNull(
+                                (
+                                    "§aYou ->> §e" + (if (rank == 0) "-" else ranking) +
+                                        "位 §f" + mcid + "  §6Rank : §r" + rank + " [§b " + RankMgr.toABCRank(rank) + " §f]"
+                                    ),
                             )
                         }
 
                         if (rankingType == RankingType.KILL) {
-                            val mcid = player.getName()
+                            val mcid = player.name
                             var ranking = 1
                             for (uuid in RankMgr.killRanking) {
-                                if (uuid == player.getUniqueId().toString()) break
+                                if (uuid == player.uniqueId.toString()) break
                                 ranking++
                             }
 
-                            val kill = PlayerStatusMgr.getKill(player.getUniqueId().toString())
+                            val kill = PlayerStatusMgr.getKill(player.uniqueId.toString())
 
-                            you.setCustomName(
-                                CraftChatMessage.fromStringOrNull(
-                                    (
-                                        "§aYou ->> §e" + (if (kill == 0) "-" else ranking) +
-                                            "位 §f" + mcid + "  §6Kill(s) : §r" + kill
-                                        ),
-                                ),
+                            you.customName = CraftChatMessage.fromStringOrNull(
+                                (
+                                    "§aYou ->> §e" + (if (kill == 0) "-" else ranking) +
+                                        "位 §f" + mcid + "  §6Kill(s) : §r" + kill
+                                    ),
                             )
                         }
 
                         if (rankingType == RankingType.PAINT) {
-                            val mcid = player.getName()
+                            val mcid = player.name
                             var ranking = 1
                             for (uuid in RankMgr.paintRanking) {
-                                if (uuid == player.getUniqueId().toString()) break
+                                if (uuid == player.uniqueId.toString()) break
                                 ranking++
                             }
 
-                            val paint = PlayerStatusMgr.getPaint(player.getUniqueId().toString())
+                            val paint = PlayerStatusMgr.getPaint(player.uniqueId.toString())
 
-                            you.setCustomName(
-                                CraftChatMessage.fromStringOrNull(
-                                    (
-                                        "§aYou ->> §e" +
-                                            (if (paint == 0) "-" else ranking) + "位 §f" + mcid + "  §6Paint(s) : §r" + paint
-                                        ),
-                                ),
+                            you.customName = CraftChatMessage.fromStringOrNull(
+                                (
+                                    "§aYou ->> §e" +
+                                        (if (paint == 0) "-" else ranking) + "位 §f" + mcid + "  §6Paint(s) : §r" + paint
+                                    ),
                             )
                         }
                         list.add(you)
@@ -321,21 +303,21 @@ class RankingHolograms(
                     list.add(separator)
                     list.add(mode)
 
-                    if (player.isOnline() && player.getWorld() === location.getWorld()) {
+                    if (player.isOnline && player.world === location.world) {
                         try {
                             for (armorStand in list) {
                                 val destroyPacket =
                                     PacketPlayOutEntityDestroy(
-                                        armorStand.getBukkitEntity().getEntityId(),
+                                        armorStand.bukkitEntity.entityId,
                                     )
-                                (player as CraftPlayer).getHandle().playerConnection.sendPacket(destroyPacket)
+                                (player as CraftPlayer).handle.playerConnection.sendPacket(destroyPacket)
                             }
                         } catch (e: Exception) {
                         }
                         try {
                             for (armorStand in list) {
                                 val spawnPacket = PacketPlayOutSpawnEntityLiving(armorStand)
-                                (player as CraftPlayer).getHandle().playerConnection.sendPacket(spawnPacket)
+                                (player as CraftPlayer).handle.playerConnection.sendPacket(spawnPacket)
                             }
                         } catch (e: Exception) {
                         }

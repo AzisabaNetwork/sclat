@@ -12,7 +12,7 @@ class PlayerHolograms {
 
     fun add(player: Player) {
         val playerHolo = RankingHolograms(player)
-        rankingHoloMap.put(player.getUniqueId(), playerHolo)
+        rankingHoloMap.put(player.uniqueId, playerHolo)
         PlayerStatusMgr.HologramUpdateRunnable(player)
     }
 
@@ -26,12 +26,12 @@ class PlayerHolograms {
         }
     }
 
-    fun get(player: Player): RankingHolograms? = get(player.getUniqueId())
+    fun get(player: Player): RankingHolograms? = get(player.uniqueId)
 
     fun get(playerUuid: UUID): RankingHolograms? = rankingHoloMap.get(playerUuid)
 
     fun remove(player: Player) {
-        rankingHoloMap.remove(player.getUniqueId())
+        rankingHoloMap.remove(player.uniqueId)
     }
 
     val keys: MutableSet<UUID>

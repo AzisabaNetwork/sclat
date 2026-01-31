@@ -85,7 +85,7 @@ object Animation {
                                 )
                             }
                         }
-                        player.playSound(player.getLocation(), Sound.ENTITY_ZOMBIE_INFECT, 13.0f, 1.5f)
+                        player.playSound(player.location, Sound.ENTITY_ZOMBIE_INFECT, 13.0f, 1.5f)
                     }
                     if (i == 40) {
                         if (winteam === DataMgr.getPlayerData(player)?.team!!) {
@@ -157,7 +157,7 @@ object Animation {
                                 10,
                             )
                         }
-                        player.playSound(player.getLocation(), Sound.ENTITY_ZOMBIE_INFECT, 13.0f, 1.5f)
+                        player.playSound(player.location, Sound.ENTITY_ZOMBIE_INFECT, 13.0f, 1.5f)
                     }
                     if (i == 40) {
                         if (winteam === DataMgr.getPlayerData(player)?.team!!) {
@@ -298,7 +298,7 @@ object Animation {
                                 )
                             }
                         }
-                        player.playSound(player.getLocation(), Sound.ENTITY_ZOMBIE_INFECT, 13.0f, 1.5f)
+                        player.playSound(player.location, Sound.ENTITY_ZOMBIE_INFECT, 13.0f, 1.5f)
                     }
                     if (i == 40) {
                         if (winteam === DataMgr.getPlayerData(player)?.team!!) {

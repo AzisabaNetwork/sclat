@@ -7,7 +7,6 @@ import be4rjp.sclat.api.SclatUtil.giveDamage
 import be4rjp.sclat.api.Sphere.getSphere
 import be4rjp.sclat.api.raytrace.BoundingBox
 import be4rjp.sclat.api.raytrace.RayTrace
-import be4rjp.sclat.data.DataMgr
 import be4rjp.sclat.data.DataMgr.getKasaDataFromArmorStand
 import be4rjp.sclat.data.DataMgr.getPlayerData
 import be4rjp.sclat.data.DataMgr.getSplashShieldDataFromArmorStand
@@ -38,7 +37,7 @@ object LitterFiveG {
 
     @JvmStatic
     fun setLitterFiveG(player: Player) {
-        getPlayerData(player)!!.setIsUsingSP(true)
+        getPlayerData(player)!!.isUsingSP = true
         getPlayerData(player)!!.setIsUsingSS(false)
         SPWeaponMgr.setSPCoolTimeAnimation(player, 280)
         if (Hash_charge.containsKey(player)) {
@@ -53,14 +52,14 @@ object LitterFiveG {
                 var p: Player? = player
 
                 override fun run() {
-                    player.getInventory().clear()
+                    player.inventory.clear()
                     player.updateInventory()
                     val item = ItemStack(Material.NAUTILUS_SHELL)
-                    val meta = item.getItemMeta()
+                    val meta = item.itemMeta
                     meta!!.setDisplayName("右クリックで射撃!")
-                    item.setItemMeta(meta)
+                    item.itemMeta = meta
                     for (count in 0..8) {
-                        player.getInventory().setItem(count, item)
+                        player.inventory.setItem(count, item)
                     }
                     player.updateInventory()
                     charge_bar(player)
@@ -73,10 +72,10 @@ object LitterFiveG {
                 var p: Player = player
 
                 override fun run() {
-                    if (getPlayerData(p)!!.isInMatch()) {
-                        getPlayerData(p)!!.setIsUsingSP(false)
+                    if (getPlayerData(p)!!.isInMatch) {
+                        getPlayerData(p)!!.isUsingSP = false
                         getPlayerData(p)!!.setIsUsingSS(false)
-                        player.getInventory().clear()
+                        player.inventory.clear()
                         WeaponClassMgr.setWeaponClass(p)
                     }
                 }
@@ -86,13 +85,13 @@ object LitterFiveG {
 
     fun charge_bar(player: Player) {
         val bar =
-            plugin.getServer().createBossBar(
+            plugin.server.createBossBar(
                 getPlayerData(player)!!.team.teamColor!!.colorCode + "§cCharge",
                 BarColor.RED,
                 BarStyle.SOLID,
                 BarFlag.CREATE_FOG,
             )
-        bar.setProgress(0.0)
+        bar.progress = 0.0
         bar.addPlayer(player)
 
         val overheat_anime: BukkitRunnable =
@@ -103,33 +102,33 @@ object LitterFiveG {
 
                 override fun run() {
                     val data = getPlayerData(p)
-                    if (p.getGameMode() == GameMode.SPECTATOR) {
+                    if (p.gameMode == GameMode.SPECTATOR) {
                         visible = false
                     }
                     if (Hash_charge.containsKey(p)) {
                         if (Hash_charge.get(p)!! < max_charge) {
-                            bar.setProgress(Hash_charge.get(p)!!.toDouble() / max_charge)
-                            if (!bar.getPlayers().contains(p)) {
+                            bar.progress = Hash_charge.get(p)!!.toDouble() / max_charge
+                            if (!bar.players.contains(p)) {
                                 bar.addPlayer(p)
                             }
                             if (bell) {
                                 bell = false
                             }
                         } else {
-                            bar.setProgress(1.0)
-                            if (!bar.getPlayers().contains(p)) {
+                            bar.progress = 1.0
+                            if (!bar.players.contains(p)) {
                                 bar.addPlayer(p)
                             }
                             if (!bell) {
-                                p.playSound(p.getLocation(), Sound.ITEM_TRIDENT_RETURN, 2.2f, 1.3f)
+                                p.playSound(p.location, Sound.ITEM_TRIDENT_RETURN, 2.2f, 1.3f)
                                 bell = true
                             }
                         }
-                        if (!data!!.isInMatch() || !p.isOnline()) {
+                        if (!data!!.isInMatch || !p.isOnline) {
                             bar.removeAll()
                             cancel()
                         }
-                        if (!data.getIsUsingSP()) {
+                        if (!data.isUsingSP) {
                             bar.removeAll()
                             cancel()
                         }
@@ -145,11 +144,11 @@ object LitterFiveG {
                                 Shoot_LitterFiveG(p)
                             }
                         }
-                        if (player.getInventory().getItemInMainHand().getItemMeta() == null) {
+                        if (player.inventory.itemInMainHand.itemMeta == null) {
                             Hash_charge.replace(p, 0)
                             Hash_cps.replace(p, 1)
                         }
-                        val rayTrace = RayTrace(p.getEyeLocation().toVector(), p.getEyeLocation().getDirection())
+                        val rayTrace = RayTrace(p.eyeLocation.toVector(), p.eyeLocation.direction)
                         var range = Hash_charge.get(p)!!.toDouble()
                         if (range > max_charge) {
                             range = max_charge.toDouble()
@@ -157,16 +156,16 @@ object LitterFiveG {
                         val positions = rayTrace.traverse((range * 1.8).toInt().toDouble(), 0.7)
                         if (visible) {
                             check@ for (i in positions.indices) {
-                                val position = positions.get(i).toLocation(p.getLocation().getWorld()!!)
-                                if (position.getBlock().getType() != Material.AIR) {
+                                val position = positions.get(i).toLocation(p.location.world!!)
+                                if (position.block.type != Material.AIR) {
                                     break
                                 }
                                 if (i % 5 == 0) {
-                                    for (target in plugin.getServer().getOnlinePlayers()) {
+                                    for (target in plugin.server.onlinePlayers) {
                                         if (target == p) continue
-                                        if (target.getWorld() === p.getWorld()) {
+                                        if (target.world === p.world) {
                                             if (target
-                                                    .getLocation()
+                                                    .location
                                                     .distanceSquared(position) < Sclat.particleRenderDistanceSquared
                                             ) {
                                                 val dustOptions =
@@ -198,7 +197,7 @@ object LitterFiveG {
 
     @JvmStatic
     fun Shoot_LitterFiveG(player: Player) {
-        if (player.getGameMode() == GameMode.SPECTATOR || !getPlayerData(player)!!.getIsUsingSP()) return
+        if (player.gameMode == GameMode.SPECTATOR || !getPlayerData(player)!!.isUsingSP) return
         var range: Int = Hash_charge.get(player)!!
         var damage = (Hash_charge.get(player)!! / 5).toDouble()
         // 半径
@@ -212,20 +211,20 @@ object LitterFiveG {
             Hash_cps.replace(player, 1)
         }
         val reach = (range * 1.8).toInt()
-        player.getWorld().playSound(player.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_BLAST, 1f, 5f)
-        val rayTrace = RayTrace(player.getEyeLocation().toVector(), player.getEyeLocation().getDirection())
+        player.world.playSound(player.location, Sound.ENTITY_FIREWORK_ROCKET_BLAST, 1f, 5f)
+        val rayTrace = RayTrace(player.eyeLocation.toVector(), player.eyeLocation.direction)
         val positions = rayTrace.traverse((reach).toDouble(), 0.2)
         Hash_charge.replace(player, 0)
 
         loop@ for (vector in positions) {
-            val position = vector.toLocation(player.getLocation().getWorld()!!)
-            val block = player.getLocation().getWorld()!!.getBlockAt(position)
+            val position = vector.toLocation(player.location.world!!)
+            val block = player.location.world!!.getBlockAt(position)
 
-            if (block.getType() != Material.AIR) {
-                for (o_player in plugin.getServer().getOnlinePlayers()) {
+            if (block.type != Material.AIR) {
+                for (o_player in plugin.server.onlinePlayers) {
                     if (getPlayerData(o_player)!!.settings.ShowEffect_MainWeaponInk()) {
                         // 爆発音
-                        player.getWorld().playSound(position, Sound.ENTITY_GENERIC_EXPLODE, 1f, 1f)
+                        player.world.playSound(position, Sound.ENTITY_GENERIC_EXPLODE, 1f, 1f)
 
                         // 爆発エフェクト
                         createInkExplosionEffect(position, maxDist, 25, player)
@@ -245,10 +244,10 @@ object LitterFiveG {
                 break
             }
             // PaintMgr.PaintHightestBlock(position, player, false, true);
-            for (target in plugin.getServer().getOnlinePlayers()) {
+            for (target in plugin.server.onlinePlayers) {
                 if (!getPlayerData(target)!!.settings.ShowEffect_MainWeaponInk()) continue
-                if (target.getWorld() === position.getWorld()) {
-                    if (target.getLocation().distanceSquared(position) < Sclat.particleRenderDistanceSquared) {
+                if (target.world === position.world) {
+                    if (target.location.distanceSquared(position) < Sclat.particleRenderDistanceSquared) {
                         val bd =
                             getPlayerData(player)!!
                                 .team.teamColor!!
@@ -260,20 +259,20 @@ object LitterFiveG {
             }
 
             val maxDistSquad = 4.0 // 2*2
-            for (target in plugin.getServer().getOnlinePlayers()) {
-                if (!getPlayerData(target)!!.isInMatch()) continue
+            for (target in plugin.server.onlinePlayers) {
+                if (!getPlayerData(target)!!.isInMatch) continue
                 if (getPlayerData(player)!!.team != getPlayerData(target)!!.team &&
-                    target.getGameMode() == GameMode.ADVENTURE
+                    target.gameMode == GameMode.ADVENTURE
                 ) {
-                    if (target.getLocation().distanceSquared(position) <= maxDistSquad) {
+                    if (target.location.distanceSquared(position) <= maxDistSquad) {
                         if (rayTrace.intersects(BoundingBox(target as Entity), (reach).toDouble(), 0.05)) {
                             val death: Boolean
                             death = giveDamage(player, target, damage, "spWeapon")
                             if (death) {
-                                player.playSound(player.getLocation(), Sound.ENTITY_ARROW_HIT_PLAYER, 1.2f, 1.3f)
-                                player.getWorld().playSound(target.getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 1f, 1f)
+                                player.playSound(player.location, Sound.ENTITY_ARROW_HIT_PLAYER, 1.2f, 1.3f)
+                                player.world.playSound(target.location, Sound.ENTITY_GENERIC_EXPLODE, 1f, 1f)
                             } else {
-                                player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_HURT, 1.2f, 1.3f)
+                                player.playSound(player.location, Sound.ENTITY_PLAYER_HURT, 1.2f, 1.3f)
                             }
 
                             // AntiNoDamageTime
@@ -282,7 +281,7 @@ object LitterFiveG {
                                     var p: Player = target
 
                                     override fun run() {
-                                        target.setNoDamageTicks(0)
+                                        target.noDamageTicks = 0
                                     }
                                 }
                             task.runTaskLater(plugin, 1)
@@ -292,50 +291,48 @@ object LitterFiveG {
                 }
             }
 
-            for (`as` in player.getWorld().getEntities()) {
+            for (`as` in player.world.entities) {
                 if (`as` is ArmorStand) {
-                    if (`as`.getLocation().distanceSquared(position) <= maxDistSquad) {
+                    if (`as`.location.distanceSquared(position) <= maxDistSquad) {
                         if (rayTrace.intersects(
                                 BoundingBox(`as` as Entity),
                                 (reach * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP)).toInt().toDouble(),
                                 0.05,
                             )
                         ) {
-                            if (`as`.getCustomName() != null) {
-                                if (`as`.getCustomName() == "SplashShield") {
+                            if (`as`.customName != null) {
+                                if (`as`.customName == "SplashShield") {
                                     val ssdata = getSplashShieldDataFromArmorStand(`as`)
                                     if (getPlayerData(ssdata!!.player)!!.team !=
-                                        DataMgr
-                                            .getPlayerData(player)!!
+                                        getPlayerData(player)!!
                                             .team
                                     ) {
                                         ArmorStandMgr.giveDamageArmorStand(`as`, damage, player)
                                         `as`
-                                            .getWorld()
-                                            .playSound(`as`.getLocation(), Sound.ENTITY_PLAYER_HURT, 0.8f, 1.2f)
+                                            .world
+                                            .playSound(`as`.location, Sound.ENTITY_PLAYER_HURT, 0.8f, 1.2f)
                                         break@loop
                                     }
-                                } else if (`as`.getCustomName() == "Kasa") {
+                                } else if (`as`.customName == "Kasa") {
                                     val ssdata = getKasaDataFromArmorStand(`as`)
                                     if (getPlayerData(ssdata!!.player)!!.team !=
-                                        DataMgr
-                                            .getPlayerData(player)!!
+                                        getPlayerData(player)!!
                                             .team
                                     ) {
                                         ArmorStandMgr.giveDamageArmorStand(`as`, damage, player)
                                         `as`
-                                            .getWorld()
-                                            .playSound(`as`.getLocation(), Sound.ENTITY_PLAYER_HURT, 0.8f, 1.2f)
+                                            .world
+                                            .playSound(`as`.location, Sound.ENTITY_PLAYER_HURT, 0.8f, 1.2f)
                                         break@loop
                                     }
                                 } else {
-                                    if (SclatUtil.isNumber(`as`.getCustomName()!!)) {
-                                        if (`as`.getCustomName() != "21" &&
-                                            `as`.getCustomName() != "100"
+                                    if (SclatUtil.isNumber(`as`.customName!!)) {
+                                        if (`as`.customName != "21" &&
+                                            `as`.customName != "100"
                                         ) {
-                                            if (`as`.isVisible()) {
+                                            if (`as`.isVisible) {
                                                 player.playSound(
-                                                    player.getLocation(),
+                                                    player.location,
                                                     Sound.ENTITY_ARROW_HIT_PLAYER,
                                                     1.2f,
                                                     1.3f,
@@ -359,7 +356,7 @@ object LitterFiveG {
                 var p: Player = player
 
                 override fun run() {
-                    getPlayerData(p)!!.setCanUseSubWeapon(true)
+                    getPlayerData(p)!!.canUseSubWeapon = true
                 }
             }
         if (getPlayerData(player)!!.settings.ShowEffect_ChargerLine()) {

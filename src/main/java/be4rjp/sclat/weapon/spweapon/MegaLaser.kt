@@ -36,7 +36,7 @@ object MegaLaser {
     fun MegaLaserRunnable(player: Player) {
         val api = BlockStudio.getBlockStudioAPI()
         val objectData = api.getObjectData("mega")
-        val bsObject = api.createObjectFromObjectData("mega", player.getLocation(), objectData, false)
+        val bsObject = api.createObjectFromObjectData("mega", player.location, objectData, false)
         bsObject.startTaskAsync(40)
         bsObject.move()
 
@@ -48,30 +48,30 @@ object MegaLaser {
                 override fun run() {
                     if (c == 0) {
                         p.addPotionEffect(PotionEffect(PotionEffectType.SLOW, 100000, 2))
-                        p.getInventory().clear()
-                        p.getInventory().clear()
+                        p.inventory.clear()
+                        p.inventory.clear()
                         player.updateInventory()
-                        getPlayerData(p)!!.setIsUsingSP(true)
+                        getPlayerData(p)!!.isUsingSP = true
                         val item = ItemStack(Material.SHULKER_SHELL)
-                        val meta = item.getItemMeta()
+                        val meta = item.itemMeta
                         meta!!.setDisplayName("狙って右クリックで発射")
-                        item.setItemMeta(meta)
+                        item.itemMeta = meta
                         for (count in 0..8) {
-                            player.getInventory().setItem(count, item)
+                            player.inventory.setItem(count, item)
                         }
                         player.updateInventory()
 
                         getPlayerData(p)!!.setIsUsingMM(true)
                     }
 
-                    val direction = player.getEyeLocation().getDirection()
+                    val direction = player.eyeLocation.direction
                     var xz = Vector(direction.getX(), 0.0, direction.getZ())
                     if (xz.lengthSquared() == 0.0) xz = Vector(1, 0, 1)
                     val normXZ = xz.normalize()
 
-                    val objectLoc = player.getLocation().add(normXZ.getX(), 0.6, normXZ.getZ())
-                    bsObject.setBaseLocation(objectLoc)
-                    bsObject.setDirection(player.getEyeLocation().getDirection())
+                    val objectLoc = player.location.add(normXZ.getX(), 0.6, normXZ.getZ())
+                    bsObject.baseLocation = objectLoc
+                    bsObject.setDirection(player.eyeLocation.direction)
                     bsObject.move()
 
                     if (!getPlayerData(p)!!.getIsUsingMM() || c == 400) {
@@ -82,7 +82,7 @@ object MegaLaser {
                         cancel()
                     }
 
-                    if (!p.isOnline() || !getPlayerData(p)!!.isInMatch() || p.getGameMode() == GameMode.SPECTATOR) {
+                    if (!p.isOnline || !getPlayerData(p)!!.isInMatch || p.gameMode == GameMode.SPECTATOR) {
                         if (p.hasPotionEffect(PotionEffectType.SLOW)) p.removePotionEffect(PotionEffectType.SLOW)
                         getPlayerData(p)!!.setIsUsingMM(false)
                         bsObject.remove()
@@ -102,8 +102,8 @@ object MegaLaser {
         p: Float,
     ) {
         for (target in AsyncThreadManager.onlinePlayers) {
-            val loc = target!!.getLocation()
-            if (loc.getWorld() === targetLoc.getWorld()) {
+            val loc = target!!.location
+            if (loc.world === targetLoc.world) {
                 if (loc.distanceSquared(targetLoc) < 500) {
                     target.playSound(targetLoc, sound, v, p)
                 }
@@ -115,11 +115,11 @@ object MegaLaser {
         player: Player,
         bsObject: BSObject,
     ) {
-        val direction = player.getEyeLocation().getDirection().normalize()
+        val direction = player.eyeLocation.direction.normalize()
         var xz = Vector(direction.getX(), 0.0, direction.getZ())
         if (xz.lengthSquared() == 0.0) xz = Vector(1, 0, 1)
         val normXZ = xz.normalize()
-        val objectLoc = player.getLocation().add(normXZ.getX(), 0.6, normXZ.getZ())
+        val objectLoc = player.location.add(normXZ.getX(), 0.6, normXZ.getZ())
 
         val rayTrace = RayTrace(objectLoc.toVector(), direction)
         val positions: ArrayList<Vector> = rayTrace.traverse(300.0, 1.0)
@@ -136,8 +136,8 @@ object MegaLaser {
                 override fun run() {
                     // 終了処理
 
-                    if (c == 13 || !playerData!!.isInMatch() || !p.isOnline()) {
-                        playerData!!.setIsUsingSP(false)
+                    if (c == 13 || !playerData!!.isInMatch || !p.isOnline) {
+                        playerData!!.isUsingSP = false
                         for (target in AsyncThreadManager.onlinePlayers) {
                             SclatUtil.sendWorldBorderWarningClearPacket(target!!)
                         }
@@ -185,13 +185,13 @@ object MegaLaser {
                         if (i == 3) r = 3
                         if (i >= 4) r = 5
 
-                        val position = positions.get(i)!!.toLocation(objectLoc.getWorld()!!)
+                        val position = positions.get(i)!!.toLocation(objectLoc.world!!)
 
                         for (plus in plusList) {
                             val eloc = position.clone().add(plus.clone().multiply(r))
                             for (target in AsyncThreadManager.onlinePlayers) {
-                                if (p.getWorld() !== target!!.getWorld()) continue
-                                if (eloc.distanceSquared(target.getLocation()) < Sclat.particleRenderDistanceSquared) {
+                                if (p.world !== target!!.world) continue
+                                if (eloc.distanceSquared(target.location) < Sclat.particleRenderDistanceSquared) {
                                     val targetData = getPlayerData(target)
                                     if (targetData == null) continue
                                     if (targetData.settings.ShowEffect_SPWeaponRegion()) {
@@ -225,18 +225,17 @@ object MegaLaser {
                         }
 
                         // 画面エフェクト
-                        val maxDist = 5.0
                         val maxDistSquared = 25.0 // 5^2
                         // List<Player> list = new ArrayList<>();
                         if (i > 5) {
                             for (target in AsyncThreadManager.onlinePlayers) {
                                 val targetData = getPlayerData(target)
                                 if (targetData == null) continue
-                                if (!targetData.isInMatch()) continue
-                                if (target!!.getWorld() !== p.getWorld()) continue
+                                if (!targetData.isInMatch) continue
+                                if (target!!.world !== p.world) continue
                                 if (targetData.team == playerData.team) continue
                                 if (target
-                                        .getLocation()
+                                        .location
                                         .distanceSquared(position.clone().add(0.0, 1.0, 0.0)) <= maxDistSquared
                                 ) {
                                     // list.add(target);
@@ -259,21 +258,19 @@ object MegaLaser {
                             for (target in AsyncThreadManager.onlinePlayers) {
                                 val targetData = getPlayerData(target)
                                 if (targetData == null) continue
-                                if (!targetData.isInMatch()) continue
-                                if (target!!.getWorld() !== p.getWorld()) continue
+                                if (!targetData.isInMatch) continue
+                                if (target!!.world !== p.world) continue
                                 if (target
-                                        .getLocation()
+                                        .location
                                         .distanceSquared(position.clone().add(0.0, -1.0, 0.0)) <= maxDistSquared
                                 ) {
                                     if (playerData.team != targetData.team &&
-                                        target.getGameMode() == GameMode.ADVENTURE
+                                        target.gameMode == GameMode.ADVENTURE
                                     ) {
-                                        if (targetData.armor > 10000.0 && target.getGameMode() != GameMode.SPECTATOR) {
-                                            target.setVelocity(
-                                                Vector(direction.getX(), 0.0, direction.getZ()).multiply(2.0),
-                                            )
-                                            target.getWorld().playSound(
-                                                target.getLocation(),
+                                        if (targetData.armor > 10000.0 && target.gameMode != GameMode.SPECTATOR) {
+                                            target.velocity = Vector(direction.getX(), 0.0, direction.getZ()).multiply(2.0)
+                                            target.world.playSound(
+                                                target.location,
                                                 Sound.ENTITY_SPLASH_POTION_BREAK,
                                                 1f,
                                                 1.5f,
@@ -288,7 +285,7 @@ object MegaLaser {
                                                 var p: Player? = target
 
                                                 override fun run() {
-                                                    target.setNoDamageTicks(0)
+                                                    target.noDamageTicks = 0
                                                 }
                                             }
                                         task.runTaskLater(plugin, 1)
@@ -298,9 +295,9 @@ object MegaLaser {
 
                             sync(
                                 Runnable {
-                                    for (`as` in player.getWorld().getEntities()) {
+                                    for (`as` in player.world.entities) {
                                         if (`as` is ArmorStand && `as`
-                                                .getLocation()
+                                                .location
                                                 .distanceSquared(position.clone().add(0.0, -1.0, 0.0)) <= maxDistSquared
                                         ) {
                                             ArmorStandMgr.giveDamageArmorStand(`as`, damage, player)

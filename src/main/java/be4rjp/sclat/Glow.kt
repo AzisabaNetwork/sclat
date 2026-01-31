@@ -32,7 +32,7 @@ class Glow : EnchantmentWrapper("sclatg") {
 
     fun isGlowing(`is`: ItemStack): Boolean {
         enableGlow()
-        return `is`.getEnchantments().containsKey(glow)
+        return `is`.enchantments.containsKey(glow)
     }
 
     fun enableGlow() {

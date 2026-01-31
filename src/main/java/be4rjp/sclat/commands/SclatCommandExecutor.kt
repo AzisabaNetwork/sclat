@@ -84,8 +84,8 @@ class SclatCommandExecutor :
             }
 
             val playerName = args[1]
-            for (player in plugin.getServer().getOnlinePlayers()) {
-                if (playerName == player.getName()) {
+            for (player in plugin.server.onlinePlayers) {
+                if (playerName == player.name) {
                     Sclat.flyList.add(playerName)
                     return true
                 }
@@ -218,11 +218,11 @@ class SclatCommandExecutor :
             }
 
             if (sender is Player) {
-                val serverName: String? = args[1]
+                val serverName: String = args[1]
                 for (ss in ServerStatusManager.serverList) {
                     if (ss.serverName == serverName) {
                         val commands: MutableList<String?> = ArrayList<String?>()
-                        commands.add("mod " + sender.getName())
+                        commands.add("mod " + sender.name)
                         commands.add("stop")
                         // Todo: use redis. fallbacks PluginMessaging
                         val sc =
@@ -269,7 +269,7 @@ class SclatCommandExecutor :
             }
 
             if (args[1] == "mt") {
-                val server: String? = args[2]
+                val server: String = args[2]
                 for (ss in ServerStatusManager.serverList) {
                     if (ss.serverName == server) {
                         ss.isMaintenance = (args[3] == "true")
@@ -299,7 +299,7 @@ class SclatCommandExecutor :
 
             if (args[1] == "add") {
                 if (args.size < 3) return false
-                val server: String? = args[2]
+                val server: String = args[2]
                 val list = Sclat.tutorialServers?.getConfig()!!.getStringList("server-list")
                 if (!list.contains(server)) {
                     list.add(server)

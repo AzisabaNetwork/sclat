@@ -1,6 +1,5 @@
 package be4rjp.sclat.data
 
-import be4rjp.sclat.api.SclatUtil
 import be4rjp.sclat.api.SclatUtil.setBlockByNMS
 import be4rjp.sclat.api.team.Team
 import be4rjp.sclat.manager.PaintMgr
@@ -56,9 +55,9 @@ class Sponge(
         if (this.health <= 10) {
             if (this.level != 0) {
                 this.block
-                    .getLocation()
-                    .getWorld()!!
-                    .playSound(this.block.getLocation(), Sound.ITEM_BUCKET_FILL, 1f, 1f)
+                    .location
+                    .world!!
+                    .playSound(this.block.location, Sound.ITEM_BUCKET_FILL, 1f, 1f)
             }
             this.level = 0
         }
@@ -66,18 +65,18 @@ class Sponge(
         if (this.health > 10 && this.health < 25) {
             if (this.level != 1) {
                 this.block
-                    .getLocation()
-                    .getWorld()!!
-                    .playSound(this.block.getLocation(), Sound.ITEM_BUCKET_FILL, 1f, 1f)
+                    .location
+                    .world!!
+                    .playSound(this.block.location, Sound.ITEM_BUCKET_FILL, 1f, 1f)
             }
             this.level = 1
         }
         if (this.health >= 25) {
             if (this.level != 2) {
                 this.block
-                    .getLocation()
-                    .getWorld()!!
-                    .playSound(this.block.getLocation(), Sound.ITEM_BUCKET_FILL, 1f, 1f)
+                    .location
+                    .world!!
+                    .playSound(this.block.location, Sound.ITEM_BUCKET_FILL, 1f, 1f)
             }
             this.level = 2
         }
@@ -92,7 +91,7 @@ class Sponge(
         // Block reset
         val rb: MutableList<Block> = PaintMgr.getCubeBlocks(block, 2)
         for (b in rb) {
-            if (b.getType() == Material.AIR || b.getType().toString().contains("POWDER")) {
+            if (b.type == Material.AIR || b.type.toString().contains("POWDER")) {
                 if (DataMgr.blockDataMap.containsKey(b)) {
                     val data = DataMgr.getPaintDataFromBlock(b)
                     data?.team = this.team
@@ -102,7 +101,7 @@ class Sponge(
                 } else {
                     val data = PaintData(b)
                     data.match = match
-                    data.setOrigianlType(b.getType())
+                    data.setOrigianlType(b.type)
                     data.team = this.team
                     // match.getBlockUpdater().setBlock(b, Material.AIR);
                     setBlockByNMS(b, Material.AIR, true)
@@ -115,13 +114,13 @@ class Sponge(
 
         val blocks: MutableList<Block> = PaintMgr.getCubeBlocks(block, level)
         for (b in blocks) {
-            if (b.getType() == Material.AIR || b.getType().toString().contains("POWDER")) {
+            if (b.type == Material.AIR || b.type.toString().contains("POWDER")) {
                 val data = DataMgr.getPaintDataFromBlock(b)
                 data?.team = this.team
                 // match.getBlockUpdater().setBlock(b,
                 // Material.getMaterial(this.team.getTeamColor().getConcrete().toString() +
                 // "_POWDER"));
-                SclatUtil.setBlockByNMS(
+                setBlockByNMS(
                     b,
                     Material.getMaterial(
                         this.team!!

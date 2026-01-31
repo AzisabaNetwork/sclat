@@ -16,7 +16,7 @@ object EquipmentServerManager {
     @JvmStatic
     fun doCommands() {
         for (cmd in commands) {
-            val args: Array<String?>? = cmd.split(" ".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+            val args: Array<String?> = cmd.split(" ".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
 
             when (args!![0]) {
                 "set" -> {
@@ -25,21 +25,20 @@ object EquipmentServerManager {
                         if (args[3]!!.length == 36) {
                             when (args[1]) {
                                 "weapon" -> for (player in plugin
-                                    .getServer()
-                                    .getOnlinePlayers()) {
+                                    .server
+                                    .onlinePlayers) {
                                     if (player
-                                            .getUniqueId()
+                                            .uniqueId
                                             .toString() == args[3]
                                     ) {
-                                        getPlayerData(player)!!
-                                            .setWeaponClass(getWeaponClass(args[2]))
+                                        getPlayerData(player)!!.weaponClass = getWeaponClass(args[2])
                                     }
                                 }
 
                                 "gear" -> for (player in plugin
-                                    .getServer()
-                                    .getOnlinePlayers()) {
-                                    if (player.getUniqueId().toString() == args[3] &&
+                                    .server
+                                    .onlinePlayers) {
+                                    if (player.uniqueId.toString() == args[3] &&
                                         SclatUtil.isNumber(args[2]!!)
                                     ) {
                                         getPlayerData(player)!!.gearNumber = args[2]!!.toInt()

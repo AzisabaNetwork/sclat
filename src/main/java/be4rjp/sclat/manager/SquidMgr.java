@@ -40,7 +40,7 @@ import static be4rjp.sclat.Sclat.conf;
 public class SquidMgr {
 	public static void SquidRunnable(Player player) {
 		BukkitRunnable task = new BukkitRunnable() {
-			Player p = player;
+			final Player p = player;
 			boolean is = false;
 			boolean is2 = true;
 			int i = 0;
@@ -271,15 +271,15 @@ public class SquidMgr {
 		 */
 
 		BukkitRunnable task = new BukkitRunnable() {
-			Player p = player;
+			final Player p = player;
 			boolean is = false;
 			boolean is2 = true;
 			boolean is3 = false;
 			boolean is4 = true;
 			boolean set = false;
-			boolean death = false;
-			net.minecraft.server.v1_14_R1.World nmsWorld = ((CraftWorld) p.getWorld()).getHandle();
-			EntitySquid es = new EntitySquid(EntityTypes.SQUID, nmsWorld);
+			final boolean death = false;
+			final net.minecraft.server.v1_14_R1.World nmsWorld = ((CraftWorld) p.getWorld()).getHandle();
+			final EntitySquid es = new EntitySquid(EntityTypes.SQUID, nmsWorld);
 
 			@Override
 			public void run() {
@@ -422,7 +422,7 @@ public class SquidMgr {
 
 	public static void PoisonCoolTime(Player player) {
 		BukkitRunnable task = new BukkitRunnable() {
-			Player p = player;
+			final Player p = player;
 			@Override
 			public void run() {
 				DataMgr.getPlayerData(p).setIsPoisonCoolTime(false);

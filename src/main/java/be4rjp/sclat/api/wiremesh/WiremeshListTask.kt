@@ -30,12 +30,12 @@ class WiremeshListTask(
 
         for (block in list) {
             if (!blockList.contains(block) && (
-                    (block.getType() == Material.IRON_TRAPDOOR && trapDoor) ||
-                        (block.getType() == Material.IRON_BARS && ironBars) ||
-                        (block.getType().toString().contains("FENCE") && fence)
+                    (block.type == Material.IRON_TRAPDOOR && trapDoor) ||
+                        (block.type == Material.IRON_BARS && ironBars) ||
+                        (block.type.toString().contains("FENCE") && fence)
                     )
             ) {
-                val bData = block.getBlockData()
+                val bData = block.blockData
                 blockDataMap.put(block, bData)
                 blockList.add(block)
             }
@@ -44,7 +44,7 @@ class WiremeshListTask(
         // Wiremeshを作成してタスクを実行
         for (block in blockList) {
             val bData = blockDataMap.get(block)
-            val wm = Wiremesh(block, block.getType(), bData!!)
+            val wm = Wiremesh(block, block.type, bData!!)
             wiremeshsList.add(wm)
         }
     }

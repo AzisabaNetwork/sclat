@@ -50,26 +50,26 @@ class SnowballListener : Listener {
         if (Sclat.type == ServerType.LOBBY) return
 
         // EntityDamage
-        if (event.getHitEntity() != null) {
+        if (event.hitEntity != null) {
             if (snowballIsHitMap.containsKey(event.getEntity() as Snowball)) {
                 setSnowballIsHit(event.getEntity() as Snowball, true)
-                if (event.getEntity().getCustomName() != null) {
-                    if (event.getEntity().getCustomName() == "JetPack" ||
-                        event.getEntity().getCustomName() == "SuperShot"
+                if (event.getEntity().customName != null) {
+                    if (event.getEntity().customName == "JetPack" ||
+                        event.getEntity().customName == "SuperShot"
                     ) {
                         val projectile = event.getEntity()
-                        val shooter = projectile.getShooter() as Player?
-                        if (event.getHitEntity() is Player) {
-                            val target = event.getHitEntity() as Player?
+                        val shooter = projectile.shooter as Player?
+                        if (event.hitEntity is Player) {
+                            val target = event.hitEntity as Player?
                             if (getPlayerData(shooter)!!.team != getPlayerData(target)!!.team &&
-                                target!!.getGameMode() == GameMode.ADVENTURE
+                                target!!.gameMode == GameMode.ADVENTURE
                             ) {
-                                if (!getPlayerData(shooter)!!.getIsUsingSP()) SPWeaponMgr.addSPCharge(shooter)
+                                if (!getPlayerData(shooter)!!.isUsingSP) SPWeaponMgr.addSPCharge(shooter)
 
-                                SclatUtil.giveDamage(shooter, target, 47.0, "spWeapon")
+                                giveDamage(shooter, target, 47.0, "spWeapon")
                             }
-                        } else if (event.getHitEntity() is ArmorStand) {
-                            val `as` = event.getHitEntity() as ArmorStand?
+                        } else if (event.hitEntity is ArmorStand) {
+                            val `as` = event.hitEntity as ArmorStand?
                             ArmorStandMgr.giveDamageArmorStand(`as`, 20.0, shooter)
                         }
                     }
@@ -77,92 +77,92 @@ class SnowballListener : Listener {
             } else {
                 val projectile = event.getEntity()
                 val shooter = projectile.shooter as Player
-                if (event.getHitEntity() is Player) {
+                if (event.hitEntity is Player) {
                     val target = event.hitEntity as Player
                     if (getPlayerData(shooter)!!.team != getPlayerData(target)!!.team &&
-                        target.getGameMode() == GameMode.ADVENTURE
+                        target.gameMode == GameMode.ADVENTURE
                     ) {
-                        if (!getPlayerData(shooter)!!.getIsUsingSP()) SPWeaponMgr.addSPCharge(shooter)
+                        if (!getPlayerData(shooter)!!.isUsingSP) SPWeaponMgr.addSPCharge(shooter)
                         if (getPlayerData(target)!!.armor > 0) {
-                            target.getWorld().playSound(
-                                target.getLocation(),
+                            target.world.playSound(
+                                target.location,
                                 Sound.ENTITY_SPLASH_POTION_BREAK,
                                 1f,
                                 1.5f,
                             )
                             if (getPlayerData(target)!!.armor > 10000) {
-                                val vec = projectile.getVelocity()
+                                val vec = projectile.velocity
                                 val v = Vector(vec.getX(), 0.0, vec.getZ()).normalize()
-                                target.setVelocity(Vector(v.getX(), 0.2, v.getZ()).multiply(0.33))
+                                target.velocity = Vector(v.getX(), 0.2, v.getZ()).multiply(0.33)
                             }
                         }
-                        if (projectile.getCustomName() != null) {
-                            if (projectile.getCustomName() == "Sprinkler" ||
-                                projectile.getCustomName() == "Amehurasi"
+                        if (projectile.customName != null) {
+                            if (projectile.customName == "Sprinkler" ||
+                                projectile.customName == "Amehurasi"
                             ) {
-                                if (projectile.getCustomName() == "Sprinkler") {
-                                    SclatUtil.giveDamage(
+                                if (projectile.customName == "Sprinkler") {
+                                    giveDamage(
                                         shooter,
                                         target,
                                         4.0,
                                         "subWeapon",
                                     )
-                                } else if (projectile.getCustomName() == "Amehurasi") {
-                                    SclatUtil.giveDamage(
+                                } else if (projectile.customName == "Amehurasi") {
+                                    giveDamage(
                                         shooter,
                                         target,
                                         4.0,
                                         "spWeapon",
                                     )
                                 }
-                                PaintMgr.Paint(target.getLocation(), shooter, true)
+                                PaintMgr.Paint(target.location, shooter, true)
                             }
 
-                            if (projectile.getCustomName() == "SuperShot") {
-                                shooter!!.playSound(shooter.getLocation(), Sound.ENTITY_PLAYER_HURT, 0.5f, 1f)
-                                SclatUtil.giveDamage(shooter, target, 47.0, "spWeapon")
+                            if (projectile.customName == "SuperShot") {
+                                shooter!!.playSound(shooter.location, Sound.ENTITY_PLAYER_HURT, 0.5f, 1f)
+                                giveDamage(shooter, target, 47.0, "spWeapon")
                             }
-                            if (projectile.getCustomName()!!.contains("#QuadroArmsSpinner")) {
-                                shooter!!.playSound(shooter.getLocation(), Sound.ENTITY_PLAYER_HURT, 0.5f, 1f)
+                            if (projectile.customName!!.contains("#QuadroArmsSpinner")) {
+                                shooter!!.playSound(shooter.location, Sound.ENTITY_PLAYER_HURT, 0.5f, 1f)
                                 var Quadrodamage = 1.0
-                                var QuadroticksLived = projectile.getTicksLived().toDouble() * 12.5
+                                var QuadroticksLived = projectile.ticksLived.toDouble() * 12.5
                                 if (QuadroticksLived > 60) QuadroticksLived = 60.0
                                 Quadrodamage += Quadrodamage * (QuadroticksLived / 30)
-                                SclatUtil.giveDamage(shooter, target, Quadrodamage, "spWeapon")
+                                giveDamage(shooter, target, Quadrodamage, "spWeapon")
                                 return
                             }
-                            if (projectile.getCustomName()!!.contains("#QuadroArmsShotgun")) {
-                                shooter!!.playSound(shooter.getLocation(), Sound.ENTITY_PLAYER_HURT, 0.5f, 1f)
+                            if (projectile.customName!!.contains("#QuadroArmsShotgun")) {
+                                shooter!!.playSound(shooter.location, Sound.ENTITY_PLAYER_HURT, 0.5f, 1f)
                                 var Quadrodamage = 9.0
-                                var QuadroticksLived = projectile.getTicksLived().toDouble() * 10
+                                var QuadroticksLived = projectile.ticksLived.toDouble() * 10
                                 if (QuadroticksLived > 30) QuadroticksLived = 30.0
                                 Quadrodamage -= Quadrodamage * (QuadroticksLived / 100)
-                                if (projectile.getCustomName()!!.contains("CounterShot")) {
+                                if (projectile.customName!!.contains("CounterShot")) {
                                     Quadrodamage = 6.5
                                 }
-                                SclatUtil.giveDamage(shooter, target, Quadrodamage, "spWeapon")
+                                giveDamage(shooter, target, Quadrodamage, "spWeapon")
                                 return
                             }
 
-                            if (DataMgr.mws.contains(projectile.getCustomName())) {
+                            if (DataMgr.mws.contains(projectile.customName)) {
                                 var dmgDouble = 1.0
-                                if (DataMgr.tsl.contains(projectile.getCustomName())) {
-                                    if (projectile.getCustomName()!!.contains("#slided")) {
+                                if (DataMgr.tsl.contains(projectile.customName)) {
+                                    if (projectile.customName!!.contains("#slided")) {
                                         dmgDouble =
                                             getPlayerData(shooter)!!
-                                                .getWeaponClass()
+                                                .weaponClass
                                                 .mainWeapon!!
                                                 .decreaseRate
-                                    } else if (!projectile.getCustomName()!!.contains(":")) {
+                                    } else if (!projectile.customName!!.contains(":")) {
                                         shooter!!.playSound(
-                                            shooter.getLocation(),
+                                            shooter.location,
                                             Sound.ENTITY_ARROW_HIT_PLAYER,
                                             1.2f,
                                             1.3f,
                                         )
                                         shooter.spawnParticle(
                                             Particle.FLASH,
-                                            projectile.getLocation(),
+                                            projectile.location,
                                             1,
                                             0.1,
                                             0.1,
@@ -170,9 +170,9 @@ class SnowballListener : Listener {
                                             0.1,
                                         )
                                     } else {
-                                        val args: Array<String?>? =
+                                        val args: Array<String?> =
                                             projectile
-                                                .getCustomName()!!
+                                                .customName!!
                                                 .split(":".toRegex())
                                                 .dropLastWhile { it.isEmpty() }
                                                 .toTypedArray()
@@ -188,19 +188,19 @@ class SnowballListener : Listener {
 
                                         if (DataMgr.oto.get(args[2]) ==
                                             getPlayerData(shooter)!!
-                                                .getWeaponClass()
+                                                .weaponClass
                                                 .mainWeapon!!
                                                 .rollerShootQuantity
                                         ) {
                                             shooter!!.playSound(
-                                                shooter.getLocation(),
+                                                shooter.location,
                                                 Sound.ENTITY_ARROW_HIT_PLAYER,
                                                 1.2f,
                                                 1.3f,
                                             )
                                             shooter.spawnParticle(
                                                 Particle.FLASH,
-                                                projectile.getLocation(),
+                                                projectile.location,
                                                 1,
                                                 0.1,
                                                 0.1,
@@ -210,15 +210,15 @@ class SnowballListener : Listener {
                                         }
                                     }
                                 }
-                                shooter!!.playSound(shooter.getLocation(), Sound.ENTITY_PLAYER_HURT, 0.5f, 1f)
-                                if (projectile.getCustomName()!!.contains("#slided")) {
+                                shooter!!.playSound(shooter.location, Sound.ENTITY_PLAYER_HURT, 0.5f, 1f)
+                                if (projectile.customName!!.contains("#slided")) {
                                     dmgDouble =
                                         getPlayerData(shooter)!!
-                                            .getWeaponClass()
+                                            .weaponClass
                                             .mainWeapon!!
                                             .decreaseRate
                                 }
-                                var damage = getPlayerData(shooter)!!.getWeaponClass().mainWeapon!!.damage
+                                var damage = getPlayerData(shooter)!!.weaponClass.mainWeapon!!.damage
                                 if (dmgDouble != 1.0) {
                                     damage = damage * dmgDouble
                                 } else {
@@ -226,12 +226,12 @@ class SnowballListener : Listener {
                                 }
                                 val type =
                                     getPlayerData(shooter)!!
-                                        .getWeaponClass()
+                                        .weaponClass
                                         .mainWeapon!!
                                         .weaponType
 
                                 if (type != "Blaster") {
-                                    var ticksLived = projectile.getTicksLived().toDouble() * 1.2
+                                    var ticksLived = projectile.ticksLived.toDouble() * 1.2
                                     if (ticksLived > 20.0) ticksLived = 20.0
                                     damage -= damage * (ticksLived / 100)
                                 }
@@ -242,7 +242,7 @@ class SnowballListener : Listener {
                                     }
                                 }
 
-                                SclatUtil.giveDamage(shooter, target, damage, "killed")
+                                giveDamage(shooter, target, damage, "killed")
                             }
                         }
                         // AntiNoDamageTime
@@ -251,7 +251,7 @@ class SnowballListener : Listener {
                                 var p: Player? = target
 
                                 override fun run() {
-                                    target.setNoDamageTicks(0)
+                                    target.noDamageTicks = 0
                                 }
                             }
                         task.runTaskLater(plugin, 1)
@@ -263,7 +263,7 @@ class SnowballListener : Listener {
 
                                 override fun run() {
                                     try {
-                                        target.setNoDamageTicks(0)
+                                        target.noDamageTicks = 0
                                         timer.cancel()
                                     } catch (e: Exception) {
                                         timer.cancel()
@@ -272,31 +272,31 @@ class SnowballListener : Listener {
                             }
                         timer.schedule(t, 25)
                     }
-                } else if (event.getHitEntity() is ArmorStand) {
-                    val `as` = event.getHitEntity() as ArmorStand?
+                } else if (event.hitEntity is ArmorStand) {
+                    val `as` = event.hitEntity as ArmorStand?
                     var dmgDouble = 1.0
-                    if (projectile.getCustomName() != null) {
-                        if (DataMgr.mws.contains(projectile.getCustomName())) {
-                            if (DataMgr.tsl.contains(projectile.getCustomName())) {
-                                if (SclatUtil.isNumber(`as`!!.getCustomName()!!)) {
-                                    if (`as`.getCustomName() != "21" && `as`.getCustomName() != "100") {
-                                        if (`as`.isVisible()) {
-                                            if (projectile.getCustomName()!!.contains("#slided")) {
+                    if (projectile.customName != null) {
+                        if (DataMgr.mws.contains(projectile.customName)) {
+                            if (DataMgr.tsl.contains(projectile.customName)) {
+                                if (SclatUtil.isNumber(`as`!!.customName!!)) {
+                                    if (`as`.customName != "21" && `as`.customName != "100") {
+                                        if (`as`.isVisible) {
+                                            if (projectile.customName!!.contains("#slided")) {
                                                 dmgDouble =
                                                     getPlayerData(shooter)!!
-                                                        .getWeaponClass()
+                                                        .weaponClass
                                                         .mainWeapon!!
                                                         .decreaseRate
-                                            } else if (!projectile.getCustomName()!!.contains(":")) {
+                                            } else if (!projectile.customName!!.contains(":")) {
                                                 shooter!!.playSound(
-                                                    shooter.getLocation(),
+                                                    shooter.location,
                                                     Sound.ENTITY_ARROW_HIT_PLAYER,
                                                     1.2f,
                                                     1.3f,
                                                 )
                                                 shooter.spawnParticle(
                                                     Particle.FLASH,
-                                                    projectile.getLocation(),
+                                                    projectile.location,
                                                     1,
                                                     0.1,
                                                     0.1,
@@ -304,9 +304,9 @@ class SnowballListener : Listener {
                                                     0.1,
                                                 )
                                             } else {
-                                                val args: Array<String?>? =
+                                                val args: Array<String?> =
                                                     projectile
-                                                        .getCustomName()!!
+                                                        .customName!!
                                                         .split(":".toRegex())
                                                         .dropLastWhile { it.isEmpty() }
                                                         .toTypedArray()
@@ -322,19 +322,19 @@ class SnowballListener : Listener {
 
                                                 if (DataMgr.oto.get(args[2]) ==
                                                     getPlayerData(shooter)!!
-                                                        .getWeaponClass()
+                                                        .weaponClass
                                                         .mainWeapon!!
                                                         .rollerShootQuantity
                                                 ) {
                                                     shooter!!.playSound(
-                                                        shooter.getLocation(),
+                                                        shooter.location,
                                                         Sound.ENTITY_ARROW_HIT_PLAYER,
                                                         1.2f,
                                                         1.3f,
                                                     )
                                                     shooter.spawnParticle(
                                                         Particle.FLASH,
-                                                        projectile.getLocation(),
+                                                        projectile.location,
                                                         1,
                                                         0.1,
                                                         0.1,
@@ -351,75 +351,73 @@ class SnowballListener : Listener {
                             }
                         }
 
-                        if (projectile.getCustomName() == "SuperShot") {
+                        if (projectile.customName == "SuperShot") {
                             ArmorStandMgr.giveDamageArmorStand(`as`, 20.0, shooter)
                             return
                         }
-                        if (projectile.getCustomName()!!.contains("#QuadroArmsSpinner")) {
+                        if (projectile.customName!!.contains("#QuadroArmsSpinner")) {
                             var Quadrodamage = 1.0
-                            var QuadroticksLived = projectile.getTicksLived().toDouble() * 12.5
+                            var QuadroticksLived = projectile.ticksLived.toDouble() * 12.5
                             if (QuadroticksLived > 60) QuadroticksLived = 60.0
                             Quadrodamage += Quadrodamage * (QuadroticksLived / 30)
                             ArmorStandMgr.giveDamageArmorStand(`as`, Quadrodamage, shooter)
                             dmgDouble = 0.0
                         }
-                        if (projectile.getCustomName()!!.contains("#QuadroArmsShotgun")) {
+                        if (projectile.customName!!.contains("#QuadroArmsShotgun")) {
                             var Quadrodamage = 9.0
-                            var QuadroticksLived = projectile.getTicksLived().toDouble() * 10
+                            var QuadroticksLived = projectile.ticksLived.toDouble() * 10
                             if (QuadroticksLived > 30) QuadroticksLived = 30.0
                             Quadrodamage -= Quadrodamage * (QuadroticksLived / 100)
-                            if (projectile.getCustomName()!!.contains("CounterShot")) {
+                            if (projectile.customName!!.contains("CounterShot")) {
                                 Quadrodamage = 6.5
                             }
                             ArmorStandMgr.giveDamageArmorStand(`as`, Quadrodamage, shooter)
                             dmgDouble = 0.0
                         }
-                        if (projectile.getCustomName() == "JetPack") {
+                        if (projectile.customName == "JetPack") {
                             ArmorStandMgr.giveDamageArmorStand(`as`, 20.0, shooter)
                             return
                         }
                     }
-                    if (`as`!!.getCustomName() != null) {
-                        if ((`as`.getCustomName() != "Path") && (`as`.getCustomName() != "21") && (`as`.getCustomName() != "100") &&
-                            (`as`.getCustomName() != "SplashShield") &&
-                            (`as`.getCustomName() != "Kasa")
+                    if (`as`!!.customName != null) {
+                        if ((`as`.customName != "Path") && (`as`.customName != "21") && (`as`.customName != "100") &&
+                            (`as`.customName != "SplashShield") &&
+                            (`as`.customName != "Kasa")
                         ) {
-                            shooter!!.playSound(shooter.getLocation(), Sound.ENTITY_PLAYER_HURT, 0.5f, 1f)
+                            shooter!!.playSound(shooter.location, Sound.ENTITY_PLAYER_HURT, 0.5f, 1f)
                         }
                     }
-                    var damage = getPlayerData(shooter)!!.getWeaponClass().mainWeapon!!.damage
+                    var damage = getPlayerData(shooter)!!.weaponClass.mainWeapon!!.damage
                     if (dmgDouble != 1.0) {
                         damage = damage * dmgDouble
                     } else {
                         damage = damage * Gear.getGearInfluence(shooter, Gear.Type.MAIN_SPEC_UP)
                     }
-                    val type = getPlayerData(shooter)!!.getWeaponClass().mainWeapon!!.weaponType
+                    val type = getPlayerData(shooter)!!.weaponClass.mainWeapon!!.weaponType
 
                     if (type != "Blaster") {
-                        var ticksLived = projectile.getTicksLived().toDouble() * 1.2
+                        var ticksLived = projectile.ticksLived.toDouble() * 1.2
                         if (ticksLived > 20.0) ticksLived = 20.0
                         damage -= damage * (ticksLived / 100)
                     }
                     if (type == "Blaster") {
                         try {
-                            if (`as`.getCustomName() != null) {
-                                if (`as`.getCustomName() == "Kasa") {
+                            if (`as`.customName != null) {
+                                if (`as`.customName == "Kasa") {
                                     val kasaData = getKasaDataFromArmorStand(`as` as ArmorStand)
                                     if (getPlayerData(kasaData!!.player)!!.team !=
-                                        DataMgr
-                                            .getPlayerData(shooter)!!
+                                        getPlayerData(shooter)!!
                                             .team
                                     ) {
-                                        Blaster.Explode(shooter, `as`.getLocation().add(Vector(0.0, 1.0, 0.0)))
+                                        Blaster.Explode(shooter, `as`.location.add(Vector(0.0, 1.0, 0.0)))
                                     }
-                                } else if (`as`.getCustomName() == "SplashShield") {
+                                } else if (`as`.customName == "SplashShield") {
                                     val splashShieldData = getSplashShieldDataFromArmorStand(`as` as ArmorStand)
                                     if (getPlayerData(splashShieldData!!.player)!!.team !=
-                                        DataMgr
-                                            .getPlayerData(shooter)!!
+                                        getPlayerData(shooter)!!
                                             .team
                                     ) {
-                                        Blaster.Explode(shooter, `as`.getLocation().add(Vector(0.0, 1.0, 0.0)))
+                                        Blaster.Explode(shooter, `as`.location.add(Vector(0.0, 1.0, 0.0)))
                                     }
                                 }
                             }
@@ -427,10 +425,10 @@ class SnowballListener : Listener {
                         }
                     }
                     if (type == "Funnel") {
-                        if (`as`.getCustomName() != null && (`as`.getCustomName() != "Path") && (`as`.getCustomName() != "21") &&
-                            (`as`.getCustomName() != "100") &&
-                            (`as`.getCustomName() != "SplashShield") &&
-                            (`as`.getCustomName() != "Kasa")
+                        if (`as`.customName != null && (`as`.customName != "Path") && (`as`.customName != "21") &&
+                            (`as`.customName != "100") &&
+                            (`as`.customName != "SplashShield") &&
+                            (`as`.customName != "Kasa")
                         ) {
                             damage = damage + Funnel.funnelPursuit(shooter, `as`)
                             if (damage < 0.1) {
@@ -445,49 +443,49 @@ class SnowballListener : Listener {
 
         // Other
         if (snowballIsHitMap.containsKey(event.getEntity() as Snowball)) {
-            if (event.getEntity().getCustomName() == null) {
+            if (event.getEntity().customName == null) {
                 setSnowballIsHit(event.getEntity() as Snowball, true)
             } else {
-                if (event.getHitBlock() != null) {
+                if (event.hitBlock != null) {
                     setSnowballIsHit(event.getEntity() as Snowball, true)
                 }
-                if (event.getHitEntity() != null) {
-                    if (event.getEntity().getCustomName() == null) {
+                if (event.hitEntity != null) {
+                    if (event.getEntity().customName == null) {
                         setSnowballIsHit(event.getEntity() as Snowball, true)
                     } else {
-                        if (event.getEntity().getCustomName() == "JetPack") {
+                        if (event.getEntity().customName == "JetPack") {
                             setSnowballIsHit(event.getEntity() as Snowball, true)
                             return
                         }
-                        if (event.getEntity().getCustomName()!!.contains("#QuadroArmsSpinner")) {
+                        if (event.getEntity().customName!!.contains("#QuadroArmsSpinner")) {
                             setSnowballIsHit(event.getEntity() as Snowball, true)
                             return
                         }
-                        if (event.getEntity().getCustomName()!!.contains("#QuadroArmsShotgun")) {
+                        if (event.getEntity().customName!!.contains("#QuadroArmsShotgun")) {
                             setSnowballIsHit(event.getEntity() as Snowball, true)
                             return
                         }
-                        if (event.getEntity().getCustomName() == "SuperShot") return
+                        if (event.getEntity().customName == "SuperShot") return
                         val ball = event.getEntity() as Snowball
-                        val vec = ball.getVelocity()
-                        val loc = ball.getLocation()
+                        val vec = ball.velocity
+                        val loc = ball.location
                         val ball2 =
-                            ball.getWorld().spawnEntity(
+                            ball.world.spawnEntity(
                                 Location(
-                                    loc.getWorld(),
-                                    loc.getX() + vec.getX(),
-                                    loc.getY() + vec.getY(),
-                                    loc.getZ() + vec.getZ(),
+                                    loc.world,
+                                    loc.x + vec.getX(),
+                                    loc.y + vec.getY(),
+                                    loc.z + vec.getZ(),
                                 ),
                                 EntityType.SNOWBALL,
                             ) as Snowball
-                        ball2.setVelocity(vec)
-                        ball2.setCustomName(ball.getCustomName())
-                        snowballNameMap.put(ball.getCustomName(), ball2)
+                        ball2.velocity = vec
+                        ball2.customName = ball.customName
+                        snowballNameMap.put(ball.customName, ball2)
                         setSnowballIsHit(ball2, false)
-                        for (o_player in plugin.getServer().getOnlinePlayers()) {
-                            val connection = (o_player as CraftPlayer).getHandle().playerConnection
-                            connection.sendPacket(PacketPlayOutEntityDestroy(ball2.getEntityId()))
+                        for (o_player in plugin.server.onlinePlayers) {
+                            val connection = (o_player as CraftPlayer).handle.playerConnection
+                            connection.sendPacket(PacketPlayOutEntityDestroy(ball2.entityId))
                         }
                     }
                 }
@@ -496,88 +494,84 @@ class SnowballListener : Listener {
         }
 
         if (event.getEntity() is Snowball) {
-            if (event.getHitEntity() != null) {
-                if (event.getEntity().getCustomName() != null) {
-                    if (mainSnowballNameMap.containsKey(event.getEntity().getCustomName())) {
-                        if (event.getHitEntity() is ArmorStand) {
-                            if (event.getHitEntity()!!.getCustomName() != null) {
-                                if (event.getHitEntity()!!.getCustomName() == "SplashShield") {
-                                    val ssdata = getSplashShieldDataFromArmorStand(event.getHitEntity() as ArmorStand?)
+            if (event.hitEntity != null) {
+                if (event.getEntity().customName != null) {
+                    if (mainSnowballNameMap.containsKey(event.getEntity().customName)) {
+                        if (event.hitEntity is ArmorStand) {
+                            if (event.hitEntity!!.customName != null) {
+                                if (event.hitEntity!!.customName == "SplashShield") {
+                                    val ssdata = getSplashShieldDataFromArmorStand(event.hitEntity as ArmorStand?)
                                     val ball = event.getEntity() as Snowball
-                                    val shooter = ball.getShooter() as Player?
+                                    val shooter = ball.shooter as Player?
                                     // if(DataMgr.getPlayerData(ssdata.player).getTeam() !=
                                     // DataMgr.getPlayerData(shooter).getTeam())
                                     // ssdata.setDamage(ssdata.damage +
                                     // DataMgr.getPlayerData(shooter).getWeaponClass().getMainWeapon().damage);
                                     if (getPlayerData(ssdata!!.player)!!.team !=
-                                        DataMgr
-                                            .getPlayerData(shooter)!!
+                                        getPlayerData(shooter)!!
                                             .team
                                     ) {
                                         return
                                     }
-                                    val vec = ball.getVelocity()
-                                    val loc = ball.getLocation()
+                                    val vec = ball.velocity
+                                    val loc = ball.location
                                     val ball2 =
-                                        ball.getWorld().spawnEntity(
+                                        ball.world.spawnEntity(
                                             Location(
-                                                loc.getWorld(),
-                                                loc.getX() + vec.getX(),
-                                                loc.getY() + vec.getY(),
-                                                loc.getZ() + vec.getZ(),
+                                                loc.world,
+                                                loc.x + vec.getX(),
+                                                loc.y + vec.getY(),
+                                                loc.z + vec.getZ(),
                                             ),
                                             EntityType.SNOWBALL,
                                         ) as Snowball
-                                    (ball2 as CraftSnowball).getHandle().setItem(
+                                    (ball2 as CraftSnowball).handle.item =
                                         CraftItemStack.asNMSCopy(
                                             ItemStack(getPlayerData(shooter)!!.team.teamColor!!.wool!!),
-                                        ),
-                                    )
-                                    ball2.setShooter(shooter)
-                                    ball2.setVelocity(vec)
-                                    ball2.setCustomName(ball.getCustomName())
+                                        )
+                                    ball2.shooter = shooter
+                                    ball2.velocity = vec
+                                    ball2.customName = ball.customName
                                     // if(!DataMgr.getPlayerData(shooter).getWeaponClass().getMainWeapon().getWeaponType().equals("Blaster"))
-                                    addSnowballHitCount(ball.getCustomName())
-                                    mainSnowballNameMap.put(ball.getCustomName(), ball2)
+                                    addSnowballHitCount(ball.customName)
+                                    mainSnowballNameMap.put(ball.customName, ball2)
                                 }
-                                if (event.getHitEntity()!!.getCustomName() == "Kasa") {
-                                    val ssdata = getKasaDataFromArmorStand(event.getHitEntity() as ArmorStand?)
+                                if (event.hitEntity!!.customName == "Kasa") {
+                                    val ssdata = getKasaDataFromArmorStand(event.hitEntity as ArmorStand?)
                                     val ball = event.getEntity() as Snowball
-                                    val shooter = ball.getShooter() as Player?
+                                    val shooter = ball.shooter as Player?
                                     // if(DataMgr.getPlayerData(ssdata.player).getTeam() !=
                                     // DataMgr.getPlayerData(shooter).getTeam())
                                     // ssdata.setDamage(ssdata.damage +
                                     // DataMgr.getPlayerData(shooter).getWeaponClass().getMainWeapon().damage);
                                     if (getPlayerData(ssdata!!.player)!!.team !=
-                                        DataMgr
-                                            .getPlayerData(shooter)!!
+                                        getPlayerData(shooter)!!
                                             .team
                                     ) {
                                         return
                                     }
-                                    val vec = ball.getVelocity()
-                                    val loc = ball.getLocation()
+                                    val vec = ball.velocity
+                                    val loc = ball.location
                                     val ball2 =
-                                        ball.getWorld().spawnEntity(
+                                        ball.world.spawnEntity(
                                             Location(
-                                                loc.getWorld(),
-                                                loc.getX() + vec.getX(),
-                                                loc.getY() + vec.getY(),
-                                                loc.getZ() + vec.getZ(),
+                                                loc.world,
+                                                loc.x + vec.getX(),
+                                                loc.y + vec.getY(),
+                                                loc.z + vec.getZ(),
                                             ),
                                             EntityType.SNOWBALL,
                                         ) as Snowball
-                                    (ball2 as CraftSnowball).getHandle().setItem(
+                                    (ball2 as CraftSnowball).handle.item =
                                         CraftItemStack.asNMSCopy(
                                             ItemStack(getPlayerData(shooter)!!.team.teamColor!!.wool!!),
-                                        ),
-                                    )
-                                    ball2.setShooter(shooter)
-                                    ball2.setVelocity(vec)
-                                    ball2.setCustomName(ball.getCustomName())
+                                        )
+                                    ball2.shooter = shooter
+                                    ball2.velocity = vec
+                                    ball2.customName = ball.customName
                                     // if(!DataMgr.getPlayerData(shooter).getWeaponClass().getMainWeapon().getWeaponType().equals("Blaster"))
-                                    addSnowballHitCount(ball.getCustomName())
-                                    mainSnowballNameMap.put(ball.getCustomName(), ball2)
+                                    addSnowballHitCount(ball.customName)
+                                    mainSnowballNameMap.put(ball.customName, ball2)
                                 }
                             }
                         }
@@ -587,23 +581,23 @@ class SnowballListener : Listener {
         }
 
         if (event.getEntity() is Snowball) {
-            if (event.getHitBlock() != null) {
-                val shooter = event.getEntity().getShooter() as Player?
-                PaintMgr.Paint(event.getHitBlock()!!.getLocation(), shooter, true)
+            if (event.hitBlock != null) {
+                val shooter = event.getEntity().shooter as Player?
+                PaintMgr.Paint(event.hitBlock!!.location, shooter, true)
                 shooter!!
-                    .getWorld()
-                    .playSound(event.getHitBlock()!!.getLocation(), Sound.ENTITY_SLIME_ATTACK, 0.3f, 2.0f)
+                    .world
+                    .playSound(event.hitBlock!!.location, Sound.ENTITY_SLIME_ATTACK, 0.3f, 2.0f)
             }
-            if (event.getHitEntity() != null) {
-                if (event.getHitEntity() is Player) {
+            if (event.hitEntity != null) {
+                if (event.hitEntity is Player) {
                     // AntiNoDamageTime
-                    val target = event.getHitEntity() as Player?
+                    val target = event.hitEntity as Player?
                     val task: BukkitRunnable =
                         object : BukkitRunnable() {
                             var p: Player? = target
 
                             override fun run() {
-                                target!!.setNoDamageTicks(0)
+                                target!!.noDamageTicks = 0
                             }
                         }
                     task.runTaskLater(plugin, 1)
@@ -615,7 +609,7 @@ class SnowballListener : Listener {
 
                             override fun run() {
                                 try {
-                                    target!!.setNoDamageTicks(0)
+                                    target!!.noDamageTicks = 0
                                     timer.cancel()
                                 } catch (e: Exception) {
                                     timer.cancel()
@@ -631,7 +625,7 @@ class SnowballListener : Listener {
     @EventHandler
     fun onEntityHit(event: EntityDamageByEntityEvent) {
         if (Sclat.type == ServerType.LOBBY) {
-            if (event.getEntity() is Player) event.setCancelled(true)
+            if (event.getEntity() is Player) event.isCancelled = true
             /*
              * if(event.getEntity() instanceof ArmorStand){ if(event.getDamager() instanceof
              * Player){ if(!((Player)event.getDamager()).hasPermission("sclat.admin"))
@@ -640,24 +634,24 @@ class SnowballListener : Listener {
             return
         }
 
-        event.setCancelled(true)
+        event.isCancelled = true
 
-        if (event.getDamager() !is Projectile) return
+        if (event.damager !is Projectile) return
 
-        if (snowballIsHitMap.containsKey(event.getDamager() as Snowball)) {
-            setSnowballIsHit(event.getDamager() as Snowball, true)
-            if (event.getDamager().getCustomName() != null) {
-                if (event.getDamager().getCustomName() == "JetPack" ||
-                    event.getDamager().getCustomName() == "SuperShot"
+        if (snowballIsHitMap.containsKey(event.damager as Snowball)) {
+            setSnowballIsHit(event.damager as Snowball, true)
+            if (event.damager.customName != null) {
+                if (event.damager.customName == "JetPack" ||
+                    event.damager.customName == "SuperShot"
                 ) {
-                    val projectile = event.getDamager() as Projectile
-                    val shooter = projectile.getShooter() as Player?
+                    val projectile = event.damager as Projectile
+                    val shooter = projectile.shooter as Player?
                     if (event.getEntity() is Player) {
                         val target = event.getEntity() as Player
                         if (getPlayerData(shooter)!!.team != getPlayerData(target)!!.team &&
-                            target.getGameMode() == GameMode.ADVENTURE
+                            target.gameMode == GameMode.ADVENTURE
                         ) {
-                            if (!getPlayerData(shooter)!!.getIsUsingSP()) SPWeaponMgr.addSPCharge(shooter)
+                            if (!getPlayerData(shooter)!!.isUsingSP) SPWeaponMgr.addSPCharge(shooter)
 
                             giveDamage(shooter, target, 47.0, "spWeapon")
                         }
@@ -668,8 +662,8 @@ class SnowballListener : Listener {
                 }
             }
         } else {
-            val projectile = event.getDamager() as Projectile
-            val shooter = projectile.getShooter() as Player
+            val projectile = event.damager as Projectile
+            val shooter = projectile.shooter as Player
             if (event.getEntity() is Player) {
                 /*
 //              * Player target = (Player)event.getEntity();
@@ -741,28 +735,28 @@ class SnowballListener : Listener {
             } else if (event.getEntity() is ArmorStand) {
                 var dmgDouble = 1.0
                 val `as` = event.getEntity() as ArmorStand
-                if (projectile.getCustomName() != null) {
-                    if (DataMgr.mws.contains(projectile.getCustomName())) {
-                        if (DataMgr.tsl.contains(projectile.getCustomName())) {
-                            if (SclatUtil.isNumber(`as`.getCustomName()!!)) {
-                                if (`as`.getCustomName() != "21" && `as`.getCustomName() != "100") {
-                                    if (`as`.isVisible()) {
-                                        if (projectile.getCustomName()!!.contains("#slided")) {
+                if (projectile.customName != null) {
+                    if (DataMgr.mws.contains(projectile.customName)) {
+                        if (DataMgr.tsl.contains(projectile.customName)) {
+                            if (SclatUtil.isNumber(`as`.customName!!)) {
+                                if (`as`.customName != "21" && `as`.customName != "100") {
+                                    if (`as`.isVisible) {
+                                        if (projectile.customName!!.contains("#slided")) {
                                             dmgDouble =
                                                 getPlayerData(shooter)!!
-                                                    .getWeaponClass()
+                                                    .weaponClass
                                                     .mainWeapon!!
                                                     .decreaseRate
-                                        } else if (!projectile.getCustomName()!!.contains(":")) {
+                                        } else if (!projectile.customName!!.contains(":")) {
                                             shooter!!.playSound(
-                                                shooter.getLocation(),
+                                                shooter.location,
                                                 Sound.ENTITY_ARROW_HIT_PLAYER,
                                                 1.2f,
                                                 1.3f,
                                             )
                                             shooter.spawnParticle(
                                                 Particle.FLASH,
-                                                projectile.getLocation(),
+                                                projectile.location,
                                                 1,
                                                 0.1,
                                                 0.1,
@@ -770,9 +764,9 @@ class SnowballListener : Listener {
                                                 0.1,
                                             )
                                         } else {
-                                            val args: Array<String?>? =
+                                            val args: Array<String?> =
                                                 projectile
-                                                    .getCustomName()!!
+                                                    .customName!!
                                                     .split(":".toRegex())
                                                     .dropLastWhile { it.isEmpty() }
                                                     .toTypedArray()
@@ -788,19 +782,19 @@ class SnowballListener : Listener {
 
                                             if (DataMgr.oto.get(args[2]) ==
                                                 getPlayerData(shooter)!!
-                                                    .getWeaponClass()
+                                                    .weaponClass
                                                     .mainWeapon!!
                                                     .rollerShootQuantity
                                             ) {
                                                 shooter!!.playSound(
-                                                    shooter.getLocation(),
+                                                    shooter.location,
                                                     Sound.ENTITY_ARROW_HIT_PLAYER,
                                                     1.2f,
                                                     1.3f,
                                                 )
                                                 shooter.spawnParticle(
                                                     Particle.FLASH,
-                                                    projectile.getLocation(),
+                                                    projectile.location,
                                                     1,
                                                     0.1,
                                                     0.1,
@@ -817,61 +811,61 @@ class SnowballListener : Listener {
                         }
                     }
 
-                    if (projectile.getCustomName() == "SuperShot") {
+                    if (projectile.customName == "SuperShot") {
                         ArmorStandMgr.giveDamageArmorStand(`as`, 20.0, shooter)
                         return
                     }
-                    if (projectile.getCustomName() == "JetPack") {
+                    if (projectile.customName == "JetPack") {
                         ArmorStandMgr.giveDamageArmorStand(`as`, 20.0, shooter)
                         return
                     }
-                    if (projectile.getCustomName()!!.contains("#QuadroArmsSpinner")) {
+                    if (projectile.customName!!.contains("#QuadroArmsSpinner")) {
                         var Quadrodamage = 1.0
-                        var QuadroticksLived = projectile.getTicksLived().toDouble() * 12.5
+                        var QuadroticksLived = projectile.ticksLived.toDouble() * 12.5
                         if (QuadroticksLived > 60) QuadroticksLived = 60.0
                         Quadrodamage += Quadrodamage * (QuadroticksLived / 30)
                         ArmorStandMgr.giveDamageArmorStand(`as`, Quadrodamage, shooter)
                         return
                     }
-                    if (projectile.getCustomName()!!.contains("#QuadroArmsShotgun")) {
+                    if (projectile.customName!!.contains("#QuadroArmsShotgun")) {
                         var Quadrodamage = 9.0
-                        var QuadroticksLived = projectile.getTicksLived().toDouble() * 10
+                        var QuadroticksLived = projectile.ticksLived.toDouble() * 10
                         if (QuadroticksLived > 30) QuadroticksLived = 30.0
                         Quadrodamage -= Quadrodamage * (QuadroticksLived / 100)
-                        if (projectile.getCustomName()!!.contains("CounterShot")) {
+                        if (projectile.customName!!.contains("CounterShot")) {
                             Quadrodamage = 6.5
                         }
                         ArmorStandMgr.giveDamageArmorStand(`as`, Quadrodamage, shooter)
                         return
                     }
                 }
-                if (`as`.getCustomName() != null) {
-                    if ((`as`.getCustomName() != "Path") && (`as`.getCustomName() != "21") && (`as`.getCustomName() != "100") &&
-                        (`as`.getCustomName() != "SplashShield") &&
-                        (`as`.getCustomName() != "Kasa")
+                if (`as`.customName != null) {
+                    if ((`as`.customName != "Path") && (`as`.customName != "21") && (`as`.customName != "100") &&
+                        (`as`.customName != "SplashShield") &&
+                        (`as`.customName != "Kasa")
                     ) {
-                        shooter!!.playSound(shooter.getLocation(), Sound.ENTITY_PLAYER_HURT, 0.5f, 1f)
+                        shooter!!.playSound(shooter.location, Sound.ENTITY_PLAYER_HURT, 0.5f, 1f)
                     }
                 }
 
-                var damage = getPlayerData(shooter)!!.getWeaponClass().mainWeapon!!.damage
+                var damage = getPlayerData(shooter)!!.weaponClass.mainWeapon!!.damage
                 if (dmgDouble != 1.0) {
                     damage = damage * dmgDouble
                 } else {
                     damage = damage * Gear.getGearInfluence(shooter, Gear.Type.MAIN_SPEC_UP)
                 }
-                val type = getPlayerData(shooter)!!.getWeaponClass().mainWeapon!!.weaponType
+                val type = getPlayerData(shooter)!!.weaponClass.mainWeapon!!.weaponType
 
                 if (type != "Burst" && type != "Blaster") {
-                    var ticksLived = projectile.getTicksLived().toDouble() * 1.2
+                    var ticksLived = projectile.ticksLived.toDouble() * 1.2
                     if (ticksLived > 20.0) ticksLived = 20.0
                     damage -= damage * (ticksLived / 100)
                 }
                 if (type == "Funnel") {
-                    if (`as`.getCustomName() != null && (`as`.getCustomName() != "Path") && (`as`.getCustomName() != "21") &&
-                        (`as`.getCustomName() != "100") &&
-                        (`as`.getCustomName() != "SplashShield") &&
-                        (`as`.getCustomName() != "Kasa")
+                    if (`as`.customName != null && (`as`.customName != "Path") && (`as`.customName != "21") &&
+                        (`as`.customName != "100") &&
+                        (`as`.customName != "SplashShield") &&
+                        (`as`.customName != "Kasa")
                     ) {
                         damage = damage + Funnel.funnelPursuit(shooter, `as`)
                         if (damage < 0.1) {

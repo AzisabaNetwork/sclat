@@ -31,7 +31,7 @@ import org.bukkit.util.Vector;
 public class PathMgr {
 	public static void setPath(Player player, Location from, Location to, Path path) {
 		BukkitRunnable task = new BukkitRunnable() {
-			Player p = player;
+			final Player p = player;
 			Item drop;
 			int c = 0;
 			Vector vec;
@@ -100,10 +100,10 @@ public class PathMgr {
 			ast.runTaskLater(VariablesKt.getPlugin(), 1);
 
 			BukkitRunnable effect = new BukkitRunnable() {
-				Path path1 = path;
-				Location from = path.getFromLocation().clone();
-				Location to = path.getToLocation().clone();
-				Match match = m;
+				final Path path1 = path;
+				final Location from = path.getFromLocation().clone();
+				final Location to = path.getToLocation().clone();
+				final Match match = m;
 				@Override
 				public void run() {
 					Team team = path1.getTeam();
@@ -133,10 +133,10 @@ public class PathMgr {
 			effect.runTaskTimer(VariablesKt.getPlugin(), 0, 5);
 
 			BukkitRunnable task = new BukkitRunnable() {
-				Path path1 = path;
-				Location from = path.getFromLocation().clone();
-				Location to = path.getToLocation().clone();
-				Match match = m;
+				final Path path1 = path;
+				final Location from = path.getFromLocation().clone();
+				final Location to = path.getToLocation().clone();
+				final Match match = m;
 				int c = 0;
 				@Override
 				public void run() {

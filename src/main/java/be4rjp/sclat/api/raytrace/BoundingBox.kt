@@ -15,7 +15,7 @@ class BoundingBox {
     }
 
     constructor(entity: Entity) {
-        val bb = (entity as CraftEntity).getHandle().getBoundingBox()
+        val bb = (entity as CraftEntity).handle.boundingBox
         min = Vector(bb.minX - 0.15, bb.minY, bb.minZ - 0.15)
         max = Vector(bb.maxX + 0.15, bb.maxY, bb.maxZ + 0.15)
     }

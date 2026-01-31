@@ -16,21 +16,21 @@ import org.bukkit.scheduler.BukkitRunnable
 object SuperSensor {
     @JvmStatic
     fun SuperSensorRunnable(player: Player) {
-        getPlayerData(player)!!.setIsUsingSP(true)
+        getPlayerData(player)!!.isUsingSP = true
         SPWeaponMgr.setSPCoolTimeAnimation(player, 200)
-        for (o_player in plugin.getServer().getOnlinePlayers()) {
+        for (o_player in plugin.server.onlinePlayers) {
             if (getPlayerData(player)!!.team != getPlayerData(o_player)!!.team &&
-                getPlayerData(o_player)!!.isInMatch()
+                getPlayerData(o_player)!!.isInMatch
             ) {
                 o_player.addPotionEffect(PotionEffect(PotionEffectType.GLOWING, 200, 1))
             }
         }
-        for (`as` in player.getWorld().getEntities()) {
-            if (`as`.getCustomName() != null) {
-                if (`as` is ArmorStand && (`as`.getCustomName() != "Path") && (`as`.getCustomName() != "21") &&
-                    (`as`.getCustomName() != "100") &&
-                    (`as`.getCustomName() != "SplashShield") &&
-                    (`as`.getCustomName() != "Kasa")
+        for (`as` in player.world.entities) {
+            if (`as`.customName != null) {
+                if (`as` is ArmorStand && (`as`.customName != "Path") && (`as`.customName != "21") &&
+                    (`as`.customName != "100") &&
+                    (`as`.customName != "SplashShield") &&
+                    (`as`.customName != "Kasa")
                 ) {
                     `as`.addPotionEffect(PotionEffect(PotionEffectType.GLOWING, 200, 1))
                 }
@@ -40,7 +40,7 @@ object SuperSensor {
             object : BukkitRunnable() {
                 override fun run() {
                     // player.playSound(player.getLocation(), Sound.BLOCK_CHEST_CLOSE, 1, 2);
-                    getPlayerData(player)!!.setIsUsingSP(false)
+                    getPlayerData(player)!!.isUsingSP = false
                 }
             }
         sound.runTaskLater(plugin, 200)

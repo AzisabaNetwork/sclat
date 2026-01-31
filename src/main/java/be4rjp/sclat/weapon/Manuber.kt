@@ -24,10 +24,10 @@ object Manuber {
         val delay: BukkitRunnable =
             object : BukkitRunnable() {
                 var p: Player = player
-                var loc: Location = player.getLocation()
-                var loc2: Location = player.getLocation()
-                var before: Location = player.getLocation()
-                var before_2: Location = player.getLocation()
+                var loc: Location = player.location
+                var loc2: Location = player.location
+                var before: Location = player.location
+                var before_2: Location = player.location
 
                 // int sl = 0;
                 // スライドの仕様改変
@@ -40,23 +40,23 @@ object Manuber {
 
                 override fun run() {
                     val data = getPlayerData(p)
-                    val ploc = p.getLocation()
+                    val ploc = p.location
 
-                    if (!data!!.isInMatch() || !p.isOnline()) {
+                    if (!data!!.isInMatch || !p.isOnline) {
                         cancel()
                         return
                     }
 
-                    val location = p.getLocation()
+                    val location = p.location
 
-                    var x = location.getX() - before.getX()
-                    var z = location.getZ() - before.getZ()
-                    var vec = p.getEyeLocation().getDirection()
+                    var x = location.x - before.x
+                    var z = location.z - before.z
+                    var vec = p.eyeLocation.direction
                     if (x != 0.0 || z != 0.0) {
                         vec = Vector(x, 0.0, z)
                     } else {
-                        x = location.getX() - before_2.getX()
-                        z = location.getZ() - before_2.getZ()
+                        x = location.x - before_2.x
+                        z = location.z - before_2.z
                         if (x != 0.0 || z != 0.0) {
                             vec = Vector(x, 0.0, z)
                         }
@@ -67,19 +67,19 @@ object Manuber {
                     // float ink = data.getWeaponClass().getMainWeapon().getSlideNeedINK();
 
                     // マニューバー系
-                    if (data.getWeaponClass().mainWeapon!!.isManeuver) {
+                    if (data.weaponClass.mainWeapon!!.isManeuver) {
                         // if(p.getExp() >= ink) {
-                        if (data.getIsSneaking() && sl_recharge_2 && !data.getIsSliding() && (
+                        if (data.isSneaking && sl_recharge_2 && !data.isSliding && (
                                 p
-                                    .getInventory()
-                                    .getItemInMainHand()
-                                    .getType()
+                                    .inventory
+                                    .itemInMainHand
+                                    .type
                                     ==
                                     data
-                                        .getWeaponClass()
+                                        .weaponClass
                                         .mainWeapon!!
                                         .weaponIteamStack!!
-                                        .getType()
+                                        .type
                                 )
                         ) { // slをsl_recharge_2に変更することで優先順位が低い方のスライドが残っている時のみ使えるようにしました
                             val jvec = (Vector(vec.getX(), 0.0, vec.getZ())).normalize()
@@ -99,7 +99,7 @@ object Manuber {
                             if (getPlayerData(player)!!.armor > 9999) {
                                 getPlayerData(player)!!.armor = 0.0
                             }
-                            p.getWorld().playSound(p.getLocation(), Sound.ITEM_ARMOR_EQUIP_GENERIC, 1.4f, 1.5f)
+                            p.world.playSound(p.location, Sound.ITEM_ARMOR_EQUIP_GENERIC, 1.4f, 1.5f)
 
                             distcheck = EntityWallHit(p, jvec.clone())
                             while (distcheck > 0 &&
@@ -128,11 +128,11 @@ object Manuber {
                                         Math.random() * random - random / 2,
                                     )
                                 val erv = ev.clone().add(randomVector)
-                                for (o_player in plugin.getServer().getOnlinePlayers()) {
+                                for (o_player in plugin.server.onlinePlayers) {
                                     if (getPlayerData(o_player)!!.settings.ShowEffect_BombEx()) {
-                                        if (o_player.getWorld() === location.getWorld()) {
+                                        if (o_player.world === location.world) {
                                             if (o_player
-                                                    .getLocation()
+                                                    .location
                                                     .distanceSquared(location) < Sclat.particleRenderDistanceSquared
                                             ) {
                                                 for (i2 in 0..3) {
@@ -160,9 +160,9 @@ object Manuber {
                                     }
                                 }
                             }
-                            data.setIsSneaking(false)
-                            data.setIsSliding(true)
-                            data.setCanShoot(false)
+                            data.isSneaking = false
+                            data.isSliding = true
+                            data.canShoot = false
                             // 優先順位が高い方のスライドがFalseだった場合に低い方をFalseにするようにしました高い方がtrueであった場合は高い方がFalseになります
                             if (!sl_recharge_1) {
                                 sl_recharge_2 = false
@@ -176,20 +176,20 @@ object Manuber {
 
                                     override fun run() {
                                         if (i == 3) {
-                                            p.setVelocity(Vector(0, 0, 0))
+                                            p.velocity = Vector(0, 0, 0)
                                             data.setIsUsingManeuver(true)
-                                            data.setCanShoot(true)
+                                            data.canShoot = true
                                         }
 
                                         if (i == 9) {
-                                            loc = p.getLocation()
+                                            loc = p.location
                                             data.setIsUsingManeuver(true)
                                         }
 
                                         if (i == 10) {
                                             // data.setIsUsingManeuver(false);
                                             // if(sl_recharge_2) {
-                                            data.setIsSliding(false)
+                                            data.isSliding = false
                                             // }
                                             cancel()
                                         }
@@ -202,19 +202,19 @@ object Manuber {
 
                                     override fun run() {
                                         if (i == 3) {
-                                            p.setVelocity(Vector(0, 0, 0))
+                                            p.velocity = Vector(0, 0, 0)
                                             data.setIsUsingManeuver(true)
-                                            data.setCanShoot(true)
+                                            data.canShoot = true
                                         }
 
                                         if (i == 9) {
-                                            loc2 = p.getLocation()
+                                            loc2 = p.location
                                             data.setIsUsingManeuver(true)
                                         }
 
                                         if (i == 10) {
                                             // data.setIsUsingManeuver(false);
-                                            data.setIsSliding(false)
+                                            data.isSliding = false
                                             cancel()
                                         }
                                         i++
@@ -242,9 +242,9 @@ object Manuber {
                         // }
                     }
 
-                    if (!data.getIsSliding()) {
-                        if ((loc.getX() == ploc.getX() && loc.getZ() == ploc.getZ()) ||
-                            (loc2.getX() == ploc.getX() && loc2.getZ() == ploc.getZ())
+                    if (!data.isSliding) {
+                        if ((loc.x == ploc.x && loc.z == ploc.z) ||
+                            (loc2.x == ploc.x && loc2.z == ploc.z)
                         ) {
                             data.setIsUsingManeuver(true)
                         } else {
@@ -292,13 +292,13 @@ object Manuber {
         p: Player,
         direction: Vector,
     ): Double {
-        val entityLocation = p.getLocation().clone()
+        val entityLocation = p.location.clone()
         val distance = 5.2 // レイの長さ
-        val world = p.getWorld()
+        val world = p.world
         val rayresult = world.rayTraceBlocks(entityLocation, direction, distance)
         // if (result != null && result.getHitBlock() != null) {
-        if (rayresult != null && rayresult.getHitBlock() != null) {
-            val hitlocation = rayresult.getHitPosition().toLocation(world)
+        if (rayresult != null && rayresult.hitBlock != null) {
+            val hitlocation = rayresult.hitPosition.toLocation(world)
             val raydistance = entityLocation.distance(hitlocation)
             if (raydistance - 0.4 > 0) {
                 return raydistance - 0.4
@@ -315,25 +315,25 @@ object Manuber {
         direction: Vector,
         dist: Double,
     ): Double {
-        val entityLocation = p.getLocation().clone()
+        val entityLocation = p.location.clone()
         val distance = dist // レイの長さ
         var distance2 = dist
-        val world = p.getWorld()
+        val world = p.world
         // if (result != null && result.getHitBlock() != null) {
-        val isArmorStand = Predicate { entity: Entity? -> entity!!.getType() == EntityType.ARMOR_STAND }
+        val isArmorStand = Predicate { entity: Entity? -> entity!!.type == EntityType.ARMOR_STAND }
 
         // rayTraceEntitiesでエンティティとの衝突を判定
         val result = world.rayTraceEntities(entityLocation, direction, distance, 0.5, isArmorStand)
 
-        if (result != null && result.getHitEntity() != null) {
+        if (result != null && result.hitEntity != null) {
             // 衝突までの距離を計算
-            val hitEntity = result.getHitEntity()
+            val hitEntity = result.hitEntity
             val armorStand = hitEntity as ArmorStand
-            if (armorStand.getCustomName() != null) {
-                if (armorStand.getCustomName() == "SplashShield") {
+            if (armorStand.customName != null) {
+                if (armorStand.customName == "SplashShield") {
                     val ssdata = getSplashShieldDataFromArmorStand(armorStand)
                     if (getPlayerData(p)!!.team != getPlayerData(ssdata!!.player)!!.team && ssdata.isDeploy) {
-                        val hitLocation = result.getHitPosition().toLocation(world)
+                        val hitLocation = result.hitPosition.toLocation(world)
                         distance2 = entityLocation.distance(hitLocation)
                         if (dist - distance2 > 0.7) {
                             distance2 = distance2 + 0.4
@@ -350,7 +350,7 @@ object Manuber {
         player: Player?,
         location: Location,
     ): Boolean {
-        val world = location.getWorld()
+        val world = location.world
         var contact = true
         if (world == null) return false
 
@@ -359,12 +359,12 @@ object Manuber {
         // プレイヤーの体が占める範囲 (高さ2ブロック、幅1ブロック)
         val playerBoundingBox =
             BoundingBox(
-                location.getX() - 0.4,
-                location.getY(),
-                location.getZ() - 0.4,
-                location.getX() + 0.4,
-                location.getY() + 1.9,
-                location.getZ() + 0.4, // location.clone().getX() - 0.4, location.clone().getY(),
+                location.x - 0.4,
+                location.y,
+                location.z - 0.4,
+                location.x + 0.4,
+                location.y + 1.9,
+                location.z + 0.4, // location.clone().getX() - 0.4, location.clone().getY(),
                 // location.clone().getZ() - 0.4,
                 // location.clone().getX() + 0.4, location.clone().getY() + 1.9,
                 // location.clone().getZ() + 0.4
@@ -383,11 +383,11 @@ object Manuber {
         // }
         // }
         // }
-        blocks.add(location.getWorld()!!.getBlockAt(location.clone().add(0.4, 0.0, 0.4)))
-        blocks.add(location.getWorld()!!.getBlockAt(location.clone().add(-0.4, 0.0, 0.4)))
-        blocks.add(location.getWorld()!!.getBlockAt(location.clone().add(0.4, 0.0, -0.4)))
-        blocks.add(location.getWorld()!!.getBlockAt(location.clone().add(-0.4, 0.0, -0.4)))
-        blocks.add(location.getWorld()!!.getBlockAt(location.clone().add(0.0, 1.0, 0.0)))
+        blocks.add(location.world!!.getBlockAt(location.clone().add(0.4, 0.0, 0.4)))
+        blocks.add(location.world!!.getBlockAt(location.clone().add(-0.4, 0.0, 0.4)))
+        blocks.add(location.world!!.getBlockAt(location.clone().add(0.4, 0.0, -0.4)))
+        blocks.add(location.world!!.getBlockAt(location.clone().add(-0.4, 0.0, -0.4)))
+        blocks.add(location.world!!.getBlockAt(location.clone().add(0.0, 1.0, 0.0)))
         for (pblock in blocks) {
             // player.sendMessage("ブロックの位置はX"+pblock.getLocation().getX()+"Y"+pblock.getLocation().getY()+"Z"+pblock.getLocation().getZ());
             if (hasCollision(pblock, playerBoundingBox)) {
@@ -405,10 +405,10 @@ object Manuber {
         block: Block,
         playerBoundingBox: BoundingBox,
     ): Boolean {
-        if (block.isEmpty() || block.isPassable()) return false // 空気や通り抜け可能ならOK
+        if (block.isEmpty || block.isPassable) return false // 空気や通り抜け可能ならOK
 
         // ブロックのバウンディングボックス（ヒットボックス）を取得
-        val blockBoundingBox = block.getBoundingBox()
+        val blockBoundingBox = block.boundingBox
 
         // プレイヤーの体とブロックが重なるかどうかを判定
         return playerBoundingBox.overlaps(blockBoundingBox)

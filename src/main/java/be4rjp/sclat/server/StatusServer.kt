@@ -70,7 +70,7 @@ internal class EchoThread(
             val reader = BufferedReader(InputStreamReader(socket!!.getInputStream()))
 
             // サーバーからクライアントへの送信用
-            val writer = PrintWriter(socket.getOutputStream(), true)
+            PrintWriter(socket.getOutputStream(), true)
 
             var cmd: String? = null
             // 命令受け取り用ループ
@@ -84,7 +84,7 @@ internal class EchoThread(
 
                     println(cmd)
 
-                    val args: Array<String?>? = cmd!!.split(" ".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+                    val args: Array<String?> = cmd!!.split(" ".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
 
                     if (args!![0] == "return" && args.size == 2) {
                         if (args[1]!!.length == 36) {
@@ -143,8 +143,8 @@ internal class EchoThread(
                                             MessageType.ALL_PLAYER,
                                         )
                                         plugin
-                                            .getServer()
-                                            .getOnlinePlayers()
+                                            .server
+                                            .onlinePlayers
                                             .forEach { player: Player? ->
                                                 SclatUtil.playGameSound(
                                                     player!!,

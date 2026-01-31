@@ -52,7 +52,7 @@ object QuadroArms {
 
     @JvmStatic
     fun setQuadroArms(player: Player) {
-        getPlayerData(player)!!.setIsUsingSP(true)
+        getPlayerData(player)!!.isUsingSP = true
         getPlayerData(player)!!.setIsUsingSS(true)
         SPWeaponMgr.setSPCoolTimeAnimation(player, 120)
         if (Hash_Quadro_overheat.containsKey(player)) {
@@ -65,31 +65,31 @@ object QuadroArms {
                 var p: Player? = player
 
                 override fun run() {
-                    player.getInventory().clear()
+                    player.inventory.clear()
                     player.updateInventory()
                     val item = ItemStack(Material.MUSIC_DISC_13)
-                    val meta = item.getItemMeta()
+                    val meta = item.itemMeta
                     meta!!.setDisplayName("Quadro-BLUE")
-                    item.setItemMeta(meta)
+                    item.itemMeta = meta
                     val item2 = ItemStack(Material.MUSIC_DISC_CAT)
-                    val meta2 = item2.getItemMeta()
+                    val meta2 = item2.itemMeta
                     meta2!!.setDisplayName("Quadro-GREEN")
-                    item2.setItemMeta(meta2)
+                    item2.itemMeta = meta2
                     val item3 = ItemStack(Material.MUSIC_DISC_BLOCKS)
-                    val meta3 = item3.getItemMeta()
+                    val meta3 = item3.itemMeta
                     meta3!!.setDisplayName("Quadro-RED")
-                    item3.setItemMeta(meta3)
+                    item3.itemMeta = meta3
                     val item4 = ItemStack(Material.MUSIC_DISC_CHIRP)
-                    val meta4 = item4.getItemMeta()
+                    val meta4 = item4.itemMeta
                     meta4!!.setDisplayName("Quadro-WHITE")
-                    item4.setItemMeta(meta4)
+                    item4.itemMeta = meta4
                     for (count in 0..8) {
-                        if (count % 2 != 0) player.getInventory().setItem(count, ItemStack(Material.AIR))
+                        if (count % 2 != 0) player.inventory.setItem(count, ItemStack(Material.AIR))
                     }
-                    player.getInventory().setItem(0, item)
-                    player.getInventory().setItem(2, item2)
-                    player.getInventory().setItem(4, item3)
-                    player.getInventory().setItem(6, item4)
+                    player.inventory.setItem(0, item)
+                    player.inventory.setItem(2, item2)
+                    player.inventory.setItem(4, item3)
+                    player.inventory.setItem(6, item4)
                     player.updateInventory()
                     player.addPotionEffect(PotionEffect(PotionEffectType.LUCK, 121, 1))
                     overheat_bar(player)
@@ -102,10 +102,10 @@ object QuadroArms {
                 var p: Player = player
 
                 override fun run() {
-                    if (getPlayerData(p)!!.isInMatch()) {
-                        getPlayerData(p)!!.setIsUsingSP(false)
+                    if (getPlayerData(p)!!.isInMatch) {
+                        getPlayerData(p)!!.isUsingSP = false
                         getPlayerData(p)!!.setIsUsingSS(false)
-                        player.getInventory().clear()
+                        player.inventory.clear()
                         WeaponClassMgr.setWeaponClass(p)
                     }
                 }
@@ -115,13 +115,13 @@ object QuadroArms {
 
     fun overheat_bar(player: Player) {
         val bar =
-            plugin.getServer().createBossBar(
+            plugin.server.createBossBar(
                 getPlayerData(player)!!.team.teamColor!!.colorCode + "§Quadro_overheat",
                 BarColor.RED,
                 BarStyle.SOLID,
                 BarFlag.CREATE_FOG,
             )
-        bar.setProgress(0.0)
+        bar.progress = 0.0
         bar.addPlayer(player)
 
         val overheat_anime: BukkitRunnable =
@@ -129,15 +129,15 @@ object QuadroArms {
                 var p: Player = player
 
                 override fun run() {
-                    val data = getPlayerData(p)
+                    getPlayerData(p)
                     if (Hash_Quadro_overheat.get(p)!! < 47) {
-                        bar.setProgress(Hash_Quadro_overheat.get(p)!!.toDouble() / 47)
-                        if (!bar.getPlayers().contains(p)) bar.addPlayer(p)
+                        bar.progress = Hash_Quadro_overheat.get(p)!!.toDouble() / 47
+                        if (!bar.players.contains(p)) bar.addPlayer(p)
                     } else {
-                        bar.setProgress(1.0)
-                        if (!bar.getPlayers().contains(p)) bar.addPlayer(p)
+                        bar.progress = 1.0
+                        if (!bar.players.contains(p)) bar.addPlayer(p)
                     }
-                    if (!getPlayerData(p)!!.isInMatch() || !p.isOnline()) {
+                    if (!getPlayerData(p)!!.isInMatch || !p.isOnline) {
                         bar.removeAll()
                         cancel()
                     }
@@ -155,14 +155,14 @@ object QuadroArms {
         player: Player,
         i: Int,
     ) {
-        val data = getPlayerData(player)
+        getPlayerData(player)
         val delay1: BukkitRunnable =
             object : BukkitRunnable() {
                 var p: Player? = player
 
                 override fun run() {
                     val data = getPlayerData(player)
-                    data!!.setCanUseSubWeapon(true)
+                    data!!.canUseSubWeapon = true
                 }
             }
         val delay: BukkitRunnable =
@@ -188,9 +188,9 @@ object QuadroArms {
                     } else if (overheatgage <= 10) {
                         Hash_Quadro_overheat.replace(p, 0)
                     }
-                    player.getWorld().playSound(p.getLocation(), Sound.ITEM_ARMOR_EQUIP_GENERIC, 0.9f, 1.3f)
+                    player.world.playSound(p.location, Sound.ITEM_ARMOR_EQUIP_GENERIC, 0.9f, 1.3f)
                     if (sound) {
-                        player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1f, 1.63f)
+                        player.playSound(player.location, Sound.UI_BUTTON_CLICK, 1f, 1.63f)
                     }
                 }
             }
@@ -297,26 +297,26 @@ object QuadroArms {
     fun ShootSpinner(player: Player) {
         val QuadroShootSpeed = 4.3
         val QuadroDisTick = 2
-        if (player.getGameMode() == GameMode.SPECTATOR) return
+        if (player.gameMode == GameMode.SPECTATOR) return
 
-        val data = getPlayerData(player)
-        val rayTrace = RayTrace(player.getEyeLocation().toVector(), player.getEyeLocation().getDirection())
+        getPlayerData(player)
+        val rayTrace = RayTrace(player.eyeLocation.toVector(), player.eyeLocation.direction)
         val positions = rayTrace.traverse(QuadroShootSpeed * QuadroDisTick, 0.7)
         var isLockOnPlayer = false
         check@ for (vector in positions) {
-            val position = vector.toLocation(player.getLocation().getWorld()!!)
-            for (target in plugin.getServer().getOnlinePlayers()) {
-                if (player !== target && player.getWorld() === target.getWorld()) {
-                    if (target.getLocation().distance(position) < 2) {
+            val position = vector.toLocation(player.location.world!!)
+            for (target in plugin.server.onlinePlayers) {
+                if (player !== target && player.world === target.world) {
+                    if (target.location.distance(position) < 2) {
                         isLockOnPlayer = true
                         break@check
                     }
                 }
             }
-            for (`as` in player.getWorld().getEntities()) {
+            for (`as` in player.world.entities) {
                 if (`as` is ArmorStand) {
-                    if (`as`.getCustomName() != null) {
-                        if (`as`.getLocation().distanceSquared(position) <= 4 /* 2*2 */) {
+                    if (`as`.customName != null) {
+                        if (`as`.location.distanceSquared(position) <= 4 /* 2*2 */) {
                             isLockOnPlayer = true
                             break@check
                         }
@@ -324,23 +324,21 @@ object QuadroArms {
                 }
             }
         }
-        PaintMgr.PaintHightestBlock(player.getLocation(), player, true, true)
+        PaintMgr.PaintHightestBlock(player.location, player, true, true)
 
         val ball = player.launchProjectile<Snowball>(Snowball::class.java)
-        (ball as CraftSnowball).getHandle().setItem(
-            CraftItemStack.asNMSCopy(ItemStack(getPlayerData(player)!!.team.teamColor!!.wool!!)),
-        )
-        player.getWorld().playSound(player.getLocation(), Sound.ENTITY_PIG_STEP, 0.3f, 1f)
-        val vec = player.getLocation().getDirection().multiply(QuadroShootSpeed)
+        (ball as CraftSnowball).handle.item = CraftItemStack.asNMSCopy(ItemStack(getPlayerData(player)!!.team.teamColor!!.wool!!))
+        player.world.playSound(player.location, Sound.ENTITY_PIG_STEP, 0.3f, 1f)
+        val vec = player.location.direction.multiply(QuadroShootSpeed)
         val random = 0.32
-        val distick = QuadroDisTick
+        QuadroDisTick
         vec.add(Vector(Math.random() * random - random / 2, 0.0, Math.random() * random - random / 2))
-        ball.setVelocity(vec)
-        ball.setShooter(player)
+        ball.velocity = vec
+        ball.shooter = player
         val originName = notDuplicateNumber.toString()
         val name = originName + "#QuadroArmsSpinner"
         DataMgr.mws.add(name) //
-        ball.setCustomName(name)
+        ball.customName = name
         mainSnowballNameMap.put(name, ball)
         setSnowballHitCount(name, 0)
         val SpinnerTask: BukkitRunnable =
@@ -355,9 +353,9 @@ object QuadroArms {
                 var p: Player = player
                 var fallvec: Vector =
                     Vector(
-                        inkball!!.getVelocity().getX(),
-                        inkball!!.getVelocity().getY(),
-                        inkball!!.getVelocity().getZ(),
+                        inkball!!.velocity.getX(),
+                        inkball!!.velocity.getY(),
+                        inkball!!.velocity.getZ(),
                     ).multiply(QuadroShootSpeed / 14)
 
                 override fun run() {
@@ -374,18 +372,18 @@ object QuadroArms {
                                 .team.teamColor!!
                                 .wool!!
                                 .createBlockData()
-                        for (o_player in plugin.getServer().getOnlinePlayers()) {
+                        for (o_player in plugin.server.onlinePlayers) {
                             if (getPlayerData(o_player)!!.settings.ShowEffect_MainWeaponInk()) {
-                                if (o_player.getWorld() ===
-                                    inkball!!.getWorld()
+                                if (o_player.world ===
+                                    inkball!!.world
                                 ) {
                                     if (o_player
-                                            .getLocation()
-                                            .distanceSquared(inkball!!.getLocation()) < Sclat.particleRenderDistanceSquared
+                                            .location
+                                            .distanceSquared(inkball!!.location) < Sclat.particleRenderDistanceSquared
                                     ) {
                                         o_player.spawnParticle<BlockData?>(
                                             Particle.BLOCK_DUST,
-                                            inkball!!.getLocation(),
+                                            inkball!!.location,
                                             0,
                                             0.0,
                                             -1.0,
@@ -400,17 +398,15 @@ object QuadroArms {
                     }
 
                     if (i >= tick && !addedFallVec) {
-                        inkball!!.setVelocity(fallvec)
+                        inkball!!.velocity = fallvec
                         addedFallVec = true
                     }
                     if (i >= tick && i <= tick + 15) {
-                        inkball!!.setVelocity(
-                            inkball!!.getVelocity().add(Vector(0.0, -0.1, 0.0)),
-                        )
+                        inkball!!.velocity = inkball!!.velocity.add(Vector(0.0, -0.1, 0.0))
                     }
                     // if(i != tick)
-                    if ((Random().nextInt(7)) == 0) PaintMgr.PaintHightestBlock(inkball!!.getLocation(), p, false, true)
-                    if (inkball!!.isDead()) cancel()
+                    if ((Random().nextInt(7)) == 0) PaintMgr.PaintHightestBlock(inkball!!.location, p, false, true)
+                    if (inkball!!.isDead) cancel()
 
                     i++
                 }
@@ -419,14 +415,12 @@ object QuadroArms {
     }
 
     fun ShootSG(player: Player): Boolean {
-        if (player.getGameMode() == GameMode.SPECTATOR) return false
+        if (player.gameMode == GameMode.SPECTATOR) return false
         val ShootSpeed = 4.5
-        val data = getPlayerData(player)
+        getPlayerData(player)
         val ball = player.launchProjectile<Snowball>(Snowball::class.java)
-        (ball as CraftSnowball).getHandle().setItem(
-            CraftItemStack.asNMSCopy(ItemStack(getPlayerData(player)!!.team.teamColor!!.wool!!)),
-        )
-        val vec = player.getLocation().getDirection().multiply(ShootSpeed)
+        (ball as CraftSnowball).handle.item = CraftItemStack.asNMSCopy(ItemStack(getPlayerData(player)!!.team.teamColor!!.wool!!))
+        val vec = player.location.direction.multiply(ShootSpeed)
         val random = 1.2
         val distick = 2
         vec.add(
@@ -436,12 +430,12 @@ object QuadroArms {
                 Math.random() * random - random / 2,
             ),
         )
-        ball.setVelocity(vec)
-        ball.setShooter(player)
+        ball.velocity = vec
+        ball.shooter = player
         val originName = notDuplicateNumber.toString()
         val name = originName + "#QuadroArmsShotgun"
         DataMgr.mws.add(name)
-        ball.setCustomName(name)
+        ball.customName = name
         mainSnowballNameMap.put(name, ball)
         setSnowballHitCount(name, 0)
         val task: BukkitRunnable =
@@ -453,9 +447,9 @@ object QuadroArms {
                 var addedFallVec: Boolean = false
                 var fallvec: Vector =
                     Vector(
-                        inkball!!.getVelocity().getX(),
-                        inkball!!.getVelocity().getY(),
-                        inkball!!.getVelocity().getZ(),
+                        inkball!!.velocity.getX(),
+                        inkball!!.velocity.getY(),
+                        inkball!!.velocity.getZ(),
                     ).multiply(ShootSpeed / 150)
 
                 override fun run() {
@@ -467,12 +461,12 @@ object QuadroArms {
                     }
 
                     if (i != 0) {
-                        for (target in plugin.getServer().getOnlinePlayers()) {
+                        for (target in plugin.server.onlinePlayers) {
                             if (!getPlayerData(target)!!.settings.ShowEffect_MainWeaponInk()) continue
-                            if (target.getWorld() === inkball!!.getWorld()) {
+                            if (target.world === inkball!!.world) {
                                 if (target
-                                        .getLocation()
-                                        .distanceSquared(inkball!!.getLocation()) < Sclat.particleRenderDistanceSquared
+                                        .location
+                                        .distanceSquared(inkball!!.location) < Sclat.particleRenderDistanceSquared
                                 ) {
                                     val bd =
                                         getPlayerData(p)!!
@@ -481,7 +475,7 @@ object QuadroArms {
                                             .createBlockData()
                                     target.spawnParticle<BlockData?>(
                                         Particle.BLOCK_DUST,
-                                        inkball!!.getLocation(),
+                                        inkball!!.location,
                                         1,
                                         0.0,
                                         0.0,
@@ -495,16 +489,14 @@ object QuadroArms {
                     }
 
                     if (i >= tick && !addedFallVec) {
-                        inkball!!.setVelocity(fallvec)
+                        inkball!!.velocity = fallvec
                         addedFallVec = true
                     }
                     if (i >= tick && i <= tick + 15) {
-                        inkball!!.setVelocity(
-                            inkball!!.getVelocity().add(Vector(0.0, -0.1, 0.0)),
-                        )
+                        inkball!!.velocity = inkball!!.velocity.add(Vector(0.0, -0.1, 0.0))
                     }
-                    if (i != tick) PaintMgr.PaintHightestBlock(inkball!!.getLocation(), p, true, true)
-                    if (inkball!!.isDead()) cancel()
+                    if (i != tick) PaintMgr.PaintHightestBlock(inkball!!.location, p, true, true)
+                    if (inkball!!.isDead) cancel()
 
                     i++
                 }
@@ -515,24 +507,22 @@ object QuadroArms {
     }
 
     fun ShootQuadroSlosher(player: Player) {
-        if (player.getGameMode() == GameMode.SPECTATOR) return
+        if (player.gameMode == GameMode.SPECTATOR) return
 
         if (!player.hasPotionEffect(PotionEffectType.LUCK)) {
             return
         }
         val ShootSpeed = 3.9
-        val data = getPlayerData(player)
+        getPlayerData(player)
         val ball = player.launchProjectile<Snowball>(Snowball::class.java)
-        (ball as CraftSnowball).getHandle().setItem(
-            CraftItemStack.asNMSCopy(ItemStack(getPlayerData(player)!!.team.teamColor!!.wool!!)),
-        )
-        val vec = player.getLocation().getDirection().multiply(ShootSpeed)
+        (ball as CraftSnowball).handle.item = CraftItemStack.asNMSCopy(ItemStack(getPlayerData(player)!!.team.teamColor!!.wool!!))
+        val vec = player.location.direction.multiply(ShootSpeed)
         val distick = 2
-        ball.setVelocity(vec)
-        ball.setShooter(player)
+        ball.velocity = vec
+        ball.shooter = player
         val originName = notDuplicateNumber.toString()
         val name = originName + "#QuadroArmsSpinner"
-        ball.setCustomName(name)
+        ball.customName = name
         DataMgr.mws.add(name)
         mainSnowballNameMap.put(name, ball)
         setSnowballHitCount(name, 0)
@@ -547,9 +537,9 @@ object QuadroArms {
                 var BlasterExHankei: Double = 4.0
                 var fallvec: Vector =
                     Vector(
-                        inkball!!.getVelocity().getX(),
-                        inkball!!.getVelocity().getY(),
-                        inkball!!.getVelocity().getZ(),
+                        inkball!!.velocity.getX(),
+                        inkball!!.velocity.getY(),
+                        inkball!!.velocity.getZ(),
                     ).multiply(ShootSpeed / 17)
 
                 override fun run() {
@@ -560,12 +550,12 @@ object QuadroArms {
                             i += getSnowballHitCount(name) - 1
                             setSnowballHitCount(name, 0)
                         }
-                        for (target in plugin.getServer().getOnlinePlayers()) {
+                        for (target in plugin.server.onlinePlayers) {
                             if (!getPlayerData(target)!!.settings.ShowEffect_MainWeaponInk()) continue
-                            if (target.getWorld() === inkball!!.getWorld()) {
+                            if (target.world === inkball!!.world) {
                                 if (target
-                                        .getLocation()
-                                        .distanceSquared(inkball!!.getLocation()) < Sclat.particleRenderDistanceSquared
+                                        .location
+                                        .distanceSquared(inkball!!.location) < Sclat.particleRenderDistanceSquared
                                 ) {
                                     val bd =
                                         getPlayerData(p)!!
@@ -574,7 +564,7 @@ object QuadroArms {
                                             .createBlockData()
                                     target.spawnParticle<BlockData?>(
                                         Particle.BLOCK_DUST,
-                                        inkball!!.getLocation(),
+                                        inkball!!.location,
                                         3,
                                         0.0,
                                         0.0,
@@ -586,34 +576,32 @@ object QuadroArms {
                             }
                         }
 
-                        PaintMgr.PaintHightestBlock(inkball!!.getLocation(), p, false, true)
+                        PaintMgr.PaintHightestBlock(inkball!!.location, p, false, true)
 
                         if (i >= tick && !addedFallVec) {
-                            inkball!!.setVelocity(fallvec)
+                            inkball!!.velocity = fallvec
                             addedFallVec = true
                         }
                         if (i >= tick && i <= tick + 15) {
-                            inkball!!.setVelocity(
-                                inkball!!.getVelocity().add(Vector(0.0, -0.1, 0.0)),
-                            )
+                            inkball!!.velocity = inkball!!.velocity.add(Vector(0.0, -0.1, 0.0))
                         }
-                        if (inkball!!.isDead()) {
+                        if (inkball!!.isDead) {
                             // 半径
                             val maxDist = BlasterExHankei
 
                             // 爆発音
                             player
-                                .getWorld()
-                                .playSound(inkball!!.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_BLAST, 0.7f, 1f)
+                                .world
+                                .playSound(inkball!!.location, Sound.ENTITY_FIREWORK_ROCKET_BLAST, 0.7f, 1f)
 
                             // 爆発エフェクト
-                            createInkExplosionEffect(inkball!!.getLocation(), maxDist, 25, player)
+                            createInkExplosionEffect(inkball!!.location, maxDist, 25, player)
 
                             // 塗る
                             run {
                                 var i = 0
                                 while (i <= maxDist) {
-                                    val p_locs = getSphere(inkball!!.getLocation(), i.toDouble(), 20)
+                                    val p_locs = getSphere(inkball!!.location, i.toDouble(), 20)
                                     for (loc in p_locs) {
                                         PaintMgr.Paint(loc, p, false)
                                         PaintMgr.PaintHightestBlock(loc, p, false, false)
@@ -623,15 +611,15 @@ object QuadroArms {
                             }
 
                             // 攻撃判定の処理
-                            for (target in plugin.getServer().getOnlinePlayers()) {
-                                if (!getPlayerData(target)!!.isInMatch()) continue
-                                if (target.getLocation().distanceSquared(inkball!!.getLocation()) <= maxDist * maxDist) {
+                            for (target in plugin.server.onlinePlayers) {
+                                if (!getPlayerData(target)!!.isInMatch) continue
+                                if (target.location.distanceSquared(inkball!!.location) <= maxDist * maxDist) {
                                     val damage = (
-                                        (1 + maxDist - target.getLocation().distance(inkball!!.getLocation())) *
+                                        (1 + maxDist - target.location.distance(inkball!!.location)) *
                                             BlasterExDamage
                                         )
                                     if (getPlayerData(player)!!.team != getPlayerData(target)!!.team &&
-                                        target.getGameMode() == GameMode.ADVENTURE
+                                        target.gameMode == GameMode.ADVENTURE
                                     ) {
                                         giveDamage(player, target, damage, "spWeapon")
 
@@ -641,7 +629,7 @@ object QuadroArms {
                                                 var p: Player = target
 
                                                 override fun run() {
-                                                    target.setNoDamageTicks(0)
+                                                    target.noDamageTicks = 0
                                                 }
                                             }
                                         task.runTaskLater(plugin, 1)
@@ -649,11 +637,11 @@ object QuadroArms {
                                 }
                             }
 
-                            for (`as` in player.getWorld().getEntities()) {
+                            for (`as` in player.world.entities) {
                                 if (`as` is ArmorStand) {
-                                    if (`as`.getLocation().distanceSquared(inkball!!.getLocation()) <= maxDist * maxDist) {
+                                    if (`as`.location.distanceSquared(inkball!!.location) <= maxDist * maxDist) {
                                         val damage = (
-                                            (1 + maxDist - `as`.getLocation().distance(inkball!!.getLocation())) *
+                                            (1 + maxDist - `as`.location.distance(inkball!!.location)) *
                                                 BlasterExDamage
                                             )
                                         ArmorStandMgr.giveDamageArmorStand(`as`, damage, p)
@@ -691,56 +679,56 @@ object QuadroArms {
                 override fun run() {
                     try {
                         if (c == 0) {
-                            p_vec = p.getEyeLocation().getDirection().multiply(1.35)
+                            p_vec = p.eyeLocation.direction.multiply(1.35)
                             val bom = ItemStack(Material.DISPENSER).clone()
-                            val bom_m = bom.getItemMeta()
+                            val bom_m = bom.itemMeta
                             bom_m!!.setLocalizedName(notDuplicateNumber.toString())
-                            bom.setItemMeta(bom_m)
-                            drop = p.getWorld().dropItem(p.getEyeLocation(), bom)
-                            drop!!.setVelocity(p_vec!!)
+                            bom.itemMeta = bom_m
+                            drop = p.world.dropItem(p.eyeLocation, bom)
+                            drop!!.velocity = p_vec!!
                             // 雪玉をスポーンさせた瞬間にプレイヤーに雪玉がデスポーンした偽のパケットを送信する
                             ball = player.launchProjectile<Snowball>(Snowball::class.java)
-                            ball!!.setVelocity(Vector(0, 0, 0))
+                            ball!!.velocity = Vector(0, 0, 0)
                             setSnowballIsHit(ball, false)
 
-                            for (o_player in plugin.getServer().getOnlinePlayers()) {
-                                val connection = (o_player as CraftPlayer).getHandle().playerConnection
-                                connection.sendPacket(PacketPlayOutEntityDestroy(ball!!.getEntityId()))
+                            for (o_player in plugin.server.onlinePlayers) {
+                                val connection = (o_player as CraftPlayer).handle.playerConnection
+                                connection.sendPacket(PacketPlayOutEntityDestroy(ball!!.entityId))
                             }
-                            p_vec = p.getEyeLocation().getDirection()
+                            p_vec = p.eyeLocation.direction
                         }
 
-                        if (!drop!!.isOnGround() &&
+                        if (!drop!!.isOnGround &&
                             !(
-                                drop!!.getVelocity().getX() == 0.0 && drop!!
-                                    .getVelocity()
+                                drop!!.velocity.getX() == 0.0 && drop!!
+                                    .velocity
                                     .getZ() != 0.0
                                 ) &&
                             !(
-                                drop!!.getVelocity().getX() != 0.0 && drop!!
-                                    .getVelocity()
+                                drop!!.velocity.getX() != 0.0 && drop!!
+                                    .velocity
                                     .getZ() == 0.0
                                 )
                         ) {
-                            ball!!.setVelocity(drop!!.getVelocity())
+                            ball!!.velocity = drop!!.velocity
                         }
 
-                        if (getSnowballIsHit(ball) || drop!!.isOnGround()) {
+                        if (getSnowballIsHit(ball) || drop!!.isOnGround) {
                             // 半径
 
                             val maxDist = 9.0
 
                             // 爆発音
-                            player.getWorld().playSound(drop!!.getLocation(), Sound.ENTITY_ARROW_SHOOT, 1f, 2f)
+                            player.world.playSound(drop!!.location, Sound.ENTITY_ARROW_SHOOT, 1f, 2f)
 
                             // 爆発エフェクト
-                            val s_locs = getSphere(drop!!.getLocation(), maxDist, 15)
-                            for (o_player in plugin.getServer().getOnlinePlayers()) {
+                            val s_locs = getSphere(drop!!.location, maxDist, 15)
+                            for (o_player in plugin.server.onlinePlayers) {
                                 if (getPlayerData(o_player)!!.settings.ShowEffect_BombEx()) {
                                     for (loc in s_locs) {
-                                        if (o_player.getWorld() === loc.getWorld()) {
+                                        if (o_player.world === loc.world) {
                                             if (o_player
-                                                    .getLocation()
+                                                    .location
                                                     .distanceSquared(loc) < Sclat.particleRenderDistanceSquared
                                             ) {
                                                 val dustOptions = Particle.DustOptions(Color.BLACK, 1f)
@@ -761,9 +749,9 @@ object QuadroArms {
                             }
 
                             // あたり判定の処理
-                            for (target in plugin.getServer().getOnlinePlayers()) {
-                                if (!getPlayerData(target)!!.isInMatch() || target.getWorld() !== p.getWorld()) continue
-                                if (target.getLocation().distance(drop!!.getLocation()) <= maxDist) {
+                            for (target in plugin.server.onlinePlayers) {
+                                if (!getPlayerData(target)!!.isInMatch || target.world !== p.world) continue
+                                if (target.location.distance(drop!!.location) <= maxDist) {
                                     if (getPlayerData(player)!!.team.iD !=
                                         getPlayerData(target)!!
                                             .team
@@ -774,14 +762,14 @@ object QuadroArms {
                                 }
                             }
 
-                            for (`as` in player.getWorld().getEntities()) {
-                                if (`as`.getLocation().distance(drop!!.getLocation()) <= maxDist) {
-                                    if (`as`.getCustomName() != null) {
-                                        if (`as`.getCustomName() == null) continue
-                                        if (`as` is ArmorStand && (`as`.getCustomName() != "Path") && (`as`.getCustomName() != "21") &&
-                                            (`as`.getCustomName() != "100") &&
-                                            (`as`.getCustomName() != "SplashShield") &&
-                                            (`as`.getCustomName() != "Kasa")
+                            for (`as` in player.world.entities) {
+                                if (`as`.location.distance(drop!!.location) <= maxDist) {
+                                    if (`as`.customName != null) {
+                                        if (`as`.customName == null) continue
+                                        if (`as` is ArmorStand && (`as`.customName != "Path") && (`as`.customName != "21") &&
+                                            (`as`.customName != "100") &&
+                                            (`as`.customName != "SplashShield") &&
+                                            (`as`.customName != "Kasa")
                                         ) {
                                             `as`
                                                 .addPotionEffect(PotionEffect(PotionEffectType.GLOWING, 240, 1))
@@ -796,12 +784,12 @@ object QuadroArms {
                         }
 
                         // ボムの視認用エフェクト
-                        for (o_player in plugin.getServer().getOnlinePlayers()) {
+                        for (o_player in plugin.server.onlinePlayers) {
                             if (getPlayerData(o_player)!!.settings.ShowEffect_Bomb()) {
-                                if (o_player.getWorld() === drop!!.getLocation().getWorld()) {
+                                if (o_player.world === drop!!.location.world) {
                                     if (o_player
-                                            .getLocation()
-                                            .distanceSquared(drop!!.getLocation()) < Sclat.particleRenderDistanceSquared
+                                            .location
+                                            .distanceSquared(drop!!.location) < Sclat.particleRenderDistanceSquared
                                     ) {
                                         val dustOptions =
                                             Particle.DustOptions(
@@ -810,7 +798,7 @@ object QuadroArms {
                                             )
                                         o_player.spawnParticle<Particle.DustOptions?>(
                                             Particle.REDSTONE,
-                                            drop!!.getLocation(),
+                                            drop!!.location,
                                             1,
                                             0.0,
                                             0.0,
@@ -824,8 +812,8 @@ object QuadroArms {
                         }
 
                         c++
-                        x = drop!!.getLocation().getX()
-                        z = drop!!.getLocation().getZ()
+                        x = drop!!.location.x
+                        z = drop!!.location.z
 
                         if (c > 1000) {
                             drop!!.remove()
@@ -835,7 +823,7 @@ object QuadroArms {
                     } catch (e: Exception) {
                         cancel()
                         drop!!.remove()
-                        plugin.getLogger().warning(e.message)
+                        plugin.logger.warning(e.message)
                     }
                 }
             }

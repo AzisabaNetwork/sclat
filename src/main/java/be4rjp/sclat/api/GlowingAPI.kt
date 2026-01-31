@@ -15,12 +15,12 @@ object GlowingAPI {
         flag: Boolean,
     ) {
         val packet = Sclat.protocolManager.createPacket(PacketType.Play.Server.ENTITY_METADATA)
-        packet.getIntegers().write(0, entity.getEntityId())
+        packet.integers.write(0, entity.entityId)
         val watcher = WrappedDataWatcher()
         val serializer = WrappedDataWatcher.Registry.get(Byte::class.java)
-        watcher.setEntity(entity)
+        watcher.entity = entity
         watcher.setObject(0, serializer, (if (flag) 0x40 else 0).toByte())
-        packet.getWatchableCollectionModifier().write(0, watcher.getWatchableObjects())
+        packet.watchableCollectionModifier.write(0, watcher.watchableObjects)
         try {
             Sclat.protocolManager.sendServerPacket(player, packet)
         } catch (e: InvocationTargetException) {

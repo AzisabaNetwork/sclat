@@ -94,7 +94,7 @@ public class SPWeaponMgr {
 
 	public static void SPWeaponRunnable(Player player) {
 		BukkitRunnable task = new BukkitRunnable() {
-			Player p = player;
+			final Player p = player;
 
 			@Override
 			public void run() {
@@ -129,7 +129,7 @@ public class SPWeaponMgr {
 		bar.addPlayer(player);
 
 		BukkitRunnable anime = new BukkitRunnable() {
-			Player p = player;
+			final Player p = player;
 			@Override
 			public void run() {
 				bar.setProgress((double) (DataMgr.getPlayerData(p).getSPGauge()) / 100D);
@@ -157,7 +157,7 @@ public class SPWeaponMgr {
 		bar.addPlayer(player);
 
 		BukkitRunnable anime = new BukkitRunnable() {
-			Player p = player;
+			final Player p = player;
 			@Override
 			public void run() {
 				PlayerData data = DataMgr.getPlayerData(p);
@@ -182,9 +182,9 @@ public class SPWeaponMgr {
 		PlayerData data = DataMgr.getPlayerData(player);
 
 		BukkitRunnable task = new BukkitRunnable() {
-			Player p = player;
+			final Player p = player;
 			double t = tick;
-			double i = tick;
+			final double i = tick;
 			@Override
 			public void run() {
 				if (t == tick)

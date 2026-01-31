@@ -376,7 +376,7 @@ object DataMgr {
     }
 
     @JvmStatic
-    fun getMapRandom(i: Int): MapData? {
+    fun getMapRandom(i: Int): MapData {
         val map = maplist.get(i)
         return map // RandomMap
     }

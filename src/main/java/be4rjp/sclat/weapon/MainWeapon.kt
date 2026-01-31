@@ -29,18 +29,18 @@ class MainWeapon : Listener {
         val player = e.getPlayer()
 
         if (e.getAction() == null || e.getItem() == null) return
-        if (!getPlayerData(player)!!.isInMatch()) return
+        if (!getPlayerData(player)!!.isInMatch) return
 
-        if (e.getItem()!!.getItemMeta()!!.getDisplayName() == null) return
+        if (e.getItem()!!.itemMeta!!.displayName == null) return
 
         val action = e.getAction()
         if (action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK) {
             MainWeaponMgr.UseMainWeapon(player)
         }
-        if (action == Action.LEFT_CLICK_AIR || action == Action.LEFT_CLICK_BLOCK) if (getPlayerData(player)!!.isInMatch()) {
+        if (action == Action.LEFT_CLICK_AIR || action == Action.LEFT_CLICK_BLOCK) if (getPlayerData(player)!!.isInMatch) {
             SubWeaponMgr.UseSubWeapon(
                 player,
-                getPlayerData(player)!!.getWeaponClass().subWeaponName,
+                getPlayerData(player)!!.weaponClass.subWeaponName,
             )
         }
     }
@@ -49,10 +49,10 @@ class MainWeapon : Listener {
     fun onSneek(event: PlayerToggleSneakEvent) {
         val player = event.getPlayer()
         val data = getPlayerData(player)
-        data!!.setIsSneaking(true)
+        data!!.isSneaking = true
         val task: BukkitRunnable = object : BukkitRunnable() {
             override fun run() {
-                data.setIsSneaking(false)
+                data.isSneaking = false
             }
         }
         task.runTaskLater(plugin, 5)
@@ -61,21 +61,21 @@ class MainWeapon : Listener {
     @EventHandler
     fun PlayerRightClick(event: PlayerInteractEntityEvent) {
         val player = event.getPlayer()
-        if (player.getInventory().getItemInMainHand() == null || player.getInventory().getItemInMainHand()
-                .getItemMeta() == null || player.getInventory().getItemInMainHand().getItemMeta()!!
-                .getDisplayName() == null
+        if (player.inventory.itemInMainHand == null || player.inventory.itemInMainHand
+                .itemMeta == null || player.inventory.itemInMainHand.itemMeta!!
+                .displayName == null
         ) {
             return
         }
 
-        if (!getPlayerData(player)!!.isInMatch()) return
+        if (!getPlayerData(player)!!.isInMatch) return
 
         MainWeaponMgr.UseMainWeapon(player)
 
-        if (getPlayerData(player)!!.isInMatch()) {
+        if (getPlayerData(player)!!.isInMatch) {
             SPWeaponMgr.UseSPWeapon(
                 player,
-                player.getInventory().getItemInMainHand().getItemMeta()!!.getDisplayName(),
+                player.inventory.itemInMainHand.itemMeta!!.displayName,
             )
         }
     }
@@ -83,20 +83,20 @@ class MainWeapon : Listener {
     @EventHandler
     fun onPlayerInteractAtEntity(event: PlayerInteractAtEntityEvent) {
         val player = event.getPlayer()
-        if (player.getInventory().getItemInMainHand() == null || player.getInventory().getItemInMainHand()
-                .getItemMeta() == null || player.getInventory().getItemInMainHand().getItemMeta()!!
-                .getDisplayName() == null
+        if (player.inventory.itemInMainHand == null || player.inventory.itemInMainHand
+                .itemMeta == null || player.inventory.itemInMainHand.itemMeta!!
+                .displayName == null
         ) {
             return
         }
-        if (!getPlayerData(player)!!.isInMatch()) return
+        if (!getPlayerData(player)!!.isInMatch) return
 
         MainWeaponMgr.UseMainWeapon(player)
 
-        if (getPlayerData(player)!!.isInMatch()) {
+        if (getPlayerData(player)!!.isInMatch) {
             SPWeaponMgr.UseSPWeapon(
                 player,
-                player.getInventory().getItemInMainHand().getItemMeta()!!.getDisplayName(),
+                player.inventory.itemInMainHand.itemMeta!!.displayName,
             )
         }
     }
@@ -105,20 +105,20 @@ class MainWeapon : Listener {
     fun onArmorStand(event: PlayerArmorStandManipulateEvent) {
         val player = event.getPlayer()
 
-        if (player.getInventory().getItemInMainHand() == null || player.getInventory().getItemInMainHand()
-                .getItemMeta() == null || player.getInventory().getItemInMainHand().getItemMeta()!!
-                .getDisplayName() == null
+        if (player.inventory.itemInMainHand == null || player.inventory.itemInMainHand
+                .itemMeta == null || player.inventory.itemInMainHand.itemMeta!!
+                .displayName == null
         ) {
             return
         }
-        if (!getPlayerData(player)!!.isInMatch()) return
+        if (!getPlayerData(player)!!.isInMatch) return
 
         MainWeaponMgr.UseMainWeapon(player)
 
-        if (getPlayerData(player)!!.isInMatch()) {
+        if (getPlayerData(player)!!.isInMatch) {
             SPWeaponMgr.UseSPWeapon(
                 player,
-                player.getInventory().getItemInMainHand().getItemMeta()!!.getDisplayName(),
+                player.inventory.itemInMainHand.itemMeta!!.displayName,
             )
         }
     }
@@ -127,19 +127,19 @@ class MainWeapon : Listener {
     fun onEntityDamage(e: EntityDamageEvent) {
         if (e.getEntity() is Player) {
             val player = e.getEntity() as Player
-            if (e.getCause() == EntityDamageEvent.DamageCause.VOID) {
-                e.setCancelled(true)
-                if (Sclat.Companion.conf!!.config!!.getString("WorkMode") == "Trial") {
+            if (e.cause == EntityDamageEvent.DamageCause.VOID) {
+                e.isCancelled = true
+                if (Sclat.conf!!.config!!.getString("WorkMode") == "Trial") {
                     player.teleport(Sclat.lobby!!)
                     return
                 }
-                if (getPlayerData(player)!!.isInMatch()) {
+                if (getPlayerData(player)!!.isInMatch) {
                     DeathMgr.PlayerDeathRunnable(player, player, "fall")
                 } else {
                     player.teleport(Sclat.lobby!!)
                 }
-            } else if (e.getCause() == EntityDamageEvent.DamageCause.DROWNING) {
-                e.setCancelled(true)
+            } else if (e.cause == EntityDamageEvent.DamageCause.DROWNING) {
+                e.isCancelled = true
             }
         }
     }

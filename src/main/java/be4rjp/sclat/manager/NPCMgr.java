@@ -36,9 +36,9 @@ public class NPCMgr {
 
 			int s = 0;
 
-			Player player = player1;
-			String npcName = npcName1;
-			Location location = location1;
+			final Player player = player1;
+			final String npcName = npcName1;
+			final Location location = location1;
 
 			@Override
 			public void run() {

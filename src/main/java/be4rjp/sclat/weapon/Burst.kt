@@ -37,14 +37,14 @@ object Burst {
 
                 override fun run() {
                     val data = getPlayerData(player)
-                    data!!.setCanRollerShoot(true)
+                    data!!.canRollerShoot = true
                 }
             }
-        if (data!!.getCanRollerShoot()) {
+        if (data!!.canRollerShoot) {
             delay1.runTaskLater(
                 plugin,
                 data
-                    .getWeaponClass()
+                    .weaponClass
                     .mainWeapon!!
                     .coolTime
                     .toLong(),
@@ -59,16 +59,16 @@ object Burst {
                     Burstshoot(player)
                 }
             }
-        if (data.getCanRollerShoot()) {
+        if (data.canRollerShoot) {
             delay.runTaskLater(
                 plugin,
                 data
-                    .getWeaponClass()
+                    .weaponClass
                     .mainWeapon!!
                     .delay
                     .toLong(),
             )
-            data.setCanRollerShoot(false)
+            data.canRollerShoot = false
         }
     }
 
@@ -81,10 +81,10 @@ object Burst {
 
                 override fun run() {
                     c++
-                    val q = getPlayerData(p)!!.getWeaponClass().mainWeapon!!.rollerShootQuantity
+                    val q = getPlayerData(p)!!.weaponClass.mainWeapon!!.rollerShootQuantity
                     Shoot(
                         p,
-                        q == 3 && getPlayerData(p)!!.getWeaponClass().mainWeapon!!.shootTick == 2,
+                        q == 3 && getPlayerData(p)!!.weaponClass.mainWeapon!!.shootTick == 2,
                         otoNumber,
                     )
                     if (c == q) cancel()
@@ -94,7 +94,7 @@ object Burst {
             plugin,
             0,
             getPlayerData(player)!!
-                .getWeaponClass()
+                .weaponClass
                 .mainWeapon!!
                 .shootTick
                 .toLong(),
@@ -106,50 +106,46 @@ object Burst {
         sound: Boolean,
         otoNumber: String?,
     ) {
-        if (player.getGameMode() == GameMode.SPECTATOR) return
+        if (player.gameMode == GameMode.SPECTATOR) return
 
         val data = getPlayerData(player)
-        if (player.getExp() <=
+        if (player.exp <=
             (
-                data!!.getWeaponClass().mainWeapon!!.needInk
+                data!!.weaponClass.mainWeapon!!.needInk
                     * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) /
                     Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)
                 ).toFloat()
         ) {
             player.sendTitle("", ChatColor.RED.toString() + "インクが足りません", 0, 5, 2)
-            player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1f, 1.63f)
+            player.playSound(player.location, Sound.UI_BUTTON_CLICK, 1f, 1.63f)
             return
         }
-        player.setExp(
-            player.getExp() -
-                (
-                    data.getWeaponClass().mainWeapon!!.needInk
-                        * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) /
-                        Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)
-                    ).toFloat(),
-        )
+        player.exp = player.exp -
+            (
+                data.weaponClass.mainWeapon!!.needInk
+                    * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) /
+                    Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)
+                ).toFloat()
 
-        PaintMgr.PaintHightestBlock(player.getLocation(), player, true, true)
+        PaintMgr.PaintHightestBlock(player.location, player, true, true)
 
         val ball = player.launchProjectile<Snowball>(Snowball::class.java)
-        (ball as CraftSnowball).getHandle().setItem(
-            CraftItemStack.asNMSCopy(ItemStack(getPlayerData(player)!!.team.teamColor!!.wool!!)),
-        )
-        player.getWorld().playSound(player.getLocation(), Sound.ENTITY_PIG_STEP, 0.3f, 1f)
+        (ball as CraftSnowball).handle.item = CraftItemStack.asNMSCopy(ItemStack(getPlayerData(player)!!.team.teamColor!!.wool!!))
+        player.world.playSound(player.location, Sound.ENTITY_PIG_STEP, 0.3f, 1f)
         val vec =
             player
-                .getLocation()
-                .getDirection()
-                .multiply(getPlayerData(player)!!.getWeaponClass().mainWeapon!!.shootSpeed)
-        val random = data.getWeaponClass().mainWeapon!!.random
-        val distick = getPlayerData(player)!!.getWeaponClass().mainWeapon!!.distanceTick
+                .location
+                .direction
+                .multiply(getPlayerData(player)!!.weaponClass.mainWeapon!!.shootSpeed)
+        val random = data.weaponClass.mainWeapon!!.random
+        val distick = getPlayerData(player)!!.weaponClass.mainWeapon!!.distanceTick
         vec.add(Vector(Math.random() * random - random / 2, 0.0, Math.random() * random - random / 2))
-        ball.setVelocity(vec)
-        ball.setShooter(player)
+        ball.velocity = vec
+        ball.shooter = player
         val name = notDuplicateNumber.toString() + ":Burst:" + otoNumber
         DataMgr.mws.add(name)
         if (sound) DataMgr.tsl.add(name)
-        ball.setCustomName(name)
+        ball.customName = name
         mainSnowballNameMap.put(name, ball)
         setSnowballHitCount(name, 0)
         val task: BukkitRunnable =
@@ -164,10 +160,10 @@ object Burst {
                 var p: Player = player
                 var fallvec: Vector =
                     Vector(
-                        inkball!!.getVelocity().getX(),
-                        inkball!!.getVelocity().getY(),
-                        inkball!!.getVelocity().getZ(),
-                    ).multiply(getPlayerData(p)!!.getWeaponClass().mainWeapon!!.shootSpeed / 17)
+                        inkball!!.velocity.getX(),
+                        inkball!!.velocity.getY(),
+                        inkball!!.velocity.getZ(),
+                    ).multiply(getPlayerData(p)!!.weaponClass.mainWeapon!!.shootSpeed / 17)
 
                 override fun run() {
                     inkball = mainSnowballNameMap.get(name)
@@ -183,18 +179,18 @@ object Burst {
                                 .team.teamColor!!
                                 .wool!!
                                 .createBlockData()
-                        for (o_player in plugin.getServer().getOnlinePlayers()) {
+                        for (o_player in plugin.server.onlinePlayers) {
                             if (getPlayerData(o_player)!!.settings.ShowEffect_MainWeaponInk()) {
-                                if (o_player.getWorld() ===
-                                    inkball!!.getWorld()
+                                if (o_player.world ===
+                                    inkball!!.world
                                 ) {
                                     if (o_player
-                                            .getLocation()
-                                            .distanceSquared(inkball!!.getLocation()) < Sclat.particleRenderDistanceSquared
+                                            .location
+                                            .distanceSquared(inkball!!.location) < Sclat.particleRenderDistanceSquared
                                     ) {
                                         o_player.spawnParticle<BlockData?>(
                                             Particle.BLOCK_DUST,
-                                            inkball!!.getLocation(),
+                                            inkball!!.location,
                                             0,
                                             0.0,
                                             -1.0,
@@ -209,17 +205,15 @@ object Burst {
                     }
 
                     if (i >= tick && !addedFallVec) {
-                        inkball!!.setVelocity(fallvec)
+                        inkball!!.velocity = fallvec
                         addedFallVec = true
                     }
                     if (i >= tick && i <= tick + 15) {
-                        inkball!!.setVelocity(
-                            inkball!!.getVelocity().add(Vector(0.0, -0.1, 0.0)),
-                        )
+                        inkball!!.velocity = inkball!!.velocity.add(Vector(0.0, -0.1, 0.0))
                     }
                     // if(i != tick)
-                    if ((Random().nextInt(5)) == 0) PaintMgr.PaintHightestBlock(inkball!!.getLocation(), p, false, true)
-                    if (inkball!!.isDead()) cancel()
+                    if ((Random().nextInt(5)) == 0) PaintMgr.PaintHightestBlock(inkball!!.location, p, false, true)
+                    if (inkball!!.isDead) cancel()
 
                     i++
                 }

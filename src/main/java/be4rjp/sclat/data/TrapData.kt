@@ -42,11 +42,11 @@ class TrapData(
             object : BukkitRunnable() {
                 override fun run() {
                     val sLocs: MutableList<Location> = getXZCircle(location.clone().add(0.0, 1.0, 0.0), 3.0, 2.0, 40)
-                    for (oPlayer in plugin.getServer().getOnlinePlayers()) {
+                    for (oPlayer in plugin.server.onlinePlayers) {
                         if (DataMgr.getPlayerData(oPlayer)?.settings?.ShowEffect_Bomb()!!) {
                             for (loc in sLocs) {
-                                if (oPlayer.getWorld() === loc.getWorld()) {
-                                    if (oPlayer.getLocation().distanceSquared(loc) < Sclat.particleRenderDistanceSquared &&
+                                if (oPlayer.world === loc.world) {
+                                    if (oPlayer.location.distanceSquared(loc) < Sclat.particleRenderDistanceSquared &&
                                         (DataMgr.getPlayerData(oPlayer)?.team!! == team || near)
                                     ) {
                                         val dustOptions =
@@ -84,7 +84,7 @@ class TrapData(
         this.task =
             object : BukkitRunnable() {
                 override fun run() {
-                    val block = location.getBlock()
+                    val block = location.block
                     if (DataMgr.blockDataMap.containsKey(block)) {
                         val pdata = DataMgr.getPaintDataFromBlock(block)
                         if (team != pdata?.team!!) explosion()
@@ -92,26 +92,26 @@ class TrapData(
 
                     if (number + 2 < DataMgr.getPlayerData(player)?.trapCount!!) explosion()
 
-                    for (target in plugin.getServer().getOnlinePlayers()) {
+                    for (target in plugin.server.onlinePlayers) {
                         if (!DataMgr
                                 .getPlayerData(target)
-                                ?.isInMatch()!! || target.getWorld() !== location.getWorld()
+                                ?.isInMatch!! || target.world !== location.world
                         ) {
                             continue
                         }
-                        if (target.getGameMode() == GameMode.SPECTATOR) continue
-                        if (target.getLocation().distance(location) <= 3 && DataMgr.getPlayerData(target)?.team!! != team) {
+                        if (target.gameMode == GameMode.SPECTATOR) continue
+                        if (target.location.distance(location) <= 3 && DataMgr.getPlayerData(target)?.team!! != team) {
                             explosion()
                         }
                     }
 
-                    for (`as` in player.getWorld().getEntities()) {
-                        if (`as` is ArmorStand && `as`.getLocation().distanceSquared(location) <= 9) { // 3^2
-                            if (`as`.getCustomName() != null) {
-                                if (`as`.getCustomName() == null) continue
-                                if ((`as`.getCustomName() != "Path") && (`as`.getCustomName() != "21") && (`as`.getCustomName() != "100") &&
-                                    (`as`.getCustomName() != "SplashShield") &&
-                                    (`as`.getCustomName() != "Kasa")
+                    for (`as` in player.world.entities) {
+                        if (`as` is ArmorStand && `as`.location.distanceSquared(location) <= 9) { // 3^2
+                            if (`as`.customName != null) {
+                                if (`as`.customName == null) continue
+                                if ((`as`.customName != "Path") && (`as`.customName != "21") && (`as`.customName != "100") &&
+                                    (`as`.customName != "SplashShield") &&
+                                    (`as`.customName != "Kasa")
                                 ) {
                                     explosion()
                                 }
@@ -119,7 +119,7 @@ class TrapData(
                         }
                     }
 
-                    if (!DataMgr.getPlayerData(player)?.isInMatch!! || !player.isOnline()) {
+                    if (!DataMgr.getPlayerData(player)?.isInMatch!! || !player.isOnline) {
                         task.cancel()
                         effect.cancel()
                     }
@@ -138,7 +138,7 @@ class TrapData(
 
                 override fun run() {
                     if (i >= 0 && i <= 4) {
-                        if (i % 2 == 0) player.getWorld().playSound(location, Sound.BLOCK_NOTE_BLOCK_PLING, 1.1f, 1.8f)
+                        if (i % 2 == 0) player.world.playSound(location, Sound.BLOCK_NOTE_BLOCK_PLING, 1.1f, 1.8f)
                     }
 
                     if (i == 20) {
@@ -147,7 +147,7 @@ class TrapData(
                         val maxDistSquared = 16.0 // 4^2
 
                         // 爆発音
-                        player.getWorld().playSound(location, Sound.ENTITY_FIREWORK_ROCKET_BLAST, 1f, 1f)
+                        player.world.playSound(location, Sound.ENTITY_FIREWORK_ROCKET_BLAST, 1f, 1f)
 
                         // 爆発エフェクト
                         createInkExplosionEffect(location, maxDist, 15, player)
@@ -157,12 +157,12 @@ class TrapData(
 
                         // センサーエフェクト
                         val sLocs = getSphere(location, maxDist + 1, 25)
-                        for (o_player in plugin.getServer().getOnlinePlayers()) {
+                        for (o_player in plugin.server.onlinePlayers) {
                             if (DataMgr.getPlayerData(o_player)?.settings?.ShowEffect_BombEx()!!) {
                                 for (loc in sLocs) {
-                                    if (o_player.getWorld() === loc.getWorld()) {
+                                    if (o_player.world === loc.world) {
                                         if (o_player
-                                                .getLocation()
+                                                .location
                                                 .distanceSquared(loc) < Sclat.particleRenderDistanceSquared
                                         ) {
                                             val dustOptions = Particle.DustOptions(Color.BLACK, 1f)
@@ -195,14 +195,14 @@ class TrapData(
                         }
 
                         // 発光効果
-                        for (target in plugin.getServer().getOnlinePlayers()) {
+                        for (target in plugin.server.onlinePlayers) {
                             if (!DataMgr
                                     .getPlayerData(target)
-                                    ?.isInMatch()!! || target.getWorld() !== player.getWorld()
+                                    ?.isInMatch!! || target.world !== player.world
                             ) {
                                 continue
                             }
-                            if (target.getLocation().distance(location) <= maxDist + 1) {
+                            if (target.location.distance(location) <= maxDist + 1) {
                                 if (DataMgr.getPlayerData(player)?.team!!.iD !=
                                     DataMgr
                                         .getPlayerData(target)
@@ -214,13 +214,13 @@ class TrapData(
                             }
                         }
 
-                        for (`as` in player.getWorld().getEntities()) {
-                            if (`as` is ArmorStand && `as`.getLocation().distance(location) <= maxDist + 1) {
-                                if (`as`.getCustomName() != null) {
-                                    if ((`as`.getCustomName() != "Path") && (`as`.getCustomName() != "21") &&
-                                        (`as`.getCustomName() != "100") &&
-                                        (`as`.getCustomName() != "SplashShield") &&
-                                        (`as`.getCustomName() != "Kasa")
+                        for (`as` in player.world.entities) {
+                            if (`as` is ArmorStand && `as`.location.distance(location) <= maxDist + 1) {
+                                if (`as`.customName != null) {
+                                    if ((`as`.customName != "Path") && (`as`.customName != "21") &&
+                                        (`as`.customName != "100") &&
+                                        (`as`.customName != "SplashShield") &&
+                                        (`as`.customName != "Kasa")
                                     ) {
                                         `as`
                                             .addPotionEffect(PotionEffect(PotionEffectType.GLOWING, 200, 1))
@@ -230,12 +230,12 @@ class TrapData(
                         }
 
                         // 攻撃判定の処理
-                        for (`as` in player.getWorld().getEntities()) {
+                        for (`as` in player.world.entities) {
                             if (`as` is ArmorStand) {
-                                if (`as`.getLocation().distanceSquared(location) <= maxDistSquared) {
-                                    if (`as`.getCustomName() != null) {
+                                if (`as`.location.distanceSquared(location) <= maxDistSquared) {
+                                    if (`as`.customName != null) {
                                         try {
-                                            if (`as`.getCustomName() == "Kasa") {
+                                            if (`as`.customName == "Kasa") {
                                                 val kasaData = DataMgr.getKasaDataFromArmorStand(`as`)
                                                 if (DataMgr.getPlayerData(kasaData?.player!!)?.team!! !=
                                                     DataMgr
@@ -245,7 +245,7 @@ class TrapData(
                                                 ) {
                                                     cancel()
                                                 }
-                                            } else if (`as`.getCustomName() == "SplashShield") {
+                                            } else if (`as`.customName == "SplashShield") {
                                                 val splashShieldData = DataMgr.getSplashShieldDataFromArmorStand(`as`)
                                                 if (DataMgr.getPlayerData(splashShieldData?.player!!)?.team!! !=
                                                     DataMgr
@@ -263,20 +263,20 @@ class TrapData(
                             }
                         }
 
-                        for (target in plugin.getServer().getOnlinePlayers()) {
+                        for (target in plugin.server.onlinePlayers) {
                             if (!DataMgr
                                     .getPlayerData(target)
-                                    ?.isInMatch()!! || target.getWorld() !== player.getWorld()
+                                    ?.isInMatch!! || target.world !== player.world
                             ) {
                                 continue
                             }
-                            if (target.getLocation().distanceSquared(location) <= maxDistSquared) {
+                            if (target.location.distanceSquared(location) <= maxDistSquared) {
                                 val damage = (
-                                    (maxDist - target.getLocation().distance(location)) * 5.0 *
+                                    (maxDist - target.location.distance(location)) * 5.0 *
                                         Gear.getGearInfluence(player, Gear.Type.SUB_SPEC_UP)
                                     )
                                 if (DataMgr.getPlayerData(player)?.team!! != DataMgr.getPlayerData(target)?.team!! &&
-                                    target.getGameMode() == GameMode.ADVENTURE
+                                    target.gameMode == GameMode.ADVENTURE
                                 ) {
                                     giveDamage(player, target, damage, "subWeapon")
 
@@ -286,7 +286,7 @@ class TrapData(
                                             var p: Player = target
 
                                             override fun run() {
-                                                target.setNoDamageTicks(0)
+                                                target.noDamageTicks = 0
                                             }
                                         }
                                     task.runTaskLater(plugin, 1)
@@ -294,16 +294,16 @@ class TrapData(
                             }
                         }
 
-                        for (`as` in player.getWorld().getEntities()) {
+                        for (`as` in player.world.entities) {
                             if (`as` is ArmorStand) {
-                                if (`as`.getLocation().distanceSquared(location) <= maxDistSquared) {
+                                if (`as`.location.distanceSquared(location) <= maxDistSquared) {
                                     val damage = (
-                                        (maxDist - `as`.getLocation().distance(location)) * 2.5 *
+                                        (maxDist - `as`.location.distance(location)) * 2.5 *
                                             Gear.getGearInfluence(player, Gear.Type.SUB_SPEC_UP)
                                         )
                                     ArmorStandMgr.giveDamageArmorStand(`as`, damage, player)
-                                    if (`as`.getCustomName() != null) {
-                                        if (`as`.getCustomName() == "SplashShield" || `as`.getCustomName() == "Kasa") break
+                                    if (`as`.customName != null) {
+                                        if (`as`.customName == "SplashShield" || `as`.customName == "Kasa") break
                                     }
                                 }
                             }

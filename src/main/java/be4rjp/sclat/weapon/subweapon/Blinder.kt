@@ -4,7 +4,6 @@ import be4rjp.sclat.Sclat
 import be4rjp.sclat.api.SclatUtil
 import be4rjp.sclat.api.raytrace.BoundingBox
 import be4rjp.sclat.api.raytrace.RayTrace
-import be4rjp.sclat.data.DataMgr
 import be4rjp.sclat.data.DataMgr.getKasaDataFromArmorStand
 import be4rjp.sclat.data.DataMgr.getPlayerData
 import be4rjp.sclat.data.DataMgr.getSplashShieldDataFromArmorStand
@@ -32,18 +31,18 @@ object Blinder {
         val cooltime: BukkitRunnable =
             object : BukkitRunnable() {
                 override fun run() {
-                    getPlayerData(player)!!.setCanUseSubWeapon(true)
+                    getPlayerData(player)!!.canUseSubWeapon = true
                 }
             }
         cooltime.runTaskLater(plugin, 8)
-        if (p.getExp() > 0.36f || getPlayerData(player)!!.getIsBombRush()) {
-            if (!getPlayerData(player)!!.getIsBombRush()) {
-                p.setExp(player.getExp() - 0.35f)
+        if (p.exp > 0.36f || getPlayerData(player)!!.isBombRush) {
+            if (!getPlayerData(player)!!.isBombRush) {
+                p.exp = player.exp - 0.35f
             }
             Shootblind(p, reach)
         } else {
             p.sendTitle("", ChatColor.RED.toString() + "インクが足りません", 0, 5, 2)
-            p.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1f, 1.63f)
+            p.playSound(player.location, Sound.UI_BUTTON_CLICK, 1f, 1.63f)
         }
     }
 
@@ -51,23 +50,23 @@ object Blinder {
         player: Player,
         reach: Int,
     ) {
-        if (player.getGameMode() == GameMode.SPECTATOR) return
-        val rayTrace = RayTrace(player.getEyeLocation().toVector(), player.getEyeLocation().getDirection())
+        if (player.gameMode == GameMode.SPECTATOR) return
+        val rayTrace = RayTrace(player.eyeLocation.toVector(), player.eyeLocation.direction)
         val positions: ArrayList<Vector> = rayTrace.traverse(reach.toDouble(), 0.15)
         loop@ for (i in positions.indices) {
-            val position = positions.get(i)!!.toLocation(player.getLocation().getWorld()!!)
-            val block = player.getLocation().getWorld()!!.getBlockAt(position)
+            val position = positions.get(i)!!.toLocation(player.location.world!!)
+            val block = player.location.world!!.getBlockAt(position)
 
-            if (block.getType() != Material.AIR) {
+            if (block.type != Material.AIR) {
                 break
             }
             // if(i<8) {
             // PaintMgr.PaintHightestBlock(position, player, false, true);
             // }
-            for (target in plugin.getServer().getOnlinePlayers()) {
+            for (target in plugin.server.onlinePlayers) {
                 if (!getPlayerData(target)!!.settings.ShowEffect_MainWeaponInk()) continue
-                if (target.getWorld() === position.getWorld()) {
-                    if (target.getLocation().distanceSquared(position) < Sclat.particleRenderDistanceSquared) {
+                if (target.world === position.world) {
+                    if (target.location.distanceSquared(position) < Sclat.particleRenderDistanceSquared) {
                         val bd =
                             getPlayerData(player)!!
                                 .team.teamColor!!
@@ -79,21 +78,21 @@ object Blinder {
             }
 
             val maxDistSquad = 4.0 // 2*2
-            for (target in plugin.getServer().getOnlinePlayers()) {
-                if (!getPlayerData(target)!!.isInMatch()) continue
+            for (target in plugin.server.onlinePlayers) {
+                if (!getPlayerData(target)!!.isInMatch) continue
                 if (getPlayerData(player)!!.team != getPlayerData(target)!!.team &&
-                    target.getGameMode() == GameMode.ADVENTURE
+                    target.gameMode == GameMode.ADVENTURE
                 ) {
-                    if (target.getLocation().distanceSquared(position) <= maxDistSquad) {
+                    if (target.location.distanceSquared(position) <= maxDistSquad) {
                         if (rayTrace.intersects(BoundingBox(target as Entity), reach.toDouble(), 0.2)) {
                             val Weapontype =
                                 getPlayerData(target)!!
-                                    .getWeaponClass()
+                                    .weaponClass
                                     .mainWeapon!!
                                     .weaponType
                             var effecttime = 40
                             if (Weapontype == "Charger" || Weapontype == "Spinner" ||
-                                getPlayerData(target)!!.getWeaponClass().mainWeapon!!.isManeuver
+                                getPlayerData(target)!!.weaponClass.mainWeapon!!.isManeuver
                             ) {
                                 effecttime += 25
                             } else if (Weapontype == "Blaster" || Weapontype == "Hound") {
@@ -103,11 +102,11 @@ object Blinder {
                             ) {
                                 effecttime -= 10
                             }
-                            if (getPlayerData(target)!!.getIsUsingSP() ||
+                            if (getPlayerData(target)!!.isUsingSP ||
                                 getPlayerData(target)!!.armor > 0
                             ) {
                                 target.addPotionEffect(PotionEffect(PotionEffectType.FIRE_RESISTANCE, 120, 1))
-                                player.playSound(player.getLocation(), Sound.ENTITY_BLAZE_HURT, 1.2f, 1.3f)
+                                player.playSound(player.location, Sound.ENTITY_BLAZE_HURT, 1.2f, 1.3f)
                             } else if (i > 85 && !target.hasPotionEffect(PotionEffectType.FIRE_RESISTANCE)) {
                                 target.addPotionEffect(
                                     PotionEffect(
@@ -119,9 +118,9 @@ object Blinder {
                                 target.addPotionEffect(
                                     PotionEffect(PotionEffectType.FIRE_RESISTANCE, 70 + effecttime, 1),
                                 )
-                                player.playSound(player.getLocation(), Sound.ENTITY_ENDER_DRAGON_HURT, 1.2f, 1.3f)
+                                player.playSound(player.location, Sound.ENTITY_ENDER_DRAGON_HURT, 1.2f, 1.3f)
                             } else if (target.hasPotionEffect(PotionEffectType.FIRE_RESISTANCE)) {
-                                player.playSound(player.getLocation(), Sound.ENTITY_BLAZE_HURT, 1.2f, 1.3f)
+                                player.playSound(player.location, Sound.ENTITY_BLAZE_HURT, 1.2f, 1.3f)
                             } else {
                                 getPlayerData(target)!!.setPoison(true)
                                 PoisonRunnable3(
@@ -129,7 +128,7 @@ object Blinder {
                                     (effecttime * Gear.getGearInfluence(player, Gear.Type.SUB_SPEC_UP) - 10).toInt(),
                                 )
                                 target.addPotionEffect(PotionEffect(PotionEffectType.FIRE_RESISTANCE, 40, 1))
-                                player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_HURT, 1.2f, 1.3f)
+                                player.playSound(player.location, Sound.ENTITY_PLAYER_HURT, 1.2f, 1.3f)
                             }
                             break@loop
                         }
@@ -137,51 +136,49 @@ object Blinder {
                 }
             }
 
-            for (`as` in player.getWorld().getEntities()) {
+            for (`as` in player.world.entities) {
                 if (`as` is ArmorStand) {
-                    if (`as`.getLocation().distanceSquared(position) <= maxDistSquad) {
+                    if (`as`.location.distanceSquared(position) <= maxDistSquad) {
                         if (rayTrace.intersects(BoundingBox(`as` as Entity), (reach).toDouble(), 0.2)) {
-                            if (`as`.getCustomName() != null) {
-                                if (`as`.getCustomName() == "SplashShield") {
+                            if (`as`.customName != null) {
+                                if (`as`.customName == "SplashShield") {
                                     val ssdata = getSplashShieldDataFromArmorStand(`as`)
                                     if (getPlayerData(ssdata!!.player)!!.team !=
-                                        DataMgr
-                                            .getPlayerData(player)!!
+                                        getPlayerData(player)!!
                                             .team
                                     ) {
                                         `as`
-                                            .getWorld()
-                                            .playSound(`as`.getLocation(), Sound.ENTITY_BLAZE_HURT, 0.8f, 1.2f)
+                                            .world
+                                            .playSound(`as`.location, Sound.ENTITY_BLAZE_HURT, 0.8f, 1.2f)
                                         break@loop
                                     }
-                                } else if (`as`.getCustomName() == "Kasa") {
+                                } else if (`as`.customName == "Kasa") {
                                     val ssdata = getKasaDataFromArmorStand(`as`)
                                     if (getPlayerData(ssdata!!.player)!!.team !=
-                                        DataMgr
-                                            .getPlayerData(player)!!
+                                        getPlayerData(player)!!
                                             .team
                                     ) {
                                         `as`
-                                            .getWorld()
-                                            .playSound(`as`.getLocation(), Sound.ENTITY_BLAZE_HURT, 0.8f, 1.2f)
+                                            .world
+                                            .playSound(`as`.location, Sound.ENTITY_BLAZE_HURT, 0.8f, 1.2f)
                                         break@loop
                                     }
                                 } else {
-                                    if (SclatUtil.isNumber(`as`.getCustomName()!!)) {
-                                        if (`as`.getCustomName() != "21" &&
-                                            `as`.getCustomName() != "100"
+                                    if (SclatUtil.isNumber(`as`.customName!!)) {
+                                        if (`as`.customName != "21" &&
+                                            `as`.customName != "100"
                                         ) {
-                                            if (`as`.isVisible()) {
+                                            if (`as`.isVisible) {
                                                 if (i > 85) {
                                                     player.playSound(
-                                                        player.getLocation(),
+                                                        player.location,
                                                         Sound.ENTITY_ENDER_DRAGON_HURT,
                                                         1.2f,
                                                         1.3f,
                                                     )
                                                 } else {
                                                     player.playSound(
-                                                        player.getLocation(),
+                                                        player.location,
                                                         Sound.ENTITY_PLAYER_HURT,
                                                         1.2f,
                                                         1.3f,

@@ -17,8 +17,8 @@ object WorldPackets {
         material: Material?,
     ): Boolean {
         val packet = Packets.createPacket(PacketType.Play.Server.BLOCK_CHANGE)
-        packet.getBlockPositionModifier().write(0, BlockPosition(location.toVector()))
-        packet.getBlockData().write(0, WrappedBlockData.createData(material))
+        packet.blockPositionModifier.write(0, BlockPosition(location.toVector()))
+        packet.blockData.write(0, WrappedBlockData.createData(material))
         return Packets.broadcastServerPacket(packet)
     }
 
@@ -28,23 +28,23 @@ object WorldPackets {
         val packet = Packets.createPacket(PacketType.Play.Server.WORLD_BORDER)
 
         // Set the action to INITIALIZE (Enum index 3 in 1.14.4)
-        packet.getWorldBorderActions().write(0, EnumWrappers.WorldBorderAction.INITIALIZE)
+        packet.worldBorderActions.write(0, EnumWrappers.WorldBorderAction.INITIALIZE)
 
         // Set Center (far away from the player to trigger the warning)
-        packet.getDoubles().write(0, player.getLocation().getX() + 10000.0) // Center X
-        packet.getDoubles().write(1, player.getLocation().getZ() + 10000.0) // Center Z
+        packet.doubles.write(0, player.location.x + 10000.0) // Center X
+        packet.doubles.write(1, player.location.z + 10000.0) // Center Z
 
         // Set Sizes
-        packet.getDoubles().write(2, 0.0) // Old radius
-        packet.getDoubles().write(3, 1.0) // New radius (Size 1)
+        packet.doubles.write(2, 0.0) // Old radius
+        packet.doubles.write(3, 1.0) // New radius (Size 1)
 
         // Set Lerp Speed (Time to reach new radius)
-        packet.getLongs().write(0, 0L)
+        packet.longs.write(0, 0L)
 
         // Set Other Required Data for INITIALIZE
-        packet.getIntegers().write(0, 29999984) // Portal Teleport Boundary
-        packet.getIntegers().write(1, 5) // Warning Time
-        packet.getIntegers().write(2, 5) // Warning Distance
+        packet.integers.write(0, 29999984) // Portal Teleport Boundary
+        packet.integers.write(1, 5) // Warning Time
+        packet.integers.write(2, 5) // Warning Distance
 
         return Packets.sendServerPacket(player, packet)
     }
@@ -55,23 +55,23 @@ object WorldPackets {
         val packet = Packets.createPacket(PacketType.Play.Server.WORLD_BORDER)
 
         // Set the action to INITIALIZE
-        packet.getWorldBorderActions().write(0, EnumWrappers.WorldBorderAction.INITIALIZE)
+        packet.worldBorderActions.write(0, EnumWrappers.WorldBorderAction.INITIALIZE)
 
         // Set Center to player's current position so they are in the middle
-        packet.getDoubles().write(0, player.getLocation().getX()) // Center X
-        packet.getDoubles().write(1, player.getLocation().getZ()) // Center Z
+        packet.doubles.write(0, player.location.x) // Center X
+        packet.doubles.write(1, player.location.z) // Center Z
 
         // Set Sizes to maximum (30 million is the Minecraft default limit)
-        packet.getDoubles().write(2, 30000000.0) // Old radius
-        packet.getDoubles().write(3, 30000000.0) // New radius
+        packet.doubles.write(2, 30000000.0) // Old radius
+        packet.doubles.write(3, 30000000.0) // New radius
 
         // Set Lerp Speed
-        packet.getLongs().write(0, 0L)
+        packet.longs.write(0, 0L)
 
         // Set Required Constants
-        packet.getIntegers().write(0, 29999984) // Portal boundary
-        packet.getIntegers().write(1, 5) // Warning time
-        packet.getIntegers().write(2, 5) // Warning distance
+        packet.integers.write(0, 29999984) // Portal boundary
+        packet.integers.write(1, 5) // Warning time
+        packet.integers.write(2, 5) // Warning distance
 
         return Packets.sendServerPacket(player, packet)
     }
@@ -85,11 +85,11 @@ object WorldPackets {
 
         // 1. Set the walk speed (which controls the FOV zoom/widening)
         // In 1.14.4, walkSpeed is usually the second float (index 1)
-        packet.getFloat().write(1, fov)
+        packet.float.write(1, fov)
 
         // 2. Set the fly speed (index 0) to the player's current fly speed to avoid
         // bugs
-        packet.getFloat().write(0, player.getFlySpeed())
+        packet.float.write(0, player.flySpeed)
 
         // 3. Set the flags (invulnerable, flying, canFly, instabuild)
         // We use a bitmask or just mirror the player's current state
@@ -99,10 +99,10 @@ object WorldPackets {
 
         // (Add more flags if you need to maintain invulnerability or creative mode
         // status)
-        packet.getBooleans().write(0, player.isInvulnerable())
-        packet.getBooleans().write(1, player.isFlying())
-        packet.getBooleans().write(2, player.getAllowFlight())
-        packet.getBooleans().write(3, player.getGameMode() == GameMode.CREATIVE)
+        packet.booleans.write(0, player.isInvulnerable)
+        packet.booleans.write(1, player.isFlying)
+        packet.booleans.write(2, player.allowFlight)
+        packet.booleans.write(3, player.gameMode == GameMode.CREATIVE)
 
         // Update your local data manager
         DataMgr.getPlayerData(player)?.fov = fov

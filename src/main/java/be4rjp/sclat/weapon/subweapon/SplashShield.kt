@@ -51,20 +51,20 @@ object SplashShield {
                 override fun run() {
                     try {
                         if (i == 0) {
-                            p.setExp(p.getExp() - 0.59f)
-                            drop = p.getWorld().dropItem(p.getEyeLocation(), ItemStack(Material.ACACIA_FENCE))
-                            drop!!.setVelocity(p.getEyeLocation().getDirection().multiply(0.7))
-                            yaw = p.getEyeLocation().getYaw()
-                            val v = p.getEyeLocation().getDirection().normalize()
+                            p.exp = p.exp - 0.59f
+                            drop = p.world.dropItem(p.eyeLocation, ItemStack(Material.ACACIA_FENCE))
+                            drop!!.velocity = p.eyeLocation.direction.multiply(0.7)
+                            yaw = p.eyeLocation.yaw
+                            val v = p.eyeLocation.direction.normalize()
                             vec = (Vector(v.getX(), 0.0, v.getZ())).normalize()
                         }
 
-                        for (o_player in plugin.getServer().getOnlinePlayers()) {
+                        for (o_player in plugin.server.onlinePlayers) {
                             if (getPlayerData(o_player)!!.settings.ShowEffect_Bomb()) {
-                                if (drop!!.getWorld() === o_player.getWorld()) {
+                                if (drop!!.world === o_player.world) {
                                     if (o_player
-                                            .getLocation()
-                                            .distanceSquared(drop!!.getLocation()) < Sclat.particleRenderDistanceSquared
+                                            .location
+                                            .distanceSquared(drop!!.location) < Sclat.particleRenderDistanceSquared
                                     ) {
                                         val dustOptions =
                                             Particle.DustOptions(
@@ -73,7 +73,7 @@ object SplashShield {
                                             )
                                         o_player.spawnParticle<Particle.DustOptions?>(
                                             Particle.REDSTONE,
-                                            drop!!.getLocation(),
+                                            drop!!.location,
                                             1,
                                             0.0,
                                             0.0,
@@ -86,21 +86,21 @@ object SplashShield {
                             }
                         }
 
-                        if (!getPlayerData(p)!!.isInMatch()) {
+                        if (!getPlayerData(p)!!.isInMatch) {
                             drop!!.remove()
                             cancel()
                         }
 
-                        if (drop!!.getLocation().getY() < 0 || drop!!.getLocation().getY() < p
-                                .getLocation()
-                                .getY() - 100 || drop!!.isDead()
+                        if (drop!!.location.y < 0 || drop!!.location.y < p
+                                .location
+                                .y - 100 || drop!!.isDead
                         ) {
                             cancel()
                         }
 
-                        if (drop!!.isOnGround()) {
-                            val loc = drop!!.getLocation()
-                            loc.setYaw(yaw)
+                        if (drop!!.isOnGround) {
+                            val loc = drop!!.location
+                            loc.yaw = yaw
                             try {
                                 for (ssdata in splashShieldDataMapWithPlayer.values) {
                                     if (ssdata!!.player === p) {
@@ -111,7 +111,7 @@ object SplashShield {
                             } catch (e: Exception) {
                             }
                             val ssdata = SplashShieldData(p)
-                            SplashShield.splashShieldRunnable(p, loc.clone(), vec!!, ssdata)
+                            splashShieldRunnable(p, loc.clone(), vec!!, ssdata)
                             drop!!.remove()
                             cancel()
                             return
@@ -124,17 +124,17 @@ object SplashShield {
                     }
                 }
             }
-        if (player.getExp() > 0.6f) {
+        if (player.exp > 0.6f) {
             task.runTaskTimer(plugin, 0, 1)
         } else {
             player.sendTitle("", ChatColor.RED.toString() + "インクが足りません", 0, 5, 2)
-            player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1f, 1.63f)
+            player.playSound(player.location, Sound.UI_BUTTON_CLICK, 1f, 1.63f)
         }
 
         val cooltime: BukkitRunnable =
             object : BukkitRunnable() {
                 override fun run() {
-                    getPlayerData(player)!!.setCanUseSubWeapon(true)
+                    getPlayerData(player)!!.canUseSubWeapon = true
                 }
             }
         cooltime.runTaskLater(plugin, 10)
@@ -156,9 +156,9 @@ object SplashShield {
                 override fun run() {
                     try {
                         if (c == 0) {
-                            p.getWorld().playSound(loc, Sound.ENTITY_ARMOR_STAND_FALL, 1f, 1f)
+                            p.world.playSound(loc, Sound.ENTITY_ARMOR_STAND_FALL, 1f, 1f)
                             val pv2 = pv.clone().multiply(-0.25)
-                            val yaw = loc.getYaw()
+                            val yaw = loc.yaw
                             val vec1 = Vector(pv.clone().getZ() * -1, 0.0, pv.clone().getX()).normalize()
                             val vec2 = Vector(pv.clone().getZ(), 0.0, pv.clone().getX() * -1).normalize()
 
@@ -169,224 +169,224 @@ object SplashShield {
                             val positions2: ArrayList<Vector> = rayTrace2.traverse(3.0, 0.2)
 
                             val as1 =
-                                player.getWorld().spawn<ArmorStand>(
+                                player.world.spawn<ArmorStand>(
                                     loc.clone().add(0.0, -0.6, 0.0),
                                     ArmorStand::class.java,
                                     Consumer { armorStand: ArmorStand ->
-                                        armorStand.setMarker(true)
-                                        armorStand.setVisible(false)
+                                        armorStand.isMarker = true
+                                        armorStand.isVisible = false
                                         armorStand.setBasePlate(false)
                                         armorStand.setGravity(false)
-                                        armorStand.setHeadPose(EulerAngle(0.0, 0.0, Math.toRadians(135.0)))
+                                        armorStand.headPose = EulerAngle(0.0, 0.0, Math.toRadians(135.0))
                                     },
                                 )
                             list.add(as1)
                             val as2 =
-                                player.getWorld().spawn<ArmorStand>(
+                                player.world.spawn<ArmorStand>(
                                     loc.clone().add(0.0, 0.0, 0.0),
                                     ArmorStand::class.java,
                                     Consumer { armorStand: ArmorStand ->
-                                        armorStand.setMarker(true)
-                                        armorStand.setVisible(false)
+                                        armorStand.isMarker = true
+                                        armorStand.isVisible = false
                                         armorStand.setBasePlate(false)
                                         armorStand.setGravity(false)
-                                        armorStand.setHeadPose(EulerAngle(0.0, 0.0, Math.toRadians(135.0)))
+                                        armorStand.headPose = EulerAngle(0.0, 0.0, Math.toRadians(135.0))
                                     },
                                 )
                             list.add(as2)
                             val as3 =
-                                player.getWorld().spawn<ArmorStand>(
+                                player.world.spawn<ArmorStand>(
                                     loc.clone().add(0.0, 0.6, 0.0),
                                     ArmorStand::class.java,
                                     Consumer { armorStand: ArmorStand ->
-                                        armorStand.setMarker(true)
-                                        armorStand.setVisible(false)
+                                        armorStand.isMarker = true
+                                        armorStand.isVisible = false
                                         armorStand.setBasePlate(false)
                                         armorStand.setGravity(false)
-                                        armorStand.setHeadPose(EulerAngle(0.0, 0.0, Math.toRadians(135.0)))
+                                        armorStand.headPose = EulerAngle(0.0, 0.0, Math.toRadians(135.0))
                                     },
                                 )
                             list.add(as3)
                             val as4 =
-                                player.getWorld().spawn<ArmorStand>(
+                                player.world.spawn<ArmorStand>(
                                     loc.clone().add(0.0, 1.05, 0.0),
                                     ArmorStand::class.java,
                                     Consumer { armorStand: ArmorStand ->
-                                        armorStand.setMarker(true)
-                                        armorStand.setVisible(false)
+                                        armorStand.isMarker = true
+                                        armorStand.isVisible = false
                                         armorStand.setBasePlate(false)
                                         armorStand.setGravity(false)
-                                        armorStand.setHeadPose(EulerAngle(0.0, 0.0, Math.toRadians(135.0)))
+                                        armorStand.headPose = EulerAngle(0.0, 0.0, Math.toRadians(135.0))
                                     },
                                 )
                             list.add(as4)
                             val as5 =
-                                player.getWorld().spawn<ArmorStand>(
+                                player.world.spawn<ArmorStand>(
                                     loc.clone().add(0.0, -0.6, 0.0),
                                     ArmorStand::class.java,
                                     Consumer { armorStand: ArmorStand ->
-                                        armorStand.setMarker(true)
-                                        armorStand.setVisible(false)
+                                        armorStand.isMarker = true
+                                        armorStand.isVisible = false
                                         armorStand.setBasePlate(false)
                                         armorStand.setGravity(false)
-                                        armorStand.setHeadPose(EulerAngle(0.0, 0.0, Math.toRadians(135.0)))
+                                        armorStand.headPose = EulerAngle(0.0, 0.0, Math.toRadians(135.0))
                                     },
                                 )
                             list.add(as5)
-                            val l6 = positions2.get(5)!!.toLocation(loc.getWorld()!!).add(0.0, 0.25, 0.0)
-                            l6.setYaw(yaw)
+                            val l6 = positions2.get(5)!!.toLocation(loc.world!!).add(0.0, 0.25, 0.0)
+                            l6.yaw = yaw
                             val as6 =
                                 player
-                                    .getWorld()
+                                    .world
                                     .spawn<ArmorStand>(
                                         l6,
                                         ArmorStand::class.java,
                                         Consumer { armorStand: ArmorStand ->
-                                            armorStand.setMarker(true)
-                                            armorStand.setVisible(false)
+                                            armorStand.isMarker = true
+                                            armorStand.isVisible = false
                                             armorStand.setBasePlate(false)
                                             armorStand.setGravity(false)
-                                            armorStand.setHeadPose(EulerAngle(0.0, 0.0, Math.toRadians(270.0)))
+                                            armorStand.headPose = EulerAngle(0.0, 0.0, Math.toRadians(270.0))
                                         },
                                     )
                             list.add(as6)
-                            val l7 = positions1.get(4)!!.toLocation(loc.getWorld()!!)
-                            l7.setYaw(yaw)
+                            val l7 = positions1.get(4)!!.toLocation(loc.world!!)
+                            l7.yaw = yaw
                             val as7 =
                                 player
-                                    .getWorld()
+                                    .world
                                     .spawn<ArmorStand>(
                                         l7,
                                         ArmorStand::class.java,
                                         Consumer { armorStand: ArmorStand ->
-                                            armorStand.setMarker(true)
-                                            armorStand.setVisible(false)
+                                            armorStand.isMarker = true
+                                            armorStand.isVisible = false
                                             armorStand.setBasePlate(false)
                                             armorStand.setGravity(false)
-                                            armorStand.setHeadPose(EulerAngle(0.0, 0.0, Math.toRadians(45.0)))
+                                            armorStand.headPose = EulerAngle(0.0, 0.0, Math.toRadians(45.0))
                                         },
                                     )
                             list.add(as7)
-                            val l8 = positions1.get(7)!!.toLocation(loc.getWorld()!!)
-                            l8.setYaw(yaw)
+                            val l8 = positions1.get(7)!!.toLocation(loc.world!!)
+                            l8.yaw = yaw
                             val as8 =
                                 player
-                                    .getWorld()
+                                    .world
                                     .spawn<ArmorStand>(
                                         l8,
                                         ArmorStand::class.java,
                                         Consumer { armorStand: ArmorStand ->
-                                            armorStand.setMarker(true)
-                                            armorStand.setVisible(false)
+                                            armorStand.isMarker = true
+                                            armorStand.isVisible = false
                                             armorStand.setBasePlate(false)
                                             armorStand.setGravity(false)
-                                            armorStand.setHeadPose(EulerAngle(0.0, 0.0, Math.toRadians(45.0)))
+                                            armorStand.headPose = EulerAngle(0.0, 0.0, Math.toRadians(45.0))
                                         },
                                     )
                             list.add(as8)
-                            val l9 = positions2.get(4)!!.toLocation(loc.getWorld()!!)
-                            l9.setYaw(yaw)
+                            val l9 = positions2.get(4)!!.toLocation(loc.world!!)
+                            l9.yaw = yaw
                             val as9 =
                                 player
-                                    .getWorld()
+                                    .world
                                     .spawn<ArmorStand>(
                                         l9,
                                         ArmorStand::class.java,
                                         Consumer { armorStand: ArmorStand ->
-                                            armorStand.setMarker(true)
-                                            armorStand.setVisible(false)
+                                            armorStand.isMarker = true
+                                            armorStand.isVisible = false
                                             armorStand.setBasePlate(false)
                                             armorStand.setGravity(false)
-                                            armorStand.setHeadPose(EulerAngle(0.0, 0.0, Math.toRadians(45.0)))
+                                            armorStand.headPose = EulerAngle(0.0, 0.0, Math.toRadians(45.0))
                                         },
                                     )
                             list.add(as9)
-                            val l10 = positions2.get(7)!!.toLocation(loc.getWorld()!!)
-                            l10.setYaw(yaw)
+                            val l10 = positions2.get(7)!!.toLocation(loc.world!!)
+                            l10.yaw = yaw
                             val as10 =
                                 player
-                                    .getWorld()
+                                    .world
                                     .spawn<ArmorStand>(
                                         l10,
                                         ArmorStand::class.java,
                                         Consumer { armorStand: ArmorStand ->
-                                            armorStand.setMarker(true)
-                                            armorStand.setVisible(false)
+                                            armorStand.isMarker = true
+                                            armorStand.isVisible = false
                                             armorStand.setBasePlate(false)
                                             armorStand.setGravity(false)
-                                            armorStand.setHeadPose(EulerAngle(0.0, 0.0, Math.toRadians(45.0)))
+                                            armorStand.headPose = EulerAngle(0.0, 0.0, Math.toRadians(45.0))
                                         },
                                     )
                             list.add(as10)
-                            val l11 = positions2.get(4)!!.toLocation(loc.getWorld()!!).add(0.0, -0.45, 0.0)
-                            l11.setYaw(yaw)
+                            val l11 = positions2.get(4)!!.toLocation(loc.world!!).add(0.0, -0.45, 0.0)
+                            l11.yaw = yaw
                             val as11 =
                                 player
-                                    .getWorld()
+                                    .world
                                     .spawn<ArmorStand>(
                                         l11,
                                         ArmorStand::class.java,
                                         Consumer { armorStand: ArmorStand ->
-                                            armorStand.setMarker(true)
-                                            armorStand.setVisible(false)
+                                            armorStand.isMarker = true
+                                            armorStand.isVisible = false
                                             armorStand.setBasePlate(false)
                                             armorStand.setGravity(false)
                                         },
                                     )
                             list.add(as11)
                             val l12 =
-                                positions2.get(3)!!.toLocation(loc.getWorld()!!).clone().add(
+                                positions2.get(3)!!.toLocation(loc.world!!).clone().add(
                                     pv2.getX(),
                                     -0.1,
                                     pv2.getZ(),
                                 )
-                            l12.setYaw(yaw)
+                            l12.yaw = yaw
                             val as12 =
-                                player.getWorld().spawn<ArmorStand>(
+                                player.world.spawn<ArmorStand>(
                                     l12.add(vec1.clone().normalize().multiply(0.05)),
                                     ArmorStand::class.java,
                                     Consumer { armorStand: ArmorStand ->
-                                        armorStand.setMarker(true)
-                                        armorStand.setVisible(false)
+                                        armorStand.isMarker = true
+                                        armorStand.isVisible = false
                                         armorStand.setBasePlate(false)
                                         armorStand.setGravity(false)
-                                        armorStand.setSmall(true)
+                                        armorStand.isSmall = true
                                     },
                                 )
-                            as12.setSmall(true)
+                            as12.isSmall = true
                             list.add(as12)
                             val l13 =
-                                positions2.get(3)!!.toLocation(loc.getWorld()!!).clone().add(
+                                positions2.get(3)!!.toLocation(loc.world!!).clone().add(
                                     pv2.getX(),
                                     -0.5,
                                     pv2.getZ(),
                                 )
-                            l13.setYaw(yaw)
+                            l13.yaw = yaw
                             val as13 =
-                                player.getWorld().spawn<ArmorStand>(
+                                player.world.spawn<ArmorStand>(
                                     l13.add(vec1.clone().normalize().multiply(0.05)),
                                     ArmorStand::class.java,
                                     Consumer { armorStand: ArmorStand ->
-                                        armorStand.setMarker(true)
-                                        armorStand.setVisible(false)
+                                        armorStand.isMarker = true
+                                        armorStand.isVisible = false
                                         armorStand.setBasePlate(false)
                                         armorStand.setGravity(false)
-                                        armorStand.setSmall(true)
+                                        armorStand.isSmall = true
                                     },
                                 )
-                            as13.setSmall(true)
+                            as13.isSmall = true
                             list.add(as13)
-                            val l14 = positions2.get(10)!!.toLocation(loc.getWorld()!!)
-                            l14.setYaw(yaw)
+                            val l14 = positions2.get(10)!!.toLocation(loc.world!!)
+                            l14.yaw = yaw
                             val as14 =
                                 player
-                                    .getWorld()
+                                    .world
                                     .spawn<ArmorStand>(
                                         l14,
                                         ArmorStand::class.java,
                                         Consumer { armorStand: ArmorStand ->
-                                            armorStand.setMarker(true)
-                                            armorStand.setVisible(false)
+                                            armorStand.isMarker = true
+                                            armorStand.isVisible = false
                                             armorStand.setBasePlate(false)
                                             armorStand.setGravity(false)
                                         },
@@ -400,13 +400,13 @@ object SplashShield {
                             for (a in list) {
                                 setSplashShieldDataWithARmorStand(a, ssdata)
                                 DataMgr.ssa.add(a)
-                                a.setCustomName("SplashShield")
+                                a.customName = "SplashShield"
 
-                                for (target in plugin.getServer().getOnlinePlayers()) {
+                                for (target in plugin.server.onlinePlayers) {
                                     if (i <= 5) {
-                                        (target as CraftPlayer).getHandle().playerConnection.sendPacket(
+                                        (target as CraftPlayer).handle.playerConnection.sendPacket(
                                             PacketPlayOutEntityEquipment(
-                                                a.getEntityId(),
+                                                a.entityId,
                                                 EnumItemSlot.HEAD,
                                                 CraftItemStack.asNMSCopy(ItemStack(Material.BLAZE_ROD)),
                                             ),
@@ -414,11 +414,11 @@ object SplashShield {
                                     }
                                     if (i > 11 && i < 14) {
                                         (target as CraftPlayer)
-                                            .getHandle()
+                                            .handle
                                             .playerConnection
                                             .sendPacket(
                                                 PacketPlayOutEntityEquipment(
-                                                    a.getEntityId(),
+                                                    a.entityId,
                                                     EnumItemSlot.HEAD,
                                                     CraftItemStack.asNMSCopy(
                                                         ItemStack(
@@ -436,11 +436,11 @@ object SplashShield {
                         if (c == 10) {
                             var i = 1
                             for (a in list) {
-                                for (target in plugin.getServer().getOnlinePlayers()) {
+                                for (target in plugin.server.onlinePlayers) {
                                     if (i > 5 && i <= 11) {
-                                        (target as CraftPlayer).getHandle().playerConnection.sendPacket(
+                                        (target as CraftPlayer).handle.playerConnection.sendPacket(
                                             PacketPlayOutEntityEquipment(
-                                                a.getEntityId(),
+                                                a.entityId,
                                                 EnumItemSlot.HEAD,
                                                 CraftItemStack.asNMSCopy(ItemStack(Material.STICK)),
                                             ),
@@ -449,13 +449,13 @@ object SplashShield {
                                 }
                                 i++
                             }
-                            p.getWorld().playSound(loc, Sound.ITEM_ARMOR_EQUIP_GENERIC, 1f, 1f)
+                            p.world.playSound(loc, Sound.ITEM_ARMOR_EQUIP_GENERIC, 1f, 1f)
                         }
 
                         if (c == 15) {
                             ssdata.isDeploy = (true)
                             for (a in list) {
-                                a.setMarker(false)
+                                a.isMarker = false
                             }
                         }
 
@@ -477,7 +477,7 @@ object SplashShield {
                                     .wool!!
                                     .createBlockData()
                             ray@ for (i in 0..<positions1.size - 4) {
-                                val position = positions1.get(i)!!.toLocation(p.getLocation().getWorld()!!)
+                                val position = positions1.get(i)!!.toLocation(p.location.world!!)
                                 PaintMgr.PaintHightestBlock(position, p, false, false)
                                 val damage = 10.0
                                 val rayTrace4 =
@@ -485,11 +485,11 @@ object SplashShield {
                                         position.clone().add(sv.getX(), 0.0, sv.getZ()).toVector(),
                                         Vector(0, -1, 0),
                                     )
-                                for (target in plugin.getServer().getOnlinePlayers()) {
-                                    if (target.getWorld() === p.getWorld()) {
+                                for (target in plugin.server.onlinePlayers) {
+                                    if (target.world === p.world) {
                                         if (rayTrace4.intersects(BoundingBox(target as Entity), 3.0, 0.5) &&
                                             getPlayerData(target)!!.team != getPlayerData(p)!!.team &&
-                                            target.getGameMode() == GameMode.ADVENTURE
+                                            target.gameMode == GameMode.ADVENTURE
                                         ) {
                                             giveDamage(player, target, damage, "subWeapon")
 
@@ -499,7 +499,7 @@ object SplashShield {
                                                     var p: Player = target
 
                                                     override fun run() {
-                                                        target.setNoDamageTicks(0)
+                                                        target.noDamageTicks = 0
                                                     }
                                                 }
                                             task.runTaskLater(plugin, 1)
@@ -507,7 +507,7 @@ object SplashShield {
                                     }
                                 }
 
-                                for (o_player in plugin.getServer().getOnlinePlayers()) {
+                                for (o_player in plugin.server.onlinePlayers) {
                                     o_player.spawnParticle<BlockData?>(
                                         Particle.FALLING_DUST,
                                         position.clone().add(sv.getX(), 0.0, sv.getZ()),
@@ -522,7 +522,7 @@ object SplashShield {
                             }
 
                             ray@ for (i in 0..<positions2.size - 1) {
-                                val position = positions2.get(i)!!.toLocation(p.getLocation().getWorld()!!)
+                                val position = positions2.get(i)!!.toLocation(p.location.world!!)
                                 PaintMgr.PaintHightestBlock(position, p, false, false)
                                 val damage = 10.0
                                 val rayTrace4 =
@@ -530,11 +530,11 @@ object SplashShield {
                                         position.clone().add(sv.getX(), 0.0, sv.getZ()).toVector(),
                                         Vector(0, -1, 0),
                                     )
-                                for (target in plugin.getServer().getOnlinePlayers()) {
-                                    if (target.getWorld() === p.getWorld()) {
+                                for (target in plugin.server.onlinePlayers) {
+                                    if (target.world === p.world) {
                                         if (rayTrace4.intersects(BoundingBox(target as Entity), 3.0, 0.5) &&
                                             getPlayerData(target)!!.team != getPlayerData(p)!!.team &&
-                                            target.getGameMode() == GameMode.ADVENTURE
+                                            target.gameMode == GameMode.ADVENTURE
                                         ) {
                                             giveDamage(player, target, damage, "subWeapon")
 
@@ -544,14 +544,14 @@ object SplashShield {
                                                     var p: Player = target
 
                                                     override fun run() {
-                                                        target.setNoDamageTicks(0)
+                                                        target.noDamageTicks = 0
                                                     }
                                                 }
                                             task.runTaskLater(plugin, 1)
                                         }
                                     }
                                 }
-                                for (o_player in plugin.getServer().getOnlinePlayers()) {
+                                for (o_player in plugin.server.onlinePlayers) {
                                     if (i == 0 || i == 1 || i == 2) {
                                         o_player.spawnParticle<BlockData?>(
                                             Particle.FALLING_DUST,
@@ -582,14 +582,14 @@ object SplashShield {
                         if (c == 110) {
                             var i = 1
                             for (a in list) {
-                                for (target in plugin.getServer().getOnlinePlayers()) {
+                                for (target in plugin.server.onlinePlayers) {
                                     if (i == 12) {
                                         (target as CraftPlayer)
-                                            .getHandle()
+                                            .handle
                                             .playerConnection
                                             .sendPacket(
                                                 PacketPlayOutEntityEquipment(
-                                                    a.getEntityId(),
+                                                    a.entityId,
                                                     EnumItemSlot.HEAD,
                                                     CraftItemStack
                                                         .asNMSCopy(ItemStack(Material.WHITE_STAINED_GLASS)),
@@ -601,10 +601,10 @@ object SplashShield {
                             }
                         }
 
-                        if (c > 200 || !getPlayerData(p)!!.isInMatch() || ssdata.damage > 80) {
+                        if (c > 200 || !getPlayerData(p)!!.isInMatch || ssdata.damage > 80) {
                             for (a in list) a.remove()
-                            list.get(0).getWorld().playSound(
-                                list.get(0).getLocation(),
+                            list.get(0).world.playSound(
+                                list.get(0).location,
                                 Sound.ENTITY_ITEM_BREAK,
                                 0.8f,
                                 0.8f,

@@ -5,7 +5,6 @@ import be4rjp.sclat.api.SclatUtil.createInkExplosionEffect
 import be4rjp.sclat.api.SclatUtil.giveDamage
 import be4rjp.sclat.api.SclatUtil.repelBarrier
 import be4rjp.sclat.api.Sphere.getSphere
-import be4rjp.sclat.data.DataMgr
 import be4rjp.sclat.data.DataMgr.getKasaDataFromArmorStand
 import be4rjp.sclat.data.DataMgr.getPlayerData
 import be4rjp.sclat.data.DataMgr.getSplashShieldDataFromArmorStand
@@ -36,7 +35,7 @@ import org.bukkit.util.Vector
 object Boomerang {
     @JvmStatic
     fun BoomerangRunnable(player: Player) {
-        val pVector = player.getEyeLocation().getDirection()
+        val pVector = player.eyeLocation.direction
         val vec = Vector(pVector.getX(), pVector.getY(), pVector.getZ()).normalize().multiply(0.6)
         val task: BukkitRunnable =
             object : BukkitRunnable() {
@@ -55,77 +54,77 @@ object Boomerang {
                     try {
                         if (i == 0) {
                             cumbackBoomeran = false
-                            if (!getPlayerData(player)!!.getIsBombRush()) player.setExp(player.getExp() - 0.59f)
+                            if (!getPlayerData(player)!!.isBombRush) player.exp = player.exp - 0.59f
 
                             as1 =
-                                player.getWorld().spawn<ArmorStand>(
-                                    player.getLocation().add(0.0, 1.6, 0.0),
+                                player.world.spawn<ArmorStand>(
+                                    player.location.add(0.0, 1.6, 0.0),
                                     ArmorStand::class.java,
                                     Consumer { armorStand: ArmorStand ->
-                                        armorStand.setVisible(false)
-                                        armorStand.setSmall(true)
+                                        armorStand.isVisible = false
+                                        armorStand.isSmall = true
                                     },
                                 )
                             as2 =
-                                player.getWorld().spawn<ArmorStand>(
-                                    player.getLocation().add(0.0, 1.6, 0.0),
+                                player.world.spawn<ArmorStand>(
+                                    player.location.add(0.0, 1.6, 0.0),
                                     ArmorStand::class.java,
                                     Consumer { armorStand: ArmorStand ->
-                                        armorStand.setVisible(false)
+                                        armorStand.isVisible = false
                                         armorStand.setGravity(false)
-                                        armorStand.setMarker(true)
-                                        armorStand.setSmall(true)
+                                        armorStand.isMarker = true
+                                        armorStand.isSmall = true
                                     },
                                 )
-                            val loc = player.getLocation().add(0.0, 0.8, 0.0)
-                            loc.setYaw(90f)
+                            val loc = player.location.add(0.0, 0.8, 0.0)
+                            loc.yaw = 90f
                             as3 =
                                 player
-                                    .getWorld()
+                                    .world
                                     .spawn<ArmorStand>(
                                         loc,
                                         ArmorStand::class.java,
                                         Consumer { armorStand: ArmorStand ->
-                                            armorStand.setVisible(false)
+                                            armorStand.isVisible = false
                                             armorStand.setGravity(false)
-                                            armorStand.setSmall(true)
+                                            armorStand.isSmall = true
                                         },
                                     )
 
                             fb =
-                                player.getWorld().spawnFallingBlock(
-                                    player.getLocation(),
+                                player.world.spawnFallingBlock(
+                                    player.location,
                                     Material.WHITE_CARPET.createBlockData(),
                                 )
                             fb!!.setGravity(false)
-                            fb!!.setDropItem(false)
+                            fb!!.dropItem = false
                             fb!!.setHurtEntities(false)
 
                             as2!!.addPassenger(fb!!)
                         }
 
-                        val aloc = as1!!.getLocation().add(0.0, -0.8, 0.0)
-                        aloc.setYaw(90f)
-                        val as1l = as1!!.getLocation()
-                        (as2 as CraftArmorStand).getHandle().setPositionRotation(
-                            as1l.getX(),
-                            as1l.getY(),
-                            as1l.getZ(),
+                        val aloc = as1!!.location.add(0.0, -0.8, 0.0)
+                        aloc.yaw = 90f
+                        val as1l = as1!!.location
+                        (as2 as CraftArmorStand).handle.setPositionRotation(
+                            as1l.x,
+                            as1l.y,
+                            as1l.z,
                             0f,
                             0f,
                         )
                         as3!!.teleport(aloc)
-                        fb!!.setTicksLived(1)
+                        fb!!.ticksLived = 1
 
                         if (i >= 5 && !cumbackBoomeran) {
-                            if (bloc!!.getX() == as1l.getX() && bloc!!.getZ() != as1l.getZ() ||
-                                bloc!!.getZ() == as1l.getZ() && bloc!!.getX() != as1l.getX()
+                            if (bloc!!.x == as1l.x && bloc!!.z != as1l.z ||
+                                bloc!!.z == as1l.z && bloc!!.x != as1l.x
                             ) {
                                 aVec =
                                     Vector(
-                                        player.getLocation().getX() - bloc!!.getX(),
-                                        (player.getLocation().getY() + 1.6) - bloc!!.getY(),
-                                        player.getLocation().getZ() - bloc!!.getZ(),
+                                        player.location.x - bloc!!.x,
+                                        (player.location.y + 1.6) - bloc!!.y,
+                                        player.location.z - bloc!!.z,
                                     ).normalize().multiply(1.0)
                                 cumbackBoomeran = true
                                 cumbacktime = i
@@ -135,29 +134,29 @@ object Boomerang {
                                         PaintMgr.Paint(loc, player, false)
                                     }
                                 }
-                            } else if (as1!!.isOnGround()) {
+                            } else if (as1!!.isOnGround) {
                                 aVec =
                                     Vector(
-                                        player.getLocation().getX() - bloc!!.getX(),
-                                        (player.getLocation().getY() + 1.6) - bloc!!.getY(),
-                                        player.getLocation().getZ() - bloc!!.getZ(),
+                                        player.location.x - bloc!!.x,
+                                        (player.location.y + 1.6) - bloc!!.y,
+                                        player.location.z - bloc!!.z,
                                     ).normalize().multiply(1.0)
                                 cumbackBoomeran = true
                                 cumbacktime = i
                             } else if (i == 30) {
                                 aVec =
                                     Vector(
-                                        player.getLocation().getX() - bloc!!.getX(),
-                                        (player.getLocation().getY() + 1.6) - bloc!!.getY(),
-                                        player.getLocation().getZ() - bloc!!.getZ(),
+                                        player.location.x - bloc!!.x,
+                                        (player.location.y + 1.6) - bloc!!.y,
+                                        player.location.z - bloc!!.z,
                                     ).normalize().multiply(1.0)
                                 cumbackBoomeran = true
                                 cumbacktime = 35
                             }
                         }
                         if (i >= cumbacktime + 5) {
-                            if (bloc!!.getX() == as1l.getX() && bloc!!.getZ() != as1l.getZ() ||
-                                bloc!!.getZ() == as1l.getZ() && bloc!!.getX() != as1l.getX()
+                            if (bloc!!.x == as1l.x && bloc!!.z != as1l.z ||
+                                bloc!!.z == as1l.z && bloc!!.x != as1l.x
                             ) {
                                 explode = true
                             }
@@ -165,7 +164,7 @@ object Boomerang {
                         if (i >= cumbacktime + 15) {
                             explode = true
                         }
-                        as1!!.setVelocity(aVec)
+                        as1!!.velocity = aVec
 
                         PaintMgr.PaintHightestBlock(as1l, player, false, true)
 
@@ -173,14 +172,14 @@ object Boomerang {
 
                         if (i % 10 == 0) {
                             for (o_player in plugin
-                                .getServer()
-                                .getOnlinePlayers()) {
+                                .server
+                                .onlinePlayers) {
                                 (o_player as CraftPlayer)
-                                    .getHandle()
+                                    .handle
                                     .playerConnection
                                     .sendPacket(
                                         PacketPlayOutEntityEquipment(
-                                            as3!!.getEntityId(),
+                                            as3!!.entityId,
                                             EnumItemSlot.HEAD,
                                             CraftItemStack.asNMSCopy(
                                                 ItemStack(
@@ -193,7 +192,7 @@ object Boomerang {
                         }
 
                         if (i >= cumbacktime + 3 && i <= cumbacktime + 13) {
-                            if (i % 2 == 0) player.getWorld().playSound(as1l, Sound.BLOCK_NOTE_BLOCK_PLING, 1f, 1.6f)
+                            if (i % 2 == 0) player.world.playSound(as1l, Sound.BLOCK_NOTE_BLOCK_PLING, 1f, 1.6f)
                         }
 
                         // エフェクト
@@ -203,13 +202,13 @@ object Boomerang {
                                     .team.teamColor!!
                                     .wool!!
                                     .createBlockData()
-                            for (target in plugin.getServer().getOnlinePlayers()) {
+                            for (target in plugin.server.onlinePlayers) {
                                 if (getPlayerData(target)!!.settings.ShowEffect_Bomb()) {
-                                    if (target.getWorld() ===
-                                        player.getWorld()
+                                    if (target.world ===
+                                        player.world
                                     ) {
                                         if (target
-                                                .getLocation()
+                                                .location
                                                 .distanceSquared(as1l) < Sclat.particleRenderDistanceSquared
                                         ) {
                                             target.spawnParticle<BlockData?>(
@@ -227,13 +226,13 @@ object Boomerang {
                                 }
                             }
                             // 攻撃判定
-                            for (target in plugin.getServer().getOnlinePlayers()) {
+                            for (target in plugin.server.onlinePlayers) {
                                 if (getPlayerData(target)!!.settings.ShowEffect_Bomb()) {
-                                    if (target.getWorld() === player.getWorld()) {
-                                        if (target.getLocation().distance(as1l) <= 1.2) {
+                                    if (target.world === player.world) {
+                                        if (target.location.distance(as1l) <= 1.2) {
                                             val damage = 0.2
                                             if (getPlayerData(player)!!.team != getPlayerData(target)!!.team &&
-                                                target.getGameMode() == GameMode.ADVENTURE
+                                                target.gameMode == GameMode.ADVENTURE
                                             ) {
                                                 giveDamage(player, target, damage, "subWeapon")
 
@@ -243,7 +242,7 @@ object Boomerang {
                                                         var p: Player = target
 
                                                         override fun run() {
-                                                            target.setNoDamageTicks(0)
+                                                            target.noDamageTicks = 0
                                                         }
                                                     }
                                                 task.runTaskLater(plugin, 1)
@@ -253,14 +252,14 @@ object Boomerang {
                                 }
                             }
 
-                            for (`as` in player.getWorld().getEntities()) {
-                                if (`as`.getLocation().distance(as1l) <= 1.2) {
+                            for (`as` in player.world.entities) {
+                                if (`as`.location.distance(as1l) <= 1.2) {
                                     if (`as` is ArmorStand) {
                                         val damage = 0.2
                                         ArmorStandMgr.giveDamageArmorStand(`as`, damage, player)
-                                        if (`as`.getCustomName() != null) {
-                                            if (`as`.getCustomName() == "SplashShield" ||
-                                                `as`.getCustomName() == "Kasa"
+                                        if (`as`.customName != null) {
+                                            if (`as`.customName == "SplashShield" ||
+                                                `as`.customName == "Kasa"
                                             ) {
                                                 break
                                             }
@@ -270,12 +269,12 @@ object Boomerang {
                             }
                         }
 
-                        if (i == 90 || !player.isOnline() || !getPlayerData(player)!!.isInMatch() || explode) {
+                        if (i == 90 || !player.isOnline || !getPlayerData(player)!!.isInMatch || explode) {
                             // 半径
                             val maxDist = 3.0
 
                             // 爆発音
-                            player.getWorld().playSound(as1l, Sound.ENTITY_FIREWORK_ROCKET_BLAST, 1f, 1f)
+                            player.world.playSound(as1l, Sound.ENTITY_FIREWORK_ROCKET_BLAST, 1f, 1f)
 
                             // 爆発エフェクト
                             createInkExplosionEffect(as1l, maxDist, 15, player)
@@ -296,16 +295,15 @@ object Boomerang {
                             }
 
                             // 攻撃判定の処理
-                            for (`as` in player.getWorld().getEntities()) {
-                                if (`as`.getLocation().distance(as1l) <= maxDist) {
+                            for (`as` in player.world.entities) {
+                                if (`as`.location.distance(as1l) <= maxDist) {
                                     if (`as` is ArmorStand) {
-                                        if (`as`.getCustomName() != null) {
+                                        if (`as`.customName != null) {
                                             try {
-                                                if (`as`.getCustomName() == "Kasa") {
+                                                if (`as`.customName == "Kasa") {
                                                     val kasaData = getKasaDataFromArmorStand(`as`)
                                                     if (getPlayerData(kasaData!!.player)!!.team !=
-                                                        DataMgr
-                                                            .getPlayerData(player)!!
+                                                        getPlayerData(player)!!
                                                             .team
                                                     ) {
                                                         as1!!.remove()
@@ -314,11 +312,10 @@ object Boomerang {
                                                         fb!!.remove()
                                                         cancel()
                                                     }
-                                                } else if (`as`.getCustomName() == "SplashShield") {
+                                                } else if (`as`.customName == "SplashShield") {
                                                     val splashShieldData = getSplashShieldDataFromArmorStand(`as`)
                                                     if (getPlayerData(splashShieldData!!.player)!!.team !=
-                                                        DataMgr
-                                                            .getPlayerData(player)!!
+                                                        getPlayerData(player)!!
                                                             .team
                                                     ) {
                                                         as1!!.remove()
@@ -335,15 +332,15 @@ object Boomerang {
                                 }
                             }
 
-                            for (target in plugin.getServer().getOnlinePlayers()) {
-                                if (!getPlayerData(target)!!.isInMatch() || target.getWorld() !== player.getWorld()) continue
-                                if (target.getLocation().distance(as1l) <= maxDist) {
+                            for (target in plugin.server.onlinePlayers) {
+                                if (!getPlayerData(target)!!.isInMatch || target.world !== player.world) continue
+                                if (target.location.distance(as1l) <= maxDist) {
                                     val damage = (
-                                        (maxDist - target.getLocation().distance(as1l)) * 1 *
+                                        (maxDist - target.location.distance(as1l)) * 1 *
                                             Gear.getGearInfluence(player, Gear.Type.SUB_SPEC_UP)
                                         )
                                     if (getPlayerData(player)!!.team != getPlayerData(target)!!.team &&
-                                        target.getGameMode() == GameMode.ADVENTURE
+                                        target.gameMode == GameMode.ADVENTURE
                                     ) {
                                         giveDamage(player, target, damage, "subWeapon")
 
@@ -353,7 +350,7 @@ object Boomerang {
                                                 var p: Player = target
 
                                                 override fun run() {
-                                                    target.setNoDamageTicks(0)
+                                                    target.noDamageTicks = 0
                                                 }
                                             }
                                         task.runTaskLater(plugin, 1)
@@ -361,17 +358,17 @@ object Boomerang {
                                 }
                             }
 
-                            for (`as` in player.getWorld().getEntities()) {
-                                if (`as`.getLocation().distance(as1l) <= maxDist) {
+                            for (`as` in player.world.entities) {
+                                if (`as`.location.distance(as1l) <= maxDist) {
                                     if (`as` is ArmorStand) {
                                         val damage = (
-                                            (maxDist - `as`.getLocation().distance(as1l)) * 1 *
+                                            (maxDist - `as`.location.distance(as1l)) * 1 *
                                                 Gear.getGearInfluence(player, Gear.Type.SUB_SPEC_UP)
                                             )
                                         ArmorStandMgr.giveDamageArmorStand(`as`, damage, player)
-                                        if (`as`.getCustomName() != null) {
-                                            if (`as`.getCustomName() == "SplashShield" ||
-                                                `as`.getCustomName() == "Kasa"
+                                        if (`as`.customName != null) {
+                                            if (`as`.customName == "SplashShield" ||
+                                                `as`.customName == "Kasa"
                                             ) {
                                                 break
                                             }
@@ -397,17 +394,17 @@ object Boomerang {
                     }
                 }
             }
-        if (player.getExp() > 0.6 || getPlayerData(player)!!.getIsBombRush()) {
+        if (player.exp > 0.6 || getPlayerData(player)!!.isBombRush) {
             task.runTaskTimer(plugin, 0, 1)
         } else {
             player.sendTitle("", ChatColor.RED.toString() + "インクが足りません", 0, 5, 2)
-            player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1f, 1.63f)
+            player.playSound(player.location, Sound.UI_BUTTON_CLICK, 1f, 1.63f)
         }
 
         val cooltime: BukkitRunnable =
             object : BukkitRunnable() {
                 override fun run() {
-                    getPlayerData(player)!!.setCanUseSubWeapon(true)
+                    getPlayerData(player)!!.canUseSubWeapon = true
                 }
             }
         cooltime.runTaskLater(plugin, 10)

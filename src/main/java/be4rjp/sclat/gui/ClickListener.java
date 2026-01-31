@@ -336,7 +336,7 @@ public class ClickListener implements Listener {
 				}
 
 				BukkitRunnable delay = new BukkitRunnable() {
-					Player p = player;
+					final Player p = player;
 					@Override
 					public void run() {
 						DataMgr.getPlayerData(p).setIsInMatch(true);
@@ -642,7 +642,7 @@ public class ClickListener implements Listener {
 
 	@EventHandler
 	public void onOpenMainMenu(PlayerInteractEvent event) {
-		Player player = (Player) event.getPlayer();
+		Player player = event.getPlayer();
 		Action action = event.getAction();
 
 		if (player.getInventory().getItemInMainHand() == null

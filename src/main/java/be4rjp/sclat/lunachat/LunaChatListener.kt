@@ -14,14 +14,14 @@ class LunaChatListener : Listener {
     // @EventHandler
     fun onChat(event: LunaChatBukkitPreChatEvent) {
         var sender: Player? = null
-        for (player in plugin.getServer().getOnlinePlayers()) {
-            if (player.getName() == event.getMember().getName()) {
+        for (player in plugin.server.onlinePlayers) {
+            if (player.name == event.member.name) {
                 sender = player
             }
         }
         if (sender != null) {
             val data = getPlayerData(sender)
-            if (data!!.getIsJoined()) event.setMessage(data.team.teamColor!!.colorCode + event.getMessage())
+            if (data!!.isJoined) event.message = data.team.teamColor!!.colorCode + event.message
         }
     }
 }

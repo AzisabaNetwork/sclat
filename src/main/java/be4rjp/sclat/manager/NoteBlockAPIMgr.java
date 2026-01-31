@@ -18,10 +18,10 @@ public class NoteBlockAPIMgr {
 	private static int nBgm_C = 0;
 	private static int fBgm_C = 0;
 	// private static byte volume = 22;
-	private static List<Song> nsList = new ArrayList<>();
-	private static List<String> nsnList = new ArrayList<>();
-	private static List<Song> fsList = new ArrayList<>();
-	private static List<String> fsnList = new ArrayList<>();
+	private static final List<Song> nsList = new ArrayList<>();
+	private static final List<String> nsnList = new ArrayList<>();
+	private static final List<Song> fsList = new ArrayList<>();
+	private static final List<String> fsnList = new ArrayList<>();
 
 	public static void LoadSongFiles() {
 		for (String songname : conf.config.getConfigurationSection("nBGM").getKeys(false)) {

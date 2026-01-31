@@ -14,7 +14,7 @@ class CustomConfig(private val plugin: Plugin, private val file: String) {
     private val configFile: File
 
     init {
-        configFile = File(plugin.getDataFolder(), file)
+        configFile = File(plugin.dataFolder, file)
     }
 
     fun saveDefaultConfig() {
@@ -35,7 +35,7 @@ class CustomConfig(private val plugin: Plugin, private val file: String) {
         try {
             getConfig()!!.save(configFile)
         } catch (ex: IOException) {
-            plugin.getLogger().log(Level.SEVERE, "Could not save config to " + configFile, ex)
+            plugin.logger.log(Level.SEVERE, "Could not save config to " + configFile, ex)
         }
     }
 

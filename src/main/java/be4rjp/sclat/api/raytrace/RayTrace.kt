@@ -9,8 +9,8 @@ class RayTrace(var origin: Vector, var direction: Vector) {
 
     fun isOnLine(position: Vector): Boolean {
         val t = (position.getX() - origin.getX()) / direction.getX()
-        return position.getBlockY().toDouble() == origin.getY() + (t * direction.getY()) &&
-            position.getBlockZ().toDouble() == origin.getZ() + (t * direction.getZ())
+        return position.blockY.toDouble() == origin.getY() + (t * direction.getY()) &&
+            position.blockZ.toDouble() == origin.getZ() + (t * direction.getZ())
     }
 
     fun traverse(blocksAway: Double, accuracy: Double): ArrayList<Vector> {

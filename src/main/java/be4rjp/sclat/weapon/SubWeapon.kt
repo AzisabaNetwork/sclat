@@ -22,11 +22,11 @@ class SubWeapon : Listener {
     fun onClickSubWeapon(event: PlayerInteractEvent) {
         val player = event.getPlayer()
         val action = event.getAction()
-        val data = getPlayerData(player)
+        getPlayerData(player)
 
-        if (player.getInventory().getItemInMainHand() == null || player.getInventory().getItemInMainHand()
-                .getItemMeta() == null || player.getInventory().getItemInMainHand().getItemMeta()!!
-                .getDisplayName() == null
+        if (player.inventory.itemInMainHand == null || player.inventory.itemInMainHand
+                .itemMeta == null || player.inventory.itemInMainHand.itemMeta!!
+                .displayName == null
         ) {
             return
         }
@@ -34,7 +34,7 @@ class SubWeapon : Listener {
         if (action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK) {
             SubWeaponMgr.UseSubWeapon(
                 player,
-                player.getInventory().getItemInMainHand().getItemMeta()!!.getDisplayName(),
+                player.inventory.itemInMainHand.itemMeta!!.displayName,
             )
         }
     }
@@ -43,20 +43,20 @@ class SubWeapon : Listener {
     fun onPlayerClick(event: PlayerAnimationEvent) {
         val player = event.getPlayer()
 
-        val rayTrace = RayTrace(player.getEyeLocation().toVector(), player.getEyeLocation().getDirection())
+        val rayTrace = RayTrace(player.eyeLocation.toVector(), player.eyeLocation.direction)
         val positions = rayTrace.traverse(4.0, 0.5)
         check@ for (vector in positions) {
-            val position = vector.toLocation(player.getLocation().getWorld()!!)
-            if (position.getBlock().getType().toString().contains("SIGN")) {
+            val position = vector.toLocation(player.location.world!!)
+            if (position.block.type.toString().contains("SIGN")) {
                 return
             }
         }
 
-        if (event.getAnimationType() == PlayerAnimationType.ARM_SWING) {
-            if (getPlayerData(player)!!.isInMatch()) {
+        if (event.animationType == PlayerAnimationType.ARM_SWING) {
+            if (getPlayerData(player)!!.isInMatch) {
                 SubWeaponMgr.UseSubWeapon(
                     player,
-                    getPlayerData(player)!!.getWeaponClass().subWeaponName,
+                    getPlayerData(player)!!.weaponClass.subWeaponName,
                 )
             }
         }
@@ -65,29 +65,29 @@ class SubWeapon : Listener {
     @EventHandler
     fun PlayerRightClick(event: PlayerInteractEntityEvent) {
         val player = event.getPlayer()
-        if (player.getInventory().getItemInMainHand() == null || player.getInventory().getItemInMainHand()
-                .getItemMeta() == null || player.getInventory().getItemInMainHand().getItemMeta()!!
-                .getDisplayName() == null
+        if (player.inventory.itemInMainHand == null || player.inventory.itemInMainHand
+                .itemMeta == null || player.inventory.itemInMainHand.itemMeta!!
+                .displayName == null
         ) {
             return
         }
 
-        if (!getPlayerData(player)!!.isInMatch()) return
+        if (!getPlayerData(player)!!.isInMatch) return
 
-        SubWeaponMgr.UseSubWeapon(player, player.getInventory().getItemInMainHand().getItemMeta()!!.getDisplayName())
+        SubWeaponMgr.UseSubWeapon(player, player.inventory.itemInMainHand.itemMeta!!.displayName)
     }
 
     @EventHandler
     fun onPlayerInteractAtEntity(event: PlayerInteractAtEntityEvent) {
         val player = event.getPlayer()
-        if (player.getInventory().getItemInMainHand() == null || player.getInventory().getItemInMainHand()
-                .getItemMeta() == null || player.getInventory().getItemInMainHand().getItemMeta()!!
-                .getDisplayName() == null
+        if (player.inventory.itemInMainHand == null || player.inventory.itemInMainHand
+                .itemMeta == null || player.inventory.itemInMainHand.itemMeta!!
+                .displayName == null
         ) {
             return
         }
-        if (!getPlayerData(player)!!.isInMatch()) return
+        if (!getPlayerData(player)!!.isInMatch) return
 
-        SubWeaponMgr.UseSubWeapon(player, player.getInventory().getItemInMainHand().getItemMeta()!!.getDisplayName())
+        SubWeaponMgr.UseSubWeapon(player, player.inventory.itemInMainHand.itemMeta!!.displayName)
     }
 }

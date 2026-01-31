@@ -55,7 +55,6 @@ import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_14_R1.inventory.CraftItemStack;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.ItemFrame;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -92,7 +91,7 @@ public class GameMgr implements Listener {
 		player.getInventory().clear();
 		player.getInventory().setHeldItemSlot(0);
 
-		((LivingEntity) player).setCollidable(false);
+		player.setCollidable(false);
 		// player.setDisplayName(player.getName());
 
 		if (PlayerReturnManager.isReturned(player.getUniqueId().toString()))
@@ -195,7 +194,7 @@ public class GameMgr implements Listener {
 			}
 
 			BukkitRunnable delay = new BukkitRunnable() {
-				Player p = player;
+				final Player p = player;
 				@Override
 				public void run() {
 					// WeaponClassMgr.setWeaponClass(p);
@@ -229,7 +228,7 @@ public class GameMgr implements Listener {
 						}
 
 						BukkitRunnable delay = new BukkitRunnable() {
-							Player p = player;
+							final Player p = player;
 							@Override
 							public void run() {
 								DataMgr.getPlayerData(p).setIsInMatch(true);
@@ -572,7 +571,7 @@ public class GameMgr implements Listener {
 			}
 			// AntiDamageTime
 			BukkitRunnable task = new BukkitRunnable() {
-				Player p = target;
+				final Player p = target;
 				@Override
 				public void run() {
 					target.setNoDamageTicks(0);
@@ -639,7 +638,7 @@ public class GameMgr implements Listener {
 	@EventHandler
 	public void onPlayerDropItem(PlayerDropItemEvent event) {
 		event.setCancelled(true);
-		Player player = (Player) event.getPlayer();
+		Player player = event.getPlayer();
 		PlayerData data = DataMgr.getPlayerData(player);
 		if (data.isInMatch() && data.getSPGauge() == 100)
 			SPWeaponMgr.UseSPWeapon(player, data.getWeaponClass().getSPWeaponName());
@@ -651,7 +650,7 @@ public class GameMgr implements Listener {
 	// sign
 	@EventHandler
 	public void onClickSign(PlayerInteractEvent e) {
-		Player player = (Player) e.getPlayer();
+		Player player = e.getPlayer();
 		Action action = e.getAction();
 		if (e.getClickedBlock() != null) {
 			if (e.getClickedBlock().getType().toString().endsWith("SIGN")) {
@@ -826,7 +825,7 @@ public class GameMgr implements Listener {
 
 	@EventHandler
 	public void onPlayerQuit(PlayerQuitEvent event) {
-		Player player = (Player) event.getPlayer();
+		Player player = event.getPlayer();
 		PlayerData data = DataMgr.getPlayerData(player);
 
 		// PacketHandler
@@ -859,14 +858,11 @@ public class GameMgr implements Listener {
 					String displayName = conf.getServers().getString("Servers." + serverName + ".DisplayName");
 					if (displayName.equals(server)) {
 						List<String> commands = new ArrayList<>();
-						commands.add("set weapon " + data.getWeaponClass().getClassName() + " "
-								+ player.getUniqueId().toString());
-						commands.add("set gear " + data.gearNumber + " " + player.getUniqueId().toString());
-						commands.add("set rank " + String.valueOf(PlayerStatusMgr.getRank(player)) + " "
-								+ player.getUniqueId().toString());
-						commands.add("setting "
-								+ conf.getPlayerSettings().getString("Settings." + player.getUniqueId().toString())
-								+ " " + player.getUniqueId().toString());
+						commands.add("set weapon " + data.getWeaponClass().getClassName() + " " + player.getUniqueId());
+						commands.add("set gear " + data.gearNumber + " " + player.getUniqueId());
+						commands.add("set rank " + PlayerStatusMgr.getRank(player) + " " + player.getUniqueId());
+						commands.add("setting " + conf.getPlayerSettings().getString("Settings." + player.getUniqueId())
+								+ " " + player.getUniqueId());
 						commands.add("stop");
 						EquipmentClient sc = new EquipmentClient(conf.config.getString("EquipShare." + name + ".Host"),
 								conf.config.getInt("EquipShare." + name + ".Port"), commands);
@@ -875,13 +871,10 @@ public class GameMgr implements Listener {
 				}
 				if (server.equals("sclattest")) {
 					List<String> commands = new ArrayList<>();
-					commands.add("set rank " + String.valueOf(PlayerStatusMgr.getRank(player)) + " "
-							+ player.getUniqueId().toString());
-					commands.add("set lv " + String.valueOf(PlayerStatusMgr.getLv(player)) + " "
-							+ player.getUniqueId().toString());
-					commands.add("setting "
-							+ conf.getPlayerSettings().getString("Settings." + player.getUniqueId().toString()) + " "
-							+ player.getUniqueId().toString());
+					commands.add("set rank " + PlayerStatusMgr.getRank(player) + " " + player.getUniqueId());
+					commands.add("set lv " + PlayerStatusMgr.getLv(player) + " " + player.getUniqueId());
+					commands.add("setting " + conf.getPlayerSettings().getString("Settings." + player.getUniqueId())
+							+ " " + player.getUniqueId());
 					commands.add("stop");
 					EquipmentClient sc = new EquipmentClient(conf.config.getString("EquipShare.Trial.Host"),
 							conf.config.getInt("EquipShare.Trial.Port"), commands);

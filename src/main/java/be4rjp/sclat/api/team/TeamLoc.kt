@@ -36,12 +36,12 @@ class TeamLoc(
 
     fun setupTeam1Loc() {
         val l = map.team1Loc!!
-        l.setX(l.getBlockX() + 0.5)
-        l.setZ(l.getBlockZ() + 0.5)
-        val l1 = Location(l.getWorld(), l.getBlockX() + 1.0, l.getBlockY().toDouble(), l.getBlockZ() + 1.0)
-        val l2 = Location(l.getWorld(), l.getBlockX() - 1.0, l.getBlockY().toDouble(), l.getBlockZ() + 1.0)
-        val l3 = Location(l.getWorld(), l.getBlockX() + 1.0, l.getBlockY().toDouble(), l.getBlockZ() - 1.0)
-        val l4 = Location(l.getWorld(), l.getBlockX() - 1.0, l.getBlockY().toDouble(), l.getBlockZ() - 1.0)
+        l.x = l.blockX + 0.5
+        l.z = l.blockZ + 0.5
+        val l1 = Location(l.world, l.blockX + 1.0, l.blockY.toDouble(), l.blockZ + 1.0)
+        val l2 = Location(l.world, l.blockX - 1.0, l.blockY.toDouble(), l.blockZ + 1.0)
+        val l3 = Location(l.world, l.blockX + 1.0, l.blockY.toDouble(), l.blockZ - 1.0)
+        val l4 = Location(l.world, l.blockX - 1.0, l.blockY.toDouble(), l.blockZ - 1.0)
         list1!!.add(l1)
         list1.add(l2)
         list1.add(l3)

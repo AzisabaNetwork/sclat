@@ -59,62 +59,62 @@ object MultiMissile {
                     try {
                         if (c == 0) {
                             p.addPotionEffect(PotionEffect(PotionEffectType.SLOW, 100000, 10))
-                            p.getInventory().clear()
+                            p.inventory.clear()
                             val item = ItemStack(Material.PRISMARINE_SHARD)
-                            val meta = item.getItemMeta()
+                            val meta = item.itemMeta
                             meta!!.setDisplayName("プレイヤーを狙って右クリックで発射")
-                            item.setItemMeta(meta)
+                            item.itemMeta = meta
                             for (count in 0..8) {
-                                player.getInventory().setItem(count, item)
+                                player.inventory.setItem(count, item)
                             }
                             player.updateInventory()
 
                             getPlayerData(p)!!.setIsUsingMM(true)
-                            val nmsWorld = (p.getWorld() as CraftWorld).getHandle()
-                            for (op in plugin.getServer().getOnlinePlayers()) {
-                                if (getPlayerData(op)!!.isInMatch() && op.getWorld() === p.getWorld() && (op.getName() != p.getName()) &&
+                            val nmsWorld = (p.world as CraftWorld).handle
+                            for (op in plugin.server.onlinePlayers) {
+                                if (getPlayerData(op)!!.isInMatch && op.world === p.world && (op.name != p.name) &&
                                     getPlayerData(
                                         p,
                                     )!!.team != getPlayerData(op)!!.team
                                 ) {
-                                    val loc: Location = op.getLocation()
+                                    val loc: Location = op.location
                                     val es = EntitySquid(EntityTypes.SQUID, nmsWorld)
-                                    es.setLocation(loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), loc.getPitch())
-                                    es.setInvisible(true)
-                                    es.setNoGravity(true)
-                                    es.setNoAI(true)
+                                    es.setLocation(loc.x, loc.y, loc.z, loc.yaw, loc.pitch)
+                                    es.isInvisible = true
+                                    es.isNoGravity = true
+                                    es.isNoAI = true
                                     ps.put(op, es)
                                     (p as CraftPlayer)
-                                        .getHandle()
+                                        .handle
                                         .playerConnection
                                         .sendPacket(PacketPlayOutSpawnEntityLiving(es))
                                 }
                             }
-                            for (e in p.getWorld().getEntities()) {
+                            for (e in p.world.entities) {
                                 if (e is ArmorStand) {
                                     val `as` = e
-                                    if (`as`.getCustomName() == null) continue
-                                    if ((`as`.getCustomName() != "Path") && (`as`.getCustomName() != "21") &&
-                                        (`as`.getCustomName() != "100") &&
-                                        (`as`.getCustomName() != "SplashShield") &&
-                                        (`as`.getCustomName() != "Kasa")
+                                    if (`as`.customName == null) continue
+                                    if ((`as`.customName != "Path") && (`as`.customName != "21") &&
+                                        (`as`.customName != "100") &&
+                                        (`as`.customName != "SplashShield") &&
+                                        (`as`.customName != "Kasa")
                                     ) {
-                                        val loc = `as`.getLocation()
+                                        val loc = `as`.location
                                         val eas =
                                             EntityArmorStand(
                                                 nmsWorld,
-                                                loc.getX(),
-                                                loc.getY(),
-                                                loc.getZ(),
+                                                loc.x,
+                                                loc.y,
+                                                loc.z,
                                             )
-                                        eas.setLocation(loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), loc.getPitch())
-                                        eas.setInvisible(true)
-                                        eas.setSmall(`as`.isSmall())
+                                        eas.setLocation(loc.x, loc.y, loc.z, loc.yaw, loc.pitch)
+                                        eas.isInvisible = true
+                                        eas.isSmall = `as`.isSmall
                                         eas.setBasePlate(`as`.hasBasePlate())
-                                        eas.setNoGravity(true)
+                                        eas.isNoGravity = true
                                         asl.put(`as`, eas)
                                         (p as CraftPlayer)
-                                            .getHandle()
+                                            .handle
                                             .playerConnection
                                             .sendPacket(PacketPlayOutSpawnEntityLiving(eas))
                                     }
@@ -122,37 +122,37 @@ object MultiMissile {
                             }
                         }
                         if (c != 0) {
-                            for (op in plugin.getServer().getOnlinePlayers()) {
-                                if (getPlayerData(op)!!.isInMatch() && op.getWorld() === p.getWorld() && (op.getName() != p.getName()) &&
+                            for (op in plugin.server.onlinePlayers) {
+                                if (getPlayerData(op)!!.isInMatch && op.world === p.world && (op.name != p.name) &&
                                     getPlayerData(
                                         p,
                                     )!!.team != getPlayerData(op)!!.team
                                 ) {
                                     val es: EntitySquid = ps.get(op)!!
-                                    val loc: Location = op.getLocation()
-                                    es.setLocation(loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), loc.getPitch())
-                                    setGlowing(es.getBukkitEntity(), p, MMCheckCanLock(p, op))
+                                    val loc: Location = op.location
+                                    es.setLocation(loc.x, loc.y, loc.z, loc.yaw, loc.pitch)
+                                    setGlowing(es.bukkitEntity, p, MMCheckCanLock(p, op))
                                     (p as CraftPlayer)
-                                        .getHandle()
+                                        .handle
                                         .playerConnection
                                         .sendPacket(PacketPlayOutEntityTeleport(es))
                                 }
                             }
-                            for (e in p.getWorld().getEntities()) {
+                            for (e in p.world.entities) {
                                 if (e is ArmorStand) {
                                     val `as` = e
-                                    if (`as`.getCustomName() == null) continue
-                                    if ((`as`.getCustomName() != "Path") && (`as`.getCustomName() != "21") &&
-                                        (`as`.getCustomName() != "100") &&
-                                        (`as`.getCustomName() != "SplashShield") &&
-                                        (`as`.getCustomName() != "Kasa")
+                                    if (`as`.customName == null) continue
+                                    if ((`as`.customName != "Path") && (`as`.customName != "21") &&
+                                        (`as`.customName != "100") &&
+                                        (`as`.customName != "SplashShield") &&
+                                        (`as`.customName != "Kasa")
                                     ) {
                                         val eas: EntityArmorStand = asl.get(`as`)!!
-                                        val loc = `as`.getLocation()
-                                        eas.setLocation(loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), loc.getPitch())
-                                        setGlowing(eas.getBukkitEntity(), p, MMCheckCanLock(p, `as`))
+                                        val loc = `as`.location
+                                        eas.setLocation(loc.x, loc.y, loc.z, loc.yaw, loc.pitch)
+                                        setGlowing(eas.bukkitEntity, p, MMCheckCanLock(p, `as`))
                                         (p as CraftPlayer)
-                                            .getHandle()
+                                            .handle
                                             .playerConnection
                                             .sendPacket(PacketPlayOutEntityTeleport(eas))
                                     }
@@ -162,41 +162,41 @@ object MultiMissile {
                         if (!getPlayerData(p)!!.getIsUsingMM() || c == 200) {
                             val targetList: MutableList<Entity> = ArrayList<Entity>()
                             var count = 0
-                            for (op in plugin.getServer().getOnlinePlayers()) {
-                                if (getPlayerData(op)!!.isInMatch() && op.getWorld() === p.getWorld() && (op.getName() != p.getName()) &&
+                            for (op in plugin.server.onlinePlayers) {
+                                if (getPlayerData(op)!!.isInMatch && op.world === p.world && (op.name != p.name) &&
                                     getPlayerData(
                                         p,
                                     )!!.team != getPlayerData(op)!!.team
                                 ) {
                                     val es: EntitySquid = ps.get(op)!!
                                     (p as CraftPlayer)
-                                        .getHandle()
+                                        .handle
                                         .playerConnection
-                                        .sendPacket(PacketPlayOutEntityDestroy(es.getBukkitEntity().getEntityId()))
+                                        .sendPacket(PacketPlayOutEntityDestroy(es.bukkitEntity.entityId))
                                     if (MMCheckCanLock(p, op)) {
                                         op.sendTitle("", ChatColor.RED.toString() + "ミサイル接近中！", 0, 40, 4)
-                                        op.playSound(op.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1f, 1f)
+                                        op.playSound(op.location, Sound.BLOCK_NOTE_BLOCK_PLING, 1f, 1f)
                                         op.addPotionEffect(PotionEffect(PotionEffectType.GLOWING, 30, 1))
                                         targetList.add(op)
                                         count++
                                     }
                                 }
                             }
-                            for (e in p.getWorld().getEntities()) {
+                            for (e in p.world.entities) {
                                 if (e is ArmorStand) {
                                     val `as` = e
-                                    if (`as`.getCustomName() == null) continue
-                                    if ((`as`.getCustomName() != "Path") && (`as`.getCustomName() != "21") &&
-                                        (`as`.getCustomName() != "100") &&
-                                        (`as`.getCustomName() != "SplashShield") &&
-                                        (`as`.getCustomName() != "Kasa")
+                                    if (`as`.customName == null) continue
+                                    if ((`as`.customName != "Path") && (`as`.customName != "21") &&
+                                        (`as`.customName != "100") &&
+                                        (`as`.customName != "SplashShield") &&
+                                        (`as`.customName != "Kasa")
                                     ) {
                                         val eas: EntityArmorStand = asl.get(`as`)!!
-                                        (p as CraftPlayer).getHandle().playerConnection.sendPacket(
-                                            PacketPlayOutEntityDestroy(eas.getBukkitEntity().getEntityId()),
+                                        (p as CraftPlayer).handle.playerConnection.sendPacket(
+                                            PacketPlayOutEntityDestroy(eas.bukkitEntity.entityId),
                                         )
-                                        val loc = `as`.getLocation()
-                                        eas.setLocation(loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), loc.getPitch())
+                                        val loc = `as`.location
+                                        eas.setLocation(loc.x, loc.y, loc.z, loc.yaw, loc.pitch)
                                         if (MMCheckCanLock(p, `as`)) {
                                             targetList.add(`as`)
                                             `as`.addPotionEffect(PotionEffect(PotionEffectType.GLOWING, 30, 1))
@@ -209,16 +209,16 @@ object MultiMissile {
                             for (e in targetList) MMShootRunnable(p, e, if (count >= 4) 2 else 4)
 
                             if (p.hasPotionEffect(PotionEffectType.SLOW)) p.removePotionEffect(PotionEffectType.SLOW)
-                            p.getInventory().clear()
+                            p.inventory.clear()
                             WeaponClassMgr.setWeaponClass(p)
-                            getPlayerData(p)!!.setIsUsingSP(true)
+                            getPlayerData(p)!!.isUsingSP = true
                             getPlayerData(p)!!.setIsUsingMM(false)
                             FireworksRunnable(p)
                             SPWeaponMgr.setSPCoolTimeAnimation(p, 100)
                             cancel()
                         }
-                        if (!getPlayerData(p)!!.isInMatch() || !p.isOnline() || p.getGameMode() == GameMode.SPECTATOR) {
-                            getPlayerData(p)!!.setIsUsingSP(false)
+                        if (!getPlayerData(p)!!.isInMatch || !p.isOnline || p.gameMode == GameMode.SPECTATOR) {
+                            getPlayerData(p)!!.isUsingSP = false
                             cancel()
                         }
                         c++
@@ -238,7 +238,7 @@ object MultiMissile {
 
                 override fun run() {
                     try {
-                        val f = p.getWorld().spawn<Firework?>(p.getLocation(), Firework::class.java)
+                        p.world.spawn<Firework?>(p.location, Firework::class.java)
                         i++
                         if (i == 5) cancel()
                     } catch (e: Exception) {
@@ -262,9 +262,9 @@ object MultiMissile {
                 override fun run() {
                     if (target is Player) {
                         val t = target
-                        if (c == i || t.getGameMode() == GameMode.SPECTATOR || !getPlayerData(s)!!.isInMatch()) cancel()
+                        if (c == i || t.gameMode == GameMode.SPECTATOR || !getPlayerData(s)!!.isInMatch) cancel()
                     } else {
-                        if (c == i || !getPlayerData(s)!!.isInMatch()) cancel()
+                        if (c == i || !getPlayerData(s)!!.isInMatch) cancel()
                     }
                     MMRunnable(s, target)
                     c++
@@ -281,7 +281,7 @@ object MultiMissile {
             object : BukkitRunnable() {
                 var s: Player = shooter
                 var t: Entity = target
-                var tl: Location = target.getLocation()
+                var tl: Location = target.location
                 var drop: Item? = null
                 var ball: Snowball? = null
                 var c: Int = 0
@@ -290,21 +290,21 @@ object MultiMissile {
                 override fun run() {
                     if (c == 0) {
                         drop =
-                            shooter.getWorld().dropItem(
-                                t.getLocation().add(0.0, 40.0, 0.0),
+                            shooter.world.dropItem(
+                                t.location.add(0.0, 40.0, 0.0),
                                 ItemStack(getPlayerData(s)!!.team.teamColor!!.wool!!),
                             )
                         drop!!.setGravity(false)
-                        ball = s.getWorld().spawnEntity(drop!!.getLocation(), EntityType.SNOWBALL) as Snowball
+                        ball = s.world.spawnEntity(drop!!.location, EntityType.SNOWBALL) as Snowball
                         ball!!.setGravity(false)
-                        ball!!.setShooter(s)
-                        ball!!.setVelocity(Vector(0, 0, 0))
-                        for (o_player in plugin.getServer().getOnlinePlayers()) {
-                            val connection = (o_player as CraftPlayer).getHandle().playerConnection
-                            connection.sendPacket(PacketPlayOutEntityDestroy(ball!!.getEntityId()))
+                        ball!!.shooter = s
+                        ball!!.velocity = Vector(0, 0, 0)
+                        for (o_player in plugin.server.onlinePlayers) {
+                            val connection = (o_player as CraftPlayer).handle.playerConnection
+                            connection.sendPacket(PacketPlayOutEntityDestroy(ball!!.entityId))
                         }
                         if (t is Player) {
-                            if (getPlayerData(t as Player)!!.isInMatch()) {
+                            if (getPlayerData(t as Player)!!.isInMatch) {
                                 tl =
                                     getPlayerData(t as Player?)!!.playerGroundLocation
                             }
@@ -312,17 +312,17 @@ object MultiMissile {
                         setSnowballIsHit(ball, false)
                     }
 
-                    if (!getPlayerData(s)!!.isInMatch() || !s.isOnline() || drop!!.isDead()) {
+                    if (!getPlayerData(s)!!.isInMatch || !s.isOnline || drop!!.isDead) {
                         drop!!.remove()
                         ball!!.remove()
                         cancel()
                     }
 
-                    val dl = drop!!.getLocation()
+                    val dl = drop!!.location
 
-                    if (!drop!!.isOnGround()) {
-                        ball!!.teleport(drop!!.getLocation())
-                        ball!!.setVelocity(drop!!.getVelocity())
+                    if (!drop!!.isOnGround) {
+                        ball!!.teleport(drop!!.location)
+                        ball!!.velocity = drop!!.velocity
                     }
 
                     if (dl.distanceSquared(tl) < 100 /* 10^2 */) {
@@ -330,7 +330,7 @@ object MultiMissile {
                     }
 
                     if (t is Player) {
-                        if ((t as Player).getGameMode() == GameMode.SPECTATOR || !(t as Player).isOnline()) {
+                        if ((t as Player).gameMode == GameMode.SPECTATOR || !(t as Player).isOnline) {
                             reached =
                                 true
                         }
@@ -339,13 +339,11 @@ object MultiMissile {
                     // if(!reached)
                     // tl = t.getLocation();
                     if (!reached) {
-                        drop!!.setVelocity(
-                            (Vector(tl.getX() - dl.getX(), tl.getY() - dl.getY(), tl.getZ() - dl.getZ()))
-                                .normalize()
-                                .multiply(0.8),
-                        )
+                        drop!!.velocity = (Vector(tl.x - dl.x, tl.y - dl.y, tl.z - dl.z))
+                            .normalize()
+                            .multiply(0.8)
                     } else {
-                        drop!!.setVelocity(drop!!.getVelocity().add(Vector(0.0, -0.1, 0.0)))
+                        drop!!.velocity = drop!!.velocity.add(Vector(0.0, -0.1, 0.0))
                     }
 
                     val bd =
@@ -353,16 +351,16 @@ object MultiMissile {
                             .team.teamColor!!
                             .wool!!
                             .createBlockData()
-                    for (o_player in plugin.getServer().getOnlinePlayers()) {
-                        if (o_player.getWorld() === drop!!.getLocation().getWorld()) {
+                    for (o_player in plugin.server.onlinePlayers) {
+                        if (o_player.world === drop!!.location.world) {
                             if (o_player
-                                    .getLocation()
-                                    .distanceSquared(drop!!.getLocation()) < Sclat.particleRenderDistanceSquared
+                                    .location
+                                    .distanceSquared(drop!!.location) < Sclat.particleRenderDistanceSquared
                             ) {
                                 if (getPlayerData(o_player)!!.settings.ShowEffect_SPWeapon()) {
                                     o_player.spawnParticle<BlockData?>(
                                         Particle.BLOCK_DUST,
-                                        drop!!.getLocation(),
+                                        drop!!.location,
                                         1,
                                         0.0,
                                         0.0,
@@ -381,15 +379,15 @@ object MultiMissile {
                         val maxDistSquared = 9.0 // 3^2
 
                         // 爆発音
-                        s.getWorld().playSound(drop!!.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_BLAST, 1f, 1f)
+                        s.world.playSound(drop!!.location, Sound.ENTITY_FIREWORK_ROCKET_BLAST, 1f, 1f)
 
                         // 爆発エフェクト
-                        createInkExplosionEffect(drop!!.getLocation(), maxDist, 25, s)
+                        createInkExplosionEffect(drop!!.location, maxDist, 25, s)
 
                         // 塗る
                         var i = 0
                         while (i <= maxDist) {
-                            val p_locs: MutableList<Location> = getSphere(drop!!.getLocation(), i.toDouble(), 20)
+                            val p_locs: MutableList<Location> = getSphere(drop!!.location, i.toDouble(), 20)
                             for (loc in p_locs) {
                                 PaintMgr.Paint(loc, s, false)
                             }
@@ -397,12 +395,12 @@ object MultiMissile {
                         }
 
                         // 攻撃判定の処理
-                        for (target in plugin.getServer().getOnlinePlayers()) {
-                            if (!getPlayerData(target)!!.isInMatch() || target.getWorld() !== s.getWorld()) continue
-                            if (target.getLocation().distanceSquared(drop!!.getLocation()) <= maxDistSquared) {
-                                val damage = (maxDist - target.getLocation().distance(drop!!.getLocation())) * 14
+                        for (target in plugin.server.onlinePlayers) {
+                            if (!getPlayerData(target)!!.isInMatch || target.world !== s.world) continue
+                            if (target.location.distanceSquared(drop!!.location) <= maxDistSquared) {
+                                val damage = (maxDist - target.location.distance(drop!!.location)) * 14
                                 if (getPlayerData(s)!!.team != getPlayerData(target)!!.team &&
-                                    target.getGameMode() == GameMode.ADVENTURE
+                                    target.gameMode == GameMode.ADVENTURE
                                 ) {
                                     giveDamage(s, target, damage, "spWeapon")
 
@@ -412,7 +410,7 @@ object MultiMissile {
                                             var p: Player = target
 
                                             override fun run() {
-                                                target.setNoDamageTicks(0)
+                                                target.noDamageTicks = 0
                                             }
                                         }
                                     task.runTaskLater(plugin, 1)
@@ -420,10 +418,10 @@ object MultiMissile {
                             }
                         }
 
-                        for (`as` in s.getWorld().getEntities()) {
-                            if (`as`.getLocation().distanceSquared(drop!!.getLocation()) <= maxDistSquared) {
+                        for (`as` in s.world.entities) {
+                            if (`as`.location.distanceSquared(drop!!.location) <= maxDistSquared) {
                                 if (`as` is ArmorStand) {
-                                    val damage = (maxDist - `as`.getLocation().distance(drop!!.getLocation())) * 2
+                                    val damage = (maxDist - `as`.location.distance(drop!!.location)) * 2
                                     ArmorStandMgr.giveDamageArmorStand(`as`, damage, s)
                                 }
                             }
@@ -443,25 +441,25 @@ object MultiMissile {
         shooter: Player,
         target: Player,
     ) {
-        val nmsWorld = (target.getWorld() as CraftWorld).getHandle()
-        val loc = target.getLocation()
+        val nmsWorld = (target.world as CraftWorld).handle
+        val loc = target.location
         val es = EntitySquid(EntityTypes.SQUID, nmsWorld)
-        es.setLocation(loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), loc.getPitch())
-        es.setInvisible(true)
-        es.setNoGravity(true)
-        es.setNoAI(true)
+        es.setLocation(loc.x, loc.y, loc.z, loc.yaw, loc.pitch)
+        es.isInvisible = true
+        es.isNoGravity = true
+        es.isNoAI = true
         es.setFlag(6, true)
-        (shooter as CraftPlayer).getHandle().playerConnection.sendPacket(PacketPlayOutSpawnEntityLiving(es))
+        (shooter as CraftPlayer).handle.playerConnection.sendPacket(PacketPlayOutSpawnEntityLiving(es))
     }
 
     fun MMCheckCanLock(
         sp: Player,
         target: Entity,
     ): Boolean {
-        val sv = sp.getEyeLocation().getDirection().normalize()
-        val tl = target.getLocation()
-        val sl = sp.getLocation()
-        val tpv = (Vector(tl.getX() - sl.getX(), tl.getY() - sl.getY(), tl.getZ() - sl.getZ())).normalize()
+        val sv = sp.eyeLocation.direction.normalize()
+        val tl = target.location
+        val sl = sp.location
+        val tpv = (Vector(tl.x - sl.x, tl.y - sl.y, tl.z - sl.z)).normalize()
         val angle = sv.angle(tpv)
         return angle < 0.4f
     }

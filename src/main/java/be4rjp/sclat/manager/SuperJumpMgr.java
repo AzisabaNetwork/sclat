@@ -44,7 +44,7 @@ public class SuperJumpMgr {
 		player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 40000, 10));
 		DataMgr.getPlayerData(player).armor = 0.0;
 		BukkitRunnable task = new BukkitRunnable() {
-			Player p = player;
+			final Player p = player;
 			@Override
 			public void run() {
 				if (player.hasPotionEffect(PotionEffectType.SLOW))
@@ -96,7 +96,7 @@ public class SuperJumpMgr {
 		 */
 
 		BukkitRunnable task = new BukkitRunnable() {
-			Player p = player;
+			final Player p = player;
 			int i = 1;
 			int t = 0;
 			@Override
@@ -143,7 +143,7 @@ public class SuperJumpMgr {
 		task.runTaskTimer(VariablesKt.getPlugin(), 0, 1);
 
 		BukkitRunnable effect = new BukkitRunnable() {
-			Player p = player;
+			final Player p = player;
 			int c = 0;
 			int id;
 			@Override

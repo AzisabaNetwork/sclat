@@ -43,7 +43,7 @@ object Amehurasi {
                 var collision: Boolean = false
                 var block_check: Boolean = false
                 var cb: Boolean = false
-                var l: Location = p.getLocation()
+                var l: Location = p.location
                 var cc: Int = 0
                 var c: Int = 0
                 var drop: Item? = null
@@ -52,36 +52,36 @@ object Amehurasi {
                 override fun run() {
                     try {
                         if (c == 0) {
-                            getPlayerData(player)!!.setIsUsingAmehurashi(true)
+                            getPlayerData(player)!!.isUsingAmehurashi = true
                             val bom = ItemStack(Material.BEACON).clone()
-                            val bom_m = bom.getItemMeta()
+                            val bom_m = bom.itemMeta
                             bom_m!!.setLocalizedName(notDuplicateNumber.toString())
-                            bom.setItemMeta(bom_m)
-                            drop = p.getWorld().dropItem(p.getEyeLocation(), bom)
-                            drop!!.setVelocity(p.getEyeLocation().getDirection())
-                            p_vec = p.getEyeLocation().getDirection()
+                            bom.itemMeta = bom_m
+                            drop = p.world.dropItem(p.eyeLocation, bom)
+                            drop!!.velocity = p.eyeLocation.direction
+                            p_vec = p.eyeLocation.direction
                             vec = Vector(p_vec!!.getX(), 0.0, p_vec!!.getZ()).normalize()
                         }
 
-                        if (drop!!.isOnGround()) {
-                            Amehurasi.AmehurasiRunnable(p, drop!!.getLocation(), vec!!)
+                        if (drop!!.isOnGround) {
+                            AmehurasiRunnable(p, drop!!.location, vec!!)
                             drop!!.remove()
                             cancel()
                         }
 
-                        if (drop!!.getLocation().getY() <= 0 || drop!!.isDead()) {
-                            getPlayerData(player)!!.setIsUsingAmehurashi(false)
+                        if (drop!!.location.y <= 0 || drop!!.isDead) {
+                            getPlayerData(player)!!.isUsingAmehurashi = false
                             WeaponClassMgr.setWeaponClass(p)
                             cancel()
                         }
 
                         // 視認用エフェクト
-                        for (o_player in plugin.getServer().getOnlinePlayers()) {
+                        for (o_player in plugin.server.onlinePlayers) {
                             if (getPlayerData(o_player)!!.settings.ShowEffect_Bomb()) {
-                                if (o_player.getWorld() === drop!!.getWorld()) {
+                                if (o_player.world === drop!!.world) {
                                     if (o_player
-                                            .getLocation()
-                                            .distanceSquared(drop!!.getLocation()) < Sclat.particleRenderDistanceSquared
+                                            .location
+                                            .distanceSquared(drop!!.location) < Sclat.particleRenderDistanceSquared
                                     ) {
                                         val dustOptions =
                                             Particle.DustOptions(
@@ -90,7 +90,7 @@ object Amehurasi {
                                             )
                                         o_player.spawnParticle<Particle.DustOptions?>(
                                             Particle.REDSTONE,
-                                            drop!!.getLocation(),
+                                            drop!!.location,
                                             1,
                                             0.0,
                                             0.0,
@@ -113,11 +113,11 @@ object Amehurasi {
                     } catch (e: Exception) {
                         drop!!.remove()
                         cancel()
-                        plugin.getLogger().warning(e.message)
+                        plugin.logger.warning(e.message)
                     }
                 }
             }
-        if (!getPlayerData(player)!!.getIsUsingAmehurashi()) task.runTaskTimer(plugin, 0, 1)
+        if (!getPlayerData(player)!!.isUsingAmehurashi) task.runTaskTimer(plugin, 0, 1)
     }
 
     fun AmehurasiRunnable(
@@ -125,7 +125,7 @@ object Amehurasi {
         loc: Location,
         vec: Vector,
     ) {
-        getPlayerData(player)!!.setIsUsingSP(true)
+        getPlayerData(player)!!.isUsingSP = true
         SPWeaponMgr.setSPCoolTimeAnimation(player, 260)
 
         val task: BukkitRunnable =
@@ -149,13 +149,13 @@ object Amehurasi {
 
                         // 雲エフェクト
                         if (c % 2 == 0) {
-                            for (o_player in plugin.getServer().getOnlinePlayers()) {
+                            for (o_player in plugin.server.onlinePlayers) {
                                 if (getPlayerData(o_player)!!.settings.ShowEffect_SPWeapon()) {
                                     for (loc in locList) {
                                         if (Random().nextInt(3) == 1) {
-                                            if (o_player.getWorld() === loc.getWorld()) {
+                                            if (o_player.world === loc.world) {
                                                 if (o_player
-                                                        .getLocation()
+                                                        .location
                                                         .distanceSquared(loc) < Sclat.particleRenderDistanceSquared
                                                 ) {
                                                     val dustOptions =
@@ -190,21 +190,20 @@ object Amehurasi {
                                 )
                             val positions4: ArrayList<Vector> = rayTrace4.traverse(300.0, 1.0)
                             for (i in 1..<positions4.size) {
-                                val position = positions4.get(i)!!.toLocation(p.getLocation().getWorld()!!)
+                                val position = positions4.get(i)!!.toLocation(p.location.world!!)
 
-                                if (position.getBlock().getType() != Material.AIR) break
+                                if (position.block.type != Material.AIR) break
 
-                                val maxDist = 6.5
                                 val maxDistSquared = 42.25 // 6.5^2
                                 val damage = 2.0
-                                for (target in plugin.getServer().getOnlinePlayers()) {
-                                    if (!getPlayerData(target)!!.isInMatch()) continue
-                                    if (target.getWorld() !== p.getWorld()) continue
-                                    if (target.getLocation().distanceSquared(position) <= maxDistSquared &&
+                                for (target in plugin.server.onlinePlayers) {
+                                    if (!getPlayerData(target)!!.isInMatch) continue
+                                    if (target.world !== p.world) continue
+                                    if (target.location.distanceSquared(position) <= maxDistSquared &&
                                         Random().nextInt(100) == 0
                                     ) {
                                         if (getPlayerData(p)!!.team != getPlayerData(target)!!.team &&
-                                            target.getGameMode() == GameMode.ADVENTURE
+                                            target.gameMode == GameMode.ADVENTURE
                                         ) {
                                             giveDamage(p, target, damage, "spWeapon")
 
@@ -214,7 +213,7 @@ object Amehurasi {
                                                     var p: Player = target
 
                                                     override fun run() {
-                                                        target.setNoDamageTicks(0)
+                                                        target.noDamageTicks = 0
                                                     }
                                                 }
                                             task.runTaskLater(plugin, 1)
@@ -222,10 +221,10 @@ object Amehurasi {
                                     }
                                 }
 
-                                for (`as` in player.getWorld().getEntities()) {
+                                for (`as` in player.world.entities) {
                                     if (`as` is ArmorStand &&
                                         `as`
-                                            .getLocation()
+                                            .location
                                             .distanceSquared(position) <= maxDistSquared && Random().nextInt(100) == 0
                                     ) {
                                         ArmorStandMgr.giveDamageArmorStand(`as`, damage, player)
@@ -237,15 +236,15 @@ object Amehurasi {
                         for (loc in locList) {
                             if (Random().nextInt(200) == 1) SnowballAmehurasiRunnable(p, loc)
                         }
-                        if (c == 260 || !getPlayerData(p)!!.isInMatch()) {
-                            getPlayerData(player)!!.setIsUsingSP(false)
+                        if (c == 260 || !getPlayerData(p)!!.isInMatch) {
+                            getPlayerData(player)!!.isUsingSP = false
                             // p.playSound(p.getLocation(), Sound.BLOCK_CHEST_CLOSE, 1, 2);
                             cancel()
                         }
                         c++
                     } catch (e: Exception) {
                         cancel()
-                        plugin.getLogger().warning(e.message)
+                        plugin.logger.warning(e.message)
                     }
                 }
             }
@@ -256,12 +255,10 @@ object Amehurasi {
         player: Player,
         loc: Location,
     ) {
-        val ball = player.getWorld().spawnEntity(loc, EntityType.SNOWBALL) as Snowball
-        (ball as CraftSnowball).getHandle().setItem(
-            CraftItemStack.asNMSCopy(ItemStack(getPlayerData(player)!!.team.teamColor!!.wool!!)),
-        )
-        ball.setShooter(player)
-        ball.setCustomName("Amehurasi")
+        val ball = player.world.spawnEntity(loc, EntityType.SNOWBALL) as Snowball
+        (ball as CraftSnowball).handle.item = CraftItemStack.asNMSCopy(ItemStack(getPlayerData(player)!!.team.teamColor!!.wool!!))
+        ball.shooter = player
+        ball.customName = "Amehurasi"
         val task: BukkitRunnable =
             object : BukkitRunnable() {
                 var i: Int = 0
@@ -275,18 +272,18 @@ object Amehurasi {
                                 .team.teamColor!!
                                 .wool!!
                                 .createBlockData()
-                        for (o_player in plugin.getServer().getOnlinePlayers()) {
+                        for (o_player in plugin.server.onlinePlayers) {
                             if (getPlayerData(o_player)!!.settings.ShowEffect_SPWeapon()) {
-                                if (o_player.getWorld() ===
-                                    inkball.getWorld()
+                                if (o_player.world ===
+                                    inkball.world
                                 ) {
                                     if (o_player
-                                            .getLocation()
-                                            .distanceSquared(inkball.getLocation()) < Sclat.particleRenderDistanceSquared
+                                            .location
+                                            .distanceSquared(inkball.location) < Sclat.particleRenderDistanceSquared
                                     ) {
                                         o_player.spawnParticle<BlockData?>(
                                             Particle.BLOCK_DUST,
-                                            inkball.getLocation(),
+                                            inkball.location,
                                             1,
                                             0.0,
                                             0.0,
@@ -300,7 +297,7 @@ object Amehurasi {
                         }
                     }
 
-                    if (inkball.isDead()) cancel()
+                    if (inkball.isDead) cancel()
 
                     i++
                 }

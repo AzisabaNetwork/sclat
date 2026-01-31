@@ -43,7 +43,7 @@ object Sprinkler {
                 var collision: Boolean = false
                 var block_check: Boolean = false
                 var cb: Boolean = false
-                var l: Location = p.getLocation()
+                var l: Location = p.location
                 var cc: Int = 0
                 var c: Int = 0
                 var drop: Item? = null
@@ -53,69 +53,67 @@ object Sprinkler {
                 override fun run() {
                     try {
                         if (c == 0) {
-                            if (!getPlayerData(player)!!.getIsBombRush()) {
-                                p.setExp(
-                                    p.getExp() - (0.59 / Gear.getGearInfluence(player, Gear.Type.SUB_SPEC_UP)).toFloat(),
-                                )
+                            if (!getPlayerData(player)!!.isBombRush) {
+                                p.exp = p.exp - (0.59 / Gear.getGearInfluence(player, Gear.Type.SUB_SPEC_UP)).toFloat()
                             }
                             val bom = ItemStack(Material.BIRCH_FENCE_GATE).clone()
-                            val bom_m = bom.getItemMeta()
+                            val bom_m = bom.itemMeta
                             ndn = notDuplicateNumber
                             bom_m!!.setLocalizedName(ndn.toString())
-                            bom.setItemMeta(bom_m)
-                            drop = p.getWorld().dropItem(p.getEyeLocation(), bom)
-                            drop!!.setVelocity(p.getEyeLocation().getDirection())
+                            bom.itemMeta = bom_m
+                            drop = p.world.dropItem(p.eyeLocation, bom)
+                            drop!!.velocity = p.eyeLocation.direction
                             // 雪玉をスポーンさせた瞬間にプレイヤーに雪玉がデスポーンした偽のパケットを送信する
                             ball = player.launchProjectile<Snowball?>(Snowball::class.java)
-                            ball!!.setVelocity(Vector(0, 0, 0))
+                            ball!!.velocity = Vector(0, 0, 0)
                             setSnowballIsHit(ball, false)
-                            ball!!.setCustomName(ndn.toString())
+                            ball!!.customName = ndn.toString()
                             snowballNameMap.put(ndn.toString(), ball)
                             setSnowballIsHit(ball, false)
 
-                            for (o_player in plugin.getServer().getOnlinePlayers()) {
-                                val connection = (o_player as CraftPlayer).getHandle().playerConnection
-                                connection.sendPacket(PacketPlayOutEntityDestroy(ball!!.getEntityId()))
+                            for (o_player in plugin.server.onlinePlayers) {
+                                val connection = (o_player as CraftPlayer).handle.playerConnection
+                                connection.sendPacket(PacketPlayOutEntityDestroy(ball!!.entityId))
                             }
-                            p_vec = p.getEyeLocation().getDirection()
+                            p_vec = p.eyeLocation.direction
                         }
 
                         ball = snowballNameMap.get(ndn.toString())
 
-                        if (!drop!!.isOnGround() &&
+                        if (!drop!!.isOnGround &&
                             !(
-                                drop!!.getVelocity().getX() == 0.0 && drop!!
-                                    .getVelocity()
+                                drop!!.velocity.getX() == 0.0 && drop!!
+                                    .velocity
                                     .getZ() != 0.0
                                 ) &&
                             !(
-                                drop!!.getVelocity().getX() != 0.0 && drop!!
-                                    .getVelocity()
+                                drop!!.velocity.getX() != 0.0 && drop!!
+                                    .velocity
                                     .getZ() == 0.0
                                 )
                         ) {
-                            ball!!.setVelocity(drop!!.getVelocity())
+                            ball!!.velocity = drop!!.velocity
                         }
 
-                        if (getSnowballIsHit(ball) || drop!!.isOnGround()) {
+                        if (getSnowballIsHit(ball) || drop!!.isOnGround) {
                             val `as` = getSprinklerFromplayer(player)
-                            `as`!!.setVisible(false)
+                            `as`!!.isVisible = false
                             `as`.setHelmet(ItemStack(Material.AIR))
-                            `as`.teleport(drop!!.getLocation().add(0.0, -0.4, 0.0))
-                            `as`.setCustomName("21")
-                            Sprinkler.SprinklerRunnable2(`as`, p)
+                            `as`.teleport(drop!!.location.add(0.0, -0.4, 0.0))
+                            `as`.customName = "21"
+                            SprinklerRunnable2(`as`, p)
                             drop!!.remove()
                             cancel()
                             return
                         }
 
                         // 視認用エフェクト
-                        for (o_player in plugin.getServer().getOnlinePlayers()) {
+                        for (o_player in plugin.server.onlinePlayers) {
                             if (getPlayerData(o_player)!!.settings.ShowEffect_Bomb()) {
-                                if (o_player.getWorld() === drop!!.getLocation().getWorld()) {
+                                if (o_player.world === drop!!.location.world) {
                                     if (o_player
-                                            .getLocation()
-                                            .distanceSquared(drop!!.getLocation()) < Sclat.particleRenderDistanceSquared
+                                            .location
+                                            .distanceSquared(drop!!.location) < Sclat.particleRenderDistanceSquared
                                     ) {
                                         val dustOptions =
                                             Particle.DustOptions(
@@ -124,7 +122,7 @@ object Sprinkler {
                                             )
                                         o_player.spawnParticle<Particle.DustOptions?>(
                                             Particle.REDSTONE,
-                                            drop!!.getLocation(),
+                                            drop!!.location,
                                             1,
                                             0.0,
                                             0.0,
@@ -138,8 +136,8 @@ object Sprinkler {
                         }
 
                         c++
-                        x = drop!!.getLocation().getX()
-                        z = drop!!.getLocation().getZ()
+                        x = drop!!.location.x
+                        z = drop!!.location.z
 
                         if (c > 1000) {
                             drop!!.remove()
@@ -149,7 +147,7 @@ object Sprinkler {
                     } catch (e: Exception) {
                         cancel()
                         drop!!.remove()
-                        plugin.getLogger().warning(e.message)
+                        plugin.logger.warning(e.message)
                     }
                 }
             }
@@ -157,12 +155,12 @@ object Sprinkler {
         val cooltime: BukkitRunnable =
             object : BukkitRunnable() {
                 override fun run() {
-                    getPlayerData(player)!!.setCanUseSubWeapon(true)
+                    getPlayerData(player)!!.canUseSubWeapon = true
                 }
             }
         cooltime.runTaskLater(plugin, 8)
 
-        if (player.getExp() > (0.6 / Gear.getGearInfluence(player, Gear.Type.SUB_SPEC_UP)).toFloat()) {
+        if (player.exp > (0.6 / Gear.getGearInfluence(player, Gear.Type.SUB_SPEC_UP)).toFloat()) {
             task.runTaskTimer(
                 plugin,
                 0,
@@ -170,7 +168,7 @@ object Sprinkler {
             )
         } else {
             player.sendTitle("", ChatColor.RED.toString() + "インクが足りません", 0, 5, 2)
-            player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1f, 1.63f)
+            player.playSound(player.location, Sound.UI_BUTTON_CLICK, 1f, 1.63f)
         }
     }
 
@@ -181,11 +179,11 @@ object Sprinkler {
         val delay: BukkitRunnable =
             object : BukkitRunnable() {
                 override fun run() {
-                    for (target in plugin.getServer().getOnlinePlayers()) {
-                        if (`as`.getWorld() !== target.getWorld()) continue
-                        (target as CraftPlayer).getHandle().playerConnection.sendPacket(
+                    for (target in plugin.server.onlinePlayers) {
+                        if (`as`.world !== target.world) continue
+                        (target as CraftPlayer).handle.playerConnection.sendPacket(
                             PacketPlayOutEntityEquipment(
-                                `as`.getEntityId(),
+                                `as`.entityId,
                                 EnumItemSlot.HEAD,
                                 CraftItemStack.asNMSCopy(
                                     ItemStack(getPlayerData(player)!!.team.teamColor!!.glass!!),
@@ -193,7 +191,7 @@ object Sprinkler {
                             ),
                         )
                     }
-                    `as`.getWorld().playSound(`as`.getLocation(), Sound.ITEM_ARMOR_EQUIP_GENERIC, 1f, 1f)
+                    `as`.world.playSound(`as`.location, Sound.ITEM_ARMOR_EQUIP_GENERIC, 1f, 1f)
                     // as.setHelmet(new
                     // ItemStack(DataMgr.getPlayerData(player).getTeam().getTeamColor().glass));
                 }

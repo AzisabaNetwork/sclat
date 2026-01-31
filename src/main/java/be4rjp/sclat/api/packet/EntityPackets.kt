@@ -12,7 +12,7 @@ object EntityPackets {
         vararg entityIds: Int,
     ): Boolean {
         val destroyPacket = Packets.createPacket(PacketType.Play.Server.ENTITY_DESTROY)
-        destroyPacket.getIntegerArrays().write(0, entityIds)
+        destroyPacket.integerArrays.write(0, entityIds)
         return Packets.sendServerPacket(player, destroyPacket)
     }
 }

@@ -32,7 +32,7 @@ import java.util.Random
 object SuperShot {
     @JvmStatic
     fun setSuperShot(player: Player) {
-        getPlayerData(player)!!.setIsUsingSP(true)
+        getPlayerData(player)!!.isUsingSP = true
         getPlayerData(player)!!.setIsUsingSS(true)
         SPWeaponMgr.setSPCoolTimeAnimation(player, 100)
 
@@ -41,16 +41,16 @@ object SuperShot {
                 var p: Player? = player
 
                 override fun run() {
-                    player.getInventory().clear()
+                    player.inventory.clear()
                     player.updateInventory()
 
                     val item = ItemStack(Material.SUGAR_CANE)
-                    val meta = item.getItemMeta()
+                    val meta = item.itemMeta
                     meta!!.setDisplayName("右クリックで発射！")
-                    item.setItemMeta(meta)
+                    item.itemMeta = meta
                     for (count in 0..8) {
-                        player.getInventory().setItem(count, item)
-                        if (count % 2 != 0) player.getInventory().setItem(count, ItemStack(Material.AIR))
+                        player.inventory.setItem(count, item)
+                        if (count % 2 != 0) player.inventory.setItem(count, ItemStack(Material.AIR))
                     }
                     player.updateInventory()
                     player.addPotionEffect(PotionEffect(PotionEffectType.LUCK, 101, 1))
@@ -63,10 +63,10 @@ object SuperShot {
                 var p: Player = player
 
                 override fun run() {
-                    if (getPlayerData(p)!!.isInMatch()) {
-                        getPlayerData(p)!!.setIsUsingSP(false)
+                    if (getPlayerData(p)!!.isInMatch) {
+                        getPlayerData(p)!!.isUsingSP = false
                         getPlayerData(p)!!.setIsUsingSS(false)
-                        player.getInventory().clear()
+                        player.inventory.clear()
                         WeaponClassMgr.setWeaponClass(p)
                     }
                 }
@@ -79,19 +79,19 @@ object SuperShot {
         if (player.hasPotionEffect(PotionEffectType.LUCK)) {
             val direction = Vector(0, 1, 0)
             var headdis = 8.5
-            val playerLocation = player.getLocation()
+            val playerLocation = player.location
             while (headdis > 3) {
-                if (player.getWorld().rayTraceBlocks(playerLocation, direction, headdis) != null) {
+                if (player.world.rayTraceBlocks(playerLocation, direction, headdis) != null) {
                     headdis -= 1.0
                 } else {
                     break
                 }
             }
-            player.getWorld().playSound(playerLocation, Sound.ENTITY_PLAYER_ATTACK_STRONG, 1.5f, 1.2f)
-            player.getWorld().playSound(playerLocation, Sound.ENTITY_WITHER_SHOOT, 0.3f, 2f)
+            player.world.playSound(playerLocation, Sound.ENTITY_PLAYER_ATTACK_STRONG, 1.5f, 1.2f)
+            player.world.playSound(playerLocation, Sound.ENTITY_WITHER_SHOOT, 0.3f, 2f)
 
-            val ploc = player.getEyeLocation().add(0.0, -1.5, 0.0)
-            val pvec = player.getEyeLocation().getDirection()
+            val ploc = player.eyeLocation.add(0.0, -1.5, 0.0)
+            val pvec = player.eyeLocation.direction
             val vec = Vector(pvec.getX(), 0.0, pvec.getZ())
             val vv1 = Vector(pvec.getZ() * -1, 0.0, pvec.getX()).normalize().multiply(0.3)
             val vv2 = Vector(pvec.getZ(), 0.0, pvec.getX() * -1).normalize().multiply(0.3)
@@ -104,7 +104,7 @@ object SuperShot {
             val loc4 = loc2.clone().add(vv1)
             val loc5 = loc2.clone().add(vv2)
 
-            player.setVelocity(vec.clone().multiply(-0.5))
+            player.velocity = vec.clone().multiply(-0.5)
 
             var y = 0.0
             while (y <= headdis) {
@@ -121,7 +121,7 @@ object SuperShot {
                 var p: Player = player
 
                 override fun run() {
-                    getPlayerData(p)!!.setCanUseSubWeapon(true)
+                    getPlayerData(p)!!.canUseSubWeapon = true
                 }
             }
         task.runTaskLater(plugin, 20)
@@ -144,25 +144,25 @@ object SuperShot {
                     try {
                         if (c == 0) {
                             val i = ItemStack(getPlayerData(p)!!.team.teamColor!!.wool!!).clone()
-                            val i_m = i.getItemMeta()
+                            val i_m = i.itemMeta
                             i_m!!.setLocalizedName(notDuplicateNumber.toString())
-                            i.setItemMeta(i_m)
-                            drop = p.getWorld().dropItem(loc, i)
-                            drop!!.setVelocity(vec)
+                            i.itemMeta = i_m
+                            drop = p.world.dropItem(loc, i)
+                            drop!!.velocity = vec
                             // 雪玉をスポーンさせた瞬間にプレイヤーに雪玉がデスポーンした偽のパケットを送信する
-                            ball = player.getWorld().spawnEntity(loc, EntityType.SNOWBALL) as Snowball
-                            ball!!.setShooter(p)
-                            ball!!.setVelocity(vec)
-                            ball!!.setCustomName("SuperShot")
-                            ball!!.setShooter(p)
-                            for (o_player in plugin.getServer().getOnlinePlayers()) {
-                                val connection = (o_player as CraftPlayer).getHandle().playerConnection
-                                connection.sendPacket(PacketPlayOutEntityDestroy(ball!!.getEntityId()))
+                            ball = player.world.spawnEntity(loc, EntityType.SNOWBALL) as Snowball
+                            ball!!.shooter = p
+                            ball!!.velocity = vec
+                            ball!!.customName = "SuperShot"
+                            ball!!.shooter = p
+                            for (o_player in plugin.server.onlinePlayers) {
+                                val connection = (o_player as CraftPlayer).handle.playerConnection
+                                connection.sendPacket(PacketPlayOutEntityDestroy(ball!!.entityId))
                             }
                         }
-                        drop!!.setVelocity(ball!!.getVelocity())
+                        drop!!.velocity = ball!!.velocity
 
-                        PaintMgr.PaintHightestBlock(ball!!.getLocation(), p, false, false)
+                        PaintMgr.PaintHightestBlock(ball!!.location, p, false, false)
 
                         if (Random().nextInt(20) == 0) {
                             val bd =
@@ -170,18 +170,18 @@ object SuperShot {
                                     .team.teamColor!!
                                     .wool!!
                                     .createBlockData()
-                            for (o_player in plugin.getServer().getOnlinePlayers()) {
+                            for (o_player in plugin.server.onlinePlayers) {
                                 if (getPlayerData(o_player)!!.settings.ShowEffect_SPWeapon()) {
-                                    if (o_player.getWorld() ===
-                                        ball!!.getWorld()
+                                    if (o_player.world ===
+                                        ball!!.world
                                     ) {
                                         if (o_player
-                                                .getLocation()
-                                                .distanceSquared(ball!!.getLocation()) < Sclat.particleRenderDistanceSquared
+                                                .location
+                                                .distanceSquared(ball!!.location) < Sclat.particleRenderDistanceSquared
                                         ) {
                                             o_player.spawnParticle<BlockData?>(
                                                 Particle.BLOCK_DUST,
-                                                ball!!.getLocation(),
+                                                ball!!.location,
                                                 1,
                                                 0.0,
                                                 0.0,
@@ -195,7 +195,7 @@ object SuperShot {
                             }
                         }
 
-                        if (ball!!.isDead() || drop!!.isDead() || !p.isOnline() || !getPlayerData(p)!!.isInMatch()) {
+                        if (ball!!.isDead || drop!!.isDead || !p.isOnline || !getPlayerData(p)!!.isInMatch) {
                             ball!!.remove()
                             drop!!.remove()
                             cancel()
@@ -205,7 +205,7 @@ object SuperShot {
                     } catch (e: Exception) {
                         drop!!.remove()
                         cancel()
-                        plugin.getLogger().warning(e.message)
+                        plugin.logger.warning(e.message)
                     }
                 }
             }

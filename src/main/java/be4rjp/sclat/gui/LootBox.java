@@ -91,7 +91,7 @@ public class LootBox {
 					lores.add("§r§6SPWeapon  : "
 							+ conf.getClassConfig().getString("WeaponClass." + ClassName + ".SPWeaponName"));
 					lores.add("");
-					lores.add("§r§b : " + String.valueOf(Lootpro) + "％");
+					lores.add("§r§b : " + Lootpro + "％");
 					itemm.setLore(lores);
 					item.setItemMeta(itemm);
 					shooter.setItem(slotnum, item);

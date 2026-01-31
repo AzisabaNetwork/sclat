@@ -26,7 +26,7 @@ object SuperArmor {
     ) {
         if (effect) {
             if (armor != 60.0) {
-                getPlayerData(player)!!.setIsUsingSP(true)
+                getPlayerData(player)!!.isUsingSP = true
                 SPWeaponMgr.setSPCoolTimeAnimation(player, delay.toInt())
                 if (armor == 30.0) {
                     player.addPotionEffect(PotionEffect(PotionEffectType.SPEED, 50, 0))
@@ -41,16 +41,16 @@ object SuperArmor {
         val effect_r: BukkitRunnable =
             object : BukkitRunnable() {
                 override fun run() {
-                    if (!data.isInMatch() || player.getGameMode() != GameMode.ADVENTURE) {
-                        if (armor != 60.0 || armor != 1.0) getPlayerData(player)!!.setIsUsingSP(false)
+                    if (!data.isInMatch || player.gameMode != GameMode.ADVENTURE) {
+                        if (armor != 60.0 || armor != 1.0) getPlayerData(player)!!.isUsingSP = false
                         cancel()
                     }
-                    for (o_player in plugin.getServer().getOnlinePlayers()) {
+                    for (o_player in plugin.server.onlinePlayers) {
                         if (getPlayerData(o_player)!!.settings.ShowEffect_SPWeapon() && o_player != player) {
-                            if (o_player.getWorld() === player.getWorld()) {
+                            if (o_player.world === player.world) {
                                 if (o_player
-                                        .getLocation()
-                                        .distanceSquared(player.getLocation()) < Sclat.particleRenderDistanceSquared
+                                        .location
+                                        .distanceSquared(player.location) < Sclat.particleRenderDistanceSquared
                                 ) {
                                     val dustOptions =
                                         Particle.DustOptions(
@@ -59,7 +59,7 @@ object SuperArmor {
                                         )
                                     o_player.spawnParticle<Particle.DustOptions?>(
                                         Particle.REDSTONE,
-                                        player.getEyeLocation(),
+                                        player.eyeLocation,
                                         5,
                                         0.5,
                                         0.4,
@@ -72,7 +72,7 @@ object SuperArmor {
                         }
                     }
                     if (data.armor <= 0) {
-                        player.playSound(player.getLocation(), Sound.BLOCK_GLASS_BREAK, 3.5f, 1.8f)
+                        player.playSound(player.location, Sound.BLOCK_GLASS_BREAK, 3.5f, 1.8f)
                         player.sendMessage("§c§l！ アーマーが破壊された ！")
                         cancel()
                     }
@@ -86,7 +86,7 @@ object SuperArmor {
                     data.armor = 0.0
                     if (effect) {
                         effect_r.cancel()
-                        getPlayerData(player)!!.setIsUsingSP(false)
+                        getPlayerData(player)!!.isUsingSP = false
                         // player.playSound(player.getLocation(), Sound.BLOCK_CHEST_CLOSE, 1, 2);
                     }
                 }
@@ -102,7 +102,7 @@ object SuperArmor {
         effect: Boolean,
     ) {
         if (effect) {
-            getPlayerData(player)!!.setIsUsingSP(true)
+            getPlayerData(player)!!.isUsingSP = true
             SPWeaponMgr.setSPCoolTimeAnimation(player, delay.toInt())
             player.addPotionEffect(PotionEffect(PotionEffectType.SPEED, 64, 0))
         }
@@ -118,8 +118,8 @@ object SuperArmor {
                 var beforeArmor: Double = 0.0
 
                 override fun run() {
-                    if (!data.isInMatch() || player.getGameMode() != GameMode.ADVENTURE) {
-                        getPlayerData(player)!!.setIsUsingSP(false)
+                    if (!data.isInMatch || player.gameMode != GameMode.ADVENTURE) {
+                        getPlayerData(player)!!.isUsingSP = false
                         cancel()
                     }
                     if ((c >= 1 && beforeArmor > data.armor)) {
@@ -146,16 +146,16 @@ object SuperArmor {
         val effect_r: BukkitRunnable =
             object : BukkitRunnable() {
                 override fun run() {
-                    if (!data.isInMatch() || player.getGameMode() != GameMode.ADVENTURE) {
-                        getPlayerData(player)!!.setIsUsingSP(false)
+                    if (!data.isInMatch || player.gameMode != GameMode.ADVENTURE) {
+                        getPlayerData(player)!!.isUsingSP = false
                         cancel()
                     }
-                    for (o_player in plugin.getServer().getOnlinePlayers()) {
+                    for (o_player in plugin.server.onlinePlayers) {
                         if (getPlayerData(o_player)!!.settings.ShowEffect_SPWeapon() && o_player != player) {
-                            if (o_player.getWorld() === player.getWorld()) {
+                            if (o_player.world === player.world) {
                                 if (o_player
-                                        .getLocation()
-                                        .distanceSquared(player.getLocation()) < Sclat.particleRenderDistanceSquared
+                                        .location
+                                        .distanceSquared(player.location) < Sclat.particleRenderDistanceSquared
                                 ) {
                                     val dustOptions =
                                         Particle.DustOptions(
@@ -164,7 +164,7 @@ object SuperArmor {
                                         )
                                     o_player.spawnParticle<Particle.DustOptions?>(
                                         Particle.REDSTONE,
-                                        player.getEyeLocation(),
+                                        player.eyeLocation,
                                         5,
                                         0.5,
                                         0.4,
@@ -177,7 +177,7 @@ object SuperArmor {
                         }
                     }
                     if (data.armor <= 0) {
-                        player.playSound(player.getLocation(), Sound.BLOCK_GLASS_BREAK, 3.5f, 1.8f)
+                        player.playSound(player.location, Sound.BLOCK_GLASS_BREAK, 3.5f, 1.8f)
                         player.sendMessage("§c§l！ アーマーが破壊された ！")
                         cancel()
                     }
@@ -191,7 +191,7 @@ object SuperArmor {
                     data.armor = 0.0
                     if (effect) {
                         effect_r.cancel()
-                        getPlayerData(player)!!.setIsUsingSP(false)
+                        getPlayerData(player)!!.isUsingSP = false
                         // player.playSound(player.getLocation(), Sound.BLOCK_CHEST_CLOSE, 1, 2);
                     }
                 }

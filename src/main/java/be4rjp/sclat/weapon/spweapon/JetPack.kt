@@ -52,7 +52,7 @@ object JetPack {
         val bsObject =
             api.createObjectFromObjectData(
                 notDuplicateNumber.toString(),
-                player.getLocation(),
+                player.location,
                 objectData,
                 40.0,
                 false,
@@ -65,30 +65,30 @@ object JetPack {
                 var ol: Location = getPlayerData(player)!!.playerGroundLocation
                 var i: Int = 0
                 var id: Int = 0
-                var btl: Location = player.getLocation()
+                var btl: Location = player.location
                 var `as`: ArmorStand =
                     player
-                        .getWorld()
+                        .world
                         .spawn<ArmorStand>(
-                            player.getLocation(),
+                            player.location,
                             ArmorStand::class.java,
                             Consumer { armorStand: ArmorStand ->
-                                armorStand.setSmall(true)
+                                armorStand.isSmall = true
                                 armorStand.setGravity(false)
-                                armorStand.setVisible(false)
+                                armorStand.isVisible = false
                                 armorStand.setBasePlate(false)
-                                armorStand.setMarker(true)
+                                armorStand.isMarker = true
                             },
                         )
                 var leader: ArmorStand =
                     player
-                        .getWorld()
+                        .world
                         .spawn<ArmorStand>(
-                            player.getLocation(),
+                            player.location,
                             ArmorStand::class.java,
                             Consumer { armorStand: ArmorStand ->
-                                armorStand.setSmall(true)
-                                armorStand.setVisible(false)
+                                armorStand.isSmall = true
+                                armorStand.isVisible = false
                                 armorStand.setBasePlate(false)
                             },
                         )
@@ -97,20 +97,20 @@ object JetPack {
                 var vehicleVector: Vector = Vector(0, 0, 0)
 
                 override fun run() {
-                    p.setSprinting(true)
+                    p.isSprinting = true
 
                     var onBlock = false
                     var yh = 1
-                    var y = p.getLocation().getBlockY()
-                    while (y >= 1 && y >= p.getLocation().getBlockY() - 7) {
+                    var y = p.location.blockY
+                    while (y >= 1 && y >= p.location.blockY - 7) {
                         val bl =
                             Location(
-                                p.getLocation().getWorld(),
-                                p.getLocation().getX(),
+                                p.location.world,
+                                p.location.x,
                                 y.toDouble(),
-                                p.getLocation().getZ(),
+                                p.location.z,
                             )
-                        if (bl.getBlock().getType() != Material.AIR && bl.getBlock().getType() != Material.WATER) {
+                        if (bl.block.type != Material.AIR && bl.block.type != Material.WATER) {
                             onBlock = true
                             break
                         }
@@ -118,12 +118,12 @@ object JetPack {
                         y--
                     }
 
-                    p.setAllowFlight(true)
-                    p.setFlying(true)
+                    p.allowFlight = true
+                    p.isFlying = true
 
                     var vec = Vector(0, 0, 0)
                     if (i % 2 == 0) vec = getPlayerData(p)!!.vehicleVector.clone().multiply(0.8)
-                    val pvec = p.getEyeLocation().getDirection()
+                    val pvec = p.eyeLocation.direction
                     val w_WASDVector = (Vector(pvec.getX(), 0.0, pvec.getZ())).multiply(vec.getX())
                     val d_WASDVector = (Vector(pvec.getZ(), 0.0, pvec.getX() * -1)).multiply(vec.getZ())
                     val xzVector = w_WASDVector.add(d_WASDVector)
@@ -137,32 +137,32 @@ object JetPack {
                         vehicleVector.add(moveVector)
                         vehicleVector = vehicleVector.multiply(0.9)
                     }
-                    leader.setVelocity(vehicleVector)
+                    leader.velocity = vehicleVector
 
                     // as.teleport(as.getLocation().add(vehicleVector));
-                    if (!`as`.getPassengers().contains(p)) {
+                    if (!`as`.passengers.contains(p)) {
                         `as`.addPassenger(p)
                     }
 
                     // p.setWalkSpeed(0.1F);
                     // p.setFlySpeed(0.02F);
-                    val leaderEyeLoc = leader.getEyeLocation()
-                    val leaderLoc = leader.getLocation().add(0.0, -0.3, 0.0)
-                    leaderEyeLoc.setYaw(p.getEyeLocation().getYaw())
+                    val leaderEyeLoc = leader.eyeLocation
+                    val leaderLoc = leader.location.add(0.0, -0.3, 0.0)
+                    leaderEyeLoc.yaw = p.eyeLocation.yaw
                     // as.teleport(leaderLoc);
-                    (`as` as CraftArmorStand).getHandle().setPositionRotation(
-                        leaderLoc.getX(),
-                        leaderLoc.getY(),
-                        leaderLoc.getZ(),
-                        p.getLocation().getYaw(),
+                    (`as` as CraftArmorStand).handle.setPositionRotation(
+                        leaderLoc.x,
+                        leaderLoc.y,
+                        leaderLoc.z,
+                        p.location.yaw,
                         0f,
                     )
 
                     // move object
-                    val pv = p.getEyeLocation().getDirection()
+                    val pv = p.eyeLocation.direction
                     val direction = Vector(pv.getX(), 0.0, pv.getZ()).normalize()
                     val locPlus = direction.clone().multiply(-0.2)
-                    bsObject.setBaseLocation(leaderLoc.clone().add(locPlus.getX(), 0.5, locPlus.getZ()))
+                    bsObject.baseLocation = leaderLoc.clone().add(locPlus.getX(), 0.5, locPlus.getZ())
                     bsObject.setDirection(direction)
                     bsObject.move()
 
@@ -186,11 +186,11 @@ object JetPack {
                         // DataMgr.getPlayerData(player).getTeam().getTeamColor().wool.createBlockData();
                         val position = loc2.clone().add(0.0, -0.2, 0.0)
                         val position2 = loc3.clone().add(0.0, -0.2, 0.0)
-                        for (o_player in plugin.getServer().getOnlinePlayers()) {
+                        for (o_player in plugin.server.onlinePlayers) {
                             if (!getPlayerData(o_player)!!.settings.ShowEffect_SPWeapon()) continue
-                            if (o_player.getWorld() === position.getWorld()) {
+                            if (o_player.world === position.world) {
                                 if (o_player
-                                        .getLocation()
+                                        .location
                                         .distanceSquared(position) < Sclat.particleRenderDistanceSquared
                                 ) {
                                     for (i in 0..10) {
@@ -210,7 +210,7 @@ object JetPack {
                                     }
                                 }
                                 if (o_player
-                                        .getLocation()
+                                        .location
                                         .distanceSquared(position2) < Sclat.particleRenderDistanceSquared
                                 ) {
                                     for (i in 0..10) {
@@ -246,88 +246,86 @@ object JetPack {
                     }
 
                     if (i == 0) {
-                        getPlayerData(p)!!.setIsUsingSP(true)
+                        getPlayerData(p)!!.isUsingSP = true
                         SPWeaponMgr.setSPCoolTimeAnimation(player, 175)
                         getPlayerData(p)!!.setIsUsingJetPack(true)
 
-                        p.getInventory().clear()
+                        p.inventory.clear()
 
                         val item = ItemStack(Material.QUARTZ)
-                        val meta = item.getItemMeta()
+                        val meta = item.itemMeta
                         meta!!.setDisplayName("右クリックで弾を発射")
-                        item.setItemMeta(meta)
+                        item.itemMeta = meta
                         for (count in 0..8) {
-                            player.getInventory().setItem(count, item)
+                            player.inventory.setItem(count, item)
                         }
                         player.updateInventory()
                         player.addPotionEffect(PotionEffect(PotionEffectType.LUCK, 176, 1))
                         SuperArmor.setArmor(player, 1.0, 175, false)
 
-                        val nmsWorld = (p.getWorld() as CraftWorld).getHandle()
-                        val `as` = EntityArmorStand(nmsWorld, ol.getX(), ol.getY(), ol.getZ())
-                        `as`.setPosition(ol.getX(), ol.getY(), ol.getZ())
-                        `as`.setInvisible(true)
-                        `as`.setNoGravity(true)
+                        val nmsWorld = (p.world as CraftWorld).handle
+                        val `as` = EntityArmorStand(nmsWorld, ol.x, ol.y, ol.z)
+                        `as`.setPosition(ol.x, ol.y, ol.z)
+                        `as`.isInvisible = true
+                        `as`.isNoGravity = true
                         `as`.setBasePlate(false)
-                        `as`.setCustomName(
-                            CraftChatMessage.fromStringOrNull(
-                                getPlayerData(p)!!.team.teamColor!!.colorCode + "↓↓↓  くコ:彡  ↓↓↓",
-                            ),
+                        `as`.customName = CraftChatMessage.fromStringOrNull(
+                            getPlayerData(p)!!.team.teamColor!!.colorCode + "↓↓↓  くコ:彡  ↓↓↓",
                         )
-                        `as`.setCustomNameVisible(true)
-                        `as`.setSmall(true)
-                        id = `as`.getBukkitEntity().getEntityId()
-                        for (target in plugin.getServer().getOnlinePlayers()) {
-                            if (p.getWorld() === target.getWorld()) {
+                        `as`.customNameVisible = true
+                        `as`.isSmall = true
+                        id = `as`.bukkitEntity.entityId
+                        for (target in plugin.server.onlinePlayers) {
+                            if (p.world === target.world) {
                                 (target as CraftPlayer)
-                                    .getHandle()
+                                    .handle
                                     .playerConnection
                                     .sendPacket(PacketPlayOutSpawnEntityLiving(`as`))
                             }
                         }
                     }
 
-                    val atl = p.getLocation()
+                    p.location
                     // p.sendMessage(String.valueOf(sv.getX() + ", " + sv.getY() + ", " +
                     // sv.getZ()));
-                    btl = p.getLocation()
+                    btl = p.location
 
-                    if (i == 170 || p.getGameMode() == GameMode.SPECTATOR || !getPlayerData(p)!!.isInMatch() ||
+                    if (i == 170 || p.gameMode == GameMode.SPECTATOR || !getPlayerData(p)!!.isInMatch ||
                         getPlayerData(
                             p,
-                        )!!.getIsDead()
+                        )!!.isDead
                     ) {
-                        if (`as`.getPassengers().contains(p)) `as`.removePassenger(p)
+                        if (`as`.passengers.contains(p)) `as`.removePassenger(p)
                         `as`.remove()
                         leader.remove()
-                        (p as CraftPlayer).getHandle().stopRiding()
+                        (p as CraftPlayer).handle.stopRiding()
 
-                        for (target in plugin.getServer().getOnlinePlayers()) {
-                            if (p.getWorld() === target.getWorld()) {
+                        for (target in plugin.server.onlinePlayers) {
+                            if (p.world === target.world) {
                                 (target as CraftPlayer)
-                                    .getHandle()
+                                    .handle
                                     .playerConnection
                                     .sendPacket(PacketPlayOutEntityDestroy(id))
                             }
                         }
-                        p.getInventory().clear()
-                        if (p.getWorld() === ol.getWorld() && p.getGameMode() != GameMode.SPECTATOR) {
-                            if (p.getLocation().distanceSquared(ol) > 9 /* 3^2 */) {
+                        p.inventory.clear()
+                        if (p.world === ol.world && p.gameMode != GameMode.SPECTATOR) {
+                            if (p.location.distanceSquared(ol) > 9 /* 3^2 */) {
                                 SuperJumpMgr.SuperJumpRunnable(p, ol)
-                                p.getWorld().playSound(p.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 2f, 1.3f)
+                                p.world.playSound(p.location, Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 2f, 1.3f)
                             } else {
-                                p.getWorld().playSound(p.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 2f, 1.3f)
+                                p.world.playSound(p.location, Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 2f, 1.3f)
                                 val v = Vector(0, 1, 0)
-                                p.setVelocity(v)
-                                p.getInventory().clear()
+                                p.velocity = v
+                                p.inventory.clear()
                                 WeaponClassMgr.setWeaponClass(p)
                             }
                         }
                         getPlayerData(p)!!.setIsUsingJetPack(false)
-                        getPlayerData(p)!!.setIsUsingSP(false)
+                        getPlayerData(p)!!.isUsingSP = false
                         bsObject.remove()
-                        p.setFlySpeed(0.1f)
-                        getPlayerData(player)!!.setCanUseSubWeapon(true)
+                        p.flySpeed = 0.1f
+                        getPlayerData(player)!!.canUseSubWeapon = true
                         // WeaponClassMgr.setWeaponClass(p);
                         cancel()
                         return
@@ -355,60 +353,60 @@ object JetPack {
                 override fun run() {
                     try {
                         if (c == 0) {
-                            player.getWorld().playSound(
-                                player.getLocation(),
+                            player.world.playSound(
+                                player.location,
                                 Sound.ENTITY_PLAYER_ATTACK_STRONG,
                                 1.5f,
                                 1.2f,
                             )
-                            p.getWorld().playSound(p.getLocation(), Sound.ENTITY_WITHER_SHOOT, 0.2f, 2f)
-                            p_vec = p.getEyeLocation().getDirection()
+                            p.world.playSound(p.location, Sound.ENTITY_WITHER_SHOOT, 0.2f, 2f)
+                            p_vec = p.eyeLocation.direction
                             val bom = ItemStack(getPlayerData(p)!!.team.teamColor!!.wool!!).clone()
-                            val bom_m = bom.getItemMeta()
+                            val bom_m = bom.itemMeta
                             bom_m!!.setLocalizedName(notDuplicateNumber.toString())
-                            bom.setItemMeta(bom_m)
-                            val dl = p.getEyeLocation().add(p_vec!!.clone().multiply(1.5))
-                            drop = p.getWorld().dropItem(dl, bom)
-                            drop!!.setVelocity(p_vec!!.multiply(1.5))
+                            bom.itemMeta = bom_m
+                            val dl = p.eyeLocation.add(p_vec!!.clone().multiply(1.5))
+                            drop = p.world.dropItem(dl, bom)
+                            drop!!.velocity = p_vec!!.multiply(1.5)
                             drop!!.setGravity(false)
                             // 雪玉をスポーンさせた瞬間にプレイヤーに雪玉がデスポーンした偽のパケットを送信する
-                            ball = player.getWorld().spawnEntity(dl, EntityType.SNOWBALL) as Snowball
-                            ball!!.setShooter(p)
+                            ball = player.world.spawnEntity(dl, EntityType.SNOWBALL) as Snowball
+                            ball!!.shooter = p
                             ball!!.setGravity(false)
-                            ball!!.setVelocity(Vector(0, 0, 0))
-                            ball!!.setCustomName("JetPack")
+                            ball!!.velocity = Vector(0, 0, 0)
+                            ball!!.customName = "JetPack"
                             setSnowballIsHit(ball, false)
 
-                            for (o_player in plugin.getServer().getOnlinePlayers()) {
-                                val connection = (o_player as CraftPlayer).getHandle().playerConnection
-                                connection.sendPacket(PacketPlayOutEntityDestroy(ball!!.getEntityId()))
+                            for (o_player in plugin.server.onlinePlayers) {
+                                val connection = (o_player as CraftPlayer).handle.playerConnection
+                                connection.sendPacket(PacketPlayOutEntityDestroy(ball!!.entityId))
                             }
-                            p_vec = p.getEyeLocation().getDirection()
+                            p_vec = p.eyeLocation.direction
                         }
 
-                        if (!drop!!.isOnGround() &&
+                        if (!drop!!.isOnGround &&
                             !(
-                                drop!!.getVelocity().getX() == 0.0 && drop!!
-                                    .getVelocity()
+                                drop!!.velocity.getX() == 0.0 && drop!!
+                                    .velocity
                                     .getZ() != 0.0
                                 ) &&
                             !(
-                                drop!!.getVelocity().getX() != 0.0 && drop!!
-                                    .getVelocity()
+                                drop!!.velocity.getX() != 0.0 && drop!!
+                                    .velocity
                                     .getZ() == 0.0
                                 )
                         ) {
-                            ball!!.setVelocity(drop!!.getVelocity())
+                            ball!!.velocity = drop!!.velocity
                         }
 
-                        for (target in plugin.getServer().getOnlinePlayers()) {
+                        for (target in plugin.server.onlinePlayers) {
                             if (!getPlayerData(target)!!.settings.ShowEffect_SPWeapon()) {
                                 continue
                             }
-                            if (target.getWorld() === ball!!.getWorld()) {
+                            if (target.world === ball!!.world) {
                                 if (target
-                                        .getLocation()
-                                        .distanceSquared(ball!!.getLocation()) < Sclat.particleRenderDistanceSquared
+                                        .location
+                                        .distanceSquared(ball!!.location) < Sclat.particleRenderDistanceSquared
                                 ) {
                                     val bd =
                                         getPlayerData(p)!!
@@ -417,7 +415,7 @@ object JetPack {
                                             .createBlockData()
                                     target.spawnParticle<BlockData?>(
                                         Particle.BLOCK_DUST,
-                                        ball!!.getLocation(),
+                                        ball!!.location,
                                         1,
                                         0.0,
                                         0.0,
@@ -429,10 +427,10 @@ object JetPack {
                             }
 
                             // ボムの視認用エフェクト
-                            if (target.getWorld() === drop!!.getLocation().getWorld()) {
+                            if (target.world === drop!!.location.world) {
                                 if (target
-                                        .getLocation()
-                                        .distanceSquared(drop!!.getLocation()) < Sclat.particleRenderDistanceSquared
+                                        .location
+                                        .distanceSquared(drop!!.location) < Sclat.particleRenderDistanceSquared
                                 ) {
                                     val dustOptions =
                                         Particle.DustOptions(
@@ -441,7 +439,7 @@ object JetPack {
                                         )
                                     target.spawnParticle<Particle.DustOptions?>(
                                         Particle.REDSTONE,
-                                        drop!!.getLocation(),
+                                        drop!!.location,
                                         1,
                                         0.0,
                                         0.0,
@@ -453,21 +451,21 @@ object JetPack {
                             }
                         }
 
-                        if (getSnowballIsHit(ball) || drop!!.isOnGround()) {
+                        if (getSnowballIsHit(ball) || drop!!.isOnGround) {
                             // 半径
 
                             val maxDist = 4.0
 
                             // 爆発音
-                            player.getWorld().playSound(drop!!.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_BLAST, 1f, 1f)
+                            player.world.playSound(drop!!.location, Sound.ENTITY_FIREWORK_ROCKET_BLAST, 1f, 1f)
 
                             // 爆発エフェクト
-                            createInkExplosionEffect(drop!!.getLocation(), 3.0, 25, player)
+                            createInkExplosionEffect(drop!!.location, 3.0, 25, player)
 
                             // 塗る
                             var i = 0
                             while (i <= maxDist) {
-                                val p_locs: MutableList<Location> = getSphere(drop!!.getLocation(), i.toDouble(), 20)
+                                val p_locs: MutableList<Location> = getSphere(drop!!.location, i.toDouble(), 20)
                                 for (loc in p_locs) {
                                     PaintMgr.Paint(loc, p, false)
                                 }
@@ -475,12 +473,12 @@ object JetPack {
                             }
 
                             // 攻撃判定の処理
-                            for (target in plugin.getServer().getOnlinePlayers()) {
-                                if (!getPlayerData(target)!!.isInMatch() || target.getWorld() !== p.getWorld()) continue
-                                if (target.getLocation().distanceSquared(drop!!.getLocation()) <= 12.25 /* 3.5^2 */) {
-                                    val damage = (3.5 - target.getLocation().distance(drop!!.getLocation())) * 10
+                            for (target in plugin.server.onlinePlayers) {
+                                if (!getPlayerData(target)!!.isInMatch || target.world !== p.world) continue
+                                if (target.location.distanceSquared(drop!!.location) <= 12.25 /* 3.5^2 */) {
+                                    val damage = (3.5 - target.location.distance(drop!!.location)) * 10
                                     if (getPlayerData(player)!!.team != getPlayerData(target)!!.team &&
-                                        target.getGameMode() == GameMode.ADVENTURE
+                                        target.gameMode == GameMode.ADVENTURE
                                     ) {
                                         giveDamage(player, target, damage, "spWeapon")
 
@@ -490,7 +488,7 @@ object JetPack {
                                                 var p: Player = target
 
                                                 override fun run() {
-                                                    target.setNoDamageTicks(0)
+                                                    target.noDamageTicks = 0
                                                 }
                                             }
                                         task.runTaskLater(plugin, 1)
@@ -498,11 +496,11 @@ object JetPack {
                                 }
                             }
 
-                            for (`as` in player.getWorld().getEntities()) {
+                            for (`as` in player.world.entities) {
                                 if (`as` is ArmorStand &&
-                                    `as`.getLocation().distanceSquared(drop!!.getLocation()) <= 12.25 // 3.5^2
+                                    `as`.location.distanceSquared(drop!!.location) <= 12.25 // 3.5^2
                                 ) {
-                                    val damage = (3.5 - `as`.getLocation().distance(drop!!.getLocation())) * 10
+                                    val damage = (3.5 - `as`.location.distance(drop!!.location)) * 10
                                     ArmorStandMgr.giveDamageArmorStand(`as`, damage, p)
                                 }
                             }
@@ -525,8 +523,8 @@ object JetPack {
                      *
                      */
                         c++
-                        x = drop!!.getLocation().getX()
-                        z = drop!!.getLocation().getZ()
+                        x = drop!!.location.x
+                        z = drop!!.location.z
 
                         if (c > 20) {
                             drop!!.remove()
@@ -537,7 +535,7 @@ object JetPack {
                     } catch (e: Exception) {
                         drop!!.remove()
                         cancel()
-                        plugin.getLogger().warning(e.message)
+                        plugin.logger.warning(e.message)
                     }
                 }
             }
@@ -548,7 +546,7 @@ object JetPack {
         val cooltime: BukkitRunnable =
             object : BukkitRunnable() {
                 override fun run() {
-                    getPlayerData(player)!!.setCanUseSubWeapon(true)
+                    getPlayerData(player)!!.canUseSubWeapon = true
                 }
             }
         cooltime.runTaskLater(plugin, 20)

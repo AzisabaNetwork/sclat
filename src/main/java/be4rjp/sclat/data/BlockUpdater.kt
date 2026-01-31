@@ -35,7 +35,7 @@ class BlockUpdater {
 
                         loop@ for (block in tb) {
                             // Sclat.setBlockByNMS(block, blocklist.get(block), true);
-                            if (block.getLocation().getChunk().isLoaded()) {
+                            if (block.location.chunk.isLoaded) {
                                 try {
                                     // Sclat.setBlockByNMSChunk(block, blocklist.get(block), true);
 
@@ -54,7 +54,7 @@ class BlockUpdater {
                                     list.add(down)
 
                                     check@ for (cb in list) {
-                                        if (cb.getType() == Material.AIR) {
+                                        if (cb.type == Material.AIR) {
                                             // Sclat.sendBlockChangeForAllPlayer(block, blocklist.get(block));
                                             chunkBlockMap
                                                 .computeIfAbsent(block.chunk) { chunk: Chunk? -> mutableListOf() }
@@ -84,18 +84,18 @@ class BlockUpdater {
                             var i = 0
                             for (block in blocks) {
                                 positionArray[i] =
-                                    ((block.getX() and 0xF) shl 12 or ((block.getZ() and 0xF) shl 8) or block.getY()).toShort()
+                                    ((block.x and 0xF) shl 12 or ((block.z and 0xF) shl 8) or block.y).toShort()
                                 i++
                             }
                             val packet =
                                 PacketPlayOutMultiBlockChange(
                                     positionArray.size,
                                     positionArray,
-                                    (chunk as CraftChunk).getHandle(),
+                                    (chunk as CraftChunk).handle,
                                 )
-                            for (target in plugin.getServer().getOnlinePlayers()) {
-                                if (target.getWorld() === chunk.getWorld()) {
-                                    (target as CraftPlayer).getHandle().playerConnection.sendPacket(packet)
+                            for (target in plugin.server.onlinePlayers) {
+                                if (target.world === chunk.world) {
+                                    (target as CraftPlayer).handle.playerConnection.sendPacket(packet)
                                 }
                             }
                         }
@@ -120,7 +120,7 @@ class BlockUpdater {
             this.blocklist.put(block, material)
             this.blocks.add(block)
 
-            if (block.getLocation().getChunk().isLoaded()) {
+            if (block.location.chunk.isLoaded) {
                 try {
                     SclatUtil.setBlockByNMSChunk(block, blocklist.get(block)!!, true)
                 } catch (e: Exception) {
@@ -138,7 +138,7 @@ class BlockUpdater {
                 this.blocklist.replace(block, material)
                 this.blocks.add(block)
 
-                if (block.getLocation().getChunk().isLoaded()) {
+                if (block.location.chunk.isLoaded) {
                     try {
                         SclatUtil.setBlockByNMSChunk(block, blocklist.get(block)!!, true)
                     } catch (e: Exception) {

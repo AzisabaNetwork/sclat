@@ -56,7 +56,7 @@ public class ArmorStandMgr {
 
 	public static void ArmorStandEquipPacketSender(World world) {
 		BukkitRunnable task = new BukkitRunnable() {
-			int c = 0;
+			final int c = 0;
 			@Override
 			public void run() {
 				for (Entity as : world.getEntities()) {
@@ -138,7 +138,7 @@ public class ArmorStandMgr {
 		DataMgr.setArmorStandPlayer(as, player);
 		DataMgr.setBeaconFromPlayer(player, as);
 		BukkitRunnable effect = new BukkitRunnable() {
-			Player p = player;
+			final Player p = player;
 			int c = 0;
 			@Override
 			public void run() {
@@ -205,7 +205,7 @@ public class ArmorStandMgr {
 		effect.runTaskTimer(VariablesKt.getPlugin(), 0, 4);
 
 		BukkitRunnable task2 = new BukkitRunnable() {
-			Player p = player;
+			final Player p = player;
 			@Override
 			public void run() {
 				Location loc = as.getLocation();
@@ -238,7 +238,7 @@ public class ArmorStandMgr {
 		DataMgr.setArmorStandPlayer(as, player);
 		DataMgr.setSprinklerFromPlayer(player, as);
 		BukkitRunnable task = new BukkitRunnable() {
-			Player p = player;
+			final Player p = player;
 			int c = 0;
 			@Override
 			public void run() {
@@ -276,7 +276,7 @@ public class ArmorStandMgr {
 		task.runTaskTimer(VariablesKt.getPlugin(), 0, 4);
 
 		BukkitRunnable task2 = new BukkitRunnable() {
-			Player p = player;
+			final Player p = player;
 			@Override
 			public void run() {
 				Location loc = as.getLocation();
@@ -293,7 +293,7 @@ public class ArmorStandMgr {
 		task2.runTaskTimer(VariablesKt.getPlugin(), 0, 2);
 
 		BukkitRunnable shoot = new BukkitRunnable() {
-			Player p = player;
+			final Player p = player;
 			@Override
 			public void run() {
 				if (as.getCustomName().equals("21")) {

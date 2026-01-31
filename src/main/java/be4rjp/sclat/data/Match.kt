@@ -31,9 +31,6 @@ class Match(
     var gatiareaTCount: Int = 0
         private set
     var isFinished: Boolean = false
-        set(v) {
-            field = `v`
-        }
     var blockUpdater: BlockUpdater? = null
     var winTeam: Team? = null
 

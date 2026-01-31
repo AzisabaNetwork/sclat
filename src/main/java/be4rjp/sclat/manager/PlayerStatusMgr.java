@@ -53,23 +53,23 @@ public class PlayerStatusMgr {
 	}
 
 	public static void setDefaultStatus(Player player) {
-		conf.getPlayerStatus().set("Status." + player.getUniqueId().toString() + ".Money", 10000);
-		conf.getPlayerStatus().set("Status." + player.getUniqueId().toString() + ".Lv", 0);
-		conf.getPlayerStatus().set("Status." + player.getUniqueId().toString() + ".Rank", 0);
+		conf.getPlayerStatus().set("Status." + player.getUniqueId() + ".Money", 10000);
+		conf.getPlayerStatus().set("Status." + player.getUniqueId() + ".Lv", 0);
+		conf.getPlayerStatus().set("Status." + player.getUniqueId() + ".Rank", 0);
 		List<String> wlist = new ArrayList<>();
 		wlist.add(conf.config.getString("DefaultClass"));
-		conf.getPlayerStatus().set("Status." + player.getUniqueId().toString() + ".WeaponClass", wlist);
+		conf.getPlayerStatus().set("Status." + player.getUniqueId() + ".WeaponClass", wlist);
 		List<Integer> glist = new ArrayList<>();
 		glist.add(0);
-		conf.getPlayerStatus().set("Status." + player.getUniqueId().toString() + ".GearList", glist);
-		conf.getPlayerStatus().set("Status." + player.getUniqueId().toString() + ".Gear", 0);
-		conf.getPlayerStatus().set("Status." + player.getUniqueId().toString() + ".Kill", 0);
-		conf.getPlayerStatus().set("Status." + player.getUniqueId().toString() + ".Paint", 0);
-		conf.getPlayerStatus().set("Status." + player.getUniqueId().toString() + ".EquiptClass",
+		conf.getPlayerStatus().set("Status." + player.getUniqueId() + ".GearList", glist);
+		conf.getPlayerStatus().set("Status." + player.getUniqueId() + ".Gear", 0);
+		conf.getPlayerStatus().set("Status." + player.getUniqueId() + ".Kill", 0);
+		conf.getPlayerStatus().set("Status." + player.getUniqueId() + ".Paint", 0);
+		conf.getPlayerStatus().set("Status." + player.getUniqueId() + ".EquiptClass",
 				conf.config.getString("DefaultClass"));
-		conf.getPlayerStatus().set("Status." + player.getUniqueId().toString() + ".Tutorial", 0);
+		conf.getPlayerStatus().set("Status." + player.getUniqueId() + ".Tutorial", 0);
 		// ガチャチケ用
-		conf.getPlayerStatus().set("Status." + player.getUniqueId().toString() + ".Ticket", 0);
+		conf.getPlayerStatus().set("Status." + player.getUniqueId() + ".Ticket", 0);
 		PlayerStatusMgr.addGear(player, 9);
 		PlayerStatusMgr.setGear(player, 9);
 	}
@@ -104,8 +104,8 @@ public class PlayerStatusMgr {
 		as.setInvisible(true);
 		as.setCustomNameVisible(true);
 		as.setNoGravity(true);
-		as.setCustomName(CraftChatMessage.fromStringOrNull(
-				"§aMoney : §r" + String.valueOf(getMoney(player)) + "  §aLv : §r" + String.valueOf(getLv(player))));
+		as.setCustomName(
+				CraftChatMessage.fromStringOrNull("§aMoney : §r" + getMoney(player) + "  §aLv : §r" + getLv(player)));
 
 		list.put(player, as);
 
@@ -114,8 +114,8 @@ public class PlayerStatusMgr {
 		as1.setInvisible(true);
 		as1.setCustomNameVisible(true);
 		as1.setNoGravity(true);
-		as1.setCustomName(CraftChatMessage.fromStringOrNull("§6Rank : §r" + String.valueOf(getRank(player)) + "  [ §b"
-				+ RankMgr.toABCRank(getRank(player)) + " §r]"));
+		as1.setCustomName(CraftChatMessage.fromStringOrNull(
+				"§6Rank : §r" + getRank(player) + "  [ §b" + RankMgr.toABCRank(getRank(player)) + " §r]"));
 
 		list1.put(player, as1);
 
@@ -124,8 +124,8 @@ public class PlayerStatusMgr {
 		as2.setInvisible(true);
 		as2.setCustomNameVisible(true);
 		as2.setNoGravity(true);
-		as2.setCustomName(CraftChatMessage.fromStringOrNull("§aPaints : §r" + String.valueOf(getPaint(player))
-				+ "  §aKills : §r" + String.valueOf(getKill(player))));
+		as2.setCustomName(CraftChatMessage
+				.fromStringOrNull("§aPaints : §r" + getPaint(player) + "  §aKills : §r" + getKill(player)));
 
 		list2.put(player, as2);
 
@@ -144,20 +144,20 @@ public class PlayerStatusMgr {
 					EntityArmorStand as = list.get(player);
 					PlayerConnection connection = ((CraftPlayer) player).getHandle().playerConnection;
 					connection.sendPacket(new PacketPlayOutEntityDestroy(as.getBukkitEntity().getEntityId()));
-					as.setCustomName(CraftChatMessage.fromStringOrNull("§aMoney : §r" + String.valueOf(getMoney(player))
-							+ "  §aLv : §r" + String.valueOf(getLv(player))));
+					as.setCustomName(CraftChatMessage
+							.fromStringOrNull("§aMoney : §r" + getMoney(player) + "  §aLv : §r" + getLv(player)));
 					connection.sendPacket(new PacketPlayOutSpawnEntityLiving(as));
 
 					EntityArmorStand as1 = list1.get(player);
 					connection.sendPacket(new PacketPlayOutEntityDestroy(as1.getBukkitEntity().getEntityId()));
-					as1.setCustomName(CraftChatMessage.fromStringOrNull("§6Rank : §r" + String.valueOf(getRank(player))
-							+ "  [ §b" + RankMgr.toABCRank(getRank(player)) + " §r]"));
+					as1.setCustomName(CraftChatMessage.fromStringOrNull(
+							"§6Rank : §r" + getRank(player) + "  [ §b" + RankMgr.toABCRank(getRank(player)) + " §r]"));
 					connection.sendPacket(new PacketPlayOutSpawnEntityLiving(as1));
 
 					EntityArmorStand as2 = list2.get(player);
 					connection.sendPacket(new PacketPlayOutEntityDestroy(as2.getBukkitEntity().getEntityId()));
-					as2.setCustomName(CraftChatMessage.fromStringOrNull("§aPaints : §r"
-							+ String.valueOf(getPaint(player)) + "  §aKills : §r" + String.valueOf(getKill(player))));
+					as2.setCustomName(CraftChatMessage
+							.fromStringOrNull("§aPaints : §r" + getPaint(player) + "  §aKills : §r" + getKill(player)));
 					connection.sendPacket(new PacketPlayOutSpawnEntityLiving(as2));
 				} catch (Exception e) {
 				}
@@ -170,20 +170,18 @@ public class PlayerStatusMgr {
 		EntityArmorStand as = list.get(player);
 		PlayerConnection connection = ((CraftPlayer) player).getHandle().playerConnection;
 		connection.sendPacket(new PacketPlayOutEntityDestroy(as.getBukkitEntity().getEntityId()));
-		as.setCustomName(CraftChatMessage.fromStringOrNull(
-				"§aMoney : §r" + String.valueOf(getMoney(player)) + "  §aLv : §r" + String.valueOf(getLv(player))));
+		as.setCustomName(
+				CraftChatMessage.fromStringOrNull("§aMoney : §r" + getMoney(player) + "  §aLv : §r" + getLv(player)));
 		connection.sendPacket(new PacketPlayOutSpawnEntityLiving(as));
 	}
 
 	public static boolean haveWeapon(Player player, String wname) {
-		List<String> wlist = conf.getPlayerStatus()
-				.getStringList("Status." + player.getUniqueId().toString() + ".WeaponClass");
+		List<String> wlist = conf.getPlayerStatus().getStringList("Status." + player.getUniqueId() + ".WeaponClass");
 		return wlist.contains(wname);
 	}
 
 	public static boolean haveGear(Player player, int g) {
-		List<Integer> glist = conf.getPlayerStatus()
-				.getIntegerList("Status." + player.getUniqueId().toString() + ".GearList");
+		List<Integer> glist = conf.getPlayerStatus().getIntegerList("Status." + player.getUniqueId() + ".GearList");
 		return glist.contains(g);
 	}
 
@@ -215,17 +213,15 @@ public class PlayerStatusMgr {
 	}
 
 	public static void addWeapon(Player player, String wname) {
-		List<String> wlist = conf.getPlayerStatus()
-				.getStringList("Status." + player.getUniqueId().toString() + ".WeaponClass");
+		List<String> wlist = conf.getPlayerStatus().getStringList("Status." + player.getUniqueId() + ".WeaponClass");
 		wlist.add(wname);
-		conf.getPlayerStatus().set("Status." + player.getUniqueId().toString() + ".WeaponClass", wlist);
+		conf.getPlayerStatus().set("Status." + player.getUniqueId() + ".WeaponClass", wlist);
 	}
 
 	public static void addGear(Player player, int g) {
-		List<Integer> glist = conf.getPlayerStatus()
-				.getIntegerList("Status." + player.getUniqueId().toString() + ".GearList");
+		List<Integer> glist = conf.getPlayerStatus().getIntegerList("Status." + player.getUniqueId() + ".GearList");
 		glist.add(g);
-		conf.getPlayerStatus().set("Status." + player.getUniqueId().toString() + ".GearList", glist);
+		conf.getPlayerStatus().set("Status." + player.getUniqueId() + ".GearList", glist);
 	}
 
 	public static void addMoney(Player player, int m) {
@@ -369,16 +365,16 @@ public class PlayerStatusMgr {
 	}
 
 	public static void subTicket(Player player, int m) {
-		if (!conf.getPlayerStatus().contains("Status." + player.getUniqueId().toString() + ".Ticket")) {
-			conf.getPlayerStatus().set("Status." + player.getUniqueId().toString() + ".Ticket", 0);
+		if (!conf.getPlayerStatus().contains("Status." + player.getUniqueId() + ".Ticket")) {
+			conf.getPlayerStatus().set("Status." + player.getUniqueId() + ".Ticket", 0);
 		}
 		String uuid = player.getUniqueId().toString();
 		conf.getPlayerStatus().set("Status." + uuid + ".Ticket",
 				conf.getPlayerStatus().getInt("Status." + uuid + ".Ticket") - m);
 	}
 	public static int getTicket(Player player) {
-		if (!conf.getPlayerStatus().contains("Status." + player.getUniqueId().toString() + ".Ticket")) {
-			conf.getPlayerStatus().set("Status." + player.getUniqueId().toString() + ".Ticket", 0);
+		if (!conf.getPlayerStatus().contains("Status." + player.getUniqueId() + ".Ticket")) {
+			conf.getPlayerStatus().set("Status." + player.getUniqueId() + ".Ticket", 0);
 		}
 		String uuid = player.getUniqueId().toString();
 		return conf.getPlayerStatus().getInt("Status." + uuid + ".Ticket");

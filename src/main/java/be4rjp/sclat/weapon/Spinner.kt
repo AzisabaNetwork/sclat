@@ -36,14 +36,14 @@ object Spinner {
                 var p: Player = player
                 var charge: Int = 0
                 var keeping: Int = 0
-                var max: Int = getPlayerData(p)!!.getWeaponClass().mainWeapon!!.maxCharge
+                var max: Int = getPlayerData(p)!!.weaponClass.mainWeapon!!.maxCharge
 
                 override fun run() {
                     val data = getPlayerData(p)
 
                     data!!.tick = data.tick + 1
 
-                    if (keeping == data.getWeaponClass().mainWeapon!!.chargeKeepingTime && data.getWeaponClass().mainWeapon!!.canChargeKeep &&
+                    if (keeping == data.weaponClass.mainWeapon!!.chargeKeepingTime && data.weaponClass.mainWeapon!!.canChargeKeep &&
                         data.settings.doChargeKeep()
                     ) {
                         charge =
@@ -58,35 +58,35 @@ object Spinner {
                         return
                     }
 
-                    if (data.tick <= 6 && data.isInMatch()) {
+                    if (data.tick <= 6 && data.isInMatch) {
                         val w =
                             data
-                                .getWeaponClass()
+                                .weaponClass
                                 .mainWeapon!!
                                 .weaponIteamStack!!
                                 .clone()
-                        val wm = w.getItemMeta()
+                        val wm = w.itemMeta
 
                         // data.setTick(data.getTick() + 1);
                         if (charge < max) charge++
 
                         wm!!.setDisplayName(
                             (
-                                wm.getDisplayName() + "§7[" +
+                                wm.displayName + "§7[" +
                                     toGauge(charge, max, data.team.teamColor!!.colorCode, "§7") + "]"
                                 ),
                         )
-                        w.setItemMeta(wm)
-                        p.getInventory().setItem(0, w)
+                        w.itemMeta = wm
+                        p.inventory.setItem(0, w)
                     }
 
-                    if (charge == max || data.getWeaponClass().mainWeapon!!.hanbunCharge) {
+                    if (charge == max || data.weaponClass.mainWeapon!!.hanbunCharge) {
                         if (p
-                                .getInventory()
-                                .getItemInMainHand()
-                                .getType() == Material.AIR
+                                .inventory
+                                .itemInMainHand
+                                .type == Material.AIR
                         ) {
-                            if (data.getWeaponClass().mainWeapon!!.canChargeKeep) {
+                            if (data.weaponClass.mainWeapon!!.canChargeKeep) {
                                 if (data.settings.doChargeKeep()) {
                                     data.tick =
                                         11
@@ -95,39 +95,39 @@ object Spinner {
                         }
                     }
 
-                    if (p.getGameMode() == GameMode.SPECTATOR) charge = 0
+                    if (p.gameMode == GameMode.SPECTATOR) charge = 0
 
-                    if (data.tick >= 11 && (charge == max || data.getWeaponClass().mainWeapon!!.hanbunCharge)) {
+                    if (data.tick >= 11 && (charge == max || data.weaponClass.mainWeapon!!.hanbunCharge)) {
                         keeping++
                     } else {
                         keeping = 0
                     }
 
-                    if (data.tick == 7 && data.isInMatch()) {
-                        if (p.getExp() > data.getWeaponClass().mainWeapon!!.needInk * charge) {
+                    if (data.tick == 7 && data.isInMatch) {
+                        if (p.exp > data.weaponClass.mainWeapon!!.needInk * charge) {
                             SpinnerShootRunnable(
-                                (charge * data.getWeaponClass().mainWeapon!!.chargeRatio).toInt(),
+                                (charge * data.weaponClass.mainWeapon!!.chargeRatio).toInt(),
                                 p,
                             )
                         } else {
-                            val reach = (p.getExp() / data.getWeaponClass().mainWeapon!!.needInk).toInt()
+                            val reach = (p.exp / data.weaponClass.mainWeapon!!.needInk).toInt()
                             if (reach >= 2) {
                                 SpinnerShootRunnable(
-                                    (reach * data.getWeaponClass().mainWeapon!!.chargeRatio).toInt(),
+                                    (reach * data.weaponClass.mainWeapon!!.chargeRatio).toInt(),
                                     p,
                                 )
                             } else {
                                 p.sendTitle("", ChatColor.RED.toString() + "インクが足りません", 0, 10, 2)
-                                p.playSound(p.getLocation(), Sound.UI_BUTTON_CLICK, 1f, 1.63f)
+                                p.playSound(p.location, Sound.UI_BUTTON_CLICK, 1f, 1.63f)
                             }
                         }
                         charge = 0
-                        p.getInventory().setItem(0, data.getWeaponClass().mainWeapon!!.weaponIteamStack)
+                        p.inventory.setItem(0, data.weaponClass.mainWeapon!!.weaponIteamStack)
                         data.tick = 8
                         data.setIsHolding(false)
                     }
 
-                    if (!data.isInMatch() || !p.isOnline()) cancel()
+                    if (!data.isInMatch || !p.isOnline) cancel()
                 }
             }
         task.runTaskTimer(plugin, 0, 1)
@@ -137,15 +137,15 @@ object Spinner {
         charge: Int,
         player: Player,
     ) {
-        getPlayerData(player)!!.setCanCharge(false)
+        getPlayerData(player)!!.canCharge = false
         val task: BukkitRunnable =
             object : BukkitRunnable() {
                 var p: Player = player
                 var c: Int = 0
 
                 override fun run() {
-                    if (c == charge || !p.isOnline() || getPlayerData(p)!!.getIsSquid()) {
-                        getPlayerData(p)!!.setCanCharge(true)
+                    if (c == charge || !p.isOnline || getPlayerData(p)!!.isSquid) {
+                        getPlayerData(p)!!.canCharge = true
                         cancel()
                     }
                     val data = getPlayerData(p)
@@ -156,7 +156,7 @@ object Spinner {
                     }
                     Shoot(
                         p,
-                        (charge / getPlayerData(p)!!.getWeaponClass().mainWeapon!!.chargeRatio).toInt(),
+                        (charge / getPlayerData(p)!!.weaponClass.mainWeapon!!.chargeRatio).toInt(),
                     )
                     c++
                 }
@@ -165,7 +165,7 @@ object Spinner {
             plugin,
             2,
             getPlayerData(player)!!
-                .getWeaponClass()
+                .weaponClass
                 .mainWeapon!!
                 .shootTick
                 .toLong(),
@@ -176,40 +176,36 @@ object Spinner {
         player: Player,
         charge: Int,
     ) {
-        if (player.getGameMode() == GameMode.SPECTATOR) return
+        if (player.gameMode == GameMode.SPECTATOR) return
 
         val data = getPlayerData(player)
-        if (player.getExp() <=
+        if (player.exp <=
             (
-                data!!.getWeaponClass().mainWeapon!!.needInk
+                data!!.weaponClass.mainWeapon!!.needInk
                     * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) /
                     Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)
                 ).toFloat()
         ) {
             player.sendTitle("", ChatColor.RED.toString() + "インクが足りません", 0, 5, 2)
-            player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1f, 1.63f)
+            player.playSound(player.location, Sound.UI_BUTTON_CLICK, 1f, 1.63f)
             return
         }
-        player.setExp(
-            player.getExp() -
-                (
-                    data.getWeaponClass().mainWeapon!!.needInk
-                        * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) /
-                        Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)
-                    ).toFloat(),
-        )
+        player.exp = player.exp -
+            (
+                data.weaponClass.mainWeapon!!.needInk
+                    * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) /
+                    Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)
+                ).toFloat()
         val ball = player.launchProjectile<Snowball>(Snowball::class.java)
-        (ball as CraftSnowball).getHandle().setItem(
-            CraftItemStack.asNMSCopy(ItemStack(getPlayerData(player)!!.team.teamColor!!.wool!!)),
-        )
-        player.getWorld().playSound(player.getLocation(), Sound.ENTITY_PIG_STEP, 0.3f, 1.1f)
+        (ball as CraftSnowball).handle.item = CraftItemStack.asNMSCopy(ItemStack(getPlayerData(player)!!.team.teamColor!!.wool!!))
+        player.world.playSound(player.location, Sound.ENTITY_PIG_STEP, 0.3f, 1.1f)
         val vec =
             player
-                .getLocation()
-                .getDirection()
-                .multiply(getPlayerData(player)!!.getWeaponClass().mainWeapon!!.shootSpeed * charge)
-        val random = getPlayerData(player)!!.getWeaponClass().mainWeapon!!.random
-        val distick = getPlayerData(player)!!.getWeaponClass().mainWeapon!!.distanceTick
+                .location
+                .direction
+                .multiply(getPlayerData(player)!!.weaponClass.mainWeapon!!.shootSpeed * charge)
+        val random = getPlayerData(player)!!.weaponClass.mainWeapon!!.random
+        val distick = getPlayerData(player)!!.weaponClass.mainWeapon!!.distanceTick
         vec.add(
             Vector(
                 Math.random() * random - random / 2,
@@ -217,11 +213,11 @@ object Spinner {
                 Math.random() * random - random / 2,
             ),
         )
-        ball.setVelocity(vec)
-        ball.setShooter(player)
+        ball.velocity = vec
+        ball.shooter = player
         val name = notDuplicateNumber.toString()
         DataMgr.mws.add(name)
-        ball.setCustomName(name)
+        ball.customName = name
         mainSnowballNameMap.put(name, ball)
         setSnowballHitCount(name, 0)
         val task: BukkitRunnable =
@@ -236,10 +232,10 @@ object Spinner {
                 var p: Player = player
                 var fallvec: Vector =
                     Vector(
-                        inkball!!.getVelocity().getX(),
-                        inkball!!.getVelocity().getY(),
-                        inkball!!.getVelocity().getZ(),
-                    ).multiply(getPlayerData(p)!!.getWeaponClass().mainWeapon!!.shootSpeed / 17)
+                        inkball!!.velocity.getX(),
+                        inkball!!.velocity.getY(),
+                        inkball!!.velocity.getZ(),
+                    ).multiply(getPlayerData(p)!!.weaponClass.mainWeapon!!.shootSpeed / 17)
 
                 override fun run() {
                     inkball = mainSnowballNameMap.get(name)
@@ -255,18 +251,18 @@ object Spinner {
                                 .team.teamColor!!
                                 .wool!!
                                 .createBlockData()
-                        for (o_player in plugin.getServer().getOnlinePlayers()) {
+                        for (o_player in plugin.server.onlinePlayers) {
                             if (getPlayerData(o_player)!!.settings.ShowEffect_MainWeaponInk()) {
-                                if (o_player.getWorld() ===
-                                    inkball!!.getWorld()
+                                if (o_player.world ===
+                                    inkball!!.world
                                 ) {
                                     if (o_player
-                                            .getLocation()
-                                            .distanceSquared(inkball!!.getLocation()) < Sclat.particleRenderDistanceSquared
+                                            .location
+                                            .distanceSquared(inkball!!.location) < Sclat.particleRenderDistanceSquared
                                     ) {
                                         o_player.spawnParticle<BlockData?>(
                                             Particle.BLOCK_DUST,
-                                            inkball!!.getLocation(),
+                                            inkball!!.location,
                                             0,
                                             0.0,
                                             -1.0,
@@ -281,16 +277,14 @@ object Spinner {
                     }
 
                     if (i >= tick && !addedFallVec) {
-                        inkball!!.setVelocity(fallvec)
+                        inkball!!.velocity = fallvec
                         addedFallVec = true
                     }
                     if (i >= tick && i <= tick + 15) {
-                        inkball!!.setVelocity(
-                            inkball!!.getVelocity().add(Vector(0.0, -0.1, 0.0)),
-                        )
+                        inkball!!.velocity = inkball!!.velocity.add(Vector(0.0, -0.1, 0.0))
                     }
-                    if (i != tick) PaintMgr.PaintHightestBlock(inkball!!.getLocation(), p, true, true)
-                    if (inkball!!.isDead()) cancel()
+                    if (i != tick) PaintMgr.PaintHightestBlock(inkball!!.location, p, true, true)
+                    if (inkball!!.isDead) cancel()
 
                     i++
                 }

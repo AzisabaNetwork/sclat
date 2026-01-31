@@ -41,7 +41,7 @@ class PacketHandler(private val player: Player?) : ChannelDuplexHandler() {
 
         // Charging fov handle
         if (packet is PacketPlayOutAbilities) {
-            if (playerData!!.getIsCharging()) {
+            if (playerData!!.isCharging) {
                 packet.b(playerData.fov)
             }
         }

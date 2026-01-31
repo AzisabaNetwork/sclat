@@ -28,11 +28,11 @@ class LobbyScoreboardRunnable(
         this.playerData = getPlayerData(player)
 
         val scoreboardManager = Bukkit.getScoreboardManager()
-        this.scoreboard = scoreboardManager!!.getNewScoreboard()
-        this.objective = scoreboard.registerNewObjective("Lobby", player.getName(), "§6§lSclat §r" + Sclat.VERSION)
-        this.objective.setDisplaySlot(DisplaySlot.SIDEBAR)
+        this.scoreboard = scoreboardManager!!.newScoreboard
+        this.objective = scoreboard.registerNewObjective("Lobby", player.name, "§6§lSclat §r" + Sclat.VERSION)
+        this.objective.displaySlot = DisplaySlot.SIDEBAR
 
-        player.setScoreboard(scoreboard)
+        player.scoreboard = scoreboard
 
         val text = ChatColor.translateAlternateColorCodes('&', Sclat.news?.getConfig()!!.getString("news-message")!!)
 
@@ -41,7 +41,7 @@ class LobbyScoreboardRunnable(
 
     override fun run() {
         objective.unregister()
-        if (!player.isOnline()) cancel()
+        if (!player.isOnline) cancel()
 
         val lines: MutableList<String> = mutableListOf()
         lines.add("§7§m                                  ")
@@ -88,8 +88,8 @@ class LobbyScoreboardRunnable(
         lines.add("   ")
         lines.add("§7§m                                  §r")
 
-        objective = scoreboard.registerNewObjective("Lobby", player.getName(), "§6§lSclat §r" + Sclat.VERSION)
-        objective.setDisplaySlot(DisplaySlot.SIDEBAR)
+        objective = scoreboard.registerNewObjective("Lobby", player.name, "§6§lSclat §r" + Sclat.VERSION)
+        objective.displaySlot = DisplaySlot.SIDEBAR
         ObjectiveUtil.setLine(objective, lines)
     }
 }

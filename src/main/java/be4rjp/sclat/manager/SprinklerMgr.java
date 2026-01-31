@@ -34,11 +34,11 @@ public class SprinklerMgr {
 		ball.setCustomName("Sprinkler");
 		BukkitRunnable task = new BukkitRunnable() {
 			int i = 0;
-			int tick = 2;
+			final int tick = 2;
 			// Vector fallvec;
-			Vector origvec = vec;
-			Snowball inkball = ball;
-			Player p = player;
+			final Vector origvec = vec;
+			final Snowball inkball = ball;
+			final Player p = player;
 			@Override
 			public void run() {
 				org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).team.getTeamColor().wool
