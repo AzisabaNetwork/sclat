@@ -2,6 +2,7 @@
 package be4rjp.sclat.weapon.subweapon;
 
 import be4rjp.sclat.Sclat;
+import be4rjp.sclat.VariablesKt;
 import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.weapon.Gear;
 import net.minecraft.server.v1_14_R1.EnumItemSlot;
@@ -66,7 +67,7 @@ public class Sprinkler {
 						DataMgr.getSnowballNameMap().put(String.valueOf(ndn), ball);
 						DataMgr.setSnowballIsHit(ball, false);
 
-						for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
+						for (Player o_player : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
 							PlayerConnection connection = ((CraftPlayer) o_player).getHandle().playerConnection;
 							connection.sendPacket(new PacketPlayOutEntityDestroy(ball.getEntityId()));
 						}
@@ -92,11 +93,11 @@ public class Sprinkler {
 					}
 
 					// 視認用エフェクト
-					for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
+					for (Player o_player : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
 						if (DataMgr.getPlayerData(o_player).settings.ShowEffect_Bomb()) {
 							if (o_player.getWorld() == drop.getLocation().getWorld()) {
 								if (o_player.getLocation()
-										.distanceSquared(drop.getLocation()) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED) {
+										.distanceSquared(drop.getLocation()) < Sclat.particleRenderDistanceSquared) {
 									Particle.DustOptions dustOptions = new Particle.DustOptions(
 											DataMgr.getPlayerData(p).team.getTeamColor().getBukkitColor(), 1);
 									o_player.spawnParticle(Particle.REDSTONE, drop.getLocation(), 1, 0, 0, 0, 50,
@@ -118,7 +119,7 @@ public class Sprinkler {
 				} catch (Exception e) {
 					cancel();
 					drop.remove();
-					Sclat.getPlugin().getLogger().warning(e.getMessage());
+					VariablesKt.getPlugin().getLogger().warning(e.getMessage());
 				}
 			}
 		};
@@ -129,10 +130,10 @@ public class Sprinkler {
 				DataMgr.getPlayerData(player).setCanUseSubWeapon(true);
 			}
 		};
-		cooltime.runTaskLater(Sclat.getPlugin(), 8);
+		cooltime.runTaskLater(VariablesKt.getPlugin(), 8);
 
 		if (player.getExp() > (float) (0.6 / Gear.getGearInfluence(player, Gear.Type.SUB_SPEC_UP)))
-			task.runTaskTimer(Sclat.getPlugin(), 0, 1);
+			task.runTaskTimer(VariablesKt.getPlugin(), 0, 1);
 		else {
 			player.sendTitle("", ChatColor.RED + "インクが足りません", 0, 5, 2);
 			player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1F, 1.63F);
@@ -143,7 +144,7 @@ public class Sprinkler {
 		BukkitRunnable delay = new BukkitRunnable() {
 			@Override
 			public void run() {
-				for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
+				for (Player target : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
 					if (as.getWorld() != target.getWorld())
 						continue;
 					((CraftPlayer) target).getHandle().playerConnection.sendPacket(new PacketPlayOutEntityEquipment(
@@ -155,6 +156,6 @@ public class Sprinkler {
 				// ItemStack(DataMgr.getPlayerData(player).getTeam().getTeamColor().glass));
 			}
 		};
-		delay.runTaskLater(Sclat.getPlugin(), 10);
+		delay.runTaskLater(VariablesKt.getPlugin(), 10);
 	}
 }

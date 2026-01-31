@@ -4,6 +4,7 @@ import be4rjp.sclat.Sclat
 import be4rjp.sclat.data.RankingType
 import be4rjp.sclat.manager.PlayerStatusMgr
 import be4rjp.sclat.manager.RankMgr
+import be4rjp.sclat.plugin
 import net.minecraft.server.v1_14_R1.EntityArmorStand
 import net.minecraft.server.v1_14_R1.PacketPlayOutEntityDestroy
 import net.minecraft.server.v1_14_R1.PacketPlayOutSpawnEntityLiving
@@ -196,7 +197,7 @@ class RankingHolograms(
 
                             if (rankingType == RankingType.TOTAL) {
                                 val uuid = RankMgr.ranking.get(i)
-                                val mcid = Sclat.conf.uUIDCash.getString(uuid)
+                                val mcid = Sclat.conf?.uUIDCash!!.getString(uuid)
 
                                 val rank = PlayerStatusMgr.getRank(uuid)
 
@@ -216,7 +217,7 @@ class RankingHolograms(
 
                             if (rankingType == RankingType.KILL) {
                                 val uuid = RankMgr.killRanking.get(i)
-                                val mcid = Sclat.conf.uUIDCash.getString(uuid)
+                                val mcid = Sclat.conf?.uUIDCash!!.getString(uuid)
 
                                 val kill = PlayerStatusMgr.getKill(uuid)
 
@@ -233,7 +234,7 @@ class RankingHolograms(
 
                             if (rankingType == RankingType.PAINT) {
                                 val uuid = RankMgr.paintRanking.get(i)
-                                val mcid = Sclat.conf.uUIDCash.getString(uuid)
+                                val mcid = Sclat.conf?.uUIDCash!!.getString(uuid)
 
                                 val paint = PlayerStatusMgr.getPaint(uuid)
 
@@ -341,6 +342,6 @@ class RankingHolograms(
                     }
                 }
             }
-        async.runTaskAsynchronously(Sclat.getPlugin())
+        async.runTaskAsynchronously(plugin)
     }
 }

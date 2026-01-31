@@ -2,6 +2,7 @@
 package be4rjp.sclat.weapon;
 
 import be4rjp.sclat.Sclat;
+import be4rjp.sclat.VariablesKt;
 import be4rjp.sclat.api.player.PlayerData;
 import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.manager.PaintMgr;
@@ -34,7 +35,7 @@ public class Bucket {
 			}
 		};
 		if (data.getCanRollerShoot())
-			delay1.runTaskLater(Sclat.getPlugin(), data.getWeaponClass().getMainWeapon().getCoolTime());
+			delay1.runTaskLater(VariablesKt.getPlugin(), data.getWeaponClass().getMainWeapon().getCoolTime());
 
 		BukkitRunnable delay = new BukkitRunnable() {
 			@Override
@@ -71,7 +72,7 @@ public class Bucket {
 		if (data.getCanRollerShoot()) {
 			// delay.runTaskLater(Main.getPlugin(),
 			// data.getWeaponClass().getMainWeapon().delay);
-			delay2.runTaskTimer(Sclat.getPlugin(), 0, data.getWeaponClass().getMainWeapon().delay);
+			delay2.runTaskTimer(VariablesKt.getPlugin(), 0, data.getWeaponClass().getMainWeapon().delay);
 			data.setCanRollerShoot(false);
 		}
 	}
@@ -127,14 +128,14 @@ public class Bucket {
 					DataMgr.setSnowballHitCount(name, 0);
 				}
 				if (i != 0) {
-					for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
+					for (Player target : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
 						if (target.getWorld() != p.getWorld())
 							continue;
 						if (!DataMgr.getPlayerData(target).settings.ShowEffect_MainWeaponInk())
 							continue;
 						if (target.getWorld() == inkball.getWorld()) {
 							if (target.getLocation()
-									.distanceSquared(inkball.getLocation()) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED) {
+									.distanceSquared(inkball.getLocation()) < Sclat.particleRenderDistanceSquared) {
 								org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).team.getTeamColor().wool
 										.createBlockData();
 								target.spawnParticle(org.bukkit.Particle.BLOCK_DUST, inkball.getLocation(), 1, 0, 0, 0,
@@ -158,7 +159,7 @@ public class Bucket {
 				i++;
 			}
 		};
-		task.runTaskTimer(Sclat.getPlugin(), 0, 1);
+		task.runTaskTimer(VariablesKt.getPlugin(), 0, 1);
 
 		return false;
 	}
@@ -189,10 +190,10 @@ public class Bucket {
 							bh_recharge = true;
 						}
 					};
-					healtask.runTaskLater(Sclat.getPlugin(), Ctime);
+					healtask.runTaskLater(VariablesKt.getPlugin(), Ctime);
 				}
 			}
 		};
-		delay3.runTaskTimer(Sclat.getPlugin(), 0, 1);
+		delay3.runTaskTimer(VariablesKt.getPlugin(), 0, 1);
 	}
 }

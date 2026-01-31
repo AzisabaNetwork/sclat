@@ -1,7 +1,7 @@
 
 package be4rjp.sclat.weapon.spweapon;
 
-import be4rjp.sclat.Sclat;
+import be4rjp.sclat.VariablesKt;
 import be4rjp.sclat.api.player.PlayerData;
 import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.manager.SPWeaponMgr;
@@ -26,6 +26,6 @@ public class BombRush {
 				data.setIsUsingSP(false);
 			}
 		};
-		task.runTaskLater(Sclat.getPlugin(), 120);
+		task.runTaskLater(VariablesKt.getPlugin(), 120);
 	}
 }

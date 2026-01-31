@@ -1,6 +1,5 @@
 package be4rjp.sclat.server
 
-import be4rjp.sclat.Sclat
 import be4rjp.sclat.api.MessageType
 import be4rjp.sclat.api.SclatUtil
 import be4rjp.sclat.api.SclatUtil.sendMessage
@@ -9,6 +8,7 @@ import be4rjp.sclat.manager.PlayerReturnManager
 import be4rjp.sclat.manager.PlayerStatusMgr
 import be4rjp.sclat.manager.RankMgr
 import be4rjp.sclat.manager.ServerStatusManager
+import be4rjp.sclat.plugin
 import org.bukkit.entity.Player
 import java.io.BufferedReader
 import java.io.IOException
@@ -53,7 +53,9 @@ class StatusServer( // private List<String> commands = new ArrayList<>();
 }
 
 // 非同期スレッド
-internal class EchoThread(socket: Socket) : Thread() {
+internal class EchoThread(
+    socket: Socket,
+) : Thread() {
     private val socket: Socket?
 
     init {
@@ -140,7 +142,9 @@ internal class EchoThread(socket: Socket) : Thread() {
                                                 ),
                                             MessageType.ALL_PLAYER,
                                         )
-                                        Sclat.getPlugin().getServer().getOnlinePlayers()
+                                        plugin
+                                            .getServer()
+                                            .getOnlinePlayers()
                                             .forEach { player: Player? ->
                                                 SclatUtil.playGameSound(
                                                     player!!,

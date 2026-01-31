@@ -1,6 +1,7 @@
 package be4rjp.sclat.weapon;
 
 import be4rjp.sclat.Sclat;
+import be4rjp.sclat.VariablesKt;
 import be4rjp.sclat.api.player.PlayerData;
 import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.manager.DeathMgr;
@@ -58,7 +59,7 @@ public class MainWeapon implements Listener {
 				data.setIsSneaking(false);
 			}
 		};
-		task.runTaskLater(Sclat.getPlugin(), 5);
+		task.runTaskLater(VariablesKt.getPlugin(), 5);
 	}
 
 	@EventHandler

@@ -1,6 +1,7 @@
 package be4rjp.sclat.weapon;
 
 import be4rjp.sclat.Sclat;
+import be4rjp.sclat.VariablesKt;
 import be4rjp.sclat.api.GlowingAPI;
 import be4rjp.sclat.api.SclatUtil;
 import be4rjp.sclat.api.player.PlayerData;
@@ -59,10 +60,10 @@ public class Funnel {
 			if (!block.getType().equals(Material.AIR)) {
 				break;
 			}
-			for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
+			for (Player target : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
 				if (DataMgr.getPlayerData(target).settings.ShowEffect_MainWeaponInk()) {
 					if (target.getWorld() == position.getWorld()) {
-						if (target.getLocation().distanceSquared(position) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED) {
+						if (target.getLocation().distanceSquared(position) < Sclat.particleRenderDistanceSquared) {
 							org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(player).team.getTeamColor().wool
 									.createBlockData();
 							target.spawnParticle(Particle.BLOCK_DUST, position, 1, 0, 0, 0, 1, bd);
@@ -72,7 +73,7 @@ public class Funnel {
 			}
 
 			double maxDistSquad = 4 /* 2*2 */;
-			for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
+			for (Player target : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
 				if (!DataMgr.getPlayerData(target).isInMatch())
 					continue;
 				if (DataMgr.getPlayerData(player).team != DataMgr.getPlayerData(target).team
@@ -91,7 +92,7 @@ public class Funnel {
 									target.setNoDamageTicks(0);
 								}
 							};
-							task.runTaskLater(Sclat.getPlugin(), 1);
+							task.runTaskLater(VariablesKt.getPlugin(), 1);
 							break loop;
 						}
 					}
@@ -227,7 +228,7 @@ public class Funnel {
 								DataMgr.setKasaDataWithARmorStand(as, kdata);
 							}
 							Team team = data.team;
-							for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
+							for (Player o_player : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
 								((CraftPlayer) o_player).getHandle().playerConnection.sendPacket(
 										new PacketPlayOutEntityEquipment(list.get(2).getEntityId(), EnumItemSlot.HEAD,
 												CraftItemStack.asNMSCopy(new ItemStack(Material.getMaterial(
@@ -281,7 +282,7 @@ public class Funnel {
 								DataMgr.setKasaDataWithARmorStand(as, kdata1);
 							}
 							Team team = data.team;
-							for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
+							for (Player o_player : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
 								((CraftPlayer) o_player).getHandle().playerConnection.sendPacket(
 										new PacketPlayOutEntityEquipment(list1.get(2).getEntityId(), EnumItemSlot.HEAD,
 												CraftItemStack.asNMSCopy(new ItemStack(Material.getMaterial(
@@ -335,7 +336,7 @@ public class Funnel {
 								DataMgr.setKasaDataWithARmorStand(as, kdata2);
 							}
 							Team team = data.team;
-							for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
+							for (Player o_player : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
 								((CraftPlayer) o_player).getHandle().playerConnection.sendPacket(
 										new PacketPlayOutEntityEquipment(list2.get(2).getEntityId(), EnumItemSlot.HEAD,
 												CraftItemStack.asNMSCopy(new ItemStack(Material.getMaterial(
@@ -424,7 +425,7 @@ public class Funnel {
 							}
 						}
 						Team team = data.team;
-						for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
+						for (Player o_player : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
 							for (List<ArmorStand> aslist : list5) {
 								((CraftPlayer) o_player).getHandle().playerConnection.sendPacket(
 										new PacketPlayOutEntityEquipment(aslist.get(1).getEntityId(), EnumItemSlot.HEAD,
@@ -439,7 +440,7 @@ public class Funnel {
 												CraftItemStack.asNMSCopy(new ItemStack(team.getTeamColor().wool))));
 							}
 						}
-						taskcheck.runTaskLater(Sclat.getPlugin(), 20);
+						taskcheck.runTaskLater(VariablesKt.getPlugin(), 20);
 					}
 					if (i >= 0) {
 						// ファンネル破壊時の復活処理
@@ -468,9 +469,9 @@ public class Funnel {
 							} else {
 								list6.remove(kasaStand);
 								if (kdata.damage == 1024) {
-									listremove.runTaskLater(Sclat.getPlugin(), 110);
+									listremove.runTaskLater(VariablesKt.getPlugin(), 110);
 								} else {
-									listremove.runTaskLater(Sclat.getPlugin(), 160);
+									listremove.runTaskLater(VariablesKt.getPlugin(), 160);
 								}
 							}
 							kdata.damage = 10000;
@@ -492,9 +493,9 @@ public class Funnel {
 							} else {
 								list6.remove(kasaStand1);
 								if (kdata1.damage == 1024) {
-									listremove1.runTaskLater(Sclat.getPlugin(), 110);
+									listremove1.runTaskLater(VariablesKt.getPlugin(), 110);
 								} else {
-									listremove1.runTaskLater(Sclat.getPlugin(), 160);
+									listremove1.runTaskLater(VariablesKt.getPlugin(), 160);
 								}
 							}
 							kdata1.damage = 10000;
@@ -516,9 +517,9 @@ public class Funnel {
 							} else {
 								list6.remove(kasaStand2);
 								if (kdata2.damage == 1024) {
-									listremove2.runTaskLater(Sclat.getPlugin(), 110);
+									listremove2.runTaskLater(VariablesKt.getPlugin(), 110);
 								} else {
-									listremove2.runTaskLater(Sclat.getPlugin(), 160);
+									listremove2.runTaskLater(VariablesKt.getPlugin(), 160);
 								}
 							}
 							kdata2.damage = 10000;
@@ -527,15 +528,15 @@ public class Funnel {
 							}
 						}
 						if (i == kdataReset) {
-							listremove.runTaskLater(Sclat.getPlugin(), 1);
+							listremove.runTaskLater(VariablesKt.getPlugin(), 1);
 							kdataReset = -1;
 						}
 						if (i == kdataReset1) {
-							listremove1.runTaskLater(Sclat.getPlugin(), 1);
+							listremove1.runTaskLater(VariablesKt.getPlugin(), 1);
 							kdataReset1 = -1;
 						}
 						if (i == kdataReset2) {
-							listremove2.runTaskLater(Sclat.getPlugin(), 1);
+							listremove2.runTaskLater(VariablesKt.getPlugin(), 1);
 							kdataReset2 = -1;
 						}
 						// ファンネル破壊時の復活処理了
@@ -607,7 +608,7 @@ public class Funnel {
 									}
 									if (i % 20 == 0) {
 										Team team = data.team;
-										for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
+										for (Player o_player : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
 											((CraftPlayer) o_player).getHandle().playerConnection.sendPacket(
 													new PacketPlayOutEntityEquipment(aslist.get(2).getEntityId(),
 															EnumItemSlot.HEAD,
@@ -691,7 +692,7 @@ public class Funnel {
 									}
 									if (i % 20 == 0) {
 										Team team = data.team;
-										for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
+										for (Player o_player : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
 											((CraftPlayer) o_player).getHandle().playerConnection.sendPacket(
 													new PacketPlayOutEntityEquipment(aslist.get(2).getEntityId(),
 															EnumItemSlot.HEAD,
@@ -787,7 +788,7 @@ public class Funnel {
 										}
 										// 残数表記了
 										Team team = data.team;
-										for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
+										for (Player o_player : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
 											((CraftPlayer) o_player).getHandle().playerConnection.sendPacket(
 													new PacketPlayOutEntityEquipment(aslist.get(2).getEntityId(),
 															EnumItemSlot.HEAD,
@@ -823,7 +824,7 @@ public class Funnel {
 					}
 					if (check && p.isSneaking() && p.getGameMode() != GameMode.SPECTATOR) {
 						check = false;
-						taskcheck.runTaskLater(Sclat.getPlugin(), 18);
+						taskcheck.runTaskLater(VariablesKt.getPlugin(), 18);
 						player.getWorld().playSound(player.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_BLAST, 0.4f, 5);
 						RayTrace rayTrace = new RayTrace(player.getEyeLocation().toVector(),
 								player.getEyeLocation().getDirection());
@@ -841,7 +842,7 @@ public class Funnel {
 								if (it < 10) {
 									if (player.getWorld() == position.getWorld()) {
 										if (player.getLocation()
-												.distanceSquared(position) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED) {
+												.distanceSquared(position) < Sclat.particleRenderDistanceSquared) {
 											org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(player).team
 													.getTeamColor().wool.createBlockData();
 											player.spawnParticle(org.bukkit.Particle.BLOCK_DUST, position, 1, 0, 0, 0,
@@ -852,7 +853,7 @@ public class Funnel {
 							}
 
 							double maxDistSquad = 20 /* 2*2 */;
-							for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
+							for (Player target : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
 								if (!DataMgr.getPlayerData(target).isInMatch())
 									continue;
 								if (DataMgr.getPlayerData(player).team != DataMgr.getPlayerData(target).team
@@ -1008,7 +1009,7 @@ public class Funnel {
 				}
 			}
 		};
-		task.runTaskTimer(Sclat.getPlugin(), 0, 1);
+		task.runTaskTimer(VariablesKt.getPlugin(), 0, 1);
 
 	}
 
@@ -1048,18 +1049,18 @@ public class Funnel {
 							Location position = positions.get(i).toLocation(p.getLocation().getWorld());
 							if (player.getWorld() == position.getWorld()) {
 								if (player.getLocation()
-										.distanceSquared(position) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED) {
+										.distanceSquared(position) < Sclat.particleRenderDistanceSquared) {
 									Particle.DustOptions dustOptions = new Particle.DustOptions(
 											data.team.getTeamColor().getBukkitColor(), 1);
 									player.spawnParticle(Particle.REDSTONE, position, 1, 0, 0, 0, 3, dustOptions);
 								}
 							}
-							for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
+							for (Player target : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
 								if (target.equals(p)
 										|| DataMgr.getPlayerData(target).settings.ShowEffect_ChargerLine()) {
 									if (target.getWorld() == p.getWorld()) {
 										if (target.getLocation()
-												.distanceSquared(position) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED) {
+												.distanceSquared(position) < Sclat.particleRenderDistanceSquared) {
 											Particle.DustOptions dustOptions = new Particle.DustOptions(
 													data.team.getTeamColor().getBukkitColor(), 1);
 											target.spawnParticle(Particle.REDSTONE, position, 1, 0, 0, 0, 3,
@@ -1074,7 +1075,7 @@ public class Funnel {
 				}
 			}
 		};
-		task.runTaskLater(Sclat.getPlugin(), 1);
+		task.runTaskLater(VariablesKt.getPlugin(), 1);
 		return rate;
 	}
 	public static double FunnelPursuitPlayer(Player player, Player target) {
@@ -1113,18 +1114,18 @@ public class Funnel {
 							Location position = positions.get(i).toLocation(p.getLocation().getWorld());
 							if (player.getWorld() == position.getWorld()) {
 								if (player.getLocation()
-										.distanceSquared(position) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED) {
+										.distanceSquared(position) < Sclat.particleRenderDistanceSquared) {
 									Particle.DustOptions dustOptions = new Particle.DustOptions(
 											data.team.getTeamColor().getBukkitColor(), 1);
 									player.spawnParticle(Particle.REDSTONE, position, 1, 0, 0, 0, 3, dustOptions);
 								}
 							}
-							for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
+							for (Player target : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
 								if (target.equals(p)
 										|| DataMgr.getPlayerData(target).settings.ShowEffect_ChargerLine()) {
 									if (target.getWorld() == p.getWorld()) {
 										if (target.getLocation()
-												.distanceSquared(position) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED) {
+												.distanceSquared(position) < Sclat.particleRenderDistanceSquared) {
 											Particle.DustOptions dustOptions = new Particle.DustOptions(
 													data.team.getTeamColor().getBukkitColor(), 1);
 											target.spawnParticle(Particle.REDSTONE, position, 1, 0, 0, 0, 3,
@@ -1139,7 +1140,7 @@ public class Funnel {
 				}
 			}
 		};
-		task.runTaskLater(Sclat.getPlugin(), 1);
+		task.runTaskLater(VariablesKt.getPlugin(), 1);
 		return rate;
 	}
 

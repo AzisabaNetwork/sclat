@@ -2,6 +2,7 @@
 package be4rjp.sclat.manager;
 
 import be4rjp.sclat.Sclat;
+import be4rjp.sclat.VariablesKt;
 import be4rjp.sclat.api.raytrace.RayTrace;
 import be4rjp.sclat.api.team.Team;
 import be4rjp.sclat.data.DataMgr;
@@ -67,7 +68,7 @@ public class PathMgr {
 				c++;
 			}
 		};
-		task.runTaskTimer(Sclat.getPlugin(), 0, 1);
+		task.runTaskTimer(VariablesKt.getPlugin(), 0, 1);
 	}
 
 	public static void setupPath(Match m) {
@@ -85,7 +86,7 @@ public class PathMgr {
 					as.setSmall(true);
 					as.setCustomName("Path");
 					as.setCustomNameVisible(false);
-					for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
+					for (Player target : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
 						if (as.getWorld() != target.getWorld())
 							continue;
 						((CraftPlayer) target).getHandle().playerConnection
@@ -96,7 +97,7 @@ public class PathMgr {
 					path.setArmorStand(as);
 				}
 			};
-			ast.runTaskLater(Sclat.getPlugin(), 1);
+			ast.runTaskLater(VariablesKt.getPlugin(), 1);
 
 			BukkitRunnable effect = new BukkitRunnable() {
 				Path path1 = path;
@@ -112,7 +113,7 @@ public class PathMgr {
 					ArrayList<Vector> positions = rayTrace.traverse(from.distance(to), 0.5);
 					for (Vector vector : positions) {
 						Location position = vector.toLocation(from.getWorld());
-						for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
+						for (Player target : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
 							if (!DataMgr.getPlayerData(target).settings.ShowEffect_ChargerLine())
 								continue;
 							Particle.DustOptions dustOptions;
@@ -129,7 +130,7 @@ public class PathMgr {
 					}
 				}
 			};
-			effect.runTaskTimer(Sclat.getPlugin(), 0, 5);
+			effect.runTaskTimer(VariablesKt.getPlugin(), 0, 5);
 
 			BukkitRunnable task = new BukkitRunnable() {
 				Path path1 = path;
@@ -140,7 +141,7 @@ public class PathMgr {
 				@Override
 				public void run() {
 					Team team = path1.getTeam();
-					for (Player player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
+					for (Player player : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
 						if (team != null) {
 							if (DataMgr.getPlayerData(player).isInMatch() && player.getWorld() == from.getWorld()
 									&& player.getInventory().getItemInMainHand().getType().equals(Material.AIR)
@@ -154,7 +155,7 @@ public class PathMgr {
 
 					if (c % 10 == 0) {
 						if (team == null) {
-							for (Player player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
+							for (Player player : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
 								if (from.getWorld() == player.getWorld()) {
 									((CraftPlayer) player).getHandle().playerConnection.sendPacket(
 											new PacketPlayOutEntityEquipment(path1.getArmorStand().getEntityId(),
@@ -163,7 +164,7 @@ public class PathMgr {
 								}
 							}
 						} else {
-							for (Player player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
+							for (Player player : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
 								if (from.getWorld() == player.getWorld()) {
 									((CraftPlayer) player).getHandle().playerConnection.sendPacket(
 											new PacketPlayOutEntityEquipment(path1.getArmorStand().getEntityId(),
@@ -180,7 +181,7 @@ public class PathMgr {
 					c++;
 				}
 			};
-			task.runTaskTimer(Sclat.getPlugin(), 2, 1);
+			task.runTaskTimer(VariablesKt.getPlugin(), 2, 1);
 		}
 	}
 }

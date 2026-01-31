@@ -2,6 +2,7 @@
 package be4rjp.sclat.weapon;
 
 import be4rjp.sclat.Sclat;
+import be4rjp.sclat.VariablesKt;
 import be4rjp.sclat.api.GaugeAPI;
 import be4rjp.sclat.api.player.PlayerData;
 import be4rjp.sclat.data.DataMgr;
@@ -101,7 +102,7 @@ public class Spinner {
 
 			}
 		};
-		task.runTaskTimer(Sclat.getPlugin(), 0, 1);
+		task.runTaskTimer(VariablesKt.getPlugin(), 0, 1);
 	}
 
 	public static void SpinnerShootRunnable(int charge, Player player) {
@@ -125,7 +126,7 @@ public class Spinner {
 				c++;
 			}
 		};
-		task.runTaskTimer(Sclat.getPlugin(), 2,
+		task.runTaskTimer(VariablesKt.getPlugin(), 2,
 				DataMgr.getPlayerData(player).getWeaponClass().getMainWeapon().getShootTick());
 	}
 
@@ -185,11 +186,11 @@ public class Spinner {
 				if (i != 0) {
 					org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).team.getTeamColor().wool
 							.createBlockData();
-					for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
+					for (Player o_player : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
 						if (DataMgr.getPlayerData(o_player).settings.ShowEffect_MainWeaponInk())
 							if (o_player.getWorld() == inkball.getWorld())
-								if (o_player.getLocation().distanceSquared(
-										inkball.getLocation()) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED)
+								if (o_player.getLocation()
+										.distanceSquared(inkball.getLocation()) < Sclat.particleRenderDistanceSquared)
 									o_player.spawnParticle(org.bukkit.Particle.BLOCK_DUST, inkball.getLocation(), 0, 0,
 											-1, 0, 1, bd);
 					}
@@ -209,6 +210,6 @@ public class Spinner {
 				i++;
 			}
 		};
-		task.runTaskTimer(Sclat.getPlugin(), 0, 1);
+		task.runTaskTimer(VariablesKt.getPlugin(), 0, 1);
 	}
 }

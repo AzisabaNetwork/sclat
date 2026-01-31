@@ -1,9 +1,10 @@
 
 package be4rjp.sclat.manager;
 
-import be4rjp.sclat.Sclat;
+import be4rjp.sclat.VariablesKt;
 import be4rjp.sclat.api.raytrace.RayTrace;
 import be4rjp.sclat.data.DataMgr;
+import java.util.ArrayList;
 import net.minecraft.server.v1_14_R1.EntityArmorStand;
 import net.minecraft.server.v1_14_R1.PacketPlayOutEntityDestroy;
 import net.minecraft.server.v1_14_R1.PacketPlayOutSpawnEntityLiving;
@@ -23,8 +24,6 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
-
-import java.util.ArrayList;
 
 /**
  *
@@ -57,11 +56,11 @@ public class SuperJumpMgr {
 			}
 		};
 		if (nearspawnpoint) {
-			task.runTaskLater(Sclat.getPlugin(), 15);
+			task.runTaskLater(VariablesKt.getPlugin(), 15);
 		} else {
 			if (!player.hasPotionEffect(PotionEffectType.GLOWING))
 				player.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 50, 1));
-			task.runTaskLater(Sclat.getPlugin(), 50);
+			task.runTaskLater(VariablesKt.getPlugin(), 50);
 		}
 	}
 
@@ -141,7 +140,7 @@ public class SuperJumpMgr {
 				t++;
 			}
 		};
-		task.runTaskTimer(Sclat.getPlugin(), 0, 1);
+		task.runTaskTimer(VariablesKt.getPlugin(), 0, 1);
 
 		BukkitRunnable effect = new BukkitRunnable() {
 			Player p = player;
@@ -161,7 +160,7 @@ public class SuperJumpMgr {
 					as.setCustomNameVisible(true);
 					as.setSmall(true);
 					id = as.getBukkitEntity().getEntityId();
-					for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
+					for (Player target : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
 						if (p.getWorld() == target.getWorld()) {
 							((CraftPlayer) target).getHandle().playerConnection
 									.sendPacket(new PacketPlayOutSpawnEntityLiving(as));
@@ -179,7 +178,7 @@ public class SuperJumpMgr {
 				p.getWorld().spawnParticle(Particle.REDSTONE, tl, 1, 0, 0.1, 0, 50, dustOptions);
 				if (p.getGameMode().equals(GameMode.ADVENTURE) || !DataMgr.getPlayerData(p).isInMatch()
 						|| !p.isOnline()) {
-					for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
+					for (Player target : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
 						if (p.getWorld() == target.getWorld()) {
 							((CraftPlayer) target).getHandle().playerConnection
 									.sendPacket(new PacketPlayOutEntityDestroy(id));
@@ -190,6 +189,6 @@ public class SuperJumpMgr {
 				c++;
 			}
 		};
-		effect.runTaskTimer(Sclat.getPlugin(), 0, 1);
+		effect.runTaskTimer(VariablesKt.getPlugin(), 0, 1);
 	}
 }

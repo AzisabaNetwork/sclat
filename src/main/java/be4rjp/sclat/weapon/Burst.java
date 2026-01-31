@@ -2,6 +2,7 @@
 package be4rjp.sclat.weapon;
 
 import be4rjp.sclat.Sclat;
+import be4rjp.sclat.VariablesKt;
 import be4rjp.sclat.api.player.PlayerData;
 import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.manager.PaintMgr;
@@ -33,7 +34,7 @@ public class Burst {
 			}
 		};
 		if (data.getCanRollerShoot())
-			delay1.runTaskLater(Sclat.getPlugin(), data.getWeaponClass().getMainWeapon().getCoolTime());
+			delay1.runTaskLater(VariablesKt.getPlugin(), data.getWeaponClass().getMainWeapon().getCoolTime());
 
 		BukkitRunnable delay = new BukkitRunnable() {
 			Player p = player;
@@ -43,7 +44,7 @@ public class Burst {
 			}
 		};
 		if (data.getCanRollerShoot()) {
-			delay.runTaskLater(Sclat.getPlugin(), data.getWeaponClass().getMainWeapon().delay);
+			delay.runTaskLater(VariablesKt.getPlugin(), data.getWeaponClass().getMainWeapon().delay);
 			data.setCanRollerShoot(false);
 		}
 	}
@@ -63,7 +64,7 @@ public class Burst {
 					cancel();
 			}
 		};
-		task.runTaskTimer(Sclat.getPlugin(), 0,
+		task.runTaskTimer(VariablesKt.getPlugin(), 0,
 				DataMgr.getPlayerData(player).getWeaponClass().getMainWeapon().getShootTick());
 	}
 
@@ -127,11 +128,11 @@ public class Burst {
 				if (i != 0) {
 					org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).team.getTeamColor().wool
 							.createBlockData();
-					for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
+					for (Player o_player : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
 						if (DataMgr.getPlayerData(o_player).settings.ShowEffect_MainWeaponInk())
 							if (o_player.getWorld() == inkball.getWorld())
-								if (o_player.getLocation().distanceSquared(
-										inkball.getLocation()) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED)
+								if (o_player.getLocation()
+										.distanceSquared(inkball.getLocation()) < Sclat.particleRenderDistanceSquared)
 									o_player.spawnParticle(org.bukkit.Particle.BLOCK_DUST, inkball.getLocation(), 0, 0,
 											-1, 0, 1, bd);
 					}
@@ -152,6 +153,6 @@ public class Burst {
 				i++;
 			}
 		};
-		task.runTaskTimer(Sclat.getPlugin(), 0, 1);
+		task.runTaskTimer(VariablesKt.getPlugin(), 0, 1);
 	}
 }

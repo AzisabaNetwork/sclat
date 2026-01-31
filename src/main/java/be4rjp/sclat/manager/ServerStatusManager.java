@@ -1,6 +1,6 @@
 package be4rjp.sclat.manager;
 
-import be4rjp.sclat.Sclat;
+import be4rjp.sclat.VariablesKt;
 import be4rjp.sclat.data.ServerStatus;
 import java.util.ArrayList;
 import java.util.List;
@@ -121,7 +121,7 @@ public class ServerStatusManager {
 				}
 			}
 		};
-		task.runTaskTimer(Sclat.getPlugin(), 0, 40);
+		task.runTaskTimer(VariablesKt.getPlugin(), 0, 40);
 	}
 
 	public static void openServerList(Player player) {

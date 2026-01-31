@@ -2,6 +2,7 @@ package be4rjp.sclat.weapon;
 
 import be4rjp.dadadachecker.ClickType;
 import be4rjp.sclat.Sclat;
+import be4rjp.sclat.VariablesKt;
 import be4rjp.sclat.api.GlowingAPI;
 import be4rjp.sclat.api.SclatUtil;
 import be4rjp.sclat.api.Sphere;
@@ -46,7 +47,7 @@ public class Hound {
 				}
 			}
 		};
-		delay.runTaskTimer(Sclat.getPlugin(), 0,
+		delay.runTaskTimer(VariablesKt.getPlugin(), 0,
 				DataMgr.getPlayerData(player).getWeaponClass().getMainWeapon().getShootTick());
 	}
 	public static void HoundCooltime(Player player) {
@@ -59,7 +60,7 @@ public class Hound {
 				data.setCanRollerShoot(true);
 			}
 		};
-		delay1.runTaskLater(Sclat.getPlugin(), data.getWeaponClass().getMainWeapon().getCoolTime());
+		delay1.runTaskLater(VariablesKt.getPlugin(), data.getWeaponClass().getMainWeapon().getCoolTime());
 	}
 	public static void HoundEXRunnable(Player player) {
 		BukkitRunnable delay = new BukkitRunnable() {
@@ -82,7 +83,7 @@ public class Hound {
 				}
 			}
 		};
-		delay.runTaskTimer(Sclat.getPlugin(), 0, 1);
+		delay.runTaskTimer(VariablesKt.getPlugin(), 0, 1);
 	}
 	public static void Shoot(Player player) {
 		if (player.getGameMode() == GameMode.SPECTATOR)
@@ -160,11 +161,10 @@ public class Hound {
 					// エフェクト
 					if (i % 2 == 0) {
 						org.bukkit.block.data.BlockData bd = data.team.getTeamColor().wool.createBlockData();
-						for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
+						for (Player target : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
 							// if (DataMgr.getPlayerData(target).getSettings().ShowEffect_Bomb()){
 							if (target.getWorld() == player.getWorld()) {
-								if (target.getLocation()
-										.distanceSquared(as1l) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED) {
+								if (target.getLocation().distanceSquared(as1l) < Sclat.particleRenderDistanceSquared) {
 									target.spawnParticle(org.bukkit.Particle.BLOCK_DUST, as1l, 1, 0, 0, 0, 1, bd);
 								}
 							}
@@ -243,7 +243,7 @@ public class Hound {
 							}
 						}
 
-						for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
+						for (Player target : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
 							if (!DataMgr.getPlayerData(target).isInMatch() || target.getWorld() != player.getWorld())
 								continue;
 							if (target.getLocation().distance(as1l) <= maxDist) {
@@ -262,7 +262,7 @@ public class Hound {
 											target.setNoDamageTicks(0);
 										}
 									};
-									task.runTaskLater(Sclat.getPlugin(), 1);
+									task.runTaskLater(VariablesKt.getPlugin(), 1);
 								}
 							}
 						}
@@ -298,7 +298,7 @@ public class Hound {
 		if (player.getExp() > (float) (data.getWeaponClass().getMainWeapon().getNeedInk()
 				* Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP)
 				/ Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)))
-			task.runTaskTimer(Sclat.getPlugin(), 0, 1);
+			task.runTaskTimer(VariablesKt.getPlugin(), 0, 1);
 		else {
 			player.sendTitle("", ChatColor.RED + "インクが足りません", 0, 5, 2);
 			player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1F, 1.63F);

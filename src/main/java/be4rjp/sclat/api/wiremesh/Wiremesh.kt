@@ -1,6 +1,6 @@
 package be4rjp.sclat.api.wiremesh
 
-import be4rjp.sclat.Sclat
+import be4rjp.sclat.plugin
 import net.minecraft.server.v1_14_R1.EntityArmorStand
 import net.minecraft.server.v1_14_R1.EntityFallingBlock
 import net.minecraft.server.v1_14_R1.IBlockData
@@ -23,8 +23,11 @@ import java.util.Random
  *
  * @author Be4rJP
  */
-class Wiremesh(private val block: Block, private val originalType: Material, private val blockData: BlockData) :
-    BukkitRunnable() {
+class Wiremesh(
+    private val block: Block,
+    private val originalType: Material,
+    private val blockData: BlockData,
+) : BukkitRunnable() {
     private val fb: EntityFallingBlock
     private val `as`: EntityArmorStand
     private val ibd: IBlockData?
@@ -53,7 +56,7 @@ class Wiremesh(private val block: Block, private val originalType: Material, pri
         `as`.setInvisible(true)
         fb.startRiding(`as`)
 
-        for (player in Sclat.getPlugin().getServer().getOnlinePlayers()) {
+        for (player in plugin.getServer().getOnlinePlayers()) {
             if (block.getWorld() !== player.getWorld()) continue
 
             player.sendBlockChange(block.getLocation(), blockData)
@@ -64,7 +67,7 @@ class Wiremesh(private val block: Block, private val originalType: Material, pri
         try {
             playerList.removeIf { player: Player? -> !player!!.isOnline() }
 
-            for (player in Sclat.getPlugin().getServer().getOnlinePlayers()) {
+            for (player in plugin.getServer().getOnlinePlayers()) {
                 if (block.getWorld() !== player.getWorld()) continue
 
                 // 透過条件
@@ -80,19 +83,22 @@ class Wiremesh(private val block: Block, private val originalType: Material, pri
                     }
 
                     if (!playerList.contains(player)) {
-                        val fbPacket = PacketPlayOutSpawnEntity(
-                            fb,
-                            net.minecraft.server.v1_14_R1.Block.getCombinedId(ibd),
-                        )
+                        val fbPacket =
+                            PacketPlayOutSpawnEntity(
+                                fb,
+                                net.minecraft.server.v1_14_R1.Block
+                                    .getCombinedId(ibd),
+                            )
                         entityPlayer.playerConnection.sendPacket(fbPacket)
                         val asPacket = PacketPlayOutSpawnEntityLiving(`as`)
                         entityPlayer.playerConnection.sendPacket(asPacket)
                         val dataWatcher = fb.getDataWatcher()
-                        val metadata = PacketPlayOutEntityMetadata(
-                            fb.getBukkitEntity().getEntityId(),
-                            dataWatcher,
-                            true,
-                        )
+                        val metadata =
+                            PacketPlayOutEntityMetadata(
+                                fb.getBukkitEntity().getEntityId(),
+                                dataWatcher,
+                                true,
+                            )
                         entityPlayer.playerConnection.sendPacket(metadata)
                         val mount = PacketPlayOutMount(`as`)
                         entityPlayer.playerConnection.sendPacket(mount)
@@ -105,13 +111,15 @@ class Wiremesh(private val block: Block, private val originalType: Material, pri
                     }
 
                     if (playerList.contains(player)) {
-                        val fbPacket = PacketPlayOutEntityDestroy(
-                            fb.getBukkitEntity().getEntityId(),
-                        )
+                        val fbPacket =
+                            PacketPlayOutEntityDestroy(
+                                fb.getBukkitEntity().getEntityId(),
+                            )
                         entityPlayer.playerConnection.sendPacket(fbPacket)
-                        val asPacket = PacketPlayOutEntityDestroy(
-                            `as`.getBukkitEntity().getEntityId(),
-                        )
+                        val asPacket =
+                            PacketPlayOutEntityDestroy(
+                                `as`.getBukkitEntity().getEntityId(),
+                            )
                         entityPlayer.playerConnection.sendPacket(asPacket)
                         player.sendBlockChange(block.getLocation(), blockData)
 
@@ -125,7 +133,7 @@ class Wiremesh(private val block: Block, private val originalType: Material, pri
     }
 
     fun startTask() {
-        this.runTaskTimerAsynchronously(Sclat.getPlugin(), 0, 5)
+        this.runTaskTimerAsynchronously(plugin, 0, 5)
     }
 
     fun stopTask() {

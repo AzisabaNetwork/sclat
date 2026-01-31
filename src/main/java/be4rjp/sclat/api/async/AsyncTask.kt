@@ -1,6 +1,6 @@
 package be4rjp.sclat.api.async
 
-import be4rjp.sclat.Sclat
+import be4rjp.sclat.plugin
 import org.bukkit.scheduler.BukkitRunnable
 
 abstract class AsyncTask : Runnable {
@@ -21,7 +21,7 @@ abstract class AsyncTask : Runnable {
             override fun run() {
                 AsyncThreadManager.randomTickThread.runTask(runnable)
             }
-        }.runTaskLater(Sclat.getPlugin(), delay)
+        }.runTaskLater(plugin, delay)
     }
 
     fun runTaskTimer(
@@ -38,6 +38,6 @@ abstract class AsyncTask : Runnable {
                 }
                 thread.runTask(runnable)
             }
-        }.runTaskTimer(Sclat.getPlugin(), delay, period)
+        }.runTaskTimer(plugin, delay, period)
     }
 }

@@ -6,6 +6,7 @@ import be4rjp.blockstudio.api.BSObject;
 import be4rjp.blockstudio.api.BlockStudioAPI;
 import be4rjp.blockstudio.file.ObjectData;
 import be4rjp.sclat.Sclat;
+import be4rjp.sclat.VariablesKt;
 import be4rjp.sclat.api.SclatUtil;
 import be4rjp.sclat.api.async.AsyncTask;
 import be4rjp.sclat.api.async.AsyncThreadManager;
@@ -15,6 +16,10 @@ import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.manager.ArmorStandMgr;
 import be4rjp.sclat.manager.SPWeaponMgr;
 import be4rjp.sclat.manager.WeaponClassMgr;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -29,11 +34,6 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
-
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 /**
  *
@@ -102,7 +102,7 @@ public class MegaLaser {
 				c++;
 			}
 		};
-		task.runTaskTimer(Sclat.getPlugin(), 0, 1);
+		task.runTaskTimer(VariablesKt.getPlugin(), 0, 1);
 	}
 
 	public static void playSound(Location targetLoc, Sound sound, float v, float p) {
@@ -194,7 +194,7 @@ public class MegaLaser {
 						for (Player target : AsyncThreadManager.onlinePlayers) {
 							if (p.getWorld() != target.getWorld())
 								continue;
-							if (eloc.distanceSquared(target.getLocation()) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED) {
+							if (eloc.distanceSquared(target.getLocation()) < Sclat.particleRenderDistanceSquared) {
 								PlayerData targetData = DataMgr.getPlayerData(target);
 								if (targetData == null)
 									continue;
@@ -278,7 +278,7 @@ public class MegaLaser {
 											target.setNoDamageTicks(0);
 										}
 									};
-									task.runTaskLater(Sclat.getPlugin(), 1);
+									task.runTaskLater(VariablesKt.getPlugin(), 1);
 								}
 							}
 						}

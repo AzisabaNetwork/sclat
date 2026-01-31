@@ -2,6 +2,7 @@
 package be4rjp.sclat.weapon.subweapon;
 
 import be4rjp.sclat.Sclat;
+import be4rjp.sclat.VariablesKt;
 import be4rjp.sclat.api.SclatUtil;
 import be4rjp.sclat.api.Sphere;
 import be4rjp.sclat.data.DataMgr;
@@ -67,7 +68,7 @@ public class KBomb {
 						DataMgr.setSnowballIsHit(ball, false);
 						DataMgr.getSnowballNameMap().put(String.valueOf(ndn), ball);
 
-						for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
+						for (Player o_player : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
 							PlayerConnection connection = ((CraftPlayer) o_player).getHandle().playerConnection;
 							connection.sendPacket(new PacketPlayOutEntityDestroy(ball.getEntityId()));
 						}
@@ -120,7 +121,7 @@ public class KBomb {
 
 						// 攻撃判定の処理
 
-						for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
+						for (Player target : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
 							if (!DataMgr.getPlayerData(target).isInMatch() || target.getWorld() != p.getWorld())
 								continue;
 							if (target.getLocation().distance(drop.getLocation()) <= maxDist) {
@@ -138,7 +139,7 @@ public class KBomb {
 											target.setNoDamageTicks(0);
 										}
 									};
-									task.runTaskLater(Sclat.getPlugin(), 1);
+									task.runTaskLater(VariablesKt.getPlugin(), 1);
 
 								}
 							}
@@ -158,11 +159,11 @@ public class KBomb {
 					}
 
 					// ボムの視認用エフェクト
-					for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
+					for (Player o_player : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
 						if (DataMgr.getPlayerData(o_player).settings.ShowEffect_Bomb()) {
 							if (o_player.getWorld() == drop.getLocation().getWorld()) {
 								if (o_player.getLocation()
-										.distanceSquared(drop.getLocation()) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED) {
+										.distanceSquared(drop.getLocation()) < Sclat.particleRenderDistanceSquared) {
 									Particle.DustOptions dustOptions = new Particle.DustOptions(
 											DataMgr.getPlayerData(p).team.getTeamColor().getBukkitColor(), 1);
 									o_player.spawnParticle(Particle.REDSTONE, drop.getLocation(), 1, 0, 0, 0, 50,
@@ -185,7 +186,7 @@ public class KBomb {
 				} catch (Exception e) {
 					cancel();
 					drop.remove();
-					Sclat.getPlugin().getLogger().warning(e.getMessage());
+					VariablesKt.getPlugin().getLogger().warning(e.getMessage());
 				}
 			}
 		};
@@ -196,10 +197,10 @@ public class KBomb {
 				DataMgr.getPlayerData(player).setCanUseSubWeapon(true);
 			}
 		};
-		cooltime.runTaskLater(Sclat.getPlugin(), 10);
+		cooltime.runTaskLater(VariablesKt.getPlugin(), 10);
 
 		if (player.getExp() > 0.6 || DataMgr.getPlayerData(player).getIsBombRush())
-			task.runTaskTimer(Sclat.getPlugin(), 0, 1);
+			task.runTaskTimer(VariablesKt.getPlugin(), 0, 1);
 		else {
 			player.sendTitle("", ChatColor.RED + "インクが足りません", 0, 5, 2);
 			player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1F, 1.63F);

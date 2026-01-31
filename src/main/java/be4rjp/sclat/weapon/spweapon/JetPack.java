@@ -6,6 +6,7 @@ import be4rjp.blockstudio.api.BSObject;
 import be4rjp.blockstudio.api.BlockStudioAPI;
 import be4rjp.blockstudio.file.ObjectData;
 import be4rjp.sclat.Sclat;
+import be4rjp.sclat.VariablesKt;
 import be4rjp.sclat.api.SclatUtil;
 import be4rjp.sclat.api.Sphere;
 import be4rjp.sclat.data.DataMgr;
@@ -157,12 +158,12 @@ public class JetPack {
 					// DataMgr.getPlayerData(player).getTeam().getTeamColor().wool.createBlockData();
 					Location position = loc2.clone().add(0, -0.2, 0);
 					Location position2 = loc3.clone().add(0, -0.2, 0);
-					for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
+					for (Player o_player : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
 						if (!DataMgr.getPlayerData(o_player).settings.ShowEffect_SPWeapon())
 							continue;
 						if (o_player.getWorld() == position.getWorld()) {
 							if (o_player.getLocation()
-									.distanceSquared(position) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED) {
+									.distanceSquared(position) < Sclat.particleRenderDistanceSquared) {
 								for (int i = 0; i <= 10; i++) {
 									double random = 0.015;
 									o_player.spawnParticle(Particle.ITEM_CRACK, position, 0,
@@ -174,7 +175,7 @@ public class JetPack {
 								}
 							}
 							if (o_player.getLocation()
-									.distanceSquared(position2) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED) {
+									.distanceSquared(position2) < Sclat.particleRenderDistanceSquared) {
 								for (int i = 0; i <= 10; i++) {
 									double random = 0.015;
 									o_player.spawnParticle(Particle.ITEM_CRACK, position, 0,
@@ -230,7 +231,7 @@ public class JetPack {
 					as.setCustomNameVisible(true);
 					as.setSmall(true);
 					id = as.getBukkitEntity().getEntityId();
-					for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
+					for (Player target : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
 						if (p.getWorld() == target.getWorld()) {
 							((CraftPlayer) target).getHandle().playerConnection
 									.sendPacket(new PacketPlayOutSpawnEntityLiving(as));
@@ -251,7 +252,7 @@ public class JetPack {
 					leader.remove();
 					((CraftPlayer) p).getHandle().stopRiding();
 
-					for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
+					for (Player target : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
 						if (p.getWorld() == target.getWorld()) {
 							((CraftPlayer) target).getHandle().playerConnection
 									.sendPacket(new PacketPlayOutEntityDestroy(id));
@@ -283,7 +284,7 @@ public class JetPack {
 				i++;
 			}
 		};
-		task.runTaskTimer(Sclat.getPlugin(), 0, 1);
+		task.runTaskTimer(VariablesKt.getPlugin(), 0, 1);
 	}
 
 	public static void ShootJetPack(Player player) {
@@ -320,7 +321,7 @@ public class JetPack {
 						ball.setCustomName("JetPack");
 						DataMgr.setSnowballIsHit(ball, false);
 
-						for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
+						for (Player o_player : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
 							PlayerConnection connection = ((CraftPlayer) o_player).getHandle().playerConnection;
 							connection.sendPacket(new PacketPlayOutEntityDestroy(ball.getEntityId()));
 						}
@@ -331,13 +332,13 @@ public class JetPack {
 							&& !(drop.getVelocity().getX() != 0 && drop.getVelocity().getZ() == 0))
 						ball.setVelocity(drop.getVelocity());
 
-					for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
+					for (Player target : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
 						if (!DataMgr.getPlayerData(target).settings.ShowEffect_SPWeapon()) {
 							continue;
 						}
 						if (target.getWorld() == ball.getWorld()) {
 							if (target.getLocation()
-									.distanceSquared(ball.getLocation()) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED) {
+									.distanceSquared(ball.getLocation()) < Sclat.particleRenderDistanceSquared) {
 								org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).team.getTeamColor().wool
 										.createBlockData();
 								target.spawnParticle(org.bukkit.Particle.BLOCK_DUST, ball.getLocation(), 1, 0, 0, 0, 1,
@@ -348,7 +349,7 @@ public class JetPack {
 						// ボムの視認用エフェクト
 						if (target.getWorld() == drop.getLocation().getWorld()) {
 							if (target.getLocation()
-									.distanceSquared(drop.getLocation()) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED) {
+									.distanceSquared(drop.getLocation()) < Sclat.particleRenderDistanceSquared) {
 								Particle.DustOptions dustOptions = new Particle.DustOptions(
 										DataMgr.getPlayerData(p).team.getTeamColor().getBukkitColor(), 1);
 								target.spawnParticle(Particle.REDSTONE, drop.getLocation(), 1, 0, 0, 0, 50,
@@ -379,7 +380,7 @@ public class JetPack {
 
 						// 攻撃判定の処理
 
-						for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
+						for (Player target : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
 							if (!DataMgr.getPlayerData(target).isInMatch() || target.getWorld() != p.getWorld())
 								continue;
 							if (target.getLocation().distanceSquared(drop.getLocation()) <= 12.25 /* 3.5^2 */) {
@@ -396,7 +397,7 @@ public class JetPack {
 											target.setNoDamageTicks(0);
 										}
 									};
-									task.runTaskLater(Sclat.getPlugin(), 1);
+									task.runTaskLater(VariablesKt.getPlugin(), 1);
 
 								}
 							}
@@ -441,12 +442,12 @@ public class JetPack {
 				} catch (Exception e) {
 					drop.remove();
 					cancel();
-					Sclat.getPlugin().getLogger().warning(e.getMessage());
+					VariablesKt.getPlugin().getLogger().warning(e.getMessage());
 				}
 			}
 		};
 		if (player.hasPotionEffect(PotionEffectType.LUCK)) {
-			task.runTaskTimer(Sclat.getPlugin(), 0, 1);
+			task.runTaskTimer(VariablesKt.getPlugin(), 0, 1);
 		}
 
 		BukkitRunnable cooltime = new BukkitRunnable() {
@@ -455,6 +456,6 @@ public class JetPack {
 				DataMgr.getPlayerData(player).setCanUseSubWeapon(true);
 			}
 		};
-		cooltime.runTaskLater(Sclat.getPlugin(), 20);
+		cooltime.runTaskLater(VariablesKt.getPlugin(), 20);
 	}
 }

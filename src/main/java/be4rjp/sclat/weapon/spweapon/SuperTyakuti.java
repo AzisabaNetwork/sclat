@@ -2,6 +2,7 @@
 package be4rjp.sclat.weapon.spweapon;
 
 import be4rjp.sclat.Sclat;
+import be4rjp.sclat.VariablesKt;
 import be4rjp.sclat.api.SclatUtil;
 import be4rjp.sclat.api.Sphere;
 import be4rjp.sclat.data.DataMgr;
@@ -71,12 +72,12 @@ public class SuperTyakuti {
 						player.setVelocity(vec);
 
 					if (i >= 5 && i <= 23) {
-						for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
+						for (Player o_player : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
 							if (DataMgr.getPlayerData(o_player).settings.ShowEffect_SPWeapon()
 									&& !o_player.equals(player)) {
 								if (o_player.getWorld() == player.getWorld()) {
 									if (o_player.getLocation().distanceSquared(
-											player.getLocation()) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED) {
+											player.getLocation()) < Sclat.particleRenderDistanceSquared) {
 										Particle.DustOptions dustOptions = new Particle.DustOptions(
 												DataMgr.getPlayerData(player).team.getTeamColor().getBukkitColor(), 1);
 										o_player.spawnParticle(Particle.REDSTONE,
@@ -105,12 +106,12 @@ public class SuperTyakuti {
 							}
 						}
 						List<Location> s_locs = Sphere.getXZCircle(bloc.add(0, 1, 0), 7, 3, 40);
-						for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
+						for (Player o_player : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
 							if (DataMgr.getPlayerData(o_player).settings.ShowEffect_SPWeaponRegion()) {
 								for (Location loc : s_locs) {
 									if (o_player.getWorld() == loc.getWorld()) {
 										if (o_player.getLocation()
-												.distanceSquared(loc) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED) {
+												.distanceSquared(loc) < Sclat.particleRenderDistanceSquared) {
 											org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(player).team
 													.getTeamColor().wool.createBlockData();
 											o_player.spawnParticle(org.bukkit.Particle.BLOCK_DUST, loc, 1, 0, 0, 0, 1,
@@ -144,7 +145,7 @@ public class SuperTyakuti {
 
 						// 攻撃判定の処理
 
-						for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
+						for (Player target : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
 							if (!DataMgr.getPlayerData(target).isInMatch() || target.getWorld() != player.getWorld())
 								continue;
 							if (target.getLocation().distanceSquared(player.getLocation()) <= maxDistSquared) {
@@ -161,7 +162,7 @@ public class SuperTyakuti {
 											target.setNoDamageTicks(0);
 										}
 									};
-									task.runTaskLater(Sclat.getPlugin(), 1);
+									task.runTaskLater(VariablesKt.getPlugin(), 1);
 
 								}
 							}
@@ -200,6 +201,6 @@ public class SuperTyakuti {
 				}
 			}
 		};
-		task.runTaskTimer(Sclat.getPlugin(), 0, 1);
+		task.runTaskTimer(VariablesKt.getPlugin(), 0, 1);
 	}
 }

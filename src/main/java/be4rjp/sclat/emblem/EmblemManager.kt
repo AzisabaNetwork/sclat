@@ -38,7 +38,7 @@ object EmblemManager {
         player: Player,
     ) {
         val strUuid = player.uniqueId.toString()
-        val userSection = Sclat.conf.emblemUserdata!!.getConfigurationSection(strUuid)
+        val userSection = Sclat.conf?.emblemUserdata!!.getConfigurationSection(strUuid)
         var cache: MutableSet<String> = HashSet()
         if (userSection != null) {
             cache = userSection.getKeys(false)
@@ -58,9 +58,9 @@ object EmblemManager {
             }
 
             // get lore of item
-            val lore = Sclat.conf.emblemItems!!.getStringList(emblem.itemName)
+            val lore = Sclat.conf?.emblemItems!!.getStringList(emblem.itemName)
 
-            val amount = Sclat.conf.emblemUserdata!!.getInt(strUuid + "." + emblem.itemName, 1)
+            val amount = Sclat.conf?.emblemUserdata!!.getInt(strUuid + "." + emblem.itemName, 1)
 
             // add emblem to inventory
             inventory.addItem(newEmblemStack(emblem.itemName, lore, amount))
@@ -71,7 +71,7 @@ object EmblemManager {
             // update cache
             newEmblems.forEach(
                 Consumer { emblem: String? ->
-                    Sclat.conf.emblemUserdata!!.set("$strUuid.$emblem", 1)
+                    Sclat.conf?.emblemUserdata!!.set("$strUuid.$emblem", 1)
                 },
             )
 
@@ -84,9 +84,9 @@ object EmblemManager {
         get() {
             val dataMap =
                 HashMap<String, MutableMap<String, Int>>()
-            for (uuid in Sclat.conf.emblemUserdata!!.getKeys(false)) {
+            for (uuid in Sclat.conf?.emblemUserdata!!.getKeys(false)) {
                 val targetSection =
-                    Sclat.conf.emblemUserdata!!.getConfigurationSection(uuid) ?: continue
+                    Sclat.conf?.emblemUserdata!!.getConfigurationSection(uuid) ?: continue
                 for (emblemName in targetSection.getKeys(false)) {
                     if (!dataMap.containsKey(emblemName)) {
                         dataMap[emblemName] = HashMap()

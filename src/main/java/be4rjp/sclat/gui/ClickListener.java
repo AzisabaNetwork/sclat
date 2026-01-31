@@ -2,6 +2,7 @@
 package be4rjp.sclat.gui;
 
 import be4rjp.sclat.Sclat;
+import be4rjp.sclat.VariablesKt;
 import be4rjp.sclat.api.MessageType;
 import be4rjp.sclat.api.SclatUtil;
 import be4rjp.sclat.api.ServerType;
@@ -116,7 +117,7 @@ public class ClickListener implements Listener {
 				if (MatchMgr.canRollback) {
 					SclatUtil.sendMessage("§a§lインクがリセットされました！", MessageType.ALL_PLAYER);
 					SclatUtil.sendMessage("§a§l3分後に再リセットできるようになります", MessageType.ALL_PLAYER);
-					for (Player op : Sclat.getPlugin().getServer().getOnlinePlayers())
+					for (Player op : VariablesKt.getPlugin().getServer().getOnlinePlayers())
 						SclatUtil.playGameSound(op, SoundType.SUCCESS);
 				}
 				Match match = DataMgr.getPlayerData(player).match;
@@ -439,7 +440,7 @@ public class ClickListener implements Listener {
 						SquidMgr.SquidShowRunnable(player);
 					}
 				};
-				delay.runTaskLater(Sclat.getPlugin(), 15);
+				delay.runTaskLater(VariablesKt.getPlugin(), 15);
 			} else {
 				DataMgr.getPlayerData(player).setWeaponClass(DataMgr.getWeaponClass(name));
 			}

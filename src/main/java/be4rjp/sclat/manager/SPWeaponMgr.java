@@ -1,7 +1,7 @@
 
 package be4rjp.sclat.manager;
 
-import be4rjp.sclat.Sclat;
+import be4rjp.sclat.VariablesKt;
 import be4rjp.sclat.api.GaugeAPI;
 import be4rjp.sclat.api.MessageType;
 import be4rjp.sclat.api.SclatUtil;
@@ -67,7 +67,7 @@ public class SPWeaponMgr {
 				try {
 					int myTeam = 0;
 					int enemyTeam = 0;
-					for (Player op : Sclat.getPlugin().getServer().getOnlinePlayers()) {
+					for (Player op : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
 						PlayerData opdata = DataMgr.getPlayerData(op);
 						if (data.match == opdata.match) {
 							if (data.team == opdata.team) {
@@ -89,7 +89,7 @@ public class SPWeaponMgr {
 				}
 			}
 		};
-		task.runTaskTimer(Sclat.getPlugin(), 0, 20);
+		task.runTaskTimer(VariablesKt.getPlugin(), 0, 20);
 	}
 
 	public static void SPWeaponRunnable(Player player) {
@@ -121,10 +121,10 @@ public class SPWeaponMgr {
 					cancel();
 			}
 		};
-		task.runTaskTimer(Sclat.getPlugin(), 0, 5);
+		task.runTaskTimer(VariablesKt.getPlugin(), 0, 5);
 
-		BossBar bar = Sclat.getPlugin().getServer().createBossBar("§6§lSpecial Weapon", BarColor.GREEN, BarStyle.SOLID,
-				BarFlag.CREATE_FOG);
+		BossBar bar = VariablesKt.getPlugin().getServer().createBossBar("§6§lSpecial Weapon", BarColor.GREEN,
+				BarStyle.SOLID, BarFlag.CREATE_FOG);
 		bar.setProgress(0);
 		bar.addPlayer(player);
 
@@ -146,11 +146,11 @@ public class SPWeaponMgr {
 				}
 			}
 		};
-		anime.runTaskTimer(Sclat.getPlugin(), 0, 2);
+		anime.runTaskTimer(VariablesKt.getPlugin(), 0, 2);
 	}
 
 	public static void ArmorRunnable(Player player) {
-		BossBar bar = Sclat.getPlugin().getServer().createBossBar(
+		BossBar bar = VariablesKt.getPlugin().getServer().createBossBar(
 				DataMgr.getPlayerData(player).team.getTeamColor().getColorCode() + "§lInk Armor", BarColor.YELLOW,
 				BarStyle.SOLID, BarFlag.CREATE_FOG);
 		bar.setProgress(0);
@@ -174,7 +174,7 @@ public class SPWeaponMgr {
 				}
 			}
 		};
-		anime.runTaskTimer(Sclat.getPlugin(), 0, 5);
+		anime.runTaskTimer(VariablesKt.getPlugin(), 0, 5);
 	}
 
 	public static void setSPCoolTimeAnimation(Player player, int tick) {
@@ -202,13 +202,13 @@ public class SPWeaponMgr {
 								WeaponClassMgr.setWeaponClass(p);
 							}
 						};
-						sync.runTask(Sclat.getPlugin());
+						sync.runTask(VariablesKt.getPlugin());
 					}
 					cancel();
 				}
 			}
 		};
-		task.runTaskTimerAsynchronously(Sclat.getPlugin(), 0, 1);
+		task.runTaskTimerAsynchronously(VariablesKt.getPlugin(), 0, 1);
 	}
 
 	public static void setSPWeapon(Player p) {

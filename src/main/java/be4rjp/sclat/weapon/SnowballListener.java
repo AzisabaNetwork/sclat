@@ -2,6 +2,7 @@
 package be4rjp.sclat.weapon;
 
 import be4rjp.sclat.Sclat;
+import be4rjp.sclat.VariablesKt;
 import be4rjp.sclat.api.SclatUtil;
 import be4rjp.sclat.api.ServerType;
 import be4rjp.sclat.data.DataMgr;
@@ -197,7 +198,7 @@ public class SnowballListener implements Listener {
 								target.setNoDamageTicks(0);
 							}
 						};
-						task.runTaskLater(Sclat.getPlugin(), 1);
+						task.runTaskLater(VariablesKt.getPlugin(), 1);
 
 						Timer timer = new Timer(false);
 						TimerTask t = new TimerTask() {
@@ -384,7 +385,7 @@ public class SnowballListener implements Listener {
 						ball2.setCustomName(ball.getCustomName());
 						DataMgr.getSnowballNameMap().put(ball.getCustomName(), ball2);
 						DataMgr.setSnowballIsHit(ball2, false);
-						for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
+						for (Player o_player : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
 							PlayerConnection connection = ((CraftPlayer) o_player).getHandle().playerConnection;
 							connection.sendPacket(new PacketPlayOutEntityDestroy(ball2.getEntityId()));
 						}
@@ -478,7 +479,7 @@ public class SnowballListener implements Listener {
 							target.setNoDamageTicks(0);
 						}
 					};
-					task.runTaskLater(Sclat.getPlugin(), 1);
+					task.runTaskLater(VariablesKt.getPlugin(), 1);
 
 					Timer timer = new Timer(false);
 					TimerTask t = new TimerTask() {

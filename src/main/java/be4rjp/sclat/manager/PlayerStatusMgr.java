@@ -1,7 +1,7 @@
 
 package be4rjp.sclat.manager;
 
-import be4rjp.sclat.Sclat;
+import be4rjp.sclat.VariablesKt;
 import com.mojang.authlib.GameProfile;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -163,7 +163,7 @@ public class PlayerStatusMgr {
 				}
 			}
 		};
-		task.runTaskTimer(Sclat.getPlugin(), 0, conf.config.getInt("HologramUpdatePeriod"));
+		task.runTaskTimer(VariablesKt.getPlugin(), 0, conf.config.getInt("HologramUpdatePeriod"));
 	}
 
 	public static void sendHologramUpdate(Player player) {

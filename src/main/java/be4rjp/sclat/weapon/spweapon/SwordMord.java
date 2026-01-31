@@ -1,6 +1,7 @@
 package be4rjp.sclat.weapon.spweapon;
 
 import be4rjp.sclat.Sclat;
+import be4rjp.sclat.VariablesKt;
 import be4rjp.sclat.api.SclatUtil;
 import be4rjp.sclat.api.Sphere;
 import be4rjp.sclat.api.player.PlayerData;
@@ -62,7 +63,7 @@ public class SwordMord {
 				SwordGurdRunnable(p);
 			}
 		};
-		it.runTaskLater(Sclat.getPlugin(), 2);
+		it.runTaskLater(VariablesKt.getPlugin(), 2);
 
 		BukkitRunnable task = new BukkitRunnable() {
 			Player p = player;
@@ -76,7 +77,7 @@ public class SwordMord {
 				}
 			}
 		};
-		task.runTaskLater(Sclat.getPlugin(), 160);
+		task.runTaskLater(VariablesKt.getPlugin(), 160);
 	}
 	public static void AttackSword(Player player) {
 		if (player.hasPotionEffect(PotionEffectType.LUCK)) {
@@ -84,10 +85,10 @@ public class SwordMord {
 				player.getWorld().playSound(player.getLocation(), Sound.ENTITY_PLAYER_ATTACK_SWEEP, 1.4F, 1.5F);
 				Location vec = player.getLocation()
 						.add(player.getEyeLocation().getDirection().normalize().multiply(2.4));
-				for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
+				for (Player target : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
 					if (DataMgr.getPlayerData(target).settings.ShowEffect_Bomb())
 						if (target.getWorld() == player.getWorld())
-							if (target.getLocation().distance(vec) < Sclat.PARTICLE_RENDER_DISTANCE)
+							if (target.getLocation().distance(vec) < Sclat.particleRenderDistance)
 								if (target.equals(player)) {
 									target.spawnParticle(Particle.SWEEP_ATTACK, vec.add(0, 1.5, 0), 0, 10, 7, 10);
 								} else {
@@ -103,7 +104,7 @@ public class SwordMord {
 					}
 				}
 
-				for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
+				for (Player target : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
 					if (!DataMgr.getPlayerData(target).isInMatch())
 						continue;
 					if (target.getLocation().distance(vec) <= maxDist) {
@@ -121,7 +122,7 @@ public class SwordMord {
 									target.setNoDamageTicks(0);
 								}
 							};
-							task.runTaskLater(Sclat.getPlugin(), 1);
+							task.runTaskLater(VariablesKt.getPlugin(), 1);
 
 						}
 					}
@@ -144,7 +145,7 @@ public class SwordMord {
 					DataMgr.getPlayerData(p).setCanUseSubWeapon(true);
 				}
 			};
-			task2.runTaskLater(Sclat.getPlugin(), 7);
+			task2.runTaskLater(VariablesKt.getPlugin(), 7);
 		}
 	}
 	public static void SwordPaintRunnable(Player player) {
@@ -171,7 +172,7 @@ public class SwordMord {
 				}
 			}
 		};
-		task.runTaskTimer(Sclat.getPlugin(), 0, 1);
+		task.runTaskTimer(VariablesKt.getPlugin(), 0, 1);
 	}
 	public static void SwordGurdRunnable(Player player) {
 		BukkitRunnable task = new BukkitRunnable() {
@@ -262,7 +263,7 @@ public class SwordMord {
 							}
 							if (kdata.damage > 0.1) {
 								RayTrace rayTrace = new RayTrace(as1.getLocation().toVector(), new Vector(0, 1, 0));
-								for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
+								for (Player target : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
 									if (!DataMgr.getPlayerData(target).isInMatch())
 										continue;
 									if (DataMgr.getPlayerData(player).team != DataMgr.getPlayerData(target).team
@@ -279,7 +280,7 @@ public class SwordMord {
 													target.setNoDamageTicks(0);
 												}
 											};
-											taskdamage.runTaskLater(Sclat.getPlugin(), 1);
+											taskdamage.runTaskLater(VariablesKt.getPlugin(), 1);
 										}
 									}
 								}
@@ -302,7 +303,7 @@ public class SwordMord {
 				}
 			}
 		};
-		task.runTaskTimer(Sclat.getPlugin(), 0, 1);
+		task.runTaskTimer(VariablesKt.getPlugin(), 0, 1);
 	}
 	public static void ShootCounter(Player player) {
 
@@ -350,11 +351,11 @@ public class SwordMord {
 				if (i != 0) {
 					org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).team.getTeamColor().wool
 							.createBlockData();
-					for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
+					for (Player o_player : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
 						if (DataMgr.getPlayerData(o_player).settings.ShowEffect_MainWeaponInk())
 							if (o_player.getWorld() == inkball.getWorld())
-								if (o_player.getLocation().distanceSquared(
-										inkball.getLocation()) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED)
+								if (o_player.getLocation()
+										.distanceSquared(inkball.getLocation()) < Sclat.particleRenderDistanceSquared)
 									o_player.spawnParticle(org.bukkit.Particle.BLOCK_DUST, inkball.getLocation(), 0, 0,
 											-1, 0, 1, bd);
 					}
@@ -377,6 +378,6 @@ public class SwordMord {
 				i++;
 			}
 		};
-		SpinnerTask.runTaskTimer(Sclat.getPlugin(), 0, 1);
+		SpinnerTask.runTaskTimer(VariablesKt.getPlugin(), 0, 1);
 	}
 }

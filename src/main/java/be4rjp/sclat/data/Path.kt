@@ -1,7 +1,7 @@
 package be4rjp.sclat.data
 
-import be4rjp.sclat.Sclat
 import be4rjp.sclat.api.team.Team
+import be4rjp.sclat.plugin
 import net.minecraft.server.v1_14_R1.EnumItemSlot
 import net.minecraft.server.v1_14_R1.PacketPlayOutEntityEquipment
 import org.bukkit.Location
@@ -29,7 +29,7 @@ class Path(
 
     fun setTeam(t: Team?) {
         this.team = t
-        for (target in Sclat.getPlugin().server.onlinePlayers) {
+        for (target in plugin.server.onlinePlayers) {
             if (armorStand!!.world !== target.world) continue
             if (t == null) {
                 (target as CraftPlayer)
@@ -72,7 +72,7 @@ class Path(
                         setTeamed = false
                     }
                 }
-            task.runTaskLater(Sclat.getPlugin(), 3600)
+            task.runTaskLater(plugin, 3600)
         }
     }
 

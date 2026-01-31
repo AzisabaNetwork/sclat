@@ -9,6 +9,7 @@ import be4rjp.sclat.data.DataMgr
 import be4rjp.sclat.manager.BungeeCordMgr
 import be4rjp.sclat.manager.DeathMgr
 import be4rjp.sclat.manager.MatchMgr
+import be4rjp.sclat.plugin
 import be4rjp.sclat.server.StatusClient
 import org.bukkit.Bukkit
 import org.bukkit.GameMode
@@ -93,17 +94,17 @@ object SclatUtil {
     @JvmStatic
     fun restartServer() {
         val commands: MutableList<String?> = ArrayList<String?>()
-        commands.add("restart " + Sclat.conf.servers!!.getString("ServerName"))
+        commands.add("restart " + Sclat.conf?.servers!!.getString("ServerName"))
         commands.add("stop")
         val sc =
             StatusClient(
-                Sclat.conf.config!!.getString("StatusShare.Host"),
-                Sclat.conf.config!!.getInt("StatusShare.Port"),
+                Sclat.conf?.config!!.getString("StatusShare.Host"),
+                Sclat.conf?.config!!.getInt("StatusShare.Port"),
                 commands,
             )
         sc.startClient()
 
-        for (player in Sclat.getPlugin().getServer().getOnlinePlayers()) {
+        for (player in plugin.getServer().getOnlinePlayers()) {
             BungeeCordMgr.PlayerSendServer(player, "sclat")
             DataMgr.getPlayerData(player)?.setServerName("Sclat")
         }
@@ -113,24 +114,24 @@ object SclatUtil {
                     Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "restart")
                 }
             }
-        task.runTaskLater(Sclat.getPlugin(), 100)
+        task.runTaskLater(plugin, 100)
     }
 
     @JvmStatic
     fun sendRestartedServerInfo() {
         val commands: MutableList<String?> = ArrayList<String?>()
-        commands.add("restarted " + Sclat.conf.servers!!.getString("ServerName"))
+        commands.add("restarted " + Sclat.conf?.servers!!.getString("ServerName"))
         commands.add(
             (
-                "map " + Sclat.conf.servers!!.getString("ServerName") + " " +
+                "map " + Sclat.conf?.servers!!.getString("ServerName") + " " +
                     DataMgr.getMapRandom(if (MatchMgr.mapcount == 0) 0 else MatchMgr.mapcount - 1)?.mapName!!
                 ),
         )
         commands.add("stop")
         val sc =
             StatusClient(
-                Sclat.conf.config!!.getString("StatusShare.Host"),
-                Sclat.conf.config!!.getInt("StatusShare.Port"),
+                Sclat.conf?.config!!.getString("StatusShare.Host"),
+                Sclat.conf?.config!!.getInt("StatusShare.Port"),
                 commands,
             )
         sc.startClient()
@@ -147,21 +148,20 @@ object SclatUtil {
         buff.append(message)
         when (type) {
             MessageType.ALL_PLAYER -> {
-                for (player in Sclat.getPlugin().getServer().getOnlinePlayers()) {
+                for (player in plugin.getServer().getOnlinePlayers()) {
                     player.sendMessage(buff.toString())
                 }
             }
 
             MessageType.CONSOLE -> {
-                Sclat
-                    .getPlugin()
+                plugin
                     .getServer()
                     .getLogger()
                     .info(buff.toString())
             }
 
             MessageType.BROADCAST -> {
-                Sclat.getPlugin().getServer().broadcastMessage(buff.toString())
+                plugin.getServer().broadcastMessage(buff.toString())
             }
 
             else -> {}
@@ -178,7 +178,7 @@ object SclatUtil {
         buff.append(sclat)
         buff.append(message)
         if (type == MessageType.TEAM) {
-            for (player in Sclat.getPlugin().getServer().getOnlinePlayers()) {
+            for (player in plugin.getServer().getOnlinePlayers()) {
                 val playerTeam = DataMgr.getPlayerData(player)?.team ?: continue
                 if (team == null) continue
                 if (playerTeam != team) continue
@@ -232,7 +232,7 @@ object SclatUtil {
                     }
                 }
             }
-        send.runTaskLater(Sclat.getPlugin(), 20)
+        send.runTaskLater(plugin, 20)
     }
 
     @JvmStatic
@@ -250,11 +250,11 @@ object SclatUtil {
                 ?.teamColor!!
                 .wool!!
                 .createBlockData()
-        for (oPlayer in Sclat.getPlugin().getServer().getOnlinePlayers()) {
+        for (oPlayer in plugin.getServer().getOnlinePlayers()) {
             if (DataMgr.getPlayerData(oPlayer)?.settings?.ShowEffect_BombEx()!!) {
                 for (loc in sLocs) {
                     if (oPlayer.getWorld() === loc.getWorld()) {
-                        if (oPlayer.getLocation().distanceSquared(loc) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED) {
+                        if (oPlayer.getLocation().distanceSquared(loc) < Sclat.particleRenderDistanceSquared) {
                             oPlayer.spawnParticle<BlockData?>(
                                 Particle.BLOCK_DUST,
                                 loc,
@@ -278,7 +278,7 @@ object SclatUtil {
         radius: Double,
         shooter: Player?,
     ) {
-        for (player in Sclat.getPlugin().getServer().getOnlinePlayers()) {
+        for (player in plugin.getServer().getOnlinePlayers()) {
             val playerData = DataMgr.getPlayerData(player)
 
             if (player.getWorld() !== center.getWorld()) continue

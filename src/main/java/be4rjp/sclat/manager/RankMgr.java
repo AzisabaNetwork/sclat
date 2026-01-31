@@ -2,6 +2,7 @@
 package be4rjp.sclat.manager;
 
 import be4rjp.sclat.Sclat;
+import be4rjp.sclat.VariablesKt;
 import be4rjp.sclat.api.holo.RankingHolograms;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -133,7 +134,7 @@ public class RankMgr {
 				}
 			}
 		};
-		async.runTaskAsynchronously(Sclat.getPlugin());
+		async.runTaskAsynchronously(VariablesKt.getPlugin());
 	}
 
 	public static void makeKillRankingAsync() {
@@ -164,7 +165,7 @@ public class RankMgr {
 				}
 			}
 		};
-		async.runTaskAsynchronously(Sclat.getPlugin());
+		async.runTaskAsynchronously(VariablesKt.getPlugin());
 	}
 
 	public static void makePaintRankingAsync() {
@@ -194,7 +195,7 @@ public class RankMgr {
 				}
 			}
 		};
-		async.runTaskAsynchronously(Sclat.getPlugin());
+		async.runTaskAsynchronously(VariablesKt.getPlugin());
 	}
 
 	public static void makeRankingTask() {
@@ -204,7 +205,7 @@ public class RankMgr {
 				makeRankingAsync();
 				makeKillRankingAsync();
 				makePaintRankingAsync();
-				for (Player player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
+				for (Player player : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
 					try {
 						Sclat.playerHolograms.ifPresent(player, RankingHolograms::refreshRankingAsync);
 					} catch (Exception e) {
@@ -212,6 +213,6 @@ public class RankMgr {
 				}
 			}
 		};
-		task.runTaskTimer(Sclat.getPlugin(), 0, conf.config.getInt("MakeRankingPeriod"));
+		task.runTaskTimer(VariablesKt.getPlugin(), 0, conf.config.getInt("MakeRankingPeriod"));
 	}
 }

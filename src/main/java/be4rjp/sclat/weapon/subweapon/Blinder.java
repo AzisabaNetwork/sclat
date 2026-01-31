@@ -1,6 +1,7 @@
 package be4rjp.sclat.weapon.subweapon;
 
 import be4rjp.sclat.Sclat;
+import be4rjp.sclat.VariablesKt;
 import be4rjp.sclat.api.SclatUtil;
 import be4rjp.sclat.api.raytrace.BoundingBox;
 import be4rjp.sclat.api.raytrace.RayTrace;
@@ -34,7 +35,7 @@ public class Blinder {
 				DataMgr.getPlayerData(player).setCanUseSubWeapon(true);
 			}
 		};
-		cooltime.runTaskLater(Sclat.getPlugin(), 8);
+		cooltime.runTaskLater(VariablesKt.getPlugin(), 8);
 		if (p.getExp() > 0.36f || DataMgr.getPlayerData(player).getIsBombRush()) {
 			if (!DataMgr.getPlayerData(player).getIsBombRush()) {
 				p.setExp(player.getExp() - 0.35f);
@@ -61,11 +62,11 @@ public class Blinder {
 			// if(i<8) {
 			// PaintMgr.PaintHightestBlock(position, player, false, true);
 			// }
-			for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
+			for (Player target : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
 				if (!DataMgr.getPlayerData(target).settings.ShowEffect_MainWeaponInk())
 					continue;
 				if (target.getWorld() == position.getWorld()) {
-					if (target.getLocation().distanceSquared(position) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED) {
+					if (target.getLocation().distanceSquared(position) < Sclat.particleRenderDistanceSquared) {
 						org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(player).team.getTeamColor().wool
 								.createBlockData();
 						target.spawnParticle(org.bukkit.Particle.BLOCK_DUST, position, 1, 0, 0, 0, 1, bd);
@@ -74,7 +75,7 @@ public class Blinder {
 			}
 
 			double maxDistSquad = 4 /* 2*2 */;
-			for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
+			for (Player target : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
 				if (!DataMgr.getPlayerData(target).isInMatch())
 					continue;
 				if (DataMgr.getPlayerData(player).team != DataMgr.getPlayerData(target).team
@@ -167,6 +168,6 @@ public class Blinder {
 				DataMgr.getPlayerData(player).setPoison(false);
 			}
 		};
-		cooltime.runTaskLater(Sclat.getPlugin(), delay);
+		cooltime.runTaskLater(VariablesKt.getPlugin(), delay);
 	}
 }

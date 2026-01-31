@@ -1,7 +1,7 @@
 
 package be4rjp.sclat.manager;
 
-import be4rjp.sclat.Sclat;
+import be4rjp.sclat.VariablesKt;
 import be4rjp.sclat.api.player.PlayerData;
 import be4rjp.sclat.data.DataMgr;
 import org.bukkit.Sound;
@@ -43,7 +43,7 @@ public class SprinklerMgr {
 			public void run() {
 				org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).team.getTeamColor().wool
 						.createBlockData();
-				for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
+				for (Player o_player : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
 					if (DataMgr.getPlayerData(o_player).settings.ShowEffect_MainWeaponInk())
 						o_player.spawnParticle(org.bukkit.Particle.BLOCK_DUST, inkball.getLocation(), 1, 0, 0, 0, 1,
 								bd);
@@ -58,6 +58,6 @@ public class SprinklerMgr {
 				i++;
 			}
 		};
-		task.runTaskTimer(Sclat.getPlugin(), 0, 1);
+		task.runTaskTimer(VariablesKt.getPlugin(), 0, 1);
 	}
 }

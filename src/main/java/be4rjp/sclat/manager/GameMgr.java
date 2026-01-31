@@ -1,6 +1,7 @@
 package be4rjp.sclat.manager;
 
 import be4rjp.sclat.Sclat;
+import be4rjp.sclat.VariablesKt;
 import be4rjp.sclat.api.MessageType;
 import be4rjp.sclat.api.SclatUtil;
 import be4rjp.sclat.api.ServerType;
@@ -148,7 +149,7 @@ public class GameMgr implements Listener {
 								data.setPlayerHead(CraftItemStack.asNMSCopy(item));
 							}
 						};
-						head.runTaskAsynchronously(Sclat.getPlugin());
+						head.runTaskAsynchronously(VariablesKt.getPlugin());
 						if (Sclat.type == ServerType.MATCH) {
 							if (Sclat.modList.contains(player.getName()))
 								Sclat.modList.remove(player.getName());
@@ -164,7 +165,7 @@ public class GameMgr implements Listener {
 				i++;
 			}
 		};
-		task.runTaskTimer(Sclat.getPlugin(), 0, 5);
+		task.runTaskTimer(VariablesKt.getPlugin(), 0, 5);
 
 		// PacketHandler
 		PacketHandler packetHandler = new PacketHandler(player);
@@ -331,11 +332,11 @@ public class GameMgr implements Listener {
 								SquidMgr.SquidShowRunnable(player);
 							}
 						};
-						delay.runTaskLater(Sclat.getPlugin(), 15);
+						delay.runTaskLater(VariablesKt.getPlugin(), 15);
 					}
 				}
 			};
-			delay.runTaskLater(Sclat.getPlugin(), 15);
+			delay.runTaskLater(VariablesKt.getPlugin(), 15);
 
 			BukkitRunnable armor = new BukkitRunnable() {
 				@Override
@@ -345,7 +346,7 @@ public class GameMgr implements Listener {
 			};
 			if (ArmorStandMgr.getIsSpawned())
 				return;
-			armor.runTaskLater(Sclat.getPlugin(), 50);
+			armor.runTaskLater(VariablesKt.getPlugin(), 50);
 			ArmorStandMgr.setIsSpawned(true);
 
 			List<Block> blocks = new ArrayList<>();
@@ -433,7 +434,7 @@ public class GameMgr implements Listener {
 		if (Sclat.type == ServerType.LOBBY) {
 			// Scoreboard
 			LobbyScoreboardRunnable runnable = new LobbyScoreboardRunnable(player);
-			runnable.runTaskTimerAsynchronously(Sclat.getPlugin(), 0, 10);
+			runnable.runTaskTimerAsynchronously(VariablesKt.getPlugin(), 0, 10);
 		}
 
 		Match match = DataMgr.getMatchFromId(Integer.MAX_VALUE);
@@ -577,7 +578,7 @@ public class GameMgr implements Listener {
 					target.setNoDamageTicks(0);
 				}
 			};
-			task.runTaskLater(Sclat.getPlugin(), 1);
+			task.runTaskLater(VariablesKt.getPlugin(), 1);
 
 			/*
 			 * Timer timer = new Timer(false); TimerTask t = new TimerTask(){ Player p =

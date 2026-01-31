@@ -2,6 +2,7 @@
 package be4rjp.sclat.weapon.spweapon;
 
 import be4rjp.sclat.Sclat;
+import be4rjp.sclat.VariablesKt;
 import be4rjp.sclat.api.SclatUtil;
 import be4rjp.sclat.api.Sphere;
 import be4rjp.sclat.api.raytrace.RayTrace;
@@ -48,7 +49,7 @@ public class AirStrike {
 					player.removePotionEffect(PotionEffectType.SLOW);
 			}
 		};
-		clear.runTaskLater(Sclat.getPlugin(), 20);
+		clear.runTaskLater(VariablesKt.getPlugin(), 20);
 
 		Vector vec = MapKitMgr.getMapLocationVector(player);
 		// int y = player.getWorld().getHighestBlockYAt(vec.getBlockX(),
@@ -92,9 +93,9 @@ public class AirStrike {
 			}
 		};
 		if (localized) {
-			task.runTaskTimer(Sclat.getPlugin(), 5, 5);
+			task.runTaskTimer(VariablesKt.getPlugin(), 5, 5);
 		} else {
-			task.runTaskTimer(Sclat.getPlugin(), 50, 10);
+			task.runTaskTimer(VariablesKt.getPlugin(), 50, 10);
 		}
 
 		BukkitRunnable effect = new BukkitRunnable() {
@@ -116,7 +117,7 @@ public class AirStrike {
 				c++;
 			}
 		};
-		effect.runTaskTimer(Sclat.getPlugin(), 0, 2);
+		effect.runTaskTimer(VariablesKt.getPlugin(), 0, 2);
 
 	}
 
@@ -171,7 +172,7 @@ public class AirStrike {
 
 					// 攻撃判定の処理
 
-					for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
+					for (Player target : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
 						if (!DataMgr.getPlayerData(target).isInMatch())
 							continue;
 						if (target.getLocation().distanceSquared(drop.getLocation()) <= maxDistSquared) {
@@ -193,7 +194,7 @@ public class AirStrike {
 										target.setNoDamageTicks(0);
 									}
 								};
-								task.runTaskLater(Sclat.getPlugin(), 1);
+								task.runTaskLater(VariablesKt.getPlugin(), 1);
 
 							}
 						}
@@ -214,7 +215,7 @@ public class AirStrike {
 				}
 
 				// ボムの視認用エフェクト
-				for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
+				for (Player o_player : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
 					if (DataMgr.getPlayerData(o_player).settings.ShowEffect_SPWeapon()) {
 						Particle.DustOptions dustOptions = new Particle.DustOptions(
 								DataMgr.getPlayerData(p).team.getTeamColor().getBukkitColor(), 1);
@@ -235,7 +236,7 @@ public class AirStrike {
 			}
 		};
 
-		task.runTaskTimer(Sclat.getPlugin(), 0, 1);
+		task.runTaskTimer(VariablesKt.getPlugin(), 0, 1);
 
 	}
 }

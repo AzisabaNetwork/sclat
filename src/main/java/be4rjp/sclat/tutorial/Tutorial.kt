@@ -15,6 +15,7 @@ import be4rjp.sclat.data.PaintData
 import be4rjp.sclat.manager.BungeeCordMgr
 import be4rjp.sclat.manager.PathMgr
 import be4rjp.sclat.manager.PlayerStatusMgr
+import be4rjp.sclat.plugin
 import be4rjp.sclat.server.StatusClient
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
@@ -43,9 +44,9 @@ object Tutorial {
 
     @JvmStatic
     fun setupTutorial(match: Match) {
-        val time = Sclat.conf.config!!.getInt("InkResetPeriod")
+        val time = Sclat.conf?.config!!.getInt("InkResetPeriod")
         bar =
-            Sclat.getPlugin().getServer().createBossBar(
+            plugin.getServer().createBossBar(
                 "§a§lインクリセットまで残り §c§l" + time + " §a§l秒",
                 BarColor.WHITE,
                 BarStyle.SOLID,
@@ -64,7 +65,7 @@ object Tutorial {
                 override fun run() {
                     if (clearPlayerCount >= 1) trainLightRunRunnable()
                     if (i % 20 == 0) {
-                        for (`as` in Sclat.lobby.getWorld()!!.getEntities()) {
+                        for (`as` in Sclat.lobby!!.getWorld()!!.getEntities()) {
                             if (`as` is ArmorStand) {
                                 if (`as`.getCustomName() == null) {
                                     `as`.remove()
@@ -77,7 +78,7 @@ object Tutorial {
                     i++
                 }
             }
-        task.runTaskTimer(Sclat.getPlugin(), 0, 60)
+        task.runTaskTimer(plugin, 0, 60)
     }
 
     fun trainLightRunRunnable() {
@@ -91,18 +92,18 @@ object Tutorial {
 
                 override fun run() {
                     if (i == 0) {
-                        val worldName = Sclat.conf.config!!.getString("Train.LFrom.WorldName")
+                        val worldName = Sclat.conf?.config!!.getString("Train.LFrom.WorldName")
                         val w = Bukkit.getWorld(worldName!!)
-                        val ix = Sclat.conf.config!!.getInt("Train.LFrom.X")
-                        val iy = Sclat.conf.config!!.getInt("Train.LFrom.Y")
-                        val iz = Sclat.conf.config!!.getInt("Train.LFrom.Z")
+                        val ix = Sclat.conf?.config!!.getInt("Train.LFrom.X")
+                        val iy = Sclat.conf?.config!!.getInt("Train.LFrom.Y")
+                        val iz = Sclat.conf?.config!!.getInt("Train.LFrom.Z")
                         from = Location(w, ix + 0.5, iy.toDouble(), iz + 0.5)
 
-                        val worldName1 = Sclat.conf.config!!.getString("Train.LTo.WorldName") // Todo: why unused?
+                        val worldName1 = Sclat.conf?.config!!.getString("Train.LTo.WorldName") // Todo: why unused?
                         val w1 = Bukkit.getWorld(worldName)
-                        val ix1 = Sclat.conf.config!!.getInt("Train.LTo.X")
-                        val iy1 = Sclat.conf.config!!.getInt("Train.LTo.Y")
-                        val iz1 = Sclat.conf.config!!.getInt("Train.LTo.Z")
+                        val ix1 = Sclat.conf?.config!!.getInt("Train.LTo.X")
+                        val iy1 = Sclat.conf?.config!!.getInt("Train.LTo.Y")
+                        val iz1 = Sclat.conf?.config!!.getInt("Train.LTo.Z")
                         to = Location(w1, ix1 + 0.5, iy1.toDouble(), iz1 + 0.5)
 
                         vec = Vector(ix1 - ix, iy1 - iy, iz1 - iz).normalize()
@@ -135,7 +136,7 @@ object Tutorial {
                     i++
                 }
             }
-        task.runTaskTimer(Sclat.getPlugin(), 0, 1)
+        task.runTaskTimer(plugin, 0, 1)
 
         val task1: BukkitRunnable =
             object : BukkitRunnable() {
@@ -147,18 +148,18 @@ object Tutorial {
 
                 override fun run() {
                     if (i == 0) {
-                        val worldName = Sclat.conf.config!!.getString("Train.RFrom.WorldName")
+                        val worldName = Sclat.conf?.config!!.getString("Train.RFrom.WorldName")
                         val w = Bukkit.getWorld(worldName!!)
-                        val ix = Sclat.conf.config!!.getInt("Train.RFrom.X")
-                        val iy = Sclat.conf.config!!.getInt("Train.RFrom.Y")
-                        val iz = Sclat.conf.config!!.getInt("Train.RFrom.Z")
+                        val ix = Sclat.conf?.config!!.getInt("Train.RFrom.X")
+                        val iy = Sclat.conf?.config!!.getInt("Train.RFrom.Y")
+                        val iz = Sclat.conf?.config!!.getInt("Train.RFrom.Z")
                         from = Location(w, ix + 0.5, iy.toDouble(), iz + 0.5)
 
-                        val worldName1 = Sclat.conf.config!!.getString("Train.RTo.WorldName")
+                        val worldName1 = Sclat.conf?.config!!.getString("Train.RTo.WorldName")
                         val w1 = Bukkit.getWorld(worldName)
-                        val ix1 = Sclat.conf.config!!.getInt("Train.RTo.X")
-                        val iy1 = Sclat.conf.config!!.getInt("Train.RTo.Y")
-                        val iz1 = Sclat.conf.config!!.getInt("Train.RTo.Z")
+                        val ix1 = Sclat.conf?.config!!.getInt("Train.RTo.X")
+                        val iy1 = Sclat.conf?.config!!.getInt("Train.RTo.Y")
+                        val iz1 = Sclat.conf?.config!!.getInt("Train.RTo.Z")
                         to = Location(w1, ix1 + 0.5, iy1.toDouble(), iz1 + 0.5)
 
                         vec = Vector(ix1 - ix, iy1 - iy, iz1 - iz).normalize()
@@ -191,22 +192,22 @@ object Tutorial {
                     i++
                 }
             }
-        task1.runTaskTimer(Sclat.getPlugin(), 0, 1)
+        task1.runTaskTimer(plugin, 0, 1)
     }
 
     @JvmStatic
     fun weaponRemoveRunnable() {
-        val worldName = Sclat.conf.config!!.getString("WeaponRemove.WorldName")
+        val worldName = Sclat.conf?.config!!.getString("WeaponRemove.WorldName")
         val w = Bukkit.getWorld(worldName!!)
-        val ix = Sclat.conf.config!!.getInt("WeaponRemove.X")
-        val iy = Sclat.conf.config!!.getInt("WeaponRemove.Y")
-        val iz = Sclat.conf.config!!.getInt("WeaponRemove.Z")
+        val ix = Sclat.conf?.config!!.getInt("WeaponRemove.X")
+        val iy = Sclat.conf?.config!!.getInt("WeaponRemove.Y")
+        val iz = Sclat.conf?.config!!.getInt("WeaponRemove.Z")
         val loc = Location(w, ix + 0.5, iy.toDouble(), iz + 0.5)
 
         val task: BukkitRunnable =
             object : BukkitRunnable() {
                 override fun run() {
-                    for (player in Sclat.getPlugin().getServer().getOnlinePlayers()) {
+                    for (player in plugin.getServer().getOnlinePlayers()) {
                         if (player.getWorld() !== w) continue
                         if (player.getLocation().distance(loc) < 8) {
                             player.getInventory().clear()
@@ -216,46 +217,46 @@ object Tutorial {
                     }
                 }
             }
-        task.runTaskTimer(Sclat.getPlugin(), 0, 5)
+        task.runTaskTimer(plugin, 0, 5)
     }
 
     @JvmStatic
     fun clearRegionRunnable() {
-        val worldName = Sclat.conf.config!!.getString("TutorialClear.WorldName")
+        val worldName = Sclat.conf?.config!!.getString("TutorialClear.WorldName")
         val w = Bukkit.getWorld(worldName!!)
-        val ix = Sclat.conf.config!!.getInt("TutorialClear.X")
-        val iy = Sclat.conf.config!!.getInt("TutorialClear.Y")
-        val iz = Sclat.conf.config!!.getInt("TutorialClear.Z")
+        val ix = Sclat.conf?.config!!.getInt("TutorialClear.X")
+        val iy = Sclat.conf?.config!!.getInt("TutorialClear.Y")
+        val iz = Sclat.conf?.config!!.getInt("TutorialClear.Z")
         val loc = Location(w, ix + 0.5, iy.toDouble(), iz + 0.5)
 
         val task: BukkitRunnable =
             object : BukkitRunnable() {
                 override fun run() {
-                    for (player in Sclat.getPlugin().getServer().getOnlinePlayers()) {
+                    for (player in plugin.getServer().getOnlinePlayers()) {
                         if (player.getWorld() !== w) continue
                         if (player.getLocation().distance(loc) < 5) {
                             clearList.remove(player)
-                            val worldName = Sclat.conf.config!!.getString("LobbyJump.WorldName")
+                            val worldName = Sclat.conf?.config!!.getString("LobbyJump.WorldName")
                             val w = Bukkit.getWorld(worldName!!)
-                            val ix = Sclat.conf.config!!.getInt("LobbyJump.X")
-                            val iy = Sclat.conf.config!!.getInt("LobbyJump.Y")
-                            val iz = Sclat.conf.config!!.getInt("LobbyJump.Z")
+                            val ix = Sclat.conf?.config!!.getInt("LobbyJump.X")
+                            val iy = Sclat.conf?.config!!.getInt("LobbyJump.Y")
+                            val iz = Sclat.conf?.config!!.getInt("LobbyJump.Z")
                             val loc = Location(w, ix + 0.5, iy.toDouble(), iz + 0.5)
                             player.teleport(loc)
                         }
                     }
                 }
             }
-        task.runTaskTimer(Sclat.getPlugin(), 0, 10)
+        task.runTaskTimer(plugin, 0, 10)
     }
 
     @JvmStatic
     fun lobbyRegionRunnable() {
-        val worldName = Sclat.conf.config!!.getString("LobbyJump.WorldName")
+        val worldName = Sclat.conf?.config!!.getString("LobbyJump.WorldName")
         val w = Bukkit.getWorld(worldName!!)
-        val ix = Sclat.conf.config!!.getInt("LobbyJump.X")
-        val iy = Sclat.conf.config!!.getInt("LobbyJump.Y")
-        val iz = Sclat.conf.config!!.getInt("LobbyJump.Z")
+        val ix = Sclat.conf?.config!!.getInt("LobbyJump.X")
+        val iy = Sclat.conf?.config!!.getInt("LobbyJump.Y")
+        val iz = Sclat.conf?.config!!.getInt("LobbyJump.Z")
         val loc = Location(w, ix + 0.5, iy.toDouble(), iz + 0.5)
 
         val task: BukkitRunnable =
@@ -263,7 +264,7 @@ object Tutorial {
                 var list: MutableList<Player?> = ArrayList<Player?>()
 
                 override fun run() {
-                    for (player in Sclat.getPlugin().getServer().getOnlinePlayers()) {
+                    for (player in plugin.getServer().getOnlinePlayers()) {
                         if (player.getWorld() !== w) continue
                         if (player.getLocation().distance(loc) < 5 && !list.contains(player)) {
                             list.add(player)
@@ -272,22 +273,22 @@ object Tutorial {
                     }
                 }
             }
-        task.runTaskTimer(Sclat.getPlugin(), 0, 10)
+        task.runTaskTimer(plugin, 0, 10)
     }
 
     @JvmStatic
     fun lobbySetStatusRunnable() {
-        val worldName = Sclat.conf.config!!.getString("TutorialClear.WorldName")
+        val worldName = Sclat.conf?.config!!.getString("TutorialClear.WorldName")
         val w = Bukkit.getWorld(worldName!!)
-        val ix = Sclat.conf.config!!.getInt("TutorialClear.X")
-        val iy = Sclat.conf.config!!.getInt("TutorialClear.Y")
-        val iz = Sclat.conf.config!!.getInt("TutorialClear.Z")
+        val ix = Sclat.conf?.config!!.getInt("TutorialClear.X")
+        val iy = Sclat.conf?.config!!.getInt("TutorialClear.Y")
+        val iz = Sclat.conf?.config!!.getInt("TutorialClear.Z")
         val loc = Location(w, ix + 0.5, iy.toDouble(), iz + 0.5)
 
         val task: BukkitRunnable =
             object : BukkitRunnable() {
                 override fun run() {
-                    for (player in Sclat.getPlugin().getServer().getOnlinePlayers()) {
+                    for (player in plugin.getServer().getOnlinePlayers()) {
                         if (player.getWorld() !== w) continue
                         if (player.getLocation().distance(loc) < 10) {
                             if (PlayerStatusMgr.getTutorialState(player.getUniqueId().toString()) == 1) {
@@ -315,7 +316,7 @@ object Tutorial {
                     }
                 }
             }
-        task.runTaskTimer(Sclat.getPlugin(), 0, 10)
+        task.runTaskTimer(plugin, 0, 10)
     }
 
     fun sendPlayerRunnable(player: Player) {
@@ -326,8 +327,8 @@ object Tutorial {
         commands.add("stop")
         val sc =
             StatusClient(
-                Sclat.conf.config!!.getString("StatusShare.Host"),
-                Sclat.conf.config!!.getInt("StatusShare.Port"),
+                Sclat.conf?.config!!.getString("StatusShare.Host"),
+                Sclat.conf?.config!!.getInt("StatusShare.Port"),
                 commands,
             )
         sc.startClient()
@@ -351,7 +352,7 @@ object Tutorial {
                     i++
                 }
             }
-        task.runTaskTimer(Sclat.getPlugin(), 0, 100)
+        task.runTaskTimer(plugin, 0, 100)
     }
 
     fun inkResetRunnable(
@@ -383,11 +384,11 @@ object Tutorial {
                         blockDataMap.clear()
                         spongeMap.clear()
                         // ------------------------------------------------------------
-                        for (player in Sclat.getPlugin().getServer().getOnlinePlayers()) player.setExp(0.99f)
+                        for (player in plugin.getServer().getOnlinePlayers()) player.setExp(0.99f)
                         val bur = BlockUpdater()
-                        if (Sclat.conf.config!!.contains("BlockUpdateRate")) {
+                        if (Sclat.conf?.config!!.contains("BlockUpdateRate")) {
                             bur.setMaxBlockInOneTick(
-                                Sclat.conf.config!!.getInt(
+                                Sclat.conf?.config!!.getInt(
                                     "BlockUpdateRate",
                                 ),
                             )
@@ -395,7 +396,7 @@ object Tutorial {
                         bur.start()
                         match.blockUpdater = bur
                         val blocks: MutableList<Block> = ArrayList<Block>()
-                        val b0 = Sclat.lobby.getBlock().getRelative(BlockFace.DOWN)
+                        val b0 = Sclat.lobby!!.getBlock().getRelative(BlockFace.DOWN)
                         blocks.add(b0)
                         blocks.add(b0.getRelative(BlockFace.EAST))
                         blocks.add(b0.getRelative(BlockFace.NORTH))
@@ -417,13 +418,13 @@ object Tutorial {
                         }
 
                         sendMessage("§a§lインクがリセットされました！", MessageType.ALL_PLAYER)
-                        for (op in Sclat.getPlugin().getServer().getOnlinePlayers()) playGameSound(op, SoundType.SUCCESS)
+                        for (op in plugin.getServer().getOnlinePlayers()) playGameSound(op, SoundType.SUCCESS)
                         time = 0
                     }
                     time++
                 }
             }
-        task.runTaskTimer(Sclat.getPlugin(), 0, 20)
+        task.runTaskTimer(plugin, 0, 20)
     }
 
     @JvmStatic

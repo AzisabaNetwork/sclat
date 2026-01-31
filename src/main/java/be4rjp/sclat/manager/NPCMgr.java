@@ -1,6 +1,7 @@
 package be4rjp.sclat.manager;
 
 import be4rjp.sclat.Sclat;
+import be4rjp.sclat.VariablesKt;
 import be4rjp.sclat.data.DataMgr;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.server.v1_14_R1.DataWatcherRegistry;
@@ -90,7 +91,7 @@ public class NPCMgr {
 				s++;
 			}
 		};
-		task.runTaskTimer(Sclat.getPlugin(), 0, 20);
+		task.runTaskTimer(VariablesKt.getPlugin(), 0, 20);
 
 	}
 }

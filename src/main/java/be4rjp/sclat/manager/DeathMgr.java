@@ -2,6 +2,7 @@
 package be4rjp.sclat.manager;
 
 import be4rjp.sclat.Sclat;
+import be4rjp.sclat.VariablesKt;
 import be4rjp.sclat.api.SclatUtil;
 import be4rjp.sclat.api.Sphere;
 import be4rjp.sclat.api.player.PlayerData;
@@ -68,7 +69,7 @@ public class DeathMgr {
 				drop2.remove();
 			}
 		};
-		clear.runTaskLater(Sclat.getPlugin(), 50);
+		clear.runTaskLater(VariablesKt.getPlugin(), 50);
 
 		if (target.hasPotionEffect(PotionEffectType.GLOWING))
 			target.removePotionEffect(PotionEffectType.GLOWING);
@@ -440,11 +441,11 @@ public class DeathMgr {
 					if (DataMgr.getPlayerData(t).getSPGauge() == 100)
 						SPWeaponMgr.setSPWeapon(t);
 					cancel();
-					Sclat.getPlugin().getLogger().warning(e.getMessage());
+					VariablesKt.getPlugin().getLogger().warning(e.getMessage());
 				}
 			}
 		};
-		task.runTaskTimer(Sclat.getPlugin(), 0, 1);
+		task.runTaskTimer(VariablesKt.getPlugin(), 0, 1);
 	}
 	public static void BarrierEffectRunnable(Player player, int time) {
 		int resettime = time / 4;
@@ -462,7 +463,7 @@ public class DeathMgr {
 				Location loc = p.getLocation().add(0, 0.5, 0);
 
 				List<Location> s_locs = Sphere.getSphere(loc, 2, 23);
-				for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
+				for (Player o_player : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
 					if (DataMgr.getPlayerData(o_player).settings.ShowEffect_SPWeapon() && !o_player.equals(player)) {
 						Particle.DustOptions dustOptions = new Particle.DustOptions(
 								data.team.getTeamColor().getBukkitColor(), 1);
@@ -470,8 +471,7 @@ public class DeathMgr {
 								.createBlockData();
 						for (Location e_loc : s_locs)
 							if (o_player.getWorld() == e_loc.getWorld())
-								if (o_player.getLocation()
-										.distanceSquared(e_loc) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED)
+								if (o_player.getLocation().distanceSquared(e_loc) < Sclat.particleRenderDistanceSquared)
 									o_player.spawnParticle(Particle.REDSTONE, e_loc, 0, 0, 0, 0, 70, dustOptions);
 					}
 				}
@@ -484,6 +484,6 @@ public class DeathMgr {
 				c++;
 			}
 		};
-		task.runTaskTimer(Sclat.getPlugin(), 0, 4);
+		task.runTaskTimer(VariablesKt.getPlugin(), 0, 4);
 	}
 }

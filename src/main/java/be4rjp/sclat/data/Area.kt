@@ -5,6 +5,7 @@ import be4rjp.sclat.api.MessageType
 import be4rjp.sclat.api.SclatUtil.sendMessage
 import be4rjp.sclat.api.team.Team
 import be4rjp.sclat.manager.PaintMgr
+import be4rjp.sclat.plugin
 import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.Sound
@@ -40,7 +41,7 @@ class Area(
                 .team0!!
                 .team!!
                 .scoreboard!!
-                .registerNewTeam("ColorTeam0" + Sclat.getNotDuplicateNumber())
+                .registerNewTeam("ColorTeam0" + Sclat.notDuplicateNumber)
         colorTeam0!!.setCanSeeFriendlyInvisibles(false)
         colorTeam0!!.color = match!!.team0!!.teamColor!!.chatColor!!
 
@@ -49,7 +50,7 @@ class Area(
                 .team0!!
                 .team!!
                 .scoreboard!!
-                .registerNewTeam("ColorTeam1" + Sclat.getNotDuplicateNumber())
+                .registerNewTeam("ColorTeam1" + Sclat.notDuplicateNumber)
         colorTeam1!!.setCanSeeFriendlyInvisibles(false)
         colorTeam1!!.color = match!!.team1!!.teamColor!!.chatColor!!
     }
@@ -128,8 +129,7 @@ class Area(
                         if (team == match.team0!!) {
                             if ((blist.size * 0.5) < t1c.toDouble()) {
                                 sendMessage("§3§lカウントストップ!", MessageType.ALL_PLAYER)
-                                for (oplayer in Sclat
-                                    .getPlugin<Sclat>(Sclat::class.java)
+                                for (oplayer in plugin
                                     .server
                                     .onlinePlayers) {
                                     if (DataMgr.getPlayerData(oplayer)?.isInMatch!!) {
@@ -143,8 +143,7 @@ class Area(
                         if (team == match.team1!!) {
                             if ((blist.size * 0.5) < t0c.toDouble()) {
                                 sendMessage("§3§lカウントストップ!", MessageType.ALL_PLAYER)
-                                for (oplayer in Sclat
-                                    .getPlugin<Sclat>(Sclat::class.java)
+                                for (oplayer in plugin
                                     .server
                                     .onlinePlayers) {
                                     if (DataMgr.getPlayerData(oplayer)?.isInMatch!!) {
@@ -158,7 +157,7 @@ class Area(
                     } else {
                         if ((blist.size * 0.6) < t0c.toDouble()) {
                             team = match.team0!!
-                            for (oplayer in Sclat.getPlugin<Sclat>(Sclat::class.java).server.onlinePlayers) {
+                            for (oplayer in plugin.server.onlinePlayers) {
                                 if (DataMgr.getPlayerData(oplayer)?.isInMatch!!) {
                                     if (team == DataMgr.getPlayerData(oplayer)?.team!!) {
                                         sendMessage("§fエリアを確保した!", MessageType.PLAYER, oplayer)
@@ -174,7 +173,7 @@ class Area(
                             updateBlocks()
                         } else if ((blist.size * 0.6) < t1c.toDouble()) {
                             team = match.team1!!
-                            for (oplayer in Sclat.getPlugin<Sclat>(Sclat::class.java).server.onlinePlayers) {
+                            for (oplayer in plugin.server.onlinePlayers) {
                                 if (DataMgr.getPlayerData(oplayer)?.isInMatch!!) {
                                     if (team == DataMgr.getPlayerData(oplayer)?.team!!) {
                                         sendMessage("§fエリアを確保した!", MessageType.PLAYER, oplayer)
@@ -195,7 +194,7 @@ class Area(
     }
 
     fun start() {
-        this.task!!.runTaskTimer(Sclat.getPlugin(), 0, 20)
+        this.task!!.runTaskTimer(plugin, 0, 20)
     }
 
     fun stop() {

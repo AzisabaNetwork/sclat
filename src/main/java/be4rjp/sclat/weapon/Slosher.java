@@ -2,6 +2,7 @@
 package be4rjp.sclat.weapon;
 
 import be4rjp.sclat.Sclat;
+import be4rjp.sclat.VariablesKt;
 import be4rjp.sclat.api.SclatUtil;
 import be4rjp.sclat.api.Sphere;
 import be4rjp.sclat.api.player.PlayerData;
@@ -39,7 +40,7 @@ public class Slosher {
 			}
 		};
 		if (data.getCanRollerShoot())
-			delay1.runTaskLater(Sclat.getPlugin(), data.getWeaponClass().getMainWeapon().getCoolTime());
+			delay1.runTaskLater(VariablesKt.getPlugin(), data.getWeaponClass().getMainWeapon().getCoolTime());
 
 		BukkitRunnable delay = new BukkitRunnable() {
 			Player p = player;
@@ -51,7 +52,7 @@ public class Slosher {
 			}
 		};
 		if (data.getCanRollerShoot()) {
-			delay.runTaskLater(Sclat.getPlugin(), data.getWeaponClass().getMainWeapon().delay);
+			delay.runTaskLater(VariablesKt.getPlugin(), data.getWeaponClass().getMainWeapon().delay);
 			data.setCanRollerShoot(false);
 		}
 	}
@@ -108,12 +109,12 @@ public class Slosher {
 						i += DataMgr.getSnowballHitCount(name) - 1;
 						DataMgr.setSnowballHitCount(name, 0);
 					}
-					for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
+					for (Player target : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
 						if (!DataMgr.getPlayerData(target).settings.ShowEffect_MainWeaponInk())
 							continue;
 						if (target.getWorld() == inkball.getWorld()) {
 							if (target.getLocation()
-									.distanceSquared(inkball.getLocation()) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED) {
+									.distanceSquared(inkball.getLocation()) < Sclat.particleRenderDistanceSquared) {
 								org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).team.getTeamColor().wool
 										.createBlockData();
 								target.spawnParticle(org.bukkit.Particle.BLOCK_DUST, inkball.getLocation(), 3, 0, 0, 0,
@@ -151,7 +152,7 @@ public class Slosher {
 
 						// 攻撃判定の処理
 
-						for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
+						for (Player target : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
 							if (!DataMgr.getPlayerData(target).isInMatch())
 								continue;
 							if (target.getLocation().distanceSquared(inkball.getLocation()) <= maxDist * maxDist) {
@@ -169,7 +170,7 @@ public class Slosher {
 											target.setNoDamageTicks(0);
 										}
 									};
-									task.runTaskLater(Sclat.getPlugin(), 1);
+									task.runTaskLater(VariablesKt.getPlugin(), 1);
 
 								}
 							}
@@ -193,6 +194,6 @@ public class Slosher {
 				}
 			}
 		};
-		task.runTaskTimer(Sclat.getPlugin(), 0, 1);
+		task.runTaskTimer(VariablesKt.getPlugin(), 0, 1);
 	}
 }

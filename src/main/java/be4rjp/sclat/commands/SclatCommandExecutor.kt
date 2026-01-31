@@ -11,6 +11,7 @@ import be4rjp.sclat.data.DataMgr
 import be4rjp.sclat.emblem.EmblemManager
 import be4rjp.sclat.manager.BungeeCordMgr
 import be4rjp.sclat.manager.ServerStatusManager
+import be4rjp.sclat.plugin
 import be4rjp.sclat.server.EquipmentClient
 import org.bukkit.ChatColor
 import org.bukkit.command.Command
@@ -83,7 +84,7 @@ class SclatCommandExecutor :
             }
 
             val playerName = args[1]
-            for (player in Sclat.getPlugin().getServer().getOnlinePlayers()) {
+            for (player in plugin.getServer().getOnlinePlayers()) {
                 if (playerName == player.getName()) {
                     Sclat.flyList.add(playerName)
                     return true
@@ -109,11 +110,11 @@ class SclatCommandExecutor :
                 sendMessage(String.format("%sの設定を再読み込み中...", targetConfig), MessageType.PLAYER, player)
                 when (targetConfig.lowercase(Locale.getDefault())) {
                     "emblemuserdata" -> {
-                        Sclat.conf.loadEmblemUserData()
+                        Sclat.conf?.loadEmblemUserData()
                     }
 
                     "emblemloredata" -> {
-                        Sclat.conf.loadEmblemLoreData()
+                        Sclat.conf?.loadEmblemLoreData()
                     }
 
                     else -> {
@@ -137,23 +138,23 @@ class SclatCommandExecutor :
                 return true
             }
 
-            if (!Sclat.conf.emblemsFile.exists()) {
+            if (!Sclat.conf?.emblemsFile!!.exists()) {
                 sender.sendMessage(ChatColor.RED.toString() + "Old emblem userdata file isn't exists.")
                 return true
             }
 
-            val oldData = YamlConfiguration.loadConfiguration(Sclat.conf.emblemsFile)
+            val oldData = YamlConfiguration.loadConfiguration(Sclat.conf?.emblemsFile!!)
             val dataUuids = oldData.getKeys(false)
             for (_uuid in dataUuids) {
                 val userEmblems = oldData.getStringList(_uuid)
                 for (emblem in userEmblems) {
-                    Sclat.conf.emblemUserdata!!.set(_uuid + "." + emblem, 1)
+                    Sclat.conf?.emblemUserdata!!.set(_uuid + "." + emblem, 1)
                 }
             }
             sender.sendMessage(ChatColor.GREEN.toString() + "Migration was succeeded!")
 
             try {
-                Sclat.conf.saveEmblemUserdata()
+                Sclat.conf?.saveEmblemUserdata()
                 sender.sendMessage(ChatColor.GREEN.toString() + "Successfully to save emblem userdata")
             } catch (e: IOException) {
                 sender.sendMessage(ChatColor.RED.toString() + "Failed to save emblem userdata")
@@ -175,7 +176,7 @@ class SclatCommandExecutor :
             }
 
             try {
-                Sclat.conf.saveEmblemUserdata()
+                Sclat.conf?.saveEmblemUserdata()
                 sender.sendMessage(ChatColor.GREEN.toString() + "Successfully to save emblem userdata")
             } catch (e: IOException) {
                 sender.sendMessage(ChatColor.RED.toString() + "Failed to save emblem userdata")
@@ -246,7 +247,7 @@ class SclatCommandExecutor :
                                     }
                                 }
                             }
-                        task.runTaskLater(Sclat.getPlugin(), 40)
+                        task.runTaskLater(plugin, 40)
                     }
                 }
                 return true
@@ -312,7 +313,7 @@ class SclatCommandExecutor :
                 sender.sendMessage(list.toString())
                 return true
             } else if (args[1] == "reload") {
-                Sclat.tutorialServers.reloadConfig()
+                Sclat.tutorialServers!!.reloadConfig()
                 return true
             }
         }

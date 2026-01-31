@@ -2,6 +2,7 @@
 package be4rjp.sclat.weapon.spweapon;
 
 import be4rjp.sclat.Sclat;
+import be4rjp.sclat.VariablesKt;
 import be4rjp.sclat.api.player.PlayerData;
 import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.manager.SPWeaponMgr;
@@ -43,11 +44,11 @@ public class SuperArmor {
 						DataMgr.getPlayerData(player).setIsUsingSP(false);
 					cancel();
 				}
-				for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
+				for (Player o_player : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
 					if (DataMgr.getPlayerData(o_player).settings.ShowEffect_SPWeapon() && !o_player.equals(player)) {
 						if (o_player.getWorld() == player.getWorld()) {
 							if (o_player.getLocation()
-									.distanceSquared(player.getLocation()) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED) {
+									.distanceSquared(player.getLocation()) < Sclat.particleRenderDistanceSquared) {
 								Particle.DustOptions dustOptions = new Particle.DustOptions(
 										data.team.getTeamColor().getBukkitColor(), 1);
 								o_player.spawnParticle(Particle.REDSTONE, player.getEyeLocation(), 5, 0.5, 0.4, 0.5, 5,
@@ -64,7 +65,7 @@ public class SuperArmor {
 			}
 		};
 		if (effect)
-			effect_r.runTaskTimer(Sclat.getPlugin(), 0, 1);
+			effect_r.runTaskTimer(VariablesKt.getPlugin(), 0, 1);
 
 		BukkitRunnable task = new BukkitRunnable() {
 			@Override
@@ -77,7 +78,7 @@ public class SuperArmor {
 				}
 			}
 		};
-		task.runTaskLater(Sclat.getPlugin(), delay);
+		task.runTaskLater(VariablesKt.getPlugin(), delay);
 
 	}
 	public static void setRegeneArmor(Player player, double armor, long delay, double regene, boolean effect) {
@@ -122,7 +123,7 @@ public class SuperArmor {
 				c++;
 			}
 		};
-		rgene_r.runTaskTimer(Sclat.getPlugin(), 0, 2);
+		rgene_r.runTaskTimer(VariablesKt.getPlugin(), 0, 2);
 		// エフェクト
 		BukkitRunnable effect_r = new BukkitRunnable() {
 			@Override
@@ -131,11 +132,11 @@ public class SuperArmor {
 					DataMgr.getPlayerData(player).setIsUsingSP(false);
 					cancel();
 				}
-				for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
+				for (Player o_player : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
 					if (DataMgr.getPlayerData(o_player).settings.ShowEffect_SPWeapon() && !o_player.equals(player)) {
 						if (o_player.getWorld() == player.getWorld()) {
 							if (o_player.getLocation()
-									.distanceSquared(player.getLocation()) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED) {
+									.distanceSquared(player.getLocation()) < Sclat.particleRenderDistanceSquared) {
 								Particle.DustOptions dustOptions = new Particle.DustOptions(
 										data.team.getTeamColor().getBukkitColor(), 1);
 								o_player.spawnParticle(Particle.REDSTONE, player.getEyeLocation(), 5, 0.5, 0.4, 0.5, 5,
@@ -152,7 +153,7 @@ public class SuperArmor {
 			}
 		};
 		if (effect)
-			effect_r.runTaskTimer(Sclat.getPlugin(), 0, 1);
+			effect_r.runTaskTimer(VariablesKt.getPlugin(), 0, 1);
 
 		BukkitRunnable task = new BukkitRunnable() {
 			@Override
@@ -165,7 +166,7 @@ public class SuperArmor {
 				}
 			}
 		};
-		task.runTaskLater(Sclat.getPlugin(), delay);
+		task.runTaskLater(VariablesKt.getPlugin(), delay);
 
 	}
 }

@@ -1,6 +1,7 @@
 package be4rjp.sclat.weapon;
 
 import be4rjp.sclat.Sclat;
+import be4rjp.sclat.VariablesKt;
 import be4rjp.sclat.api.GaugeAPI;
 import be4rjp.sclat.api.SclatUtil;
 import be4rjp.sclat.api.player.PlayerData;
@@ -215,7 +216,7 @@ public class Charger {
 
 			}
 		};
-		task.runTaskTimer(Sclat.getPlugin(), 0, 1);
+		task.runTaskTimer(VariablesKt.getPlugin(), 0, 1);
 	}
 
 	public static void Shoot(Player player, int reach, double damage, double decRate) {
@@ -284,7 +285,7 @@ public class Charger {
 			// }
 			if (DataMgr.getPlayerData(player).settings.ShowEffect_MainWeaponInk()) {
 				if (player.getWorld() == position.getWorld()) {
-					if (player.getLocation().distanceSquared(position) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED) {
+					if (player.getLocation().distanceSquared(position) < Sclat.particleRenderDistanceSquared) {
 						org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(player).team.getTeamColor().wool
 								.createBlockData();
 						player.spawnParticle(org.bukkit.Particle.BLOCK_DUST, position, 1, 0, 0, 0, 1, bd);
@@ -293,7 +294,7 @@ public class Charger {
 			}
 
 			double maxDistSquad = 4 /* 2*2 */;
-			for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
+			for (Player target : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
 				if (!DataMgr.getPlayerData(target).isInMatch())
 					continue;
 				if (DataMgr.getPlayerData(player).team != DataMgr.getPlayerData(target).team
@@ -320,7 +321,7 @@ public class Charger {
 									target.setNoDamageTicks(0);
 								}
 							};
-							task.runTaskLater(Sclat.getPlugin(), 1);
+							task.runTaskLater(VariablesKt.getPlugin(), 1);
 							break loop;
 						}
 					}

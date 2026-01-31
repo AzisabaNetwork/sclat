@@ -2,9 +2,11 @@
 package be4rjp.sclat.weapon.subweapon;
 
 import be4rjp.sclat.Sclat;
+import be4rjp.sclat.VariablesKt;
 import be4rjp.sclat.api.Sphere;
 import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.weapon.Gear;
+import java.util.List;
 import net.minecraft.server.v1_14_R1.PacketPlayOutEntityDestroy;
 import net.minecraft.server.v1_14_R1.PlayerConnection;
 import org.bukkit.ChatColor;
@@ -25,8 +27,6 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
-
-import java.util.List;
 
 /**
  *
@@ -62,7 +62,7 @@ public class Sensor {
 						ball.setVelocity(new Vector(0, 0, 0));
 						DataMgr.setSnowballIsHit(ball, false);
 
-						for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
+						for (Player o_player : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
 							PlayerConnection connection = ((CraftPlayer) o_player).getHandle().playerConnection;
 							connection.sendPacket(new PacketPlayOutEntityDestroy(ball.getEntityId()));
 						}
@@ -83,12 +83,12 @@ public class Sensor {
 
 						// 爆発エフェクト
 						List<Location> s_locs = Sphere.getSphere(drop.getLocation(), maxDist, 15);
-						for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
+						for (Player o_player : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
 							if (DataMgr.getPlayerData(o_player).settings.ShowEffect_BombEx()) {
 								for (Location loc : s_locs) {
 									if (o_player.getWorld() == loc.getWorld()) {
 										if (o_player.getLocation()
-												.distanceSquared(loc) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED) {
+												.distanceSquared(loc) < Sclat.particleRenderDistanceSquared) {
 											Particle.DustOptions dustOptions = new Particle.DustOptions(Color.BLACK, 1);
 											o_player.spawnParticle(Particle.REDSTONE, loc, 1, 0, 0, 0, 1, dustOptions);
 										}
@@ -99,7 +99,7 @@ public class Sensor {
 
 						// あたり判定の処理
 
-						for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
+						for (Player target : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
 							if (!DataMgr.getPlayerData(target).isInMatch() || target.getWorld() != p.getWorld())
 								continue;
 							if (target.getLocation().distance(drop.getLocation()) <= maxDist) {
@@ -133,11 +133,11 @@ public class Sensor {
 					}
 
 					// ボムの視認用エフェクト
-					for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
+					for (Player o_player : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
 						if (DataMgr.getPlayerData(o_player).settings.ShowEffect_Bomb()) {
 							if (o_player.getWorld() == drop.getLocation().getWorld()) {
 								if (o_player.getLocation()
-										.distanceSquared(drop.getLocation()) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED) {
+										.distanceSquared(drop.getLocation()) < Sclat.particleRenderDistanceSquared) {
 									Particle.DustOptions dustOptions = new Particle.DustOptions(
 											DataMgr.getPlayerData(p).team.getTeamColor().getBukkitColor(), 1);
 									o_player.spawnParticle(Particle.REDSTONE, drop.getLocation(), 1, 0, 0, 0, 50,
@@ -159,7 +159,7 @@ public class Sensor {
 				} catch (Exception e) {
 					cancel();
 					drop.remove();
-					Sclat.getPlugin().getLogger().warning(e.getMessage());
+					VariablesKt.getPlugin().getLogger().warning(e.getMessage());
 				}
 			}
 		};
@@ -170,10 +170,10 @@ public class Sensor {
 				DataMgr.getPlayerData(player).setCanUseSubWeapon(true);
 			}
 		};
-		cooltime.runTaskLater(Sclat.getPlugin(), 8);
+		cooltime.runTaskLater(VariablesKt.getPlugin(), 8);
 
 		if (player.getExp() > 0.3 || DataMgr.getPlayerData(player).getIsBombRush())
-			task.runTaskTimer(Sclat.getPlugin(), 0, 1);
+			task.runTaskTimer(VariablesKt.getPlugin(), 0, 1);
 		else {
 			player.sendTitle("", ChatColor.RED + "インクが足りません", 0, 5, 2);
 			player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1F, 1.63F);

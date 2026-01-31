@@ -1,8 +1,8 @@
 package be4rjp.sclat.api
 
-import be4rjp.sclat.Sclat
 import be4rjp.sclat.api.team.Team
 import be4rjp.sclat.data.DataMgr
+import be4rjp.sclat.plugin
 import org.bukkit.ChatColor
 import org.bukkit.Sound
 import org.bukkit.entity.Player
@@ -99,7 +99,7 @@ object Animation {
                     i++
                 }
             }
-        task.runTaskTimer(Sclat.getPlugin(), 0, 2)
+        task.runTaskTimer(plugin, 0, 2)
     }
 
     @JvmStatic
@@ -171,7 +171,7 @@ object Animation {
                     i++
                 }
             }
-        task.runTaskTimer(Sclat.getPlugin(), 0, 2)
+        task.runTaskTimer(plugin, 0, 2)
     }
 
     @JvmStatic
@@ -312,6 +312,6 @@ object Animation {
                     i++
                 }
             }
-        task.runTaskTimer(Sclat.getPlugin(), 0, 2)
+        task.runTaskTimer(plugin, 0, 2)
     }
 }

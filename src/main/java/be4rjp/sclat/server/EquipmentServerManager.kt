@@ -1,10 +1,10 @@
 package be4rjp.sclat.server
 
-import be4rjp.sclat.Sclat
 import be4rjp.sclat.api.SclatUtil
 import be4rjp.sclat.data.DataMgr.getPlayerData
 import be4rjp.sclat.data.DataMgr.getWeaponClass
 import be4rjp.sclat.manager.PlayerStatusMgr
+import be4rjp.sclat.plugin
 
 object EquipmentServerManager {
     var commands: MutableList<String> = ArrayList<String>()
@@ -24,8 +24,7 @@ object EquipmentServerManager {
                     if (args.size == 4) {
                         if (args[3]!!.length == 36) {
                             when (args[1]) {
-                                "weapon" -> for (player in Sclat
-                                    .getPlugin()
+                                "weapon" -> for (player in plugin
                                     .getServer()
                                     .getOnlinePlayers()) {
                                     if (player
@@ -37,8 +36,7 @@ object EquipmentServerManager {
                                     }
                                 }
 
-                                "gear" -> for (player in Sclat
-                                    .getPlugin()
+                                "gear" -> for (player in plugin
                                     .getServer()
                                     .getOnlinePlayers()) {
                                     if (player.getUniqueId().toString() == args[3] &&

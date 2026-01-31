@@ -2,6 +2,7 @@
 package be4rjp.sclat.weapon.spweapon;
 
 import be4rjp.sclat.Sclat;
+import be4rjp.sclat.VariablesKt;
 import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.manager.PaintMgr;
 import be4rjp.sclat.manager.SPWeaponMgr;
@@ -55,7 +56,7 @@ public class SuperShot {
 				player.addPotionEffect(new PotionEffect(PotionEffectType.LUCK, 101, 1));
 			}
 		};
-		it.runTaskLater(Sclat.getPlugin(), 2);
+		it.runTaskLater(VariablesKt.getPlugin(), 2);
 
 		BukkitRunnable task = new BukkitRunnable() {
 			Player p = player;
@@ -69,7 +70,7 @@ public class SuperShot {
 				}
 			}
 		};
-		task.runTaskLater(Sclat.getPlugin(), 100);
+		task.runTaskLater(VariablesKt.getPlugin(), 100);
 	}
 
 	public static void Shot(Player player) {
@@ -118,7 +119,7 @@ public class SuperShot {
 				DataMgr.getPlayerData(p).setCanUseSubWeapon(true);
 			}
 		};
-		task.runTaskLater(Sclat.getPlugin(), 20);
+		task.runTaskLater(VariablesKt.getPlugin(), 20);
 	}
 
 	public static void ShootSnowball(Player player, Location loc, Vector vec) {
@@ -144,7 +145,7 @@ public class SuperShot {
 						ball.setVelocity(vec);
 						ball.setCustomName("SuperShot");
 						ball.setShooter(p);
-						for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
+						for (Player o_player : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
 							PlayerConnection connection = ((CraftPlayer) o_player).getHandle().playerConnection;
 							connection.sendPacket(new PacketPlayOutEntityDestroy(ball.getEntityId()));
 						}
@@ -156,11 +157,11 @@ public class SuperShot {
 					if (new Random().nextInt(20) == 0) {
 						org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).team.getTeamColor().wool
 								.createBlockData();
-						for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
+						for (Player o_player : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
 							if (DataMgr.getPlayerData(o_player).settings.ShowEffect_SPWeapon())
 								if (o_player.getWorld() == ball.getWorld())
-									if (o_player.getLocation().distanceSquared(
-											ball.getLocation()) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED)
+									if (o_player.getLocation()
+											.distanceSquared(ball.getLocation()) < Sclat.particleRenderDistanceSquared)
 										o_player.spawnParticle(org.bukkit.Particle.BLOCK_DUST, ball.getLocation(), 1, 0,
 												0, 0, 1, bd);
 						}
@@ -176,10 +177,10 @@ public class SuperShot {
 				} catch (Exception e) {
 					drop.remove();
 					cancel();
-					Sclat.getPlugin().getLogger().warning(e.getMessage());
+					VariablesKt.getPlugin().getLogger().warning(e.getMessage());
 				}
 			}
 		};
-		task.runTaskTimer(Sclat.getPlugin(), 0, 1);
+		task.runTaskTimer(VariablesKt.getPlugin(), 0, 1);
 	}
 }

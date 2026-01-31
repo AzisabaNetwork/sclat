@@ -1,6 +1,6 @@
 package be4rjp.sclat.api.async
 
-import be4rjp.sclat.Sclat
+import be4rjp.sclat.plugin
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import java.util.Random
@@ -41,6 +41,6 @@ object AsyncThreadManager {
 
     @JvmStatic
     fun sync(runnable: Runnable) {
-        Bukkit.getScheduler().runTask(Sclat.getPlugin(), runnable)
+        Bukkit.getScheduler().runTask(plugin, runnable)
     }
 }

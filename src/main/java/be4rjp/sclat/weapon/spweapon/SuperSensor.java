@@ -2,6 +2,7 @@
 package be4rjp.sclat.weapon.spweapon;
 
 import be4rjp.sclat.Sclat;
+import be4rjp.sclat.VariablesKt;
 import be4rjp.sclat.data.DataMgr;
 import be4rjp.sclat.manager.SPWeaponMgr;
 import org.bukkit.entity.ArmorStand;
@@ -40,6 +41,6 @@ public class SuperSensor {
 				DataMgr.getPlayerData(player).setIsUsingSP(false);
 			}
 		};
-		sound.runTaskLater(Sclat.getPlugin(), 200);
+		sound.runTaskLater(VariablesKt.getPlugin(), 200);
 	}
 }

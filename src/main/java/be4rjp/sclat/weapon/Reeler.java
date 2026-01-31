@@ -2,6 +2,7 @@ package be4rjp.sclat.weapon;
 
 import be4rjp.dadadachecker.ClickType;
 import be4rjp.sclat.Sclat;
+import be4rjp.sclat.VariablesKt;
 import be4rjp.sclat.api.SclatUtil;
 import be4rjp.sclat.api.player.PlayerData;
 import be4rjp.sclat.api.raytrace.RayTrace;
@@ -55,7 +56,7 @@ public class Reeler {
 				}
 			}
 		};
-		delay.runTaskTimer(Sclat.getPlugin(), 0,
+		delay.runTaskTimer(VariablesKt.getPlugin(), 0,
 				DataMgr.getPlayerData(player).getWeaponClass().getMainWeapon().getSlidingShootTick());
 	}
 	public static void ReelerRunnable(Player player) {
@@ -106,11 +107,11 @@ public class Reeler {
 						Vector randomVector = new Vector(Math.random() * random - random / 2,
 								Math.random() * random - random / 2, Math.random() * random - random / 2);
 						Vector erv = ev.clone().add(randomVector);
-						for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
+						for (Player o_player : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
 							if (DataMgr.getPlayerData(o_player).settings.ShowEffect_BombEx()) {
 								if (o_player.getWorld() == location.getWorld()) {
 									if (o_player.getLocation()
-											.distanceSquared(location) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED) {
+											.distanceSquared(location) < Sclat.particleRenderDistanceSquared) {
 										o_player.spawnParticle(org.bukkit.Particle.BLOCK_DUST,
 												location.clone().add(0, 0.7, 0).add(randomVector.getX(),
 														randomVector.getY(), randomVector.getZ()),
@@ -147,8 +148,8 @@ public class Reeler {
 							grapple(player, dest);
 							gr_recharge = 0;
 							data.setCanShoot(false);
-							task1.runTaskLater(Sclat.getPlugin(), 9);
-							task.runTaskTimer(Sclat.getPlugin(), 0, 1);
+							task1.runTaskLater(VariablesKt.getPlugin(), 9);
+							task.runTaskTimer(VariablesKt.getPlugin(), 0, 1);
 						}
 					} else {
 						ArmorStand destarm = null;
@@ -157,8 +158,8 @@ public class Reeler {
 							grappletest(player, destarm);
 							gr_recharge = 0;
 							data.setCanShoot(false);
-							task1.runTaskLater(Sclat.getPlugin(), 9);
-							task.runTaskTimer(Sclat.getPlugin(), 0, 1);
+							task1.runTaskLater(VariablesKt.getPlugin(), 9);
+							task.runTaskTimer(VariablesKt.getPlugin(), 0, 1);
 						}
 					}
 					data.setIsSneaking(false);
@@ -179,7 +180,7 @@ public class Reeler {
 							// check = true;
 						}
 					};
-					task2.runTaskLater(Sclat.getPlugin(), 10);
+					task2.runTaskLater(VariablesKt.getPlugin(), 10);
 				}
 				// }else{
 				// p.sendTitle("", ChatColor.RED + "インクが足りません", 0, 10, 2);
@@ -198,7 +199,7 @@ public class Reeler {
 				// loc = ploc;
 			}
 		};
-		delay.runTaskTimer(Sclat.getPlugin(), 0, 1);
+		delay.runTaskTimer(VariablesKt.getPlugin(), 0, 1);
 	}
 
 	public static void grapple(Player p, Player target) {
@@ -255,7 +256,7 @@ public class Reeler {
 			}
 		};
 		// graptask.runTaskLater(Main.getPlugin(), 8);
-		graptask.runTaskTimer(Sclat.getPlugin(), 0, 1);
+		graptask.runTaskTimer(VariablesKt.getPlugin(), 0, 1);
 	}
 	public static void grappletest(Player p, ArmorStand target) {
 		BukkitRunnable graptask = new BukkitRunnable() {
@@ -303,7 +304,7 @@ public class Reeler {
 				i++;
 			}
 		};
-		graptask.runTaskTimer(Sclat.getPlugin(), 0, 1);
+		graptask.runTaskTimer(VariablesKt.getPlugin(), 0, 1);
 	}
 	public static Player grap(Player player) {
 		Player dest = player;
@@ -321,7 +322,7 @@ public class Reeler {
 			if (DataMgr.getPlayerData(player).settings.ShowEffect_MainWeaponInk()) {
 				if (it < 10) {
 					if (player.getWorld() == position.getWorld()) {
-						if (player.getLocation().distanceSquared(position) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED) {
+						if (player.getLocation().distanceSquared(position) < Sclat.particleRenderDistanceSquared) {
 							org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(player).team.getTeamColor().wool
 									.createBlockData();
 							player.spawnParticle(org.bukkit.Particle.BLOCK_DUST, position, 1, 0, 0, 0, 1, bd);
@@ -331,7 +332,7 @@ public class Reeler {
 			}
 
 			double maxDistSquad = 6 /* 2*2 */;
-			for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
+			for (Player target : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
 				if (!DataMgr.getPlayerData(target).isInMatch())
 					continue;
 				if (DataMgr.getPlayerData(player).team != DataMgr.getPlayerData(target).team
@@ -364,7 +365,7 @@ public class Reeler {
 			if (DataMgr.getPlayerData(player).settings.ShowEffect_MainWeaponInk()) {
 				if (it < 10) {
 					if (player.getWorld() == position.getWorld()) {
-						if (player.getLocation().distanceSquared(position) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED) {
+						if (player.getLocation().distanceSquared(position) < Sclat.particleRenderDistanceSquared) {
 							org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(player).team.getTeamColor().wool
 									.createBlockData();
 							player.spawnParticle(org.bukkit.Particle.BLOCK_DUST, position, 1, 0, 0, 0, 1, bd);
@@ -439,7 +440,7 @@ public class Reeler {
 		if (data.getWeaponClass().getMainWeapon().maxRandom == 0) {
 			check : for (Vector vector : positions) {
 				Location position = vector.toLocation(player.getLocation().getWorld());
-				for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
+				for (Player target : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
 					if (player != target && player.getWorld() == target.getWorld()) {
 						if (target.getLocation().distance(position) < 2) {
 							isLockOnPlayer = true;
@@ -508,11 +509,11 @@ public class Reeler {
 				if (i != 0) {
 					org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).team.getTeamColor().wool
 							.createBlockData();
-					for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
+					for (Player o_player : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
 						if (DataMgr.getPlayerData(o_player).settings.ShowEffect_MainWeaponInk())
 							if (o_player.getWorld() == inkball.getWorld())
-								if (o_player.getLocation().distanceSquared(
-										inkball.getLocation()) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED)
+								if (o_player.getLocation()
+										.distanceSquared(inkball.getLocation()) < Sclat.particleRenderDistanceSquared)
 									o_player.spawnParticle(org.bukkit.Particle.BLOCK_DUST, inkball.getLocation(), 0, 0,
 											-1, 0, 1, bd);
 					}
@@ -533,6 +534,6 @@ public class Reeler {
 				i++;
 			}
 		};
-		task.runTaskTimer(Sclat.getPlugin(), 0, 1);
+		task.runTaskTimer(VariablesKt.getPlugin(), 0, 1);
 	}
 }

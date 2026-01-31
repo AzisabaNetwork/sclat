@@ -1,7 +1,7 @@
 package be4rjp.sclat.data
 
-import be4rjp.sclat.Sclat
 import be4rjp.sclat.api.MineStat
+import be4rjp.sclat.plugin
 import org.bukkit.block.Block
 import org.bukkit.block.Sign
 import org.bukkit.scheduler.BukkitRunnable
@@ -86,7 +86,7 @@ class ServerStatus(
                     }
                 }
             }
-        task.runTaskTimerAsynchronously(Sclat.getPlugin(), 0, this.period.toLong())
+        task.runTaskTimerAsynchronously(plugin, 0, this.period.toLong())
 
         this.task2 =
             object : BukkitRunnable() {
@@ -114,7 +114,7 @@ class ServerStatus(
                     }
                 }
             }
-        task2.runTaskTimer(Sclat.getPlugin(), 5, this.period.toLong())
+        task2.runTaskTimer(plugin, 5, this.period.toLong())
     }
 
     fun stopTask() {

@@ -1,7 +1,7 @@
 package be4rjp.sclat.lunachat
 
-import be4rjp.sclat.Sclat
 import be4rjp.sclat.data.DataMgr.getPlayerData
+import be4rjp.sclat.plugin
 import com.github.ucchyocean.lc3.bukkit.event.LunaChatBukkitPreChatEvent
 import org.bukkit.entity.Player
 import org.bukkit.event.Listener
@@ -14,7 +14,7 @@ class LunaChatListener : Listener {
     // @EventHandler
     fun onChat(event: LunaChatBukkitPreChatEvent) {
         var sender: Player? = null
-        for (player in Sclat.getPlugin().getServer().getOnlinePlayers()) {
+        for (player in plugin.getServer().getOnlinePlayers()) {
             if (player.getName() == event.getMember().getName()) {
                 sender = player
             }

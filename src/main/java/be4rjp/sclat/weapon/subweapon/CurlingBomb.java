@@ -1,6 +1,7 @@
 package be4rjp.sclat.weapon.subweapon;
 
 import be4rjp.sclat.Sclat;
+import be4rjp.sclat.VariablesKt;
 import be4rjp.sclat.api.SclatUtil;
 import be4rjp.sclat.api.Sphere;
 import be4rjp.sclat.data.DataMgr;
@@ -101,7 +102,7 @@ public class CurlingBomb {
 					bloc = as1l.clone();
 
 					if (i % 10 == 0) {
-						for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers())
+						for (Player o_player : VariablesKt.getPlugin().getServer().getOnlinePlayers())
 							((CraftPlayer) o_player).getHandle().playerConnection
 									.sendPacket(new PacketPlayOutEntityEquipment(as3.getEntityId(), EnumItemSlot.HEAD,
 											CraftItemStack.asNMSCopy(new ItemStack(
@@ -117,15 +118,15 @@ public class CurlingBomb {
 					if (i % 2 == 0) {
 						org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(player).team.getTeamColor().wool
 								.createBlockData();
-						for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
+						for (Player target : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
 							if (DataMgr.getPlayerData(target).settings.ShowEffect_Bomb())
 								if (target.getWorld() == player.getWorld())
 									if (target.getLocation()
-											.distanceSquared(as1l) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED)
+											.distanceSquared(as1l) < Sclat.particleRenderDistanceSquared)
 										target.spawnParticle(org.bukkit.Particle.BLOCK_DUST, as1l, 2, 0, 0, 0, 1, bd);
 						}
 						// 攻撃判定
-						for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
+						for (Player target : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
 							if (DataMgr.getPlayerData(target).settings.ShowEffect_Bomb()) {
 								if (target.getWorld() == player.getWorld()) {
 									if (target.getLocation().distance(as1l) <= 1.2) {
@@ -142,7 +143,7 @@ public class CurlingBomb {
 													target.setNoDamageTicks(0);
 												}
 											};
-											task.runTaskLater(Sclat.getPlugin(), 1);
+											task.runTaskLater(VariablesKt.getPlugin(), 1);
 										}
 									}
 								}
@@ -221,7 +222,7 @@ public class CurlingBomb {
 							}
 						}
 
-						for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
+						for (Player target : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
 							if (!DataMgr.getPlayerData(target).isInMatch() || target.getWorld() != player.getWorld())
 								continue;
 							if (target.getLocation().distance(as1l) <= maxDist) {
@@ -239,7 +240,7 @@ public class CurlingBomb {
 											target.setNoDamageTicks(0);
 										}
 									};
-									task.runTaskLater(Sclat.getPlugin(), 1);
+									task.runTaskLater(VariablesKt.getPlugin(), 1);
 								}
 							}
 						}
@@ -276,7 +277,7 @@ public class CurlingBomb {
 			}
 		};
 		if (player.getExp() > 0.6 || DataMgr.getPlayerData(player).getIsBombRush())
-			task.runTaskTimer(Sclat.getPlugin(), 0, 1);
+			task.runTaskTimer(VariablesKt.getPlugin(), 0, 1);
 		else {
 			player.sendTitle("", ChatColor.RED + "インクが足りません", 0, 5, 2);
 			player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1F, 1.63F);
@@ -288,6 +289,6 @@ public class CurlingBomb {
 				DataMgr.getPlayerData(player).setCanUseSubWeapon(true);
 			}
 		};
-		cooltime.runTaskLater(Sclat.getPlugin(), 10);
+		cooltime.runTaskLater(VariablesKt.getPlugin(), 10);
 	}
 }

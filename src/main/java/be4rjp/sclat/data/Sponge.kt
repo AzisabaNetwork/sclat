@@ -1,10 +1,10 @@
 package be4rjp.sclat.data
 
-import be4rjp.sclat.Sclat
 import be4rjp.sclat.api.SclatUtil
 import be4rjp.sclat.api.SclatUtil.setBlockByNMS
 import be4rjp.sclat.api.team.Team
 import be4rjp.sclat.manager.PaintMgr
+import be4rjp.sclat.plugin
 import org.bukkit.Material
 import org.bukkit.Sound
 import org.bukkit.block.Block
@@ -38,7 +38,7 @@ class Sponge(
                     canGiveDamage = true
                 }
             }
-        task.runTaskLater(Sclat.getPlugin(), 10)
+        task.runTaskLater(plugin, 10)
 
         if (this.team != team) {
             if (this.health > damage) {

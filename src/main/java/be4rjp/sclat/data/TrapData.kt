@@ -9,6 +9,7 @@ import be4rjp.sclat.api.Sphere.getXZCircle
 import be4rjp.sclat.api.team.Team
 import be4rjp.sclat.manager.ArmorStandMgr
 import be4rjp.sclat.manager.PaintMgr
+import be4rjp.sclat.plugin
 import be4rjp.sclat.weapon.Gear
 import org.bukkit.Color
 import org.bukkit.GameMode
@@ -41,11 +42,11 @@ class TrapData(
             object : BukkitRunnable() {
                 override fun run() {
                     val sLocs: MutableList<Location> = getXZCircle(location.clone().add(0.0, 1.0, 0.0), 3.0, 2.0, 40)
-                    for (oPlayer in Sclat.getPlugin().getServer().getOnlinePlayers()) {
+                    for (oPlayer in plugin.getServer().getOnlinePlayers()) {
                         if (DataMgr.getPlayerData(oPlayer)?.settings?.ShowEffect_Bomb()!!) {
                             for (loc in sLocs) {
                                 if (oPlayer.getWorld() === loc.getWorld()) {
-                                    if (oPlayer.getLocation().distanceSquared(loc) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED &&
+                                    if (oPlayer.getLocation().distanceSquared(loc) < Sclat.particleRenderDistanceSquared &&
                                         (DataMgr.getPlayerData(oPlayer)?.team!! == team || near)
                                     ) {
                                         val dustOptions =
@@ -78,7 +79,7 @@ class TrapData(
                     }
                 }
             }
-        effect.runTaskTimer(Sclat.getPlugin(), 0, 5)
+        effect.runTaskTimer(plugin, 0, 5)
 
         this.task =
             object : BukkitRunnable() {
@@ -91,7 +92,7 @@ class TrapData(
 
                     if (number + 2 < DataMgr.getPlayerData(player)?.trapCount!!) explosion()
 
-                    for (target in Sclat.getPlugin().getServer().getOnlinePlayers()) {
+                    for (target in plugin.getServer().getOnlinePlayers()) {
                         if (!DataMgr
                                 .getPlayerData(target)
                                 ?.isInMatch()!! || target.getWorld() !== location.getWorld()
@@ -124,7 +125,7 @@ class TrapData(
                     }
                 }
             }
-        task.runTaskTimer(Sclat.getPlugin(), 0, 2)
+        task.runTaskTimer(plugin, 0, 2)
     }
 
     fun explosion() {
@@ -156,13 +157,13 @@ class TrapData(
 
                         // センサーエフェクト
                         val sLocs = getSphere(location, maxDist + 1, 25)
-                        for (o_player in Sclat.getPlugin().getServer().getOnlinePlayers()) {
+                        for (o_player in plugin.getServer().getOnlinePlayers()) {
                             if (DataMgr.getPlayerData(o_player)?.settings?.ShowEffect_BombEx()!!) {
                                 for (loc in sLocs) {
                                     if (o_player.getWorld() === loc.getWorld()) {
                                         if (o_player
                                                 .getLocation()
-                                                .distanceSquared(loc) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED
+                                                .distanceSquared(loc) < Sclat.particleRenderDistanceSquared
                                         ) {
                                             val dustOptions = Particle.DustOptions(Color.BLACK, 1f)
                                             o_player.spawnParticle<Particle.DustOptions?>(
@@ -194,7 +195,7 @@ class TrapData(
                         }
 
                         // 発光効果
-                        for (target in Sclat.getPlugin().getServer().getOnlinePlayers()) {
+                        for (target in plugin.getServer().getOnlinePlayers()) {
                             if (!DataMgr
                                     .getPlayerData(target)
                                     ?.isInMatch()!! || target.getWorld() !== player.getWorld()
@@ -262,7 +263,7 @@ class TrapData(
                             }
                         }
 
-                        for (target in Sclat.getPlugin().getServer().getOnlinePlayers()) {
+                        for (target in plugin.getServer().getOnlinePlayers()) {
                             if (!DataMgr
                                     .getPlayerData(target)
                                     ?.isInMatch()!! || target.getWorld() !== player.getWorld()
@@ -288,7 +289,7 @@ class TrapData(
                                                 target.setNoDamageTicks(0)
                                             }
                                         }
-                                    task.runTaskLater(Sclat.getPlugin(), 1)
+                                    task.runTaskLater(plugin, 1)
                                 }
                             }
                         }
@@ -314,7 +315,7 @@ class TrapData(
                     i++
                 }
             }
-        ex.runTaskTimer(Sclat.getPlugin(), 0, 1)
+        ex.runTaskTimer(plugin, 0, 1)
     }
 
     fun addNumber() {

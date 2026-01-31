@@ -1,6 +1,7 @@
 package be4rjp.sclat.weapon.spweapon;
 
 import be4rjp.sclat.Sclat;
+import be4rjp.sclat.VariablesKt;
 import be4rjp.sclat.api.SclatUtil;
 import be4rjp.sclat.api.Sphere;
 import be4rjp.sclat.api.player.PlayerData;
@@ -67,7 +68,7 @@ public class LitterFiveG {
 				charge_bar(player);
 			}
 		};
-		it.runTaskLater(Sclat.getPlugin(), 2);
+		it.runTaskLater(VariablesKt.getPlugin(), 2);
 
 		BukkitRunnable task = new BukkitRunnable() {
 			Player p = player;
@@ -81,10 +82,10 @@ public class LitterFiveG {
 				}
 			}
 		};
-		task.runTaskLater(Sclat.getPlugin(), 281);
+		task.runTaskLater(VariablesKt.getPlugin(), 281);
 	}
 	public static void charge_bar(Player player) {
-		BossBar bar = Sclat.getPlugin().getServer().createBossBar(
+		BossBar bar = VariablesKt.getPlugin().getServer().createBossBar(
 				DataMgr.getPlayerData(player).team.getTeamColor().getColorCode() + "§cCharge", BarColor.RED,
 				BarStyle.SOLID, BarFlag.CREATE_FOG);
 		bar.setProgress(0);
@@ -156,12 +157,12 @@ public class LitterFiveG {
 								break;
 							}
 							if (i % 5 == 0) {
-								for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
+								for (Player target : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
 									if (target.equals(p))
 										continue;
 									if (target.getWorld() == p.getWorld()) {
 										if (target.getLocation()
-												.distanceSquared(position) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED) {
+												.distanceSquared(position) < Sclat.particleRenderDistanceSquared) {
 											Particle.DustOptions dustOptions = new Particle.DustOptions(
 													data.team.getTeamColor().getBukkitColor(), 1);
 											target.spawnParticle(Particle.REDSTONE, position, 1, 0, 0, 0, 10,
@@ -175,7 +176,7 @@ public class LitterFiveG {
 				}
 			}
 		};
-		overheat_anime.runTaskTimer(Sclat.getPlugin(), 0, 2);
+		overheat_anime.runTaskTimer(VariablesKt.getPlugin(), 0, 2);
 	}
 
 	public static void Shoot_LitterFiveG(Player player) {
@@ -205,7 +206,7 @@ public class LitterFiveG {
 			Block block = player.getLocation().getWorld().getBlockAt(position);
 
 			if (!block.getType().equals(Material.AIR)) {
-				for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
+				for (Player o_player : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
 					if (DataMgr.getPlayerData(o_player).settings.ShowEffect_MainWeaponInk()) {
 						// 爆発音
 						player.getWorld().playSound(position, Sound.ENTITY_GENERIC_EXPLODE, 1, 1);
@@ -226,11 +227,11 @@ public class LitterFiveG {
 				break;
 			}
 			// PaintMgr.PaintHightestBlock(position, player, false, true);
-			for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
+			for (Player target : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
 				if (!DataMgr.getPlayerData(target).settings.ShowEffect_MainWeaponInk())
 					continue;
 				if (target.getWorld() == position.getWorld()) {
-					if (target.getLocation().distanceSquared(position) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED) {
+					if (target.getLocation().distanceSquared(position) < Sclat.particleRenderDistanceSquared) {
 						org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(player).team.getTeamColor().wool
 								.createBlockData();
 						target.spawnParticle(Particle.BLOCK_DUST, position, 1, 0, 0, 0, 1, bd);
@@ -239,7 +240,7 @@ public class LitterFiveG {
 			}
 
 			double maxDistSquad = 4 /* 2*2 */;
-			for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
+			for (Player target : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
 				if (!DataMgr.getPlayerData(target).isInMatch())
 					continue;
 				if (DataMgr.getPlayerData(player).team != DataMgr.getPlayerData(target).team
@@ -264,7 +265,7 @@ public class LitterFiveG {
 									target.setNoDamageTicks(0);
 								}
 							};
-							task.runTaskLater(Sclat.getPlugin(), 1);
+							task.runTaskLater(VariablesKt.getPlugin(), 1);
 							break loop;
 						}
 					}
@@ -319,7 +320,7 @@ public class LitterFiveG {
 			}
 		};
 		if (DataMgr.getPlayerData(player).settings.ShowEffect_ChargerLine()) {
-			task2.runTaskLater(Sclat.getPlugin(), 8);
+			task2.runTaskLater(VariablesKt.getPlugin(), 8);
 		}
 	}
 
@@ -333,7 +334,7 @@ public class LitterFiveG {
 				DataMgr.getPlayerData(p).setIsUsingSS(false);
 			}
 		};
-		task3.runTaskLater(Sclat.getPlugin(), 8);
+		task3.runTaskLater(VariablesKt.getPlugin(), 8);
 		DataMgr.getPlayerData(player).setIsUsingSS(true);
 	}
 }

@@ -43,7 +43,9 @@ class EquipmentServer( // private List<String> commands = new ArrayList<>();
 }
 
 // 非同期スレッド
-internal class EquipEchoThread(socket: Socket) : Thread() {
+internal class EquipEchoThread(
+    socket: Socket,
+) : Thread() {
     private val socket: Socket?
 
     init {
@@ -80,7 +82,7 @@ internal class EquipEchoThread(socket: Socket) : Thread() {
                             // setting [settingData] [uuid]
                             if (args.size == 3) {
                                 if (args[1]!!.length == 9 && args[2]!!.length == 36) {
-                                    Sclat.conf.playerSettings.set("Settings." + args[2], args[1])
+                                    Sclat.conf?.playerSettings!!.set("Settings." + args[2], args[1])
                                 }
                             }
                         }

@@ -1,11 +1,10 @@
 package be4rjp.sclat.manager;
 
-import be4rjp.sclat.Sclat;
+import be4rjp.sclat.VariablesKt;
 import be4rjp.sclat.api.player.PlayerReturn;
-import org.bukkit.scheduler.BukkitRunnable;
-
 import java.util.ArrayList;
 import java.util.List;
+import org.bukkit.scheduler.BukkitRunnable;
 
 public class PlayerReturnManager {
 
@@ -31,7 +30,7 @@ public class PlayerReturnManager {
 				}
 			}
 		};
-		task.runTaskTimer(Sclat.getPlugin(), 0, 200);
+		task.runTaskTimer(VariablesKt.getPlugin(), 0, 200);
 	}
 
 	public static void addPlayerReturn(String uuid) {

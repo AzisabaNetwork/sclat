@@ -1,6 +1,7 @@
 package be4rjp.sclat.protocollib
 
 import be4rjp.sclat.Sclat
+import be4rjp.sclat.plugin
 import com.comphenix.protocol.PacketType
 import com.comphenix.protocol.events.ListenerPriority
 
@@ -9,14 +10,14 @@ object SclatPacketListener {
     fun init() {
         Sclat.protocolManager.addPacketListener(
             VehiclePacketListener(
-                Sclat.getPlugin(),
+                plugin,
                 ListenerPriority.NORMAL,
                 PacketType.Play.Client.STEER_VEHICLE,
             ),
         )
 
         Sclat.protocolManager
-            .addPacketListener(EntityClickListener(Sclat.getPlugin(), PacketType.Play.Client.USE_ENTITY))
+            .addPacketListener(EntityClickListener(plugin, PacketType.Play.Client.USE_ENTITY))
 
         /*
          * Main.protocolManager.addPacketListener( new PacketAdapter(Main.getPlugin(),

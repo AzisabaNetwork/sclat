@@ -2,6 +2,7 @@ package be4rjp.sclat.weapon;
 
 import be4rjp.dadadachecker.ClickType;
 import be4rjp.sclat.Sclat;
+import be4rjp.sclat.VariablesKt;
 import be4rjp.sclat.api.SclatUtil;
 import be4rjp.sclat.api.player.PlayerData;
 import be4rjp.sclat.data.DataMgr;
@@ -51,7 +52,7 @@ public class Brush {
 				}
 			}
 		};
-		task.runTaskTimer(Sclat.getPlugin(), 0, 1);
+		task.runTaskTimer(VariablesKt.getPlugin(), 0, 1);
 	}
 
 	public static void RollPaintRunnable(Player player) {
@@ -89,11 +90,11 @@ public class Brush {
 							front = eloc.add(vec.getX() * 1.5, -0.9, vec.getZ() * 1.5);
 						org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).team.getTeamColor().wool
 								.createBlockData();
-						for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
+						for (Player target : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
 							if (DataMgr.getPlayerData(target).settings.ShowEffect_MainWeaponInk())
 								if (target.getWorld() == p.getWorld())
 									if (target.getLocation()
-											.distanceSquared(front) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED)
+											.distanceSquared(front) < Sclat.particleRenderDistanceSquared)
 										target.spawnParticle(org.bukkit.Particle.BLOCK_DUST, front, 2, 0, 0, 0, 1, bd);
 						}
 						Vector vec1 = new Vector(vec.getZ() * -1, 0, vec.getX());
@@ -106,17 +107,17 @@ public class Brush {
 							p.getLocation().getWorld().spawnParticle(org.bukkit.Particle.BLOCK_DUST, position, 2, 0, 0,
 									0, 1, bd);
 
-							for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
+							for (Player target : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
 								if (DataMgr.getPlayerData(target).settings.ShowEffect_MainWeaponInk())
 									if (target.getWorld() == p.getWorld())
 										if (target.getLocation()
-												.distanceSquared(position) < Sclat.PARTICLE_RENDER_DISTANCE_SQUARED)
+												.distanceSquared(position) < Sclat.particleRenderDistanceSquared)
 											target.spawnParticle(org.bukkit.Particle.BLOCK_DUST, position, 2, 0, 0, 0,
 													1, bd);
 							}
 
 							double maxDistSquad = 4 /* 2*2 */;
-							for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
+							for (Player target : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
 								if (!DataMgr.getPlayerData(target).isInMatch())
 									continue;
 								if (DataMgr.getPlayerData(p).team != DataMgr.getPlayerData(target).team
@@ -157,9 +158,9 @@ public class Brush {
 			}
 		};
 		if (DataMgr.getPlayerData(player).getWeaponClass().getMainWeapon().isHude)
-			task.runTaskTimer(Sclat.getPlugin(), 0, 1);
+			task.runTaskTimer(VariablesKt.getPlugin(), 0, 1);
 		else
-			task.runTaskTimer(Sclat.getPlugin(), 0, 5);
+			task.runTaskTimer(VariablesKt.getPlugin(), 0, 5);
 	}
 
 	public static void ShootPaintRunnable(Player player) {
@@ -199,7 +200,7 @@ public class Brush {
 
 		};
 		if (pdata.getCanRollerShoot()) {
-			task.runTaskLater(Sclat.getPlugin(), pdata.getWeaponClass().getMainWeapon().getShootTick());
+			task.runTaskLater(VariablesKt.getPlugin(), pdata.getWeaponClass().getMainWeapon().getShootTick());
 			pdata.setCanRollerShoot(false);
 		}
 	}
@@ -212,7 +213,7 @@ public class Brush {
 				data.setCanRollerShoot(true);
 			}
 		};
-		task.runTaskLater(Sclat.getPlugin(), data.getWeaponClass().getMainWeapon().getShootTick());
+		task.runTaskLater(VariablesKt.getPlugin(), data.getWeaponClass().getMainWeapon().getShootTick());
 	}
 
 	public static void Shoot(Player player, Vector v) {
@@ -282,7 +283,7 @@ public class Brush {
 					DataMgr.setSnowballHitCount(name, 0);
 				}
 				if (i != 0) {
-					for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
+					for (Player target : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
 						if (target.getWorld() != p.getWorld())
 							continue;
 						if (!DataMgr.getPlayerData(target).settings.ShowEffect_MainWeaponInk())
@@ -307,7 +308,7 @@ public class Brush {
 				i++;
 			}
 		};
-		task.runTaskTimer(Sclat.getPlugin(), 0, 1);
+		task.runTaskTimer(VariablesKt.getPlugin(), 0, 1);
 	}
 
 }

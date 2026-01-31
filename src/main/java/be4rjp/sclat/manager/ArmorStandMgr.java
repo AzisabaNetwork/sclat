@@ -1,6 +1,7 @@
 package be4rjp.sclat.manager;
 
 import be4rjp.sclat.Sclat;
+import be4rjp.sclat.VariablesKt;
 import be4rjp.sclat.api.SclatUtil;
 import be4rjp.sclat.api.Sphere;
 import be4rjp.sclat.data.DataMgr;
@@ -67,7 +68,7 @@ public class ArmorStandMgr {
 						if (!as.getCustomName().equals("Path") && !as.getCustomName().equals("21")
 								&& !as.getCustomName().equals("100") && !as.getCustomName().equals("SplashShield")
 								&& !as.getCustomName().equals("Kasa")) {
-							for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
+							for (Player o_player : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
 								((CraftPlayer) o_player).getHandle().playerConnection.sendPacket(
 										new PacketPlayOutEntityEquipment(as.getEntityId(), EnumItemSlot.HEAD,
 												CraftItemStack.asNMSCopy(new ItemStack(Material.LEATHER_HELMET))));
@@ -86,7 +87,7 @@ public class ArmorStandMgr {
 				}
 			}
 		};
-		task.runTaskTimer(Sclat.getPlugin(), 0, 20);
+		task.runTaskTimer(VariablesKt.getPlugin(), 0, 20);
 	}
 
 	public static void ArmorStandSetup(Player player) {
@@ -147,7 +148,7 @@ public class ArmorStandMgr {
 					p.getWorld().spawnParticle(Particle.REDSTONE, as.getLocation().add(0, 0.7, 0), 3, 0.3, 0.3, 0.3, 1,
 							dustOptions);
 					if (c % 10 == 0) {
-						for (Player player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
+						for (Player player : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
 							if (as.getWorld() == player.getWorld()) {
 								((CraftPlayer) player).getHandle().playerConnection.sendPacket(
 										new PacketPlayOutEntityEquipment(as.getEntityId(), EnumItemSlot.HEAD,
@@ -158,7 +159,7 @@ public class ArmorStandMgr {
 						// 索敵機能
 						double distance = 8;
 
-						for (Player target : Sclat.getPlugin().getServer().getOnlinePlayers()) {
+						for (Player target : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
 							if (!DataMgr.getPlayerData(target).isInMatch() || target.getWorld() != p.getWorld())
 								continue;
 							if (target.getLocation().distance(as.getLocation()) <= distance) {
@@ -188,7 +189,7 @@ public class ArmorStandMgr {
 					c++;
 				} else {
 					if (c % 10 == 0) {
-						for (Player player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
+						for (Player player : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
 							if (as.getWorld() == player.getWorld()) {
 								((CraftPlayer) player).getHandle().playerConnection.sendPacket(
 										new PacketPlayOutEntityEquipment(as.getEntityId(), EnumItemSlot.HEAD,
@@ -201,7 +202,7 @@ public class ArmorStandMgr {
 					cancel();
 			}
 		};
-		effect.runTaskTimer(Sclat.getPlugin(), 0, 4);
+		effect.runTaskTimer(VariablesKt.getPlugin(), 0, 4);
 
 		BukkitRunnable task2 = new BukkitRunnable() {
 			Player p = player;
@@ -218,7 +219,7 @@ public class ArmorStandMgr {
 					cancel();
 			}
 		};
-		task2.runTaskTimer(Sclat.getPlugin(), 0, 2);
+		task2.runTaskTimer(VariablesKt.getPlugin(), 0, 2);
 	}
 
 	public static void SprinklerArmorStandSetup(Player player) {
@@ -247,7 +248,7 @@ public class ArmorStandMgr {
 					p.getWorld().spawnParticle(Particle.REDSTONE, as.getLocation().add(0, 0.7, 0), 3, 0.3, 0.3, 0.3, 1,
 							dustOptions);
 					if (c % 10 == 0) {
-						for (Player player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
+						for (Player player : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
 							if (as.getWorld() == player.getWorld()) {
 								((CraftPlayer) player).getHandle().playerConnection
 										.sendPacket(new PacketPlayOutEntityEquipment(as.getEntityId(),
@@ -259,7 +260,7 @@ public class ArmorStandMgr {
 					c++;
 				} else {
 					if (c % 10 == 0) {
-						for (Player player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
+						for (Player player : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
 							if (as.getWorld() == player.getWorld()) {
 								((CraftPlayer) player).getHandle().playerConnection.sendPacket(
 										new PacketPlayOutEntityEquipment(as.getEntityId(), EnumItemSlot.HEAD,
@@ -272,7 +273,7 @@ public class ArmorStandMgr {
 					cancel();
 			}
 		};
-		task.runTaskTimer(Sclat.getPlugin(), 0, 4);
+		task.runTaskTimer(VariablesKt.getPlugin(), 0, 4);
 
 		BukkitRunnable task2 = new BukkitRunnable() {
 			Player p = player;
@@ -289,7 +290,7 @@ public class ArmorStandMgr {
 					cancel();
 			}
 		};
-		task2.runTaskTimer(Sclat.getPlugin(), 0, 2);
+		task2.runTaskTimer(VariablesKt.getPlugin(), 0, 2);
 
 		BukkitRunnable shoot = new BukkitRunnable() {
 			Player p = player;
@@ -325,7 +326,7 @@ public class ArmorStandMgr {
 			}
 		};
 
-		shoot.runTaskTimer(Sclat.getPlugin(), 0, 4);
+		shoot.runTaskTimer(VariablesKt.getPlugin(), 0, 4);
 
 	}
 
@@ -414,7 +415,7 @@ public class ArmorStandMgr {
 						}
 					}
 
-					for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers()) {
+					for (Player o_player : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
 						((CraftPlayer) o_player).getHandle().playerConnection
 								.sendPacket(new PacketPlayOutEntityEquipment(as.getEntityId(), EnumItemSlot.HEAD,
 										CraftItemStack.asNMSCopy(new ItemStack(Material.AIR))));
@@ -438,7 +439,7 @@ public class ArmorStandMgr {
 							drop2.remove();
 							drop3.remove();
 							drop4.remove();
-							for (Player o_player : Sclat.getPlugin().getServer().getOnlinePlayers())
+							for (Player o_player : VariablesKt.getPlugin().getServer().getOnlinePlayers())
 								((CraftPlayer) o_player).getHandle().playerConnection.sendPacket(
 										new PacketPlayOutSpawnEntityLiving(((CraftArmorStand) as).getHandle()));
 							as.setCustomNameVisible(true);
@@ -452,7 +453,7 @@ public class ArmorStandMgr {
 							as.setCustomName("20.0");
 						}
 					};
-					delay.runTaskLater(Sclat.getPlugin(), 60);
+					delay.runTaskLater(VariablesKt.getPlugin(), 60);
 
 				}
 			}
@@ -461,7 +462,7 @@ public class ArmorStandMgr {
 			if (DataMgr.getPlayerData(shooter).team != DataMgr.getPlayerData(player).team) {
 				as.setCustomName("100");
 				as.setVisible(false);
-				for (Player op : Sclat.getPlugin().getServer().getOnlinePlayers()) {
+				for (Player op : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
 					if (as.getWorld() == op.getWorld()) {
 						((CraftPlayer) op).getHandle().playerConnection
 								.sendPacket(new PacketPlayOutEntityEquipment(as.getEntityId(), EnumItemSlot.HEAD,
