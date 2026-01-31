@@ -1,80 +1,60 @@
-package be4rjp.sclat;
+package be4rjp.sclat
 
-import org.bukkit.enchantments.Enchantment;
-import org.bukkit.enchantments.EnchantmentTarget;
-import org.bukkit.enchantments.EnchantmentWrapper;
-import org.bukkit.inventory.ItemStack;
+import org.bukkit.enchantments.Enchantment
+import org.bukkit.enchantments.EnchantmentTarget
+import org.bukkit.enchantments.EnchantmentWrapper
+import org.bukkit.inventory.ItemStack
 
-import java.lang.reflect.Field;
-import java.util.Map;
+class Glow : EnchantmentWrapper("sclatg") {
+    override fun canEnchantItem(item: ItemStack): Boolean = true
 
-public class Glow extends EnchantmentWrapper {
+    override fun conflictsWith(other: Enchantment): Boolean = false
 
-	private static Glow glow = null;
+    override fun getItemTarget(): EnchantmentTarget = EnchantmentTarget.ALL
 
-	public Glow() {
-		super("sclatg");
-	}
+    override fun getMaxLevel(): Int = 10
 
-	public boolean canEnchantItem(ItemStack item) {
-		return true;
-	}
+    override fun getName(): String = "sclatg"
 
-	public boolean conflictsWith(Enchantment other) {
-		return false;
-	}
+    override fun getStartLevel(): Int = 1
 
-	public EnchantmentTarget getItemTarget() {
-		return null;
-	}
+    fun enchantGlow(`is`: ItemStack): ItemStack {
+        enableGlow()
+        `is`.addEnchantment(glow!!, 1)
+        return `is`
+    }
 
-	public int getMaxLevel() {
-		return 10;
-	}
+    fun removeGlow(`is`: ItemStack): ItemStack {
+        enableGlow()
+        `is`.removeEnchantment(glow!!)
+        return `is`
+    }
 
-	public String getName() {
-		return "sclatg";
-	}
+    fun isGlowing(`is`: ItemStack): Boolean {
+        enableGlow()
+        return `is`.getEnchantments().containsKey(glow)
+    }
 
-	public int getStartLevel() {
-		return 1;
-	}
+    fun enableGlow() {
+        try {
+            if (glow == null) {
+                glow = Glow()
+                val f = Enchantment::class.java.getDeclaredField("acceptingNew")
+                f.setAccessible(true)
+                f.set(null, true)
+                val hmapf = Enchantment::class.java.getDeclaredField("byName")
+                hmapf.setAccessible(true)
+                val hmap = hmapf.get(hmapf) as MutableMap<String?, Enchantment?>
+                if (!hmap.containsKey("sclatg")) {
+                    Enchantment.registerEnchantment(glow!!)
+                }
+            }
+        } catch (ex: Exception) {
+            ex.printStackTrace()
+        }
+    }
 
-	public ItemStack enchantGlow(ItemStack is) {
-		enableGlow();
-		is.addEnchantment(glow, 1);
-		return is;
-	}
-
-	public ItemStack removeGlow(ItemStack is) {
-		enableGlow();
-		is.removeEnchantment(glow);
-		return is;
-	}
-
-	public Boolean isGlowing(ItemStack is) {
-		enableGlow();
-		return is.getEnchantments().containsKey(glow);
-	}
-
-	@SuppressWarnings("unchecked")
-	public void enableGlow() {
-		try {
-			if (glow == null) {
-				glow = new Glow();
-				Field f = Enchantment.class.getDeclaredField("acceptingNew");
-				f.setAccessible(true);
-				f.set(null, true);
-				Field hmapf = Enchantment.class.getDeclaredField("byName");
-				hmapf.setAccessible(true);
-				Map<String, Enchantment> hmap = (Map<String, Enchantment>) hmapf.get(hmapf);
-				if (!hmap.containsKey("sclatg")) {
-					Enchantment.registerEnchantment(glow);
-				}
-			}
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-	}
-
+    companion object {
+        private var glow: Glow? = null
+    }
 }
