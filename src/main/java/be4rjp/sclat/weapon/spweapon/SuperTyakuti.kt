@@ -1,206 +1,262 @@
+package be4rjp.sclat.weapon.spweapon
 
-package be4rjp.sclat.weapon.spweapon;
-
-import be4rjp.sclat.Sclat;
-import be4rjp.sclat.VariablesKt;
-import be4rjp.sclat.api.SclatUtil;
-import be4rjp.sclat.api.Sphere;
-import be4rjp.sclat.data.DataMgr;
-import be4rjp.sclat.manager.ArmorStandMgr;
-import be4rjp.sclat.manager.PaintMgr;
-import be4rjp.sclat.manager.SPWeaponMgr;
-import be4rjp.sclat.manager.WeaponClassMgr;
-import java.util.List;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Particle;
-import org.bukkit.Sound;
-import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.util.Vector;
+import be4rjp.sclat.Sclat
+import be4rjp.sclat.api.SclatUtil.createInkExplosionEffect
+import be4rjp.sclat.api.SclatUtil.giveDamage
+import be4rjp.sclat.api.Sphere.getSphere
+import be4rjp.sclat.api.Sphere.getXZCircle
+import be4rjp.sclat.data.DataMgr.getPlayerData
+import be4rjp.sclat.manager.ArmorStandMgr
+import be4rjp.sclat.manager.PaintMgr
+import be4rjp.sclat.manager.SPWeaponMgr
+import be4rjp.sclat.manager.WeaponClassMgr
+import be4rjp.sclat.plugin
+import org.bukkit.GameMode
+import org.bukkit.Location
+import org.bukkit.Material
+import org.bukkit.Particle
+import org.bukkit.Sound
+import org.bukkit.block.data.BlockData
+import org.bukkit.entity.ArmorStand
+import org.bukkit.entity.Player
+import org.bukkit.scheduler.BukkitRunnable
+import org.bukkit.util.Vector
 
 /**
  *
  * @author Be4rJP
  */
-public class SuperTyakuti {
-	public static void SuperTyakutiRunnable(Player player) {
-		player.getInventory().clear();
-		DataMgr.getPlayerData(player).setIsUsingSP(true);
-		DataMgr.getPlayerData(player).setIsUsingTyakuti(true);
-		player.getWorld().playSound(player.getLocation(), Sound.ENTITY_WITHER_SHOOT, 0.3F, 0.5F);
-		SPWeaponMgr.setSPCoolTimeAnimation(player, 40);
-		BukkitRunnable task = new BukkitRunnable() {
-			int i = 0;
-			@Override
-			public void run() {
-				try {
-					player.getInventory().clear();
-					Vector vec = new Vector(0, 0, 0);
-					switch (i) {
-						case 1 :
-							vec = new Vector(0, 3, 0);
-							break;
-						case 2 :
-							vec = new Vector(0, 2.5, 0);
-							break;
-						case 3 :
-							vec = new Vector(0, 2, 0);
-							break;
-						case 4 :
-							vec = new Vector(0, 1, 0);
-							break;
-						case 24 :
-							vec = new Vector(0, -0.5, 0);
-							break;
-						case 25 :
-							vec = new Vector(0, -1, 0);
-							break;
-						case 26 :
-							vec = new Vector(0, -2, 0);
-							break;
-						case 27 :
-							vec = new Vector(0, -4, 0);
-							break;
-						default :
-							break;
-					}
-					if (i <= 27)
-						player.setVelocity(vec);
+object SuperTyakuti {
+    @JvmStatic
+    fun SuperTyakutiRunnable(player: Player) {
+        player.getInventory().clear()
+        getPlayerData(player)!!.setIsUsingSP(true)
+        getPlayerData(player)!!.setIsUsingTyakuti(true)
+        player.getWorld().playSound(player.getLocation(), Sound.ENTITY_WITHER_SHOOT, 0.3f, 0.5f)
+        SPWeaponMgr.setSPCoolTimeAnimation(player, 40)
+        val task: BukkitRunnable =
+            object : BukkitRunnable() {
+                var i: Int = 0
 
-					if (i >= 5 && i <= 23) {
-						for (Player o_player : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
-							if (DataMgr.getPlayerData(o_player).settings.ShowEffect_SPWeapon()
-									&& !o_player.equals(player)) {
-								if (o_player.getWorld() == player.getWorld()) {
-									if (o_player.getLocation().distanceSquared(
-											player.getLocation()) < Sclat.particleRenderDistanceSquared) {
-										Particle.DustOptions dustOptions = new Particle.DustOptions(
-												DataMgr.getPlayerData(player).team.getTeamColor().getBukkitColor(), 1);
-										o_player.spawnParticle(Particle.REDSTONE,
-												player.getEyeLocation().add(0, -0.5, 0), 5, 0.5, 0.4, 0.5, 5,
-												dustOptions);
-									}
-								}
-							}
-						}
-					}
+                override fun run() {
+                    try {
+                        player.getInventory().clear()
+                        var vec = Vector(0, 0, 0)
+                        when (i) {
+                            1 -> {
+                                vec = Vector(0, 3, 0)
+                            }
 
-					if (i == 2)
-						SuperArmor.setArmor(player, 60, 38, false);
+                            2 -> {
+                                vec = Vector(0.0, 2.5, 0.0)
+                            }
 
-					// 範囲エフェクト
-					if (i % 5 == 0) {
-						Location bloc = player.getWorld()
-								.getHighestBlockAt(player.getLocation().getBlockX(), player.getLocation().getBlockZ())
-								.getLocation();
-						for (int y = player.getLocation().getBlockY(); y > 0; y--) {
-							Location bl = new Location(player.getWorld(), player.getLocation().getX(), y,
-									player.getLocation().getZ());
-							if (!bl.getBlock().getType().equals(Material.AIR)) {
-								bloc = bl;
-								break;
-							}
-						}
-						List<Location> s_locs = Sphere.getXZCircle(bloc.add(0, 1, 0), 7, 3, 40);
-						for (Player o_player : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
-							if (DataMgr.getPlayerData(o_player).settings.ShowEffect_SPWeaponRegion()) {
-								for (Location loc : s_locs) {
-									if (o_player.getWorld() == loc.getWorld()) {
-										if (o_player.getLocation()
-												.distanceSquared(loc) < Sclat.particleRenderDistanceSquared) {
-											org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(player).team
-													.getTeamColor().wool.createBlockData();
-											o_player.spawnParticle(org.bukkit.Particle.BLOCK_DUST, loc, 1, 0, 0, 0, 1,
-													bd);
-										}
-									}
-								}
-							}
-						}
-					}
+                            3 -> {
+                                vec = Vector(0, 2, 0)
+                            }
 
-					if (i >= 24 && player.isOnGround()) {
-						// 爆発音
-						player.getWorld().playSound(player.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_BLAST, 1.2F,
-								0.8F);
-						player.getWorld().playSound(player.getLocation(), Sound.ENTITY_PLAYER_SPLASH_HIGH_SPEED, 1.1F,
-								0.9F);
+                            4 -> {
+                                vec = Vector(0, 1, 0)
+                            }
 
-						// 爆発エフェクト
-						SclatUtil.createInkExplosionEffect(player.getLocation(), 7, 10, player);
+                            24 -> {
+                                vec = Vector(0.0, -0.5, 0.0)
+                            }
 
-						double maxDist = 8;
-						double maxDistSquared = 64; /* 8^2 */
-						// 塗る
-						for (int i = 0; i <= maxDist; i++) {
-							List<Location> p_locs = Sphere.getSphere(player.getLocation(), i, 10);
-							for (Location loc : p_locs) {
-								PaintMgr.Paint(loc, player, false);
-							}
-						}
+                            25 -> {
+                                vec = Vector(0, -1, 0)
+                            }
 
-						// 攻撃判定の処理
+                            26 -> {
+                                vec = Vector(0, -2, 0)
+                            }
 
-						for (Player target : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
-							if (!DataMgr.getPlayerData(target).isInMatch() || target.getWorld() != player.getWorld())
-								continue;
-							if (target.getLocation().distanceSquared(player.getLocation()) <= maxDistSquared) {
-								double damage = (maxDist - target.getLocation().distance(player.getLocation())) * 15;
-								if (DataMgr.getPlayerData(player).team != DataMgr.getPlayerData(target).team
-										&& target.getGameMode().equals(GameMode.ADVENTURE)) {
-									SclatUtil.giveDamage(player, target, damage, "spWeapon");
+                            27 -> {
+                                vec = Vector(0, -4, 0)
+                            }
 
-									// AntiNoDamageTime
-									BukkitRunnable task = new BukkitRunnable() {
-										Player p = target;
-										@Override
-										public void run() {
-											target.setNoDamageTicks(0);
-										}
-									};
-									task.runTaskLater(VariablesKt.getPlugin(), 1);
+                            else -> {}
+                        }
+                        if (i <= 27) player.setVelocity(vec)
 
-								}
-							}
-						}
+                        if (i >= 5 && i <= 23) {
+                            for (o_player in plugin.getServer().getOnlinePlayers()) {
+                                if (getPlayerData(o_player)!!.settings.ShowEffect_SPWeapon() &&
+                                    o_player != player
+                                ) {
+                                    if (o_player.getWorld() === player.getWorld()) {
+                                        if (o_player.getLocation().distanceSquared(
+                                                player.getLocation(),
+                                            ) < Sclat.particleRenderDistanceSquared
+                                        ) {
+                                            val dustOptions =
+                                                Particle.DustOptions(
+                                                    getPlayerData(player)!!.team.teamColor!!.bukkitColor!!,
+                                                    1f,
+                                                )
+                                            o_player.spawnParticle<Particle.DustOptions?>(
+                                                Particle.REDSTONE,
+                                                player.getEyeLocation().add(0.0, -0.5, 0.0),
+                                                5,
+                                                0.5,
+                                                0.4,
+                                                0.5,
+                                                5.0,
+                                                dustOptions,
+                                            )
+                                        }
+                                    }
+                                }
+                            }
+                        }
 
-						for (Entity as : player.getWorld().getEntities()) {
-							if (as.getLocation().distanceSquared(player.getLocation()) <= maxDistSquared) {
-								if (as instanceof ArmorStand) {
-									if (as.getCustomName() != null) {
-										double damage = (maxDist - as.getLocation().distance(player.getLocation()))
-												* 15;
-										ArmorStandMgr.giveDamageArmorStand((ArmorStand) as, damage, player);
-									}
-								}
-							}
-						}
-						WeaponClassMgr.setWeaponClass(player);
-						DataMgr.getPlayerData(player).setIsUsingSP(false);
-						DataMgr.getPlayerData(player).setIsUsingTyakuti(false);
-						cancel();
-					}
+                        if (i == 2) SuperArmor.setArmor(player, 60.0, 38, false)
 
-					if (i == 500 || player.getGameMode().equals(GameMode.SPECTATOR)
-							|| !DataMgr.getPlayerData(player).isInMatch()) {
-						if (i == 500 && player.getGameMode().equals(GameMode.ADVENTURE)
-								&& DataMgr.getPlayerData(player).isInMatch()) {
-							WeaponClassMgr.setWeaponClass(player);
-						}
-						DataMgr.getPlayerData(player).setIsUsingSP(false);
-						DataMgr.getPlayerData(player).setIsUsingTyakuti(false);
-						cancel();
-					}
-					i++;
-				} catch (Exception e) {
-					cancel();
-				}
-			}
-		};
-		task.runTaskTimer(VariablesKt.getPlugin(), 0, 1);
-	}
+                        // 範囲エフェクト
+                        if (i % 5 == 0) {
+                            var bloc =
+                                player
+                                    .getWorld()
+                                    .getHighestBlockAt(player.getLocation().getBlockX(), player.getLocation().getBlockZ())
+                                    .getLocation()
+                            for (y in player.getLocation().getBlockY() downTo 1) {
+                                val bl =
+                                    Location(
+                                        player.getWorld(),
+                                        player.getLocation().getX(),
+                                        y.toDouble(),
+                                        player.getLocation().getZ(),
+                                    )
+                                if (bl.getBlock().getType() != Material.AIR) {
+                                    bloc = bl
+                                    break
+                                }
+                            }
+                            val s_locs = getXZCircle(bloc.add(0.0, 1.0, 0.0), 7.0, 3.0, 40)
+                            for (o_player in plugin.getServer().getOnlinePlayers()) {
+                                if (getPlayerData(o_player)!!.settings.ShowEffect_SPWeaponRegion()) {
+                                    for (loc in s_locs) {
+                                        if (o_player.getWorld() === loc.getWorld()) {
+                                            if (o_player
+                                                    .getLocation()
+                                                    .distanceSquared(loc) < Sclat.particleRenderDistanceSquared
+                                            ) {
+                                                val bd =
+                                                    getPlayerData(player)!!
+                                                        .team
+                                                        .teamColor!!
+                                                        .wool!!
+                                                        .createBlockData()
+                                                o_player.spawnParticle<BlockData?>(
+                                                    Particle.BLOCK_DUST,
+                                                    loc,
+                                                    1,
+                                                    0.0,
+                                                    0.0,
+                                                    0.0,
+                                                    1.0,
+                                                    bd,
+                                                )
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        if (i >= 24 && player.isOnGround()) {
+                            // 爆発音
+                            player.getWorld().playSound(
+                                player.getLocation(),
+                                Sound.ENTITY_FIREWORK_ROCKET_BLAST,
+                                1.2f,
+                                0.8f,
+                            )
+                            player.getWorld().playSound(
+                                player.getLocation(),
+                                Sound.ENTITY_PLAYER_SPLASH_HIGH_SPEED,
+                                1.1f,
+                                0.9f,
+                            )
+
+                            // 爆発エフェクト
+                            createInkExplosionEffect(player.getLocation(), 7.0, 10, player)
+
+                            val maxDist = 8.0
+                            val maxDistSquared = 64.0 // 8^2
+                            // 塗る
+                            run {
+                                var i = 0
+                                while (i <= maxDist) {
+                                    val p_locs: MutableList<Location> = getSphere(player.getLocation(), i.toDouble(), 10)
+                                    for (loc in p_locs) {
+                                        PaintMgr.Paint(loc, player, false)
+                                    }
+                                    i++
+                                }
+                            }
+
+                            // 攻撃判定の処理
+                            for (target in plugin.getServer().getOnlinePlayers()) {
+                                if (!getPlayerData(target)!!.isInMatch() || target.getWorld() !== player.getWorld()) continue
+                                if (target.getLocation().distanceSquared(player.getLocation()) <= maxDistSquared) {
+                                    val damage = (maxDist - target.getLocation().distance(player.getLocation())) * 15
+                                    if (getPlayerData(player)!!.team != getPlayerData(target)!!.team &&
+                                        target.getGameMode() == GameMode.ADVENTURE
+                                    ) {
+                                        giveDamage(player, target, damage, "spWeapon")
+
+                                        // AntiNoDamageTime
+                                        val task: BukkitRunnable =
+                                            object : BukkitRunnable() {
+                                                var p: Player = target
+
+                                                override fun run() {
+                                                    target.setNoDamageTicks(0)
+                                                }
+                                            }
+                                        task.runTaskLater(plugin, 1)
+                                    }
+                                }
+                            }
+
+                            for (`as` in player.getWorld().getEntities()) {
+                                if (`as`.getLocation().distanceSquared(player.getLocation()) <= maxDistSquared) {
+                                    if (`as` is ArmorStand) {
+                                        if (`as`.getCustomName() != null) {
+                                            val damage = (
+                                                (maxDist - `as`.getLocation().distance(player.getLocation())) *
+                                                    15
+                                                )
+                                            ArmorStandMgr.giveDamageArmorStand(`as`, damage, player)
+                                        }
+                                    }
+                                }
+                            }
+                            WeaponClassMgr.setWeaponClass(player)
+                            getPlayerData(player)!!.setIsUsingSP(false)
+                            getPlayerData(player)!!.setIsUsingTyakuti(false)
+                            cancel()
+                        }
+
+                        if (i == 500 || player.getGameMode() == GameMode.SPECTATOR ||
+                            !getPlayerData(player)!!.isInMatch()
+                        ) {
+                            if (i == 500 && player.getGameMode() == GameMode.ADVENTURE &&
+                                getPlayerData(player)!!.isInMatch()
+                            ) {
+                                WeaponClassMgr.setWeaponClass(player)
+                            }
+                            getPlayerData(player)!!.setIsUsingSP(false)
+                            getPlayerData(player)!!.setIsUsingTyakuti(false)
+                            cancel()
+                        }
+                        i++
+                    } catch (e: Exception) {
+                        cancel()
+                    }
+                }
+            }
+        task.runTaskTimer(plugin, 0, 1)
+    }
 }

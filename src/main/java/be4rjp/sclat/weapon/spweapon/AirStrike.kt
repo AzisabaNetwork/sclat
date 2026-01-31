@@ -1,242 +1,282 @@
+package be4rjp.sclat.weapon.spweapon
 
-package be4rjp.sclat.weapon.spweapon;
-
-import be4rjp.sclat.Sclat;
-import be4rjp.sclat.VariablesKt;
-import be4rjp.sclat.api.SclatUtil;
-import be4rjp.sclat.api.Sphere;
-import be4rjp.sclat.api.raytrace.RayTrace;
-import be4rjp.sclat.data.DataMgr;
-import be4rjp.sclat.manager.ArmorStandMgr;
-import be4rjp.sclat.manager.MapKitMgr;
-import be4rjp.sclat.manager.PaintMgr;
-import be4rjp.sclat.manager.SPWeaponMgr;
-import be4rjp.sclat.manager.WeaponClassMgr;
-import java.util.ArrayList;
-import java.util.List;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Particle;
-import org.bukkit.Sound;
-import org.bukkit.block.Block;
-import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Firework;
-import org.bukkit.entity.Item;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.potion.PotionEffectType;
-import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.util.Vector;
+import be4rjp.sclat.Sclat.Companion.notDuplicateNumber
+import be4rjp.sclat.api.SclatUtil.createInkExplosionEffect
+import be4rjp.sclat.api.SclatUtil.giveDamage
+import be4rjp.sclat.api.Sphere.getSphere
+import be4rjp.sclat.api.raytrace.RayTrace
+import be4rjp.sclat.data.DataMgr.getPlayerData
+import be4rjp.sclat.manager.ArmorStandMgr
+import be4rjp.sclat.manager.MapKitMgr
+import be4rjp.sclat.manager.PaintMgr
+import be4rjp.sclat.manager.SPWeaponMgr
+import be4rjp.sclat.manager.WeaponClassMgr
+import be4rjp.sclat.plugin
+import org.bukkit.GameMode
+import org.bukkit.Location
+import org.bukkit.Material
+import org.bukkit.Particle
+import org.bukkit.Sound
+import org.bukkit.entity.ArmorStand
+import org.bukkit.entity.Firework
+import org.bukkit.entity.Item
+import org.bukkit.entity.Player
+import org.bukkit.inventory.ItemStack
+import org.bukkit.potion.PotionEffectType
+import org.bukkit.scheduler.BukkitRunnable
+import org.bukkit.util.Vector
 
 /**
  *
  * @author Be4rJP
  */
-public class AirStrike {
-	public static void AirStrikeRunnable(Player player, Boolean localized) {
-		Firework f = (Firework) player.getWorld().spawn(player.getLocation(), Firework.class);
-		player.getInventory().clear();
-		SPWeaponMgr.setSPCoolTimeAnimation(player, 200);
+object AirStrike {
+    @JvmStatic
+    fun AirStrikeRunnable(
+        player: Player,
+        localized: Boolean,
+    ) {
+        val f = player.getWorld().spawn<Firework?>(player.getLocation(), Firework::class.java)
+        player.getInventory().clear()
+        SPWeaponMgr.setSPCoolTimeAnimation(player, 200)
 
-		BukkitRunnable clear = new BukkitRunnable() {
-			@Override
-			public void run() {
-				WeaponClassMgr.setWeaponClass(player);
-				if (player.hasPotionEffect(PotionEffectType.SLOW))
-					player.removePotionEffect(PotionEffectType.SLOW);
-			}
-		};
-		clear.runTaskLater(VariablesKt.getPlugin(), 20);
+        val clear: BukkitRunnable =
+            object : BukkitRunnable() {
+                override fun run() {
+                    WeaponClassMgr.setWeaponClass(player)
+                    if (player.hasPotionEffect(PotionEffectType.SLOW)) player.removePotionEffect(PotionEffectType.SLOW)
+                }
+            }
+        clear.runTaskLater(plugin, 20)
 
-		Vector vec = MapKitMgr.getMapLocationVector(player);
-		// int y = player.getWorld().getHighestBlockYAt(vec.getBlockX(),
-		// vec.getBlockZ());
+        val vec = MapKitMgr.getMapLocationVector(player)
 
-		int c = 0;
-		for (int i = 254; i > 0; i--) {
-			Location locc = new Location(player.getWorld(), player.getLocation().getBlockX() + vec.getBlockX(), i,
-					player.getLocation().getBlockZ() + vec.getBlockZ());
-			Block block = player.getWorld().getBlockAt(locc);
-			if (!block.getType().equals(Material.AIR)) {
-				c = i;
-				break;
-			}
-		}
-		int y = c;
-		Location ploc = player.getLocation();
-		Location tloc = new Location(player.getWorld(), player.getLocation().getBlockX() + vec.getBlockX(), y,
-				player.getLocation().getBlockZ() + vec.getBlockZ());
-		BukkitRunnable task = new BukkitRunnable() {
-			int c = 0;
-			@Override
-			public void run() {
-				if (c == 0)
-					DataMgr.getPlayerData(player).setIsUsingSP(true);
-				double random = 18;
-				// 集中砲火用
-				if (localized) {
-					random = 7;
-				}
-				//
-				Location loc = new Location(ploc.getWorld(),
-						ploc.getBlockX() + vec.getBlockX() + (Math.random() * random - random / 2), y + 50,
-						ploc.getBlockZ() + vec.getBlockZ() + (Math.random() * random - random / 2));
-				StrikeRunnable(player, localized, loc);
-				if (c == 15 || !DataMgr.getPlayerData(player).isInMatch()) {
-					// player.playSound(player.getLocation(), Sound.BLOCK_CHEST_CLOSE, 1, 2);
-					cancel();
-				}
-				c++;
-			}
-		};
-		if (localized) {
-			task.runTaskTimer(VariablesKt.getPlugin(), 5, 5);
-		} else {
-			task.runTaskTimer(VariablesKt.getPlugin(), 50, 10);
-		}
+        // int y = player.getWorld().getHighestBlockYAt(vec.getBlockX(),
+        // vec.getBlockZ());
+        var c = 0
+        for (i in 254 downTo 1) {
+            val locc =
+                Location(
+                    player.getWorld(),
+                    (player.getLocation().getBlockX() + vec.getBlockX()).toDouble(),
+                    i.toDouble(),
+                    (player.getLocation().getBlockZ() + vec.getBlockZ()).toDouble(),
+                )
+            val block = player.getWorld().getBlockAt(locc)
+            if (block.getType() != Material.AIR) {
+                c = i
+                break
+            }
+        }
+        val y = c
+        val ploc = player.getLocation()
+        val tloc =
+            Location(
+                player.getWorld(),
+                (player.getLocation().getBlockX() + vec.getBlockX()).toDouble(),
+                y.toDouble(),
+                (player.getLocation().getBlockZ() + vec.getBlockZ()).toDouble(),
+            )
+        val task: BukkitRunnable =
+            object : BukkitRunnable() {
+                var c: Int = 0
 
-		BukkitRunnable effect = new BukkitRunnable() {
-			int c = 0;
-			@Override
-			public void run() {
-				RayTrace rayTrace = new RayTrace(tloc.toVector(), new Vector(0, 1, 0));
-				ArrayList<Vector> positions = rayTrace.traverse(50, 0.8);
-				check : for (Vector vector : positions) {
-					Location position = vector.toLocation(player.getLocation().getWorld());
-					Particle.DustOptions dustOptions = new Particle.DustOptions(
-							DataMgr.getPlayerData(player).team.getTeamColor().getBukkitColor(), 1);
-					player.getWorld().spawnParticle(Particle.REDSTONE, position, 1, 0, 0, 0, 1, dustOptions);
-				}
-				if (c == 100 || !DataMgr.getPlayerData(player).isInMatch()) {
-					DataMgr.getPlayerData(player).setIsUsingSP(false);
-					cancel();
-				}
-				c++;
-			}
-		};
-		effect.runTaskTimer(VariablesKt.getPlugin(), 0, 2);
+                override fun run() {
+                    if (c == 0) getPlayerData(player)!!.setIsUsingSP(true)
+                    var random = 18.0
+                    // 集中砲火用
+                    if (localized) {
+                        random = 7.0
+                    }
+                    //
+                    val loc =
+                        Location(
+                            ploc.getWorld(),
+                            ploc.getBlockX() + vec.getBlockX() + (Math.random() * random - random / 2),
+                            (y + 50).toDouble(),
+                            ploc.getBlockZ() + vec.getBlockZ() + (Math.random() * random - random / 2),
+                        )
+                    StrikeRunnable(player, localized, loc)
+                    if (c == 15 || !getPlayerData(player)!!.isInMatch()) {
+                        // player.playSound(player.getLocation(), Sound.BLOCK_CHEST_CLOSE, 1, 2);
+                        cancel()
+                    }
+                    c++
+                }
+            }
+        if (localized) {
+            task.runTaskTimer(plugin, 5, 5)
+        } else {
+            task.runTaskTimer(plugin, 50, 10)
+        }
 
-	}
+        val effect: BukkitRunnable =
+            object : BukkitRunnable() {
+                var c: Int = 0
 
-	public static void StrikeRunnable(Player player, boolean localized, Location loc) {
-		BukkitRunnable task = new BukkitRunnable() {
-			Player p = player;
-			Vector p_vec;
-			double x = 0;
-			double z = 0;
-			boolean collision = false;
-			boolean block_check = false;
-			int c = 0;
-			Item drop;
-			@Override
-			public void run() {
-				if (c == 0) {
-					ItemStack bom = new ItemStack(DataMgr.getPlayerData(p).team.getTeamColor().wool).clone();
-					ItemMeta bom_m = bom.getItemMeta();
-					bom_m.setLocalizedName(String.valueOf(Sclat.getNotDuplicateNumber()));
-					bom.setItemMeta(bom_m);
-					drop = p.getWorld().dropItem(loc, bom);
-					if (localized) {
-						drop.setVelocity(new Vector(0, -4, 0));
-					} else {
-						drop.setVelocity(new Vector(0, -1, 0));
-					}
-				}
+                override fun run() {
+                    val rayTrace = RayTrace(tloc.toVector(), Vector(0, 1, 0))
+                    val positions = rayTrace.traverse(50.0, 0.8)
+                    check@ for (vector in positions) {
+                        val position = vector.toLocation(player.getLocation().getWorld()!!)
+                        val dustOptions =
+                            Particle.DustOptions(
+                                getPlayerData(player)!!.team.teamColor!!.bukkitColor!!,
+                                1f,
+                            )
+                        player.getWorld().spawnParticle<Particle.DustOptions?>(
+                            Particle.REDSTONE,
+                            position,
+                            1,
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0,
+                            dustOptions,
+                        )
+                    }
+                    if (c == 100 || !getPlayerData(player)!!.isInMatch()) {
+                        getPlayerData(player)!!.setIsUsingSP(false)
+                        cancel()
+                    }
+                    c++
+                }
+            }
+        effect.runTaskTimer(plugin, 0, 2)
+    }
 
-				if (drop.isOnGround()) {
+    fun StrikeRunnable(
+        player: Player,
+        localized: Boolean,
+        loc: Location,
+    ) {
+        val task: BukkitRunnable =
+            object : BukkitRunnable() {
+                var p: Player = player
+                var p_vec: Vector? = null
+                var x: Double = 0.0
+                var z: Double = 0.0
+                var collision: Boolean = false
+                var block_check: Boolean = false
+                var c: Int = 0
+                var drop: Item? = null
 
-					// 半径
-					double maxDist = 4;
-					double maxDistSquared = 16; /* 4^2 */
-					if (localized) {
-						maxDist = 5;
-						maxDistSquared = 25; /* 4^2 */
-					}
+                override fun run() {
+                    if (c == 0) {
+                        val bom = ItemStack(getPlayerData(p)!!.team.teamColor!!.wool!!).clone()
+                        val bom_m = bom.getItemMeta()
+                        bom_m!!.setLocalizedName(notDuplicateNumber.toString())
+                        bom.setItemMeta(bom_m)
+                        drop = p.getWorld().dropItem(loc, bom)
+                        if (localized) {
+                            drop!!.setVelocity(Vector(0, -4, 0))
+                        } else {
+                            drop!!.setVelocity(Vector(0, -1, 0))
+                        }
+                    }
 
-					// 爆発音
-					player.getWorld().playSound(drop.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_BLAST, 1, 1);
+                    if (drop!!.isOnGround()) {
+                        // 半径
 
-					// 爆発エフェクト
-					SclatUtil.createInkExplosionEffect(drop.getLocation(), maxDist, 25, player);
+                        var maxDist = 4.0
+                        var maxDistSquared = 16.0 // 4^2
+                        if (localized) {
+                            maxDist = 5.0
+                            maxDistSquared = 25.0 // 4^2
+                        }
 
-					// 塗る
-					for (int i = 0; i <= maxDist; i++) {
-						List<Location> p_locs = Sphere.getSphere(drop.getLocation(), i, 20);
-						for (Location loc : p_locs) {
-							PaintMgr.Paint(loc, p, false);
-						}
-					}
+                        // 爆発音
+                        player.getWorld().playSound(drop!!.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_BLAST, 1f, 1f)
 
-					// 攻撃判定の処理
+                        // 爆発エフェクト
+                        createInkExplosionEffect(drop!!.getLocation(), maxDist, 25, player)
 
-					for (Player target : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
-						if (!DataMgr.getPlayerData(target).isInMatch())
-							continue;
-						if (target.getLocation().distanceSquared(drop.getLocation()) <= maxDistSquared) {
-							double damage;
-							if (localized) {
-								damage = (maxDist - target.getLocation().distance(drop.getLocation())) * 5;
-							} else {
-								damage = (maxDist - target.getLocation().distance(drop.getLocation())) * 7;
-							}
-							if (DataMgr.getPlayerData(player).team != DataMgr.getPlayerData(target).team
-									&& target.getGameMode().equals(GameMode.ADVENTURE)) {
-								SclatUtil.giveDamage(player, target, damage, "spWeapon");
+                        // 塗る
+                        var i = 0
+                        while (i <= maxDist) {
+                            val p_locs: MutableList<Location> = getSphere(drop!!.getLocation(), i.toDouble(), 20)
+                            for (loc in p_locs) {
+                                PaintMgr.Paint(loc, p, false)
+                            }
+                            i++
+                        }
 
-								// AntiNoDamageTime
-								BukkitRunnable task = new BukkitRunnable() {
-									Player p = target;
-									@Override
-									public void run() {
-										target.setNoDamageTicks(0);
-									}
-								};
-								task.runTaskLater(VariablesKt.getPlugin(), 1);
+                        // 攻撃判定の処理
+                        for (target in plugin.getServer().getOnlinePlayers()) {
+                            if (!getPlayerData(target)!!.isInMatch()) continue
+                            if (target.getLocation().distanceSquared(drop!!.getLocation()) <= maxDistSquared) {
+                                val damage: Double
+                                if (localized) {
+                                    damage = (maxDist - target.getLocation().distance(drop!!.getLocation())) * 5
+                                } else {
+                                    damage = (maxDist - target.getLocation().distance(drop!!.getLocation())) * 7
+                                }
+                                if (getPlayerData(player)!!.team != getPlayerData(target)!!.team &&
+                                    target.getGameMode() == GameMode.ADVENTURE
+                                ) {
+                                    giveDamage(player, target, damage, "spWeapon")
 
-							}
-						}
-					}
+                                    // AntiNoDamageTime
+                                    val task: BukkitRunnable =
+                                        object : BukkitRunnable() {
+                                            var p: Player = target
 
-					for (Entity as : player.getWorld().getEntities()) {
-						if (as.getLocation().distanceSquared(drop.getLocation()) <= maxDistSquared) {
-							if (as instanceof ArmorStand) {
-								double damage = (maxDist - as.getLocation().distance(drop.getLocation())) * 7;
-								ArmorStandMgr.giveDamageArmorStand((ArmorStand) as, damage, p);
-							}
-						}
-					}
+                                            override fun run() {
+                                                target.setNoDamageTicks(0)
+                                            }
+                                        }
+                                    task.runTaskLater(plugin, 1)
+                                }
+                            }
+                        }
 
-					drop.remove();
-					cancel();
-					return;
-				}
+                        for (`as` in player.getWorld().getEntities()) {
+                            if (`as`.getLocation().distanceSquared(drop!!.getLocation()) <= maxDistSquared) {
+                                if (`as` is ArmorStand) {
+                                    val damage = (maxDist - `as`.getLocation().distance(drop!!.getLocation())) * 7
+                                    ArmorStandMgr.giveDamageArmorStand(`as`, damage, p)
+                                }
+                            }
+                        }
 
-				// ボムの視認用エフェクト
-				for (Player o_player : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
-					if (DataMgr.getPlayerData(o_player).settings.ShowEffect_SPWeapon()) {
-						Particle.DustOptions dustOptions = new Particle.DustOptions(
-								DataMgr.getPlayerData(p).team.getTeamColor().getBukkitColor(), 1);
-						o_player.spawnParticle(Particle.REDSTONE, drop.getLocation(), 1, 0, 0, 0, 50, dustOptions);
-					}
-				}
+                        drop!!.remove()
+                        cancel()
+                        return
+                    }
 
-				c++;
-				x = drop.getLocation().getX();
-				z = drop.getLocation().getZ();
+                    // ボムの視認用エフェクト
+                    for (o_player in plugin.getServer().getOnlinePlayers()) {
+                        if (getPlayerData(o_player)!!.settings.ShowEffect_SPWeapon()) {
+                            val dustOptions =
+                                Particle.DustOptions(
+                                    getPlayerData(p)!!.team.teamColor!!.bukkitColor!!,
+                                    1f,
+                                )
+                            o_player.spawnParticle<Particle.DustOptions?>(
+                                Particle.REDSTONE,
+                                drop!!.getLocation(),
+                                1,
+                                0.0,
+                                0.0,
+                                0.0,
+                                50.0,
+                                dustOptions,
+                            )
+                        }
+                    }
 
-				if (c > 2000 || !DataMgr.getPlayerData(p).isInMatch()) {
-					drop.remove();
-					cancel();
-					return;
-				}
+                    c++
+                    x = drop!!.getLocation().getX()
+                    z = drop!!.getLocation().getZ()
 
-			}
-		};
+                    if (c > 2000 || !getPlayerData(p)!!.isInMatch()) {
+                        drop!!.remove()
+                        cancel()
+                        return
+                    }
+                }
+            }
 
-		task.runTaskTimer(VariablesKt.getPlugin(), 0, 1);
-
-	}
+        task.runTaskTimer(plugin, 0, 1)
+    }
 }

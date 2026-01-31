@@ -1,183 +1,215 @@
+package be4rjp.sclat.weapon.subweapon
 
-package be4rjp.sclat.weapon.subweapon;
-
-import be4rjp.sclat.Sclat;
-import be4rjp.sclat.VariablesKt;
-import be4rjp.sclat.api.Sphere;
-import be4rjp.sclat.data.DataMgr;
-import be4rjp.sclat.weapon.Gear;
-import java.util.List;
-import net.minecraft.server.v1_14_R1.PacketPlayOutEntityDestroy;
-import net.minecraft.server.v1_14_R1.PlayerConnection;
-import org.bukkit.ChatColor;
-import org.bukkit.Color;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Particle;
-import org.bukkit.Sound;
-import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
-import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Item;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Snowball;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
-import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.util.Vector;
+import be4rjp.sclat.Sclat
+import be4rjp.sclat.Sclat.Companion.notDuplicateNumber
+import be4rjp.sclat.api.Sphere.getSphere
+import be4rjp.sclat.data.DataMgr.getPlayerData
+import be4rjp.sclat.data.DataMgr.getSnowballIsHit
+import be4rjp.sclat.data.DataMgr.setSnowballIsHit
+import be4rjp.sclat.plugin
+import be4rjp.sclat.weapon.Gear
+import net.minecraft.server.v1_14_R1.PacketPlayOutEntityDestroy
+import org.bukkit.ChatColor
+import org.bukkit.Color
+import org.bukkit.Material
+import org.bukkit.Particle
+import org.bukkit.Sound
+import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer
+import org.bukkit.entity.ArmorStand
+import org.bukkit.entity.Item
+import org.bukkit.entity.Player
+import org.bukkit.entity.Snowball
+import org.bukkit.inventory.ItemStack
+import org.bukkit.potion.PotionEffect
+import org.bukkit.potion.PotionEffectType
+import org.bukkit.scheduler.BukkitRunnable
+import org.bukkit.util.Vector
 
 /**
  *
  * @author Be4rJP
  */
-public class Sensor {
-	public static void SensorRunnable(Player player) {
-		BukkitRunnable task = new BukkitRunnable() {
-			Player p = player;
-			Vector p_vec;
-			double x = 0;
-			double z = 0;
-			boolean collision = false;
-			boolean block_check = false;
-			int c = 0;
-			Item drop;
-			Snowball ball;
-			@Override
-			public void run() {
-				try {
-					if (c == 0) {
-						p_vec = p.getEyeLocation().getDirection();
-						if (!DataMgr.getPlayerData(player).getIsBombRush())
-							p.setExp(p.getExp() - 0.39F);
-						ItemStack bom = new ItemStack(Material.DISPENSER).clone();
-						ItemMeta bom_m = bom.getItemMeta();
-						bom_m.setLocalizedName(String.valueOf(Sclat.getNotDuplicateNumber()));
-						bom.setItemMeta(bom_m);
-						drop = p.getWorld().dropItem(p.getEyeLocation(), bom);
-						drop.setVelocity(p_vec);
-						// 雪玉をスポーンさせた瞬間にプレイヤーに雪玉がデスポーンした偽のパケットを送信する
-						ball = player.launchProjectile(Snowball.class);
-						ball.setVelocity(new Vector(0, 0, 0));
-						DataMgr.setSnowballIsHit(ball, false);
+object Sensor {
+    @JvmStatic
+    fun SensorRunnable(player: Player) {
+        val task: BukkitRunnable =
+            object : BukkitRunnable() {
+                var p: Player = player
+                var p_vec: Vector? = null
+                var x: Double = 0.0
+                var z: Double = 0.0
+                var collision: Boolean = false
+                var block_check: Boolean = false
+                var c: Int = 0
+                var drop: Item? = null
+                var ball: Snowball? = null
 
-						for (Player o_player : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
-							PlayerConnection connection = ((CraftPlayer) o_player).getHandle().playerConnection;
-							connection.sendPacket(new PacketPlayOutEntityDestroy(ball.getEntityId()));
-						}
-						p_vec = p.getEyeLocation().getDirection();
-					}
+                override fun run() {
+                    try {
+                        if (c == 0) {
+                            p_vec = p.getEyeLocation().getDirection()
+                            if (!getPlayerData(player)!!.getIsBombRush()) p.setExp(p.getExp() - 0.39f)
+                            val bom = ItemStack(Material.DISPENSER).clone()
+                            val bom_m = bom.getItemMeta()
+                            bom_m!!.setLocalizedName(notDuplicateNumber.toString())
+                            bom.setItemMeta(bom_m)
+                            drop = p.getWorld().dropItem(p.getEyeLocation(), bom)
+                            drop!!.setVelocity(p_vec!!)
+                            // 雪玉をスポーンさせた瞬間にプレイヤーに雪玉がデスポーンした偽のパケットを送信する
+                            ball = player.launchProjectile<Snowball>(Snowball::class.java)
+                            ball!!.setVelocity(Vector(0, 0, 0))
+                            setSnowballIsHit(ball, false)
 
-					if (!drop.isOnGround() && !(drop.getVelocity().getX() == 0 && drop.getVelocity().getZ() != 0)
-							&& !(drop.getVelocity().getX() != 0 && drop.getVelocity().getZ() == 0))
-						ball.setVelocity(drop.getVelocity());
+                            for (o_player in plugin.getServer().getOnlinePlayers()) {
+                                val connection = (o_player as CraftPlayer).getHandle().playerConnection
+                                connection.sendPacket(PacketPlayOutEntityDestroy(ball!!.getEntityId()))
+                            }
+                            p_vec = p.getEyeLocation().getDirection()
+                        }
 
-					if (DataMgr.getSnowballIsHit(ball) || drop.isOnGround()) {
+                        if (!drop!!.isOnGround() &&
+                            !(
+                                drop!!.getVelocity().getX() == 0.0 && drop!!
+                                    .getVelocity()
+                                    .getZ() != 0.0
+                                ) &&
+                            !(
+                                drop!!.getVelocity().getX() != 0.0 && drop!!
+                                    .getVelocity()
+                                    .getZ() == 0.0
+                                )
+                        ) {
+                            ball!!.setVelocity(drop!!.getVelocity())
+                        }
 
-						// 半径
-						double maxDist = (int) 5 * Gear.getGearInfluence(player, Gear.Type.SUB_SPEC_UP);
+                        if (getSnowballIsHit(ball) || drop!!.isOnGround()) {
+                            // 半径
 
-						// 爆発音
-						player.getWorld().playSound(drop.getLocation(), Sound.ENTITY_ARROW_SHOOT, 1, 2);
+                            val maxDist = 5 * Gear.getGearInfluence(player, Gear.Type.SUB_SPEC_UP)
 
-						// 爆発エフェクト
-						List<Location> s_locs = Sphere.getSphere(drop.getLocation(), maxDist, 15);
-						for (Player o_player : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
-							if (DataMgr.getPlayerData(o_player).settings.ShowEffect_BombEx()) {
-								for (Location loc : s_locs) {
-									if (o_player.getWorld() == loc.getWorld()) {
-										if (o_player.getLocation()
-												.distanceSquared(loc) < Sclat.particleRenderDistanceSquared) {
-											Particle.DustOptions dustOptions = new Particle.DustOptions(Color.BLACK, 1);
-											o_player.spawnParticle(Particle.REDSTONE, loc, 1, 0, 0, 0, 1, dustOptions);
-										}
-									}
-								}
-							}
-						}
+                            // 爆発音
+                            player.getWorld().playSound(drop!!.getLocation(), Sound.ENTITY_ARROW_SHOOT, 1f, 2f)
 
-						// あたり判定の処理
+                            // 爆発エフェクト
+                            val s_locs = getSphere(drop!!.getLocation(), maxDist, 15)
+                            for (o_player in plugin.getServer().getOnlinePlayers()) {
+                                if (getPlayerData(o_player)!!.settings.ShowEffect_BombEx()) {
+                                    for (loc in s_locs) {
+                                        if (o_player.getWorld() === loc.getWorld()) {
+                                            if (o_player
+                                                    .getLocation()
+                                                    .distanceSquared(loc) < Sclat.particleRenderDistanceSquared
+                                            ) {
+                                                val dustOptions = Particle.DustOptions(Color.BLACK, 1f)
+                                                o_player.spawnParticle<Particle.DustOptions?>(
+                                                    Particle.REDSTONE,
+                                                    loc,
+                                                    1,
+                                                    0.0,
+                                                    0.0,
+                                                    0.0,
+                                                    1.0,
+                                                    dustOptions,
+                                                )
+                                            }
+                                        }
+                                    }
+                                }
+                            }
 
-						for (Player target : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
-							if (!DataMgr.getPlayerData(target).isInMatch() || target.getWorld() != p.getWorld())
-								continue;
-							if (target.getLocation().distance(drop.getLocation()) <= maxDist) {
-								if (DataMgr.getPlayerData(player).team.getID() != DataMgr.getPlayerData(target).team
-										.getID()) {
-									target.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 200, 1));
-								}
+                            // あたり判定の処理
+                            for (target in plugin.getServer().getOnlinePlayers()) {
+                                if (!getPlayerData(target)!!.isInMatch() || target.getWorld() !== p.getWorld()) continue
+                                if (target.getLocation().distance(drop!!.getLocation()) <= maxDist) {
+                                    if (getPlayerData(player)!!.team.iD !=
+                                        getPlayerData(target)!!
+                                            .team
+                                            .iD
+                                    ) {
+                                        target.addPotionEffect(PotionEffect(PotionEffectType.GLOWING, 200, 1))
+                                    }
+                                }
+                            }
 
-							}
-						}
+                            for (`as` in player.getWorld().getEntities()) {
+                                if (`as`.getLocation().distance(drop!!.getLocation()) <= maxDist) {
+                                    if (`as`.getCustomName() != null) {
+                                        if (`as`.getCustomName() == null) continue
+                                        if (`as` is ArmorStand && (`as`.getCustomName() != "Path") && (`as`.getCustomName() != "21") &&
+                                            (`as`.getCustomName() != "100") &&
+                                            (`as`.getCustomName() != "SplashShield") &&
+                                            (`as`.getCustomName() != "Kasa")
+                                        ) {
+                                            `as`
+                                                .addPotionEffect(PotionEffect(PotionEffectType.GLOWING, 200, 1))
+                                        }
+                                    }
+                                }
+                            }
 
-						for (Entity as : player.getWorld().getEntities()) {
-							if (as.getLocation().distance(drop.getLocation()) <= maxDist) {
-								if (as.getCustomName() != null) {
-									if (as.getCustomName() == null)
-										continue;
-									if (as instanceof ArmorStand && !as.getCustomName().equals("Path")
-											&& !as.getCustomName().equals("21") && !as.getCustomName().equals("100")
-											&& !as.getCustomName().equals("SplashShield")
-											&& !as.getCustomName().equals("Kasa")) {
-										((ArmorStand) as)
-												.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 200, 1));
-									}
-								}
-							}
-						}
+                            drop!!.remove()
+                            cancel()
+                            return
+                        }
 
-						drop.remove();
-						cancel();
-						return;
-					}
+                        // ボムの視認用エフェクト
+                        for (o_player in plugin.getServer().getOnlinePlayers()) {
+                            if (getPlayerData(o_player)!!.settings.ShowEffect_Bomb()) {
+                                if (o_player.getWorld() === drop!!.getLocation().getWorld()) {
+                                    if (o_player
+                                            .getLocation()
+                                            .distanceSquared(drop!!.getLocation()) < Sclat.particleRenderDistanceSquared
+                                    ) {
+                                        val dustOptions =
+                                            Particle.DustOptions(
+                                                getPlayerData(p)!!.team.teamColor!!.bukkitColor!!,
+                                                1f,
+                                            )
+                                        o_player.spawnParticle<Particle.DustOptions?>(
+                                            Particle.REDSTONE,
+                                            drop!!.getLocation(),
+                                            1,
+                                            0.0,
+                                            0.0,
+                                            0.0,
+                                            50.0,
+                                            dustOptions,
+                                        )
+                                    }
+                                }
+                            }
+                        }
 
-					// ボムの視認用エフェクト
-					for (Player o_player : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
-						if (DataMgr.getPlayerData(o_player).settings.ShowEffect_Bomb()) {
-							if (o_player.getWorld() == drop.getLocation().getWorld()) {
-								if (o_player.getLocation()
-										.distanceSquared(drop.getLocation()) < Sclat.particleRenderDistanceSquared) {
-									Particle.DustOptions dustOptions = new Particle.DustOptions(
-											DataMgr.getPlayerData(p).team.getTeamColor().getBukkitColor(), 1);
-									o_player.spawnParticle(Particle.REDSTONE, drop.getLocation(), 1, 0, 0, 0, 50,
-											dustOptions);
-								}
-							}
-						}
-					}
+                        c++
+                        x = drop!!.getLocation().getX()
+                        z = drop!!.getLocation().getZ()
 
-					c++;
-					x = drop.getLocation().getX();
-					z = drop.getLocation().getZ();
+                        if (c > 1000) {
+                            drop!!.remove()
+                            cancel()
+                            return
+                        }
+                    } catch (e: Exception) {
+                        cancel()
+                        drop!!.remove()
+                        plugin.getLogger().warning(e.message)
+                    }
+                }
+            }
 
-					if (c > 1000) {
-						drop.remove();
-						cancel();
-						return;
-					}
-				} catch (Exception e) {
-					cancel();
-					drop.remove();
-					VariablesKt.getPlugin().getLogger().warning(e.getMessage());
-				}
-			}
-		};
+        val cooltime: BukkitRunnable =
+            object : BukkitRunnable() {
+                override fun run() {
+                    getPlayerData(player)!!.setCanUseSubWeapon(true)
+                }
+            }
+        cooltime.runTaskLater(plugin, 8)
 
-		BukkitRunnable cooltime = new BukkitRunnable() {
-			@Override
-			public void run() {
-				DataMgr.getPlayerData(player).setCanUseSubWeapon(true);
-			}
-		};
-		cooltime.runTaskLater(VariablesKt.getPlugin(), 8);
-
-		if (player.getExp() > 0.3 || DataMgr.getPlayerData(player).getIsBombRush())
-			task.runTaskTimer(VariablesKt.getPlugin(), 0, 1);
-		else {
-			player.sendTitle("", ChatColor.RED + "インクが足りません", 0, 5, 2);
-			player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1F, 1.63F);
-		}
-
-	}
+        if (player.getExp() > 0.3 || getPlayerData(player)!!.getIsBombRush()) {
+            task.runTaskTimer(plugin, 0, 1)
+        } else {
+            player.sendTitle("", ChatColor.RED.toString() + "インクが足りません", 0, 5, 2)
+            player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1f, 1.63f)
+        }
+    }
 }

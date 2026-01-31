@@ -44,9 +44,9 @@ class Glow : EnchantmentWrapper("sclatg") {
                 f.set(null, true)
                 val hmapf = Enchantment::class.java.getDeclaredField("byName")
                 hmapf.setAccessible(true)
-                val hmap = hmapf.get(hmapf) as MutableMap<String?, Enchantment?>
+                val hmap = hmapf.get(hmapf) as MutableMap<*, *>
                 if (!hmap.containsKey("sclatg")) {
-                    Enchantment.registerEnchantment(glow!!)
+                    registerEnchantment(glow!!)
                 }
             }
         } catch (ex: Exception) {

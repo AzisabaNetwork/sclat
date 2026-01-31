@@ -1,804 +1,1136 @@
+package be4rjp.sclat.weapon
 
-package be4rjp.sclat.weapon;
-
-import be4rjp.sclat.Sclat;
-import be4rjp.sclat.VariablesKt;
-import be4rjp.sclat.api.SclatUtil;
-import be4rjp.sclat.api.player.PlayerData;
-import be4rjp.sclat.api.raytrace.BoundingBox;
-import be4rjp.sclat.api.raytrace.RayTrace;
-import be4rjp.sclat.api.team.Team;
-import be4rjp.sclat.data.DataMgr;
-import be4rjp.sclat.data.KasaData;
-import be4rjp.sclat.manager.MainWeaponMgr;
-import be4rjp.sclat.manager.PaintMgr;
-import be4rjp.sclat.manager.WeaponClassMgr;
-import java.util.ArrayList;
-import java.util.List;
-import net.minecraft.server.v1_14_R1.EnumItemSlot;
-import net.minecraft.server.v1_14_R1.PacketPlayOutEntityEquipment;
-import org.bukkit.ChatColor;
-import org.bukkit.GameMode;
-import org.bukkit.Instrument;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Note;
-import org.bukkit.Particle;
-import org.bukkit.Sound;
-import org.bukkit.block.data.BlockData;
-import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
-import org.bukkit.craftbukkit.v1_14_R1.entity.CraftSnowball;
-import org.bukkit.craftbukkit.v1_14_R1.inventory.CraftItemStack;
-import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Snowball;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.util.EulerAngle;
-import org.bukkit.util.Vector;
+import be4rjp.sclat.Sclat
+import be4rjp.sclat.Sclat.Companion.notDuplicateNumber
+import be4rjp.sclat.api.SclatUtil.giveDamage
+import be4rjp.sclat.api.raytrace.BoundingBox
+import be4rjp.sclat.api.raytrace.RayTrace
+import be4rjp.sclat.data.DataMgr
+import be4rjp.sclat.data.DataMgr.getPlayerData
+import be4rjp.sclat.data.DataMgr.getSnowballHitCount
+import be4rjp.sclat.data.DataMgr.mainSnowballNameMap
+import be4rjp.sclat.data.DataMgr.setKasaDataWithARmorStand
+import be4rjp.sclat.data.DataMgr.setKasaDataWithPlayer
+import be4rjp.sclat.data.DataMgr.setSnowballHitCount
+import be4rjp.sclat.data.KasaData
+import be4rjp.sclat.manager.MainWeaponMgr
+import be4rjp.sclat.manager.PaintMgr
+import be4rjp.sclat.manager.WeaponClassMgr
+import be4rjp.sclat.plugin
+import net.minecraft.server.v1_14_R1.EnumItemSlot
+import net.minecraft.server.v1_14_R1.PacketPlayOutEntityEquipment
+import org.bukkit.ChatColor
+import org.bukkit.GameMode
+import org.bukkit.Instrument
+import org.bukkit.Material
+import org.bukkit.Note
+import org.bukkit.Particle
+import org.bukkit.Sound
+import org.bukkit.block.data.BlockData
+import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer
+import org.bukkit.craftbukkit.v1_14_R1.entity.CraftSnowball
+import org.bukkit.craftbukkit.v1_14_R1.inventory.CraftItemStack
+import org.bukkit.entity.ArmorStand
+import org.bukkit.entity.Entity
+import org.bukkit.entity.EntityType
+import org.bukkit.entity.Player
+import org.bukkit.entity.Snowball
+import org.bukkit.inventory.ItemStack
+import org.bukkit.scheduler.BukkitRunnable
+import org.bukkit.util.EulerAngle
+import org.bukkit.util.Vector
 
 /**
  *
  * @author Be4rJP
  */
-public class Kasa {
-	public static void ShootKasa(Player player) {
-
-		if (player.isSneaking())
-			return;
-
-		PlayerData data = DataMgr.getPlayerData(player);
-		BukkitRunnable delay1 = new BukkitRunnable() {
-			Player p = player;
-			@Override
-			public void run() {
-				PlayerData data = DataMgr.getPlayerData(player);
-				data.setCanRollerShoot(true);
-			}
-		};
-		if (data.getCanRollerShoot())
-			delay1.runTaskLater(VariablesKt.getPlugin(), data.getWeaponClass().getMainWeapon().getCoolTime());
-
-		BukkitRunnable delay = new BukkitRunnable() {
-			final Player p = player;
-			@Override
-			public void run() {
-				boolean sound = false;
-				for (int i = 0; i < data.getWeaponClass().getMainWeapon().getRollerShootQuantity(); i++) {
-					boolean is = Shoot(player, null);
-					if (is)
-						sound = true;
-				}
-				player.getWorld().playSound(p.getLocation(), Sound.ITEM_ARMOR_EQUIP_GENERIC, 0.9F, 1.3F);
-				if (sound) {
-					player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1F, 1.63F);
-				}
-			}
-		};
-		if (data.getCanRollerShoot()) {
-			delay.runTaskLater(VariablesKt.getPlugin(), data.getWeaponClass().getMainWeapon().delay);
-			data.setCanRollerShoot(false);
-		}
-	}
-
-	public static boolean Shoot(Player player, Vector v) {
-
-		if (player.getGameMode() == GameMode.SPECTATOR)
-			return false;
-
-		PlayerData data = DataMgr.getPlayerData(player);
-		if (player.getExp() <= (float) (data.getWeaponClass().getMainWeapon().getNeedInk()
-				* Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP)
-				/ Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP))) {
-			player.sendTitle("", ChatColor.RED + "インクが足りません", 0, 13, 2);
-			return true;
-		}
-		player.setExp(player.getExp() - (float) (data.getWeaponClass().getMainWeapon().getNeedInk()
-				* Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP)
-				/ Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)));
-		Snowball ball = player.launchProjectile(Snowball.class);
-		((CraftSnowball) ball).getHandle().setItem(
-				CraftItemStack.asNMSCopy(new ItemStack(DataMgr.getPlayerData(player).team.getTeamColor().wool)));
-		Vector vec = player.getLocation().getDirection()
-				.multiply(DataMgr.getPlayerData(player).getWeaponClass().getMainWeapon().getShootSpeed());
-		if (v != null)
-			vec = v;
-		double random = DataMgr.getPlayerData(player).getWeaponClass().getMainWeapon().random;
-		int distick = DataMgr.getPlayerData(player).getWeaponClass().getMainWeapon().getDistanceTick();
-		vec.add(new Vector(Math.random() * random - random / 2, Math.random() * random / 1.5 - random / 3,
-				Math.random() * random - random / 2));
-		ball.setVelocity(vec);
-		ball.setShooter(player);
-		String name = String.valueOf(Sclat.getNotDuplicateNumber());
-		DataMgr.mws.add(name);
-		ball.setCustomName(name);
-		DataMgr.getMainSnowballNameMap().put(name, ball);
-		DataMgr.setSnowballHitCount(name, 0);
-		BukkitRunnable task = new BukkitRunnable() {
-			int i = 0;
-			int tick = distick;
-			Snowball inkball = ball;
-			Player p = player;
-			boolean addedFallVec = false;
-			Vector fallvec = new Vector(inkball.getVelocity().getX(), inkball.getVelocity().getY(),
-					inkball.getVelocity().getZ())
-							.multiply(DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getShootSpeed() / 17);
-			@Override
-			public void run() {
-				inkball = DataMgr.getMainSnowballNameMap().get(name);
-
-				if (!inkball.equals(ball)) {
-					i += DataMgr.getSnowballHitCount(name) - 1;
-					DataMgr.setSnowballHitCount(name, 0);
-				}
-
-				if (i != 0) {
-					for (Player target : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
-						if (!DataMgr.getPlayerData(target).settings.ShowEffect_MainWeaponInk())
-							continue;
-						if (target.getWorld() == inkball.getWorld()) {
-							if (target.getLocation()
-									.distanceSquared(inkball.getLocation()) < Sclat.particleRenderDistanceSquared) {
-								org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).team.getTeamColor().wool
-										.createBlockData();
-								target.spawnParticle(org.bukkit.Particle.BLOCK_DUST, inkball.getLocation(), 1, 0, 0, 0,
-										1, bd);
-							}
-						}
-					}
-				}
-
-				if (i >= tick && !addedFallVec) {
-					inkball.setVelocity(fallvec);
-					addedFallVec = true;
-				}
-				if (i >= tick && i <= tick + 15)
-					inkball.setVelocity(inkball.getVelocity().add(new Vector(0, -0.1, 0)));
-				if (i != tick)
-					PaintMgr.PaintHightestBlock(inkball.getLocation(), p, true, true);
-				if (inkball.isDead())
-					cancel();
-
-				i++;
-			}
-		};
-		task.runTaskTimer(VariablesKt.getPlugin(), 0, 1);
-
-		return false;
-	}
-
-	public static void KasaRunnable(Player player, boolean big) {
-		KasaData kdata = new KasaData(player);
-		DataMgr.setKasaDataWithPlayer(player, kdata);
-
-		BukkitRunnable task = new BukkitRunnable() {
-			Player p = player;
-			int i = 0;
-			List<ArmorStand> list = new ArrayList<>();
-			boolean weapon = false;
-			boolean sound = true;
-
-			ArmorStand as1;
-			ArmorStand as2;
-			ArmorStand as3;
-			ArmorStand as4;
-			ArmorStand as5;
-			ArmorStand as6;
-			ArmorStand as7;
-
-			@Override
-			public void run() {
-				try {
-					PlayerData data = DataMgr.getPlayerData(p);
-
-					try {
-						weapon = MainWeaponMgr.equalWeapon(p);
-					} catch (Exception e) {
-						weapon = false;
-					}
-
-					if (data.getIsSneaking() && kdata.damage <= 200) {
-						if (!sound) {
-							sound = true;
-							p.getWorld().playSound(p.getLocation(), Sound.ITEM_ARMOR_EQUIP_GENERIC, 1F, 1F);
-						}
-					} else {
-						sound = false;
-					}
-
-					Location ploc = player.getLocation();
-					Vector pvec = player.getEyeLocation().getDirection().normalize();
-					Vector vec = new Vector(pvec.getX(), 0, pvec.getZ()).normalize().multiply(1.3);
-					Vector mvec = vec.clone().normalize().multiply(-1.2);
-					Location aml = ploc.clone().add(vec.getX(), -1.15, vec.getZ());
-					Location aml2 = ploc.clone().add(vec.getX() * 0.8, -1.15, vec.getZ() * 0.8);
-					Vector v1 = new Vector(vec.getZ() * -1, 0, vec.getX()).normalize().multiply(0.31);
-					Vector v2 = new Vector(vec.getZ(), 0, vec.getX() * -1).normalize().multiply(0.31);
-					Location rl = aml.clone().add(v1);
-					Location rl2 = aml2.clone().add(v1);
-					Location ll = aml.clone().add(v2);
-					Location ll2 = aml2.clone().add(v2);
-
-					if (i == 0) {
-						as1 = (ArmorStand) player.getWorld().spawnEntity(rl.clone().add(0, 0.2, 0),
-								EntityType.ARMOR_STAND);
-						as2 = (ArmorStand) player.getWorld().spawnEntity(rl2.clone().add(0, -0.52, 0),
-								EntityType.ARMOR_STAND);
-						as3 = (ArmorStand) player.getWorld().spawnEntity(ll.clone().add(0, 0.2, 0),
-								EntityType.ARMOR_STAND);
-						as4 = (ArmorStand) player.getWorld().spawnEntity(ll2.clone().add(0, -0.52, 0),
-								EntityType.ARMOR_STAND);
-						as5 = (ArmorStand) player.getWorld()
-								.spawnEntity(aml.clone().add(mvec.getX(), 0.35, mvec.getZ()), EntityType.ARMOR_STAND);
-						as6 = (ArmorStand) player.getWorld().spawnEntity(rl.clone().add(0, 0.8, 0),
-								EntityType.ARMOR_STAND);
-						as7 = (ArmorStand) player.getWorld().spawnEntity(ll.clone().add(0, 0.8, 0),
-								EntityType.ARMOR_STAND);
-						// as5.setSmall(true);
-						list.add(as1);
-						list.add(as2);
-						list.add(as4);
-						list.add(as3);
-						list.add(as5);
-						list.add(as6);
-						list.add(as7);
-
-						kdata.setArmorStandList(list);
-
-						int c = 1;
-						for (ArmorStand as : list) {
-							// as.setHeadPose(new EulerAngle(Math.toRadians(90), 0, 0));
-							as.setBasePlate(false);
-							as.setVisible(false);
-							as.setGravity(false);
-							as.setCustomName("Kasa");
-							DataMgr.setKasaDataWithARmorStand(as, kdata);
-							/*
-							 * if(c <= 4){ for (Player o_player :
-							 * Main.getPlugin().getServer().getOnlinePlayers()) {
-							 * ((CraftPlayer)o_player).getHandle().playerConnection.sendPacket(new
-							 * PacketPlayOutEntityEquipment(as.getEntityId(), EnumItemSlot.HEAD,
-							 * CraftItemStack.asNMSCopy(new ItemStack(Material.WHITE_STAINED_GLASS_PANE))));
-							 * } } if(c == 5){ for (Player o_player :
-							 * Main.getPlugin().getServer().getOnlinePlayers()) {
-							 * ((CraftPlayer)o_player).getHandle().playerConnection.sendPacket(new
-							 * PacketPlayOutEntityEquipment(as.getEntityId(), EnumItemSlot.HEAD,
-							 * CraftItemStack.asNMSCopy(new ItemStack(Material.END_ROD)))); } }
-							 */
-							c++;
-						}
-
-						as1.setHeadPose(new EulerAngle(Math.toRadians(350), 0, 0));
-						as2.setHeadPose(new EulerAngle(Math.toRadians(10), 0, 0));
-						as3.setHeadPose(new EulerAngle(Math.toRadians(350), 0, 0));
-						as4.setHeadPose(new EulerAngle(Math.toRadians(10), 0, 0));
-						as5.setHeadPose(new EulerAngle(Math.toRadians(30), 0, 0));
-					}
-
-					if (i != 0) {
-						if (p.isSneaking() && kdata.damage <= 200 && weapon
-								&& p.getGameMode().equals(GameMode.ADVENTURE)) {
-							as1.teleport(rl.clone().add(0, 0.2, 0));
-							as2.teleport(rl2.clone().add(0, -0.52, 0));
-							as3.teleport(ll.clone().add(0, 0.2, 0));
-							as4.teleport(ll2.clone().add(0, -0.52, 0));
-							as5.teleport(aml.clone().add(mvec.getX(), 0.35, mvec.getZ()));
-							as6.teleport(rl.clone().add(0, 1, 0));
-							as7.teleport(ll.clone().add(0, 1, 0));
-
-							if (i % 10 == 0) {
-								ArmorStandItemDelay(list, p, kdata);
-							}
-						} else {
-							if (i % 5 == 0) {
-								for (ArmorStand as : list) {
-									for (Player o_player : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
-										((CraftPlayer) o_player).getHandle().playerConnection.sendPacket(
-												new PacketPlayOutEntityEquipment(as.getEntityId(), EnumItemSlot.HEAD,
-														CraftItemStack.asNMSCopy(new ItemStack(Material.AIR))));
-									}
-								}
-								ArmorStandTeleportDelay(list, p, kdata);
-							}
-						}
-					}
-
-					if (i % 100 == 0) {
-						if (kdata.damage - 50 > 0) {
-							kdata.damage = (kdata.damage - 50);
-						} else {
-							kdata.damage = (0);
-						}
-					}
-
-					if (p.getGameMode().equals(GameMode.SPECTATOR))
-						kdata.damage = (0);
-
-					if (!data.isInMatch() || !p.isOnline()) {
-						for (ArmorStand as : list)
-							as.remove();
-						cancel();
-					}
-
-					i++;
-				} catch (Exception e) {
-					cancel();
-				}
-			}
-		};
-
-		BukkitRunnable bigktask = new BukkitRunnable() {
-			Player p = player;
-			int i = 0;
-			int c = 0;
-			boolean is = true;
-			int pageCooltime = DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().rollerWidth;
-
-			@Override
-			public void run() {
-				if (p.isSneaking() && is && p.getGameMode() != GameMode.SPECTATOR
-						&& !DataMgr.getPlayerData(p).getIsUsingTyakuti()) {
-					is = false;
-					Camping(p);
-					DataMgr.getPlayerData(p).setMainItemGlow(false);
-					if (!DataMgr.getPlayerData(p).getIsUsingSP())
-						WeaponClassMgr.setWeaponClass(p);
-				}
-				if (!is) {
-					c++;
-					if (c == pageCooltime) {
-						is = true;
-						c = 0;
-						DataMgr.getPlayerData(p).setMainItemGlow(true);
-						if (!DataMgr.getPlayerData(p).getIsUsingSP())
-							WeaponClassMgr.setWeaponClass(p);
-					}
-				}
-				i++;
-				if (!p.isOnline() || !DataMgr.getPlayerData(p).isInMatch()) {
-					cancel();
-				}
-			}
-		};
-
-		if (big)
-			bigktask.runTaskTimer(VariablesKt.getPlugin(), 0, 1);
-		else
-			task.runTaskTimer(VariablesKt.getPlugin(), 0, 1);
-	}
-
-	public static void Camping(Player player) {
-		KasaData kdata = new KasaData(player);
-		DataMgr.setKasaDataWithPlayer(player, kdata);
-		player.getWorld().playSound(player.getLocation(), Sound.ITEM_ARMOR_EQUIP_GENERIC, 1F, 1F);
-
-		BukkitRunnable task = new BukkitRunnable() {
-			Player p = player;
-			int i = 0;
-			boolean bp = false;
-			boolean squid = true;
-			float kasaSpeed = DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getRollerNeedInk();
-			int pageCooltime = DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().rollerWidth;
-
-			Vector dir = new Vector(1, 0, 0);
-
-			List<ArmorStand> list = new ArrayList<>();
-			List<ArmorStand> ul = new ArrayList<>();
-			List<ArmorStand> dl = new ArrayList<>();
-
-			ArmorStand as1;
-			ArmorStand as2;
-			ArmorStand as3;
-			ArmorStand as4;
-			ArmorStand as5;
-			ArmorStand as6;
-			ArmorStand as7;
-			ArmorStand as8;
-			ArmorStand as9;
-			ArmorStand as10;
-			ArmorStand as11;
-			ArmorStand as12;
-			ArmorStand as13;
-			ArmorStand as14;
-			ArmorStand as15;
-			ArmorStand as16;
-			ArmorStand as17;
-			ArmorStand as18;
-			ArmorStand as19;
-			ArmorStand as20;
-			// ArmorStand as21;
-			// ArmorStand as22;
-			ArmorStand las;
-
-			@Override
-			public void run() {
-				try {
-					Location loc = p.getLocation().add(0, -1.7, 0);
-
-					if (bp) {
-						if (las.isOnGround())
-							las.setVelocity(dir.clone().multiply(kasaSpeed));
-						loc = las.getLocation().add(0, -1.7, 0);
-					}
-					Vector pv = p.getEyeLocation().getDirection().normalize();
-					Vector vec = new Vector(pv.getX(), 0, pv.getZ()).normalize();
-					if (bp)
-						vec = dir;
-					Vector mvec = vec.clone().multiply(-1);
-					Location floc = loc.add(vec.clone().multiply(1.5));
-					Vector vec1 = new Vector(vec.getZ() * -1, 0, vec.getX());
-					Vector vec2 = new Vector(vec.getZ(), 0, vec.getX() * -1);
-
-					Location l1 = floc.clone().add(vec1.clone().multiply(0.6));
-					Location l2 = floc.clone().add(vec1.clone().multiply(1.2));
-
-					Location r1 = floc.clone().add(vec2.clone().multiply(0.6));
-					Location r2 = floc.clone().add(vec2.clone().multiply(1.2));
-
-					if (i == 0) {
-						as1 = (ArmorStand) p.getWorld().spawnEntity(
-								floc.clone().add(0, -0.05, 0).add(mvec.clone().multiply(0.38)), EntityType.ARMOR_STAND);
-						as2 = (ArmorStand) p.getWorld().spawnEntity(floc.clone().add(0, 0.6, 0),
-								EntityType.ARMOR_STAND);
-						as3 = (ArmorStand) p.getWorld().spawnEntity(floc.clone().add(0, 1.2, 0),
-								EntityType.ARMOR_STAND);
-						as4 = (ArmorStand) p.getWorld().spawnEntity(
-								floc.clone().add(0, 3.15, 0).add(mvec.clone().multiply(0.9)), EntityType.ARMOR_STAND);
-
-						as5 = (ArmorStand) p.getWorld().spawnEntity(
-								l1.clone().add(0, -0.05, 0).add(mvec.clone().multiply(0.38)), EntityType.ARMOR_STAND);
-						as6 = (ArmorStand) p.getWorld().spawnEntity(l1.clone().add(0, 0.6, 0), EntityType.ARMOR_STAND);
-						as7 = (ArmorStand) p.getWorld().spawnEntity(l1.clone().add(0, 1.2, 0), EntityType.ARMOR_STAND);
-						as8 = (ArmorStand) p.getWorld().spawnEntity(
-								l1.clone().add(0, 3.15, 0).add(mvec.clone().multiply(0.9)), EntityType.ARMOR_STAND);
-
-						as9 = (ArmorStand) p.getWorld().spawnEntity(
-								l2.clone().add(0, -0.05, 0).add(mvec.clone().multiply(0.38)), EntityType.ARMOR_STAND);
-						as10 = (ArmorStand) p.getWorld().spawnEntity(l2.clone().add(0, 0.6, 0), EntityType.ARMOR_STAND);
-						as11 = (ArmorStand) p.getWorld().spawnEntity(l2.clone().add(0, 1.2, 0), EntityType.ARMOR_STAND);
-						as12 = (ArmorStand) p.getWorld().spawnEntity(
-								l2.clone().add(0, 3.15, 0).add(mvec.clone().multiply(0.9)), EntityType.ARMOR_STAND);
-
-						as13 = (ArmorStand) p.getWorld().spawnEntity(
-								r1.clone().add(0, -0.05, 0).add(mvec.clone().multiply(0.38)), EntityType.ARMOR_STAND);
-						as14 = (ArmorStand) p.getWorld().spawnEntity(r1.clone().add(0, 0.6, 0), EntityType.ARMOR_STAND);
-						as15 = (ArmorStand) p.getWorld().spawnEntity(r1.clone().add(0, 1.2, 0), EntityType.ARMOR_STAND);
-						as16 = (ArmorStand) p.getWorld().spawnEntity(
-								r1.clone().add(0, 3.15, 0).add(mvec.clone().multiply(0.9)), EntityType.ARMOR_STAND);
-
-						as17 = (ArmorStand) p.getWorld().spawnEntity(
-								r2.clone().add(0, -0.05, 0).add(mvec.clone().multiply(0.38)), EntityType.ARMOR_STAND);
-						as18 = (ArmorStand) p.getWorld().spawnEntity(r2.clone().add(0, 0.6, 0), EntityType.ARMOR_STAND);
-						as19 = (ArmorStand) p.getWorld().spawnEntity(r2.clone().add(0, 1.2, 0), EntityType.ARMOR_STAND);
-						as20 = (ArmorStand) p.getWorld().spawnEntity(
-								r2.clone().add(0, 3.15, 0).add(mvec.clone().multiply(0.9)), EntityType.ARMOR_STAND);
-
-						list.add(as16);
-						list.add(as4);
-						list.add(as2);
-						list.add(as11);
-						list.add(as20);
-						list.add(as3);
-						list.add(as6);
-						list.add(as14);
-						list.add(as7);
-						list.add(as9);
-						list.add(as10);
-						list.add(as12);
-						list.add(as8);
-						list.add(as13);
-						list.add(as15);
-						list.add(as1);
-						list.add(as17);
-						list.add(as5);
-						list.add(as19);
-						list.add(as18);
-
-						dl.add(as1);
-						ul.add(as4);
-						dl.add(as5);
-						ul.add(as8);
-						dl.add(as9);
-						ul.add(as12);
-						dl.add(as13);
-						ul.add(as16);
-						dl.add(as17);
-						ul.add(as20);
-
-						List<ArmorStand> aslist = new ArrayList<>(list);
-						kdata.setArmorStandList(aslist);
-						kdata.damage = (DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().slideNeedINK);
-
-						for (ArmorStand as : list) {
-							// as.setHeadPose(new EulerAngle(Math.toRadians(90), 0, 0));
-							as.setBasePlate(false);
-							as.setVisible(false);
-							as.setGravity(false);
-							as.setCustomName("Kasa");
-							DataMgr.setKasaDataWithARmorStand(as, kdata);
-						}
-
-						for (ArmorStand as : ul) {
-							as.setHeadPose(new EulerAngle(Math.toRadians(160), 0, 0));
-						}
-
-						for (ArmorStand as : dl) {
-							as.setHeadPose(new EulerAngle(Math.toRadians(20), 0, 0));
-						}
-					}
-
-					if (i >= 0) {
-						as1.teleport(floc.clone().add(0, -0.05, 0).add(mvec.clone().multiply(0.38)));
-						as2.teleport(floc.clone().add(0, 0.6, 0));
-						as3.teleport(floc.clone().add(0, 1.2, 0));
-						as4.teleport(floc.clone().add(0, 3.15, 0).add(mvec.clone().multiply(0.9)));
-
-						as5.teleport(l1.clone().add(0, -0.05, 0).add(mvec.clone().multiply(0.38)));
-						as6.teleport(l1.clone().add(0, 0.6, 0));
-						as7.teleport(l1.clone().add(0, 1.2, 0));
-						as8.teleport(l1.clone().add(0, 3.15, 0).add(mvec.clone().multiply(0.9)));
-
-						as9.teleport(l2.clone().add(0, -0.05, 0).add(mvec.clone().multiply(0.38)));
-						as10.teleport(l2.clone().add(0, 0.6, 0));
-						as11.teleport(l2.clone().add(0, 1.2, 0));
-						as12.teleport(l2.clone().add(0, 3.15, 0).add(mvec.clone().multiply(0.9)));
-
-						as13.teleport(r1.clone().add(0, -0.05, 0).add(mvec.clone().multiply(0.38)));
-						as14.teleport(r1.clone().add(0, 0.6, 0));
-						as15.teleport(r1.clone().add(0, 1.2, 0));
-						as16.teleport(r1.clone().add(0, 3.15, 0).add(mvec.clone().multiply(0.9)));
-
-						as17.teleport(r2.clone().add(0, -0.05, 0).add(mvec.clone().multiply(0.38)));
-						as18.teleport(r2.clone().add(0, 0.6, 0));
-						as19.teleport(r2.clone().add(0, 1.2, 0));
-						as20.teleport(r2.clone().add(0, 3.15, 0).add(mvec.clone().multiply(0.9)));
-
-						if (i % 2 == 0) {
-							Location asl = as4.getLocation();
-							BlockData bd = DataMgr.getPlayerData(p).team.getTeamColor().wool.createBlockData();
-							for (Player target : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
-								if (DataMgr.getPlayerData(target).settings.ShowEffect_MainWeaponInk())
-									if (target.getWorld() == p.getWorld())
-										if (target.getLocation()
-												.distanceSquared(asl) < Sclat.particleRenderDistanceSquared)
-											target.spawnParticle(Particle.BLOCK_DUST, asl, 1, 0, 0, 0, 1, bd);
-							}
-
-							for (ArmorStand as : ul) {
-								PaintMgr.PaintHightestBlock(as.getLocation(), p, false, false);
-							}
-						}
-
-						if (i % 3 == 0) {
-							for (ArmorStand as : dl) {
-								RayTrace rayTrace = new RayTrace(as.getLocation().toVector(), new Vector(0, 1, 0));
-								double damage = 1.0;
-								for (Player target : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
-									if (!DataMgr.getPlayerData(target).isInMatch())
-										continue;
-									if (DataMgr.getPlayerData(player).team != DataMgr.getPlayerData(target).team
-											&& target.getGameMode().equals(GameMode.ADVENTURE)) {
-										if (rayTrace.intersects(new BoundingBox((Entity) target), 5, 0.05)) {
-											SclatUtil.giveDamage(player, target, damage, "killed");
-
-											// AntiNoDamageTime
-											BukkitRunnable task = new BukkitRunnable() {
-												Player p = target;
-												@Override
-												public void run() {
-													target.setNoDamageTicks(0);
-												}
-											};
-											task.runTaskLater(VariablesKt.getPlugin(), 1);
-										}
-									}
-								}
-							}
-						}
-
-						int c = 1;
-						for (ArmorStand as : list) {
-							PlayerData data = DataMgr.getPlayerData(player);
-							Team team = data.match.team0;
-							if (team == data.team)
-								team = data.match.team1;
-							for (Player o_player : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
-								if (kdata.damage == 0) {
-									((CraftPlayer) o_player).getHandle().playerConnection
-											.sendPacket(new PacketPlayOutEntityEquipment(as.getEntityId(),
-													EnumItemSlot.HEAD, CraftItemStack.asNMSCopy(
-															new ItemStack(Material.WHITE_STAINED_GLASS_PANE))));
-								}
-								if (kdata.damage > 0 && kdata.damage <= 50) {
-									if (c == 1)
-										((CraftPlayer) o_player).getHandle().playerConnection.sendPacket(
-												new PacketPlayOutEntityEquipment(as.getEntityId(), EnumItemSlot.HEAD,
-														CraftItemStack.asNMSCopy(new ItemStack(Material.getMaterial(
-																team.getTeamColor().glass.toString() + "_PANE")))));
-									else
-										((CraftPlayer) o_player).getHandle().playerConnection
-												.sendPacket(new PacketPlayOutEntityEquipment(as.getEntityId(),
-														EnumItemSlot.HEAD, CraftItemStack.asNMSCopy(
-																new ItemStack(Material.WHITE_STAINED_GLASS_PANE))));
-								}
-								if (kdata.damage > 50 && kdata.damage <= 100) {
-									if (c <= 2)
-										((CraftPlayer) o_player).getHandle().playerConnection.sendPacket(
-												new PacketPlayOutEntityEquipment(as.getEntityId(), EnumItemSlot.HEAD,
-														CraftItemStack.asNMSCopy(new ItemStack(Material.getMaterial(
-																team.getTeamColor().glass.toString() + "_PANE")))));
-									else
-										((CraftPlayer) o_player).getHandle().playerConnection
-												.sendPacket(new PacketPlayOutEntityEquipment(as.getEntityId(),
-														EnumItemSlot.HEAD, CraftItemStack.asNMSCopy(
-																new ItemStack(Material.WHITE_STAINED_GLASS_PANE))));
-								}
-								if (kdata.damage > 100 && kdata.damage <= 150) {
-									if (c <= 3)
-										((CraftPlayer) o_player).getHandle().playerConnection.sendPacket(
-												new PacketPlayOutEntityEquipment(as.getEntityId(), EnumItemSlot.HEAD,
-														CraftItemStack.asNMSCopy(new ItemStack(Material.getMaterial(
-																team.getTeamColor().glass.toString() + "_PANE")))));
-									else
-										((CraftPlayer) o_player).getHandle().playerConnection
-												.sendPacket(new PacketPlayOutEntityEquipment(as.getEntityId(),
-														EnumItemSlot.HEAD, CraftItemStack.asNMSCopy(
-																new ItemStack(Material.WHITE_STAINED_GLASS_PANE))));
-								}
-								if (kdata.damage > 150) {
-									if (c <= 4)
-										((CraftPlayer) o_player).getHandle().playerConnection.sendPacket(
-												new PacketPlayOutEntityEquipment(as.getEntityId(), EnumItemSlot.HEAD,
-														CraftItemStack.asNMSCopy(new ItemStack(Material.getMaterial(
-																team.getTeamColor().glass.toString() + "_PANE")))));
-									else
-										((CraftPlayer) o_player).getHandle().playerConnection
-												.sendPacket(new PacketPlayOutEntityEquipment(as.getEntityId(),
-														EnumItemSlot.HEAD, CraftItemStack.asNMSCopy(
-																new ItemStack(Material.WHITE_STAINED_GLASS_PANE))));
-								}
-							}
-							c++;
-						}
-					}
-
-					if ((p.getInventory().getItemInMainHand().getType().equals(Material.AIR) || !p.isSneaking()
-							|| p.getGameMode() == GameMode.SPECTATOR) && squid && i < 39) {
-						squid = false;
-						i = 39;
-					}
-
-					if (i == 40) {
-						bp = true;
-						dir = vec.clone().multiply(1);
-						las = (ArmorStand) p.getWorld().spawnEntity(p.getLocation(), EntityType.ARMOR_STAND);
-						las.setVisible(false);
-						las.setGravity(true);
-						las.setCustomName("Kasa");
-						List<ArmorStand> l = kdata.getArmorStandList();
-						l.add(las);
-						kdata.setArmorStandList(l);
-						DataMgr.setKasaDataWithARmorStand(las, kdata);
-						p.playNote(p.getLocation(), Instrument.STICKS, Note.flat(1, Note.Tone.C));
-						p.playSound(p.getLocation(), Sound.BLOCK_WOODEN_PRESSURE_PLATE_CLICK_ON, 1F, 1.2F);
-					}
-
-					if (i == pageCooltime + 20 || kdata.damage > 200 || !p.isOnline()
-							|| !DataMgr.getPlayerData(p).isInMatch()) {
-						if (kdata.damage <= 200 && DataMgr.getPlayerData(p).isInMatch())
-							as1.getWorld().playSound(as1.getLocation(), Sound.ENTITY_ITEM_BREAK, 0.8F, 0.8F);
-
-						for (ArmorStand as : list) {
-							as.remove();
-						}
-						las.remove();
-						cancel();
-					}
-
-					i++;
-				} catch (Exception e) {
-					cancel();
-				}
-			}
-		};
-		task.runTaskTimer(VariablesKt.getPlugin(), 0, 1);
-	}
-
-	public static void ArmorStandItemDelay(List<ArmorStand> list, Player player, KasaData kdata) {
-		BukkitRunnable task = new BukkitRunnable() {
-			@Override
-			public void run() {
-				PlayerData data = DataMgr.getPlayerData(player);
-				Team team = data.match.team0;
-				if (team == data.team)
-					team = data.match.team1;
-
-				int c = 1;
-				for (ArmorStand as : list) {
-					if (c <= 4) {
-						for (Player o_player : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
-							if (kdata.damage == 0) {
-								((CraftPlayer) o_player).getHandle().playerConnection
-										.sendPacket(new PacketPlayOutEntityEquipment(as.getEntityId(),
-												EnumItemSlot.HEAD, CraftItemStack
-														.asNMSCopy(new ItemStack(Material.WHITE_STAINED_GLASS_PANE))));
-							}
-							if (kdata.damage > 0 && kdata.damage <= 50) {
-								if (c == 1)
-									((CraftPlayer) o_player).getHandle().playerConnection.sendPacket(
-											new PacketPlayOutEntityEquipment(as.getEntityId(), EnumItemSlot.HEAD,
-													CraftItemStack.asNMSCopy(new ItemStack(Material.getMaterial(
-															team.getTeamColor().glass.toString() + "_PANE")))));
-								else
-									((CraftPlayer) o_player).getHandle().playerConnection
-											.sendPacket(new PacketPlayOutEntityEquipment(as.getEntityId(),
-													EnumItemSlot.HEAD, CraftItemStack.asNMSCopy(
-															new ItemStack(Material.WHITE_STAINED_GLASS_PANE))));
-							}
-							if (kdata.damage > 50 && kdata.damage <= 100) {
-								if (c <= 2)
-									((CraftPlayer) o_player).getHandle().playerConnection.sendPacket(
-											new PacketPlayOutEntityEquipment(as.getEntityId(), EnumItemSlot.HEAD,
-													CraftItemStack.asNMSCopy(new ItemStack(Material.getMaterial(
-															team.getTeamColor().glass.toString() + "_PANE")))));
-								else
-									((CraftPlayer) o_player).getHandle().playerConnection
-											.sendPacket(new PacketPlayOutEntityEquipment(as.getEntityId(),
-													EnumItemSlot.HEAD, CraftItemStack.asNMSCopy(
-															new ItemStack(Material.WHITE_STAINED_GLASS_PANE))));
-							}
-							if (kdata.damage > 100 && kdata.damage <= 150) {
-								if (c <= 3)
-									((CraftPlayer) o_player).getHandle().playerConnection.sendPacket(
-											new PacketPlayOutEntityEquipment(as.getEntityId(), EnumItemSlot.HEAD,
-													CraftItemStack.asNMSCopy(new ItemStack(Material.getMaterial(
-															team.getTeamColor().glass.toString() + "_PANE")))));
-								else
-									((CraftPlayer) o_player).getHandle().playerConnection
-											.sendPacket(new PacketPlayOutEntityEquipment(as.getEntityId(),
-													EnumItemSlot.HEAD, CraftItemStack.asNMSCopy(
-															new ItemStack(Material.WHITE_STAINED_GLASS_PANE))));
-							}
-							if (kdata.damage > 150) {
-								if (c <= 4)
-									((CraftPlayer) o_player).getHandle().playerConnection.sendPacket(
-											new PacketPlayOutEntityEquipment(as.getEntityId(), EnumItemSlot.HEAD,
-													CraftItemStack.asNMSCopy(new ItemStack(Material.getMaterial(
-															team.getTeamColor().glass.toString() + "_PANE")))));
-								else
-									((CraftPlayer) o_player).getHandle().playerConnection
-											.sendPacket(new PacketPlayOutEntityEquipment(as.getEntityId(),
-													EnumItemSlot.HEAD, CraftItemStack.asNMSCopy(
-															new ItemStack(Material.WHITE_STAINED_GLASS_PANE))));
-							}
-						}
-					}
-
-					if (c == 5) {
-						for (Player o_player : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
-							((CraftPlayer) o_player).getHandle().playerConnection
-									.sendPacket(new PacketPlayOutEntityEquipment(as.getEntityId(), EnumItemSlot.HEAD,
-											CraftItemStack.asNMSCopy(new ItemStack(Material.END_ROD))));
-						}
-					}
-
-					c++;
-				}
-			}
-		};
-		task.runTaskLater(VariablesKt.getPlugin(), 10);
-	}
-
-	public static void ArmorStandTeleportDelay(List<ArmorStand> list, Player player, KasaData kdata) {
-		BukkitRunnable task = new BukkitRunnable() {
-			@Override
-			public void run() {
-				for (ArmorStand as : list)
-					as.teleport(player.getLocation().add(0, 50, 0));
-			}
-		};
-		task.runTaskLater(VariablesKt.getPlugin(), 3);
-	}
+object Kasa {
+    @JvmStatic
+    fun shootKasa(player: Player) {
+        if (player.isSneaking()) return
+
+        val data = getPlayerData(player)
+        val delay1: BukkitRunnable =
+            object : BukkitRunnable() {
+                var p: Player = player
+
+                override fun run() {
+                    val data = getPlayerData(player)
+                    data!!.setCanRollerShoot(true)
+                }
+            }
+        if (data!!.getCanRollerShoot()) {
+            delay1.runTaskLater(
+                plugin,
+                data
+                    .getWeaponClass()
+                    .mainWeapon!!
+                    .coolTime
+                    .toLong(),
+            )
+        }
+
+        val delay: BukkitRunnable =
+            object : BukkitRunnable() {
+                val p: Player = player
+
+                override fun run() {
+                    var sound = false
+                    for (i in 0..<data.getWeaponClass().mainWeapon!!.rollerShootQuantity) {
+                        val `is` = shoot(player, null)
+                        if (`is`) sound = true
+                    }
+                    player.getWorld().playSound(p.getLocation(), Sound.ITEM_ARMOR_EQUIP_GENERIC, 0.9f, 1.3f)
+                    if (sound) {
+                        player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1f, 1.63f)
+                    }
+                }
+            }
+        if (data.getCanRollerShoot()) {
+            delay.runTaskLater(
+                plugin,
+                data
+                    .getWeaponClass()
+                    .mainWeapon!!
+                    .delay
+                    .toLong(),
+            )
+            data.setCanRollerShoot(false)
+        }
+    }
+
+    fun shoot(
+        player: Player,
+        v: Vector?,
+    ): Boolean {
+        if (player.getGameMode() == GameMode.SPECTATOR) return false
+
+        val data = getPlayerData(player)
+        if (player.getExp() <=
+            (
+                data!!.getWeaponClass().mainWeapon!!.needInk
+                    * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) /
+                    Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)
+                ).toFloat()
+        ) {
+            player.sendTitle("", ChatColor.RED.toString() + "インクが足りません", 0, 13, 2)
+            return true
+        }
+        player.setExp(
+            player.getExp() -
+                (
+                    data.getWeaponClass().mainWeapon!!.needInk
+                        * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) /
+                        Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)
+                    ).toFloat(),
+        )
+        val ball = player.launchProjectile<Snowball>(Snowball::class.java)
+        (ball as CraftSnowball).getHandle().setItem(
+            CraftItemStack.asNMSCopy(ItemStack(getPlayerData(player)!!.team.teamColor!!.wool!!)),
+        )
+        var vec: Vector? =
+            player
+                .getLocation()
+                .getDirection()
+                .multiply(getPlayerData(player)!!.getWeaponClass().mainWeapon!!.shootSpeed)
+        if (v != null) vec = v
+        val random = getPlayerData(player)!!.getWeaponClass().mainWeapon!!.random
+        val distick = getPlayerData(player)!!.getWeaponClass().mainWeapon!!.distanceTick
+        vec!!.add(
+            Vector(
+                Math.random() * random - random / 2,
+                Math.random() * random / 1.5 - random / 3,
+                Math.random() * random - random / 2,
+            ),
+        )
+        ball.setVelocity(vec)
+        ball.setShooter(player)
+        val name = notDuplicateNumber.toString()
+        DataMgr.mws.add(name)
+        ball.setCustomName(name)
+        mainSnowballNameMap.put(name, ball)
+        setSnowballHitCount(name, 0)
+        val task: BukkitRunnable =
+            object : BukkitRunnable() {
+                var i: Int = 0
+                var tick: Int = distick
+                var inkball: Snowball? = ball
+                var p: Player = player
+                var addedFallVec: Boolean = false
+                var fallvec: Vector =
+                    Vector(
+                        inkball!!.getVelocity().getX(),
+                        inkball!!.getVelocity().getY(),
+                        inkball!!.getVelocity().getZ(),
+                    ).multiply(getPlayerData(p)!!.getWeaponClass().mainWeapon!!.shootSpeed / 17)
+
+                override fun run() {
+                    inkball = mainSnowballNameMap.get(name)
+
+                    if (inkball != ball) {
+                        i += getSnowballHitCount(name) - 1
+                        setSnowballHitCount(name, 0)
+                    }
+
+                    if (i != 0) {
+                        for (target in plugin.getServer().getOnlinePlayers()) {
+                            if (!getPlayerData(target)!!.settings.ShowEffect_MainWeaponInk()) continue
+                            if (target.getWorld() === inkball!!.getWorld()) {
+                                if (target
+                                        .getLocation()
+                                        .distanceSquared(inkball!!.getLocation()) < Sclat.particleRenderDistanceSquared
+                                ) {
+                                    val bd =
+                                        getPlayerData(p)!!
+                                            .team.teamColor!!
+                                            .wool!!
+                                            .createBlockData()
+                                    target.spawnParticle<BlockData?>(
+                                        Particle.BLOCK_DUST,
+                                        inkball!!.getLocation(),
+                                        1,
+                                        0.0,
+                                        0.0,
+                                        0.0,
+                                        1.0,
+                                        bd,
+                                    )
+                                }
+                            }
+                        }
+                    }
+
+                    if (i >= tick && !addedFallVec) {
+                        inkball!!.setVelocity(fallvec)
+                        addedFallVec = true
+                    }
+                    if (i >= tick && i <= tick + 15) {
+                        inkball!!.setVelocity(
+                            inkball!!.getVelocity().add(Vector(0.0, -0.1, 0.0)),
+                        )
+                    }
+                    if (i != tick) PaintMgr.PaintHightestBlock(inkball!!.getLocation(), p, true, true)
+                    if (inkball!!.isDead()) cancel()
+
+                    i++
+                }
+            }
+        task.runTaskTimer(plugin, 0, 1)
+
+        return false
+    }
+
+    @JvmStatic
+    fun kasaRunnable(
+        player: Player,
+        big: Boolean,
+    ) {
+        val kdata = KasaData(player)
+        setKasaDataWithPlayer(player, kdata)
+
+        val task: BukkitRunnable =
+            object : BukkitRunnable() {
+                var p: Player = player
+                var i: Int = 0
+                var list: MutableList<ArmorStand> = ArrayList<ArmorStand>()
+                var weapon: Boolean = false
+                var sound: Boolean = true
+
+                var as1: ArmorStand? = null
+                var as2: ArmorStand? = null
+                var as3: ArmorStand? = null
+                var as4: ArmorStand? = null
+                var as5: ArmorStand? = null
+                var as6: ArmorStand? = null
+                var as7: ArmorStand? = null
+
+                override fun run() {
+                    try {
+                        val data = getPlayerData(p)
+
+                        try {
+                            weapon = MainWeaponMgr.equalWeapon(p)
+                        } catch (e: Exception) {
+                            weapon = false
+                        }
+
+                        if (data!!.getIsSneaking() && kdata.damage <= 200) {
+                            if (!sound) {
+                                sound = true
+                                p.getWorld().playSound(p.getLocation(), Sound.ITEM_ARMOR_EQUIP_GENERIC, 1f, 1f)
+                            }
+                        } else {
+                            sound = false
+                        }
+
+                        val ploc = player.getLocation()
+                        val pvec = player.getEyeLocation().getDirection().normalize()
+                        val vec = Vector(pvec.getX(), 0.0, pvec.getZ()).normalize().multiply(1.3)
+                        val mvec = vec.clone().normalize().multiply(-1.2)
+                        val aml = ploc.clone().add(vec.getX(), -1.15, vec.getZ())
+                        val aml2 = ploc.clone().add(vec.getX() * 0.8, -1.15, vec.getZ() * 0.8)
+                        val v1 = Vector(vec.getZ() * -1, 0.0, vec.getX()).normalize().multiply(0.31)
+                        val v2 = Vector(vec.getZ(), 0.0, vec.getX() * -1).normalize().multiply(0.31)
+                        val rl = aml.clone().add(v1)
+                        val rl2 = aml2.clone().add(v1)
+                        val ll = aml.clone().add(v2)
+                        val ll2 = aml2.clone().add(v2)
+
+                        if (i == 0) {
+                            as1 =
+                                player.getWorld().spawnEntity(
+                                    rl.clone().add(0.0, 0.2, 0.0),
+                                    EntityType.ARMOR_STAND,
+                                ) as ArmorStand
+                            as2 =
+                                player.getWorld().spawnEntity(
+                                    rl2.clone().add(0.0, -0.52, 0.0),
+                                    EntityType.ARMOR_STAND,
+                                ) as ArmorStand
+                            as3 =
+                                player.getWorld().spawnEntity(
+                                    ll.clone().add(0.0, 0.2, 0.0),
+                                    EntityType.ARMOR_STAND,
+                                ) as ArmorStand
+                            as4 =
+                                player.getWorld().spawnEntity(
+                                    ll2.clone().add(0.0, -0.52, 0.0),
+                                    EntityType.ARMOR_STAND,
+                                ) as ArmorStand
+                            as5 =
+                                player
+                                    .getWorld()
+                                    .spawnEntity(
+                                        aml.clone().add(mvec.getX(), 0.35, mvec.getZ()),
+                                        EntityType.ARMOR_STAND,
+                                    ) as ArmorStand
+                            as6 =
+                                player.getWorld().spawnEntity(
+                                    rl.clone().add(0.0, 0.8, 0.0),
+                                    EntityType.ARMOR_STAND,
+                                ) as ArmorStand
+                            as7 =
+                                player.getWorld().spawnEntity(
+                                    ll.clone().add(0.0, 0.8, 0.0),
+                                    EntityType.ARMOR_STAND,
+                                ) as ArmorStand
+                            // as5.setSmall(true);
+                            list.add(as1!!)
+                            list.add(as2!!)
+                            list.add(as4!!)
+                            list.add(as3!!)
+                            list.add(as5!!)
+                            list.add(as6!!)
+                            list.add(as7!!)
+
+                            kdata.armorStandList = list
+
+                            var c = 1
+                            for (`as` in list) {
+                                // as.setHeadPose(new EulerAngle(Math.toRadians(90), 0, 0));
+                                `as`.setBasePlate(false)
+                                `as`.setVisible(false)
+                                `as`.setGravity(false)
+                                `as`.setCustomName("Kasa")
+                                setKasaDataWithARmorStand(`as`, kdata)
+                            /*
+                             * if(c <= 4){ for (Player o_player :
+                             * Main.getPlugin().getServer().getOnlinePlayers()) {
+                             * ((CraftPlayer)o_player).getHandle().playerConnection.sendPacket(new
+                             * PacketPlayOutEntityEquipment(as.getEntityId(), EnumItemSlot.HEAD,
+                             * CraftItemStack.asNMSCopy(new ItemStack(Material.WHITE_STAINED_GLASS_PANE))));
+                             * } } if(c == 5){ for (Player o_player :
+                             * Main.getPlugin().getServer().getOnlinePlayers()) {
+                             * ((CraftPlayer)o_player).getHandle().playerConnection.sendPacket(new
+                             * PacketPlayOutEntityEquipment(as.getEntityId(), EnumItemSlot.HEAD,
+                             * CraftItemStack.asNMSCopy(new ItemStack(Material.END_ROD)))); } }
+                             */
+                                c++
+                            }
+
+                            as1!!.setHeadPose(EulerAngle(Math.toRadians(350.0), 0.0, 0.0))
+                            as2!!.setHeadPose(EulerAngle(Math.toRadians(10.0), 0.0, 0.0))
+                            as3!!.setHeadPose(EulerAngle(Math.toRadians(350.0), 0.0, 0.0))
+                            as4!!.setHeadPose(EulerAngle(Math.toRadians(10.0), 0.0, 0.0))
+                            as5!!.setHeadPose(EulerAngle(Math.toRadians(30.0), 0.0, 0.0))
+                        }
+
+                        if (i != 0) {
+                            if (p.isSneaking() && kdata.damage <= 200 && weapon &&
+                                p.getGameMode() == GameMode.ADVENTURE
+                            ) {
+                                as1!!.teleport(rl.clone().add(0.0, 0.2, 0.0))
+                                as2!!.teleport(rl2.clone().add(0.0, -0.52, 0.0))
+                                as3!!.teleport(ll.clone().add(0.0, 0.2, 0.0))
+                                as4!!.teleport(ll2.clone().add(0.0, -0.52, 0.0))
+                                as5!!.teleport(aml.clone().add(mvec.getX(), 0.35, mvec.getZ()))
+                                as6!!.teleport(rl.clone().add(0.0, 1.0, 0.0))
+                                as7!!.teleport(ll.clone().add(0.0, 1.0, 0.0))
+
+                                if (i % 10 == 0) {
+                                    armorStandItemDelay(list, p, kdata)
+                                }
+                            } else {
+                                if (i % 5 == 0) {
+                                    for (`as` in list) {
+                                        for (o_player in plugin.getServer().getOnlinePlayers()) {
+                                            (o_player as CraftPlayer).getHandle().playerConnection.sendPacket(
+                                                PacketPlayOutEntityEquipment(
+                                                    `as`.getEntityId(),
+                                                    EnumItemSlot.HEAD,
+                                                    CraftItemStack.asNMSCopy(ItemStack(Material.AIR)),
+                                                ),
+                                            )
+                                        }
+                                    }
+                                    armorStandTeleportDelay(list, p, kdata)
+                                }
+                            }
+                        }
+
+                        if (i % 100 == 0) {
+                            if (kdata.damage - 50 > 0) {
+                                kdata.damage = (kdata.damage - 50)
+                            } else {
+                                kdata.damage = (0).toDouble()
+                            }
+                        }
+
+                        if (p.getGameMode() == GameMode.SPECTATOR) kdata.damage = (0).toDouble()
+
+                        if (!data.isInMatch() || !p.isOnline()) {
+                            for (`as` in list) `as`.remove()
+                            cancel()
+                        }
+
+                        i++
+                    } catch (e: Exception) {
+                        cancel()
+                    }
+                }
+            }
+
+        val bigktask: BukkitRunnable =
+            object : BukkitRunnable() {
+                var p: Player = player
+                var i: Int = 0
+                var c: Int = 0
+                var `is`: Boolean = true
+                var pageCooltime: Int = getPlayerData(p)!!.getWeaponClass().mainWeapon!!.rollerWidth
+
+                override fun run() {
+                    if (p.isSneaking() && `is` && p.getGameMode() != GameMode.SPECTATOR && !getPlayerData(p)!!.getIsUsingTyakuti()) {
+                        `is` = false
+                        camping(p)
+                        getPlayerData(p)!!.setMainItemGlow(false)
+                        if (!getPlayerData(p)!!.getIsUsingSP()) WeaponClassMgr.setWeaponClass(p)
+                    }
+                    if (!`is`) {
+                        c++
+                        if (c == pageCooltime) {
+                            `is` = true
+                            c = 0
+                            getPlayerData(p)!!.setMainItemGlow(true)
+                            if (!getPlayerData(p)!!.getIsUsingSP()) WeaponClassMgr.setWeaponClass(p)
+                        }
+                    }
+                    i++
+                    if (!p.isOnline() || !getPlayerData(p)!!.isInMatch()) {
+                        cancel()
+                    }
+                }
+            }
+
+        if (big) {
+            bigktask.runTaskTimer(plugin, 0, 1)
+        } else {
+            task.runTaskTimer(plugin, 0, 1)
+        }
+    }
+
+    fun camping(player: Player) {
+        val kdata = KasaData(player)
+        setKasaDataWithPlayer(player, kdata)
+        player.getWorld().playSound(player.getLocation(), Sound.ITEM_ARMOR_EQUIP_GENERIC, 1f, 1f)
+
+        val task: BukkitRunnable =
+            object : BukkitRunnable() {
+                var p: Player = player
+                var i: Int = 0
+                var bp: Boolean = false
+                var squid: Boolean = true
+                var kasaSpeed: Float = getPlayerData(p)!!.getWeaponClass().mainWeapon!!.rollerNeedInk
+                var pageCooltime: Int = getPlayerData(p)!!.getWeaponClass().mainWeapon!!.rollerWidth
+
+                var dir: Vector = Vector(1, 0, 0)
+
+                var list: MutableList<ArmorStand> = ArrayList<ArmorStand>()
+                var ul: MutableList<ArmorStand> = ArrayList<ArmorStand>()
+                var dl: MutableList<ArmorStand> = ArrayList<ArmorStand>()
+
+                var as1: ArmorStand? = null
+                var as2: ArmorStand? = null
+                var as3: ArmorStand? = null
+                var as4: ArmorStand? = null
+                var as5: ArmorStand? = null
+                var as6: ArmorStand? = null
+                var as7: ArmorStand? = null
+                var as8: ArmorStand? = null
+                var as9: ArmorStand? = null
+                var as10: ArmorStand? = null
+                var as11: ArmorStand? = null
+                var as12: ArmorStand? = null
+                var as13: ArmorStand? = null
+                var as14: ArmorStand? = null
+                var as15: ArmorStand? = null
+                var as16: ArmorStand? = null
+                var as17: ArmorStand? = null
+                var as18: ArmorStand? = null
+                var as19: ArmorStand? = null
+                var as20: ArmorStand? = null
+
+                // ArmorStand as21;
+                // ArmorStand as22;
+                var las: ArmorStand? = null
+
+                override fun run() {
+                    try {
+                        var loc = p.getLocation().add(0.0, -1.7, 0.0)
+
+                        if (bp) {
+                            if (las!!.isOnGround()) las!!.setVelocity(dir.clone().multiply(kasaSpeed))
+                            loc = las!!.getLocation().add(0.0, -1.7, 0.0)
+                        }
+                        val pv = p.getEyeLocation().getDirection().normalize()
+                        var vec = Vector(pv.getX(), 0.0, pv.getZ()).normalize()
+                        if (bp) vec = dir
+                        val mvec = vec.clone().multiply(-1)
+                        val floc = loc.add(vec.clone().multiply(1.5))
+                        val vec1 = Vector(vec.getZ() * -1, 0.0, vec.getX())
+                        val vec2 = Vector(vec.getZ(), 0.0, vec.getX() * -1)
+
+                        val l1 = floc.clone().add(vec1.clone().multiply(0.6))
+                        val l2 = floc.clone().add(vec1.clone().multiply(1.2))
+
+                        val r1 = floc.clone().add(vec2.clone().multiply(0.6))
+                        val r2 = floc.clone().add(vec2.clone().multiply(1.2))
+
+                        if (i == 0) {
+                            as1 =
+                                p.getWorld().spawnEntity(
+                                    floc.clone().add(0.0, -0.05, 0.0).add(mvec.clone().multiply(0.38)),
+                                    EntityType.ARMOR_STAND,
+                                ) as ArmorStand
+                            as2 =
+                                p.getWorld().spawnEntity(
+                                    floc.clone().add(0.0, 0.6, 0.0),
+                                    EntityType.ARMOR_STAND,
+                                ) as ArmorStand
+                            as3 =
+                                p.getWorld().spawnEntity(
+                                    floc.clone().add(0.0, 1.2, 0.0),
+                                    EntityType.ARMOR_STAND,
+                                ) as ArmorStand
+                            as4 =
+                                p.getWorld().spawnEntity(
+                                    floc.clone().add(0.0, 3.15, 0.0).add(mvec.clone().multiply(0.9)),
+                                    EntityType.ARMOR_STAND,
+                                ) as ArmorStand
+
+                            as5 =
+                                p.getWorld().spawnEntity(
+                                    l1.clone().add(0.0, -0.05, 0.0).add(mvec.clone().multiply(0.38)),
+                                    EntityType.ARMOR_STAND,
+                                ) as ArmorStand
+                            as6 =
+                                p
+                                    .getWorld()
+                                    .spawnEntity(l1.clone().add(0.0, 0.6, 0.0), EntityType.ARMOR_STAND) as ArmorStand
+                            as7 =
+                                p
+                                    .getWorld()
+                                    .spawnEntity(l1.clone().add(0.0, 1.2, 0.0), EntityType.ARMOR_STAND) as ArmorStand
+                            as8 =
+                                p.getWorld().spawnEntity(
+                                    l1.clone().add(0.0, 3.15, 0.0).add(mvec.clone().multiply(0.9)),
+                                    EntityType.ARMOR_STAND,
+                                ) as ArmorStand
+
+                            as9 =
+                                p.getWorld().spawnEntity(
+                                    l2.clone().add(0.0, -0.05, 0.0).add(mvec.clone().multiply(0.38)),
+                                    EntityType.ARMOR_STAND,
+                                ) as ArmorStand
+                            as10 =
+                                p
+                                    .getWorld()
+                                    .spawnEntity(l2.clone().add(0.0, 0.6, 0.0), EntityType.ARMOR_STAND) as ArmorStand
+                            as11 =
+                                p
+                                    .getWorld()
+                                    .spawnEntity(l2.clone().add(0.0, 1.2, 0.0), EntityType.ARMOR_STAND) as ArmorStand
+                            as12 =
+                                p.getWorld().spawnEntity(
+                                    l2.clone().add(0.0, 3.15, 0.0).add(mvec.clone().multiply(0.9)),
+                                    EntityType.ARMOR_STAND,
+                                ) as ArmorStand
+
+                            as13 =
+                                p.getWorld().spawnEntity(
+                                    r1.clone().add(0.0, -0.05, 0.0).add(mvec.clone().multiply(0.38)),
+                                    EntityType.ARMOR_STAND,
+                                ) as ArmorStand
+                            as14 =
+                                p
+                                    .getWorld()
+                                    .spawnEntity(r1.clone().add(0.0, 0.6, 0.0), EntityType.ARMOR_STAND) as ArmorStand
+                            as15 =
+                                p
+                                    .getWorld()
+                                    .spawnEntity(r1.clone().add(0.0, 1.2, 0.0), EntityType.ARMOR_STAND) as ArmorStand
+                            as16 =
+                                p.getWorld().spawnEntity(
+                                    r1.clone().add(0.0, 3.15, 0.0).add(mvec.clone().multiply(0.9)),
+                                    EntityType.ARMOR_STAND,
+                                ) as ArmorStand
+
+                            as17 =
+                                p.getWorld().spawnEntity(
+                                    r2.clone().add(0.0, -0.05, 0.0).add(mvec.clone().multiply(0.38)),
+                                    EntityType.ARMOR_STAND,
+                                ) as ArmorStand
+                            as18 =
+                                p
+                                    .getWorld()
+                                    .spawnEntity(r2.clone().add(0.0, 0.6, 0.0), EntityType.ARMOR_STAND) as ArmorStand
+                            as19 =
+                                p
+                                    .getWorld()
+                                    .spawnEntity(r2.clone().add(0.0, 1.2, 0.0), EntityType.ARMOR_STAND) as ArmorStand
+                            as20 =
+                                p.getWorld().spawnEntity(
+                                    r2.clone().add(0.0, 3.15, 0.0).add(mvec.clone().multiply(0.9)),
+                                    EntityType.ARMOR_STAND,
+                                ) as ArmorStand
+
+                            list.add(as16!!)
+                            list.add(as4!!)
+                            list.add(as2!!)
+                            list.add(as11!!)
+                            list.add(as20!!)
+                            list.add(as3!!)
+                            list.add(as6!!)
+                            list.add(as14!!)
+                            list.add(as7!!)
+                            list.add(as9!!)
+                            list.add(as10!!)
+                            list.add(as12!!)
+                            list.add(as8!!)
+                            list.add(as13!!)
+                            list.add(as15!!)
+                            list.add(as1!!)
+                            list.add(as17!!)
+                            list.add(as5!!)
+                            list.add(as19!!)
+                            list.add(as18!!)
+
+                            dl.add(as1!!)
+                            ul.add(as4!!)
+                            dl.add(as5!!)
+                            ul.add(as8!!)
+                            dl.add(as9!!)
+                            ul.add(as12!!)
+                            dl.add(as13!!)
+                            ul.add(as16!!)
+                            dl.add(as17!!)
+                            ul.add(as20!!)
+
+                            val aslist: MutableList<ArmorStand> = ArrayList<ArmorStand>(list)
+                            kdata.armorStandList = aslist
+                            kdata.damage = (getPlayerData(p)!!.getWeaponClass().mainWeapon!!.slideNeedINK).toDouble()
+
+                            for (`as` in list) {
+                                // as.setHeadPose(new EulerAngle(Math.toRadians(90), 0, 0));
+                                `as`.setBasePlate(false)
+                                `as`.setVisible(false)
+                                `as`.setGravity(false)
+                                `as`.setCustomName("Kasa")
+                                setKasaDataWithARmorStand(`as`, kdata)
+                            }
+
+                            for (`as` in ul) {
+                                `as`.setHeadPose(EulerAngle(Math.toRadians(160.0), 0.0, 0.0))
+                            }
+
+                            for (`as` in dl) {
+                                `as`.setHeadPose(EulerAngle(Math.toRadians(20.0), 0.0, 0.0))
+                            }
+                        }
+
+                        if (i >= 0) {
+                            as1!!.teleport(floc.clone().add(0.0, -0.05, 0.0).add(mvec.clone().multiply(0.38)))
+                            as2!!.teleport(floc.clone().add(0.0, 0.6, 0.0))
+                            as3!!.teleport(floc.clone().add(0.0, 1.2, 0.0))
+                            as4!!.teleport(floc.clone().add(0.0, 3.15, 0.0).add(mvec.clone().multiply(0.9)))
+
+                            as5!!.teleport(l1.clone().add(0.0, -0.05, 0.0).add(mvec.clone().multiply(0.38)))
+                            as6!!.teleport(l1.clone().add(0.0, 0.6, 0.0))
+                            as7!!.teleport(l1.clone().add(0.0, 1.2, 0.0))
+                            as8!!.teleport(l1.clone().add(0.0, 3.15, 0.0).add(mvec.clone().multiply(0.9)))
+
+                            as9!!.teleport(l2.clone().add(0.0, -0.05, 0.0).add(mvec.clone().multiply(0.38)))
+                            as10!!.teleport(l2.clone().add(0.0, 0.6, 0.0))
+                            as11!!.teleport(l2.clone().add(0.0, 1.2, 0.0))
+                            as12!!.teleport(l2.clone().add(0.0, 3.15, 0.0).add(mvec.clone().multiply(0.9)))
+
+                            as13!!.teleport(r1.clone().add(0.0, -0.05, 0.0).add(mvec.clone().multiply(0.38)))
+                            as14!!.teleport(r1.clone().add(0.0, 0.6, 0.0))
+                            as15!!.teleport(r1.clone().add(0.0, 1.2, 0.0))
+                            as16!!.teleport(r1.clone().add(0.0, 3.15, 0.0).add(mvec.clone().multiply(0.9)))
+
+                            as17!!.teleport(r2.clone().add(0.0, -0.05, 0.0).add(mvec.clone().multiply(0.38)))
+                            as18!!.teleport(r2.clone().add(0.0, 0.6, 0.0))
+                            as19!!.teleport(r2.clone().add(0.0, 1.2, 0.0))
+                            as20!!.teleport(r2.clone().add(0.0, 3.15, 0.0).add(mvec.clone().multiply(0.9)))
+
+                            if (i % 2 == 0) {
+                                val asl = as4!!.getLocation()
+                                val bd =
+                                    getPlayerData(p)!!
+                                        .team.teamColor!!
+                                        .wool!!
+                                        .createBlockData()
+                                for (target in plugin.getServer().getOnlinePlayers()) {
+                                    if (getPlayerData(target)!!.settings.ShowEffect_MainWeaponInk() && target.getWorld() === p.getWorld() &&
+                                        target
+                                            .getLocation()
+                                            .distanceSquared(asl) < Sclat.particleRenderDistanceSquared
+                                    ) {
+                                        target.spawnParticle<BlockData?>(
+                                            Particle.BLOCK_DUST,
+                                            asl,
+                                            1,
+                                            0.0,
+                                            0.0,
+                                            0.0,
+                                            1.0,
+                                            bd,
+                                        )
+                                    }
+                                }
+
+                                for (`as` in ul) {
+                                    PaintMgr.PaintHightestBlock(`as`.getLocation(), p, false, false)
+                                }
+                            }
+
+                            if (i % 3 == 0) {
+                                for (`as` in dl) {
+                                    val rayTrace = RayTrace(`as`.getLocation().toVector(), Vector(0, 1, 0))
+                                    val damage = 1.0
+                                    for (target in plugin.getServer().getOnlinePlayers()) {
+                                        if (!getPlayerData(target)!!.isInMatch()) continue
+                                        if (getPlayerData(player)!!.team != getPlayerData(target)!!.team &&
+                                            target.getGameMode() == GameMode.ADVENTURE
+                                        ) {
+                                            if (rayTrace.intersects(BoundingBox(target as Entity), 5.0, 0.05)) {
+                                                giveDamage(player, target, damage, "killed")
+
+                                                // AntiNoDamageTime
+                                                val task: BukkitRunnable =
+                                                    object : BukkitRunnable() {
+                                                        var p: Player = target
+
+                                                        override fun run() {
+                                                            target.setNoDamageTicks(0)
+                                                        }
+                                                    }
+                                                task.runTaskLater(plugin, 1)
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                            var c = 1
+                            for (`as` in list) {
+                                val data = getPlayerData(player)
+                                var team = data!!.match.team0
+                                if (team == data.team) team = data.match.team1
+                                for (o_player in plugin.getServer().getOnlinePlayers()) {
+                                    if (kdata.damage == 0.0) {
+                                        (o_player as CraftPlayer)
+                                            .getHandle()
+                                            .playerConnection
+                                            .sendPacket(
+                                                PacketPlayOutEntityEquipment(
+                                                    `as`.getEntityId(),
+                                                    EnumItemSlot.HEAD,
+                                                    CraftItemStack.asNMSCopy(
+                                                        ItemStack(Material.WHITE_STAINED_GLASS_PANE),
+                                                    ),
+                                                ),
+                                            )
+                                    }
+                                    if (kdata.damage > 0 && kdata.damage <= 50) {
+                                        if (c == 1) {
+                                            (o_player as CraftPlayer).getHandle().playerConnection.sendPacket(
+                                                PacketPlayOutEntityEquipment(
+                                                    `as`.getEntityId(),
+                                                    EnumItemSlot.HEAD,
+                                                    CraftItemStack.asNMSCopy(
+                                                        ItemStack(
+                                                            Material.getMaterial(
+                                                                team!!.teamColor!!.glass.toString() + "_PANE",
+                                                            )!!,
+                                                        ),
+                                                    ),
+                                                ),
+                                            )
+                                        } else {
+                                            (o_player as CraftPlayer)
+                                                .getHandle()
+                                                .playerConnection
+                                                .sendPacket(
+                                                    PacketPlayOutEntityEquipment(
+                                                        `as`.getEntityId(),
+                                                        EnumItemSlot.HEAD,
+                                                        CraftItemStack.asNMSCopy(
+                                                            ItemStack(Material.WHITE_STAINED_GLASS_PANE),
+                                                        ),
+                                                    ),
+                                                )
+                                        }
+                                    }
+                                    if (kdata.damage > 50 && kdata.damage <= 100) {
+                                        if (c <= 2) {
+                                            (o_player as CraftPlayer).getHandle().playerConnection.sendPacket(
+                                                PacketPlayOutEntityEquipment(
+                                                    `as`.getEntityId(),
+                                                    EnumItemSlot.HEAD,
+                                                    CraftItemStack.asNMSCopy(
+                                                        ItemStack(
+                                                            Material.getMaterial(
+                                                                team!!.teamColor!!.glass.toString() + "_PANE",
+                                                            )!!,
+                                                        ),
+                                                    ),
+                                                ),
+                                            )
+                                        } else {
+                                            (o_player as CraftPlayer)
+                                                .getHandle()
+                                                .playerConnection
+                                                .sendPacket(
+                                                    PacketPlayOutEntityEquipment(
+                                                        `as`.getEntityId(),
+                                                        EnumItemSlot.HEAD,
+                                                        CraftItemStack.asNMSCopy(
+                                                            ItemStack(Material.WHITE_STAINED_GLASS_PANE),
+                                                        ),
+                                                    ),
+                                                )
+                                        }
+                                    }
+                                    if (kdata.damage > 100 && kdata.damage <= 150) {
+                                        if (c <= 3) {
+                                            (o_player as CraftPlayer).getHandle().playerConnection.sendPacket(
+                                                PacketPlayOutEntityEquipment(
+                                                    `as`.getEntityId(),
+                                                    EnumItemSlot.HEAD,
+                                                    CraftItemStack.asNMSCopy(
+                                                        ItemStack(
+                                                            Material.getMaterial(
+                                                                team!!.teamColor!!.glass.toString() + "_PANE",
+                                                            )!!,
+                                                        ),
+                                                    ),
+                                                ),
+                                            )
+                                        } else {
+                                            (o_player as CraftPlayer)
+                                                .getHandle()
+                                                .playerConnection
+                                                .sendPacket(
+                                                    PacketPlayOutEntityEquipment(
+                                                        `as`.getEntityId(),
+                                                        EnumItemSlot.HEAD,
+                                                        CraftItemStack.asNMSCopy(
+                                                            ItemStack(Material.WHITE_STAINED_GLASS_PANE),
+                                                        ),
+                                                    ),
+                                                )
+                                        }
+                                    }
+                                    if (kdata.damage > 150) {
+                                        if (c <= 4) {
+                                            (o_player as CraftPlayer).getHandle().playerConnection.sendPacket(
+                                                PacketPlayOutEntityEquipment(
+                                                    `as`.getEntityId(),
+                                                    EnumItemSlot.HEAD,
+                                                    CraftItemStack.asNMSCopy(
+                                                        ItemStack(
+                                                            Material.getMaterial(
+                                                                team!!.teamColor!!.glass.toString() + "_PANE",
+                                                            )!!,
+                                                        ),
+                                                    ),
+                                                ),
+                                            )
+                                        } else {
+                                            (o_player as CraftPlayer)
+                                                .getHandle()
+                                                .playerConnection
+                                                .sendPacket(
+                                                    PacketPlayOutEntityEquipment(
+                                                        `as`.getEntityId(),
+                                                        EnumItemSlot.HEAD,
+                                                        CraftItemStack.asNMSCopy(
+                                                            ItemStack(Material.WHITE_STAINED_GLASS_PANE),
+                                                        ),
+                                                    ),
+                                                )
+                                        }
+                                    }
+                                }
+                                c++
+                            }
+                        }
+
+                        if ((
+                                p
+                                    .getInventory()
+                                    .getItemInMainHand()
+                                    .getType() == Material.AIR || !p.isSneaking() || p.getGameMode() == GameMode.SPECTATOR
+                                ) && squid && i < 39
+                        ) {
+                            squid = false
+                            i = 39
+                        }
+
+                        if (i == 40) {
+                            bp = true
+                            dir = vec.clone().multiply(1)
+                            las = p.getWorld().spawnEntity(p.getLocation(), EntityType.ARMOR_STAND) as ArmorStand
+                            las!!.setVisible(false)
+                            las!!.setGravity(true)
+                            las!!.setCustomName("Kasa")
+                            val l: MutableList<ArmorStand>? = kdata.armorStandList
+                            l!!.add(las!!)
+                            kdata.armorStandList = l
+                            setKasaDataWithARmorStand(las, kdata)
+                            p.playNote(p.getLocation(), Instrument.STICKS, Note.flat(1, Note.Tone.C))
+                            p.playSound(p.getLocation(), Sound.BLOCK_WOODEN_PRESSURE_PLATE_CLICK_ON, 1f, 1.2f)
+                        }
+
+                        if (i == pageCooltime + 20 || kdata.damage > 200 || !p.isOnline() || !getPlayerData(p)!!.isInMatch()) {
+                            if (kdata.damage <= 200 && getPlayerData(p)!!.isInMatch()) {
+                                as1!!
+                                    .getWorld()
+                                    .playSound(as1!!.getLocation(), Sound.ENTITY_ITEM_BREAK, 0.8f, 0.8f)
+                            }
+
+                            for (`as` in list) {
+                                `as`.remove()
+                            }
+                            las!!.remove()
+                            cancel()
+                        }
+
+                        i++
+                    } catch (e: Exception) {
+                        cancel()
+                    }
+                }
+            }
+        task.runTaskTimer(plugin, 0, 1)
+    }
+
+    fun armorStandItemDelay(
+        list: MutableList<ArmorStand>,
+        player: Player?,
+        kdata: KasaData,
+    ) {
+        val task: BukkitRunnable =
+            object : BukkitRunnable() {
+                override fun run() {
+                    val data = getPlayerData(player)
+                    var team = data!!.match.team0
+                    if (team == data.team) team = data.match.team1
+
+                    var c = 1
+                    for (`as` in list) {
+                        if (c <= 4) {
+                            for (o_player in plugin.getServer().getOnlinePlayers()) {
+                                if (kdata.damage == 0.0) {
+                                    (o_player as CraftPlayer)
+                                        .getHandle()
+                                        .playerConnection
+                                        .sendPacket(
+                                            PacketPlayOutEntityEquipment(
+                                                `as`.getEntityId(),
+                                                EnumItemSlot.HEAD,
+                                                CraftItemStack
+                                                    .asNMSCopy(ItemStack(Material.WHITE_STAINED_GLASS_PANE)),
+                                            ),
+                                        )
+                                }
+                                if (kdata.damage > 0 && kdata.damage <= 50) {
+                                    if (c == 1) {
+                                        (o_player as CraftPlayer).getHandle().playerConnection.sendPacket(
+                                            PacketPlayOutEntityEquipment(
+                                                `as`.getEntityId(),
+                                                EnumItemSlot.HEAD,
+                                                CraftItemStack.asNMSCopy(
+                                                    ItemStack(
+                                                        Material.getMaterial(
+                                                            team!!.teamColor!!.glass.toString() + "_PANE",
+                                                        )!!,
+                                                    ),
+                                                ),
+                                            ),
+                                        )
+                                    } else {
+                                        (o_player as CraftPlayer)
+                                            .getHandle()
+                                            .playerConnection
+                                            .sendPacket(
+                                                PacketPlayOutEntityEquipment(
+                                                    `as`.getEntityId(),
+                                                    EnumItemSlot.HEAD,
+                                                    CraftItemStack.asNMSCopy(
+                                                        ItemStack(Material.WHITE_STAINED_GLASS_PANE),
+                                                    ),
+                                                ),
+                                            )
+                                    }
+                                }
+                                if (kdata.damage > 50 && kdata.damage <= 100) {
+                                    if (c <= 2) {
+                                        (o_player as CraftPlayer).getHandle().playerConnection.sendPacket(
+                                            PacketPlayOutEntityEquipment(
+                                                `as`.getEntityId(),
+                                                EnumItemSlot.HEAD,
+                                                CraftItemStack.asNMSCopy(
+                                                    ItemStack(
+                                                        Material.getMaterial(
+                                                            team!!.teamColor!!.glass.toString() + "_PANE",
+                                                        )!!,
+                                                    ),
+                                                ),
+                                            ),
+                                        )
+                                    } else {
+                                        (o_player as CraftPlayer)
+                                            .getHandle()
+                                            .playerConnection
+                                            .sendPacket(
+                                                PacketPlayOutEntityEquipment(
+                                                    `as`.getEntityId(),
+                                                    EnumItemSlot.HEAD,
+                                                    CraftItemStack.asNMSCopy(
+                                                        ItemStack(Material.WHITE_STAINED_GLASS_PANE),
+                                                    ),
+                                                ),
+                                            )
+                                    }
+                                }
+                                if (kdata.damage > 100 && kdata.damage <= 150) {
+                                    if (c <= 3) {
+                                        (o_player as CraftPlayer).getHandle().playerConnection.sendPacket(
+                                            PacketPlayOutEntityEquipment(
+                                                `as`.getEntityId(),
+                                                EnumItemSlot.HEAD,
+                                                CraftItemStack.asNMSCopy(
+                                                    ItemStack(
+                                                        Material.getMaterial(
+                                                            team!!.teamColor!!.glass.toString() + "_PANE",
+                                                        )!!,
+                                                    ),
+                                                ),
+                                            ),
+                                        )
+                                    } else {
+                                        (o_player as CraftPlayer)
+                                            .getHandle()
+                                            .playerConnection
+                                            .sendPacket(
+                                                PacketPlayOutEntityEquipment(
+                                                    `as`.getEntityId(),
+                                                    EnumItemSlot.HEAD,
+                                                    CraftItemStack.asNMSCopy(
+                                                        ItemStack(Material.WHITE_STAINED_GLASS_PANE),
+                                                    ),
+                                                ),
+                                            )
+                                    }
+                                }
+                                if (kdata.damage > 150) {
+                                    if (c <= 4) {
+                                        (o_player as CraftPlayer).getHandle().playerConnection.sendPacket(
+                                            PacketPlayOutEntityEquipment(
+                                                `as`.getEntityId(),
+                                                EnumItemSlot.HEAD,
+                                                CraftItemStack.asNMSCopy(
+                                                    ItemStack(
+                                                        Material.getMaterial(
+                                                            team!!.teamColor!!.glass.toString() + "_PANE",
+                                                        )!!,
+                                                    ),
+                                                ),
+                                            ),
+                                        )
+                                    } else {
+                                        (o_player as CraftPlayer)
+                                            .getHandle()
+                                            .playerConnection
+                                            .sendPacket(
+                                                PacketPlayOutEntityEquipment(
+                                                    `as`.getEntityId(),
+                                                    EnumItemSlot.HEAD,
+                                                    CraftItemStack.asNMSCopy(
+                                                        ItemStack(Material.WHITE_STAINED_GLASS_PANE),
+                                                    ),
+                                                ),
+                                            )
+                                    }
+                                }
+                            }
+                        }
+
+                        if (c == 5) {
+                            for (o_player in plugin.getServer().getOnlinePlayers()) {
+                                (o_player as CraftPlayer)
+                                    .getHandle()
+                                    .playerConnection
+                                    .sendPacket(
+                                        PacketPlayOutEntityEquipment(
+                                            `as`.getEntityId(),
+                                            EnumItemSlot.HEAD,
+                                            CraftItemStack.asNMSCopy(ItemStack(Material.END_ROD)),
+                                        ),
+                                    )
+                            }
+                        }
+
+                        c++
+                    }
+                }
+            }
+        task.runTaskLater(plugin, 10)
+    }
+
+    fun armorStandTeleportDelay(
+        list: MutableList<ArmorStand>,
+        player: Player,
+        kdata: KasaData?,
+    ) {
+        val task: BukkitRunnable =
+            object : BukkitRunnable() {
+                override fun run() {
+                    for (`as` in list) `as`.teleport(player.getLocation().add(0.0, 50.0, 0.0))
+                }
+            }
+        task.runTaskLater(plugin, 3)
+    }
 }

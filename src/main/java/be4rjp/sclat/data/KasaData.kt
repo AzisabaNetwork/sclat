@@ -10,7 +10,7 @@ import org.bukkit.entity.Player
 class KasaData(
     @JvmField val player: Player?,
 ) {
-    var armorStandList: MutableList<ArmorStand?>? = ArrayList<ArmorStand?>()
+    var armorStandList: MutableList<ArmorStand> = mutableListOf()
 
     @JvmField
     var damage: Double = 0.0

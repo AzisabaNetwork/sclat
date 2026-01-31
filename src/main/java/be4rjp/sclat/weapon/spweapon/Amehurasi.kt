@@ -1,253 +1,310 @@
+package be4rjp.sclat.weapon.spweapon
 
-package be4rjp.sclat.weapon.spweapon;
-
-import be4rjp.sclat.Sclat;
-import be4rjp.sclat.VariablesKt;
-import be4rjp.sclat.api.SclatUtil;
-import be4rjp.sclat.api.Sphere;
-import be4rjp.sclat.api.raytrace.RayTrace;
-import be4rjp.sclat.data.DataMgr;
-import be4rjp.sclat.manager.ArmorStandMgr;
-import be4rjp.sclat.manager.SPWeaponMgr;
-import be4rjp.sclat.manager.WeaponClassMgr;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Particle;
-import org.bukkit.craftbukkit.v1_14_R1.entity.CraftSnowball;
-import org.bukkit.craftbukkit.v1_14_R1.inventory.CraftItemStack;
-import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Item;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Snowball;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.util.Vector;
+import be4rjp.sclat.Sclat
+import be4rjp.sclat.Sclat.Companion.notDuplicateNumber
+import be4rjp.sclat.api.SclatUtil.giveDamage
+import be4rjp.sclat.api.Sphere.getXZCircle
+import be4rjp.sclat.api.raytrace.RayTrace
+import be4rjp.sclat.data.DataMgr.getPlayerData
+import be4rjp.sclat.manager.ArmorStandMgr
+import be4rjp.sclat.manager.SPWeaponMgr
+import be4rjp.sclat.manager.WeaponClassMgr
+import be4rjp.sclat.plugin
+import org.bukkit.GameMode
+import org.bukkit.Location
+import org.bukkit.Material
+import org.bukkit.Particle
+import org.bukkit.block.data.BlockData
+import org.bukkit.craftbukkit.v1_14_R1.entity.CraftSnowball
+import org.bukkit.craftbukkit.v1_14_R1.inventory.CraftItemStack
+import org.bukkit.entity.ArmorStand
+import org.bukkit.entity.EntityType
+import org.bukkit.entity.Item
+import org.bukkit.entity.Player
+import org.bukkit.entity.Snowball
+import org.bukkit.inventory.ItemStack
+import org.bukkit.scheduler.BukkitRunnable
+import org.bukkit.util.Vector
+import java.util.Random
 
 /**
  *
  * @author Be4rJP
  */
-public class Amehurasi {
-	public static void AmehurasiDropRunnable(Player player) {
-		BukkitRunnable task = new BukkitRunnable() {
-			Player p = player;
-			Vector p_vec;
-			double x = 0;
-			double z = 0;
-			boolean collision = false;
-			boolean block_check = false;
-			boolean cb = false;
-			Location l = p.getLocation();
-			int cc = 0;
-			int c = 0;
-			Item drop;
-			Vector vec;
+object Amehurasi {
+    @JvmStatic
+    fun AmehurasiDropRunnable(player: Player) {
+        val task: BukkitRunnable =
+            object : BukkitRunnable() {
+                var p: Player = player
+                var p_vec: Vector? = null
+                var x: Double = 0.0
+                var z: Double = 0.0
+                var collision: Boolean = false
+                var block_check: Boolean = false
+                var cb: Boolean = false
+                var l: Location = p.getLocation()
+                var cc: Int = 0
+                var c: Int = 0
+                var drop: Item? = null
+                var vec: Vector? = null
 
-			@Override
-			public void run() {
-				try {
-					if (c == 0) {
-						DataMgr.getPlayerData(player).setIsUsingAmehurashi(true);
-						ItemStack bom = new ItemStack(Material.BEACON).clone();
-						ItemMeta bom_m = bom.getItemMeta();
-						bom_m.setLocalizedName(String.valueOf(Sclat.getNotDuplicateNumber()));
-						bom.setItemMeta(bom_m);
-						drop = p.getWorld().dropItem(p.getEyeLocation(), bom);
-						drop.setVelocity(p.getEyeLocation().getDirection());
-						p_vec = p.getEyeLocation().getDirection();
-						vec = new Vector(p_vec.getX(), 0, p_vec.getZ()).normalize();
-					}
+                override fun run() {
+                    try {
+                        if (c == 0) {
+                            getPlayerData(player)!!.setIsUsingAmehurashi(true)
+                            val bom = ItemStack(Material.BEACON).clone()
+                            val bom_m = bom.getItemMeta()
+                            bom_m!!.setLocalizedName(notDuplicateNumber.toString())
+                            bom.setItemMeta(bom_m)
+                            drop = p.getWorld().dropItem(p.getEyeLocation(), bom)
+                            drop!!.setVelocity(p.getEyeLocation().getDirection())
+                            p_vec = p.getEyeLocation().getDirection()
+                            vec = Vector(p_vec!!.getX(), 0.0, p_vec!!.getZ()).normalize()
+                        }
 
-					if (drop.isOnGround()) {
-						AmehurasiRunnable(p, drop.getLocation(), vec);
-						drop.remove();
-						cancel();
-					}
+                        if (drop!!.isOnGround()) {
+                            Amehurasi.AmehurasiRunnable(p, drop!!.getLocation(), vec!!)
+                            drop!!.remove()
+                            cancel()
+                        }
 
-					if (drop.getLocation().getY() <= 0 || drop.isDead()) {
-						DataMgr.getPlayerData(player).setIsUsingAmehurashi(false);
-						WeaponClassMgr.setWeaponClass(p);
-						cancel();
-					}
+                        if (drop!!.getLocation().getY() <= 0 || drop!!.isDead()) {
+                            getPlayerData(player)!!.setIsUsingAmehurashi(false)
+                            WeaponClassMgr.setWeaponClass(p)
+                            cancel()
+                        }
 
-					// 視認用エフェクト
-					for (Player o_player : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
-						if (DataMgr.getPlayerData(o_player).settings.ShowEffect_Bomb()) {
-							if (o_player.getWorld() == drop.getWorld()) {
-								if (o_player.getLocation()
-										.distanceSquared(drop.getLocation()) < Sclat.particleRenderDistanceSquared) {
-									Particle.DustOptions dustOptions = new Particle.DustOptions(
-											DataMgr.getPlayerData(p).team.getTeamColor().getBukkitColor(), 1);
-									o_player.spawnParticle(Particle.REDSTONE, drop.getLocation(), 1, 0, 0, 0, 50,
-											dustOptions);
-								}
-							}
-						}
-					}
+                        // 視認用エフェクト
+                        for (o_player in plugin.getServer().getOnlinePlayers()) {
+                            if (getPlayerData(o_player)!!.settings.ShowEffect_Bomb()) {
+                                if (o_player.getWorld() === drop!!.getWorld()) {
+                                    if (o_player
+                                            .getLocation()
+                                            .distanceSquared(drop!!.getLocation()) < Sclat.particleRenderDistanceSquared
+                                    ) {
+                                        val dustOptions =
+                                            Particle.DustOptions(
+                                                getPlayerData(p)!!.team.teamColor!!.bukkitColor!!,
+                                                1f,
+                                            )
+                                        o_player.spawnParticle<Particle.DustOptions?>(
+                                            Particle.REDSTONE,
+                                            drop!!.getLocation(),
+                                            1,
+                                            0.0,
+                                            0.0,
+                                            0.0,
+                                            50.0,
+                                            dustOptions,
+                                        )
+                                    }
+                                }
+                            }
+                        }
 
-					c++;
+                        c++
 
-					if (c > 1000) {
-						drop.remove();
-						cancel();
-						return;
-					}
-				} catch (Exception e) {
-					drop.remove();
-					cancel();
-					VariablesKt.getPlugin().getLogger().warning(e.getMessage());
-				}
-			}
-		};
-		if (!DataMgr.getPlayerData(player).getIsUsingAmehurashi())
-			task.runTaskTimer(VariablesKt.getPlugin(), 0, 1);
-	}
+                        if (c > 1000) {
+                            drop!!.remove()
+                            cancel()
+                            return
+                        }
+                    } catch (e: Exception) {
+                        drop!!.remove()
+                        cancel()
+                        plugin.getLogger().warning(e.message)
+                    }
+                }
+            }
+        if (!getPlayerData(player)!!.getIsUsingAmehurashi()) task.runTaskTimer(plugin, 0, 1)
+    }
 
-	public static void AmehurasiRunnable(Player player, Location loc, Vector vec) {
-		DataMgr.getPlayerData(player).setIsUsingSP(true);
-		SPWeaponMgr.setSPCoolTimeAnimation(player, 260);
+    fun AmehurasiRunnable(
+        player: Player,
+        loc: Location,
+        vec: Vector,
+    ) {
+        getPlayerData(player)!!.setIsUsingSP(true)
+        SPWeaponMgr.setSPCoolTimeAnimation(player, 260)
 
-		BukkitRunnable task = new BukkitRunnable() {
-			Player p = player;
-			int c = 0;
-			List<Location> locList = Sphere.getXZCircle(loc.clone().add(0, 18, 0), 8, 1, 100);
-			@Override
-			public void run() {
-				try {
-					if (c % 4 == 0) {
-						locList.clear();
-						locList = Sphere.getXZCircle(loc.clone().add(vec.getX() * c / 12, 18, vec.getZ() * c / 12), 8,
-								1, 100);
-					}
+        val task: BukkitRunnable =
+            object : BukkitRunnable() {
+                var p: Player = player
+                var c: Int = 0
+                var locList: MutableList<Location> = getXZCircle(loc.clone().add(0.0, 18.0, 0.0), 8.0, 1.0, 100)
 
-					// 雲エフェクト
-					if (c % 2 == 0) {
-						for (Player o_player : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
-							if (DataMgr.getPlayerData(o_player).settings.ShowEffect_SPWeapon()) {
-								for (Location loc : locList) {
-									if (new Random().nextInt(3) == 1) {
-										if (o_player.getWorld() == loc.getWorld()) {
-											if (o_player.getLocation()
-													.distanceSquared(loc) < Sclat.particleRenderDistanceSquared) {
-												Particle.DustOptions dustOptions = new Particle.DustOptions(
-														DataMgr.getPlayerData(p).team.getTeamColor().getBukkitColor(),
-														3);
-												o_player.spawnParticle(Particle.REDSTONE, loc, 1, 1, 1, 1, 1,
-														dustOptions);
-											}
-										}
-									}
-								}
-							}
-						}
-					}
+                override fun run() {
+                    try {
+                        if (c % 4 == 0) {
+                            locList.clear()
+                            locList =
+                                getXZCircle(
+                                    loc.clone().add(vec.getX() * c / 12, 18.0, vec.getZ() * c / 12),
+                                    8.0,
+                                    1.0,
+                                    100,
+                                )
+                        }
 
-					if (c >= 30) {
-						// 攻撃判定
-						RayTrace rayTrace4 = new RayTrace(
-								loc.clone().add(vec.getX() * c / 12, 18, vec.getZ() * c / 12).toVector(),
-								new Vector(0, -1, 0));
-						ArrayList<Vector> positions4 = rayTrace4.traverse(300, 1);
-						for (int i = 1; i < positions4.size(); i++) {
-							Location position = positions4.get(i).toLocation(p.getLocation().getWorld());
+                        // 雲エフェクト
+                        if (c % 2 == 0) {
+                            for (o_player in plugin.getServer().getOnlinePlayers()) {
+                                if (getPlayerData(o_player)!!.settings.ShowEffect_SPWeapon()) {
+                                    for (loc in locList) {
+                                        if (Random().nextInt(3) == 1) {
+                                            if (o_player.getWorld() === loc.getWorld()) {
+                                                if (o_player
+                                                        .getLocation()
+                                                        .distanceSquared(loc) < Sclat.particleRenderDistanceSquared
+                                                ) {
+                                                    val dustOptions =
+                                                        Particle.DustOptions(
+                                                            getPlayerData(p)!!.team.teamColor!!.bukkitColor!!,
+                                                            3f,
+                                                        )
+                                                    o_player.spawnParticle<Particle.DustOptions?>(
+                                                        Particle.REDSTONE,
+                                                        loc,
+                                                        1,
+                                                        1.0,
+                                                        1.0,
+                                                        1.0,
+                                                        1.0,
+                                                        dustOptions,
+                                                    )
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
 
-							if (position.getBlock().getType() != Material.AIR)
-								break;
+                        if (c >= 30) {
+                            // 攻撃判定
+                            val rayTrace4 =
+                                RayTrace(
+                                    loc.clone().add(vec.getX() * c / 12, 18.0, vec.getZ() * c / 12).toVector(),
+                                    Vector(0, -1, 0),
+                                )
+                            val positions4: ArrayList<Vector> = rayTrace4.traverse(300.0, 1.0)
+                            for (i in 1..<positions4.size) {
+                                val position = positions4.get(i)!!.toLocation(p.getLocation().getWorld()!!)
 
-							double maxDist = 6.5;
-							double maxDistSquared = 42.25; /* 6.5^2 */
-							double damage = 2;
-							for (Player target : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
-								if (!DataMgr.getPlayerData(target).isInMatch())
-									continue;
-								if (target.getWorld() != p.getWorld())
-									continue;
-								if (target.getLocation().distanceSquared(position) <= maxDistSquared
-										&& new Random().nextInt(100) == 0) {
-									if (DataMgr.getPlayerData(p).team != DataMgr.getPlayerData(target).team
-											&& target.getGameMode().equals(GameMode.ADVENTURE)) {
-										SclatUtil.giveDamage(p, target, damage, "spWeapon");
+                                if (position.getBlock().getType() != Material.AIR) break
 
-										// AntiNoDamageTime
-										BukkitRunnable task = new BukkitRunnable() {
-											Player p = target;
-											@Override
-											public void run() {
-												target.setNoDamageTicks(0);
-											}
-										};
-										task.runTaskLater(VariablesKt.getPlugin(), 1);
-									}
-								}
-							}
+                                val maxDist = 6.5
+                                val maxDistSquared = 42.25 // 6.5^2
+                                val damage = 2.0
+                                for (target in plugin.getServer().getOnlinePlayers()) {
+                                    if (!getPlayerData(target)!!.isInMatch()) continue
+                                    if (target.getWorld() !== p.getWorld()) continue
+                                    if (target.getLocation().distanceSquared(position) <= maxDistSquared &&
+                                        Random().nextInt(100) == 0
+                                    ) {
+                                        if (getPlayerData(p)!!.team != getPlayerData(target)!!.team &&
+                                            target.getGameMode() == GameMode.ADVENTURE
+                                        ) {
+                                            giveDamage(p, target, damage, "spWeapon")
 
-							for (Entity as : player.getWorld().getEntities()) {
-								if (as instanceof ArmorStand
-										&& as.getLocation().distanceSquared(position) <= maxDistSquared
-										&& new Random().nextInt(100) == 0) {
-									ArmorStandMgr.giveDamageArmorStand((ArmorStand) as, damage, player);
-								}
-							}
-						}
-					}
+                                            // AntiNoDamageTime
+                                            val task: BukkitRunnable =
+                                                object : BukkitRunnable() {
+                                                    var p: Player = target
 
-					for (Location loc : locList) {
-						if (new Random().nextInt(200) == 1)
-							SnowballAmehurasiRunnable(p, loc);
-					}
-					if (c == 260 || !DataMgr.getPlayerData(p).isInMatch()) {
-						DataMgr.getPlayerData(player).setIsUsingSP(false);
-						// p.playSound(p.getLocation(), Sound.BLOCK_CHEST_CLOSE, 1, 2);
-						cancel();
-					}
-					c++;
-				} catch (Exception e) {
-					cancel();
-					VariablesKt.getPlugin().getLogger().warning(e.getMessage());
-				}
-			}
-		};
-		task.runTaskTimer(VariablesKt.getPlugin(), 0, 1);
-	}
+                                                    override fun run() {
+                                                        target.setNoDamageTicks(0)
+                                                    }
+                                                }
+                                            task.runTaskLater(plugin, 1)
+                                        }
+                                    }
+                                }
 
-	public static void SnowballAmehurasiRunnable(Player player, Location loc) {
-		Snowball ball = (Snowball) player.getWorld().spawnEntity(loc, EntityType.SNOWBALL);
-		((CraftSnowball) ball).getHandle().setItem(
-				CraftItemStack.asNMSCopy(new ItemStack(DataMgr.getPlayerData(player).team.getTeamColor().wool)));
-		ball.setShooter(player);
-		ball.setCustomName("Amehurasi");
-		BukkitRunnable task = new BukkitRunnable() {
-			int i = 0;
-			Snowball inkball = ball;
-			Player p = player;
-			@Override
-			public void run() {
-				if (i % 2 == 0) {
-					org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).team.getTeamColor().wool
-							.createBlockData();
-					for (Player o_player : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
-						if (DataMgr.getPlayerData(o_player).settings.ShowEffect_SPWeapon())
-							if (o_player.getWorld() == inkball.getWorld())
-								if (o_player.getLocation()
-										.distanceSquared(inkball.getLocation()) < Sclat.particleRenderDistanceSquared)
-									o_player.spawnParticle(org.bukkit.Particle.BLOCK_DUST, inkball.getLocation(), 1, 0,
-											0, 0, 1, bd);
-					}
-				}
+                                for (`as` in player.getWorld().getEntities()) {
+                                    if (`as` is ArmorStand &&
+                                        `as`
+                                            .getLocation()
+                                            .distanceSquared(position) <= maxDistSquared && Random().nextInt(100) == 0
+                                    ) {
+                                        ArmorStandMgr.giveDamageArmorStand(`as`, damage, player)
+                                    }
+                                }
+                            }
+                        }
 
-				if (inkball.isDead())
-					cancel();
+                        for (loc in locList) {
+                            if (Random().nextInt(200) == 1) SnowballAmehurasiRunnable(p, loc)
+                        }
+                        if (c == 260 || !getPlayerData(p)!!.isInMatch()) {
+                            getPlayerData(player)!!.setIsUsingSP(false)
+                            // p.playSound(p.getLocation(), Sound.BLOCK_CHEST_CLOSE, 1, 2);
+                            cancel()
+                        }
+                        c++
+                    } catch (e: Exception) {
+                        cancel()
+                        plugin.getLogger().warning(e.message)
+                    }
+                }
+            }
+        task.runTaskTimer(plugin, 0, 1)
+    }
 
-				i++;
-			}
-		};
-		task.runTaskTimer(VariablesKt.getPlugin(), 0, 2);
-	}
+    fun SnowballAmehurasiRunnable(
+        player: Player,
+        loc: Location,
+    ) {
+        val ball = player.getWorld().spawnEntity(loc, EntityType.SNOWBALL) as Snowball
+        (ball as CraftSnowball).getHandle().setItem(
+            CraftItemStack.asNMSCopy(ItemStack(getPlayerData(player)!!.team.teamColor!!.wool!!)),
+        )
+        ball.setShooter(player)
+        ball.setCustomName("Amehurasi")
+        val task: BukkitRunnable =
+            object : BukkitRunnable() {
+                var i: Int = 0
+                var inkball: Snowball = ball
+                var p: Player = player
+
+                override fun run() {
+                    if (i % 2 == 0) {
+                        val bd =
+                            getPlayerData(p)!!
+                                .team.teamColor!!
+                                .wool!!
+                                .createBlockData()
+                        for (o_player in plugin.getServer().getOnlinePlayers()) {
+                            if (getPlayerData(o_player)!!.settings.ShowEffect_SPWeapon()) {
+                                if (o_player.getWorld() ===
+                                    inkball.getWorld()
+                                ) {
+                                    if (o_player
+                                            .getLocation()
+                                            .distanceSquared(inkball.getLocation()) < Sclat.particleRenderDistanceSquared
+                                    ) {
+                                        o_player.spawnParticle<BlockData?>(
+                                            Particle.BLOCK_DUST,
+                                            inkball.getLocation(),
+                                            1,
+                                            0.0,
+                                            0.0,
+                                            0.0,
+                                            1.0,
+                                            bd,
+                                        )
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    if (inkball.isDead()) cancel()
+
+                    i++
+                }
+            }
+        task.runTaskTimer(plugin, 0, 2)
+    }
 }

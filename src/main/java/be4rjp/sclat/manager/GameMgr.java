@@ -306,12 +306,12 @@ public class GameMgr implements Listener {
 
 								if (DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getWeaponType()
 										.equals("Kasa")) {
-									Kasa.KasaRunnable(p, false);
+									Kasa.kasaRunnable(p, false);
 								}
 
 								if (DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getWeaponType()
 										.equals("Camping")) {
-									Kasa.KasaRunnable(p, true);
+									Kasa.kasaRunnable(p, true);
 									DataMgr.getPlayerData(p).setMainItemGlow(true);
 									WeaponClassMgr.setWeaponClass(p);
 								}

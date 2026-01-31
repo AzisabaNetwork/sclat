@@ -1,327 +1,415 @@
-package be4rjp.sclat.weapon.subweapon;
+package be4rjp.sclat.weapon.subweapon
 
-import be4rjp.sclat.Sclat;
-import be4rjp.sclat.VariablesKt;
-import be4rjp.sclat.api.SclatUtil;
-import be4rjp.sclat.api.Sphere;
-import be4rjp.sclat.data.DataMgr;
-import be4rjp.sclat.data.KasaData;
-import be4rjp.sclat.data.SplashShieldData;
-import be4rjp.sclat.manager.ArmorStandMgr;
-import be4rjp.sclat.manager.PaintMgr;
-import be4rjp.sclat.weapon.Gear;
-import java.util.List;
-import net.minecraft.server.v1_14_R1.EnumItemSlot;
-import net.minecraft.server.v1_14_R1.PacketPlayOutEntityEquipment;
-import org.bukkit.ChatColor;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Sound;
-import org.bukkit.craftbukkit.v1_14_R1.entity.CraftArmorStand;
-import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
-import org.bukkit.craftbukkit.v1_14_R1.inventory.CraftItemStack;
-import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.FallingBlock;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.util.Vector;
+import be4rjp.sclat.Sclat
+import be4rjp.sclat.api.SclatUtil.createInkExplosionEffect
+import be4rjp.sclat.api.SclatUtil.giveDamage
+import be4rjp.sclat.api.SclatUtil.repelBarrier
+import be4rjp.sclat.api.Sphere.getSphere
+import be4rjp.sclat.data.DataMgr
+import be4rjp.sclat.data.DataMgr.getKasaDataFromArmorStand
+import be4rjp.sclat.data.DataMgr.getPlayerData
+import be4rjp.sclat.data.DataMgr.getSplashShieldDataFromArmorStand
+import be4rjp.sclat.manager.ArmorStandMgr
+import be4rjp.sclat.manager.PaintMgr
+import be4rjp.sclat.plugin
+import be4rjp.sclat.weapon.Gear
+import net.minecraft.server.v1_14_R1.EnumItemSlot
+import net.minecraft.server.v1_14_R1.PacketPlayOutEntityEquipment
+import org.bukkit.ChatColor
+import org.bukkit.GameMode
+import org.bukkit.Location
+import org.bukkit.Material
+import org.bukkit.Particle
+import org.bukkit.Sound
+import org.bukkit.block.data.BlockData
+import org.bukkit.craftbukkit.v1_14_R1.entity.CraftArmorStand
+import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer
+import org.bukkit.craftbukkit.v1_14_R1.inventory.CraftItemStack
+import org.bukkit.entity.ArmorStand
+import org.bukkit.entity.FallingBlock
+import org.bukkit.entity.Player
+import org.bukkit.inventory.ItemStack
+import org.bukkit.scheduler.BukkitRunnable
+import org.bukkit.util.Consumer
+import org.bukkit.util.Vector
 
-public class Boomerang {
-	public static void BoomerangRunnable(Player player) {
-		Vector pVector = player.getEyeLocation().getDirection();
-		Vector vec = new Vector(pVector.getX(), pVector.getY(), pVector.getZ()).normalize().multiply(0.6);
-		BukkitRunnable task = new BukkitRunnable() {
-			Vector aVec = vec.clone();
-			Location bloc;
-			int i = 0;
-			ArmorStand as1;
-			ArmorStand as2;
-			ArmorStand as3;
-			FallingBlock fb;
-			boolean cumbackBoomeran = false;
-			int cumbacktime = 90;
-			boolean explode = false;
-			@Override
-			public void run() {
-				try {
-					if (i == 0) {
-						cumbackBoomeran = false;
-						if (!DataMgr.getPlayerData(player).getIsBombRush())
-							player.setExp(player.getExp() - 0.59F);
+object Boomerang {
+    @JvmStatic
+    fun BoomerangRunnable(player: Player) {
+        val pVector = player.getEyeLocation().getDirection()
+        val vec = Vector(pVector.getX(), pVector.getY(), pVector.getZ()).normalize().multiply(0.6)
+        val task: BukkitRunnable =
+            object : BukkitRunnable() {
+                var aVec: Vector = vec.clone()
+                var bloc: Location? = null
+                var i: Int = 0
+                lateinit var as1: ArmorStand
+                lateinit var as2: ArmorStand
+                lateinit var as3: ArmorStand
+                var fb: FallingBlock? = null
+                var cumbackBoomeran: Boolean = false
+                var cumbacktime: Int = 90
+                var explode: Boolean = false
 
-						as1 = player.getWorld().spawn(player.getLocation().add(0, 1.6, 0), ArmorStand.class,
-								armorStand -> {
-									armorStand.setVisible(false);
-									armorStand.setSmall(true);
-								});
-						as2 = player.getWorld().spawn(player.getLocation().add(0, 1.6, 0), ArmorStand.class,
-								armorStand -> {
-									armorStand.setVisible(false);
-									armorStand.setGravity(false);
-									armorStand.setMarker(true);
+                override fun run() {
+                    try {
+                        if (i == 0) {
+                            cumbackBoomeran = false
+                            if (!getPlayerData(player)!!.getIsBombRush()) player.setExp(player.getExp() - 0.59f)
 
-									armorStand.setSmall(true);
-								});
-						Location loc = player.getLocation().add(0, 0.8, 0);
-						loc.setYaw(90);
-						as3 = player.getWorld().spawn(loc, ArmorStand.class, armorStand -> {
-							armorStand.setVisible(false);
-							armorStand.setGravity(false);
-							armorStand.setSmall(true);
-						});
+                            as1 =
+                                player.getWorld().spawn<ArmorStand>(
+                                    player.getLocation().add(0.0, 1.6, 0.0),
+                                    ArmorStand::class.java,
+                                    Consumer { armorStand: ArmorStand ->
+                                        armorStand.setVisible(false)
+                                        armorStand.setSmall(true)
+                                    },
+                                )
+                            as2 =
+                                player.getWorld().spawn<ArmorStand>(
+                                    player.getLocation().add(0.0, 1.6, 0.0),
+                                    ArmorStand::class.java,
+                                    Consumer { armorStand: ArmorStand ->
+                                        armorStand.setVisible(false)
+                                        armorStand.setGravity(false)
+                                        armorStand.setMarker(true)
+                                        armorStand.setSmall(true)
+                                    },
+                                )
+                            val loc = player.getLocation().add(0.0, 0.8, 0.0)
+                            loc.setYaw(90f)
+                            as3 =
+                                player
+                                    .getWorld()
+                                    .spawn<ArmorStand>(
+                                        loc,
+                                        ArmorStand::class.java,
+                                        Consumer { armorStand: ArmorStand ->
+                                            armorStand.setVisible(false)
+                                            armorStand.setGravity(false)
+                                            armorStand.setSmall(true)
+                                        },
+                                    )
 
-						fb = player.getWorld().spawnFallingBlock(player.getLocation(),
-								Material.WHITE_CARPET.createBlockData());
-						fb.setGravity(false);
-						fb.setDropItem(false);
-						fb.setHurtEntities(false);
+                            fb =
+                                player.getWorld().spawnFallingBlock(
+                                    player.getLocation(),
+                                    Material.WHITE_CARPET.createBlockData(),
+                                )
+                            fb!!.setGravity(false)
+                            fb!!.setDropItem(false)
+                            fb!!.setHurtEntities(false)
 
-						as2.addPassenger(fb);
-					}
+                            as2!!.addPassenger(fb!!)
+                        }
 
-					Location aloc = as1.getLocation().add(0, -0.8, 0);
-					aloc.setYaw(90);
-					Location as1l = as1.getLocation();
-					((CraftArmorStand) as2).getHandle().setPositionRotation(as1l.getX(), as1l.getY(), as1l.getZ(), 0,
-							0);
-					as3.teleport(aloc);
-					fb.setTicksLived(1);
+                        val aloc = as1!!.getLocation().add(0.0, -0.8, 0.0)
+                        aloc.setYaw(90f)
+                        val as1l = as1!!.getLocation()
+                        (as2 as CraftArmorStand).getHandle().setPositionRotation(
+                            as1l.getX(),
+                            as1l.getY(),
+                            as1l.getZ(),
+                            0f,
+                            0f,
+                        )
+                        as3!!.teleport(aloc)
+                        fb!!.setTicksLived(1)
 
-					if (i >= 5 && !cumbackBoomeran) {
-						if (bloc.getX() == as1l.getX() && bloc.getZ() != as1l.getZ()
-								|| bloc.getZ() == as1l.getZ() && bloc.getX() != as1l.getX()) {
-							aVec = new Vector(player.getLocation().getX() - bloc.getX(),
-									(player.getLocation().getY() + 1.6) - bloc.getY(),
-									player.getLocation().getZ() - bloc.getZ()).normalize().multiply(1.0);
-							cumbackBoomeran = true;
-							cumbacktime = i;
-							for (int painti = 0; painti <= 2; painti++) {
-								List<Location> p_locs = Sphere.getSphere(as1l, painti, 20);
-								for (Location loc : p_locs) {
-									PaintMgr.Paint(loc, player, false);
-								}
-							}
-						} else if (as1.isOnGround()) {
-							aVec = new Vector(player.getLocation().getX() - bloc.getX(),
-									(player.getLocation().getY() + 1.6) - bloc.getY(),
-									player.getLocation().getZ() - bloc.getZ()).normalize().multiply(1.0);
-							cumbackBoomeran = true;
-							cumbacktime = i;
-						} else if (i == 30) {
-							aVec = new Vector(player.getLocation().getX() - bloc.getX(),
-									(player.getLocation().getY() + 1.6) - bloc.getY(),
-									player.getLocation().getZ() - bloc.getZ()).normalize().multiply(1.0);
-							cumbackBoomeran = true;
-							cumbacktime = 35;
-						}
-					}
-					if (i >= cumbacktime + 5) {
-						if (bloc.getX() == as1l.getX() && bloc.getZ() != as1l.getZ()
-								|| bloc.getZ() == as1l.getZ() && bloc.getX() != as1l.getX()) {
-							explode = true;
-						}
-					}
-					if (i >= cumbacktime + 15) {
-						explode = true;
-					}
-					as1.setVelocity(aVec);
+                        if (i >= 5 && !cumbackBoomeran) {
+                            if (bloc!!.getX() == as1l.getX() && bloc!!.getZ() != as1l.getZ() ||
+                                bloc!!.getZ() == as1l.getZ() && bloc!!.getX() != as1l.getX()
+                            ) {
+                                aVec =
+                                    Vector(
+                                        player.getLocation().getX() - bloc!!.getX(),
+                                        (player.getLocation().getY() + 1.6) - bloc!!.getY(),
+                                        player.getLocation().getZ() - bloc!!.getZ(),
+                                    ).normalize().multiply(1.0)
+                                cumbackBoomeran = true
+                                cumbacktime = i
+                                for (painti in 0..2) {
+                                    val p_locs: MutableList<Location> = getSphere(as1l, painti.toDouble(), 20)
+                                    for (loc in p_locs) {
+                                        PaintMgr.Paint(loc, player, false)
+                                    }
+                                }
+                            } else if (as1!!.isOnGround()) {
+                                aVec =
+                                    Vector(
+                                        player.getLocation().getX() - bloc!!.getX(),
+                                        (player.getLocation().getY() + 1.6) - bloc!!.getY(),
+                                        player.getLocation().getZ() - bloc!!.getZ(),
+                                    ).normalize().multiply(1.0)
+                                cumbackBoomeran = true
+                                cumbacktime = i
+                            } else if (i == 30) {
+                                aVec =
+                                    Vector(
+                                        player.getLocation().getX() - bloc!!.getX(),
+                                        (player.getLocation().getY() + 1.6) - bloc!!.getY(),
+                                        player.getLocation().getZ() - bloc!!.getZ(),
+                                    ).normalize().multiply(1.0)
+                                cumbackBoomeran = true
+                                cumbacktime = 35
+                            }
+                        }
+                        if (i >= cumbacktime + 5) {
+                            if (bloc!!.getX() == as1l.getX() && bloc!!.getZ() != as1l.getZ() ||
+                                bloc!!.getZ() == as1l.getZ() && bloc!!.getX() != as1l.getX()
+                            ) {
+                                explode = true
+                            }
+                        }
+                        if (i >= cumbacktime + 15) {
+                            explode = true
+                        }
+                        as1!!.setVelocity(aVec)
 
-					PaintMgr.PaintHightestBlock(as1l, player, false, true);
+                        PaintMgr.PaintHightestBlock(as1l, player, false, true)
 
-					bloc = as1l.clone();
+                        bloc = as1l.clone()
 
-					if (i % 10 == 0) {
-						for (Player o_player : VariablesKt.getPlugin().getServer().getOnlinePlayers())
-							((CraftPlayer) o_player).getHandle().playerConnection
-									.sendPacket(new PacketPlayOutEntityEquipment(as3.getEntityId(), EnumItemSlot.HEAD,
-											CraftItemStack.asNMSCopy(new ItemStack(
-													DataMgr.getPlayerData(player).team.getTeamColor().wool))));
-					}
+                        if (i % 10 == 0) {
+                            for (o_player in plugin
+                                .getServer()
+                                .getOnlinePlayers()) {
+                                (o_player as CraftPlayer)
+                                    .getHandle()
+                                    .playerConnection
+                                    .sendPacket(
+                                        PacketPlayOutEntityEquipment(
+                                            as3!!.getEntityId(),
+                                            EnumItemSlot.HEAD,
+                                            CraftItemStack.asNMSCopy(
+                                                ItemStack(
+                                                    getPlayerData(player)!!.team.teamColor!!.wool!!,
+                                                ),
+                                            ),
+                                        ),
+                                    )
+                            }
+                        }
 
-					if (i >= cumbacktime + 3 && i <= cumbacktime + 13) {
-						if (i % 2 == 0)
-							player.getWorld().playSound(as1l, Sound.BLOCK_NOTE_BLOCK_PLING, 1F, 1.6F);
-					}
+                        if (i >= cumbacktime + 3 && i <= cumbacktime + 13) {
+                            if (i % 2 == 0) player.getWorld().playSound(as1l, Sound.BLOCK_NOTE_BLOCK_PLING, 1f, 1.6f)
+                        }
 
-					// エフェクト
-					if (i % 2 == 0) {
-						org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(player).team.getTeamColor().wool
-								.createBlockData();
-						for (Player target : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
-							if (DataMgr.getPlayerData(target).settings.ShowEffect_Bomb())
-								if (target.getWorld() == player.getWorld())
-									if (target.getLocation()
-											.distanceSquared(as1l) < Sclat.particleRenderDistanceSquared)
-										target.spawnParticle(org.bukkit.Particle.BLOCK_DUST, as1l, 2, 0, 0, 0, 1, bd);
-						}
-						// 攻撃判定
-						for (Player target : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
-							if (DataMgr.getPlayerData(target).settings.ShowEffect_Bomb()) {
-								if (target.getWorld() == player.getWorld()) {
-									if (target.getLocation().distance(as1l) <= 1.2) {
-										double damage = 0.2;
-										if (DataMgr.getPlayerData(player).team != DataMgr.getPlayerData(target).team
-												&& target.getGameMode().equals(GameMode.ADVENTURE)) {
-											SclatUtil.giveDamage(player, target, damage, "subWeapon");
+                        // エフェクト
+                        if (i % 2 == 0) {
+                            val bd =
+                                getPlayerData(player)!!
+                                    .team.teamColor!!
+                                    .wool!!
+                                    .createBlockData()
+                            for (target in plugin.getServer().getOnlinePlayers()) {
+                                if (getPlayerData(target)!!.settings.ShowEffect_Bomb()) {
+                                    if (target.getWorld() ===
+                                        player.getWorld()
+                                    ) {
+                                        if (target
+                                                .getLocation()
+                                                .distanceSquared(as1l) < Sclat.particleRenderDistanceSquared
+                                        ) {
+                                            target.spawnParticle<BlockData?>(
+                                                Particle.BLOCK_DUST,
+                                                as1l,
+                                                2,
+                                                0.0,
+                                                0.0,
+                                                0.0,
+                                                1.0,
+                                                bd,
+                                            )
+                                        }
+                                    }
+                                }
+                            }
+                            // 攻撃判定
+                            for (target in plugin.getServer().getOnlinePlayers()) {
+                                if (getPlayerData(target)!!.settings.ShowEffect_Bomb()) {
+                                    if (target.getWorld() === player.getWorld()) {
+                                        if (target.getLocation().distance(as1l) <= 1.2) {
+                                            val damage = 0.2
+                                            if (getPlayerData(player)!!.team != getPlayerData(target)!!.team &&
+                                                target.getGameMode() == GameMode.ADVENTURE
+                                            ) {
+                                                giveDamage(player, target, damage, "subWeapon")
 
-											// AntiNoDamageTime
-											BukkitRunnable task = new BukkitRunnable() {
-												Player p = target;
-												@Override
-												public void run() {
-													target.setNoDamageTicks(0);
-												}
-											};
-											task.runTaskLater(VariablesKt.getPlugin(), 1);
-										}
-									}
-								}
-							}
-						}
+                                                // AntiNoDamageTime
+                                                val task: BukkitRunnable =
+                                                    object : BukkitRunnable() {
+                                                        var p: Player = target
 
-						for (Entity as : player.getWorld().getEntities()) {
-							if (as.getLocation().distance(as1l) <= 1.2) {
-								if (as instanceof ArmorStand) {
-									double damage = 0.2;
-									ArmorStandMgr.giveDamageArmorStand((ArmorStand) as, damage, player);
-									if (as.getCustomName() != null) {
-										if (as.getCustomName().equals("SplashShield")
-												|| as.getCustomName().equals("Kasa"))
-											break;
-									}
-								}
-							}
-						}
-					}
+                                                        override fun run() {
+                                                            target.setNoDamageTicks(0)
+                                                        }
+                                                    }
+                                                task.runTaskLater(plugin, 1)
+                                            }
+                                        }
+                                    }
+                                }
+                            }
 
-					if (i == 90 || !player.isOnline() || !DataMgr.getPlayerData(player).isInMatch() || explode) {
-						// 半径
-						double maxDist = 3;
+                            for (`as` in player.getWorld().getEntities()) {
+                                if (`as`.getLocation().distance(as1l) <= 1.2) {
+                                    if (`as` is ArmorStand) {
+                                        val damage = 0.2
+                                        ArmorStandMgr.giveDamageArmorStand(`as`, damage, player)
+                                        if (`as`.getCustomName() != null) {
+                                            if (`as`.getCustomName() == "SplashShield" ||
+                                                `as`.getCustomName() == "Kasa"
+                                            ) {
+                                                break
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
 
-						// 爆発音
-						player.getWorld().playSound(as1l, Sound.ENTITY_FIREWORK_ROCKET_BLAST, 1, 1);
+                        if (i == 90 || !player.isOnline() || !getPlayerData(player)!!.isInMatch() || explode) {
+                            // 半径
+                            val maxDist = 3.0
 
-						// 爆発エフェクト
-						SclatUtil.createInkExplosionEffect(as1l, maxDist, 15, player);
+                            // 爆発音
+                            player.getWorld().playSound(as1l, Sound.ENTITY_FIREWORK_ROCKET_BLAST, 1f, 1f)
 
-						// バリアをはじく
-						SclatUtil.repelBarrier(as1l, maxDist, player);
+                            // 爆発エフェクト
+                            createInkExplosionEffect(as1l, maxDist, 15, player)
 
-						// 塗る
-						for (int i = 0; i <= maxDist; i++) {
-							List<Location> p_locs = Sphere.getSphere(as1l, i, 20);
-							for (Location loc : p_locs) {
-								PaintMgr.Paint(loc, player, false);
-							}
-						}
+                            // バリアをはじく
+                            repelBarrier(as1l, maxDist, player)
 
-						// 攻撃判定の処理
+                            // 塗る
+                            run {
+                                var i = 0
+                                while (i <= maxDist) {
+                                    val p_locs: MutableList<Location> = getSphere(as1l, i.toDouble(), 20)
+                                    for (loc in p_locs) {
+                                        PaintMgr.Paint(loc, player, false)
+                                    }
+                                    i++
+                                }
+                            }
 
-						for (Entity as : player.getWorld().getEntities()) {
-							if (as.getLocation().distance(as1l) <= maxDist) {
-								if (as instanceof ArmorStand) {
-									if (as.getCustomName() != null) {
-										try {
-											if (as.getCustomName().equals("Kasa")) {
-												KasaData kasaData = DataMgr.getKasaDataFromArmorStand((ArmorStand) as);
-												if (DataMgr.getPlayerData(kasaData.player).team != DataMgr
-														.getPlayerData(player).team) {
-													as1.remove();
-													as2.remove();
-													as3.remove();
-													fb.remove();
-													cancel();
-												}
-											} else if (as.getCustomName().equals("SplashShield")) {
-												SplashShieldData splashShieldData = DataMgr
-														.getSplashShieldDataFromArmorStand((ArmorStand) as);
-												if (DataMgr.getPlayerData(splashShieldData.player).team != DataMgr
-														.getPlayerData(player).team) {
-													as1.remove();
-													as2.remove();
-													as3.remove();
-													fb.remove();
-													cancel();
-												}
-											}
-										} catch (Exception e) {
-										}
-									}
-								}
-							}
-						}
+                            // 攻撃判定の処理
+                            for (`as` in player.getWorld().getEntities()) {
+                                if (`as`.getLocation().distance(as1l) <= maxDist) {
+                                    if (`as` is ArmorStand) {
+                                        if (`as`.getCustomName() != null) {
+                                            try {
+                                                if (`as`.getCustomName() == "Kasa") {
+                                                    val kasaData = getKasaDataFromArmorStand(`as`)
+                                                    if (getPlayerData(kasaData!!.player)!!.team !=
+                                                        DataMgr
+                                                            .getPlayerData(player)!!
+                                                            .team
+                                                    ) {
+                                                        as1!!.remove()
+                                                        as2.remove()
+                                                        as3!!.remove()
+                                                        fb!!.remove()
+                                                        cancel()
+                                                    }
+                                                } else if (`as`.getCustomName() == "SplashShield") {
+                                                    val splashShieldData = getSplashShieldDataFromArmorStand(`as`)
+                                                    if (getPlayerData(splashShieldData!!.player)!!.team !=
+                                                        DataMgr
+                                                            .getPlayerData(player)!!
+                                                            .team
+                                                    ) {
+                                                        as1!!.remove()
+                                                        as2.remove()
+                                                        as3!!.remove()
+                                                        fb!!.remove()
+                                                        cancel()
+                                                    }
+                                                }
+                                            } catch (e: Exception) {
+                                            }
+                                        }
+                                    }
+                                }
+                            }
 
-						for (Player target : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
-							if (!DataMgr.getPlayerData(target).isInMatch() || target.getWorld() != player.getWorld())
-								continue;
-							if (target.getLocation().distance(as1l) <= maxDist) {
-								double damage = (maxDist - target.getLocation().distance(as1l)) * 1
-										* Gear.getGearInfluence(player, Gear.Type.SUB_SPEC_UP);
-								if (DataMgr.getPlayerData(player).team != DataMgr.getPlayerData(target).team
-										&& target.getGameMode().equals(GameMode.ADVENTURE)) {
-									SclatUtil.giveDamage(player, target, damage, "subWeapon");
+                            for (target in plugin.getServer().getOnlinePlayers()) {
+                                if (!getPlayerData(target)!!.isInMatch() || target.getWorld() !== player.getWorld()) continue
+                                if (target.getLocation().distance(as1l) <= maxDist) {
+                                    val damage = (
+                                        (maxDist - target.getLocation().distance(as1l)) * 1 *
+                                            Gear.getGearInfluence(player, Gear.Type.SUB_SPEC_UP)
+                                        )
+                                    if (getPlayerData(player)!!.team != getPlayerData(target)!!.team &&
+                                        target.getGameMode() == GameMode.ADVENTURE
+                                    ) {
+                                        giveDamage(player, target, damage, "subWeapon")
 
-									// AntiNoDamageTime
-									BukkitRunnable task = new BukkitRunnable() {
-										Player p = target;
-										@Override
-										public void run() {
-											target.setNoDamageTicks(0);
-										}
-									};
-									task.runTaskLater(VariablesKt.getPlugin(), 1);
-								}
-							}
-						}
+                                        // AntiNoDamageTime
+                                        val task: BukkitRunnable =
+                                            object : BukkitRunnable() {
+                                                var p: Player = target
 
-						for (Entity as : player.getWorld().getEntities()) {
-							if (as.getLocation().distance(as1l) <= maxDist) {
-								if (as instanceof ArmorStand) {
-									double damage = (maxDist - as.getLocation().distance(as1l)) * 1
-											* Gear.getGearInfluence(player, Gear.Type.SUB_SPEC_UP);
-									ArmorStandMgr.giveDamageArmorStand((ArmorStand) as, damage, player);
-									if (as.getCustomName() != null) {
-										if (as.getCustomName().equals("SplashShield")
-												|| as.getCustomName().equals("Kasa"))
-											break;
-									}
-								}
-							}
-						}
+                                                override fun run() {
+                                                    target.setNoDamageTicks(0)
+                                                }
+                                            }
+                                        task.runTaskLater(plugin, 1)
+                                    }
+                                }
+                            }
 
-						as1.remove();
-						as2.remove();
-						as3.remove();
-						fb.remove();
-						cancel();
-					}
+                            for (`as` in player.getWorld().getEntities()) {
+                                if (`as`.getLocation().distance(as1l) <= maxDist) {
+                                    if (`as` is ArmorStand) {
+                                        val damage = (
+                                            (maxDist - `as`.getLocation().distance(as1l)) * 1 *
+                                                Gear.getGearInfluence(player, Gear.Type.SUB_SPEC_UP)
+                                            )
+                                        ArmorStandMgr.giveDamageArmorStand(`as`, damage, player)
+                                        if (`as`.getCustomName() != null) {
+                                            if (`as`.getCustomName() == "SplashShield" ||
+                                                `as`.getCustomName() == "Kasa"
+                                            ) {
+                                                break
+                                            }
+                                        }
+                                    }
+                                }
+                            }
 
-					i++;
-				} catch (Exception e) {
-					as1.remove();
-					as2.remove();
-					as3.remove();
-					fb.remove();
-					cancel();
-				}
-			}
-		};
-		if (player.getExp() > 0.6 || DataMgr.getPlayerData(player).getIsBombRush())
-			task.runTaskTimer(VariablesKt.getPlugin(), 0, 1);
-		else {
-			player.sendTitle("", ChatColor.RED + "インクが足りません", 0, 5, 2);
-			player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1F, 1.63F);
-		}
+                            as1!!.remove()
+                            as2.remove()
+                            as3!!.remove()
+                            fb!!.remove()
+                            cancel()
+                        }
 
-		BukkitRunnable cooltime = new BukkitRunnable() {
-			@Override
-			public void run() {
-				DataMgr.getPlayerData(player).setCanUseSubWeapon(true);
-			}
-		};
-		cooltime.runTaskLater(VariablesKt.getPlugin(), 10);
-	}
+                        i++
+                    } catch (e: Exception) {
+                        as1!!.remove()
+                        as2!!.remove()
+                        as3!!.remove()
+                        fb!!.remove()
+                        cancel()
+                    }
+                }
+            }
+        if (player.getExp() > 0.6 || getPlayerData(player)!!.getIsBombRush()) {
+            task.runTaskTimer(plugin, 0, 1)
+        } else {
+            player.sendTitle("", ChatColor.RED.toString() + "インクが足りません", 0, 5, 2)
+            player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1f, 1.63f)
+        }
+
+        val cooltime: BukkitRunnable =
+            object : BukkitRunnable() {
+                override fun run() {
+                    getPlayerData(player)!!.setCanUseSubWeapon(true)
+                }
+            }
+        cooltime.runTaskLater(plugin, 10)
+    }
 }

@@ -1,69 +1,83 @@
-package be4rjp.sclat.weapon;
+package be4rjp.sclat.weapon
 
-import be4rjp.sclat.VariablesKt;
-import be4rjp.sclat.api.player.PlayerData;
-import be4rjp.sclat.data.DataMgr;
-import be4rjp.sclat.manager.WeaponClassMgr;
-import org.bukkit.Sound;
-import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
+import be4rjp.sclat.data.DataMgr.getPlayerData
+import be4rjp.sclat.data.DataMgr.getWeaponClass
+import be4rjp.sclat.manager.WeaponClassMgr
+import be4rjp.sclat.plugin
+import org.bukkit.Sound
+import org.bukkit.entity.Player
+import org.bukkit.scheduler.BukkitRunnable
 
-public class Swapper {
-	public static void SwapperRunnable(Player player) {
-		BukkitRunnable delay = new BukkitRunnable() {
-			Player p = player;
-			boolean sw_recharge = true;
+object Swapper {
+    @JvmStatic
+    fun SwapperRunnable(player: Player) {
+        val delay: BukkitRunnable =
+            object : BukkitRunnable() {
+                var p: Player = player
+                var sw_recharge: Boolean = true
 
-			@Override
-			public void run() {
-				PlayerData data = DataMgr.getPlayerData(p);
+                override fun run() {
+                    val data = getPlayerData(p)
 
-				if (!data.isInMatch() || !p.isOnline()) {
-					cancel();
-					return;
-				}
-				// スワッパ―系
-				if (data.getWeaponClass().getMainWeapon().getIsSwap()) {
-					if (data.getIsSneaking() && sw_recharge && p.getInventory().getItemInMainHand().getType()
-							.equals(data.getWeaponClass().getMainWeapon().getWeaponIteamStack().getType())) {
-						data.stoprun = true;
-						player.getInventory().clear();
-						p.getWorld().playSound(p.getLocation(), Sound.ITEM_ARMOR_EQUIP_GENERIC, 1.4F, 1.5F);
-						sw_recharge = false;
-						BukkitRunnable swapset = new BukkitRunnable() {// チャージャーとローラーのみ対応
-							@Override
-							public void run() {
-								String swapname = data.getWeaponClass().getMainWeapon().swap;
-								data.stoprun = false;
-								data.setWeaponClass(DataMgr.getWeaponClass(swapname));
-								data.setCanRollerShoot(true);
-								DataMgr.getPlayerData(p).setIsUsingManeuver(false);
-								if (DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getWeaponType()
-										.equals("Shooter")) {
-									if (DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon()
-											.getSlidingShootTick() > 1) {
-										DataMgr.getPlayerData(p).setIsUsingManeuver(true);
-									} else {
-										Shooter.ShooterRunnable(p);
-									}
-								}
-								WeaponClassMgr.setWeaponClass(p);
-							}
-						};
-						BukkitRunnable task = new BukkitRunnable() {// クールタイムを管理しています
-							@Override
-							public void run() {
-								sw_recharge = true;
-							}
-						};
-						swapset.runTaskLater(VariablesKt.getPlugin(), 5);
-						task.runTaskLater(VariablesKt.getPlugin(), 30);
-					}
-				}
-				// loc = ploc;
-			}
-		};
-		delay.runTaskTimer(VariablesKt.getPlugin(), 0, 1);
-	}
-
+                    if (!data!!.isInMatch() || !p.isOnline()) {
+                        cancel()
+                        return
+                    }
+                    // スワッパ―系
+                    if (data.getWeaponClass().mainWeapon!!.getIsSwap()) {
+                        if (data.getIsSneaking() && sw_recharge && (
+                                p.getInventory().getItemInMainHand().getType()
+                                    ==
+                                    data
+                                        .getWeaponClass()
+                                        .mainWeapon!!
+                                        .weaponIteamStack!!
+                                        .getType()
+                                )
+                        ) {
+                            data.stoprun = true
+                            player.getInventory().clear()
+                            p.getWorld().playSound(p.getLocation(), Sound.ITEM_ARMOR_EQUIP_GENERIC, 1.4f, 1.5f)
+                            sw_recharge = false
+                            val swapset: BukkitRunnable =
+                                object : BukkitRunnable() {
+                                    // チャージャーとローラーのみ対応
+                                    override fun run() {
+                                        val swapname = data.getWeaponClass().mainWeapon!!.swap
+                                        data.stoprun = false
+                                        data.setWeaponClass(getWeaponClass(swapname))
+                                        data.setCanRollerShoot(true)
+                                        getPlayerData(p)!!.setIsUsingManeuver(false)
+                                        if (getPlayerData(p)!!.getWeaponClass().mainWeapon!!.weaponType
+                                            == "Shooter"
+                                        ) {
+                                            if (getPlayerData(p)!!
+                                                    .getWeaponClass()
+                                                    .mainWeapon!!
+                                                    .slidingShootTick > 1
+                                            ) {
+                                                getPlayerData(p)!!.setIsUsingManeuver(true)
+                                            } else {
+                                                Shooter.ShooterRunnable(p)
+                                            }
+                                        }
+                                        WeaponClassMgr.setWeaponClass(p)
+                                    }
+                                }
+                            val task: BukkitRunnable =
+                                object : BukkitRunnable() {
+                                    // クールタイムを管理しています
+                                    override fun run() {
+                                        sw_recharge = true
+                                    }
+                                }
+                            swapset.runTaskLater(plugin, 5)
+                            task.runTaskLater(plugin, 30)
+                        }
+                    }
+                    // loc = ploc;
+                }
+            }
+        delay.runTaskTimer(plugin, 0, 1)
+    }
 }

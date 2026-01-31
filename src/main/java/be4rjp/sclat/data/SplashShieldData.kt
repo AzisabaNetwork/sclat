@@ -13,7 +13,7 @@ class SplashShieldData(
 ) {
     @JvmField
     var task: BukkitRunnable? = null
-    var armorStandList: MutableList<ArmorStand?>? = ArrayList<ArmorStand?>()
+    var armorStandList: MutableList<ArmorStand> = mutableListOf()
 
     @JvmField
     var damage: Double = 0.0

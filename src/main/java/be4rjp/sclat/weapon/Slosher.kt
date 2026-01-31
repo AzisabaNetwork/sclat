@@ -1,199 +1,266 @@
+package be4rjp.sclat.weapon
 
-package be4rjp.sclat.weapon;
-
-import be4rjp.sclat.Sclat;
-import be4rjp.sclat.VariablesKt;
-import be4rjp.sclat.api.SclatUtil;
-import be4rjp.sclat.api.Sphere;
-import be4rjp.sclat.api.player.PlayerData;
-import be4rjp.sclat.data.DataMgr;
-import be4rjp.sclat.manager.ArmorStandMgr;
-import be4rjp.sclat.manager.PaintMgr;
-import java.util.List;
-import org.bukkit.ChatColor;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
-import org.bukkit.Sound;
-import org.bukkit.craftbukkit.v1_14_R1.entity.CraftSnowball;
-import org.bukkit.craftbukkit.v1_14_R1.inventory.CraftItemStack;
-import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Snowball;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.util.Vector;
+import be4rjp.sclat.Sclat
+import be4rjp.sclat.Sclat.Companion.notDuplicateNumber
+import be4rjp.sclat.api.SclatUtil.createInkExplosionEffect
+import be4rjp.sclat.api.SclatUtil.giveDamage
+import be4rjp.sclat.api.Sphere.getSphere
+import be4rjp.sclat.data.DataMgr
+import be4rjp.sclat.data.DataMgr.getPlayerData
+import be4rjp.sclat.data.DataMgr.getSnowballHitCount
+import be4rjp.sclat.data.DataMgr.mainSnowballNameMap
+import be4rjp.sclat.data.DataMgr.setSnowballHitCount
+import be4rjp.sclat.manager.ArmorStandMgr
+import be4rjp.sclat.manager.PaintMgr
+import be4rjp.sclat.plugin
+import org.bukkit.ChatColor
+import org.bukkit.GameMode
+import org.bukkit.Particle
+import org.bukkit.Sound
+import org.bukkit.block.data.BlockData
+import org.bukkit.craftbukkit.v1_14_R1.entity.CraftSnowball
+import org.bukkit.craftbukkit.v1_14_R1.inventory.CraftItemStack
+import org.bukkit.entity.ArmorStand
+import org.bukkit.entity.Player
+import org.bukkit.entity.Snowball
+import org.bukkit.inventory.ItemStack
+import org.bukkit.scheduler.BukkitRunnable
+import org.bukkit.util.Vector
 
 /**
  *
  * @author Be4rJP
  */
-public class Slosher {
-	public static void ShootSlosher(Player player) {
-		PlayerData data = DataMgr.getPlayerData(player);
-		BukkitRunnable delay1 = new BukkitRunnable() {
-			Player p = player;
-			@Override
-			public void run() {
-				PlayerData data = DataMgr.getPlayerData(player);
-				data.setCanRollerShoot(true);
-			}
-		};
-		if (data.getCanRollerShoot())
-			delay1.runTaskLater(VariablesKt.getPlugin(), data.getWeaponClass().getMainWeapon().getCoolTime());
+object Slosher {
+    @JvmStatic
+    fun ShootSlosher(player: Player) {
+        val data = getPlayerData(player)
+        val delay1: BukkitRunnable =
+            object : BukkitRunnable() {
+                var p: Player? = player
 
-		BukkitRunnable delay = new BukkitRunnable() {
-			Player p = player;
-			@Override
-			public void run() {
-				for (int i = 0; i < data.getWeaponClass().getMainWeapon().getRollerShootQuantity(); i++) {
-					Slosher.Shoot(player, null);
-				}
-			}
-		};
-		if (data.getCanRollerShoot()) {
-			delay.runTaskLater(VariablesKt.getPlugin(), data.getWeaponClass().getMainWeapon().delay);
-			data.setCanRollerShoot(false);
-		}
-	}
+                override fun run() {
+                    val data = getPlayerData(player)
+                    data!!.setCanRollerShoot(true)
+                }
+            }
+        if (data!!.getCanRollerShoot()) {
+            delay1.runTaskLater(
+                plugin,
+                data
+                    .getWeaponClass()
+                    .mainWeapon!!
+                    .coolTime
+                    .toLong(),
+            )
+        }
 
-	public static void Shoot(Player player, Vector v) {
+        val delay: BukkitRunnable =
+            object : BukkitRunnable() {
+                var p: Player? = player
 
-		if (player.getGameMode() == GameMode.SPECTATOR)
-			return;
+                override fun run() {
+                    for (i in 0..<data.getWeaponClass().mainWeapon!!.rollerShootQuantity) {
+                        Shoot(player, null)
+                    }
+                }
+            }
+        if (data.getCanRollerShoot()) {
+            delay.runTaskLater(
+                plugin,
+                data
+                    .getWeaponClass()
+                    .mainWeapon!!
+                    .delay
+                    .toLong(),
+            )
+            data.setCanRollerShoot(false)
+        }
+    }
 
-		PlayerData data = DataMgr.getPlayerData(player);
-		if (player.getExp() <= (float) (data.getWeaponClass().getMainWeapon().getNeedInk()
-				* Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP)
-				/ Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP))) {
-			player.sendTitle("", ChatColor.RED + "インクが足りません", 0, 13, 2);
-			player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1F, 1.63F);
-			return;
-		}
-		player.setExp(player.getExp() - (float) (data.getWeaponClass().getMainWeapon().getNeedInk()
-				* Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP)
-				/ Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)));
-		Snowball ball = player.launchProjectile(Snowball.class);
-		((CraftSnowball) ball).getHandle().setItem(
-				CraftItemStack.asNMSCopy(new ItemStack(DataMgr.getPlayerData(player).team.getTeamColor().wool)));
-		Vector vec = player.getLocation().getDirection()
-				.multiply(DataMgr.getPlayerData(player).getWeaponClass().getMainWeapon().getShootSpeed());
-		if (v != null)
-			vec = v;
-		double random = DataMgr.getPlayerData(player).getWeaponClass().getMainWeapon().random;
-		int distick = DataMgr.getPlayerData(player).getWeaponClass().getMainWeapon().getDistanceTick();
-		vec.add(new Vector(Math.random() * random - random / 2, Math.random() * random / 1.5 - random / 3,
-				Math.random() * random - random / 2));
-		ball.setVelocity(vec);
-		ball.setShooter(player);
-		String name = String.valueOf(Sclat.getNotDuplicateNumber());
-		DataMgr.mws.add(name);
-		ball.setCustomName(name);
-		DataMgr.getMainSnowballNameMap().put(name, ball);
-		DataMgr.setSnowballHitCount(name, 0);
-		BukkitRunnable task = new BukkitRunnable() {
-			int i = 0;
-			int tick = distick;
-			Snowball inkball = ball;
-			Player p = player;
-			boolean addedFallVec = false;
-			Vector fallvec = new Vector(inkball.getVelocity().getX(), inkball.getVelocity().getY(),
-					inkball.getVelocity().getZ())
-							.multiply(DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getShootSpeed() / 17);
-			@Override
-			public void run() {
-				try {
-					inkball = DataMgr.getMainSnowballNameMap().get(name);
+    fun Shoot(
+        player: Player,
+        v: Vector?,
+    ) {
+        if (player.getGameMode() == GameMode.SPECTATOR) return
 
-					if (!inkball.equals(ball)) {
-						i += DataMgr.getSnowballHitCount(name) - 1;
-						DataMgr.setSnowballHitCount(name, 0);
-					}
-					for (Player target : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
-						if (!DataMgr.getPlayerData(target).settings.ShowEffect_MainWeaponInk())
-							continue;
-						if (target.getWorld() == inkball.getWorld()) {
-							if (target.getLocation()
-									.distanceSquared(inkball.getLocation()) < Sclat.particleRenderDistanceSquared) {
-								org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).team.getTeamColor().wool
-										.createBlockData();
-								target.spawnParticle(org.bukkit.Particle.BLOCK_DUST, inkball.getLocation(), 3, 0, 0, 0,
-										1, bd);
-							}
-						}
-					}
+        val data = getPlayerData(player)
+        if (player.getExp() <=
+            (
+                data!!.getWeaponClass().mainWeapon!!.needInk
+                    * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) /
+                    Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)
+                ).toFloat()
+        ) {
+            player.sendTitle("", ChatColor.RED.toString() + "インクが足りません", 0, 13, 2)
+            player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1f, 1.63f)
+            return
+        }
+        player.setExp(
+            player.getExp() -
+                (
+                    data.getWeaponClass().mainWeapon!!.needInk
+                        * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) /
+                        Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)
+                    ).toFloat(),
+        )
+        val ball = player.launchProjectile<Snowball>(Snowball::class.java)
+        (ball as CraftSnowball).getHandle().setItem(
+            CraftItemStack.asNMSCopy(ItemStack(getPlayerData(player)!!.team.teamColor!!.wool!!)),
+        )
+        var vec: Vector? =
+            player
+                .getLocation()
+                .getDirection()
+                .multiply(getPlayerData(player)!!.getWeaponClass().mainWeapon!!.shootSpeed)
+        if (v != null) vec = v
+        val random = getPlayerData(player)!!.getWeaponClass().mainWeapon!!.random
+        val distick = getPlayerData(player)!!.getWeaponClass().mainWeapon!!.distanceTick
+        vec!!.add(
+            Vector(
+                Math.random() * random - random / 2,
+                Math.random() * random / 1.5 - random / 3,
+                Math.random() * random - random / 2,
+            ),
+        )
+        ball.setVelocity(vec)
+        ball.setShooter(player)
+        val name = notDuplicateNumber.toString()
+        DataMgr.mws.add(name)
+        ball.setCustomName(name)
+        mainSnowballNameMap.put(name, ball)
+        setSnowballHitCount(name, 0)
+        val task: BukkitRunnable =
+            object : BukkitRunnable() {
+                var i: Int = 0
+                var tick: Int = distick
+                var inkball: Snowball? = ball
+                var p: Player = player
+                var addedFallVec: Boolean = false
+                var fallvec: Vector =
+                    Vector(
+                        inkball!!.getVelocity().getX(),
+                        inkball!!.getVelocity().getY(),
+                        inkball!!.getVelocity().getZ(),
+                    ).multiply(getPlayerData(p)!!.getWeaponClass().mainWeapon!!.shootSpeed / 17)
 
-					PaintMgr.PaintHightestBlock(inkball.getLocation(), p, false, true);
+                override fun run() {
+                    try {
+                        inkball = mainSnowballNameMap.get(name)
 
-					if (i >= tick && !addedFallVec) {
-						inkball.setVelocity(fallvec);
-						addedFallVec = true;
-					}
-					if (i >= tick && i <= tick + 15)
-						inkball.setVelocity(inkball.getVelocity().add(new Vector(0, -0.1, 0)));
-					if (inkball.isDead()) {
-						// 半径
-						double maxDist = data.getWeaponClass().getMainWeapon().getBlasterExHankei();
+                        if (inkball != ball) {
+                            i += getSnowballHitCount(name) - 1
+                            setSnowballHitCount(name, 0)
+                        }
+                        for (target in plugin.getServer().getOnlinePlayers()) {
+                            if (!getPlayerData(target)!!.settings.ShowEffect_MainWeaponInk()) continue
+                            if (target.getWorld() === inkball!!.getWorld()) {
+                                if (target
+                                        .getLocation()
+                                        .distanceSquared(inkball!!.getLocation()) < Sclat.particleRenderDistanceSquared
+                                ) {
+                                    val bd =
+                                        getPlayerData(p)!!
+                                            .team.teamColor!!
+                                            .wool!!
+                                            .createBlockData()
+                                    target.spawnParticle<BlockData?>(
+                                        Particle.BLOCK_DUST,
+                                        inkball!!.getLocation(),
+                                        3,
+                                        0.0,
+                                        0.0,
+                                        0.0,
+                                        1.0,
+                                        bd,
+                                    )
+                                }
+                            }
+                        }
 
-						// 爆発音
-						player.getWorld().playSound(inkball.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_BLAST, 0.7F, 1);
+                        PaintMgr.PaintHightestBlock(inkball!!.getLocation(), p, false, true)
 
-						// 爆発エフェクト
-						SclatUtil.createInkExplosionEffect(inkball.getLocation(), maxDist, 25, player);
+                        if (i >= tick && !addedFallVec) {
+                            inkball!!.setVelocity(fallvec)
+                            addedFallVec = true
+                        }
+                        if (i >= tick && i <= tick + 15) {
+                            inkball!!.setVelocity(
+                                inkball!!.getVelocity().add(Vector(0.0, -0.1, 0.0)),
+                            )
+                        }
+                        if (inkball!!.isDead()) {
+                            // 半径
+                            val maxDist = data.getWeaponClass().mainWeapon!!.blasterExHankei
 
-						// 塗る
-						for (int i = 0; i <= maxDist; i++) {
-							List<Location> p_locs = Sphere.getSphere(inkball.getLocation(), i, 20);
-							for (Location loc : p_locs) {
-								PaintMgr.Paint(loc, p, false);
-								PaintMgr.PaintHightestBlock(loc, p, false, false);
-							}
-						}
+                            // 爆発音
+                            player
+                                .getWorld()
+                                .playSound(inkball!!.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_BLAST, 0.7f, 1f)
 
-						// 攻撃判定の処理
+                            // 爆発エフェクト
+                            createInkExplosionEffect(inkball!!.getLocation(), maxDist, 25, player)
 
-						for (Player target : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
-							if (!DataMgr.getPlayerData(target).isInMatch())
-								continue;
-							if (target.getLocation().distanceSquared(inkball.getLocation()) <= maxDist * maxDist) {
-								double damage = (maxDist - target.getLocation().distance(inkball.getLocation()))
-										* data.getWeaponClass().getMainWeapon().getBlasterExDamage();
-								if (DataMgr.getPlayerData(player).team != DataMgr.getPlayerData(target).team
-										&& target.getGameMode().equals(GameMode.ADVENTURE)) {
-									SclatUtil.giveDamage(player, target, damage, "killed");
+                            // 塗る
+                            run {
+                                var i = 0
+                                while (i <= maxDist) {
+                                    val p_locs = getSphere(inkball!!.getLocation(), i.toDouble(), 20)
+                                    for (loc in p_locs) {
+                                        PaintMgr.Paint(loc, p, false)
+                                        PaintMgr.PaintHightestBlock(loc, p, false, false)
+                                    }
+                                    i++
+                                }
+                            }
 
-									// AntiNoDamageTime
-									BukkitRunnable task = new BukkitRunnable() {
-										Player p = target;
-										@Override
-										public void run() {
-											target.setNoDamageTicks(0);
-										}
-									};
-									task.runTaskLater(VariablesKt.getPlugin(), 1);
+                            // 攻撃判定の処理
+                            for (target in plugin.getServer().getOnlinePlayers()) {
+                                if (!getPlayerData(target)!!.isInMatch()) continue
+                                if (target.getLocation().distanceSquared(inkball!!.getLocation()) <= maxDist * maxDist) {
+                                    val damage = (
+                                        (maxDist - target.getLocation().distance(inkball!!.getLocation())) *
+                                            data.getWeaponClass().mainWeapon!!.blasterExDamage
+                                        )
+                                    if (getPlayerData(player)!!.team != getPlayerData(target)!!.team &&
+                                        target.getGameMode() == GameMode.ADVENTURE
+                                    ) {
+                                        giveDamage(player, target, damage, "killed")
 
-								}
-							}
-						}
+                                        // AntiNoDamageTime
+                                        val task: BukkitRunnable =
+                                            object : BukkitRunnable() {
+                                                var p: Player = target
 
-						for (Entity as : player.getWorld().getEntities()) {
-							if (as instanceof ArmorStand) {
-								if (as.getLocation().distanceSquared(inkball.getLocation()) <= maxDist * maxDist) {
-									double damage = (maxDist - as.getLocation().distance(inkball.getLocation()))
-											* data.getWeaponClass().getMainWeapon().getBlasterExDamage();
-									ArmorStandMgr.giveDamageArmorStand((ArmorStand) as, damage, p);
-								}
-							}
-						}
-						cancel();
-					}
+                                                override fun run() {
+                                                    target.setNoDamageTicks(0)
+                                                }
+                                            }
+                                        task.runTaskLater(plugin, 1)
+                                    }
+                                }
+                            }
 
-					i++;
-				} catch (Exception e) {
-					cancel();
-				}
-			}
-		};
-		task.runTaskTimer(VariablesKt.getPlugin(), 0, 1);
-	}
+                            for (`as` in player.getWorld().getEntities()) {
+                                if (`as` is ArmorStand) {
+                                    if (`as`.getLocation().distanceSquared(inkball!!.getLocation()) <= maxDist * maxDist) {
+                                        val damage = (
+                                            (maxDist - `as`.getLocation().distance(inkball!!.getLocation())) *
+                                                data.getWeaponClass().mainWeapon!!.blasterExDamage
+                                            )
+                                        ArmorStandMgr.giveDamageArmorStand(`as`, damage, p)
+                                    }
+                                }
+                            }
+                            cancel()
+                        }
+
+                        i++
+                    } catch (e: Exception) {
+                        cancel()
+                    }
+                }
+            }
+        task.runTaskTimer(plugin, 0, 1)
+    }
 }

@@ -1,46 +1,48 @@
+package be4rjp.sclat.weapon.spweapon
 
-package be4rjp.sclat.weapon.spweapon;
-
-import be4rjp.sclat.Sclat;
-import be4rjp.sclat.VariablesKt;
-import be4rjp.sclat.data.DataMgr;
-import be4rjp.sclat.manager.SPWeaponMgr;
-import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
-import org.bukkit.scheduler.BukkitRunnable;
+import be4rjp.sclat.data.DataMgr.getPlayerData
+import be4rjp.sclat.manager.SPWeaponMgr
+import be4rjp.sclat.plugin
+import org.bukkit.entity.ArmorStand
+import org.bukkit.entity.Player
+import org.bukkit.potion.PotionEffect
+import org.bukkit.potion.PotionEffectType
+import org.bukkit.scheduler.BukkitRunnable
 
 /**
  *
  * @author Be4rJP
  */
-public class SuperSensor {
-	public static void SuperSensorRunnable(Player player) {
-		DataMgr.getPlayerData(player).setIsUsingSP(true);
-		SPWeaponMgr.setSPCoolTimeAnimation(player, 200);
-		for (Player o_player : Sclat.getPlugin(Sclat.class).getServer().getOnlinePlayers()) {
-			if (DataMgr.getPlayerData(player).team != DataMgr.getPlayerData(o_player).team
-					&& DataMgr.getPlayerData(o_player).isInMatch())
-				o_player.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 200, 1));
-		}
-		for (Entity as : player.getWorld().getEntities()) {
-			if (as.getCustomName() != null) {
-				if (as instanceof ArmorStand && !as.getCustomName().equals("Path") && !as.getCustomName().equals("21")
-						&& !as.getCustomName().equals("100") && !as.getCustomName().equals("SplashShield")
-						&& !as.getCustomName().equals("Kasa")) {
-					((ArmorStand) as).addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 200, 1));
-				}
-			}
-		}
-		BukkitRunnable sound = new BukkitRunnable() {
-			@Override
-			public void run() {
-				// player.playSound(player.getLocation(), Sound.BLOCK_CHEST_CLOSE, 1, 2);
-				DataMgr.getPlayerData(player).setIsUsingSP(false);
-			}
-		};
-		sound.runTaskLater(VariablesKt.getPlugin(), 200);
-	}
+object SuperSensor {
+    @JvmStatic
+    fun SuperSensorRunnable(player: Player) {
+        getPlayerData(player)!!.setIsUsingSP(true)
+        SPWeaponMgr.setSPCoolTimeAnimation(player, 200)
+        for (o_player in plugin.getServer().getOnlinePlayers()) {
+            if (getPlayerData(player)!!.team != getPlayerData(o_player)!!.team &&
+                getPlayerData(o_player)!!.isInMatch()
+            ) {
+                o_player.addPotionEffect(PotionEffect(PotionEffectType.GLOWING, 200, 1))
+            }
+        }
+        for (`as` in player.getWorld().getEntities()) {
+            if (`as`.getCustomName() != null) {
+                if (`as` is ArmorStand && (`as`.getCustomName() != "Path") && (`as`.getCustomName() != "21") &&
+                    (`as`.getCustomName() != "100") &&
+                    (`as`.getCustomName() != "SplashShield") &&
+                    (`as`.getCustomName() != "Kasa")
+                ) {
+                    `as`.addPotionEffect(PotionEffect(PotionEffectType.GLOWING, 200, 1))
+                }
+            }
+        }
+        val sound: BukkitRunnable =
+            object : BukkitRunnable() {
+                override fun run() {
+                    // player.playSound(player.getLocation(), Sound.BLOCK_CHEST_CLOSE, 1, 2);
+                    getPlayerData(player)!!.setIsUsingSP(false)
+                }
+            }
+        sound.runTaskLater(plugin, 200)
+    }
 }

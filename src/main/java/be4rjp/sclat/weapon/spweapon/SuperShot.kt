@@ -1,186 +1,214 @@
+package be4rjp.sclat.weapon.spweapon
 
-package be4rjp.sclat.weapon.spweapon;
-
-import be4rjp.sclat.Sclat;
-import be4rjp.sclat.VariablesKt;
-import be4rjp.sclat.data.DataMgr;
-import be4rjp.sclat.manager.PaintMgr;
-import be4rjp.sclat.manager.SPWeaponMgr;
-import be4rjp.sclat.manager.WeaponClassMgr;
-import java.util.Random;
-import net.minecraft.server.v1_14_R1.PacketPlayOutEntityDestroy;
-import net.minecraft.server.v1_14_R1.PlayerConnection;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Sound;
-import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Item;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Snowball;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
-import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.util.Vector;
+import be4rjp.sclat.Sclat
+import be4rjp.sclat.Sclat.Companion.notDuplicateNumber
+import be4rjp.sclat.data.DataMgr.getPlayerData
+import be4rjp.sclat.manager.PaintMgr
+import be4rjp.sclat.manager.SPWeaponMgr
+import be4rjp.sclat.manager.WeaponClassMgr
+import be4rjp.sclat.plugin
+import net.minecraft.server.v1_14_R1.PacketPlayOutEntityDestroy
+import org.bukkit.Location
+import org.bukkit.Material
+import org.bukkit.Particle
+import org.bukkit.Sound
+import org.bukkit.block.data.BlockData
+import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer
+import org.bukkit.entity.EntityType
+import org.bukkit.entity.Item
+import org.bukkit.entity.Player
+import org.bukkit.entity.Snowball
+import org.bukkit.inventory.ItemStack
+import org.bukkit.potion.PotionEffect
+import org.bukkit.potion.PotionEffectType
+import org.bukkit.scheduler.BukkitRunnable
+import org.bukkit.util.Vector
+import java.util.Random
 
 /**
  *
  * @author Be4rJP
  */
-public class SuperShot {
+object SuperShot {
+    @JvmStatic
+    fun setSuperShot(player: Player) {
+        getPlayerData(player)!!.setIsUsingSP(true)
+        getPlayerData(player)!!.setIsUsingSS(true)
+        SPWeaponMgr.setSPCoolTimeAnimation(player, 100)
 
-	public static void setSuperShot(Player player) {
-		DataMgr.getPlayerData(player).setIsUsingSP(true);
-		DataMgr.getPlayerData(player).setIsUsingSS(true);
-		SPWeaponMgr.setSPCoolTimeAnimation(player, 100);
+        val it: BukkitRunnable =
+            object : BukkitRunnable() {
+                var p: Player? = player
 
-		BukkitRunnable it = new BukkitRunnable() {
-			Player p = player;
-			@Override
-			public void run() {
-				player.getInventory().clear();
-				player.updateInventory();
+                override fun run() {
+                    player.getInventory().clear()
+                    player.updateInventory()
 
-				ItemStack item = new ItemStack(Material.SUGAR_CANE);
-				ItemMeta meta = item.getItemMeta();
-				meta.setDisplayName("右クリックで発射！");
-				item.setItemMeta(meta);
-				for (int count = 0; count < 9; count++) {
-					player.getInventory().setItem(count, item);
-					if (count % 2 != 0)
-						player.getInventory().setItem(count, new ItemStack(Material.AIR));
-				}
-				player.updateInventory();
-				player.addPotionEffect(new PotionEffect(PotionEffectType.LUCK, 101, 1));
-			}
-		};
-		it.runTaskLater(VariablesKt.getPlugin(), 2);
+                    val item = ItemStack(Material.SUGAR_CANE)
+                    val meta = item.getItemMeta()
+                    meta!!.setDisplayName("右クリックで発射！")
+                    item.setItemMeta(meta)
+                    for (count in 0..8) {
+                        player.getInventory().setItem(count, item)
+                        if (count % 2 != 0) player.getInventory().setItem(count, ItemStack(Material.AIR))
+                    }
+                    player.updateInventory()
+                    player.addPotionEffect(PotionEffect(PotionEffectType.LUCK, 101, 1))
+                }
+            }
+        it.runTaskLater(plugin, 2)
 
-		BukkitRunnable task = new BukkitRunnable() {
-			Player p = player;
-			@Override
-			public void run() {
-				if (DataMgr.getPlayerData(p).isInMatch()) {
-					DataMgr.getPlayerData(p).setIsUsingSP(false);
-					DataMgr.getPlayerData(p).setIsUsingSS(false);
-					player.getInventory().clear();
-					WeaponClassMgr.setWeaponClass(p);
-				}
-			}
-		};
-		task.runTaskLater(VariablesKt.getPlugin(), 100);
-	}
+        val task: BukkitRunnable =
+            object : BukkitRunnable() {
+                var p: Player = player
 
-	public static void Shot(Player player) {
-		if (player.hasPotionEffect(PotionEffectType.LUCK)) {
-			Vector direction = new Vector(0, 1, 0);
-			double headdis = 8.5;
-			Location playerLocation = player.getLocation();
-			while (headdis > 3) {
-				if (player.getWorld().rayTraceBlocks(playerLocation, direction, headdis) != null) {
-					headdis -= 1;
-				} else {
-					break;
-				}
-			}
-			player.getWorld().playSound(playerLocation, Sound.ENTITY_PLAYER_ATTACK_STRONG, 1.5F, 1.2F);
-			player.getWorld().playSound(playerLocation, Sound.ENTITY_WITHER_SHOOT, 0.3F, 2F);
+                override fun run() {
+                    if (getPlayerData(p)!!.isInMatch()) {
+                        getPlayerData(p)!!.setIsUsingSP(false)
+                        getPlayerData(p)!!.setIsUsingSS(false)
+                        player.getInventory().clear()
+                        WeaponClassMgr.setWeaponClass(p)
+                    }
+                }
+            }
+        task.runTaskLater(plugin, 100)
+    }
 
-			Location ploc = player.getEyeLocation().add(0, -1.5, 0);
-			Vector pvec = player.getEyeLocation().getDirection();
-			Vector vec = new Vector(pvec.getX(), 0, pvec.getZ());
-			Vector vv1 = new Vector(pvec.getZ() * -1, 0, pvec.getX()).normalize().multiply(0.3);
-			Vector vv2 = new Vector(pvec.getZ(), 0, pvec.getX() * -1).normalize().multiply(0.3);
-			Vector vec1 = new Vector(pvec.getX(), 0, pvec.getZ()).normalize().multiply(1);
-			Vector vec2 = new Vector(pvec.getX(), 0, pvec.getZ()).normalize().multiply(1.3);
-			Vector vec3 = new Vector(pvec.getX(), 0, pvec.getZ()).normalize().multiply(1.6);
-			Location loc1 = ploc.clone().add(vec1);
-			Location loc2 = ploc.clone().add(vec2);
-			Location loc3 = ploc.clone().add(vec3);
-			Location loc4 = loc2.clone().add(vv1);
-			Location loc5 = loc2.clone().add(vv2);
+    @JvmStatic
+    fun Shot(player: Player) {
+        if (player.hasPotionEffect(PotionEffectType.LUCK)) {
+            val direction = Vector(0, 1, 0)
+            var headdis = 8.5
+            val playerLocation = player.getLocation()
+            while (headdis > 3) {
+                if (player.getWorld().rayTraceBlocks(playerLocation, direction, headdis) != null) {
+                    headdis -= 1.0
+                } else {
+                    break
+                }
+            }
+            player.getWorld().playSound(playerLocation, Sound.ENTITY_PLAYER_ATTACK_STRONG, 1.5f, 1.2f)
+            player.getWorld().playSound(playerLocation, Sound.ENTITY_WITHER_SHOOT, 0.3f, 2f)
 
-			player.setVelocity(vec.clone().multiply(-0.5));
+            val ploc = player.getEyeLocation().add(0.0, -1.5, 0.0)
+            val pvec = player.getEyeLocation().getDirection()
+            val vec = Vector(pvec.getX(), 0.0, pvec.getZ())
+            val vv1 = Vector(pvec.getZ() * -1, 0.0, pvec.getX()).normalize().multiply(0.3)
+            val vv2 = Vector(pvec.getZ(), 0.0, pvec.getX() * -1).normalize().multiply(0.3)
+            val vec1 = Vector(pvec.getX(), 0.0, pvec.getZ()).normalize().multiply(1)
+            val vec2 = Vector(pvec.getX(), 0.0, pvec.getZ()).normalize().multiply(1.3)
+            val vec3 = Vector(pvec.getX(), 0.0, pvec.getZ()).normalize().multiply(1.6)
+            val loc1 = ploc.clone().add(vec1)
+            val loc2 = ploc.clone().add(vec2)
+            val loc3 = ploc.clone().add(vec3)
+            val loc4 = loc2.clone().add(vv1)
+            val loc5 = loc2.clone().add(vv2)
 
-			for (double y = 0; y <= headdis; y += 0.5) {
-				ShootSnowball(player, loc1.clone().add(0, y, 0), vec.clone().normalize().multiply(1.8));
-				ShootSnowball(player, loc3.clone().add(0, y, 0), vec.clone().normalize().multiply(1.8));
-				ShootSnowball(player, loc4.clone().add(0, y, 0), vec.clone().normalize().multiply(1.8));
-				ShootSnowball(player, loc5.clone().add(0, y, 0), vec.clone().normalize().multiply(1.8));
-			}
-		}
+            player.setVelocity(vec.clone().multiply(-0.5))
 
-		BukkitRunnable task = new BukkitRunnable() {
-			Player p = player;
-			@Override
-			public void run() {
-				DataMgr.getPlayerData(p).setCanUseSubWeapon(true);
-			}
-		};
-		task.runTaskLater(VariablesKt.getPlugin(), 20);
-	}
+            var y = 0.0
+            while (y <= headdis) {
+                ShootSnowball(player, loc1.clone().add(0.0, y, 0.0), vec.clone().normalize().multiply(1.8))
+                ShootSnowball(player, loc3.clone().add(0.0, y, 0.0), vec.clone().normalize().multiply(1.8))
+                ShootSnowball(player, loc4.clone().add(0.0, y, 0.0), vec.clone().normalize().multiply(1.8))
+                ShootSnowball(player, loc5.clone().add(0.0, y, 0.0), vec.clone().normalize().multiply(1.8))
+                y += 0.5
+            }
+        }
 
-	public static void ShootSnowball(Player player, Location loc, Vector vec) {
-		BukkitRunnable task = new BukkitRunnable() {
-			Player p = player;
-			boolean block_check = false;
-			int c = 0;
-			Item drop;
-			Snowball ball;
-			@Override
-			public void run() {
-				try {
-					if (c == 0) {
-						ItemStack i = new ItemStack(DataMgr.getPlayerData(p).team.getTeamColor().wool).clone();
-						ItemMeta i_m = i.getItemMeta();
-						i_m.setLocalizedName(String.valueOf(Sclat.getNotDuplicateNumber()));
-						i.setItemMeta(i_m);
-						drop = p.getWorld().dropItem(loc, i);
-						drop.setVelocity(vec);
-						// 雪玉をスポーンさせた瞬間にプレイヤーに雪玉がデスポーンした偽のパケットを送信する
-						ball = (Snowball) player.getWorld().spawnEntity(loc, EntityType.SNOWBALL);
-						ball.setShooter(p);
-						ball.setVelocity(vec);
-						ball.setCustomName("SuperShot");
-						ball.setShooter(p);
-						for (Player o_player : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
-							PlayerConnection connection = ((CraftPlayer) o_player).getHandle().playerConnection;
-							connection.sendPacket(new PacketPlayOutEntityDestroy(ball.getEntityId()));
-						}
-					}
-					drop.setVelocity(ball.getVelocity());
+        val task: BukkitRunnable =
+            object : BukkitRunnable() {
+                var p: Player = player
 
-					PaintMgr.PaintHightestBlock(ball.getLocation(), p, false, false);
+                override fun run() {
+                    getPlayerData(p)!!.setCanUseSubWeapon(true)
+                }
+            }
+        task.runTaskLater(plugin, 20)
+    }
 
-					if (new Random().nextInt(20) == 0) {
-						org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).team.getTeamColor().wool
-								.createBlockData();
-						for (Player o_player : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
-							if (DataMgr.getPlayerData(o_player).settings.ShowEffect_SPWeapon())
-								if (o_player.getWorld() == ball.getWorld())
-									if (o_player.getLocation()
-											.distanceSquared(ball.getLocation()) < Sclat.particleRenderDistanceSquared)
-										o_player.spawnParticle(org.bukkit.Particle.BLOCK_DUST, ball.getLocation(), 1, 0,
-												0, 0, 1, bd);
-						}
-					}
+    fun ShootSnowball(
+        player: Player,
+        loc: Location,
+        vec: Vector,
+    ) {
+        val task: BukkitRunnable =
+            object : BukkitRunnable() {
+                var p: Player = player
+                var block_check: Boolean = false
+                var c: Int = 0
+                var drop: Item? = null
+                var ball: Snowball? = null
 
-					if (ball.isDead() || drop.isDead() || !p.isOnline() || !DataMgr.getPlayerData(p).isInMatch()) {
-						ball.remove();
-						drop.remove();
-						cancel();
-					}
+                override fun run() {
+                    try {
+                        if (c == 0) {
+                            val i = ItemStack(getPlayerData(p)!!.team.teamColor!!.wool!!).clone()
+                            val i_m = i.getItemMeta()
+                            i_m!!.setLocalizedName(notDuplicateNumber.toString())
+                            i.setItemMeta(i_m)
+                            drop = p.getWorld().dropItem(loc, i)
+                            drop!!.setVelocity(vec)
+                            // 雪玉をスポーンさせた瞬間にプレイヤーに雪玉がデスポーンした偽のパケットを送信する
+                            ball = player.getWorld().spawnEntity(loc, EntityType.SNOWBALL) as Snowball
+                            ball!!.setShooter(p)
+                            ball!!.setVelocity(vec)
+                            ball!!.setCustomName("SuperShot")
+                            ball!!.setShooter(p)
+                            for (o_player in plugin.getServer().getOnlinePlayers()) {
+                                val connection = (o_player as CraftPlayer).getHandle().playerConnection
+                                connection.sendPacket(PacketPlayOutEntityDestroy(ball!!.getEntityId()))
+                            }
+                        }
+                        drop!!.setVelocity(ball!!.getVelocity())
 
-					c++;
-				} catch (Exception e) {
-					drop.remove();
-					cancel();
-					VariablesKt.getPlugin().getLogger().warning(e.getMessage());
-				}
-			}
-		};
-		task.runTaskTimer(VariablesKt.getPlugin(), 0, 1);
-	}
+                        PaintMgr.PaintHightestBlock(ball!!.getLocation(), p, false, false)
+
+                        if (Random().nextInt(20) == 0) {
+                            val bd =
+                                getPlayerData(p)!!
+                                    .team.teamColor!!
+                                    .wool!!
+                                    .createBlockData()
+                            for (o_player in plugin.getServer().getOnlinePlayers()) {
+                                if (getPlayerData(o_player)!!.settings.ShowEffect_SPWeapon()) {
+                                    if (o_player.getWorld() ===
+                                        ball!!.getWorld()
+                                    ) {
+                                        if (o_player
+                                                .getLocation()
+                                                .distanceSquared(ball!!.getLocation()) < Sclat.particleRenderDistanceSquared
+                                        ) {
+                                            o_player.spawnParticle<BlockData?>(
+                                                Particle.BLOCK_DUST,
+                                                ball!!.getLocation(),
+                                                1,
+                                                0.0,
+                                                0.0,
+                                                0.0,
+                                                1.0,
+                                                bd,
+                                            )
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        if (ball!!.isDead() || drop!!.isDead() || !p.isOnline() || !getPlayerData(p)!!.isInMatch()) {
+                            ball!!.remove()
+                            drop!!.remove()
+                            cancel()
+                        }
+
+                        c++
+                    } catch (e: Exception) {
+                        drop!!.remove()
+                        cancel()
+                        plugin.getLogger().warning(e.message)
+                    }
+                }
+            }
+        task.runTaskTimer(plugin, 0, 1)
+    }
 }

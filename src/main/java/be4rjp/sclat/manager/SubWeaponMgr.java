@@ -188,7 +188,7 @@ public class SubWeaponMgr {
 				data.setCanUseSubWeapon(false);
 				break;
 			case "スプラッシュシールド" :
-				SplashShield.SplashShieldThrowRunnable(player);
+				SplashShield.splashShieldThrowRunnable(player);
 				data.setCanUseSubWeapon(false);
 				break;
 			case "カーリングボム" :

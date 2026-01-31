@@ -1,31 +1,30 @@
+package be4rjp.sclat.weapon.spweapon
 
-package be4rjp.sclat.weapon.spweapon;
-
-import be4rjp.sclat.VariablesKt;
-import be4rjp.sclat.api.player.PlayerData;
-import be4rjp.sclat.data.DataMgr;
-import be4rjp.sclat.manager.SPWeaponMgr;
-import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
+import be4rjp.sclat.data.DataMgr.getPlayerData
+import be4rjp.sclat.manager.SPWeaponMgr
+import be4rjp.sclat.plugin
+import org.bukkit.entity.Player
+import org.bukkit.scheduler.BukkitRunnable
 
 /**
  *
  * @author Be4rJP
  */
-public class BombRush {
-	public static void BombRushRunnable(Player player) {
-		PlayerData data = DataMgr.getPlayerData(player);
-		data.setIsBombRush(true);
-		data.setIsUsingSP(true);
-		SPWeaponMgr.setSPCoolTimeAnimation(player, 120);
-		BukkitRunnable task = new BukkitRunnable() {
-			@Override
-			public void run() {
-				data.setIsBombRush(false);
-				// player.playSound(player.getLocation(), Sound.BLOCK_CHEST_CLOSE, 1, 2);
-				data.setIsUsingSP(false);
-			}
-		};
-		task.runTaskLater(VariablesKt.getPlugin(), 120);
-	}
+object BombRush {
+    @JvmStatic
+    fun BombRushRunnable(player: Player?) {
+        val data = getPlayerData(player)
+        data!!.setIsBombRush(true)
+        data.setIsUsingSP(true)
+        SPWeaponMgr.setSPCoolTimeAnimation(player, 120)
+        val task: BukkitRunnable =
+            object : BukkitRunnable() {
+                override fun run() {
+                    data.setIsBombRush(false)
+                    // player.playSound(player.getLocation(), Sound.BLOCK_CHEST_CLOSE, 1, 2);
+                    data.setIsUsingSP(false)
+                }
+            }
+        task.runTaskLater(plugin, 120)
+    }
 }

@@ -1,424 +1,526 @@
-package be4rjp.sclat.weapon;
+package be4rjp.sclat.weapon
 
-import be4rjp.dadadachecker.ClickType;
-import be4rjp.sclat.Sclat;
-import be4rjp.sclat.VariablesKt;
-import be4rjp.sclat.api.player.PlayerData;
-import be4rjp.sclat.api.raytrace.RayTrace;
-import be4rjp.sclat.data.DataMgr;
-import be4rjp.sclat.manager.PaintMgr;
-import java.util.ArrayList;
-import java.util.Random;
-import org.bukkit.ChatColor;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
-import org.bukkit.Sound;
-import org.bukkit.craftbukkit.v1_14_R1.entity.CraftSnowball;
-import org.bukkit.craftbukkit.v1_14_R1.inventory.CraftItemStack;
-import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Snowball;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.util.Vector;
+import be4rjp.dadadachecker.ClickType
+import be4rjp.sclat.Sclat
+import be4rjp.sclat.Sclat.Companion.notDuplicateNumber
+import be4rjp.sclat.api.raytrace.RayTrace
+import be4rjp.sclat.data.DataMgr
+import be4rjp.sclat.data.DataMgr.getPlayerData
+import be4rjp.sclat.data.DataMgr.getSnowballHitCount
+import be4rjp.sclat.data.DataMgr.mainSnowballNameMap
+import be4rjp.sclat.data.DataMgr.setSnowballHitCount
+import be4rjp.sclat.manager.PaintMgr
+import be4rjp.sclat.plugin
+import org.bukkit.ChatColor
+import org.bukkit.GameMode
+import org.bukkit.Location
+import org.bukkit.Particle
+import org.bukkit.Sound
+import org.bukkit.block.data.BlockData
+import org.bukkit.craftbukkit.v1_14_R1.entity.CraftSnowball
+import org.bukkit.craftbukkit.v1_14_R1.inventory.CraftItemStack
+import org.bukkit.entity.ArmorStand
+import org.bukkit.entity.Player
+import org.bukkit.entity.Snowball
+import org.bukkit.inventory.ItemStack
+import org.bukkit.scheduler.BukkitRunnable
+import org.bukkit.util.Vector
+import java.util.Random
 
 /**
  *
  * @author Be4rJP
  */
-public class Shooter {
-	public static void ShooterRunnable(Player player) {
-		BukkitRunnable delay = new BukkitRunnable() {
-			Player p = player;
-			int sl = 0;
-			boolean check = true;
-			int maxRandomCount = 0;
-			@Override
-			public void run() {
-				PlayerData data = DataMgr.getPlayerData(p);
+object Shooter {
+    @JvmStatic
+    fun ShooterRunnable(player: Player) {
+        val delay: BukkitRunnable =
+            object : BukkitRunnable() {
+                var p: Player = player
+                var sl: Int = 0
+                var check: Boolean = true
+                var maxRandomCount: Int = 0
 
-				if (!data.isInMatch() || !p.isOnline() || data.stoprun) {
-					cancel();
-					return;
-				}
+                override fun run() {
+                    val data = getPlayerData(p)
 
-				if (!data.getIsUsingManeuver() && data.getCanShoot()) {
-					ClickType clickType = Sclat.dadadaCheckerAPI.getPlayerClickType(player);
-					if ((clickType == ClickType.FIRST_CLICK || clickType == ClickType.RENDA
-							|| clickType == ClickType.NAGAOSI) && data.isInMatch()) {
-						Shooter.Shoot(p, false, false,
-								maxRandomCount >= data.getWeaponClass().getMainWeapon().maxRandomCount);
-						data.tick = data.tick
-								+ DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getShootTick();
-						if (data.getWeaponClass().getMainWeapon().maxRandom != 0
-								&& maxRandomCount <= data.getWeaponClass().getMainWeapon().maxRandomCount * 2) {
-							maxRandomCount++;
-						}
-					} else {
-						if (data.getWeaponClass().getMainWeapon().maxRandom != 0 && maxRandomCount >= 0)
-							maxRandomCount -= 2;
-					}
-				}
-			}
-		};
-		delay.runTaskTimer(VariablesKt.getPlugin(), 0,
-				DataMgr.getPlayerData(player).getWeaponClass().getMainWeapon().getShootTick());
-	}
+                    if (!data!!.isInMatch() || !p.isOnline() || data.stoprun) {
+                        cancel()
+                        return
+                    }
 
-	public static void ManeuverShootRunnable(Player player) {
-		BukkitRunnable delay = new BukkitRunnable() {
-			Player p = player;
-			int sl = 0;
-			boolean check = true;
+                    if (!data.getIsUsingManeuver() && data.getCanShoot()) {
+                        val clickType = Sclat.dadadaCheckerAPI!!.getPlayerClickType(player)
+                        if ((clickType == ClickType.FIRST_CLICK || clickType == ClickType.RENDA || clickType == ClickType.NAGAOSI) &&
+                            data.isInMatch()
+                        ) {
+                            Shoot(
+                                p,
+                                false,
+                                false,
+                                maxRandomCount >= data.getWeaponClass().mainWeapon!!.maxRandomCount,
+                            )
+                            data.tick = (
+                                data.tick +
+                                    getPlayerData(p)!!.getWeaponClass().mainWeapon!!.shootTick
+                                )
+                            if (data.getWeaponClass().mainWeapon!!.maxRandom != 0.0 &&
+                                maxRandomCount <= data.getWeaponClass().mainWeapon!!.maxRandomCount * 2
+                            ) {
+                                maxRandomCount++
+                            }
+                        } else {
+                            if (data.getWeaponClass().mainWeapon!!.maxRandom != 0.0 && maxRandomCount >= 0) maxRandomCount -= 2
+                        }
+                    }
+                }
+            }
+        delay.runTaskTimer(
+            plugin,
+            0,
+            getPlayerData(player)!!
+                .getWeaponClass()
+                .mainWeapon!!
+                .shootTick
+                .toLong(),
+        )
+    }
 
-			@Override
-			public void run() {
-				PlayerData data = DataMgr.getPlayerData(p);
+    @JvmStatic
+    fun ManeuverShootRunnable(player: Player) {
+        val delay: BukkitRunnable =
+            object : BukkitRunnable() {
+                var p: Player = player
+                var sl: Int = 0
+                var check: Boolean = true
 
-				if (!data.isInMatch() || !p.isOnline()) {
-					cancel();
-					return;
-				}
+                override fun run() {
+                    val data = getPlayerData(p)
 
-				if (data.getIsUsingManeuver()) {
-					ClickType clickType = Sclat.dadadaCheckerAPI.getPlayerClickType(player);
-					if ((clickType == ClickType.FIRST_CLICK || clickType == ClickType.RENDA
-							|| clickType == ClickType.NAGAOSI) && data.isInMatch()) {
-						Shooter.Shoot(p, true, false, false);
-						data.tick = data.tick
-								+ DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getShootTick();
-					}
-				}
-			}
-		};
-		delay.runTaskTimer(VariablesKt.getPlugin(), 0,
-				DataMgr.getPlayerData(player).getWeaponClass().getMainWeapon().getSlidingShootTick());
-	}
+                    if (!data!!.isInMatch() || !p.isOnline()) {
+                        cancel()
+                        return
+                    }
 
-	public static void ManeuverRunnable(Player player) {
-		BukkitRunnable delay = new BukkitRunnable() {
-			Player p = player;
-			Location loc = player.getLocation();
-			Location before = player.getLocation();
-			Location before_2 = player.getLocation();
-			// int sl = 0;
-			// スライドの仕様改変
-			boolean sl_recharge_1 = true;
-			boolean sl_recharge_2 = true;
-			// スライドに使う変数の定義Trueの時は使用可能Falseの時は使用不可能を表している
-			boolean check = true;
+                    if (data.getIsUsingManeuver()) {
+                        val clickType = Sclat.dadadaCheckerAPI!!.getPlayerClickType(player)
+                        if ((clickType == ClickType.FIRST_CLICK || clickType == ClickType.RENDA || clickType == ClickType.NAGAOSI) &&
+                            data.isInMatch()
+                        ) {
+                            Shoot(p, true, false, false)
+                            data.tick = (
+                                data.tick +
+                                    getPlayerData(p)!!.getWeaponClass().mainWeapon!!.shootTick
+                                )
+                        }
+                    }
+                }
+            }
+        delay.runTaskTimer(
+            plugin,
+            0,
+            getPlayerData(player)!!
+                .getWeaponClass()
+                .mainWeapon!!
+                .slidingShootTick
+                .toLong(),
+        )
+    }
 
-			@Override
-			public void run() {
-				PlayerData data = DataMgr.getPlayerData(p);
-				Location ploc = p.getLocation();
+    @JvmStatic
+    fun ManeuverRunnable(player: Player) {
+        val delay: BukkitRunnable =
+            object : BukkitRunnable() {
+                var p: Player = player
+                var loc: Location = player.getLocation()
+                var before: Location = player.getLocation()
+                var before_2: Location = player.getLocation()
 
-				if (!data.isInMatch() || !p.isOnline()) {
-					cancel();
-					return;
-				}
+                // int sl = 0;
+                // スライドの仕様改変
+                var sl_recharge_1: Boolean = true
+                var sl_recharge_2: Boolean = true
 
-				Location location = p.getLocation();
+                // スライドに使う変数の定義Trueの時は使用可能Falseの時は使用不可能を表している
+                var check: Boolean = true
 
-				double x = location.getX() - before.getX();
-				double z = location.getZ() - before.getZ();
-				Vector vec = p.getEyeLocation().getDirection();
-				if (x != 0 || z != 0) {
-					vec = new Vector(x, 0, z);
-				} else {
-					x = location.getX() - before_2.getX();
-					z = location.getZ() - before_2.getZ();
-					if (x != 0 || z != 0) {
-						vec = new Vector(x, 0, z);
-					}
-				}
-				before_2 = before.clone();
-				before = location.clone();
+                override fun run() {
+                    val data = getPlayerData(p)
+                    val ploc = p.getLocation()
 
-				// float ink = data.getWeaponClass().getMainWeapon().getSlideNeedINK();
+                    if (!data!!.isInMatch() || !p.isOnline()) {
+                        cancel()
+                        return
+                    }
 
-				// マニューバー系
-				if (data.getWeaponClass().getMainWeapon().isManeuver) {
-					// if(p.getExp() >= ink) {
-					if (data.getIsSneaking() && sl_recharge_2 && !data.getIsSliding()
-							&& p.getInventory().getItemInMainHand().getType()
-									.equals(data.getWeaponClass().getMainWeapon().getWeaponIteamStack().getType())) {// slをsl_recharge_2に変更することで優先順位が低い方のスライドが残っている時のみ使えるようにしました
-						Vector jvec = (new Vector(vec.getX(), 0, vec.getZ())).normalize().multiply(3);
-						Vector ev = jvec.clone().normalize().multiply(-2);
-						check = true;
+                    val location = p.getLocation()
 
-						// p.setExp(p.getExp() - ink);
+                    var x = location.getX() - before.getX()
+                    var z = location.getZ() - before.getZ()
+                    var vec = p.getEyeLocation().getDirection()
+                    if (x != 0.0 || z != 0.0) {
+                        vec = Vector(x, 0.0, z)
+                    } else {
+                        x = location.getX() - before_2.getX()
+                        z = location.getZ() - before_2.getZ()
+                        if (x != 0.0 || z != 0.0) {
+                            vec = Vector(x, 0.0, z)
+                        }
+                    }
+                    before_2 = before.clone()
+                    before = location.clone()
 
-						// エフェクト
-						org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(player).team.getTeamColor().wool
-								.createBlockData();
-						double random = 1.0;
-						for (int i = 0; i < 35; i++) {
-							Vector randomVector = new Vector(Math.random() * random - random / 2,
-									Math.random() * random - random / 2, Math.random() * random - random / 2);
-							Vector erv = ev.clone().add(randomVector);
-							for (Player o_player : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
-								if (DataMgr.getPlayerData(o_player).settings.ShowEffect_BombEx()) {
-									if (o_player.getWorld() == location.getWorld()) {
-										if (o_player.getLocation()
-												.distanceSquared(location) < Sclat.particleRenderDistanceSquared) {
-											o_player.spawnParticle(org.bukkit.Particle.BLOCK_DUST,
-													location.clone().add(0, 0.7, 0).add(randomVector.getX(),
-															randomVector.getY(), randomVector.getZ()),
-													0, erv.getX(), erv.getY(), erv.getZ(), 1, bd);
-										}
-									}
-								}
-							}
-						}
+                    // float ink = data.getWeaponClass().getMainWeapon().getSlideNeedINK();
 
-						if (DataMgr.getPlayerData(player).armor > 9999) {
-							DataMgr.getPlayerData(player).armor = 0;
-						}
-						p.getWorld().playSound(p.getLocation(), Sound.ITEM_ARMOR_EQUIP_GENERIC, 1.4F, 1.5F);
+                    // マニューバー系
+                    if (data.getWeaponClass().mainWeapon!!.isManeuver) {
+                        // if(p.getExp() >= ink) {
+                        if (data.getIsSneaking() && sl_recharge_2 && !data.getIsSliding() && (
+                                p
+                                    .getInventory()
+                                    .getItemInMainHand()
+                                    .getType()
+                                    ==
+                                    data
+                                        .getWeaponClass()
+                                        .mainWeapon!!
+                                        .weaponIteamStack!!
+                                        .getType()
+                                )
+                        ) { // slをsl_recharge_2に変更することで優先順位が低い方のスライドが残っている時のみ使えるようにしました
+                            val jvec = (Vector(vec.getX(), 0.0, vec.getZ())).normalize().multiply(3)
+                            val ev = jvec.clone().normalize().multiply(-2)
+                            check = true
 
-						p.setVelocity(jvec.clone().setY(p.isOnGround() ? 0 : -0.4));
-						data.setIsSneaking(false);
-						data.setIsSliding(true);
-						data.setCanShoot(false);
-						// 優先順位が高い方のスライドがFalseだった場合に低い方をFalseにするようにしました高い方がtrueであった場合は高い方がFalseになります
-						if (!sl_recharge_1) {
-							sl_recharge_2 = false;
-						} else {
-							sl_recharge_1 = false;
-						}
-						// sl++;
-						BukkitRunnable task = new BukkitRunnable() {
-							int i = 1;
+                            // p.setExp(p.getExp() - ink);
 
-							@Override
-							public void run() {
-								if (i == 3) {
-									p.setVelocity(new Vector(0, 0, 0));
-									data.setIsUsingManeuver(true);
-									data.setCanShoot(true);
-								}
+                            // エフェクト
+                            val bd =
+                                getPlayerData(player)!!
+                                    .team.teamColor!!
+                                    .wool!!
+                                    .createBlockData()
+                            val random = 1.0
+                            for (i in 0..34) {
+                                val randomVector =
+                                    Vector(
+                                        Math.random() * random - random / 2,
+                                        Math.random() * random - random / 2,
+                                        Math.random() * random - random / 2,
+                                    )
+                                val erv = ev.clone().add(randomVector)
+                                for (o_player in plugin.getServer().getOnlinePlayers()) {
+                                    if (getPlayerData(o_player)!!.settings.ShowEffect_BombEx()) {
+                                        if (o_player.getWorld() === location.getWorld()) {
+                                            if (o_player
+                                                    .getLocation()
+                                                    .distanceSquared(location) < Sclat.particleRenderDistanceSquared
+                                            ) {
+                                                o_player.spawnParticle<BlockData?>(
+                                                    Particle.BLOCK_DUST,
+                                                    location.clone().add(0.0, 0.7, 0.0).add(
+                                                        randomVector.getX(),
+                                                        randomVector.getY(),
+                                                        randomVector.getZ(),
+                                                    ),
+                                                    0,
+                                                    erv.getX(),
+                                                    erv.getY(),
+                                                    erv.getZ(),
+                                                    1.0,
+                                                    bd,
+                                                )
+                                            }
+                                        }
+                                    }
+                                }
+                            }
 
-								if (i == 10) {
-									data.setIsUsingManeuver(false);
-									loc = p.getLocation();
-									cancel();
-								}
-								i++;
-							}
-						};
-						task.runTaskTimer(VariablesKt.getPlugin(), 0, 1);
+                            if (getPlayerData(player)!!.armor > 9999) {
+                                getPlayerData(player)!!.armor = 0.0
+                            }
+                            p.getWorld().playSound(p.getLocation(), Sound.ITEM_ARMOR_EQUIP_GENERIC, 1.4f, 1.5f)
 
-						BukkitRunnable task1 = new BukkitRunnable() {
-							@Override
-							public void run() {
-								data.setIsSliding(false);
-							}
-						};
-						task1.runTaskLater(VariablesKt.getPlugin(), 10);
-						// BukkitRunnable task2 = new BukkitRunnable() {
-						// @Override
-						// public void run() {
-						// sl = 0;
-						// check = true;
-						// }
-						// };
-						// BukkitRunnable task2 = new BukkitRunnable() {//二つのtaskの追加でそれぞれのスライドを管理しています
-						// @Override
-						// public void run() {
-						// sl_recharge_1 = true;
-						// //check = true;
-						// }
-						// };
-						// BukkitRunnable task3 = new BukkitRunnable() {
-						// @Override
-						// public void run() {
-						// sl_recharge_2 = true;
-						// //check = true;
-						// }
-						// };
-						// スライド仕様変更の改変
-						// if( sl_recharge_2 == true){task2.runTaskLater(Main.getPlugin(), 64);}
-						// else{task3.runTaskLater(Main.getPlugin(), 64);}
-						// booleam型の変数で二つのスライドをそれぞれ表現している、優先順位が低い方がTrueのときは高い方が使われた後のため高い方のリチャージをする（優先順位が高い方は2秒、低い方は2.2秒）
-						// check = false;
-					}
-					// }else{
-					// p.sendTitle("", ChatColor.RED + "インクが足りません", 0, 10, 2);
-					// player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1F, 1.63F);
-					// }
-				}
+                            p.setVelocity(jvec.clone().setY(if (p.isOnGround()) 0.0 else -0.4))
+                            data.setIsSneaking(false)
+                            data.setIsSliding(true)
+                            data.setCanShoot(false)
+                            // 優先順位が高い方のスライドがFalseだった場合に低い方をFalseにするようにしました高い方がtrueであった場合は高い方がFalseになります
+                            if (!sl_recharge_1) {
+                                sl_recharge_2 = false
+                            } else {
+                                sl_recharge_1 = false
+                            }
+                            // sl++;
+                            val task: BukkitRunnable =
+                                object : BukkitRunnable() {
+                                    var i: Int = 1
 
-				if (!data.getIsSliding()) {
-					if (loc.getX() == ploc.getX() && loc.getZ() == ploc.getZ())
-						data.setIsUsingManeuver(true);
-					else {
-						if (check) {
-							BukkitRunnable task4 = new BukkitRunnable() {
-								@Override
-								public void run() {
-									sl_recharge_1 = true;
-									// check = true;
-								}
-							};
+                                    override fun run() {
+                                        if (i == 3) {
+                                            p.setVelocity(Vector(0, 0, 0))
+                                            data.setIsUsingManeuver(true)
+                                            data.setCanShoot(true)
+                                        }
 
-							BukkitRunnable task5 = new BukkitRunnable() {
-								@Override
-								public void run() {
-									sl_recharge_1 = true;
-									sl_recharge_2 = true;
-									// check = true;
-								}
-							};
-							if (sl_recharge_2) {
-								task4.runTaskLater(VariablesKt.getPlugin(), 64);
-							} else {
-								task5.runTaskLater(VariablesKt.getPlugin(), 64);
-							}
-							check = false;
-						}
-						data.setIsUsingManeuver(false);
-					}
-				}
+                                        if (i == 10) {
+                                            data.setIsUsingManeuver(false)
+                                            loc = p.getLocation()
+                                            cancel()
+                                        }
+                                        i++
+                                    }
+                                }
+                            task.runTaskTimer(plugin, 0, 1)
 
-				// loc = ploc;
-			}
-		};
-		delay.runTaskTimer(VariablesKt.getPlugin(), 0, 1);
-	}
+                            val task1: BukkitRunnable =
+                                object : BukkitRunnable() {
+                                    override fun run() {
+                                        data.setIsSliding(false)
+                                    }
+                                }
+                            task1.runTaskLater(plugin, 10)
+                            // BukkitRunnable task2 = new BukkitRunnable() {
+                            // @Override
+                            // public void run() {
+                            // sl = 0;
+                            // check = true;
+                            // }
+                            // };
+                            // BukkitRunnable task2 = new BukkitRunnable() {//二つのtaskの追加でそれぞれのスライドを管理しています
+                            // @Override
+                            // public void run() {
+                            // sl_recharge_1 = true;
+                            // //check = true;
+                            // }
+                            // };
+                            // BukkitRunnable task3 = new BukkitRunnable() {
+                            // @Override
+                            // public void run() {
+                            // sl_recharge_2 = true;
+                            // //check = true;
+                            // }
+                            // };
+                            // スライド仕様変更の改変
+                            // if( sl_recharge_2 == true){task2.runTaskLater(Main.getPlugin(), 64);}
+                            // else{task3.runTaskLater(Main.getPlugin(), 64);}
+                            // booleam型の変数で二つのスライドをそれぞれ表現している、優先順位が低い方がTrueのときは高い方が使われた後のため高い方のリチャージをする（優先順位が高い方は2秒、低い方は2.2秒）
+                            // check = false;
+                        }
+                        // }else{
+                        // p.sendTitle("", ChatColor.RED + "インクが足りません", 0, 10, 2);
+                        // player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1F, 1.63F);
+                        // }
+                    }
 
-	public static void Shoot(Player player, boolean slided, boolean sound, boolean maxRandom) {
+                    if (!data.getIsSliding()) {
+                        if (loc.getX() == ploc.getX() && loc.getZ() == ploc.getZ()) {
+                            data.setIsUsingManeuver(true)
+                        } else {
+                            if (check) {
+                                val task4: BukkitRunnable =
+                                    object : BukkitRunnable() {
+                                        override fun run() {
+                                            sl_recharge_1 = true
+                                            // check = true;
+                                        }
+                                    }
 
-		if (player.getGameMode() == GameMode.SPECTATOR)
-			return;
+                                val task5: BukkitRunnable =
+                                    object : BukkitRunnable() {
+                                        override fun run() {
+                                            sl_recharge_1 = true
+                                            sl_recharge_2 = true
+                                            // check = true;
+                                        }
+                                    }
+                                if (sl_recharge_2) {
+                                    task4.runTaskLater(plugin, 64)
+                                } else {
+                                    task5.runTaskLater(plugin, 64)
+                                }
+                                check = false
+                            }
+                            data.setIsUsingManeuver(false)
+                        }
+                    }
 
-		PlayerData data = DataMgr.getPlayerData(player);
-		if (player.getExp() <= (float) (data.getWeaponClass().getMainWeapon().getNeedInk()
-				* Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP)
-				/ Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP))) {
-			player.sendTitle("", ChatColor.RED + "インクが足りません", 0, 5, 2);
-			player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1F, 1.63F);
-			return;
-		}
-		player.setExp(player.getExp() - (float) (data.getWeaponClass().getMainWeapon().getNeedInk()
-				* Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP)
-				/ Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)));
-		RayTrace rayTrace = new RayTrace(player.getEyeLocation().toVector(), player.getEyeLocation().getDirection());
-		ArrayList<Vector> positions = rayTrace.traverse(data.getWeaponClass().getMainWeapon().getShootSpeed()
-				* data.getWeaponClass().getMainWeapon().getDistanceTick(), 0.7);
-		boolean isLockOnPlayer = false;
-		if (data.getWeaponClass().getMainWeapon().maxRandom == 0) {
-			check : for (Vector vector : positions) {
-				Location position = vector.toLocation(player.getLocation().getWorld());
-				for (Player target : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
-					if (player != target && player.getWorld() == target.getWorld()) {
-						if (target.getLocation().distance(position) < 2) {
-							isLockOnPlayer = true;
-							break check;
-						}
-					}
-				}
+                    // loc = ploc;
+                }
+            }
+        delay.runTaskTimer(plugin, 0, 1)
+    }
 
-				for (Entity as : player.getWorld().getEntities()) {
-					if (as instanceof ArmorStand) {
-						if (as.getCustomName() != null) {
-							if (as.getLocation().distanceSquared(position) <= 4 /* 2*2 */) {
-								isLockOnPlayer = true;
-								break check;
-							}
-						}
-					}
-				}
-			}
-		} else {
-			if (!player.isOnGround())
-				maxRandom = true;
-		}
+    fun Shoot(
+        player: Player,
+        slided: Boolean,
+        sound: Boolean,
+        maxRandom: Boolean,
+    ) {
+        var maxRandom = maxRandom
+        if (player.getGameMode() == GameMode.SPECTATOR) return
 
-		PaintMgr.PaintHightestBlock(player.getLocation(), player, true, true);
+        val data = getPlayerData(player)
+        if (player.getExp() <=
+            (
+                data!!.getWeaponClass().mainWeapon!!.needInk
+                    * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) /
+                    Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)
+                ).toFloat()
+        ) {
+            player.sendTitle("", ChatColor.RED.toString() + "インクが足りません", 0, 5, 2)
+            player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1f, 1.63f)
+            return
+        }
+        player.setExp(
+            player.getExp() -
+                (
+                    data.getWeaponClass().mainWeapon!!.needInk
+                        * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) /
+                        Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)
+                    ).toFloat(),
+        )
+        val rayTrace = RayTrace(player.getEyeLocation().toVector(), player.getEyeLocation().getDirection())
+        val positions =
+            rayTrace.traverse(
+                data.getWeaponClass().mainWeapon!!.shootSpeed
+                    * data.getWeaponClass().mainWeapon!!.distanceTick,
+                0.7,
+            )
+        var isLockOnPlayer = false
+        if (data.getWeaponClass().mainWeapon!!.maxRandom == 0.0) {
+            check@ for (vector in positions) {
+                val position = vector.toLocation(player.getLocation().getWorld()!!)
+                for (target in plugin.getServer().getOnlinePlayers()) {
+                    if (player !== target && player.getWorld() === target.getWorld()) {
+                        if (target.getLocation().distance(position) < 2) {
+                            isLockOnPlayer = true
+                            break@check
+                        }
+                    }
+                }
 
-		Snowball ball = player.launchProjectile(Snowball.class);
-		((CraftSnowball) ball).getHandle().setItem(
-				CraftItemStack.asNMSCopy(new ItemStack(DataMgr.getPlayerData(player).team.getTeamColor().wool)));
-		player.getWorld().playSound(player.getLocation(), Sound.ENTITY_PIG_STEP, 0.3F, 1F);
-		Vector vec = player.getLocation().getDirection()
-				.multiply(DataMgr.getPlayerData(player).getWeaponClass().getMainWeapon().getShootSpeed());
-		double random = data.getWeaponClass().getMainWeapon().random;
-		if (maxRandom)
-			random = data.getWeaponClass().getMainWeapon().maxRandom;
-		if (isLockOnPlayer)
-			random /= 2.0;
-		if (slided)
-			random /= 10.0;
-		int distick = DataMgr.getPlayerData(player).getWeaponClass().getMainWeapon().getDistanceTick();
-		vec.add(new Vector(Math.random() * random - random / 2, 0, Math.random() * random - random / 2));
-		ball.setVelocity(vec);
-		ball.setShooter(player);
-		// スライド時かどうかをSnowballListenerに渡すためのnameの改変
-		String originName = String.valueOf(Sclat.getNotDuplicateNumber());
-		StringBuilder buf = new StringBuilder();
-		buf.append(originName);
-		if (slided) {
-			buf.append("#slided");
-		}
-		String name = buf.toString();
-		// String name = String.valueOf(Main.getNotDuplicateNumber());//ここで改変終わり
-		DataMgr.mws.add(name);
-		if (sound || slided)
-			DataMgr.tsl.add(name);
-		ball.setCustomName(name);
-		DataMgr.getMainSnowballNameMap().put(name, ball);
-		DataMgr.setSnowballHitCount(name, 0);
-		BukkitRunnable task = new BukkitRunnable() {
-			int i = 0;
-			int tick = distick;
-			// Vector fallvec;
-			Vector origvec = vec;
-			Snowball inkball = ball;
-			boolean addedFallVec = false;
-			Player p = player;
-			Vector fallvec = new Vector(inkball.getVelocity().getX(), inkball.getVelocity().getY(),
-					inkball.getVelocity().getZ())
-							.multiply(DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getShootSpeed() / 17);
-			@Override
-			public void run() {
-				inkball = DataMgr.getMainSnowballNameMap().get(name);
+                for (`as` in player.getWorld().getEntities()) {
+                    if (`as` is ArmorStand) {
+                        if (`as`.getCustomName() != null) {
+                            if (`as`.getLocation().distanceSquared(position) <= 4 /* 2*2 */) {
+                                isLockOnPlayer = true
+                                break@check
+                            }
+                        }
+                    }
+                }
+            }
+        } else {
+            if (!player.isOnGround()) maxRandom = true
+        }
 
-				if (!inkball.equals(ball)) {
-					i += DataMgr.getSnowballHitCount(name) - 1;
-					DataMgr.setSnowballHitCount(name, 0);
-				}
+        PaintMgr.PaintHightestBlock(player.getLocation(), player, true, true)
 
-				if (i != 0) {
-					org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).team.getTeamColor().wool
-							.createBlockData();
-					for (Player o_player : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
-						if (DataMgr.getPlayerData(o_player).settings.ShowEffect_MainWeaponInk())
-							if (o_player.getWorld() == inkball.getWorld())
-								if (o_player.getLocation()
-										.distanceSquared(inkball.getLocation()) < Sclat.particleRenderDistanceSquared)
-									o_player.spawnParticle(org.bukkit.Particle.BLOCK_DUST, inkball.getLocation(), 0, 0,
-											-1, 0, 1, bd);
-					}
-				}
+        val ball = player.launchProjectile<Snowball>(Snowball::class.java)
+        (ball as CraftSnowball).getHandle().setItem(
+            CraftItemStack.asNMSCopy(ItemStack(getPlayerData(player)!!.team.teamColor!!.wool!!)),
+        )
+        player.getWorld().playSound(player.getLocation(), Sound.ENTITY_PIG_STEP, 0.3f, 1f)
+        val vec =
+            player
+                .getLocation()
+                .getDirection()
+                .multiply(getPlayerData(player)!!.getWeaponClass().mainWeapon!!.shootSpeed)
+        var random = data.getWeaponClass().mainWeapon!!.random
+        if (maxRandom) random = data.getWeaponClass().mainWeapon!!.maxRandom
+        if (isLockOnPlayer) random /= 2.0
+        if (slided) random /= 10.0
+        val distick = getPlayerData(player)!!.getWeaponClass().mainWeapon!!.distanceTick
+        vec.add(Vector(Math.random() * random - random / 2, 0.0, Math.random() * random - random / 2))
+        ball.setVelocity(vec)
+        ball.setShooter(player)
+        // スライド時かどうかをSnowballListenerに渡すためのnameの改変
+        val originName = notDuplicateNumber.toString()
+        val buf = StringBuilder()
+        buf.append(originName)
+        if (slided) {
+            buf.append("#slided")
+        }
+        val name = buf.toString()
+        // String name = String.valueOf(Main.getNotDuplicateNumber());//ここで改変終わり
+        DataMgr.mws.add(name)
+        if (sound || slided) DataMgr.tsl.add(name)
+        ball.setCustomName(name)
+        mainSnowballNameMap.put(name, ball)
+        setSnowballHitCount(name, 0)
+        val task: BukkitRunnable =
+            object : BukkitRunnable() {
+                var i: Int = 0
+                var tick: Int = distick
 
-				if (i >= tick && !addedFallVec) {
-					inkball.setVelocity(fallvec);
-					addedFallVec = true;
-				}
-				if (i >= tick && i <= tick + 15)
-					inkball.setVelocity(inkball.getVelocity().add(new Vector(0, -0.1, 0)));
-				// if(i != tick)
-				if ((new Random().nextInt(7)) == 0)
-					PaintMgr.PaintHightestBlock(inkball.getLocation(), p, false, true);
-				if (inkball.isDead())
-					cancel();
+                // Vector fallvec;
+                var origvec: Vector = vec
+                var inkball: Snowball? = ball
+                var addedFallVec: Boolean = false
+                var p: Player = player
+                var fallvec: Vector =
+                    Vector(
+                        inkball!!.getVelocity().getX(),
+                        inkball!!.getVelocity().getY(),
+                        inkball!!.getVelocity().getZ(),
+                    ).multiply(getPlayerData(p)!!.getWeaponClass().mainWeapon!!.shootSpeed / 17)
 
-				i++;
-			}
-		};
-		task.runTaskTimer(VariablesKt.getPlugin(), 0, 1);
-	}
+                override fun run() {
+                    inkball = mainSnowballNameMap.get(name)
 
+                    if (inkball != ball) {
+                        i += getSnowballHitCount(name) - 1
+                        setSnowballHitCount(name, 0)
+                    }
+
+                    if (i != 0) {
+                        val bd =
+                            getPlayerData(p)!!
+                                .team.teamColor!!
+                                .wool!!
+                                .createBlockData()
+                        for (o_player in plugin.getServer().getOnlinePlayers()) {
+                            if (getPlayerData(o_player)!!.settings.ShowEffect_MainWeaponInk()) {
+                                if (o_player.getWorld() ===
+                                    inkball!!.getWorld()
+                                ) {
+                                    if (o_player
+                                            .getLocation()
+                                            .distanceSquared(inkball!!.getLocation()) < Sclat.particleRenderDistanceSquared
+                                    ) {
+                                        o_player.spawnParticle<BlockData?>(
+                                            Particle.BLOCK_DUST,
+                                            inkball!!.getLocation(),
+                                            0,
+                                            0.0,
+                                            -1.0,
+                                            0.0,
+                                            1.0,
+                                            bd,
+                                        )
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    if (i >= tick && !addedFallVec) {
+                        inkball!!.setVelocity(fallvec)
+                        addedFallVec = true
+                    }
+                    if (i >= tick && i <= tick + 15) {
+                        inkball!!.setVelocity(
+                            inkball!!.getVelocity().add(Vector(0.0, -0.1, 0.0)),
+                        )
+                    }
+                    // if(i != tick)
+                    if ((Random().nextInt(7)) == 0) PaintMgr.PaintHightestBlock(inkball!!.getLocation(), p, false, true)
+                    if (inkball!!.isDead()) cancel()
+
+                    i++
+                }
+            }
+        task.runTaskTimer(plugin, 0, 1)
+    }
 }

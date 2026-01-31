@@ -1,70 +1,87 @@
+package be4rjp.sclat.weapon.spweapon
 
-package be4rjp.sclat.weapon.spweapon;
-
-import be4rjp.sclat.Sclat;
-import be4rjp.sclat.VariablesKt;
-import be4rjp.sclat.api.Sphere;
-import be4rjp.sclat.api.player.PlayerData;
-import be4rjp.sclat.data.DataMgr;
-import be4rjp.sclat.manager.SPWeaponMgr;
-import java.util.ArrayList;
-import java.util.List;
-import net.minecraft.server.v1_14_R1.EntityArmorStand;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
-import org.bukkit.Particle;
-import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
+import be4rjp.sclat.Sclat
+import be4rjp.sclat.api.Sphere.getSphere
+import be4rjp.sclat.data.DataMgr.getPlayerData
+import be4rjp.sclat.manager.SPWeaponMgr
+import be4rjp.sclat.plugin
+import net.minecraft.server.v1_14_R1.EntityArmorStand
+import org.bukkit.GameMode
+import org.bukkit.Particle
+import org.bukkit.entity.Player
+import org.bukkit.scheduler.BukkitRunnable
 
 /**
  *
  * @author Be4rJP
  */
-public class Barrier {
-	public static void BarrierRunnable(Player player) {
-		DataMgr.getPlayerData(player).setIsUsingSP(true);
-		PlayerData data = DataMgr.getPlayerData(player);
-		// data.setArmor(Double.MAX_VALUE);
-		SPWeaponMgr.setSPCoolTimeAnimation(player, 100);
+object Barrier {
+    @JvmStatic
+    fun BarrierRunnable(player: Player) {
+        getPlayerData(player)!!.setIsUsingSP(true)
+        val data = getPlayerData(player)
+        // data.setArmor(Double.MAX_VALUE);
+        SPWeaponMgr.setSPCoolTimeAnimation(player, 100)
 
-		// エフェクトとアーマー解除
-		BukkitRunnable task = new BukkitRunnable() {
-			Player p = player;
-			List<EntityArmorStand> list = new ArrayList<>();
-			int c = 0;
-			@Override
-			public void run() {
-				if (!data.isInMatch() || !player.getGameMode().equals(GameMode.ADVENTURE) || !p.isOnline()) {
-					data.armor = 0;
-					DataMgr.getPlayerData(player).setIsUsingSP(false);
-					cancel();
-				}
-				if (c == 0)
-					data.armor = Double.MAX_VALUE;
-				Location loc = p.getLocation().add(0, 0.5, 0);
+        // エフェクトとアーマー解除
+        val task: BukkitRunnable =
+            object : BukkitRunnable() {
+                var p: Player = player
+                var list: MutableList<EntityArmorStand?> = ArrayList<EntityArmorStand?>()
+                var c: Int = 0
 
-				List<Location> s_locs = Sphere.getSphere(loc, 2, 23);
-				for (Player o_player : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
-					if (DataMgr.getPlayerData(o_player).settings.ShowEffect_SPWeapon() && !o_player.equals(player)) {
-						Particle.DustOptions dustOptions = new Particle.DustOptions(
-								data.team.getTeamColor().getBukkitColor(), 1);
-						org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).team.getTeamColor().wool
-								.createBlockData();
-						for (Location e_loc : s_locs)
-							if (o_player.getWorld() == e_loc.getWorld())
-								if (o_player.getLocation().distanceSquared(e_loc) < Sclat.particleRenderDistanceSquared)
-									o_player.spawnParticle(Particle.REDSTONE, e_loc, 0, 0, 0, 0, 70, dustOptions);
-					}
-				}
-				if (c == 25) {
-					data.armor = 0;
-					// p.playSound(p.getLocation(), Sound.BLOCK_CHEST_CLOSE, 1, 2);
-					DataMgr.getPlayerData(player).setIsUsingSP(false);
-					cancel();
-				}
-				c++;
-			}
-		};
-		task.runTaskTimer(VariablesKt.getPlugin(), 0, 4);
-	}
+                override fun run() {
+                    if (!data!!.isInMatch() || (player.getGameMode() != GameMode.ADVENTURE) || !p.isOnline()) {
+                        data.armor = 0.0
+                        getPlayerData(player)!!.setIsUsingSP(false)
+                        cancel()
+                    }
+                    if (c == 0) data.armor = Double.Companion.MAX_VALUE
+                    val loc = p.getLocation().add(0.0, 0.5, 0.0)
+
+                    val s_locs = getSphere(loc, 2.0, 23)
+                    for (o_player in plugin.getServer().getOnlinePlayers()) {
+                        if (getPlayerData(o_player)!!.settings.ShowEffect_SPWeapon() && o_player != player) {
+                            val dustOptions =
+                                Particle.DustOptions(
+                                    data.team.teamColor!!.bukkitColor!!,
+                                    1f,
+                                )
+                            val bd =
+                                getPlayerData(p)!!
+                                    .team.teamColor!!
+                                    .wool!!
+                                    .createBlockData()
+                            for (e_loc in s_locs) {
+                                if (o_player.getWorld() === e_loc.getWorld()) {
+                                    if (o_player
+                                            .getLocation()
+                                            .distanceSquared(e_loc) < Sclat.particleRenderDistanceSquared
+                                    ) {
+                                        o_player.spawnParticle<Particle.DustOptions?>(
+                                            Particle.REDSTONE,
+                                            e_loc,
+                                            0,
+                                            0.0,
+                                            0.0,
+                                            0.0,
+                                            70.0,
+                                            dustOptions,
+                                        )
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    if (c == 25) {
+                        data.armor = 0.0
+                        // p.playSound(p.getLocation(), Sound.BLOCK_CHEST_CLOSE, 1, 2);
+                        getPlayerData(player)!!.setIsUsingSP(false)
+                        cancel()
+                    }
+                    c++
+                }
+            }
+        task.runTaskTimer(plugin, 0, 4)
+    }
 }

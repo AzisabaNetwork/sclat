@@ -219,7 +219,7 @@ public class MainWeaponMgr {
 				Slosher.ShootSlosher(player);
 			if (data.getWeaponClass().getMainWeapon().getWeaponType().equals("Kasa")
 					|| data.getWeaponClass().getMainWeapon().getWeaponType().equals("Camping"))
-				Kasa.ShootKasa(player);
+				Kasa.shootKasa(player);
 		}
 	}
 }

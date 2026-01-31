@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package be4rjp.sclat
 
 import be4rjp.blockstudio.BlockStudio
