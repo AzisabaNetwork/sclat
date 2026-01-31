@@ -428,7 +428,7 @@ public class ClickListener implements Listener {
 						if (DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getWeaponType()
 								.equals("Funnel")) {
 							Shooter.ShooterRunnable(p);
-							Funnel.FunnelFloat(p);
+							Funnel.funnelFloat(p);
 						}
 						WeaponClassMgr.setWeaponClass(p);
 						player.setExp(0.99F);

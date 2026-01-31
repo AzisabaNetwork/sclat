@@ -767,7 +767,7 @@ public class MatchMgr {
 						if (DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getWeaponType()
 								.equals("Funnel")) {
 							Shooter.ShooterRunnable(p);
-							Funnel.FunnelFloat(p);
+							Funnel.funnelFloat(p);
 						}
 
 						SquidMgr.SquidShowRunnable(p);

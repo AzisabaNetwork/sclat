@@ -236,7 +236,7 @@ class SnowballListener : Listener {
                                     damage -= damage * (ticksLived / 100)
                                 }
                                 if (type == "Funnel") {
-                                    damage = damage + Funnel.FunnelPursuitPlayer(shooter, target)
+                                    damage = damage + Funnel.funnelPursuitPlayer(shooter, target)
                                     if (damage < 0.1) {
                                         damage = 0.1
                                     }
@@ -432,7 +432,7 @@ class SnowballListener : Listener {
                             (`as`.getCustomName() != "SplashShield") &&
                             (`as`.getCustomName() != "Kasa")
                         ) {
-                            damage = damage + Funnel.FunnelPursuit(shooter, `as`)
+                            damage = damage + Funnel.funnelPursuit(shooter, `as`)
                             if (damage < 0.1) {
                                 damage = 0.1
                             }
@@ -873,7 +873,7 @@ class SnowballListener : Listener {
                         (`as`.getCustomName() != "SplashShield") &&
                         (`as`.getCustomName() != "Kasa")
                     ) {
-                        damage = damage + Funnel.FunnelPursuit(shooter, `as`)
+                        damage = damage + Funnel.funnelPursuit(shooter, `as`)
                         if (damage < 0.1) {
                             damage = 0.1
                         }
