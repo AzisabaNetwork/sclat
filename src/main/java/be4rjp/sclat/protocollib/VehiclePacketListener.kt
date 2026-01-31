@@ -1,46 +1,42 @@
-package be4rjp.sclat.protocollib;
+package be4rjp.sclat.protocollib
 
-import be4rjp.sclat.data.DataMgr;
-import com.comphenix.protocol.PacketType;
-import com.comphenix.protocol.events.ListenerPriority;
-import com.comphenix.protocol.events.PacketAdapter;
-import com.comphenix.protocol.events.PacketContainer;
-import com.comphenix.protocol.events.PacketEvent;
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
-import org.bukkit.util.Vector;
+import be4rjp.sclat.data.DataMgr.getPlayerData
+import com.comphenix.protocol.PacketType
+import com.comphenix.protocol.events.ListenerPriority
+import com.comphenix.protocol.events.PacketAdapter
+import com.comphenix.protocol.events.PacketEvent
+import org.bukkit.plugin.Plugin
+import org.bukkit.util.Vector
 
-public class VehiclePacketListener extends PacketAdapter {
+class VehiclePacketListener(
+    plugin: Plugin,
+    listenerPriority: ListenerPriority,
+    vararg types: PacketType,
+) : PacketAdapter(plugin, listenerPriority, *types) {
+    override fun onPacketReceiving(event: PacketEvent) { // プレイヤーがエンティティに乗っているときのパケットを監視
+        val player = event.getPlayer()
+        if (event.getPacketType() === PacketType.Play.Client.STEER_VEHICLE && player.getVehicle() != null) {
+            val packet = event.getPacket()
 
-	public VehiclePacketListener(Plugin plugin, ListenerPriority listenerPriority, PacketType... types) {
-		super(plugin, listenerPriority, types);
-	}
+            val z = event.getPacket().getFloat().readSafely(0)
+            val x = event.getPacket().getFloat().readSafely(1)
 
-	@Override
-	public void onPacketReceiving(PacketEvent event) {// プレイヤーがエンティティに乗っているときのパケットを監視
-		final Player player = event.getPlayer();
-		if (event.getPacketType() == PacketType.Play.Client.STEER_VEHICLE && player.getVehicle() != null) {
-			final PacketContainer packet = event.getPacket();
+            var y = 0f
 
-			final float z = event.getPacket().getFloat().readSafely(0);
-			final float x = event.getPacket().getFloat().readSafely(1);
+            try {
+                if (event.getPacket().getBooleans().readSafely(1)) {
+                    y = -1f
+                    if (getPlayerData(player)!!.isInMatch()) event.setCancelled(true)
+                }
+                if (event.getPacket().getBooleans().readSafely(0)) {
+                    y = 1f
+                }
+            } catch (e45: Error) {
+            } catch (e45: Exception) {
+            }
 
-			float y = 0F;
-
-			try {
-				if (event.getPacket().getBooleans().readSafely(1)) {
-					y = -1F;
-					if (DataMgr.getPlayerData(player).isInMatch())
-						event.setCancelled(true);
-				}
-				if (event.getPacket().getBooleans().readSafely(0)) {
-					y = 1F;
-				}
-			} catch (Error | Exception e45) {
-			}
-
-			Vector vec = new Vector(x, y, z);
-			DataMgr.getPlayerData(player).vehicleVector = vec;
-		}
-	}
+            val vec = Vector(x, y, z)
+            getPlayerData(player)!!.vehicleVector = vec
+        }
+    }
 }

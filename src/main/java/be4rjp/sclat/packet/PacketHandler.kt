@@ -1,59 +1,51 @@
-package be4rjp.sclat.packet;
+package be4rjp.sclat.packet
 
-import be4rjp.sclat.api.player.PlayerData;
-import be4rjp.sclat.api.player.PlayerSettings;
-import be4rjp.sclat.data.DataMgr;
-import io.netty.channel.ChannelDuplexHandler;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelPromise;
-import net.minecraft.server.v1_14_R1.EntityTypes;
-import net.minecraft.server.v1_14_R1.PacketPlayOutAbilities;
-import net.minecraft.server.v1_14_R1.PacketPlayOutSpawnEntity;
-import org.bukkit.entity.Player;
+import be4rjp.sclat.api.player.PlayerData
+import be4rjp.sclat.api.player.PlayerSettings
+import be4rjp.sclat.data.DataMgr.getPlayerData
+import io.netty.channel.ChannelDuplexHandler
+import io.netty.channel.ChannelHandlerContext
+import io.netty.channel.ChannelPromise
+import net.minecraft.server.v1_14_R1.EntityTypes
+import net.minecraft.server.v1_14_R1.PacketPlayOutAbilities
+import net.minecraft.server.v1_14_R1.PacketPlayOutSpawnEntity
+import org.bukkit.entity.Player
 
-import java.lang.reflect.Field;
+class PacketHandler(private val player: Player?) : ChannelDuplexHandler() {
+    private val playerData: PlayerData?
+    private val playerSettings: PlayerSettings
 
-public class PacketHandler extends ChannelDuplexHandler {
+    init {
+        this.playerData = getPlayerData(player)
+        this.playerSettings = playerData!!.settings
+    }
 
-	private final Player player;
-	private final PlayerData playerData;
-	private final PlayerSettings playerSettings;
+    @Throws(Exception::class)
+    override fun channelRead(channelHandlerContext: ChannelHandlerContext?, packet: Any?) {
+        super.channelRead(channelHandlerContext, packet)
+    }
 
-	public PacketHandler(Player player) {
-		this.player = player;
-		this.playerData = DataMgr.getPlayerData(player);
-		this.playerSettings = playerData.settings;
-	}
+    @Throws(Exception::class)
+    override fun write(channelHandlerContext: ChannelHandlerContext?, packet: Any?, channelPromise: ChannelPromise?) {
+        // Snowball shown handle
 
-	@Override
-	public void channelRead(ChannelHandlerContext channelHandlerContext, Object packet) throws Exception {
+        if (packet is PacketPlayOutSpawnEntity) {
+            val k = packet.javaClass.getDeclaredField("k")
+            k.setAccessible(true)
+            val entityTypes = k.get(packet) as EntityTypes<*>?
 
-		super.channelRead(channelHandlerContext, packet);
-	}
+            if (entityTypes === EntityTypes.SNOWBALL) {
+                if (!playerSettings.ShowSnowBall()) return
+            }
+        }
 
-	@Override
-	public void write(ChannelHandlerContext channelHandlerContext, Object packet, ChannelPromise channelPromise)
-			throws Exception {
+        // Charging fov handle
+        if (packet is PacketPlayOutAbilities) {
+            if (playerData!!.getIsCharging()) {
+                packet.b(playerData.fov)
+            }
+        }
 
-		// Snowball shown handle
-		if (packet instanceof PacketPlayOutSpawnEntity) {
-			Field k = packet.getClass().getDeclaredField("k");
-			k.setAccessible(true);
-			EntityTypes<?> entityTypes = (EntityTypes<?>) k.get(packet);
-
-			if (entityTypes == EntityTypes.SNOWBALL) {
-				if (!playerSettings.ShowSnowBall())
-					return;
-			}
-		}
-
-		// Charging fov handle
-		if (packet instanceof PacketPlayOutAbilities) {
-			if (playerData.getIsCharging()) {
-				((PacketPlayOutAbilities) packet).b(playerData.fov);
-			}
-		}
-
-		super.write(channelHandlerContext, packet, channelPromise);
-	}
+        super.write(channelHandlerContext, packet, channelPromise)
+    }
 }
