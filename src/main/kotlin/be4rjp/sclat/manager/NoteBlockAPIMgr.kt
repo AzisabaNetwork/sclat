@@ -22,7 +22,7 @@ object NoteBlockAPIMgr {
     private val fsnList: MutableList<String?> = ArrayList<String?>()
 
     fun loadSongFiles() {
-        for (songname in Sclat.Companion.conf!!
+        for (songname in Sclat.conf!!
             .config!!
             .getConfigurationSection("nBGM")!!
             .getKeys(false)) {
@@ -30,7 +30,7 @@ object NoteBlockAPIMgr {
                 NBSDecoder.parse(
                     File(
                         "plugins/Sclat/BGM",
-                        Sclat.Companion.conf!!
+                        Sclat.conf!!
                             .config!!
                             .getString("nBGM." + songname),
                     ),
@@ -40,7 +40,7 @@ object NoteBlockAPIMgr {
             nbgmC++
         }
 
-        for (songname in Sclat.Companion.conf!!
+        for (songname in Sclat.conf!!
             .config!!
             .getConfigurationSection("fBGM")!!
             .getKeys(false)) {
@@ -48,7 +48,7 @@ object NoteBlockAPIMgr {
                 NBSDecoder.parse(
                     File(
                         "plugins/Sclat/BGM",
-                        Sclat.Companion.conf!!
+                        Sclat.conf!!
                             .config!!
                             .getString("fBGM." + songname),
                     ),

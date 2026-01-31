@@ -49,61 +49,61 @@ object SquidMgr {
                 override fun run() {
                     val data = getPlayerData(p)
 
-                    if (!p.isOnline()) {
+                    if (!p.isOnline) {
                         cancel()
                     }
 
                     if (!data!!.isInMatch) {
                         if (p.hasPotionEffect(PotionEffectType.REGENERATION)) p.removePotionEffect(PotionEffectType.REGENERATION)
                         if (p.hasPotionEffect(PotionEffectType.INVISIBILITY)) p.removePotionEffect(PotionEffectType.INVISIBILITY)
-                        p.setWalkSpeed(0.2f)
+                        p.walkSpeed = 0.2f
                         @Suppress("DEPRECATION")
-                        p.setMaxHealth(20.0)
+                        p.maxHealth = 20.0
 
                         if (Sclat.type == ServerType.MATCH) {
-                            p.setFoodLevel(20)
-                            p.setExp(0f)
+                            p.foodLevel = 20
+                            p.exp = 0f
                         }
 
                         if (data.canFly) {
-                            p.setAllowFlight(true)
-                            p.setFlying(true)
+                            p.allowFlight = true
+                            p.isFlying = true
                         } else {
-                            if (p.hasPermission("sclat.lobbyfly") || Sclat.flyList.contains(p.getName())) {
-                                p.setAllowFlight(true)
+                            if (p.hasPermission("sclat.lobbyfly") || Sclat.flyList.contains(p.name)) {
+                                p.allowFlight = true
                             } else {
-                                p.setAllowFlight(false)
-                                p.setFlying(false)
+                                p.allowFlight = false
+                                p.isFlying = false
                             }
                         }
                         return
                     }
 
                     // Sponge
-                    val pl = p.getLocation().add(0.0, 0.5, 0.0)
-                    val b1 = pl.getBlock()
-                    val b2 = pl.clone().add(0.0, 1.0, 0.0).getBlock()
-                    if (b1.getType().toString().contains("POWDER") || b2.getType().toString().contains("POWDER")) {
+                    val pl = p.location.add(0.0, 0.5, 0.0)
+                    val b1 = pl.block
+                    val b2 = pl.clone().add(0.0, 1.0, 0.0).block
+                    if (b1.type.toString().contains("POWDER") || b2.type.toString().contains("POWDER")) {
                         p.teleport(pl.add(0.0, 0.5, 0.0))
-                        p.setVelocity(Vector(0.0, 0.5, 0.0))
+                        p.velocity = Vector(0.0, 0.5, 0.0)
                     }
 
                     if (data.weaponClass!!.mainWeapon!!.isManeuver) {
-                        if (p.getInventory().getItemInMainHand().getType()
+                        if (p.inventory.itemInMainHand.type
                             ==
                             data.weaponClass!!
                                 .mainWeapon!!
                                 .weaponIteamStack!!
-                                .getType()
+                                .type
                         ) {
-                            if (p.getInventory().getItemInOffHand().getType()
+                            if (p.inventory.itemInOffHand.type
                                 !=
                                 data.weaponClass!!
                                     .mainWeapon!!
                                     .weaponIteamStack!!
-                                    .getType()
+                                    .type
                             ) {
-                                p.getInventory().setItem(
+                                p.inventory.setItem(
                                     40,
                                     data.weaponClass!!
                                         .mainWeapon!!
@@ -112,12 +112,12 @@ object SquidMgr {
                                 )
                             }
                         } else {
-                            p.getInventory().setItem(40, ItemStack(Material.AIR))
+                            p.inventory.setItem(40, ItemStack(Material.AIR))
                         }
                     }
 
-                    val down = p.getLocation().getBlock().getRelative(BlockFace.DOWN)
-                    if (blockDataMap.containsKey(down) && p.getGameMode() == GameMode.ADVENTURE) {
+                    val down = p.location.block.getRelative(BlockFace.DOWN)
+                    if (blockDataMap.containsKey(down) && p.gameMode == GameMode.ADVENTURE) {
                         if (blockDataMap.get(down)!!.team != data.team) {
                             if (data.armor <= 0 && !data.isPoisonCoolTime) {
                                 p.addPotionEffect(PotionEffect(PotionEffectType.POISON, 200, 3))
@@ -126,8 +126,8 @@ object SquidMgr {
                             if (p.hasPotionEffect(PotionEffectType.POISON)) p.removePotionEffect(PotionEffectType.POISON)
                         }
                     } else {
-                        if (Sclat.tutorial && down.getType().toString().contains("WOOL")) {
-                            if (down.getType() != data.team!!.teamColor!!.wool) {
+                        if (Sclat.tutorial && down.type.toString().contains("WOOL")) {
+                            if (down.type != data.team!!.teamColor!!.wool) {
                                 if (data.armor <= 0 && !data.isPoisonCoolTime) {
                                     p.addPotionEffect(PotionEffect(PotionEffectType.POISON, 200, 3))
                                 }
@@ -139,7 +139,7 @@ object SquidMgr {
 
                     if (i > 2) {
                         i = 0
-                        data.isSquid = (player.getInventory().getItemInMainHand().getType() == Material.AIR)
+                        data.isSquid = (player.inventory.itemInMainHand.type == Material.AIR)
                     }
                     i++
 
@@ -160,16 +160,16 @@ object SquidMgr {
                     if ((data.isOnInk && data.isSquid) || data.isOnPath) {
                         is2 = false
                         if (!`is`) {
-                            p.playSound(p.getLocation(), Sound.ITEM_BUCKET_FILL, 0.5f, 1f)
+                            p.playSound(p.location, Sound.ITEM_BUCKET_FILL, 0.5f, 1f)
                             `is` = true
-                            p.setFoodLevel(20)
+                            p.foodLevel = 20
                         }
-                        if (data.isUsingJetPack) p.setFlySpeed(0.1f)
+                        if (data.isUsingJetPack) p.flySpeed = 0.1f
 
-                        if (p.getExp() <= (
+                        if (p.exp <= (
                                 0.99f -
                                     (
-                                        Sclat.Companion.conf!!
+                                        Sclat.conf!!
                                             .config!!
                                             .getDouble("SquidRecovery") *
                                             getGearInfluence(p, Gear.Type.INK_RECOVERY_UP)
@@ -177,34 +177,32 @@ object SquidMgr {
                             )
                         ) {
                             if (data.canUseSubWeapon) {
-                                p.setExp(
-                                    p.getExp() +
-                                        (
-                                            Sclat.Companion.conf!!
-                                                .config!!
-                                                .getDouble("SquidRecovery") *
-                                                getGearInfluence(p, Gear.Type.INK_RECOVERY_UP)
-                                        ).toFloat(),
-                                )
+                                p.exp = p.exp +
+                                    (
+                                        Sclat.conf!!
+                                            .config!!
+                                            .getDouble("SquidRecovery") *
+                                            getGearInfluence(p, Gear.Type.INK_RECOVERY_UP)
+                                    ).toFloat()
                             }
                         }
                         p.addPotionEffect(PotionEffect(PotionEffectType.REGENERATION, 200, 3))
 
                         // p.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 200, 1));
-                        val loc = p.getLocation()
+                        val loc = p.location
                         var gro = data.playerGroundLocation
                         if (gro == null) gro = loc
-                        if (loc.getX() != gro.getX() || loc.getX() != gro.getX() || loc.getX() != gro.getX()) {
-                            p.setSprinting(true)
+                        if (loc.x != gro.x || loc.x != gro.x || loc.x != gro.x) {
+                            p.isSprinting = true
                             val bd =
                                 getPlayerData(p)!!
                                     .team!!
                                     .teamColor!!
                                     .wool!!
                                     .createBlockData()
-                            p.getLocation().getWorld()!!.spawnParticle<BlockData?>(
+                            p.location.world!!.spawnParticle<BlockData?>(
                                 Particle.BLOCK_DUST,
-                                p.getLocation(),
+                                p.location,
                                 2,
                                 0.1,
                                 0.1,
@@ -213,11 +211,11 @@ object SquidMgr {
                                 bd,
                             )
                         } else {
-                            p.setSprinting(false)
+                            p.isSprinting = false
                         }
 
                         var speed = (
-                            Sclat.Companion.conf!!
+                            Sclat.conf!!
                                 .config!!
                                 .getDouble("SquidSpeed") *
                                 getGearInfluence(p, Gear.Type.IKA_SPEED_UP)
@@ -226,16 +224,16 @@ object SquidMgr {
                         if (data.speed != 0.0) speed = data.speed
 
                         if (!getPlayerData(p)!!.poison) {
-                            p.setWalkSpeed(speed.toFloat())
+                            p.walkSpeed = speed.toFloat()
                         } else {
-                            p.setWalkSpeed(((speed - speed / 3) * getGearInfluence(p, Gear.Type.PENA_DOWN)).toFloat())
+                            p.walkSpeed = ((speed - speed / 3) * getGearInfluence(p, Gear.Type.PENA_DOWN)).toFloat()
                         }
                     } else {
                         if (!is2) {
-                            p.playSound(p.getLocation(), Sound.ENTITY_PLAYER_SWIM, 0.3f, 5f)
+                            p.playSound(p.location, Sound.ENTITY_PLAYER_SWIM, 0.3f, 5f)
                             is2 = true
-                            p.setSprinting(false)
-                            p.setFoodLevel(4)
+                            p.isSprinting = false
+                            p.foodLevel = 4
                         }
                         `is` = false
                         if (p.hasPotionEffect(PotionEffectType.REGENERATION)) p.removePotionEffect(PotionEffectType.REGENERATION)
@@ -244,12 +242,12 @@ object SquidMgr {
                         // p.removePotionEffect(PotionEffectType.INVISIBILITY);
                         var speed = 0.2
 
-                        if (p.getInventory().getItemInMainHand().getType()
+                        if (p.inventory.itemInMainHand.type
                             ==
                             data.weaponClass!!
                                 .mainWeapon!!
                                 .weaponIteamStack!!
-                                .getType()
+                                .type
                         ) {
                             speed = data.weaponClass!!
                                 .mainWeapon!!
@@ -261,7 +259,7 @@ object SquidMgr {
                                 )
                         } else {
                             speed = (
-                                Sclat.Companion.conf!!
+                                Sclat.conf!!
                                     .config!!
                                     .getDouble("PlayerWalkSpeed") *
                                     getGearInfluence(p, Gear.Type.HITO_SPEED_UP)
@@ -270,48 +268,45 @@ object SquidMgr {
 
                         if (data.speed != 0.0) speed = data.speed
 
-                        if (p.getExp() <= (
+                        if (p.exp <= (
                                 0.99f -
-                                    Sclat.Companion.conf!!
+                                    Sclat.conf!!
                                         .config!!
                                         .getDouble("NormalRecovery")
                                         .toFloat()
                             )
                         ) {
-                            p.setExp(
-                                p.getExp() +
-                                    Sclat.Companion.conf!!
-                                        .config!!
-                                        .getDouble("NormalRecovery")
-                                        .toFloat(),
-                            )
+                            p.exp = p.exp +
+                                Sclat.conf!!
+                                    .config!!
+                                    .getDouble("NormalRecovery")
+                                    .toFloat()
                         }
 
-                        if (data.isHolding && data.canPaint && p.getExp() >= data.weaponClass!!.mainWeapon!!.needInk) {
-                            p.setSprinting(true)
+                        if (data.isHolding && data.canPaint && p.exp >= data.weaponClass!!.mainWeapon!!.needInk) {
+                            p.isSprinting = true
                         } else {
-                            if (!getPlayerData(p)!!.poison) p.setWalkSpeed(speed.toFloat())
+                            if (!getPlayerData(p)!!.poison) p.walkSpeed = speed.toFloat()
                             if (getPlayerData(p)!!.poison) {
-                                p.setWalkSpeed(
+                                p.walkSpeed =
                                     (
                                         speed *
                                             getGearInfluence(
                                                 p,
                                                 Gear.Type.PENA_DOWN,
                                             ) - speed / 3
-                                    ).toFloat(),
-                                )
+                                    ).toFloat()
                             }
                         }
 
-                        if (p.getGameMode() != GameMode.CREATIVE && !data.isUsingJetPack) {
-                            p.setAllowFlight(false)
-                            p.setFlying(false)
+                        if (p.gameMode != GameMode.CREATIVE && !data.isUsingJetPack) {
+                            p.allowFlight = false
+                            p.isFlying = false
                         }
                     }
 
                     // プレイヤーが最後に立っていた地面を記録する
-                    if (p.isOnGround()) data.playerGroundLocation = p.getLocation()
+                    if (p.isOnGround) data.playerGroundLocation = p.location
                 }
             }
         task.runTaskTimer(plugin, 0, 2)
@@ -358,70 +353,70 @@ object SquidMgr {
                 var is4: Boolean = true
                 var set: Boolean = false
                 val death: Boolean = false
-                val nmsWorld: World? = (p.getWorld() as CraftWorld).getHandle()
+                val nmsWorld: World? = (p.world as CraftWorld).handle
                 val es: EntitySquid = EntitySquid(EntityTypes.SQUID, nmsWorld)
 
                 override fun run() {
                     if (!set) {
                         set = true
-                        es.setNoAI(true)
-                        es.setNoGravity(true)
-                        es.setCustomName(CraftChatMessage.fromStringOrNull(player.getName()))
-                        es.setCustomNameVisible(true)
-                        (es.getBukkitEntity() as LivingEntity).setCollidable(false)
+                        es.isNoAI = true
+                        es.isNoGravity = true
+                        es.customName = CraftChatMessage.fromStringOrNull(player.name)
+                        es.customNameVisible = true
+                        (es.bukkitEntity as LivingEntity).isCollidable = false
 
                         // data.getTeam().getTeam().addEntry(es.getBukkitEntity().getUniqueId().toString());
-                        if (Sclat.Companion.conf!!
+                        if (Sclat.conf!!
                                 .config!!
                                 .getString("WorkMode") == "Trial"
                         ) {
                             val manager = Bukkit.getScoreboardManager()
-                            val scoreboard = manager!!.getNewScoreboard()
+                            val scoreboard = manager!!.newScoreboard
 
                             val bteam0 =
                                 scoreboard
                                     .registerNewTeam(data!!.team!!.teamColor!!.colorName!!)
-                            bteam0.setColor(data.team!!.teamColor!!.chatColor!!)
+                            bteam0.color = data.team!!.teamColor!!.chatColor!!
                             // bteam0.setNameTagVisibility(NameTagVisibility.HIDE_FOR_OTHER_TEAMS);
-                            bteam0.setPrefix(data.team!!.teamColor!!.colorCode!!)
+                            bteam0.prefix = data.team!!.teamColor!!.colorCode!!
                             bteam0.setOption(Team.Option.COLLISION_RULE, Team.OptionStatus.NEVER)
 
                             @Suppress("DEPRECATION")
                             bteam0.addPlayer(player)
-                            player.setScoreboard(scoreboard)
+                            player.scoreboard = scoreboard
 
-                            bteam0.addEntry(es.getBukkitEntity().getUniqueId().toString())
+                            bteam0.addEntry(es.bukkitEntity.uniqueId.toString())
 
                             // player.setScoreboard(data.getMatch().getScoreboard());
                             // data.getTeam().getTeam().addEntry(player.getName());
 
                             // data.getTeam().getTeam().addEntry(es.getBukkitEntity().getUniqueId().toString());
                         } else {
-                            data!!.team!!.team!!.addEntry(es.getBukkitEntity().getUniqueId().toString())
+                            data!!.team!!.team!!.addEntry(es.bukkitEntity.uniqueId.toString())
                         }
                     }
 
                     try {
-                        val loc = player.getLocation()
-                        es.setLocation(loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), 0f)
+                        val loc = player.location
+                        es.setLocation(loc.x, loc.y, loc.z, loc.yaw, 0f)
 
                         if (!data!!.isOnInk && data.isSquid && !data.isOnPath) {
                             is2 = false
                             if (!`is`) {
                                 `is` = true
                                 val packet = PacketPlayOutSpawnEntityLiving(es)
-                                for (target in plugin.getServer().getOnlinePlayers()) {
-                                    if (p.getWorld() === target.getWorld()) {
-                                        (target as CraftPlayer).getHandle().playerConnection.sendPacket(packet)
+                                for (target in plugin.server.onlinePlayers) {
+                                    if (p.world === target.world) {
+                                        (target as CraftPlayer).handle.playerConnection.sendPacket(packet)
                                     }
                                 }
                             }
 
                             // squid.teleport(p);
                             val packet = PacketPlayOutEntityTeleport(es)
-                            for (target in plugin.getServer().getOnlinePlayers()) {
-                                if (p.getWorld() === target.getWorld()) {
-                                    (target as CraftPlayer).getHandle().playerConnection.sendPacket(packet)
+                            for (target in plugin.server.onlinePlayers) {
+                                if (p.world === target.world) {
+                                    (target as CraftPlayer).handle.playerConnection.sendPacket(packet)
                                 }
                             }
                         } else {
@@ -430,11 +425,11 @@ object SquidMgr {
                                 is2 = true
                                 val packet =
                                     PacketPlayOutEntityDestroy(
-                                        es.getBukkitEntity().getEntityId(),
+                                        es.bukkitEntity.entityId,
                                     )
-                                for (target in plugin.getServer().getOnlinePlayers()) {
-                                    if (p.getWorld() === target.getWorld()) {
-                                        (target as CraftPlayer).getHandle().playerConnection.sendPacket(packet)
+                                for (target in plugin.server.onlinePlayers) {
+                                    if (p.world === target.world) {
+                                        (target as CraftPlayer).handle.playerConnection.sendPacket(packet)
                                     }
                                 }
                             }
@@ -446,12 +441,12 @@ object SquidMgr {
                         is4 = false
                         if (!is3) {
                             is3 = true
-                            p.getEquipment()!!.setHelmet(ItemStack(Material.AIR))
+                            p.equipment!!.helmet = ItemStack(Material.AIR)
                             if (data.weaponClass!!.mainWeapon!!.weaponType == "Buckler") {
-                                p.getInventory().setItem(40, ItemStack(Material.AIR))
+                                p.inventory.setItem(40, ItemStack(Material.AIR))
                             }
                             if (data.weaponClass!!.mainWeapon!!.isManeuver) {
-                                p.getInventory().setItem(
+                                p.inventory.setItem(
                                     40,
                                     ItemStack(
                                         Material.AIR,
@@ -464,12 +459,12 @@ object SquidMgr {
                         is3 = false
                         if (!is4) {
                             is4 = true
-                            p.getEquipment()!!.setHelmet(getPlayerData(p)!!.team!!.teamColor!!.bougu)
+                            p.equipment!!.helmet = getPlayerData(p)!!.team!!.teamColor!!.bougu
                             if (data.weaponClass!!.mainWeapon!!.weaponType == "Buckler") {
-                                p.getInventory().setItem(40, ItemStack(Material.SLIME_BALL))
+                                p.inventory.setItem(40, ItemStack(Material.SLIME_BALL))
                             }
                             if (data.weaponClass!!.mainWeapon!!.isManeuver) {
-                                p.getInventory().setItem(
+                                p.inventory.setItem(
                                     40,
                                     getPlayerData(p)!!
                                         .weaponClass!!
@@ -482,30 +477,30 @@ object SquidMgr {
                         if (p.hasPotionEffect(PotionEffectType.INVISIBILITY)) p.removePotionEffect(PotionEffectType.INVISIBILITY)
                     }
 
-                    if (p.getGameMode() == GameMode.SPECTATOR && !data.isJumping) {
+                    if (p.gameMode == GameMode.SPECTATOR && !data.isJumping) {
                         try {
                             val packet =
                                 PacketPlayOutEntityDestroy(
-                                    es.getBukkitEntity().getEntityId(),
+                                    es.bukkitEntity.entityId,
                                 )
-                            for (target in plugin.getServer().getOnlinePlayers()) {
-                                if (p.getWorld() === target.getWorld()) {
-                                    (target as CraftPlayer).getHandle().playerConnection.sendPacket(packet)
+                            for (target in plugin.server.onlinePlayers) {
+                                if (p.world === target.world) {
+                                    (target as CraftPlayer).handle.playerConnection.sendPacket(packet)
                                 }
                             }
                         } catch (e: Exception) {
                         }
                     }
 
-                    if (!data.isInMatch || !p.isOnline()) {
+                    if (!data.isInMatch || !p.isOnline) {
                         try {
                             val packet =
                                 PacketPlayOutEntityDestroy(
-                                    es.getBukkitEntity().getEntityId(),
+                                    es.bukkitEntity.entityId,
                                 )
-                            for (target in plugin.getServer().getOnlinePlayers()) {
-                                if (p.getWorld() === target.getWorld()) {
-                                    (target as CraftPlayer).getHandle().playerConnection.sendPacket(packet)
+                            for (target in plugin.server.onlinePlayers) {
+                                if (p.world === target.world) {
+                                    (target as CraftPlayer).handle.playerConnection.sendPacket(packet)
                                 }
                             }
                         } catch (e: Exception) {

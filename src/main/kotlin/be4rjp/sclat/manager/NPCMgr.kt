@@ -43,20 +43,20 @@ object NPCMgr {
 
                 override fun run() {
                     if (s == 0) {
-                        location.setYaw(location1.getYaw())
+                        location.yaw = location1.yaw
 
-                        val nmsServer: MinecraftServer = (Bukkit.getServer() as CraftServer).getServer()
-                        val nmsWorld = (location.getWorld() as CraftWorld).getHandle()
-                        val gameProfile = GameProfile(player.getUniqueId(), npcName)
+                        val nmsServer: MinecraftServer = (Bukkit.getServer() as CraftServer).server
+                        val nmsWorld = (location.world as CraftWorld).handle
+                        val gameProfile = GameProfile(player.uniqueId, npcName)
 
                         npc = EntityPlayer(nmsServer, nmsWorld, gameProfile, PlayerInteractManager(nmsWorld))
 
                         // 見えないところにスポーンさせて、クライアントにスキンを先に読み込ませる
-                        npc!!.setLocation(location.getX(), location.getY() - 20, location.getZ(), location.getYaw(), 0f)
-                        npc!!.getDataWatcher().set<Byte?>(DataWatcherRegistry.a.a(15), 127.toByte())
+                        npc!!.setLocation(location.x, location.y - 20, location.z, location.yaw, 0f)
+                        npc!!.dataWatcher.set<Byte?>(DataWatcherRegistry.a.a(15), 127.toByte())
 
-                        for (p in plugin.getServer().getOnlinePlayers()) {
-                            val connection = (p as CraftPlayer).getHandle().playerConnection
+                        for (p in plugin.server.onlinePlayers) {
+                            val connection = (p as CraftPlayer).handle.playerConnection
                             connection.sendPacket(
                                 PacketPlayOutPlayerInfo(
                                     PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER,
@@ -64,23 +64,23 @@ object NPCMgr {
                                 ),
                             )
                             connection.sendPacket(PacketPlayOutNamedEntitySpawn(npc))
-                            connection.sendPacket(PacketPlayOutEntityMetadata(npc!!.getId(), npc!!.getDataWatcher(), true))
+                            connection.sendPacket(PacketPlayOutEntityMetadata(npc!!.id, npc!!.dataWatcher, true))
                         }
                     }
                     if (s == 1) {
-                        npc!!.setLocation(location.getX(), location.getY(), location.getZ(), location.getYaw(), 0f)
-                        for (p in plugin.getServer().getOnlinePlayers()) {
-                            val connection = (p as CraftPlayer).getHandle().playerConnection
+                        npc!!.setLocation(location.x, location.y, location.z, location.yaw, 0f)
+                        for (p in plugin.server.onlinePlayers) {
+                            val connection = (p as CraftPlayer).handle.playerConnection
                             connection.sendPacket(PacketPlayOutEntityTeleport(npc))
                             connection.sendPacket(
                                 PacketPlayOutEntityHeadRotation(
                                     npc,
-                                    ((location.getYaw() * 256.0f) / 360.0f).toInt().toByte(),
+                                    ((location.yaw * 256.0f) / 360.0f).toInt().toByte(),
                                 ),
                             )
                             connection.sendPacket(
                                 PacketPlayOutEntityEquipment(
-                                    npc!!.getBukkitEntity().getEntityId(),
+                                    npc!!.bukkitEntity.entityId,
                                     EnumItemSlot.MAINHAND,
                                     CraftItemStack.asNMSCopy(
                                         getPlayerData(player)!!.weaponClass!!.mainWeapon!!.weaponIteamStack,
@@ -90,7 +90,7 @@ object NPCMgr {
                             if (getPlayerData(player)!!.weaponClass!!.mainWeapon!!.isManeuver) {
                                 connection.sendPacket(
                                     PacketPlayOutEntityEquipment(
-                                        npc!!.getBukkitEntity().getEntityId(),
+                                        npc!!.bukkitEntity.entityId,
                                         EnumItemSlot.OFFHAND,
                                         CraftItemStack.asNMSCopy(
                                             getPlayerData(player)!!
@@ -105,9 +105,9 @@ object NPCMgr {
                         }
                     }
                     if (s == 3) {
-                        for (p in plugin.getServer().getOnlinePlayers()) {
-                            val connection = (p as CraftPlayer).getHandle().playerConnection
-                            connection.sendPacket(PacketPlayOutEntityDestroy(npc!!.getBukkitEntity().getEntityId()))
+                        for (p in plugin.server.onlinePlayers) {
+                            val connection = (p as CraftPlayer).handle.playerConnection
+                            connection.sendPacket(PacketPlayOutEntityDestroy(npc!!.bukkitEntity.entityId))
                         }
                         cancel()
                     }

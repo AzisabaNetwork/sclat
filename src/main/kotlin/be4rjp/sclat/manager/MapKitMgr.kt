@@ -21,32 +21,32 @@ import org.bukkit.util.Vector
  */
 object MapKitMgr {
     fun setMapKit(player: Player) {
-        val view = Bukkit.getServer().createMap(player.getWorld())
-        view.setCenterX(player.getLocation().getBlockX())
-        view.setCenterZ(player.getLocation().getBlockZ())
-        view.setScale(MapView.Scale.CLOSEST)
+        val view = Bukkit.getServer().createMap(player.world)
+        view.centerX = player.location.blockX
+        view.centerZ = player.location.blockZ
+        view.scale = MapView.Scale.CLOSEST
 
         // renderer
         view.addRenderer(MyRenderer())
 
         val item = ItemStack(Material.FILLED_MAP)
-        val meta = item.getItemMeta() as MapMeta?
+        val meta = item.itemMeta as MapMeta?
         @Suppress("DEPRECATION")
-        meta!!.setMapId(view.getId())
+        meta!!.mapId = view.id
         meta.setDisplayName("カーソルを合わせて右クリックで発射")
-        item.setItemMeta(meta)
+        item.itemMeta = meta
 
         for (count in 1..8) {
-            player.getInventory().setItem(count, item)
+            player.inventory.setItem(count, item)
         }
         meta.setDisplayName("カーソルを合わせて右クリックで発射!")
-        item.setItemMeta(meta)
-        player.getInventory().setItem(0, item)
+        item.itemMeta = meta
+        player.inventory.setItem(0, item)
 
         player.updateInventory()
 
-        val loc = player.getLocation()
-        loc.setPitch(65f)
+        val loc = player.location
+        loc.pitch = 65f
         player.teleport(loc)
 
         player.addPotionEffect(PotionEffect(PotionEffectType.SLOW, 100000, 10))
@@ -56,9 +56,9 @@ object MapKitMgr {
 
     fun getMapLocationVector(player: Player): Vector {
         val loc = getPlayerData(player)!!.playerMapLoc!!.clone()
-        val ploc = player.getLocation().clone()
-        var x = (((ploc.getYaw() + 180) - (loc.getYaw() + 180)) * 3 / 2).toInt()
-        var y = ((ploc.getPitch() - loc.getPitch()) * 3 / 2).toInt()
+        val ploc = player.location.clone()
+        var x = (((ploc.yaw + 180) - (loc.yaw + 180)) * 3 / 2).toInt()
+        var y = ((ploc.pitch - loc.pitch) * 3 / 2).toInt()
         if (x > 128) x = 128
         if (x < -128) x = -128
         if (y > 128) y = 128
@@ -74,20 +74,20 @@ object MapKitMgr {
         ) {
             val cursors = MapCursorCollection()
             val loc = getPlayerData(player)!!.playerMapLoc!!.clone()
-            val ploc = player.getLocation().clone()
-            var x = (((ploc.getYaw() + 180) - (loc.getYaw() + 180)) * 3).toInt()
-            var y = ((ploc.getPitch() - loc.getPitch()) * 3).toInt()
+            val ploc = player.location.clone()
+            var x = (((ploc.yaw + 180) - (loc.yaw + 180)) * 3).toInt()
+            var y = ((ploc.pitch - loc.pitch) * 3).toInt()
             if (x > 128) x = 128
             if (x < -128) x = -128
             if (y > 128) y = 128
             if (y < -128) y = -128
             if (x == 128 || x == -128) {
-                ploc.setYaw(loc.getYaw())
+                ploc.yaw = loc.yaw
                 player.teleport(ploc)
             }
 
             cursors.addCursor(MapCursor(x.toByte(), y.toByte(), 6.toByte(), MapCursor.Type.WHITE_CROSS, true))
-            canvas.setCursors(cursors)
+            canvas.cursors = cursors
         }
     }
 }

@@ -32,8 +32,8 @@ object LootBox {
         var isHit = false
         val lootSeed = Math.random() * 100
         var nextLootSeed = 0.0
-        val name = ""
-        for (ClassName in Sclat.Companion.conf!!
+        ""
+        for (ClassName in Sclat.conf!!
             .classConfig!!
             .getConfigurationSection("WeaponClass")!!
             .getKeys(false)) {
@@ -96,7 +96,7 @@ object LootBox {
         val shooter = Bukkit.createInventory(null, 54, "ガチャ詳細")
         var slotnum = 0
         var nextLootpro = 0.0
-        for (ClassName in Sclat.Companion.conf!!
+        for (ClassName in Sclat.conf!!
             .classConfig!!
             .getConfigurationSection("WeaponClass")!!
             .getKeys(false)) {
@@ -104,25 +104,25 @@ object LootBox {
                 val lootpro = getWeaponClass(ClassName)!!.mainWeapon!!.lootpro
                 if (lootpro != 0.0) {
                     val item = ItemStack(getWeaponClass(ClassName)!!.mainWeapon!!.weaponIteamStack!!)
-                    val itemm = item.getItemMeta()
+                    val itemm = item.itemMeta
                     itemm!!.setDisplayName(ClassName)
                     val lores: MutableList<String?> = ArrayList<String?>()
                     lores.add(
                         "§r§6SubWeapon : " +
-                            Sclat.Companion.conf!!
+                            Sclat.conf!!
                                 .classConfig!!
                                 .getString("WeaponClass." + ClassName + ".SubWeaponName"),
                     )
                     lores.add(
                         "§r§6SPWeapon  : " +
-                            Sclat.Companion.conf!!
+                            Sclat.conf!!
                                 .classConfig!!
                                 .getString("WeaponClass." + ClassName + ".SPWeaponName"),
                     )
                     lores.add("")
                     lores.add("§r§b : " + lootpro + "％")
-                    itemm.setLore(lores)
-                    item.setItemMeta(itemm)
+                    itemm.lore = lores
+                    item.itemMeta = itemm
                     shooter.setItem(slotnum, item)
                     slotnum += 1
                     nextLootpro += lootpro
@@ -132,7 +132,7 @@ object LootBox {
         var i = 1
         while (i <= 5) {
             val paper = ItemStack(Material.PAPER)
-            val pmeta = paper.getItemMeta()
+            val pmeta = paper.itemMeta
             val paperlores: MutableList<String?> = ArrayList<String?>()
             when (i) {
                 1 -> {
@@ -185,17 +185,17 @@ object LootBox {
                     }
                 }
             }
-            pmeta!!.setLore(paperlores)
-            paper.setItemMeta(pmeta)
+            pmeta!!.lore = paperlores
+            paper.itemMeta = pmeta
             shooter.setItem(slotnum, paper)
             slotnum += 1
             i += 1
         }
         val paper = ItemStack(Material.PAPER)
-        val pmeta = paper.getItemMeta()
+        val pmeta = paper.itemMeta
 
         pmeta!!.setDisplayName("数値の表記に0.000001未満の誤差が生じることがあります、ご了承ください")
-        paper.setItemMeta(pmeta)
+        paper.itemMeta = pmeta
         shooter.setItem(slotnum, paper)
         player.openInventory(shooter)
     }
@@ -225,11 +225,11 @@ object LootBox {
         // 操作説明本
 
         val termsBook = ItemStack(Material.WRITTEN_BOOK)
-        val bookMeta = termsBook.getItemMeta() as BookMeta?
+        val bookMeta = termsBook.itemMeta as BookMeta?
 
         // 本のタイトルと著者を設定
-        bookMeta!!.setTitle(ChatColor.DARK_GREEN.toString() + "アニバーサリー記念・裏話本")
-        bookMeta.setAuthor(ChatColor.GRAY.toString() + "Sclat運営")
+        bookMeta!!.title = ChatColor.DARK_GREEN.toString() + "アニバーサリー記念・裏話本"
+        bookMeta.author = ChatColor.GRAY.toString() + "Sclat運営"
 
         // 利用規約の内容を追加
         bookMeta.addPage("まずはSclatをプレイしていただきありがとうございます。\n" + "ここではアップデート再開からの開発の裏話について語っていきたいと思います。\n")
@@ -313,10 +313,10 @@ object LootBox {
         bookMeta.addPage("からも何卒宜しくお願い致します。")
 
         // 作成したBookMetaを設定
-        termsBook.setItemMeta(bookMeta)
+        termsBook.itemMeta = bookMeta
 
         // プレイヤーのインベントリをクリアし、利用規約の本をアイテムスロットに追加
         // player.getInventory().clear();
-        player.getInventory().setItem(4, termsBook)
+        player.inventory.setItem(4, termsBook)
     }
 }

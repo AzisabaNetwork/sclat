@@ -17,20 +17,20 @@ import org.bukkit.inventory.ItemStack
 object WeaponClassMgr {
     @Synchronized
     fun weaponClassSetup() {
-        for (classname in Sclat.Companion.conf!!
+        for (classname in Sclat.conf!!
             .classConfig!!
             .getConfigurationSection("WeaponClass")!!
             .getKeys(false)) {
             val weaponName =
-                Sclat.Companion.conf!!
+                Sclat.conf!!
                     .classConfig!!
                     .getString("WeaponClass." + classname + ".MainWeaponName")
             val subWeaponName =
-                Sclat.Companion.conf!!
+                Sclat.conf!!
                     .classConfig!!
                     .getString("WeaponClass." + classname + ".SubWeaponName")
             val spWeaponName =
-                Sclat.Companion.conf!!
+                Sclat.conf!!
                     .classConfig!!
                     .getString("WeaponClass." + classname + ".SPWeaponName")
             val wc = WeaponClass(classname)
@@ -44,7 +44,7 @@ object WeaponClassMgr {
 
     @JvmStatic
     fun setWeaponClass(player: Player) {
-        player.getInventory().clear()
+        player.inventory.clear()
         val data = getPlayerData(player)
         val main =
             data!!
@@ -56,10 +56,10 @@ object WeaponClassMgr {
             Sclat.glow!!.enchantGlow(main)
             main.addEnchantment(Sclat.glow!!, 1)
         }
-        player.getInventory().setItem(0, main)
+        player.inventory.setItem(0, main)
         if (data.weaponClass!!.mainWeapon!!.isManeuver) {
             player
-                .getInventory()
+                .inventory
                 .setItem(
                     40,
                     data.weaponClass!!
@@ -69,26 +69,26 @@ object WeaponClassMgr {
                 )
         }
         val `is` = SubWeaponMgr.getSubWeapon(player)
-        player.getInventory().setItem(2, `is`)
+        player.inventory.setItem(2, `is`)
         val co = ItemStack(Material.BOOK)
-        val meta = co.getItemMeta()
+        val meta = co.itemMeta
         meta!!.setDisplayName("スーパージャンプ")
-        co.setItemMeta(meta)
-        player.getInventory().setItem(6, co)
-        if (!data.isSquid) player.getEquipment()!!.setHelmet(getPlayerData(player)!!.team!!.teamColor!!.bougu)
+        co.itemMeta = meta
+        player.inventory.setItem(6, co)
+        if (!data.isSquid) player.equipment!!.helmet = getPlayerData(player)!!.team!!.teamColor!!.bougu
 
         if (data.sPGauge == 100) SPWeaponMgr.setSPWeapon(player)
 
-        if (Sclat.Companion.conf!!
+        if (Sclat.conf!!
                 .config!!
                 .getString("WorkMode") == "Trial" &&
             !Sclat.tutorial
         ) {
             val join = ItemStack(Material.CHEST)
-            val joinmeta = join.getItemMeta()
+            val joinmeta = join.itemMeta
             joinmeta!!.setDisplayName(ChatColor.GOLD.toString() + "右クリックでメインメニューを開く")
-            join.setItemMeta(joinmeta)
-            player.getInventory().setItem(7, join)
+            join.itemMeta = joinmeta
+            player.inventory.setItem(7, join)
         }
     }
 }

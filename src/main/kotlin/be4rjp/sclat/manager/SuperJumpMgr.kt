@@ -37,15 +37,15 @@ object SuperJumpMgr {
         loc: Location,
         nearspawnpoint: Boolean,
     ) {
-        if (player.getWorld() !== loc.getWorld()) return
+        if (player.world !== loc.world) return
 
-        if (player.getLocation().distance(loc) <= 3) {
+        if (player.location.distance(loc) <= 3) {
             player.sendMessage(ChatColor.RED.toString() + "目的地が近すぎます！")
-            player.playNote(player.getLocation(), Instrument.BASS_GUITAR, Note.flat(0, Note.Tone.G))
+            player.playNote(player.location, Instrument.BASS_GUITAR, Note.flat(0, Note.Tone.G))
             return
         }
 
-        player.getInventory().clear()
+        player.inventory.clear()
         player.addPotionEffect(PotionEffect(PotionEffectType.SLOW, 40000, 10))
         getPlayerData(player)!!.armor = 0.0
         val task: BukkitRunnable =
@@ -54,8 +54,8 @@ object SuperJumpMgr {
 
                 override fun run() {
                     if (player.hasPotionEffect(PotionEffectType.SLOW)) player.removePotionEffect(PotionEffectType.SLOW)
-                    if (p.getGameMode() != GameMode.SPECTATOR) {
-                        p.getWorld().playSound(p.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 2f, 1.3f)
+                    if (p.gameMode != GameMode.SPECTATOR) {
+                        p.world.playSound(p.location, Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 2f, 1.3f)
                         superJumpRunnable(p, loc)
                     }
                 }
@@ -80,15 +80,15 @@ object SuperJumpMgr {
         player: Player,
         toloc: Location,
     ) {
-        if (player.getLocation().distance(toloc) <= 3) {
-            player.setVelocity(Vector(0, 2, 0))
+        if (player.location.distance(toloc) <= 3) {
+            player.velocity = Vector(0, 2, 0)
             return
         }
 
-        val from = player.getLocation().clone()
+        val from = player.location.clone()
         val to = toloc
-        val vec = Vector(to.getX() - from.getX(), to.getY() - from.getY(), to.getZ() - from.getZ()).normalize()
-        player.setGameMode(GameMode.SPECTATOR)
+        val vec = Vector(to.x - from.x, to.y - from.y, to.z - from.z).normalize()
+        player.gameMode = GameMode.SPECTATOR
         getPlayerData(player)!!.isJumping = (true)
         val rayTrace1 = RayTrace(from.toVector(), vec)
         val positions: ArrayList<Vector> = rayTrace1.traverse(from.distance(to), 1.0)
@@ -118,39 +118,39 @@ object SuperJumpMgr {
                 override fun run() {
                     if (getPlayerData(p)!!.isDead) cancel()
 
-                    val position = positions.get(i).toLocation(p.getLocation().getWorld()!!)
+                    val position = positions.get(i).toLocation(p.location.world!!)
                     val py = (
                         (abs((positions.size / 2) - i).toDouble().pow(2.0) * -1 * coef) +
                             ((positions.size / 2).toDouble().pow(2.0) * coef)
                     )
                     val y = if (py > 100) 100 + py / 2.8 else py
-                    val tloc = Location(p.getWorld(), position.getX(), y + position.getY(), position.getZ())
+                    val tloc = Location(p.world, position.x, y + position.y, position.z)
                     val pvec =
                         Vector(
-                            tloc.getX() - p.getLocation().getX(),
-                            tloc.getY() - p.getLocation().getY(),
-                            tloc.getZ() - p.getLocation().getZ(),
+                            tloc.x - p.location.x,
+                            tloc.y - p.location.y,
+                            tloc.z - p.location.z,
                         ).multiply(0.17)
-                    p.setVelocity(pvec)
-                    if (tloc.distance(p.getLocation()) < 15) i++
+                    p.velocity = pvec
+                    if (tloc.distance(p.location) < 15) i++
                     if (i == positions.size - 2) {
-                        p.setGameMode(GameMode.ADVENTURE)
+                        p.gameMode = GameMode.ADVENTURE
                         WeaponClassMgr.setWeaponClass(p)
                         p.closeInventory()
-                        p.getInventory().setHeldItemSlot(0)
+                        p.inventory.heldItemSlot = 0
                     }
 
-                    if (t > 200 || (p.isOnGround() && t >= 20)) { // スタック回避
-                        p.setGameMode(GameMode.ADVENTURE)
+                    if (t > 200 || (p.isOnGround && t >= 20)) { // スタック回避
+                        p.gameMode = GameMode.ADVENTURE
                         WeaponClassMgr.setWeaponClass(p)
                         p.closeInventory()
-                        p.getInventory().setHeldItemSlot(0)
+                        p.inventory.heldItemSlot = 0
                         p.teleport(toloc.clone().add(0.0, 4.0, 0.0))
                         getPlayerData(player)!!.isJumping = (false)
                         cancel()
                     }
 
-                    if (i == positions.size || !getPlayerData(p)!!.isInMatch || !p.isOnline() || getPlayerData(p)!!.isUsingTyakuti) {
+                    if (i == positions.size || !getPlayerData(p)!!.isInMatch || !p.isOnline || getPlayerData(p)!!.isUsingTyakuti) {
                         getPlayerData(player)!!.isJumping = (false)
                         cancel()
                     }
@@ -168,24 +168,23 @@ object SuperJumpMgr {
 
                 override fun run() {
                     if (c == 0) {
-                        val nmsWorld = (p.getWorld() as CraftWorld).getHandle()
-                        val `as` = EntityArmorStand(nmsWorld, toloc.getX(), toloc.getY(), toloc.getZ())
-                        `as`.setPosition(toloc.getX(), toloc.getY(), toloc.getZ())
-                        `as`.setInvisible(true)
-                        `as`.setNoGravity(true)
+                        val nmsWorld = (p.world as CraftWorld).handle
+                        val `as` = EntityArmorStand(nmsWorld, toloc.x, toloc.y, toloc.z)
+                        `as`.setPosition(toloc.x, toloc.y, toloc.z)
+                        `as`.isInvisible = true
+                        `as`.isNoGravity = true
                         `as`.setBasePlate(false)
-                        `as`.setCustomName(
+                        `as`.customName =
                             CraftChatMessage.fromStringOrNull(
                                 getPlayerData(p)!!.team!!.teamColor!!.colorCode + "↓↓↓  くコ:彡  ↓↓↓",
-                            ),
-                        )
-                        `as`.setCustomNameVisible(true)
-                        `as`.setSmall(true)
-                        id = `as`.getBukkitEntity().getEntityId()
-                        for (target in plugin.getServer().getOnlinePlayers()) {
-                            if (p.getWorld() === target.getWorld()) {
+                            )
+                        `as`.customNameVisible = true
+                        `as`.isSmall = true
+                        id = `as`.bukkitEntity.entityId
+                        for (target in plugin.server.onlinePlayers) {
+                            if (p.world === target.world) {
                                 (target as CraftPlayer)
-                                    .getHandle()
+                                    .handle
                                     .playerConnection
                                     .sendPacket(PacketPlayOutSpawnEntityLiving(`as`))
                             }
@@ -193,23 +192,23 @@ object SuperJumpMgr {
                     }
                     // エフェクト
                     val r = 0.5
-                    val x = to.getX() + r * cos(c.toDouble())
-                    val y = to.getY() + 0.4
-                    val z = to.getZ() + r * sin(c.toDouble())
-                    val tl = Location(p.getWorld(), x, y, z)
+                    val x = to.x + r * cos(c.toDouble())
+                    val y = to.y + 0.4
+                    val z = to.z + r * sin(c.toDouble())
+                    val tl = Location(p.world, x, y, z)
                     val dustOptions =
                         Particle.DustOptions(
                             getPlayerData(p)!!.team!!.teamColor!!.bukkitColor!!,
                             1f,
                         )
                     p
-                        .getWorld()
+                        .world
                         .spawnParticle<Particle.DustOptions?>(Particle.REDSTONE, tl, 1, 0.0, 0.1, 0.0, 50.0, dustOptions)
-                    if (p.getGameMode() == GameMode.ADVENTURE || !getPlayerData(p)!!.isInMatch || !p.isOnline()) {
-                        for (target in plugin.getServer().getOnlinePlayers()) {
-                            if (p.getWorld() === target.getWorld()) {
+                    if (p.gameMode == GameMode.ADVENTURE || !getPlayerData(p)!!.isInMatch || !p.isOnline) {
+                        for (target in plugin.server.onlinePlayers) {
+                            if (p.world === target.world) {
                                 (target as CraftPlayer)
-                                    .getHandle()
+                                    .handle
                                     .playerConnection
                                     .sendPacket(PacketPlayOutEntityDestroy(id))
                             }

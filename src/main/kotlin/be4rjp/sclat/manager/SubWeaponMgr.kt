@@ -39,73 +39,73 @@ object SubWeaponMgr {
         when (data!!.weaponClass!!.subWeaponName) {
             "スプラッシュボム" -> {
                 stack = ItemStack(data.team!!.teamColor!!.glass!!)
-                ism = stack.getItemMeta()
+                ism = stack.itemMeta
                 ism!!.setDisplayName("スプラッシュボム")
             }
 
             "クイックボム" -> {
                 stack = ItemStack(data.team!!.teamColor!!.wool!!)
-                ism = stack.getItemMeta()
+                ism = stack.itemMeta
                 ism!!.setDisplayName("クイックボム")
             }
 
             "フローターボム" -> {
                 stack = ItemStack(data.team!!.teamColor!!.wool!!)
-                ism = stack.getItemMeta()
+                ism = stack.itemMeta
                 ism!!.setDisplayName("フローターボム")
             }
 
             "ブーメランボム" -> {
                 stack = ItemStack(Material.IRON_NUGGET)
-                ism = stack.getItemMeta()
+                ism = stack.itemMeta
                 ism!!.setDisplayName("ブーメランボム")
             }
 
             "センサー" -> {
                 stack = ItemStack(Material.DISPENSER)
-                ism = stack.getItemMeta()
+                ism = stack.itemMeta
                 ism!!.setDisplayName("センサー")
             }
 
             "ポイズン" -> {
                 stack = ItemStack(Material.PRISMARINE)
-                ism = stack.getItemMeta()
+                ism = stack.itemMeta
                 ism!!.setDisplayName("ポイズン")
             }
 
             "キューバンボム" -> {
                 stack = ItemStack(data.team!!.teamColor!!.concrete!!)
-                ism = stack.getItemMeta()
+                ism = stack.itemMeta
                 ism!!.setDisplayName("キューバンボム")
             }
 
             "ビーコン" -> {
                 stack = ItemStack(Material.IRON_TRAPDOOR)
-                ism = stack.getItemMeta()
+                ism = stack.itemMeta
                 ism!!.setDisplayName("ビーコン")
             }
 
             "スプリンクラー" -> {
                 stack = ItemStack(Material.BIRCH_FENCE_GATE)
-                ism = stack.getItemMeta()
+                ism = stack.itemMeta
                 ism!!.setDisplayName("スプリンクラー")
             }
 
             "スプラッシュシールド" -> {
                 stack = ItemStack(Material.ACACIA_FENCE)
-                ism = stack.getItemMeta()
+                ism = stack.itemMeta
                 ism!!.setDisplayName("スプラッシュシールド")
             }
 
             "カーリングボム" -> {
                 stack = ItemStack(Material.QUARTZ_SLAB)
-                ism = stack.getItemMeta()
+                ism = stack.itemMeta
                 ism!!.setDisplayName("カーリングボム")
             }
 
             "トラップ" -> {
                 stack = ItemStack(Material.MUSIC_DISC_STAL)
-                ism = stack.getItemMeta()
+                ism = stack.itemMeta
                 ism!!.setDisplayName("トラップ")
             }
         }
@@ -120,7 +120,7 @@ object SubWeaponMgr {
     ) {
         val data = getPlayerData(player)
         if (!data!!.canUseSubWeapon) return
-        if (player.getGameMode() == GameMode.SPECTATOR) return
+        if (player.gameMode == GameMode.SPECTATOR) return
 
         when (name) {
             "右クリックで弾を発射" -> {

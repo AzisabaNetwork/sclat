@@ -18,7 +18,6 @@ import be4rjp.sclat.data.DataMgr.sprinklerMap
 import be4rjp.sclat.data.PaintData
 import be4rjp.sclat.manager.ArmorStandMgr.beaconArmorStandSetup
 import be4rjp.sclat.manager.ArmorStandMgr.sprinklerArmorStandSetup
-import be4rjp.sclat.manager.BungeeCordMgr
 import be4rjp.sclat.manager.BungeeCordMgr.playerSendServer
 import be4rjp.sclat.manager.MatchMgr
 import be4rjp.sclat.manager.MatchMgr.playerJoinMatch
@@ -33,7 +32,6 @@ import be4rjp.sclat.manager.SPWeaponMgr.spWeaponRunnable
 import be4rjp.sclat.manager.ServerStatusManager
 import be4rjp.sclat.manager.ServerStatusManager.openServerList
 import be4rjp.sclat.manager.SquidMgr.squidShowRunnable
-import be4rjp.sclat.manager.SuperJumpMgr
 import be4rjp.sclat.manager.SuperJumpMgr.superJumpCollTime
 import be4rjp.sclat.manager.WeaponClassMgr.setWeaponClass
 import be4rjp.sclat.plugin
@@ -82,21 +80,21 @@ import org.bukkit.scheduler.BukkitRunnable
 class ClickListener : Listener {
     @EventHandler
     fun onGUIClick(event: InventoryClickEvent) {
-        if (event.getCurrentItem() == null ||
-            event.getCurrentItem()!!.getItemMeta() == null ||
+        if (event.currentItem == null ||
+            event.currentItem!!.itemMeta == null ||
             event
-                .getCurrentItem()
-                ?.getItemMeta()
-                ?.getDisplayName() == null
+                .currentItem
+                ?.itemMeta
+                ?.displayName == null
         ) {
             return
         }
 
-        val name = event.getCurrentItem()!!.getItemMeta()!!.getDisplayName()
-        val player = event.getWhoClicked() as Player
+        val name = event.currentItem!!.itemMeta!!.displayName
+        val player = event.whoClicked as Player
 
         if (name == ".") {
-            event.setCancelled(true)
+            event.isCancelled = true
             return
         }
 
@@ -148,19 +146,19 @@ class ClickListener : Listener {
                 if (MatchMgr.canRollback) {
                     sendMessage("§a§lインクがリセットされました！", MessageType.ALL_PLAYER)
                     sendMessage("§a§l3分後に再リセットできるようになります", MessageType.ALL_PLAYER)
-                    for (op in plugin.getServer().getOnlinePlayers()) playGameSound(op, SoundType.SUCCESS)
+                    for (op in plugin.server.onlinePlayers) playGameSound(op, SoundType.SUCCESS)
                 }
                 val match = getPlayerData(player)!!.match
                 match!!.blockUpdater!!.stop()
                 rollBack()
-                player.setExp(0.99f)
+                player.exp = 0.99f
                 val bur = BlockUpdater()
-                if (Sclat.Companion.conf!!
+                if (Sclat.conf!!
                         .config!!
                         .contains("BlockUpdateRate")
                 ) {
                     bur.setMaxBlockInOneTick(
-                        Sclat.Companion.conf!!.config!!.getInt(
+                        Sclat.conf!!.config!!.getInt(
                             "BlockUpdateRate",
                         ),
                     )
@@ -168,7 +166,7 @@ class ClickListener : Listener {
                 bur.start()
                 match.blockUpdater = bur
                 val blocks: MutableList<Block> = ArrayList<Block>()
-                val b0 = Sclat.lobby!!.getBlock().getRelative(BlockFace.DOWN)
+                val b0 = Sclat.lobby!!.block.getRelative(BlockFace.DOWN)
                 blocks.add(b0)
                 blocks.add(b0.getRelative(BlockFace.EAST))
                 blocks.add(b0.getRelative(BlockFace.NORTH))
@@ -179,13 +177,13 @@ class ClickListener : Listener {
                 blocks.add(b0.getRelative(BlockFace.SOUTH_EAST))
                 blocks.add(b0.getRelative(BlockFace.SOUTH_WEST))
                 for (block in blocks) {
-                    if (block.getType() == Material.WHITE_STAINED_GLASS) {
+                    if (block.type == Material.WHITE_STAINED_GLASS) {
                         val pdata = PaintData(block)
                         pdata.match = (match)
                         pdata.team = (match.team0)
-                        pdata.setOrigianlType(block.getType())
+                        pdata.setOrigianlType(block.type)
                         setPaintDataFromBlock(block, pdata)
-                        block.setType(match.team0!!.teamColor!!.glass!!)
+                        block.type = match.team0!!.teamColor!!.glass!!
                     }
                 }
             }
@@ -235,12 +233,12 @@ class ClickListener : Listener {
         }
         if (name == "リソースパックをダウンロード / DOWNLOAD RESOURCEPACK") {
             player.setResourcePack(
-                Sclat.Companion.conf!!.config!!.getString(
+                Sclat.conf!!.config!!.getString(
                     "ResourcePackURL",
                 )!!,
             )
         }
-        if (event.getView().getTitle() == "Gear") {
+        if (event.view.title == "Gear") {
             var i = 0
             while (i <= 9) {
                 if (getGearName(i) == name) {
@@ -255,7 +253,7 @@ class ClickListener : Listener {
                 }
                 i++
             }
-        } else if (event.getView().getTitle() == "Gear shop") {
+        } else if (event.view.title == "Gear shop") {
             var i = 0
             while (i <= 9) {
                 if (getGearName(i) == name) {
@@ -274,7 +272,7 @@ class ClickListener : Listener {
                 i++
             }
         }
-        if (event.getView().getTitle() == "Server List") {
+        if (event.view.title == "Server List") {
             for (ss in ServerStatusManager.serverList) {
                 if (ss.displayName == name) {
                     if (ss.restartingServer) {
@@ -289,7 +287,7 @@ class ClickListener : Listener {
                                 playGameSound(player, SoundType.ERROR)
                                 return
                             }
-                            BungeeCordMgr.playerSendServer(player, ss.serverName!!)
+                            playerSendServer(player, ss.serverName!!)
                             getPlayerData(player)!!.setServerName(ss.displayName)
                         } else {
                             sendMessage("§c§nこのサーバーは満員のため参加できません", MessageType.PLAYER, player)
@@ -316,7 +314,7 @@ class ClickListener : Listener {
             }
         }
 
-        if (event.getView().getTitle() == "武器選択") {
+        if (event.view.title == "武器選択") {
             if (name == "装備選択へ戻る" ||
                 name == "戻る" ||
                 name == "シューター" ||
@@ -362,11 +360,11 @@ class ClickListener : Listener {
                 return
             }
             // 試しうちモード
-            if (Sclat.Companion.conf!!
+            if (Sclat.conf!!
                     .config!!
                     .getString("WorkMode") == "Trial"
             ) {
-                player.getInventory().clear()
+                player.inventory.clear()
                 getPlayerData(player)!!.reset()
                 getPlayerData(player)!!.isInMatch = false
                 getPlayerData(player)!!.isJoined = false
@@ -466,7 +464,7 @@ class ClickListener : Listener {
                                 funnelFloat(p)
                             }
                             setWeaponClass(p)
-                            player.setExp(0.99f)
+                            player.exp = 0.99f
 
                             // p.setScoreboard(DataMgr.getPlayerData(p).getMatch().getScoreboard());
                             // DataMgr.getPlayerData(p).getTeam().getTeam().addEntry(p.getName());
@@ -485,7 +483,7 @@ class ClickListener : Listener {
             )
         }
 
-        if (event.getView().getTitle() == "Shop") {
+        if (event.view.title == "Shop") {
             if (name == "装備選択へ戻る" ||
                 name == "戻る" ||
                 name == "シューター" ||
@@ -551,34 +549,34 @@ class ClickListener : Listener {
             }
         }
 
-        if (event.getView().getTitle() == "Chose Target") {
+        if (event.view.title == "Chose Target") {
             if (name == "§r§6リスポーン地点へジャンプ") {
                 var loc: Location? = Sclat.lobby!!.clone()
-                if (Sclat.Companion.conf!!
+                if (Sclat.conf!!
                         .config!!
                         .getString("WorkMode") != "Trial"
                 ) {
                     loc =
                         getPlayerData(player)!!.matchLocation
                 }
-                SuperJumpMgr.superJumpCollTime(player, loc!!, false)
+                superJumpCollTime(player, loc!!, false)
             }
             if (name == "§r§6ロビーへジャンプ") {
                 val worldName =
-                    Sclat.Companion.conf!!
+                    Sclat.conf!!
                         .config!!
                         .getString("LobbyJump.WorldName")
                 val w = Bukkit.getWorld(worldName!!)
                 val ix =
-                    Sclat.Companion.conf!!
+                    Sclat.conf!!
                         .config!!
                         .getInt("LobbyJump.X")
                 val iy =
-                    Sclat.Companion.conf!!
+                    Sclat.conf!!
                         .config!!
                         .getInt("LobbyJump.Y")
                 val iz =
-                    Sclat.Companion.conf!!
+                    Sclat.conf!!
                         .config!!
                         .getInt("LobbyJump.Z")
                 val loc = Location(w, ix + 0.5, iy.toDouble(), iz + 0.5)
@@ -586,16 +584,16 @@ class ClickListener : Listener {
             }
             var nearspwan = true
             var spawnloc: Location? = Sclat.lobby!!.clone()
-            if (Sclat.Companion.conf!!
+            if (Sclat.conf!!
                     .config!!
                     .getString("WorkMode") != "Trial"
             ) {
                 spawnloc =
                     getPlayerData(player)!!.matchLocation
             }
-            if (spawnloc!!.getWorld() === player.getWorld()) {
+            if (spawnloc!!.world === player.world) {
                 if (player
-                        .getLocation()
+                        .location
                         .distance(spawnloc) > 10 &&
                     !Tutorial.clearList.contains(player)
                 ) {
@@ -604,24 +602,24 @@ class ClickListener : Listener {
                     }
                 }
             }
-            for (p in plugin.getServer().getOnlinePlayers()) {
-                if (p.getName() == name) {
-                    if (event.getCurrentItem()!!.getType() == Material.PLAYER_HEAD) {
-                        if (p.getGameMode() == GameMode.SPECTATOR) {
+            for (p in plugin.server.onlinePlayers) {
+                if (p.name == name) {
+                    if (event.currentItem!!.type == Material.PLAYER_HEAD) {
+                        if (p.gameMode == GameMode.SPECTATOR) {
                             sendMessage("§c今そのプレイヤーにはジャンプできない！", MessageType.PLAYER, player)
                             playGameSound(player, SoundType.ERROR)
                             break
                         }
-                        SuperJumpMgr.superJumpCollTime(
+                        superJumpCollTime(
                             player,
                             getPlayerData(p)!!.playerGroundLocation!!,
                             nearspwan,
                         )
                     }
-                    if (event.getCurrentItem()!!.getType() == Material.IRON_TRAPDOOR) {
+                    if (event.currentItem!!.type == Material.IRON_TRAPDOOR) {
                         superJumpCollTime(
                             player,
-                            getBeaconFromplayer(p)!!.getLocation(),
+                            getBeaconFromplayer(p)!!.location,
                             nearspwan,
                         )
                     }
@@ -629,7 +627,7 @@ class ClickListener : Listener {
             }
         }
 
-        if (event.getView().getTitle() == "設定") {
+        if (event.view.title == "設定") {
             if (name == "戻る") {
                 OpenGUI.openMenu(player)
                 return
@@ -649,7 +647,7 @@ class ClickListener : Listener {
 
             OpenGUI.openSettingsUI(player)
 
-            player.playNote(player.getLocation(), Instrument.STICKS, Note.flat(1, Note.Tone.C))
+            player.playNote(player.location, Instrument.STICKS, Note.flat(1, Note.Tone.C))
 
             val b = if (getPlayerData(player)!!.settings!!.playBGM()) "1" else "0"
             val eS = if (getPlayerData(player)!!.settings!!.showEffectMainWeaponInk()) "1" else "0"
@@ -665,13 +663,13 @@ class ClickListener : Listener {
 
             val sData = b + eS + eCL + eCS + eRR + eRS + eB + eBEx + ck
 
-            val uuid: String = player.getUniqueId().toString()
-            Sclat.Companion.conf!!
+            val uuid: String = player.uniqueId.toString()
+            Sclat.conf!!
                 .playerSettings
                 .set("Settings." + uuid, sData)
         }
 
-        if (player.getGameMode() != GameMode.CREATIVE) event.setCancelled(true)
+        if (player.gameMode != GameMode.CREATIVE) event.isCancelled = true
     }
 
     @EventHandler
@@ -680,14 +678,14 @@ class ClickListener : Listener {
         val action = event.getAction()
 
         if (player
-                .getInventory()
-                .getItemInMainHand()
-                .getItemMeta() == null ||
+                .inventory
+                .itemInMainHand
+                .itemMeta == null ||
             player
-                .getInventory()
-                .getItemInMainHand()
-                .getItemMeta()
-                ?.getDisplayName() == null
+                .inventory
+                .itemInMainHand
+                .itemMeta
+                ?.displayName == null
         ) {
             return
         }
@@ -697,13 +695,13 @@ class ClickListener : Listener {
             action == Action.LEFT_CLICK_AIR ||
             action == Action.LEFT_CLICK_BLOCK
         ) {
-            if (player.getInventory().getItemInMainHand().getType() == Material.CHEST) OpenGUI.openMenu(player)
+            if (player.inventory.itemInMainHand.type == Material.CHEST) OpenGUI.openMenu(player)
             when (
                 player
-                    .getInventory()
-                    .getItemInMainHand()
-                    .getItemMeta()!!
-                    .getDisplayName()
+                    .inventory
+                    .itemInMainHand
+                    .itemMeta!!
+                    .displayName
             ) {
                 "スーパージャンプ" -> {
                     OpenGUI.superJumpGUI(player)
@@ -719,10 +717,10 @@ class ClickListener : Listener {
                 }
             }
             if (player
-                    .getInventory()
-                    .getItemInMainHand()
-                    .getItemMeta()!!
-                    .getDisplayName() == "スーパージャンプ"
+                    .inventory
+                    .itemInMainHand
+                    .itemMeta!!
+                    .displayName == "スーパージャンプ"
             ) {
                 OpenGUI.superJumpGUI(player)
             }

@@ -25,12 +25,10 @@ object SprinklerMgr {
         `as`: ArmorStand,
         vec: Vector,
     ) {
-        val data = getPlayerData(player)
-        val ball = player.getWorld().spawnEntity(`as`.getLocation().add(0.0, 0.5, 0.0), EntityType.SNOWBALL) as Snowball
-        (ball as CraftSnowball).getHandle().setItem(
-            CraftItemStack.asNMSCopy(ItemStack(getPlayerData(player)!!.team!!.teamColor!!.wool!!)),
-        )
-        player.getWorld().playSound(`as`.getLocation(), Sound.ENTITY_PIG_STEP, 0.1f, 1f)
+        getPlayerData(player)
+        val ball = player.world.spawnEntity(`as`.location.add(0.0, 0.5, 0.0), EntityType.SNOWBALL) as Snowball
+        (ball as CraftSnowball).handle.setItem(CraftItemStack.asNMSCopy(ItemStack(getPlayerData(player)!!.team!!.teamColor!!.wool!!)))
+        player.world.playSound(`as`.location, Sound.ENTITY_PIG_STEP, 0.1f, 1f)
         val random = 1.2
         vec.add(
             Vector(
@@ -39,9 +37,9 @@ object SprinklerMgr {
                 Math.random() * random - random / 2,
             ),
         )
-        ball.setVelocity(vec)
-        ball.setShooter(player)
-        ball.setCustomName("Sprinkler")
+        ball.velocity = vec
+        ball.shooter = player
+        ball.customName = "Sprinkler"
         val task: BukkitRunnable =
             object : BukkitRunnable() {
                 var i: Int = 0
@@ -59,11 +57,11 @@ object SprinklerMgr {
                             .teamColor!!
                             .wool!!
                             .createBlockData()
-                    for (o_player in plugin.getServer().getOnlinePlayers()) {
+                    for (o_player in plugin.server.onlinePlayers) {
                         if (getPlayerData(o_player)!!.settings!!.showEffectMainWeaponInk()) {
                             o_player.spawnParticle<BlockData?>(
                                 Particle.BLOCK_DUST,
-                                inkball.getLocation(),
+                                inkball.location,
                                 1,
                                 0.0,
                                 0.0,
@@ -73,9 +71,9 @@ object SprinklerMgr {
                             )
                         }
                     }
-                    if (i >= tick) inkball.setVelocity(inkball.getVelocity().add(Vector(0.0, -0.1, 0.0)))
-                    if (i != tick) PaintMgr.paintHightestBlock(inkball.getLocation(), p, true, true)
-                    if (inkball.isDead()) cancel()
+                    if (i >= tick) inkball.velocity = inkball.velocity.add(Vector(0.0, -0.1, 0.0))
+                    if (i != tick) PaintMgr.paintHightestBlock(inkball.location, p, true, true)
+                    if (inkball.isDead) cancel()
 
                     i++
                 }

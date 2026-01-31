@@ -128,12 +128,12 @@ object RankMgr {
                     try {
                         // かぶらないようにマッピング
                         val playerMap: MutableMap<Int, String> = HashMap()
-                        for (uuid in Sclat.Companion.conf!!
+                        for (uuid in Sclat.conf!!
                             .playerStatus
                             .getConfigurationSection("Status")!!
                             .getKeys(false)) {
                             var rate =
-                                Sclat.Companion.conf!!
+                                Sclat.conf!!
                                     .playerStatus
                                     .getInt("Status." + uuid + ".Rank")
                             if (rate == 0) continue
@@ -167,7 +167,7 @@ object RankMgr {
                             .getConfigurationSection("Status")!!
                             .getKeys(false)) {
                             var rate =
-                                Sclat.Companion.conf!!
+                                Sclat.conf!!
                                     .playerStatus
                                     .getInt("Status." + uuid + ".Kill")
                             if (rate == 0) continue
@@ -197,12 +197,12 @@ object RankMgr {
                     try {
                         // かぶらないようにマッピング
                         val playerMap: MutableMap<Int, String> = HashMap()
-                        for (uuid in Sclat.Companion.conf!!
+                        for (uuid in Sclat.conf!!
                             .playerStatus
                             .getConfigurationSection("Status")!!
                             .getKeys(false)) {
                             var rate =
-                                Sclat.Companion.conf!!
+                                Sclat.conf!!
                                     .playerStatus
                                     .getInt("Status." + uuid + ".Paint")
                             if (rate == 0) continue
@@ -231,7 +231,7 @@ object RankMgr {
                     makeRankingAsync()
                     makeKillRankingAsync()
                     makePaintRankingAsync()
-                    for (player in plugin.getServer().getOnlinePlayers()) {
+                    for (player in plugin.server.onlinePlayers) {
                         try {
                             Sclat.playerHolograms.ifPresent(
                                 player,
@@ -245,7 +245,7 @@ object RankMgr {
         task.runTaskTimer(
             plugin,
             0,
-            Sclat.Companion.conf!!
+            Sclat.conf!!
                 .config!!
                 .getInt("MakeRankingPeriod")
                 .toLong(),

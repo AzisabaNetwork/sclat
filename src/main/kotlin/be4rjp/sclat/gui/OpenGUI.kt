@@ -40,17 +40,17 @@ object OpenGUI {
         var i = 0
         while (i <= 44) {
             val `is` = ItemStack(Material.BLACK_STAINED_GLASS_PANE)
-            val ism = `is`.getItemMeta()
+            val ism = `is`.itemMeta
             ism!!.setDisplayName(".")
-            `is`.setItemMeta(ism)
+            `is`.itemMeta = ism
             inv.setItem(i, `is`)
             i++
         }
 
         val join = ItemStack(Material.LIME_STAINED_GLASS_PANE)
-        val joinmeta = join.getItemMeta()
+        val joinmeta = join.itemMeta
         joinmeta!!.setDisplayName("試合に参加 / JOIN THE MATCH")
-        join.setItemMeta(joinmeta)
+        join.itemMeta = joinmeta
         if (Sclat.conf!!
                 .config!!
                 .getString("WorkMode") != "Trial"
@@ -59,28 +59,28 @@ object OpenGUI {
         }
 
         val setting = ItemStack(Material.COMPARATOR)
-        val settingM = setting.getItemMeta()
+        val settingM = setting.itemMeta
         settingM!!.setDisplayName("設定 / SETTINGS")
-        setting.setItemMeta(settingM)
+        setting.itemMeta = settingM
         inv.setItem(14, setting)
 
         val w = ItemStack(Material.LEATHER_CHESTPLATE)
-        val wmeta = w.getItemMeta()
+        val wmeta = w.itemMeta
         wmeta!!.setDisplayName("装備変更 / EQUIPMENT")
-        w.setItemMeta(wmeta)
+        w.itemMeta = wmeta
         inv.setItem(12, w)
         player.openInventory(inv)
 
         val t = ItemStack(Material.GRASS_BLOCK)
-        val tmeta = t.getItemMeta()
+        val tmeta = t.itemMeta
         tmeta!!.setDisplayName("リソースパックをダウンロード / DOWNLOAD RESOURCEPACK")
-        t.setItemMeta(tmeta)
+        t.itemMeta = tmeta
         inv.setItem(28, t)
 
         val r = ItemStack(Material.MILK_BUCKET)
-        val rmeta = r.getItemMeta()
+        val rmeta = r.itemMeta
         rmeta!!.setDisplayName("塗りをリセット / RESET INK")
-        r.setItemMeta(rmeta)
+        r.itemMeta = rmeta
         if (Sclat.conf!!
                 .config!!
                 .getString("WorkMode") == "Trial"
@@ -93,28 +93,28 @@ object OpenGUI {
                 .getString("WorkMode") == "Trial"
         ) {
             val b = ItemStack(Material.OAK_DOOR)
-            val bmeta = b.getItemMeta()
+            val bmeta = b.itemMeta
             bmeta!!.setDisplayName("ロビーへ戻る / RETURN TO LOBBY")
-            b.setItemMeta(bmeta)
+            b.itemMeta = bmeta
             inv.setItem(16, b)
         } else {
             val ta = ItemStack(Material.ARMOR_STAND)
-            val tameta = ta.getItemMeta()
+            val tameta = ta.itemMeta
             tameta!!.setDisplayName("試し打ちサーバーへ接続 / TRAINING FIELD")
-            ta.setItemMeta(tameta)
+            ta.itemMeta = tameta
             inv.setItem(30, ta)
 
             val b = ItemStack(Material.CHEST)
-            val bmeta = b.getItemMeta()
+            val bmeta = b.itemMeta
             bmeta!!.setDisplayName("ショップを開く / OPEN SHOP")
-            b.setItemMeta(bmeta)
+            b.itemMeta = bmeta
             inv.setItem(16, b)
 
             val data = getPlayerData(player)
             var status = ItemStack(Material.PLAYER_HEAD)
             if (data!!.playerHead != null) status = CraftItemStack.asBukkitCopy(data.playerHead).clone()
-            val statusMeta = status.getItemMeta()
-            statusMeta!!.setDisplayName("§r§e" + player.getName() + " のステータス")
+            val statusMeta = status.itemMeta
+            statusMeta!!.setDisplayName("§r§e" + player.name + " のステータス")
             val lores: MutableList<String> = ArrayList()
             lores.add(
                 (
@@ -126,23 +126,23 @@ object OpenGUI {
             lores.add("§r§bKill(s) : §r" + getKill(player))
             lores.add("§r§bPaint(s) : §r" + getPaint(player))
             lores.add("§r§aMoney : §r" + getMoney(player))
-            statusMeta.setLore(lores)
-            status.setItemMeta(statusMeta)
+            statusMeta.lore = lores
+            status.itemMeta = statusMeta
             inv.setItem(32, status)
         }
 
         if (Sclat.type == ServerType.LOBBY) {
             val b = ItemStack(Material.EGG)
-            val bmeta = b.getItemMeta()
+            val bmeta = b.itemMeta
             bmeta!!.setDisplayName("称号 / EMBLEM")
-            b.setItemMeta(bmeta)
+            b.itemMeta = bmeta
             inv.setItem(34, b)
         }
 
         val b = ItemStack(Material.BARRIER)
-        val bmeta = b.getItemMeta()
+        val bmeta = b.itemMeta
         bmeta!!.setDisplayName("閉じる")
-        b.setItemMeta(bmeta)
+        b.itemMeta = bmeta
         inv.setItem(44, b)
 
         player.openInventory(inv)
@@ -160,22 +160,22 @@ object OpenGUI {
                 while (i <= 9) {
                     if (haveGear(player, i)) {
                         val n = ItemStack(Material.BLACK_STAINED_GLASS_PANE)
-                        val nmeta = n.getItemMeta()
+                        val nmeta = n.itemMeta
                         nmeta!!.setDisplayName(".")
-                        n.setItemMeta(nmeta)
+                        n.itemMeta = nmeta
                         inv.setItem(i, n)
                         i++
                         continue
                     }
 
                     val n = ItemStack(getGearMaterial(i))
-                    val nmeta = n.getItemMeta()
+                    val nmeta = n.itemMeta
                     nmeta!!.setDisplayName(getGearName(i))
                     val list: MutableList<String?> = ArrayList<String?>()
                     list.add("")
                     list.add("§r§bMoney : " + getGearPrice(i))
-                    nmeta.setLore(list)
-                    n.setItemMeta(nmeta)
+                    nmeta.lore = list
+                    n.itemMeta = nmeta
                     inv.setItem(i, n)
                     i++
                 }
@@ -183,9 +183,9 @@ object OpenGUI {
             var i = 10
             while (i <= 17) {
                 val n = ItemStack(Material.BLACK_STAINED_GLASS_PANE)
-                val nmeta = n.getItemMeta()
+                val nmeta = n.itemMeta
                 nmeta!!.setDisplayName(".")
-                n.setItemMeta(nmeta)
+                n.itemMeta = nmeta
                 inv.setItem(i, n)
                 i++
             }
@@ -202,18 +202,18 @@ object OpenGUI {
                         )
                     ) {
                         val n = ItemStack(Material.BLACK_STAINED_GLASS_PANE)
-                        val nmeta = n.getItemMeta()
+                        val nmeta = n.itemMeta
                         nmeta!!.setDisplayName(".")
-                        n.setItemMeta(nmeta)
+                        n.itemMeta = nmeta
                         inv.setItem(i, n)
                         i++
                         continue
                     }
 
                     val n = ItemStack(getGearMaterial(i))
-                    val nmeta = n.getItemMeta()
+                    val nmeta = n.itemMeta
                     nmeta!!.setDisplayName(getGearName(i))
-                    n.setItemMeta(nmeta)
+                    n.itemMeta = nmeta
                     inv.setItem(i, n)
                     i++
                 }
@@ -221,9 +221,9 @@ object OpenGUI {
             var i = 10
             while (i <= 17) {
                 val n = ItemStack(Material.BLACK_STAINED_GLASS_PANE)
-                val nmeta = n.getItemMeta()
+                val nmeta = n.itemMeta
                 nmeta!!.setDisplayName(".")
-                n.setItemMeta(nmeta)
+                n.itemMeta = nmeta
                 inv.setItem(i, n)
                 i++
             }
@@ -241,17 +241,17 @@ object OpenGUI {
         var i = 0
         while (i <= 26) {
             val `is` = ItemStack(if (shop) Material.WHITE_STAINED_GLASS_PANE else Material.BLACK_STAINED_GLASS_PANE)
-            val ism = `is`.getItemMeta()
+            val ism = `is`.itemMeta
             ism!!.setDisplayName(".")
-            `is`.setItemMeta(ism)
+            `is`.itemMeta = ism
             inv.setItem(i, `is`)
             i++
         }
 
         val n = ItemStack(getGearMaterial(getPlayerData(player)!!.gearNumber))
-        val nmeta = n.getItemMeta()
+        val nmeta = n.itemMeta
         nmeta!!.setDisplayName(if (shop) "§bギア購入 / GEAR" else "§bギア変更 / GEAR")
-        n.setItemMeta(nmeta)
+        n.itemMeta = nmeta
         inv.setItem(15, n)
 
         val t =
@@ -260,15 +260,15 @@ object OpenGUI {
                 .mainWeapon!!
                 .weaponIteamStack!!
                 .clone()
-        val tmeta = t.getItemMeta()
+        val tmeta = t.itemMeta
         tmeta!!.setDisplayName(if (shop) "§6武器購入 / WEAPON" else "§6武器変更 / WEAPON")
-        t.setItemMeta(tmeta)
+        t.itemMeta = tmeta
         inv.setItem(11, t)
 
         val `is` = ItemStack(Material.OAK_DOOR)
-        val ism = `is`.getItemMeta()
+        val ism = `is`.itemMeta
         ism!!.setDisplayName("戻る")
-        `is`.setItemMeta(ism)
+        `is`.itemMeta = ism
         inv.setItem(26, `is`)
 
         player.openInventory(inv)
@@ -280,29 +280,29 @@ object OpenGUI {
         var i = 0
         while (i <= 17) {
             val `is` = ItemStack(Material.BLACK_STAINED_GLASS_PANE)
-            val ism = `is`.getItemMeta()
+            val ism = `is`.itemMeta
             ism!!.setDisplayName(".")
-            `is`.setItemMeta(ism)
+            `is`.itemMeta = ism
             inv.setItem(i, `is`)
             i++
         }
 
         val n = ItemStack(Material.SNOWBALL)
-        val nmeta = n.getItemMeta()
+        val nmeta = n.itemMeta
         nmeta!!.setDisplayName("ナワバリバトル")
-        n.setItemMeta(nmeta)
+        n.itemMeta = nmeta
         inv.setItem(2, n)
 
         val t = ItemStack(Material.DIAMOND_SWORD)
-        val tmeta = t.getItemMeta()
+        val tmeta = t.itemMeta
         tmeta!!.setDisplayName("チームデスマッチ")
-        t.setItemMeta(tmeta)
+        t.itemMeta = tmeta
         inv.setItem(4, t)
 
         val nu = ItemStack(Material.GLASS)
-        val numeta = nu.getItemMeta()
+        val numeta = nu.itemMeta
         numeta!!.setDisplayName("ガチエリア")
-        nu.setItemMeta(numeta)
+        nu.itemMeta = numeta
         val match = getMatchFromId(MatchMgr.matchcount)
         if (match!!.mapData!!.canAreaBattle) inv.setItem(6, nu)
 
@@ -313,9 +313,9 @@ object OpenGUI {
         val inv = Bukkit.createInventory(null, 18, "Chose Target")
 
         val `is` = ItemStack(getPlayerData(player)!!.team!!.teamColor!!.glass!!)
-        val ism = `is`.getItemMeta()
+        val ism = `is`.itemMeta
         ism!!.setDisplayName(if (Sclat.tutorial) "§r§6ロビーへジャンプ" else "§r§6リスポーン地点へジャンプ")
-        `is`.setItemMeta(ism)
+        `is`.itemMeta = ism
         var loc = Sclat.lobby!!.clone()
         if (Sclat.conf!!
                 .config!!
@@ -324,9 +324,9 @@ object OpenGUI {
             loc =
                 getPlayerData(player)!!.matchLocation!!.clone()
         }
-        if (loc.getWorld() === player.getWorld()) {
+        if (loc.world === player.world) {
             if (player
-                    .getLocation()
+                    .location
                     .distance(loc) > 10 &&
                 !Tutorial.clearList.contains(player)
             ) {
@@ -338,19 +338,19 @@ object OpenGUI {
 
         var slotnum = 1
 
-        for (p in plugin.getServer().getOnlinePlayers()) {
-            if (p.getGameMode() == GameMode.SPECTATOR) continue
-            if (getPlayerData(p)!!.team!!.iD == getPlayerData(player)!!.team!!.iD && p.getWorld() === player.getWorld() && p !== player) {
-                if (getPlayerData(p)!!.playerGroundLocation!!.distance(player.getLocation()) > 10 &&
+        for (p in plugin.server.onlinePlayers) {
+            if (p.gameMode == GameMode.SPECTATOR) continue
+            if (getPlayerData(p)!!.team!!.iD == getPlayerData(player)!!.team!!.iD && p.world === player.world && p !== player) {
+                if (getPlayerData(p)!!.playerGroundLocation!!.distance(player.location) > 10 &&
                     getPlayerData(p)!!.playerHead != null
                 ) {
                     if (slotnum <= 17) {
                         val head = CraftItemStack.asBukkitCopy(getPlayerData(p)!!.playerHead).clone()
-                        val headM = head.getItemMeta()
+                        val headM = head.itemMeta
                         val lores: MutableList<String> = ArrayList()
                         lores.add("§r§aプレイヤーへジャンプ")
-                        headM!!.setLore(lores)
-                        head.setItemMeta(headM)
+                        headM!!.lore = lores
+                        head.itemMeta = headM
                         inv.setItem(slotnum, head)
                     }
                     slotnum++
@@ -358,18 +358,18 @@ object OpenGUI {
             }
         }
         for (`as` in beaconMap.values) {
-            if (`as`!!.getCustomName() == "21") {
+            if (`as`!!.customName == "21") {
                 val p = getArmorStandPlayer(`as`)
                 if (getPlayerData(player)!!.team == getPlayerData(p)!!.team) {
-                    if (`as`.getWorld() === player.getWorld()) {
-                        if (`as`.getLocation().distance(player.getLocation()) > 10) {
+                    if (`as`.world === player.world) {
+                        if (`as`.location.distance(player.location) > 10) {
                             val item = ItemStack(Material.IRON_TRAPDOOR)
-                            val im = item.getItemMeta()
-                            im!!.setDisplayName(p!!.getName())
+                            val im = item.itemMeta
+                            im!!.setDisplayName(p!!.name)
                             val lores: MutableList<String> = ArrayList()
                             lores.add("§r§6プレイヤーのビーコンへジャンプ")
-                            im.setLore(lores)
-                            item.setItemMeta(im)
+                            im.lore = lores
+                            item.itemMeta = im
                             if (slotnum <= 17) {
                                 inv.setItem(slotnum, item)
                             }
@@ -396,7 +396,7 @@ object OpenGUI {
             .getConfigurationSection("WeaponClass")!!
             .getKeys(false)) {
             val item = ItemStack(getWeaponClass(ClassName)!!.mainWeapon!!.weaponIteamStack!!)
-            val itemm = item.getItemMeta()
+            val itemm = item.itemMeta
             itemm!!.setDisplayName(ClassName)
             val lores: MutableList<String> = ArrayList()
             lores.add(
@@ -411,8 +411,8 @@ object OpenGUI {
                         .classConfig!!
                         .getString("WeaponClass." + ClassName + ".SPWeaponName"),
             )
-            itemm.setLore(lores)
-            item.setItemMeta(itemm)
+            itemm.lore = lores
+            item.itemMeta = itemm
             if (slotnum <= 44 &&
                 (
                     getWeaponClass(ClassName)!!.mainWeapon!!.weaponType == "Shooter" ||
@@ -452,7 +452,7 @@ object OpenGUI {
                     .getConfigurationSection("WeaponClass")!!
                     .getKeys(false)) {
                     val item = ItemStack(getWeaponClass(ClassName)!!.mainWeapon!!.weaponIteamStack!!)
-                    val itemm = item.getItemMeta()
+                    val itemm = item.itemMeta
                     itemm!!.setDisplayName(ClassName)
                     val lores: MutableList<String> = ArrayList()
                     lores.add(
@@ -471,8 +471,8 @@ object OpenGUI {
                         lores.add("")
                         lores.add("§r§bMoney : " + getWeaponClass(ClassName)!!.mainWeapon!!.money)
                     }
-                    itemm.setLore(lores)
-                    item.setItemMeta(itemm)
+                    itemm.lore = lores
+                    item.itemMeta = itemm
 
                     val list: MutableList<String> = ArrayList<String>()
                     list.add(weaponType)
@@ -528,17 +528,17 @@ object OpenGUI {
                             ) {
                                 if (getWeaponClass(ClassName)!!.mainWeapon!!.level > getLv(player)) {
                                     val glass = ItemStack(Material.BLACK_STAINED_GLASS_PANE)
-                                    val gmeta = glass.getItemMeta()
+                                    val gmeta = glass.itemMeta
                                     gmeta!!.setDisplayName(
                                         "§6レベル§c" + getWeaponClass(ClassName)!!.mainWeapon!!.level + "§6で解禁",
                                     )
-                                    glass.setItemMeta(gmeta)
+                                    glass.itemMeta = gmeta
                                     shooter.setItem(slotnum, glass)
                                 } else if (getWeaponClass(ClassName)!!.mainWeapon!!.islootbox) {
                                     val glass = ItemStack(Material.BLACK_STAINED_GLASS_PANE)
-                                    val gmeta = glass.getItemMeta()
+                                    val gmeta = glass.itemMeta
                                     gmeta!!.setDisplayName("§6ガチャ武器です")
-                                    glass.setItemMeta(gmeta)
+                                    glass.itemMeta = gmeta
                                     shooter.setItem(slotnum, glass)
                                 } else {
                                     shooter.setItem(slotnum, item)
@@ -553,11 +553,11 @@ object OpenGUI {
                             ) {
                                 if (getWeaponClass(ClassName)!!.mainWeapon!!.level > getLv(player)) {
                                     val glass = ItemStack(Material.BLACK_STAINED_GLASS_PANE)
-                                    val gmeta = glass.getItemMeta()
+                                    val gmeta = glass.itemMeta
                                     gmeta!!.setDisplayName(
                                         "§6レベル§c" + getWeaponClass(ClassName)!!.mainWeapon!!.level + "§6で解禁",
                                     )
-                                    glass.setItemMeta(gmeta)
+                                    glass.itemMeta = gmeta
                                     shooter.setItem(slotnum, glass)
                                 } else {
                                     shooter.setItem(slotnum, item)
@@ -572,9 +572,9 @@ object OpenGUI {
                 }
                 if (!Sclat.tutorial) {
                     val `is` = ItemStack(Material.OAK_DOOR)
-                    val ism = `is`.getItemMeta()
+                    val ism = `is`.itemMeta
                     ism!!.setDisplayName("戻る")
-                    `is`.setItemMeta(ism)
+                    `is`.itemMeta = ism
                     shooter.setItem(53, `is`)
                 }
 
@@ -590,79 +590,79 @@ object OpenGUI {
                     }
 
                 val s = ItemStack(Material.WOODEN_HOE)
-                val sm = s.getItemMeta()
+                val sm = s.itemMeta
                 sm!!.setDisplayName("シューター")
-                s.setItemMeta(sm)
+                s.itemMeta = sm
 
                 val b = ItemStack(Material.DIAMOND_SHOVEL)
-                val bm = b.getItemMeta()
+                val bm = b.itemMeta
                 bm!!.setDisplayName("ブラスター")
-                b.setItemMeta(bm)
+                b.itemMeta = bm
 
                 val ba = ItemStack(Material.DIAMOND_AXE)
-                val bam = ba.getItemMeta()
+                val bam = ba.itemMeta
                 bam!!.setDisplayName("バーストシューター")
-                ba.setItemMeta(bam)
+                ba.itemMeta = bam
 
                 val r = ItemStack(Material.STONE_PICKAXE)
-                val rm = r.getItemMeta()
+                val rm = r.itemMeta
                 rm!!.setDisplayName("ローラー")
-                r.setItemMeta(rm)
+                r.itemMeta = rm
 
                 val f = ItemStack(Material.CARROT_ON_A_STICK)
-                val fm = f.getItemMeta()
+                val fm = f.itemMeta
                 fm!!.setDisplayName("ブラシ")
-                f.setItemMeta(fm)
+                f.itemMeta = fm
 
                 val sy = ItemStack(Material.KELP)
-                val sym = sy.getItemMeta()
+                val sym = sy.itemMeta
                 sym!!.setDisplayName("シェルター")
-                sy.setItemMeta(sym)
+                sy.itemMeta = sym
 
                 val sr = ItemStack(Material.NETHER_BRICK)
-                val srm = sr.getItemMeta()
+                val srm = sr.itemMeta
                 srm!!.setDisplayName("スロッシャー")
-                sr.setItemMeta(srm)
+                sr.itemMeta = srm
 
                 val c = ItemStack(Material.WOODEN_SWORD)
-                val cm = c.getItemMeta()
+                val cm = c.itemMeta
                 cm!!.setDisplayName("チャージャー")
-                c.setItemMeta(cm)
+                c.itemMeta = cm
 
                 val sp = ItemStack(Material.IRON_INGOT)
-                val spm = sp.getItemMeta()
+                val spm = sp.itemMeta
                 spm!!.setDisplayName("スピナー")
-                sp.setItemMeta(spm)
+                sp.itemMeta = spm
 
                 val m = ItemStack(Material.GOLDEN_HOE)
-                val mm = m.getItemMeta()
+                val mm = m.itemMeta
                 mm!!.setDisplayName("マニューバー")
-                m.setItemMeta(mm)
+                m.itemMeta = mm
 
                 val hd = ItemStack(Material.GLOWSTONE_DUST)
-                val hdm = hd.getItemMeta()
+                val hdm = hd.itemMeta
                 hdm!!.setDisplayName("ハウンド")
-                hd.setItemMeta(hdm)
+                hd.itemMeta = hdm
 
                 val swp = ItemStack(Material.IRON_HORSE_ARMOR)
-                val swpm = swp.getItemMeta()
+                val swpm = swp.itemMeta
                 swpm!!.setDisplayName("スワッパー")
-                swp.setItemMeta(swpm)
+                swp.itemMeta = swpm
 
                 val fnl = ItemStack(Material.LEATHER)
-                val fnlm = fnl.getItemMeta()
+                val fnlm = fnl.itemMeta
                 fnlm!!.setDisplayName("ドラグーン")
-                fnl.setItemMeta(fnlm)
+                fnl.itemMeta = fnlm
 
                 val grp = ItemStack(Material.ORANGE_DYE)
-                val grpm = grp.getItemMeta()
+                val grpm = grp.itemMeta
                 grpm!!.setDisplayName("リーラー")
-                grp.setItemMeta(grpm)
+                grp.itemMeta = grpm
 
                 val bck = ItemStack(Material.SLIME_BALL)
-                val bckm = bck.getItemMeta()
+                val bckm = bck.itemMeta
                 bckm!!.setDisplayName("バックラー")
-                bck.setItemMeta(bckm)
+                bck.itemMeta = bckm
 
                 wm.setItem(0, s)
                 wm.setItem(1, b)
@@ -683,9 +683,9 @@ object OpenGUI {
                 player.openInventory(wm)
 
                 val `is` = ItemStack(Material.OAK_DOOR)
-                val ism = `is`.getItemMeta()
+                val ism = `is`.itemMeta
                 ism!!.setDisplayName("装備選択へ戻る")
-                `is`.setItemMeta(ism)
+                `is`.itemMeta = ism
                 wm.setItem(17, `is`)
             }
         }
@@ -697,21 +697,21 @@ object OpenGUI {
         var i = 0
         while (i <= 35) {
             val `is` = ItemStack(Material.BLACK_STAINED_GLASS_PANE)
-            val ism = `is`.getItemMeta()
+            val ism = `is`.itemMeta
             ism!!.setDisplayName(".")
-            `is`.setItemMeta(ism)
+            `is`.itemMeta = ism
             inv.setItem(i, `is`)
             i++
         }
 
         val `is` = ItemStack(Material.OAK_DOOR)
-        val ism = `is`.getItemMeta()
+        val ism = `is`.itemMeta
         ism!!.setDisplayName("戻る")
-        `is`.setItemMeta(ism)
+        `is`.itemMeta = ism
         inv.setItem(35, `is`)
 
         val shooter = ItemStack(Material.WOODEN_HOE)
-        val shooterM = shooter.getItemMeta()
+        val shooterM = shooter.itemMeta
         shooterM!!.setDisplayName("メインウエポンのインクエフェクト")
         val shooterR = ArrayList<String?>()
         if (getPlayerData(player)!!.settings!!.showEffectMainWeaponInk()) {
@@ -724,8 +724,8 @@ object OpenGUI {
         shooterR.add("メインウエポンの弾の軌跡にインクのエフェクトを描画します。")
         shooterR.add("無効化するとクライアントのパーティクル描画負担と")
         shooterR.add("通信量を削減することができます。")
-        shooterM.setLore(shooterR)
-        shooter.setItemMeta(shooterM)
+        shooterM.lore = shooterR
+        shooter.itemMeta = shooterM
         inv.setItem(9, shooter)
 
         val shooterP: ItemStack?
@@ -734,7 +734,7 @@ object OpenGUI {
         } else {
             shooterP = ItemStack(Material.GUNPOWDER)
         }
-        val shooterPM = shooterP.getItemMeta()
+        val shooterPM = shooterP.itemMeta
         shooterPM!!.setDisplayName("メインウエポンのインクエフェクト")
         val shooterPR = ArrayList<String?>()
         if (getPlayerData(player)!!.settings!!.showEffectMainWeaponInk()) {
@@ -742,12 +742,12 @@ object OpenGUI {
         } else {
             shooterPR.add("§7§l[Disable]")
         }
-        shooterPM.setLore(shooterPR)
-        shooterP.setItemMeta(shooterPM)
+        shooterPM.lore = shooterPR
+        shooterP.itemMeta = shooterPM
         inv.setItem(18, shooterP)
 
         val charger = ItemStack(Material.WOODEN_SWORD)
-        val chargerM = charger.getItemMeta()
+        val chargerM = charger.itemMeta
         chargerM!!.setDisplayName("チャージャーのレーザー")
         val chargerR = ArrayList<String?>()
         if (getPlayerData(player)!!.settings!!.showEffectChargerLine()) {
@@ -761,8 +761,8 @@ object OpenGUI {
         chargerR.add("方向と射撃距離を表すレーザーを描画します。")
         chargerR.add("無効化するとクライアントのパーティクル描画負担と")
         chargerR.add("通信量を削減することができます。")
-        chargerM.setLore(chargerR)
-        charger.setItemMeta(chargerM)
+        chargerM.lore = chargerR
+        charger.itemMeta = chargerM
         inv.setItem(10, charger)
 
         val chargerP: ItemStack?
@@ -771,7 +771,7 @@ object OpenGUI {
         } else {
             chargerP = ItemStack(Material.GUNPOWDER)
         }
-        val chargerPM = chargerP.getItemMeta()
+        val chargerPM = chargerP.itemMeta
         chargerPM!!.setDisplayName("チャージャーのレーザー")
         val chargerPR = ArrayList<String?>()
         if (getPlayerData(player)!!.settings!!.showEffectChargerLine()) {
@@ -779,12 +779,12 @@ object OpenGUI {
         } else {
             chargerPR.add("§7§l[Disable]")
         }
-        chargerPM.setLore(chargerPR)
-        chargerP.setItemMeta(chargerPM)
+        chargerPM.lore = chargerPR
+        chargerP.itemMeta = chargerPM
         inv.setItem(19, chargerP)
 
         val chargerS = ItemStack(Material.END_CRYSTAL)
-        val chargersM = chargerS.getItemMeta()
+        val chargersM = chargerS.itemMeta
         chargersM!!.setDisplayName("スペシャルウエポンのエフェクト")
         val chargersR = ArrayList<String?>()
         if (getPlayerData(player)!!.settings!!.showEffectSPWeapon()) {
@@ -798,8 +798,8 @@ object OpenGUI {
         chargersR.add("演出用のエフェクトを描画します。")
         chargersR.add("無効化するとクライアントのパーティクル描画負担と")
         chargersR.add("通信量を削減することができます。")
-        chargersM.setLore(chargersR)
-        chargerS.setItemMeta(chargersM)
+        chargersM.lore = chargersR
+        chargerS.itemMeta = chargersM
         inv.setItem(11, chargerS)
 
         val chargersP: ItemStack?
@@ -808,7 +808,7 @@ object OpenGUI {
         } else {
             chargersP = ItemStack(Material.GUNPOWDER)
         }
-        val chargersPM = chargersP.getItemMeta()
+        val chargersPM = chargersP.itemMeta
         chargersPM!!.setDisplayName("スペシャルウエポンのエフェクト")
         val chargersPR = ArrayList<String?>()
         if (getPlayerData(player)!!.settings!!.showEffectSPWeapon()) {
@@ -816,12 +816,12 @@ object OpenGUI {
         } else {
             chargersPR.add("§7§l[Disable]")
         }
-        chargersPM.setLore(chargersPR)
-        chargersP.setItemMeta(chargersPM)
+        chargersPM.lore = chargersPR
+        chargersP.itemMeta = chargersPM
         inv.setItem(20, chargersP)
 
         val rollaerL = ItemStack(Material.SHULKER_SHELL)
-        val rollaerlM = rollaerL.getItemMeta()
+        val rollaerlM = rollaerL.itemMeta
         rollaerlM!!.setDisplayName("スペシャルウエポンの範囲エフェクト")
         val rollaerlR = ArrayList<String?>()
         if (getPlayerData(player)!!.settings!!.showEffectSPWeaponRegion()) {
@@ -836,8 +836,8 @@ object OpenGUI {
         rollaerlR.add("無効化するとクライアントのパーティクル描画負担と")
         rollaerlR.add("通信量を削減することができますが")
         rollaerlR.add("スペシャルウエポンの効果範囲を把握しづらくなります。")
-        rollaerlM.setLore(rollaerlR)
-        rollaerL.setItemMeta(rollaerlM)
+        rollaerlM.lore = rollaerlR
+        rollaerL.itemMeta = rollaerlM
         inv.setItem(12, rollaerL)
 
         val rollaerlP: ItemStack?
@@ -846,7 +846,7 @@ object OpenGUI {
         } else {
             rollaerlP = ItemStack(Material.GUNPOWDER)
         }
-        val rollaerlPM = rollaerlP.getItemMeta()
+        val rollaerlPM = rollaerlP.itemMeta
         rollaerlPM!!.setDisplayName("スペシャルウエポンの範囲エフェクト")
         val rollaerlPR = ArrayList<String?>()
         if (getPlayerData(player)!!.settings!!.showEffectSPWeaponRegion()) {
@@ -854,12 +854,12 @@ object OpenGUI {
         } else {
             rollaerlPR.add("§7§l[Disable]")
         }
-        rollaerlPM.setLore(rollaerlPR)
-        rollaerlP.setItemMeta(rollaerlPM)
+        rollaerlPM.lore = rollaerlPR
+        rollaerlP.itemMeta = rollaerlPM
         inv.setItem(21, rollaerlP)
 
         val rollerS = ItemStack(Material.SNOWBALL)
-        val rollersM = rollerS.getItemMeta()
+        val rollersM = rollerS.itemMeta
         rollersM!!.setDisplayName("弾の表示")
         val rollersR = ArrayList<String?>()
         if (getPlayerData(player)!!.settings!!.showSnowBall()) {
@@ -872,8 +872,8 @@ object OpenGUI {
         rollersR.add("メインウエポンから発射された弾を描画します。")
         rollersR.add("無効化するとクライアントのエンティティ描画負担と")
         rollersR.add("通信量を削減することができます。")
-        rollersM.setLore(rollersR)
-        rollerS.setItemMeta(rollersM)
+        rollersM.lore = rollersR
+        rollerS.itemMeta = rollersM
         inv.setItem(13, rollerS)
 
         val rollersP: ItemStack?
@@ -882,7 +882,7 @@ object OpenGUI {
         } else {
             rollersP = ItemStack(Material.GUNPOWDER)
         }
-        val rollersPM = rollersP.getItemMeta()
+        val rollersPM = rollersP.itemMeta
         rollersPM!!.setDisplayName("弾の表示")
         val rollersPR = ArrayList<String?>()
         if (getPlayerData(player)!!.settings!!.showSnowBall()) {
@@ -890,8 +890,8 @@ object OpenGUI {
         } else {
             rollersPR.add("§7§l[Disable]")
         }
-        rollersPM.setLore(rollersPR)
-        rollersP.setItemMeta(rollersPM)
+        rollersPM.lore = rollersPR
+        rollersP.itemMeta = rollersPM
         inv.setItem(22, rollersP)
 
         val bgmP: ItemStack?
@@ -900,7 +900,7 @@ object OpenGUI {
         } else {
             bgmP = ItemStack(Material.GUNPOWDER)
         }
-        val bgmPM = bgmP.getItemMeta()
+        val bgmPM = bgmP.itemMeta
         bgmPM!!.setDisplayName("BGM")
         val bgmPR = ArrayList<String?>()
         if (getPlayerData(player)!!.settings!!.playBGM()) {
@@ -908,13 +908,13 @@ object OpenGUI {
         } else {
             bgmPR.add("§7§l[Disable]")
         }
-        bgmPM.setLore(bgmPR)
-        bgmP.setItemMeta(bgmPM)
+        bgmPM.lore = bgmPR
+        bgmP.itemMeta = bgmPM
 
         // if(Main.NoteBlockAPI)
         // inv.setItem(26, bgm_p);
         val bgm = ItemStack(Material.MUSIC_DISC_13)
-        val bgmM = bgm.getItemMeta()
+        val bgmM = bgm.itemMeta
         bgmM!!.setDisplayName("BGM")
         val bgmR = ArrayList<String?>()
         if (getPlayerData(player)!!.settings!!.playBGM()) {
@@ -922,13 +922,13 @@ object OpenGUI {
         } else {
             bgmR.add("§7§l[Disable]")
         }
-        bgmM.setLore(bgmR)
-        bgm.setItemMeta(bgmM)
+        bgmM.lore = bgmR
+        bgm.itemMeta = bgmM
 
         // if(Main.NoteBlockAPI)
         // inv.setItem(17, bgm);
         val bomb = ItemStack(Material.WHITE_STAINED_GLASS)
-        val bombM = bomb.getItemMeta()
+        val bombM = bomb.itemMeta
         bombM!!.setDisplayName("投擲武器の視認用エフェクト")
         val bombR = ArrayList<String?>()
         if (getPlayerData(player)!!.settings!!.showEffectBomb()) {
@@ -941,8 +941,8 @@ object OpenGUI {
         bombR.add("サブウエポン等の投擲武器の軌跡にエフェクトを描画します。")
         bombR.add("無効化するとクライアントのパーティクル描画負担と")
         bombR.add("通信量を削減することができます。")
-        bombM.setLore(bombR)
-        bomb.setItemMeta(bombM)
+        bombM.lore = bombR
+        bomb.itemMeta = bombM
         inv.setItem(14, bomb)
 
         val bombP: ItemStack?
@@ -951,7 +951,7 @@ object OpenGUI {
         } else {
             bombP = ItemStack(Material.GUNPOWDER)
         }
-        val bombPM = bombP.getItemMeta()
+        val bombPM = bombP.itemMeta
         bombPM!!.setDisplayName("投擲武器の視認用エフェクト")
         val bombPR = ArrayList<String?>()
         if (getPlayerData(player)!!.settings!!.showEffectBomb()) {
@@ -959,12 +959,12 @@ object OpenGUI {
         } else {
             bombPR.add("§7§l[Disable]")
         }
-        bombPM.setLore(bombPR)
-        bombP.setItemMeta(bombPM)
+        bombPM.lore = bombPR
+        bombP.itemMeta = bombPM
         inv.setItem(23, bombP)
 
         val bombEx = ItemStack(Material.TNT)
-        val bombexM = bombEx.getItemMeta()
+        val bombexM = bombEx.itemMeta
         bombexM!!.setDisplayName("爆発エフェクト")
         val bombexR = ArrayList<String?>()
         if (getPlayerData(player)!!.settings!!.showEffectBombEx()) {
@@ -977,8 +977,8 @@ object OpenGUI {
         bombexR.add("ボム等の爆発エフェクトを描画します。")
         bombexR.add("無効化するとクライアントのパーティクル描画負担と")
         bombexR.add("通信量を削減することができます。")
-        bombexM.setLore(bombexR)
-        bombEx.setItemMeta(bombexM)
+        bombexM.lore = bombexR
+        bombEx.itemMeta = bombexM
         inv.setItem(15, bombEx)
 
         val bombexP: ItemStack?
@@ -987,7 +987,7 @@ object OpenGUI {
         } else {
             bombexP = ItemStack(Material.GUNPOWDER)
         }
-        val bombexPM = bombexP.getItemMeta()
+        val bombexPM = bombexP.itemMeta
         bombexPM!!.setDisplayName("爆発エフェクト")
         val bombexPR = ArrayList<String?>()
         if (getPlayerData(player)!!.settings!!.showEffectBombEx()) {
@@ -995,12 +995,12 @@ object OpenGUI {
         } else {
             bombexPR.add("§7§l[Disable]")
         }
-        bombexPM.setLore(bombexPR)
-        bombexP.setItemMeta(bombexPM)
+        bombexPM.lore = bombexPR
+        bombexP.itemMeta = bombexPM
         inv.setItem(24, bombexP)
 
         val ck = ItemStack(Material.GOLDEN_SWORD)
-        val ckM = ck.getItemMeta()
+        val ckM = ck.itemMeta
         ckM!!.setDisplayName("チャージキープ")
         val ckR = ArrayList<String?>()
         if (getPlayerData(player)!!.settings!!.doChargeKeep()) {
@@ -1012,8 +1012,8 @@ object OpenGUI {
         ckR.add("§b[INFO]§r")
         ckR.add("チャージャー等のチャージキープ機能を発動できるようになります。")
         ckR.add("(チャージキープは十分チャージした後にイカ状態に切り替えると発動します。)")
-        ckM.setLore(ckR)
-        ck.setItemMeta(ckM)
+        ckM.lore = ckR
+        ck.itemMeta = ckM
         inv.setItem(16, ck)
 
         val ckP: ItemStack?
@@ -1022,7 +1022,7 @@ object OpenGUI {
         } else {
             ckP = ItemStack(Material.GUNPOWDER)
         }
-        val ckPM = ckP.getItemMeta()
+        val ckPM = ckP.itemMeta
         ckPM!!.setDisplayName("チャージキープ")
         val ckPR = ArrayList<String?>()
         if (getPlayerData(player)!!.settings!!.doChargeKeep()) {
@@ -1030,8 +1030,8 @@ object OpenGUI {
         } else {
             ckPR.add("§7§l[Disable]")
         }
-        ckPM.setLore(ckPR)
-        ckP.setItemMeta(ckPM)
+        ckPM.lore = ckPR
+        ckP.itemMeta = ckPM
         inv.setItem(25, ckP)
 
         player.openInventory(inv)

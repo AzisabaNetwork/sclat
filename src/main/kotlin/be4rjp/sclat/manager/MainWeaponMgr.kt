@@ -23,189 +23,189 @@ import org.bukkit.inventory.ItemStack
 object MainWeaponMgr {
     @Synchronized
     fun setupMainWeapon() {
-        for (weaponname in Sclat.Companion.conf!!
+        for (weaponname in Sclat.conf!!
             .weaponConfig!!
             .getConfigurationSection("MainWeapon")!!
             .getKeys(false)) {
             val weaponType =
-                Sclat.Companion.conf!!
+                Sclat.conf!!
                     .weaponConfig!!
                     .getString("MainWeapon." + weaponname + ".WeaponType")
             val weaponMaterial =
                 Material
                     .getMaterial(
-                        Sclat.Companion.conf!!
+                        Sclat.conf!!
                             .weaponConfig!!
                             .getString("MainWeapon." + weaponname + ".WeaponMaterial")!!,
                     )
             val random =
-                Sclat.Companion.conf!!
+                Sclat.conf!!
                     .weaponConfig!!
                     .getDouble("MainWeapon." + weaponname + ".ShootRandom")
             val distick =
-                Sclat.Companion.conf!!
+                Sclat.conf!!
                     .weaponConfig!!
                     .getInt("MainWeapon." + weaponname + ".ShootDistance")
             val shootspeed =
-                Sclat.Companion.conf!!
+                Sclat.conf!!
                     .weaponConfig!!
                     .getDouble("MainWeapon." + weaponname + ".ShootSpeed")
             val shoottick =
-                Sclat.Companion.conf!!
+                Sclat.conf!!
                     .weaponConfig!!
                     .getInt("MainWeapon." + weaponname + ".ShootTick")
             val paintrandom =
-                Sclat.Companion.conf!!
+                Sclat.conf!!
                     .weaponConfig!!
                     .getInt("MainWeapon." + weaponname + ".PaintRandom")
             val maxpaintdis =
-                Sclat.Companion.conf!!
+                Sclat.conf!!
                     .weaponConfig!!
                     .getInt("MainWeapon." + weaponname + ".MaxPaintDistance")
                     .toDouble()
             val needink =
-                Sclat.Companion.conf!!
+                Sclat.conf!!
                     .weaponConfig!!
                     .getDouble("MainWeapon." + weaponname + ".NeedInk")
                     .toFloat()
             val damage =
-                Sclat.Companion.conf!!
+                Sclat.conf!!
                     .weaponConfig!!
                     .getDouble("MainWeapon." + weaponname + ".Damage")
             val maxcharge =
-                Sclat.Companion.conf!!
+                Sclat.conf!!
                     .weaponConfig!!
                     .getInt("MainWeapon." + weaponname + ".MaxCharge")
             val rollershootQuantity =
-                Sclat.Companion.conf!!
+                Sclat.conf!!
                     .weaponConfig!!
                     .getInt("MainWeapon." + weaponname + ".RollerShootQuantity")
             val usinwalkspeed =
-                Sclat.Companion.conf!!
+                Sclat.conf!!
                     .weaponConfig!!
                     .getDouble("MainWeapon." + weaponname + ".UsingWalkSpeed")
                     .toFloat()
             val rollerWidth =
-                Sclat.Companion.conf!!
+                Sclat.conf!!
                     .weaponConfig!!
                     .getInt("MainWeapon." + weaponname + ".RollerWidth")
             val tatehuri =
-                Sclat.Companion.conf!!
+                Sclat.conf!!
                     .weaponConfig!!
                     .getBoolean("MainWeapon." + weaponname + ".RollerTatehuri")
             val rollerdamage =
-                Sclat.Companion.conf!!
+                Sclat.conf!!
                     .weaponConfig!!
                     .getDouble("MainWeapon." + weaponname + ".RollerDamage")
             val rollerneedink =
-                Sclat.Companion.conf!!
+                Sclat.conf!!
                     .weaponConfig!!
                     .getDouble("MainWeapon." + weaponname + ".RollerNeedInk")
                     .toFloat()
             var exh = 0.0
-            if (Sclat.Companion.conf!!
+            if (Sclat.conf!!
                     .weaponConfig!!
                     .contains("MainWeapon." + weaponname + ".BlasterExHankei")
             ) {
                 exh =
-                    Sclat.Companion.conf!!
+                    Sclat.conf!!
                         .weaponConfig!!
                         .getInt("MainWeapon." + weaponname + ".BlasterExHankei")
                         .toDouble()
             }
             val delay =
-                Sclat.Companion.conf!!
+                Sclat.conf!!
                     .weaponConfig!!
                     .getInt("MainWeapon." + weaponname + ".Delay")
             val cooltime =
-                Sclat.Companion.conf!!
+                Sclat.conf!!
                     .weaponConfig!!
                     .getInt("MainWeapon." + weaponname + ".Cooltime")
             val exd =
-                Sclat.Companion.conf!!
+                Sclat.conf!!
                     .weaponConfig!!
                     .getDouble("MainWeapon." + weaponname + ".BlasterExDamage")
             val hude =
-                Sclat.Companion.conf!!
+                Sclat.conf!!
                     .weaponConfig!!
                     .getBoolean("MainWeapon." + weaponname + ".IsBrush")
             val huder =
-                Sclat.Companion.conf!!
+                Sclat.conf!!
                     .weaponConfig!!
                     .getDouble("MainWeapon." + weaponname + ".BrushRandom")
             var man = false
-            if (Sclat.Companion.conf!!
+            if (Sclat.conf!!
                     .weaponConfig!!
                     .contains("MainWeapon." + weaponname + ".IsManeuver")
             ) {
                 man =
-                    Sclat.Companion.conf!!
+                    Sclat.conf!!
                         .weaponConfig!!
                         .getBoolean("MainWeapon." + weaponname + ".IsManeuver")
             }
             var slST = 1
-            if (Sclat.Companion.conf!!
+            if (Sclat.conf!!
                     .weaponConfig!!
                     .contains("MainWeapon." + weaponname + ".SlidingShootTick")
             ) {
                 slST =
-                    Sclat.Companion.conf!!
+                    Sclat.conf!!
                         .weaponConfig!!
                         .getInt("MainWeapon." + weaponname + ".SlidingShootTick")
             }
 
             var cr = 1.0
-            if (Sclat.Companion.conf!!
+            if (Sclat.conf!!
                     .weaponConfig!!
                     .contains("MainWeapon." + weaponname + ".ChargeRatio")
             ) {
                 cr =
-                    Sclat.Companion.conf!!
+                    Sclat.conf!!
                         .weaponConfig!!
                         .getDouble("MainWeapon." + weaponname + ".ChargeRatio")
             }
 
             var ck = false
-            if (Sclat.Companion.conf!!
+            if (Sclat.conf!!
                     .weaponConfig!!
                     .contains("MainWeapon." + weaponname + ".CanChargeKeep")
             ) {
                 ck =
-                    Sclat.Companion.conf!!
+                    Sclat.conf!!
                         .weaponConfig!!
                         .getBoolean("MainWeapon." + weaponname + ".CanChargeKeep")
             }
 
             var ckt = 0
-            if (Sclat.Companion.conf!!
+            if (Sclat.conf!!
                     .weaponConfig!!
                     .contains("MainWeapon." + weaponname + ".ChargeKeepingTime")
             ) {
                 ckt =
-                    Sclat.Companion.conf!!
+                    Sclat.conf!!
                         .weaponConfig!!
                         .getInt("MainWeapon." + weaponname + ".ChargeKeepingTime")
             }
 
             var hc = false
-            if (Sclat.Companion.conf!!
+            if (Sclat.conf!!
                     .weaponConfig!!
                     .contains("MainWeapon." + weaponname + ".HanbunChargeKeep")
             ) {
                 hc =
-                    Sclat.Companion.conf!!
+                    Sclat.conf!!
                         .weaponConfig!!
                         .getBoolean("MainWeapon." + weaponname + ".HanbunChargeKeep")
             }
 
             var sn = 0.2f
-            if (Sclat.Companion.conf!!
+            if (Sclat.conf!!
                     .weaponConfig!!
                     .contains("MainWeapon." + weaponname + ".SlideNeedInk")
             ) {
                 sn =
                     (
-                        Sclat.Companion.conf!!
+                        Sclat.conf!!
                             .weaponConfig!!
                             .getDouble("MainWeapon." + weaponname + ".SlideNeedInk")
                     ).toFloat()
@@ -214,9 +214,9 @@ object MainWeaponMgr {
             val mw = MainWeapon(weaponname)
             mw.weaponType = (weaponType)
             val `is` = ItemStack(weaponMaterial!!)
-            val itemMeta = `is`.getItemMeta()
+            val itemMeta = `is`.itemMeta
             itemMeta!!.setDisplayName(weaponname)
-            `is`.setItemMeta(itemMeta)
+            `is`.itemMeta = itemMeta
             mw.setWeaponItemStack(`is`)
             mw.random = (random)
             mw.distanceTick = distick
@@ -247,79 +247,79 @@ object MainWeaponMgr {
             mw.hanbunCharge = hc
             mw.slideNeedINK = (sn)
 
-            if (Sclat.Companion.conf!!
+            if (Sclat.conf!!
                     .weaponConfig!!
                     .contains("MainWeapon." + weaponname + ".SPRate")
             ) {
                 mw.sPRate =
-                    Sclat.Companion.conf!!
+                    Sclat.conf!!
                         .weaponConfig!!
                         .getDouble("MainWeapon." + weaponname + ".SPRate")
             }
 
-            if (Sclat.Companion.conf!!
+            if (Sclat.conf!!
                     .weaponConfig!!
                     .contains("MainWeapon." + weaponname + ".MaxRandom")
             ) {
                 mw.maxRandom =
                     (
-                        Sclat.Companion.conf!!
+                        Sclat.conf!!
                             .weaponConfig!!
                             .getDouble("MainWeapon." + weaponname + ".MaxRandom")
                     )
             }
 
-            if (Sclat.Companion.conf!!
+            if (Sclat.conf!!
                     .weaponConfig!!
                     .contains("MainWeapon." + weaponname + ".MaxRandomCount")
             ) {
                 mw.maxRandomCount =
                     (
-                        Sclat.Companion.conf!!
+                        Sclat.conf!!
                             .weaponConfig!!
                             .getInt("MainWeapon." + weaponname + ".MaxRandomCount")
                     )
             }
 
-            if (Sclat.Companion.conf!!
+            if (Sclat.conf!!
                     .weaponConfig!!
                     .contains("MainWeapon." + weaponname + ".Scope")
             ) {
                 mw.scope =
-                    Sclat.Companion.conf!!
+                    Sclat.conf!!
                         .weaponConfig!!
                         .getBoolean("MainWeapon." + weaponname + ".Scope")
             }
 
-            if (Sclat.Companion.conf!!
+            if (Sclat.conf!!
                     .weaponConfig!!
                     .contains("MainWeapon." + weaponname + ".DecreaseRate")
             ) {
                 // チャージャーの非適性ダメージ減少率
                 mw.decreaseRate =
-                    Sclat.Companion.conf!!
+                    Sclat.conf!!
                         .weaponConfig!!
                         .getDouble("MainWeapon." + weaponname + ".DecreaseRate")
             }
 
-            if (Sclat.Companion.conf!!
+            if (Sclat.conf!!
                     .weaponConfig!!
                     .contains("MainWeapon." + weaponname + ".AppDistance")
             ) {
                 // チャージャーの非適性距離
                 mw.appDistance =
-                    Sclat.Companion.conf!!
+                    Sclat.conf!!
                         .weaponConfig!!
                         .getInt("MainWeapon." + weaponname + ".AppDistance")
             }
 
-            if (Sclat.Companion.conf!!
+            if (Sclat.conf!!
                     .weaponConfig!!
                     .contains("MainWeapon." + weaponname + ".Money")
             ) {
                 mw.money =
                     (
-                        Sclat.Companion.conf!!
+                        Sclat.conf!!
                             .weaponConfig!!
                             .getInt("MainWeapon." + weaponname + ".Money")
                     )
@@ -327,13 +327,13 @@ object MainWeaponMgr {
                 mw.money = (0)
             }
 
-            if (Sclat.Companion.conf!!
+            if (Sclat.conf!!
                     .weaponConfig!!
                     .contains("MainWeapon." + weaponname + ".Level")
             ) {
                 mw.level =
                     (
-                        Sclat.Companion.conf!!
+                        Sclat.conf!!
                             .weaponConfig!!
                             .getInt("MainWeapon." + weaponname + ".Level")
                     )
@@ -341,60 +341,60 @@ object MainWeaponMgr {
                 mw.level = (0)
             }
 
-            if (Sclat.Companion.conf!!
+            if (Sclat.conf!!
                     .weaponConfig!!
                     .contains("MainWeapon." + weaponname + ".InHoldWalkSpeed")
             ) {
                 mw.inHoldSpeed =
-                    Sclat.Companion.conf!!
+                    Sclat.conf!!
                         .weaponConfig!!
                         .getDouble("MainWeapon." + weaponname + ".InHoldWalkSpeed")
                         .toFloat()
             } else {
                 mw.inHoldSpeed =
-                    Sclat.Companion.conf!!
+                    Sclat.conf!!
                         .config!!
                         .getDouble("PlayerWalkSpeed")
                         .toFloat()
             }
 
-            if (Sclat.Companion.conf!!
+            if (Sclat.conf!!
                     .weaponConfig!!
                     .contains("MainWeapon." + weaponname + ".IsLootBox")
             ) { // ガチャ武器用
                 mw.islootbox =
                     (
-                        Sclat.Companion.conf!!
+                        Sclat.conf!!
                             .weaponConfig!!
                             .getBoolean("MainWeapon." + weaponname + ".IsLootBox")
                     )
             }
-            if (Sclat.Companion.conf!!
+            if (Sclat.conf!!
                     .weaponConfig!!
                     .contains("MainWeapon." + weaponname + ".LootPro")
             ) { // ガチャ武器用排出率
                 mw.lootpro = (
-                    Sclat.Companion.conf!!
+                    Sclat.conf!!
                         .weaponConfig!!
                         .getDouble("MainWeapon." + weaponname + ".LootPro")
                 )
             }
-            if (Sclat.Companion.conf!!
+            if (Sclat.conf!!
                     .weaponConfig!!
                     .contains("MainWeapon." + weaponname + ".IsSwapper")
             ) { // スワッパ―判別
                 mw.setIsSwap(
-                    Sclat.Companion.conf!!
+                    Sclat.conf!!
                         .weaponConfig!!
                         .getBoolean("MainWeapon." + weaponname + ".IsSwapper"),
                 )
             }
-            if (Sclat.Companion.conf!!
+            if (Sclat.conf!!
                     .weaponConfig!!
                     .contains("MainWeapon." + weaponname + ".SwapWeapon")
             ) { // スワッパ―スワップ先
                 mw.swap = (
-                    Sclat.Companion.conf!!
+                    Sclat.conf!!
                         .weaponConfig!!
                         .getString("MainWeapon." + weaponname + ".SwapWeapon")
                 )
@@ -411,22 +411,22 @@ object MainWeaponMgr {
                     .weaponClass!!
                     .mainWeapon!!
                     .weaponIteamStack!!
-                    .getItemMeta()!!
-                    .getDisplayName()
+                    .itemMeta!!
+                    .displayName
             if (player
-                    .getInventory()
-                    .getItemInMainHand()
-                    .getItemMeta()
-                    ?.getDisplayName() == null
+                    .inventory
+                    .itemInMainHand
+                    .itemMeta
+                    ?.displayName == null
             ) {
                 return false
             }
             val itemname =
                 player
-                    .getInventory()
-                    .getItemInMainHand()
-                    .getItemMeta()!!
-                    .getDisplayName()
+                    .inventory
+                    .itemInMainHand
+                    .itemMeta!!
+                    .displayName
             if (itemname.length >= wname.length) return wname == itemname.substring(0, wname.length)
             return false
         } catch (e: Exception) {

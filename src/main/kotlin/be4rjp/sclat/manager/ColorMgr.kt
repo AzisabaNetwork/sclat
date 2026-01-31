@@ -23,9 +23,9 @@ object ColorMgr {
         blue.colorCode = "§9"
         blue.bukkitColor = org.bukkit.Color.BLUE
         val bh = ItemStack(Material.LEATHER_HELMET, 1)
-        val bhm = bh.getItemMeta() as LeatherArmorMeta?
+        val bhm = bh.itemMeta as LeatherArmorMeta?
         bhm!!.setColor(org.bukkit.Color.BLUE)
-        bh.setItemMeta(bhm)
+        bh.itemMeta = bhm
         blue.bougu = (bh)
         blue.chatColor = ChatColor.BLUE
         if (Sclat.colors.isEmpty() || Sclat.colors.contains("Blue")) {
@@ -40,9 +40,9 @@ object ColorMgr {
         aqua.colorCode = "§b"
         aqua.bukkitColor = org.bukkit.Color.AQUA
         val ah = ItemStack(Material.LEATHER_HELMET, 1)
-        val ahm = ah.getItemMeta() as LeatherArmorMeta?
+        val ahm = ah.itemMeta as LeatherArmorMeta?
         ahm!!.setColor(org.bukkit.Color.AQUA)
-        ah.setItemMeta(ahm)
+        ah.itemMeta = ahm
         aqua.bougu = (ah)
         aqua.chatColor = ChatColor.AQUA
         if (Sclat.colors.isEmpty() || Sclat.colors.contains("Aqua")) {
@@ -57,9 +57,9 @@ object ColorMgr {
         orange.colorCode = "§6"
         orange.bukkitColor = org.bukkit.Color.ORANGE
         val oh = ItemStack(Material.LEATHER_HELMET, 1)
-        val ohm = oh.getItemMeta() as LeatherArmorMeta?
+        val ohm = oh.itemMeta as LeatherArmorMeta?
         ohm!!.setColor(org.bukkit.Color.ORANGE)
-        oh.setItemMeta(ohm)
+        oh.itemMeta = ohm
         orange.bougu = (oh)
         orange.chatColor = ChatColor.GOLD
         if (Sclat.colors.isEmpty() || Sclat.colors.contains("Orange")) {
@@ -74,9 +74,9 @@ object ColorMgr {
         lime.colorCode = "§a"
         lime.bukkitColor = org.bukkit.Color.LIME
         val lh = ItemStack(Material.LEATHER_HELMET, 1)
-        val lhm = lh.getItemMeta() as LeatherArmorMeta?
+        val lhm = lh.itemMeta as LeatherArmorMeta?
         lhm!!.setColor(org.bukkit.Color.LIME)
-        lh.setItemMeta(lhm)
+        lh.itemMeta = lhm
         lime.bougu = (lh)
         lime.chatColor = ChatColor.GREEN
         if (Sclat.colors.isEmpty() || Sclat.colors.contains("Lime")) {
@@ -91,9 +91,9 @@ object ColorMgr {
         y.colorCode = "§e"
         y.bukkitColor = org.bukkit.Color.YELLOW
         val yh = ItemStack(Material.LEATHER_HELMET, 1)
-        val yhm = yh.getItemMeta() as LeatherArmorMeta?
+        val yhm = yh.itemMeta as LeatherArmorMeta?
         yhm!!.setColor(org.bukkit.Color.YELLOW)
-        yh.setItemMeta(yhm)
+        yh.itemMeta = yhm
         y.bougu = (yh)
         y.chatColor = ChatColor.YELLOW
         if (Sclat.colors.isEmpty() || Sclat.colors.contains("Yellow")) {

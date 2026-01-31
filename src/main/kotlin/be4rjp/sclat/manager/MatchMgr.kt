@@ -6,7 +6,6 @@ import be4rjp.sclat.api.Animation.resultAnimation
 import be4rjp.sclat.api.Animation.tdmResultAnimation
 import be4rjp.sclat.api.MessageType
 import be4rjp.sclat.api.Plugins
-import be4rjp.sclat.api.SclatUtil
 import be4rjp.sclat.api.SclatUtil.playGameSound
 import be4rjp.sclat.api.SclatUtil.restartServer
 import be4rjp.sclat.api.SclatUtil.sendMessage
@@ -114,9 +113,9 @@ object MatchMgr {
             val match = getMatchFromId(matchcount)
             if (match!!.canJoin()) {
                 match.addPlayerCount()
-                val playercount = match.playerCount
+                match.playerCount
                 if (match.joinedPlayerCount <
-                    Sclat.Companion.conf!!
+                    Sclat.conf!!
                         .config!!
                         .getInt("MaxPlayerCount")
                 ) {
@@ -128,21 +127,21 @@ object MatchMgr {
                     DataMgr.joinedList.add(player)
 
                     sendMessage(
-                        "§b§n" + player.getDisplayName() + " joined the match",
+                        "§b§n" + player.displayName + " joined the match",
                         MessageType.ALL_PLAYER,
                     )
 
                     player.teleport(match.mapData!!.taikibayso!!)
-                    if (Sclat.Companion.conf!!
+                    if (Sclat.conf!!
                             .config!!
                             .getBoolean("CanVoting") &&
-                        !getPlayerIsQuit(player.getUniqueId().toString())
+                        !getPlayerIsQuit(player.uniqueId.toString())
                     ) {
                         OpenGUI.matchTohyoGUI(player)
                     }
 
                     val startPlayerCount =
-                        Sclat.Companion.conf!!
+                        Sclat.conf!!
                             .config!!
                             .getInt("StartPlayerCount")
 
@@ -179,17 +178,17 @@ object MatchMgr {
                                             val commands: MutableList<String?> = ArrayList<String?>()
                                             commands.add(
                                                 "cdc " +
-                                                    Sclat.Companion.conf!!
+                                                    Sclat.conf!!
                                                         .servers!!
                                                         .getString("ServerName"),
                                             )
                                             commands.add("stop")
                                             val sc =
                                                 StatusClient(
-                                                    Sclat.Companion.conf!!
+                                                    Sclat.conf!!
                                                         .config!!
                                                         .getString("StatusShare.Host"),
-                                                    Sclat.Companion.conf!!
+                                                    Sclat.conf!!
                                                         .config!!
                                                         .getInt("StatusShare.Port"),
                                                     commands,
@@ -205,7 +204,7 @@ object MatchMgr {
                                             commands.add(
                                                 (
                                                     "cd " +
-                                                        Sclat.Companion.conf!!
+                                                        Sclat.conf!!
                                                             .servers!!
                                                             .getString("ServerName") + " " +
                                                         (System.currentTimeMillis() / 1000 + 30)
@@ -214,10 +213,10 @@ object MatchMgr {
                                             commands.add("stop")
                                             val sc =
                                                 StatusClient(
-                                                    Sclat.Companion.conf!!
+                                                    Sclat.conf!!
                                                         .config!!
                                                         .getString("StatusShare.Host"),
-                                                    Sclat.Companion.conf!!
+                                                    Sclat.conf!!
                                                         .config!!
                                                         .getInt("StatusShare.Port"),
                                                     commands,
@@ -248,7 +247,7 @@ object MatchMgr {
 
                                         // ソート
                                         var sortedMember: MutableList<Player?> = ArrayList<Player?>()
-                                        if (Sclat.Companion.conf!!
+                                        if (Sclat.conf!!
                                                 .config!!
                                                 .getBoolean("RateMatch")
                                         ) {
@@ -286,7 +285,7 @@ object MatchMgr {
                                         var playerNumber = 1
                                         for (jp in sortedMember) {
                                             val data = getPlayerData(jp)
-                                            if (jp!!.isOnline()) {
+                                            if (jp!!.isOnline) {
                                                 data!!.playerNumber = (playerNumber)
                                                 data.team!!.addRateTotal(PlayerStatusMgr.getRank(jp))
                                                 // jp.setDisplayName(data.getTeam().getTeamColor().getColorCode() +
@@ -297,14 +296,14 @@ object MatchMgr {
 
                                         // Settings
                                         if (Sclat.type == ServerType.MATCH) {
-                                            for (op in plugin.getServer().getOnlinePlayers()) {
+                                            for (op in plugin.server.onlinePlayers) {
                                                 val playerSettings = PlayerSettings(op)
                                                 SettingMgr.setSettings(playerSettings, op)
                                             }
                                         }
 
                                         sendMessage("§6試合が開始されました", MessageType.BROADCAST)
-                                        if (Sclat.Companion.conf!!
+                                        if (Sclat.conf!!
                                                 .config!!
                                                 .getBoolean("RateMatch")
                                         ) {
@@ -316,28 +315,28 @@ object MatchMgr {
                                             )
                                         }
                                         doCommands()
-                                        if (Sclat.Companion.conf!!
+                                        if (Sclat.conf!!
                                                 .config!!
                                                 .getBoolean("CanVoting")
                                         ) {
                                             if (match.nawabariTCount >= match.tdmTCount &&
                                                 match.nawabariTCount >= match.gatiareaTCount
                                             ) {
-                                                Sclat.Companion.conf!!
+                                                Sclat.conf!!
                                                     .config!!
                                                     .set("WorkMode", "Normal")
                                             } else if (match.tdmTCount >= match.gatiareaTCount) {
-                                                Sclat.Companion.conf!!
+                                                Sclat.conf!!
                                                     .config!!
                                                     .set("WorkMode", "TDM")
                                             } else {
-                                                Sclat.Companion.conf!!
+                                                Sclat.conf!!
                                                     .config!!
                                                     .set("WorkMode", "Area")
                                             }
                                         }
-                                        MatchMgr.startMatch(match)
-                                        for (entity in p.getWorld().getEntities()) {
+                                        startMatch(match)
+                                        for (entity in p.world.entities) {
                                             if (entity !is Player && entity !is FallingBlock) {
                                                 entity.remove()
                                             }
@@ -349,7 +348,7 @@ object MatchMgr {
                                             commands.add(
                                                 (
                                                     "started " +
-                                                        Sclat.Companion.conf!!
+                                                        Sclat.conf!!
                                                             .servers!!
                                                             .getString("ServerName") + " " +
                                                         System.currentTimeMillis() / 1000
@@ -358,10 +357,10 @@ object MatchMgr {
                                             commands.add("stop")
                                             val sc =
                                                 StatusClient(
-                                                    Sclat.Companion.conf!!
+                                                    Sclat.conf!!
                                                         .config!!
                                                         .getString("StatusShare.Host"),
-                                                    Sclat.Companion.conf!!
+                                                    Sclat.conf!!
                                                         .config!!
                                                         .getInt("StatusShare.Port"),
                                                     commands,
@@ -393,11 +392,11 @@ object MatchMgr {
     @Synchronized
     fun matchSetup() {
         // 再起動オプション
-        if (Sclat.Companion.conf!!
+        if (Sclat.conf!!
                 .config!!
                 .contains("RestartMatchCount")
         ) {
-            if (Sclat.Companion.conf!!
+            if (Sclat.conf!!
                     .config!!
                     .getInt("RestartMatchCount") ==
                 matchcount
@@ -414,12 +413,12 @@ object MatchMgr {
         setTeam(id * 2 + 1, team1)
 
         val bur = BlockUpdater()
-        if (Sclat.Companion.conf!!
+        if (Sclat.conf!!
                 .config!!
                 .contains("BlockUpdateRate")
         ) {
             bur.setMaxBlockInOneTick(
-                Sclat.Companion.conf!!.config!!.getInt(
+                Sclat.conf!!.config!!.getInt(
                     "BlockUpdateRate",
                 ),
             )
@@ -451,7 +450,7 @@ object MatchMgr {
         setMatch(id, match)
 
         // lobby待機者用
-        val id2 = Int.Companion.MAX_VALUE
+        val id2 = Int.MAX_VALUE
         val lobbyM = Match(id2)
         val lobbyT0 = Team(id2)
         val lobbyT1 = Team(id2 - 1)
@@ -476,15 +475,15 @@ object MatchMgr {
         // teamloc.SetupTeam0Loc();
         // teamloc.SetupTeam1Loc();
         // DataMgr.setTeamLoc(map, teamloc);
-        if (Sclat.Companion.conf!!
+        if (Sclat.conf!!
                 .config!!
                 .getString("WorkMode") == "Trial"
         ) {
             val manager = Bukkit.getScoreboardManager()
-            val scoreboard = manager!!.getNewScoreboard()
+            val scoreboard = manager!!.newScoreboard
 
             val bteam0 = scoreboard.registerNewTeam(match.team0!!.teamColor!!.colorName!!)
-            bteam0.setColor(match.team0!!.teamColor!!.chatColor!!)
+            bteam0.color = match.team0!!.teamColor!!.chatColor!!
             bteam0.setOption(
                 org.bukkit.scoreboard.Team.Option.NAME_TAG_VISIBILITY,
                 org.bukkit.scoreboard.Team.OptionStatus.FOR_OTHER_TEAMS,
@@ -495,7 +494,7 @@ object MatchMgr {
             )
 
             val bteam1 = scoreboard.registerNewTeam(match.team1!!.teamColor!!.colorName!!)
-            bteam1.setColor(match.team1!!.teamColor!!.chatColor!!)
+            bteam1.color = match.team1!!.teamColor!!.chatColor!!
             bteam1.setOption(
                 org.bukkit.scoreboard.Team.Option.NAME_TAG_VISIBILITY,
                 org.bukkit.scoreboard.Team.OptionStatus.FOR_OTHER_TEAMS,
@@ -515,7 +514,7 @@ object MatchMgr {
     @JvmStatic
     fun rollBack() {
         if (!canRollback &&
-            Sclat.Companion.conf!!
+            Sclat.conf!!
                 .config!!
                 .getString("WorkMode") == "Trial"
         ) {
@@ -523,7 +522,7 @@ object MatchMgr {
         }
         for (data in blockDataMap.values) {
             var data = data
-            data!!.block!!.setType(data.originalType!!)
+            data!!.block!!.type = data.originalType!!
             if (data.blockData != null) data.block.setBlockData(data.blockData!!)
             data = null
         }
@@ -573,7 +572,7 @@ object MatchMgr {
             object : BukkitRunnable() {
                 var s: Int = 0
                 val p: Player = player
-                val w: World? = plugin.getServer().getWorld(match.mapData!!.worldName!!)
+                val w: World? = plugin.server.getWorld(match.mapData!!.worldName!!)
                 var intromove: Location? = null
 
                 // EntitySquid squid;
@@ -583,22 +582,22 @@ object MatchMgr {
                 override fun run() {
                     try {
                         if (s == 0) {
-                            p.setDisplayName(getPlayerData(p)!!.team!!.teamColor!!.colorCode + p.getName())
+                            p.setDisplayName(getPlayerData(p)!!.team!!.teamColor!!.colorCode + p.name)
 
                             getPlayerData(p)!!.canFly = (true)
 
                             if (getPlayerData(p)!!.playerNumber == 1) {
                                 PaintMgr.paintGlass(match)
 
-                                p.getWorld().getEntities().forEach(
+                                p.world.entities.forEach(
                                     Consumer { entity: Entity? ->
-                                        if (entity!!.getType() == EntityType.SHULKER) {
+                                        if (entity!!.type == EntityType.SHULKER) {
                                             entity.remove()
                                         }
                                     },
                                 )
 
-                                if (Sclat.Companion.conf!!
+                                if (Sclat.conf!!
                                         .config!!
                                         .getString("WorkMode") == "Area"
                                 ) {
@@ -609,7 +608,7 @@ object MatchMgr {
                             }
 
                             when (
-                                Sclat.Companion.conf!!
+                                Sclat.conf!!
                                     .config!!
                                     .getString("WorkMode")
                             ) {
@@ -636,45 +635,45 @@ object MatchMgr {
                                 if (i == 1) {
                                     sl =
                                         Location(
-                                            l!!.getWorld(),
-                                            l.getBlockX() + 1.5,
-                                            l.getBlockY().toDouble(),
-                                            l.getBlockZ() + 1.5,
+                                            l!!.world,
+                                            l.blockX + 1.5,
+                                            l.blockY.toDouble(),
+                                            l.blockZ + 1.5,
                                         )
                                 } else if (i == 2) {
                                     sl =
                                         Location(
-                                            l!!.getWorld(),
-                                            l.getBlockX() - 0.5,
-                                            l.getBlockY().toDouble(),
-                                            l.getBlockZ() + 1.5,
+                                            l!!.world,
+                                            l.blockX - 0.5,
+                                            l.blockY.toDouble(),
+                                            l.blockZ + 1.5,
                                         )
                                 } else if (i == 3) {
                                     sl =
                                         Location(
-                                            l!!.getWorld(),
-                                            l.getBlockX() + 1.5,
-                                            l.getBlockY().toDouble(),
-                                            l.getBlockZ() - 0.5,
+                                            l!!.world,
+                                            l.blockX + 1.5,
+                                            l.blockY.toDouble(),
+                                            l.blockZ - 0.5,
                                         )
                                 } else if (i == 4) {
                                     sl =
                                         Location(
-                                            l!!.getWorld(),
-                                            l.getBlockX() - 0.5,
-                                            l.getBlockY().toDouble(),
-                                            l.getBlockZ() - 0.5,
+                                            l!!.world,
+                                            l.blockX - 0.5,
+                                            l.blockY.toDouble(),
+                                            l.blockZ - 0.5,
                                         )
                                 } else {
                                     sl =
                                         Location(
-                                            l!!.getWorld(),
-                                            l.getBlockX() + 0.5,
-                                            l.getBlockY().toDouble(),
-                                            l.getBlockZ() + 0.5,
+                                            l!!.world,
+                                            l.blockX + 0.5,
+                                            l.blockY.toDouble(),
+                                            l.blockZ + 0.5,
                                         )
                                 }
-                                sl.setYaw(l.getYaw())
+                                sl.yaw = l.yaw
                                 getPlayerData(p)!!.matchLocation = (sl)
                             }
                             if (getPlayerData(p)!!.team == match.team1) {
@@ -684,45 +683,45 @@ object MatchMgr {
                                 if (i == 1) {
                                     sl =
                                         Location(
-                                            l!!.getWorld(),
-                                            l.getBlockX() + 1.5,
-                                            l.getBlockY().toDouble(),
-                                            l.getBlockZ() + 1.5,
+                                            l!!.world,
+                                            l.blockX + 1.5,
+                                            l.blockY.toDouble(),
+                                            l.blockZ + 1.5,
                                         )
                                 } else if (i == 2) {
                                     sl =
                                         Location(
-                                            l!!.getWorld(),
-                                            l.getBlockX() - 0.5,
-                                            l.getBlockY().toDouble(),
-                                            l.getBlockZ() + 1.5,
+                                            l!!.world,
+                                            l.blockX - 0.5,
+                                            l.blockY.toDouble(),
+                                            l.blockZ + 1.5,
                                         )
                                 } else if (i == 3) {
                                     sl =
                                         Location(
-                                            l!!.getWorld(),
-                                            l.getBlockX() + 1.5,
-                                            l.getBlockY().toDouble(),
-                                            l.getBlockZ() - 0.5,
+                                            l!!.world,
+                                            l.blockX + 1.5,
+                                            l.blockY.toDouble(),
+                                            l.blockZ - 0.5,
                                         )
                                 } else if (i == 4) {
                                     sl =
                                         Location(
-                                            l!!.getWorld(),
-                                            l.getBlockX() - 0.5,
-                                            l.getBlockY().toDouble(),
-                                            l.getBlockZ() - 0.5,
+                                            l!!.world,
+                                            l.blockX - 0.5,
+                                            l.blockY.toDouble(),
+                                            l.blockZ - 0.5,
                                         )
                                 } else {
                                     sl =
                                         Location(
-                                            l!!.getWorld(),
-                                            l.getBlockX() + 0.5,
-                                            l.getBlockY().toDouble(),
-                                            l.getBlockZ() + 0.5,
+                                            l!!.world,
+                                            l.blockX + 0.5,
+                                            l.blockY.toDouble(),
+                                            l.blockZ + 0.5,
                                         )
                                 }
-                                sl.setYaw(l.getYaw())
+                                sl.yaw = l.yaw
                                 getPlayerData(p)!!.matchLocation = (sl)
                             }
 
@@ -730,22 +729,22 @@ object MatchMgr {
                                 val e =
                                     getPlayerData(p)!!
                                         .matchLocation!!
-                                        .getWorld()!!
+                                        .world!!
                                         .spawnEntity(getPlayerData(p)!!.matchLocation!!, EntityType.SQUID)
                                 squid = e as LivingEntity
                                 squid!!.setAI(false)
-                                squid!!.setSwimming(true)
-                                squid!!.setCustomName(p.getName())
-                                squid!!.setCustomNameVisible(true)
+                                squid!!.isSwimming = true
+                                squid!!.customName = p.name
+                                squid!!.isCustomNameVisible = true
                             }
 
-                            p.setGameMode(GameMode.SPECTATOR)
-                            p.getInventory().clear()
+                            p.gameMode = GameMode.SPECTATOR
+                            p.inventory.clear()
                             val introl = match.mapData!!.intro
                             p.teleport(introl!!)
-                            val location = getPlayerData(p)!!.matchLocation
+                            getPlayerData(p)!!.matchLocation
 
-                            if (Sclat.Companion.conf!!
+                            if (Sclat.conf!!
                                     .config!!
                                     .getString("WorkMode") == "TDM"
                             ) {
@@ -756,7 +755,7 @@ object MatchMgr {
                                     70,
                                     20,
                                 )
-                            } else if (Sclat.Companion.conf!!
+                            } else if (Sclat.conf!!
                                     .config!!
                                     .getString("WorkMode") == "Area"
                             ) {
@@ -774,7 +773,7 @@ object MatchMgr {
                             startCount(p)
 
                             val manager = Bukkit.getScoreboardManager()
-                            val scoreboard = manager!!.getNewScoreboard()
+                            val scoreboard = manager!!.newScoreboard
 
                             val objective =
                                 scoreboard.registerNewObjective(
@@ -782,7 +781,7 @@ object MatchMgr {
                                     "intro",
                                     "§6§lSclat§r " + Sclat.VERSION,
                                 )
-                            objective.setDisplaySlot(DisplaySlot.SIDEBAR)
+                            objective.displaySlot = DisplaySlot.SIDEBAR
 
                             val lines: MutableList<String> = mutableListOf()
 
@@ -790,12 +789,12 @@ object MatchMgr {
                             lines.add("§a§lマップ名 » §6" + getPlayerData(p)!!.match!!.mapData!!.mapName)
                             lines.add(" ")
 
-                            if (Sclat.Companion.conf!!
+                            if (Sclat.conf!!
                                     .config!!
                                     .getString("WorkMode") == "TDM"
                             ) {
                                 lines.add(ChatColor.YELLOW.toString() + "§lゲームモード » §rチームデスマッチ")
-                            } else if (Sclat.Companion.conf!!
+                            } else if (Sclat.conf!!
                                     .config!!
                                     .getString("WorkMode") == "Area"
                             ) {
@@ -808,9 +807,9 @@ object MatchMgr {
 
                             ObjectiveUtil.setLine(objective, lines)
 
-                            p.setScoreboard(scoreboard)
+                            p.scoreboard = scoreboard
 
-                            for (player in plugin.getServer().getOnlinePlayers()) {
+                            for (player in plugin.server.onlinePlayers) {
                                 p.hidePlayer(plugin, player)
                             }
                         }
@@ -836,7 +835,7 @@ object MatchMgr {
                                             .teamColor!!
                                             .wool!!
                                             .createBlockData()
-                                    introl.getWorld()!!.spawnParticle<BlockData?>(
+                                    introl.world!!.spawnParticle<BlockData?>(
                                         Particle.BLOCK_DUST,
                                         getPlayerData(p)!!.matchLocation!!,
                                         10,
@@ -852,13 +851,13 @@ object MatchMgr {
                                 }
                                 if (s == 100) {
                                     if (getPlayerData(p)!!.playerNumber <= 8) {
-                                        introl.getWorld()!!.playSound(
+                                        introl.world!!.playSound(
                                             getPlayerData(p)!!.matchLocation!!,
                                             Sound.ENTITY_PLAYER_SWIM,
                                             1f,
                                             1f,
                                         )
-                                        NPCMgr.createNPC(p, p.getName(), getPlayerData(p)!!.matchLocation!!)
+                                        NPCMgr.createNPC(p, p.name, getPlayerData(p)!!.matchLocation!!)
                                     }
                                 }
                             }
@@ -878,7 +877,7 @@ object MatchMgr {
                                             .teamColor!!
                                             .wool!!
                                             .createBlockData()
-                                    introl.getWorld()!!.spawnParticle<BlockData?>(
+                                    introl.world!!.spawnParticle<BlockData?>(
                                         Particle.BLOCK_DUST,
                                         getPlayerData(p)!!.matchLocation!!,
                                         10,
@@ -894,28 +893,28 @@ object MatchMgr {
                                 }
                                 if (s == 160) {
                                     if (getPlayerData(p)!!.playerNumber <= 8) {
-                                        introl.getWorld()!!.playSound(
+                                        introl.world!!.playSound(
                                             getPlayerData(p)!!.matchLocation!!,
                                             Sound.ENTITY_PLAYER_SWIM,
                                             1f,
                                             1f,
                                         )
-                                        NPCMgr.createNPC(p, p.getName(), getPlayerData(p)!!.matchLocation!!)
+                                        NPCMgr.createNPC(p, p.name, getPlayerData(p)!!.matchLocation!!)
                                     }
                                 }
                             }
                         }
 
                         if (s == 221) {
-                            for (player in plugin.getServer().getOnlinePlayers()) {
+                            for (player in plugin.server.onlinePlayers) {
                                 p.showPlayer(plugin, player)
                             }
                         }
 
                         if (s >= 221 && s <= 280) {
-                            p.getInventory().setItem(0, ItemStack(Material.AIR))
-                            p.setGameMode(GameMode.ADVENTURE)
-                            p.setExp(0.99f)
+                            p.inventory.setItem(0, ItemStack(Material.AIR))
+                            p.gameMode = GameMode.ADVENTURE
+                            p.exp = 0.99f
                             val introl = getPlayerData(p)!!.matchLocation
                             p.teleport(introl!!)
                         }
@@ -1015,7 +1014,7 @@ object MatchMgr {
 
                             SquidMgr.squidShowRunnable(p)
 
-                            p.getEquipment()!!.setHelmet(getPlayerData(p)!!.team!!.teamColor!!.bougu)
+                            p.equipment!!.helmet = getPlayerData(p)!!.team!!.teamColor!!.bougu
 
                             setArmor(p, 31.0, 100, false)
                             SPWeaponMgr.spWeaponRunnable(p)
@@ -1027,10 +1026,10 @@ object MatchMgr {
 
                             // SquidMgr.SquidRunnable(p);
                             getPlayerData(p)!!.isInMatch = (true)
-                            p.setExp(0.99f)
+                            p.exp = 0.99f
                             if (getPlayerData(p)!!.playerNumber == 1) {
                                 inMatchCounter(p)
-                                if (Sclat.Companion.conf!!
+                                if (Sclat.conf!!
                                         .config!!
                                         .getString("WorkMode") == "Area"
                                 ) {
@@ -1039,13 +1038,13 @@ object MatchMgr {
                                     }
                                 }
                             }
-                            p.playSound(p.getLocation(), Sound.ENTITY_ZOMBIE_INFECT, 10.0f, 2.0f)
+                            p.playSound(p.location, Sound.ENTITY_ZOMBIE_INFECT, 10.0f, 2.0f)
 
                             @Suppress("DEPRECATION")
                             if (getGearInfluence(p, Gear.Type.MAX_HEALTH_UP) == 1.2) {
-                                p.setMaxHealth(22.0)
+                                p.maxHealth = 22.0
                             } else {
-                                p.setMaxHealth(20.0)
+                                p.maxHealth = 20.0
                             }
 
                             SPWeaponMgr.spWeaponHuriRunnable(p)
@@ -1057,7 +1056,7 @@ object MatchMgr {
                                 val song = nbs.song
                                 val radio = RadioSongPlayer(song)
                                 radio.setVolume(volume)
-                                for (oplayer in plugin.getServer().getOnlinePlayers()) {
+                                for (oplayer in plugin.server.onlinePlayers) {
                                     if (getPlayerData(oplayer)!!.settings!!.playBGM() &&
                                         getPlayerData(oplayer)!!.isJoined
                                     ) {
@@ -1068,8 +1067,8 @@ object MatchMgr {
                                         )
                                     }
                                 }
-                                radio.setPlaying(true)
-                                if (Sclat.Companion.conf!!
+                                radio.isPlaying = true
+                                if (Sclat.conf!!
                                         .config!!
                                         .getString("WorkMode") == "Area"
                                 ) {
@@ -1085,7 +1084,7 @@ object MatchMgr {
 
                             if (getPlayerData(p)!!.playerNumber == 1) {
                                 PathMgr.setupPath(match)
-                                if (Sclat.Companion.conf!!
+                                if (Sclat.conf!!
                                         .config!!
                                         .getString("WorkMode") == "Area"
                                 ) {
@@ -1102,7 +1101,7 @@ object MatchMgr {
                                 }
                             }
 
-                            p.setCollidable(true)
+                            p.isCollidable = true
 
                             cancel()
                         }
@@ -1123,7 +1122,7 @@ object MatchMgr {
         val task: BukkitRunnable =
             object : BukkitRunnable() {
                 override fun run() {
-                    radio.setPlaying(false)
+                    radio.isPlaying = false
                 }
             }
         task.runTaskLater(plugin, delay)
@@ -1132,7 +1131,7 @@ object MatchMgr {
             object : BukkitRunnable() {
                 override fun run() {
                     if (match.isFinished) {
-                        radio.setPlaying(false)
+                        radio.isPlaying = false
                         task.cancel()
                         cancel()
                     }
@@ -1142,7 +1141,7 @@ object MatchMgr {
     }
 
     fun startMatch(match: Match) {
-        for (player in plugin.getServer().getOnlinePlayers()) {
+        for (player in plugin.server.onlinePlayers) {
             val data = getPlayerData(player)
             if (data!!.match == match) {
                 matchRunnable(player, match)
@@ -1158,13 +1157,13 @@ object MatchMgr {
 
     fun inMatchCounter(player: Player) {
         val manager = Bukkit.getScoreboardManager()
-        val scoreboard = manager!!.getNewScoreboard()
+        val scoreboard = manager!!.newScoreboard
 
         val match = getPlayerData(player)!!.match
         match!!.scoreboard = (scoreboard)
 
         val bteam0 = scoreboard.registerNewTeam(match.team0!!.teamColor!!.colorName!!)
-        bteam0.setColor(match.team0!!.teamColor!!.chatColor!!)
+        bteam0.color = match.team0!!.teamColor!!.chatColor!!
         bteam0.setOption(
             org.bukkit.scoreboard.Team.Option.NAME_TAG_VISIBILITY,
             org.bukkit.scoreboard.Team.OptionStatus.FOR_OTHER_TEAMS,
@@ -1174,10 +1173,10 @@ object MatchMgr {
             org.bukkit.scoreboard.Team.Option.COLLISION_RULE,
             org.bukkit.scoreboard.Team.OptionStatus.FOR_OWN_TEAM,
         )
-        bteam0.setPrefix(match.team0!!.teamColor!!.colorCode!!)
+        bteam0.prefix = match.team0!!.teamColor!!.colorCode!!
 
         val bteam1 = scoreboard.registerNewTeam(match.team1!!.teamColor!!.colorName!!)
-        bteam1.setColor(match.team1!!.teamColor!!.chatColor!!)
+        bteam1.color = match.team1!!.teamColor!!.chatColor!!
         // bteam1.setNameTagVisibility(NameTagVisibility.HIDE_FOR_OTHER_TEAMS);
         bteam1.setOption(
             org.bukkit.scoreboard.Team.Option.NAME_TAG_VISIBILITY,
@@ -1187,16 +1186,16 @@ object MatchMgr {
             org.bukkit.scoreboard.Team.Option.COLLISION_RULE,
             org.bukkit.scoreboard.Team.OptionStatus.FOR_OWN_TEAM,
         )
-        bteam1.setPrefix(match.team1!!.teamColor!!.colorCode!!)
+        bteam1.prefix = match.team1!!.teamColor!!.colorCode!!
 
         match.team0!!.team = bteam0
         match.team1!!.team = bteam1
 
-        for (oplayer in plugin.getServer().getOnlinePlayers()) {
+        for (oplayer in plugin.server.onlinePlayers) {
             if (getPlayerData(oplayer)!!.isJoined) {
-                oplayer.setScoreboard(scoreboard)
-                if (match.team0 == getPlayerData(oplayer)!!.team) bteam0.addEntry(oplayer.getName())
-                if (match.team1 == getPlayerData(oplayer)!!.team) bteam1.addEntry(oplayer.getName())
+                oplayer.scoreboard = scoreboard
+                if (match.team0 == getPlayerData(oplayer)!!.team) bteam0.addEntry(oplayer.name)
+                if (match.team1 == getPlayerData(oplayer)!!.team) bteam1.addEntry(oplayer.name)
             }
         }
 
@@ -1215,7 +1214,7 @@ object MatchMgr {
                         if (objective != null) objective!!.unregister()
 
                         objective = scoreboard.registerNewObjective("match", "intro", "§6§lSclat§r " + Sclat.VERSION)
-                        objective!!.setDisplaySlot(DisplaySlot.SIDEBAR)
+                        objective!!.displaySlot = DisplaySlot.SIDEBAR
 
                         val min = String.format("%02d", s % 60)
 
@@ -1225,12 +1224,12 @@ object MatchMgr {
                         lines.add("§a§lマップ名 » §6" + getPlayerData(p)!!.match!!.mapData!!.mapName)
                         lines.add(" ")
 
-                        if (Sclat.Companion.conf!!
+                        if (Sclat.conf!!
                                 .config!!
                                 .getString("WorkMode") == "TDM"
                         ) {
                             lines.add(ChatColor.YELLOW.toString() + "§lゲームモード » §6チームデスマッチ")
-                        } else if (Sclat.Companion.conf!!
+                        } else if (Sclat.conf!!
                                 .config!!
                                 .getString("WorkMode") == "Area"
                         ) {
@@ -1246,7 +1245,7 @@ object MatchMgr {
                         var entyo = false
 
                         // ガチエリアカウント
-                        if (Sclat.Companion.conf!!
+                        if (Sclat.conf!!
                                 .config!!
                                 .getString("WorkMode") == "Area"
                         ) {
@@ -1298,7 +1297,7 @@ object MatchMgr {
                                 if (wteam!!.gatiCount == lteam!!.gatiCount) {
                                     if (wteam.gatiCount + 1 > lteam.gatiCount) {
                                         if (wteam.gatiCount != 0) {
-                                            for (player in plugin.getServer().getOnlinePlayers()) {
+                                            for (player in plugin.server.onlinePlayers) {
                                                 val data = getPlayerData(player)
                                                 if (data!!.team == null || !data.isInMatch) continue
 
@@ -1309,7 +1308,7 @@ object MatchMgr {
                                                 } else {
                                                     sendMessage("§c§lカウントリードされた!", MessageType.PLAYER, player)
                                                     player.sendTitle("", "§c§lカウントリードされた!", 10, 20, 10)
-                                                    player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_PLACE, 1f, 3f)
+                                                    player.playSound(player.location, Sound.BLOCK_ANVIL_PLACE, 1f, 3f)
                                                 }
                                             }
                                         }
@@ -1339,19 +1338,19 @@ object MatchMgr {
                             }
 
                             if (s == 0 && entyo) {
-                                for (oplayer in plugin.getServer().getOnlinePlayers()) {
+                                for (oplayer in plugin.server.onlinePlayers) {
                                     if (getPlayerData(oplayer)!!.isInMatch) {
                                         oplayer.sendTitle("", "§7延長戦！", 10, 20, 10)
-                                        SclatUtil.sendMessage("§7延長戦！", MessageType.PLAYER, oplayer)
+                                        sendMessage("§7延長戦！", MessageType.PLAYER, oplayer)
                                     }
                                 }
                             }
 
                             if (match.team0!!.gatiCount == 100 || match.team1!!.gatiCount == 100) {
-                                for (oplayer in plugin.getServer().getOnlinePlayers()) {
+                                for (oplayer in plugin.server.onlinePlayers) {
                                     if (getPlayerData(oplayer)!!.isJoined && p !== oplayer) {
-                                        oplayer.setScoreboard(Bukkit.getScoreboardManager()!!.getNewScoreboard())
-                                        oplayer.getInventory().clear()
+                                        oplayer.scoreboard = Bukkit.getScoreboardManager()!!.newScoreboard
+                                        oplayer.inventory.clear()
                                         finishMatch(oplayer)
                                     }
                                 }
@@ -1364,11 +1363,11 @@ object MatchMgr {
                                 if (match.team0!!.gatiCount == 95) team0nokori = true
                                 if (match.team1!!.gatiCount == 95) team1nokori = true
 
-                                for (oplayer in plugin.getServer().getOnlinePlayers()) {
+                                for (oplayer in plugin.server.onlinePlayers) {
                                     if (getPlayerData(oplayer)!!.isInMatch) {
                                         oplayer.sendTitle("", "§7残りカウントあとわずか！", 10, 20, 10)
-                                        SclatUtil.sendMessage("§7残りカウントあとわずか！", MessageType.PLAYER, oplayer)
-                                        p.playSound(p.getLocation(), Sound.ENTITY_ZOMBIE_INFECT, 8.0f, 2.0f)
+                                        sendMessage("§7残りカウントあとわずか！", MessageType.PLAYER, oplayer)
+                                        p.playSound(p.location, Sound.ENTITY_ZOMBIE_INFECT, 8.0f, 2.0f)
                                     }
                                 }
                             }
@@ -1377,13 +1376,13 @@ object MatchMgr {
                         ObjectiveUtil.setLine(objective!!, lines)
 
                         if (s == 60 &&
-                            Sclat.Companion.conf!!
+                            Sclat.conf!!
                                 .config!!
                                 .getString("WorkMode") != "Area"
                         ) {
-                            for (oplayer in plugin.getServer().getOnlinePlayers()) {
+                            for (oplayer in plugin.server.onlinePlayers) {
                                 if (getPlayerData(oplayer)!!.isJoined) {
-                                    SclatUtil.sendMessage("§6§n残り1分！", MessageType.PLAYER, oplayer)
+                                    sendMessage("§6§n残り1分！", MessageType.PLAYER, oplayer)
                                 }
                             }
                             if (getPlayerData(p)!!.playerNumber == 1 && Plugins.NOTEBLOCKAPI.isLoaded) {
@@ -1391,7 +1390,7 @@ object MatchMgr {
                                 val song = nbs.song
                                 val radio = RadioSongPlayer(song)
                                 radio.setVolume(volume)
-                                for (oplayer in plugin.getServer().getOnlinePlayers()) {
+                                for (oplayer in plugin.server.onlinePlayers) {
                                     if (getPlayerData(oplayer)!!.settings!!.playBGM() &&
                                         getPlayerData(oplayer)!!.isJoined
                                     ) {
@@ -1402,15 +1401,15 @@ object MatchMgr {
                                         )
                                     }
                                 }
-                                radio.setPlaying(true)
-                                MatchMgr.stopMusic(radio, 1200, match)
+                                radio.isPlaying = true
+                                stopMusic(radio, 1200, match)
                             }
                         }
                         if (s <= 0 && !entyo) {
-                            for (oplayer in plugin.getServer().getOnlinePlayers()) {
+                            for (oplayer in plugin.server.onlinePlayers) {
                                 if (getPlayerData(oplayer)!!.isJoined && p !== oplayer) {
-                                    oplayer.setScoreboard(Bukkit.getScoreboardManager()!!.getNewScoreboard())
-                                    oplayer.getInventory().clear()
+                                    oplayer.scoreboard = Bukkit.getScoreboardManager()!!.newScoreboard
+                                    oplayer.inventory.clear()
                                     finishMatch(oplayer)
                                 }
                             }
@@ -1419,10 +1418,10 @@ object MatchMgr {
                         }
 
                         if (s <= -60) {
-                            for (oplayer in plugin.getServer().getOnlinePlayers()) {
+                            for (oplayer in plugin.server.onlinePlayers) {
                                 if (getPlayerData(oplayer)!!.isJoined && p !== oplayer) {
-                                    oplayer.setScoreboard(Bukkit.getScoreboardManager()!!.getNewScoreboard())
-                                    oplayer.getInventory().clear()
+                                    oplayer.scoreboard = Bukkit.getScoreboardManager()!!.newScoreboard
+                                    oplayer.inventory.clear()
                                     finishMatch(oplayer)
                                 }
                             }
@@ -1431,7 +1430,7 @@ object MatchMgr {
                         }
 
                         if (s <= 5 && s > 0) {
-                            for (oplayer in plugin.getServer().getOnlinePlayers()) {
+                            for (oplayer in plugin.server.onlinePlayers) {
                                 if (getPlayerData(oplayer)!!.isInMatch) {
                                     oplayer.sendTitle(
                                         ChatColor.GRAY.toString() + s.toString(),
@@ -1468,7 +1467,7 @@ object MatchMgr {
                 override fun run() {
                     try {
                         if (i == 0) {
-                            p.setDisplayName(p.getName())
+                            p.setDisplayName(p.name)
 
                             getPlayerData(p)!!.match!!.isFinished = true
                             if (getPlayerData(p)!!.playerNumber == 1) {
@@ -1476,7 +1475,7 @@ object MatchMgr {
                                     path!!.stop()
                                     path.reset()
                                 }
-                                if (Sclat.Companion.conf!!
+                                if (Sclat.conf!!
                                         .config!!
                                         .getString("WorkMode") == "Area"
                                 ) {
@@ -1484,9 +1483,9 @@ object MatchMgr {
                                         area!!.stop()
                                     }
                                 }
-                                for (oplayer in plugin.getServer().getOnlinePlayers()) {
+                                for (oplayer in plugin.server.onlinePlayers) {
                                     @Suppress("DEPRECATION")
-                                    oplayer.setMaxHealth(20.0)
+                                    oplayer.maxHealth = 20.0
                                 }
 
                                 for (uuid in DataMgr.pul) {
@@ -1495,7 +1494,7 @@ object MatchMgr {
 
                                 getPlayerData(p)!!.match!!.blockUpdater!!.stop()
 
-                                for (target in plugin.getServer().getOnlinePlayers()) {
+                                for (target in plugin.server.onlinePlayers) {
                                     sendWorldBorderWarningClearPacket(target)
                                 }
 
@@ -1517,20 +1516,20 @@ object MatchMgr {
                             armorStandMap.clear()
                             getPlayerData(p)!!.isInMatch = (false)
                             if (p.hasPotionEffect(PotionEffectType.SLOW)) p.removePotionEffect(PotionEffectType.SLOW)
-                            p.playSound(p.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 3f, 1.3f)
-                            loc = p.getLocation()
+                            p.playSound(p.location, Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 3f, 1.3f)
+                            loc = p.location
 
-                            p.getInventory().clear()
+                            p.inventory.clear()
 
                             // p.setPlayerListName(p.displayName);
                             val manager = Bukkit.getScoreboardManager()
-                            val scoreboard = manager!!.getNewScoreboard()
+                            val scoreboard = manager!!.newScoreboard
 
                         /*
                          * org.bukkit.scoreboard.Team team = scoreboard.registerNewTeam("");
                          * team.addPlayer(p); team.setColor(ChatColor.WHITE);
                          */
-                            p.setScoreboard(scoreboard)
+                            p.scoreboard = scoreboard
                         }
                         if (i == 2) {
                             getPlayerData(p)!!.canFly = (true)
@@ -1546,16 +1545,16 @@ object MatchMgr {
 
                         if (i >= 1 && i <= 45) {
                             p.teleport(loc!!)
-                            p.getInventory().clear()
+                            p.inventory.clear()
                             if (p.hasPotionEffect(PotionEffectType.POISON)) p.removePotionEffect(PotionEffectType.POISON)
                         }
                         if (i == 46) {
-                            for (player in plugin.getServer().getOnlinePlayers()) {
+                            for (player in plugin.server.onlinePlayers) {
                                 p.hidePlayer(plugin, player)
                             }
                         }
                         if (i == 46 && getPlayerData(p)!!.playerNumber == 1) {
-                            if (Sclat.Companion.conf!!
+                            if (Sclat.conf!!
                                     .config!!
                                     .getString("WorkMode") == "TDM"
                             ) {
@@ -1581,7 +1580,7 @@ object MatchMgr {
                                 match.winTeam = winteam
                                 match.isHikiwake = (hikiwake)
 
-                                for (oplayer in plugin.getServer().getOnlinePlayers()) {
+                                for (oplayer in plugin.server.onlinePlayers) {
                                     if (getPlayerData(oplayer)!!.isJoined) {
                                         tdmResultAnimation(
                                             oplayer,
@@ -1594,7 +1593,7 @@ object MatchMgr {
                                         )
                                     }
                                 }
-                            } else if (Sclat.Companion.conf!!
+                            } else if (Sclat.conf!!
                                     .config!!
                                     .getString("WorkMode") == "Area"
                             ) {
@@ -1632,7 +1631,7 @@ object MatchMgr {
                                 if (per > 100) per = 100
                                 if (per < 0) per = 0
 
-                                for (oplayer in plugin.getServer().getOnlinePlayers()) {
+                                for (oplayer in plugin.server.onlinePlayers) {
                                     if (getPlayerData(oplayer)!!.isJoined) {
                                         if ((per == 100 || per == 0) && !hikiwake) {
                                             areaResultAnimation(
@@ -1709,7 +1708,7 @@ object MatchMgr {
                                 if (per > 100) per = 100
                                 if (per < 0) per = 0
 
-                                for (oplayer in plugin.getServer().getOnlinePlayers()) {
+                                for (oplayer in plugin.server.onlinePlayers) {
                                     if (getPlayerData(oplayer)!!.isJoined) {
                                         resultAnimation(
                                             oplayer,
@@ -1725,23 +1724,23 @@ object MatchMgr {
                             }
                         }
 
-                        if (i == 46 && p.isOnline()) p.setGameMode(GameMode.ADVENTURE)
+                        if (i == 46 && p.isOnline) p.gameMode = GameMode.ADVENTURE
 
                         if (i >= 46 && i <= 156) {
                             p.teleport(getPlayerData(p)!!.match!!.mapData!!.resultLoc!!)
                         }
 
                         if (i == 80) {
-                            val data = getPlayerData(p)
+                            getPlayerData(p)
                             val commands: MutableList<String?> = ArrayList<String?>()
-                            commands.add("return " + p.getUniqueId())
+                            commands.add("return " + p.uniqueId)
                             commands.add("stop")
                             val sc =
                                 StatusClient(
-                                    Sclat.Companion.conf!!
+                                    Sclat.conf!!
                                         .config!!
                                         .getString("StatusShare.Host"),
-                                    Sclat.Companion.conf!!
+                                    Sclat.conf!!
                                         .config!!
                                         .getInt("StatusShare.Port"),
                                     commands,
@@ -1759,7 +1758,7 @@ object MatchMgr {
                             sendMessage("§a----------<< Match result >>----------", MessageType.PLAYER, p)
                             sendMessage("", MessageType.PLAYER, p)
 
-                            for (op in plugin.getServer().getOnlinePlayers()) {
+                            for (op in plugin.server.onlinePlayers) {
                                 val odata = getPlayerData(op)
                                 if (!odata!!.isJoined) continue
                                 if (odata.team!!.iD == data.team!!.iD) {
@@ -1767,7 +1766,7 @@ object MatchMgr {
                                         sendMessage(
                                             (
                                                 odata.team!!.teamColor!!.colorCode + "§l[ §l" +
-                                                    op.getDisplayName() + "§l ]" + ChatColor.RESET + "Kills : " +
+                                                    op.displayName + "§l ]" + ChatColor.RESET + "Kills : " +
                                                     ChatColor.YELLOW + odata.killCount + "   " + ChatColor.RESET + "Points : " +
                                                     ChatColor.YELLOW + odata.paintCount
                                             ),
@@ -1782,7 +1781,7 @@ object MatchMgr {
                                         sendMessage(
                                             (
                                                 odata.team!!.teamColor!!.colorCode + "[ " +
-                                                    op.getDisplayName() + " ]" + ChatColor.RESET + "Kills : " +
+                                                    op.displayName + " ]" + ChatColor.RESET + "Kills : " +
                                                     ChatColor.YELLOW + odata.killCount + "   " + ChatColor.RESET + "Points : " +
                                                     ChatColor.YELLOW + odata.paintCount
                                             ),
@@ -1803,7 +1802,7 @@ object MatchMgr {
                                 }
                             }
 
-                            for (op in plugin.getServer().getOnlinePlayers()) {
+                            for (op in plugin.server.onlinePlayers) {
                                 val odata = getPlayerData(op)
                                 if (!odata!!.isJoined) continue
                                 if (odata.team!!.iD != data.team!!.iD) {
@@ -1811,7 +1810,7 @@ object MatchMgr {
                                         sendMessage(
                                             (
                                                 odata.team!!.teamColor!!.colorCode + "§l[ §l" +
-                                                    op.getDisplayName() + "§l ]" + ChatColor.RESET + "Kills : " +
+                                                    op.displayName + "§l ]" + ChatColor.RESET + "Kills : " +
                                                     ChatColor.YELLOW + odata.killCount + "   " + ChatColor.RESET + "Points : " +
                                                     ChatColor.YELLOW + odata.paintCount
                                             ),
@@ -1826,7 +1825,7 @@ object MatchMgr {
                                         sendMessage(
                                             (
                                                 odata.team!!.teamColor!!.colorCode + "[ " +
-                                                    op.getDisplayName() + " ]" + ChatColor.RESET + "Kills : " +
+                                                    op.displayName + " ]" + ChatColor.RESET + "Kills : " +
                                                     ChatColor.YELLOW + odata.killCount + "   " + ChatColor.RESET + "Points : " +
                                                     ChatColor.YELLOW + odata.paintCount
                                             ),
@@ -1868,7 +1867,7 @@ object MatchMgr {
                             // pRank = 80 + (int)((double)data.killCount * 2.2D +
                             // (double)data.paintCount / 700D);
                             if (data.match!!.joinedPlayerCount == 1 ||
-                                !Sclat.Companion.conf!!
+                                !Sclat.conf!!
                                     .config!!
                                     .getBoolean("RateMatch")
                             ) {
@@ -1888,19 +1887,19 @@ object MatchMgr {
 
                             if (Sclat.type == ServerType.MATCH) {
                                 val commands: MutableList<String?> = ArrayList<String?>()
-                                commands.add("add money " + pMoney + " " + p.getUniqueId())
-                                commands.add("add level " + pLv + " " + p.getUniqueId())
-                                commands.add("add ticket " + pTicket + " " + p.getUniqueId())
-                                commands.add("add rank " + pRank + " " + p.getUniqueId())
-                                commands.add("add kill " + data.killCount + " " + p.getUniqueId())
-                                commands.add("add paint " + data.paintCount + " " + p.getUniqueId())
+                                commands.add("add money " + pMoney + " " + p.uniqueId)
+                                commands.add("add level " + pLv + " " + p.uniqueId)
+                                commands.add("add ticket " + pTicket + " " + p.uniqueId)
+                                commands.add("add rank " + pRank + " " + p.uniqueId)
+                                commands.add("add kill " + data.killCount + " " + p.uniqueId)
+                                commands.add("add paint " + data.paintCount + " " + p.uniqueId)
                                 commands.add("stop")
                                 val sc =
                                     StatusClient(
-                                        Sclat.Companion.conf!!
+                                        Sclat.conf!!
                                             .config!!
                                             .getString("StatusShare.Host"),
-                                        Sclat.Companion.conf!!
+                                        Sclat.conf!!
                                             .config!!
                                             .getInt("StatusShare.Port"),
                                         commands,
@@ -1964,38 +1963,38 @@ object MatchMgr {
                          * p.sendMessage(ChatColor.GREEN + "##########################");
                          */
                             val worldName =
-                                Sclat.Companion.conf!!
+                                Sclat.conf!!
                                     .config!!
                                     .getString("Lobby.WorldName")
                             val w = Bukkit.getServer().getWorld(worldName!!)
 
                             val ix =
-                                Sclat.Companion.conf!!
+                                Sclat.conf!!
                                     .config!!
                                     .getInt("Lobby.X")
                             val iy =
-                                Sclat.Companion.conf!!
+                                Sclat.conf!!
                                     .config!!
                                     .getInt("Lobby.Y")
                             val iz =
-                                Sclat.Companion.conf!!
+                                Sclat.conf!!
                                     .config!!
                                     .getInt("Lobby.Z")
                             val iyaw =
-                                Sclat.Companion.conf!!
+                                Sclat.conf!!
                                     .config!!
                                     .getInt("Lobby.Yaw")
                             val il = Location(w, ix.toDouble(), iy.toDouble(), iz.toDouble())
-                            il.setYaw(iyaw.toFloat())
+                            il.yaw = iyaw.toFloat()
                             val wc = getPlayerData(p)!!.weaponClass
                             p.teleport(il)
                             if (Sclat.type != ServerType.MATCH) {
                                 val join = ItemStack(Material.CHEST)
-                                val joinmeta = join.getItemMeta()
+                                val joinmeta = join.itemMeta
                                 joinmeta!!.setDisplayName("メインメニュー")
-                                join.setItemMeta(joinmeta)
-                                p.getInventory().clear()
-                                p.getInventory().setItem(0, join)
+                                join.itemMeta = joinmeta
+                                p.inventory.clear()
+                                p.inventory.setItem(0, join)
                             }
 
                             PlayerStatusMgr.sendHologram(p)
@@ -2010,13 +2009,13 @@ object MatchMgr {
                                     val commands: MutableList<String?> = ArrayList<String?>()
                                     commands.add(
                                         "stopped " +
-                                            Sclat.Companion.conf!!
+                                            Sclat.conf!!
                                                 .servers!!
                                                 .getString("ServerName"),
                                     )
                                     commands.add(
                                         "map " +
-                                            Sclat.Companion.conf!!
+                                            Sclat.conf!!
                                                 .servers!!
                                                 .getString("ServerName") + " " +
                                             getMapRandom(
@@ -2026,10 +2025,10 @@ object MatchMgr {
                                     commands.add("stop")
                                     val sc =
                                         StatusClient(
-                                            Sclat.Companion.conf!!
+                                            Sclat.conf!!
                                                 .config!!
                                                 .getString("StatusShare.Host"),
-                                            Sclat.Companion.conf!!
+                                            Sclat.conf!!
                                                 .config!!
                                                 .getInt("StatusShare.Port"),
                                             commands,
@@ -2049,14 +2048,14 @@ object MatchMgr {
 
                             DataMgr.joinedList.clear()
 
-                            p.setWalkSpeed(0.2f)
-                            p.setHealth(20.0)
+                            p.walkSpeed = 0.2f
+                            p.health = 20.0
 
-                            p.setGameMode(GameMode.ADVENTURE)
+                            p.gameMode = GameMode.ADVENTURE
                             // PlayerData data = new PlayerData(p);
                             // data.weaponClass = (wc);
                             // DataMgr.setPlayerData(p, data);
-                            for (player in plugin.getServer().getOnlinePlayers()) {
+                            for (player in plugin.server.onlinePlayers) {
                                 p.showPlayer(plugin, player)
                             }
 

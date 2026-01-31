@@ -93,28 +93,28 @@ class GameMgr : Listener {
     @EventHandler
     fun onPlayerJoin(e: PlayerJoinEvent) {
         val player = e.getPlayer()
-        player.getInventory().clear()
-        player.getInventory().setHeldItemSlot(0)
+        player.inventory.clear()
+        player.inventory.heldItemSlot = 0
 
-        player.setCollidable(false)
+        player.isCollidable = false
 
         // player.setDisplayName(player.getName());
         if (PlayerReturnManager.isReturned(
-                player.getUniqueId().toString(),
+                player.uniqueId.toString(),
             )
         ) {
-            e.setJoinMessage(ChatColor.GOLD.toString() + player.getName() + " returned from a match.")
+            e.joinMessage = ChatColor.GOLD.toString() + player.name + " returned from a match."
         }
 
-        player.setGameMode(GameMode.ADVENTURE)
+        player.gameMode = GameMode.ADVENTURE
         val data = PlayerData(player)
 
-        val uuid: String? = player.getUniqueId().toString()
+        val uuid: String = player.uniqueId.toString()
         val settings = PlayerSettings(player)
         data.settings = settings
         data.weaponClass = (
             getWeaponClass(
-                Sclat.Companion.conf!!
+                Sclat.conf!!
                     .config!!
                     .getString("DefaultClass"),
             )
@@ -124,9 +124,9 @@ class GameMgr : Listener {
         // ((LivingEntity)player).setCollidable(false);
         PlayerStatusMgr.setupPlayerStatus(player)
 
-        Sclat.Companion.conf!!
+        Sclat.conf!!
             .uUIDCash
-            .set(player.getUniqueId().toString(), player.getName())
+            .set(player.uniqueId.toString(), player.name)
         if (Sclat.type == ServerType.LOBBY) {
             // Add user-specific hologram
             // RankingHolograms rankingHolograms = new RankingHolograms(player);
@@ -149,7 +149,7 @@ class GameMgr : Listener {
                         0 -> {
                             run {
                                 // ----------------------------------------------------------------------------
-                                if (Sclat.Companion.conf!!
+                                if (Sclat.conf!!
                                         .config!!
                                         .getString("WorkMode") != "Trial" &&
                                     Sclat.type != ServerType.MATCH
@@ -169,17 +169,17 @@ class GameMgr : Listener {
                                     object : BukkitRunnable() {
                                         override fun run() {
                                             val item = ItemStack(Material.PLAYER_HEAD)
-                                            val meta = item.getItemMeta() as SkullMeta?
-                                            meta!!.setOwningPlayer(player)
-                                            meta.setDisplayName(player.getName())
-                                            item.setItemMeta(meta)
+                                            val meta = item.itemMeta as SkullMeta?
+                                            meta!!.owningPlayer = player
+                                            meta.setDisplayName(player.name)
+                                            item.itemMeta = meta
                                             data.playerHead = (CraftItemStack.asNMSCopy(item))
                                         }
                                     }
                                 head.runTaskAsynchronously(plugin)
                                 if (Sclat.type == ServerType.MATCH) {
-                                    if (Sclat.modList.contains(player.getName())) {
-                                        Sclat.modList.remove(player.getName())
+                                    if (Sclat.modList.contains(player.name)) {
+                                        Sclat.modList.remove(player.name)
                                     } else {
                                         MatchMgr.playerJoinMatch(player)
                                     }
@@ -199,17 +199,17 @@ class GameMgr : Listener {
                                     object : BukkitRunnable() {
                                         override fun run() {
                                             val item = ItemStack(Material.PLAYER_HEAD)
-                                            val meta = item.getItemMeta() as SkullMeta?
-                                            meta!!.setOwningPlayer(player)
-                                            meta.setDisplayName(player.getName())
-                                            item.setItemMeta(meta)
+                                            val meta = item.itemMeta as SkullMeta?
+                                            meta!!.owningPlayer = player
+                                            meta.setDisplayName(player.name)
+                                            item.itemMeta = meta
                                             data.playerHead = (CraftItemStack.asNMSCopy(item))
                                         }
                                     }
                                 head.runTaskAsynchronously(plugin)
                                 if (Sclat.type == ServerType.MATCH) {
-                                    if (Sclat.modList.contains(player.getName())) {
-                                        Sclat.modList.remove(player.getName())
+                                    if (Sclat.modList.contains(player.name)) {
+                                        Sclat.modList.remove(player.name)
                                     } else {
                                         MatchMgr.playerJoinMatch(player)
                                     }
@@ -226,17 +226,17 @@ class GameMgr : Listener {
                                     object : BukkitRunnable() {
                                         override fun run() {
                                             val item = ItemStack(Material.PLAYER_HEAD)
-                                            val meta = item.getItemMeta() as SkullMeta?
-                                            meta!!.setOwningPlayer(player)
-                                            meta.setDisplayName(player.getName())
-                                            item.setItemMeta(meta)
+                                            val meta = item.itemMeta as SkullMeta?
+                                            meta!!.owningPlayer = player
+                                            meta.setDisplayName(player.name)
+                                            item.itemMeta = meta
                                             data.playerHead = (CraftItemStack.asNMSCopy(item))
                                         }
                                     }
                                 head.runTaskAsynchronously(plugin)
                                 if (Sclat.type == ServerType.MATCH) {
-                                    if (Sclat.modList.contains(player.getName())) {
-                                        Sclat.modList.remove(player.getName())
+                                    if (Sclat.modList.contains(player.name)) {
+                                        Sclat.modList.remove(player.name)
                                     } else {
                                         MatchMgr.playerJoinMatch(player)
                                     }
@@ -261,13 +261,13 @@ class GameMgr : Listener {
         val packetHandler = PacketHandler(player)
         val pipeline =
             (player as CraftPlayer)
-                .getHandle()
+                .handle
                 .playerConnection.networkManager.channel
                 .pipeline()
-        pipeline.addBefore("packet_handler", "SclatPacketInjector:" + player.getName(), packetHandler)
+        pipeline.addBefore("packet_handler", "SclatPacketInjector:" + player.name, packetHandler)
 
         // 試し撃ちモード
-        if (Sclat.Companion.conf!!
+        if (Sclat.conf!!
                 .config!!
                 .getString("WorkMode") == "Trial"
         ) {
@@ -276,14 +276,14 @@ class GameMgr : Listener {
             data.team = match!!.team0
             player.teleport(Sclat.lobby!!)
             val join = ItemStack(Material.CHEST)
-            val joinmeta = join.getItemMeta()
+            val joinmeta = join.itemMeta
             joinmeta!!.setDisplayName(ChatColor.GOLD.toString() + "右クリックでメインメニューを開く")
-            join.setItemMeta(joinmeta)
-            player.getInventory().clear()
+            join.itemMeta = joinmeta
+            player.inventory.clear()
             SquidMgr.squidRunnable(player)
             SquidMgr.squidShowRunnable(player)
-            player.setExp(0.99f)
-            player.getInventory().setItem(7, join)
+            player.exp = 0.99f
+            player.inventory.setItem(7, join)
 
             if (Sclat.tutorial) {
                 setInkResetTimer(player)
@@ -296,13 +296,13 @@ class GameMgr : Listener {
 
                     override fun run() {
                         // WeaponClassMgr.weaponClass = (p);
-                        player.getInventory().clear()
+                        player.inventory.clear()
                         val join = ItemStack(Material.CHEST)
-                        val joinmeta = join.getItemMeta()
+                        val joinmeta = join.itemMeta
                         joinmeta!!.setDisplayName(ChatColor.GOLD.toString() + "右クリックでメインメニューを開く")
-                        join.setItemMeta(joinmeta)
-                        if (!Sclat.tutorial) player.getInventory().setItem(7, join)
-                        player.setExp(0f)
+                        join.itemMeta = joinmeta
+                        if (!Sclat.tutorial) player.inventory.setItem(7, join)
+                        player.exp = 0f
                         SPWeaponMgr.spWeaponRunnable(player)
                         SPWeaponMgr.armorRunnable(p)
                         SquidMgr.squidShowRunnable(player)
@@ -310,7 +310,7 @@ class GameMgr : Listener {
                             doCommands()
                             OpenGUI.openWeaponSelect(p, "Main", "null", false)
                         } else {
-                            player.getInventory().clear()
+                            player.inventory.clear()
                             getPlayerData(player)!!.reset()
                             getPlayerData(player)!!.isInMatch = false
                             getPlayerData(player)!!.isJoined = false
@@ -333,7 +333,7 @@ class GameMgr : Listener {
                                         getPlayerData(p)!!.tick = 10
                                         val wc =
                                             getWeaponClass(
-                                                Sclat.Companion.conf!!
+                                                Sclat.conf!!
                                                     .config!!
                                                     .getString("DefaultClass"),
                                             )
@@ -429,7 +429,7 @@ class GameMgr : Listener {
                                             funnelFloat(p)
                                         }
                                         WeaponClassMgr.setWeaponClass(p)
-                                        player.setExp(0.99f)
+                                        player.exp = 0.99f
 
                                         SPWeaponMgr.spWeaponRunnable(player)
                                         SquidMgr.squidShowRunnable(player)
@@ -452,7 +452,7 @@ class GameMgr : Listener {
             ArmorStandMgr.isSpawned = true
 
             val blocks: MutableList<Block> = ArrayList()
-            val b0 = Sclat.lobby!!.getBlock().getRelative(BlockFace.DOWN)
+            val b0 = Sclat.lobby!!.block.getRelative(BlockFace.DOWN)
             blocks.add(b0)
             blocks.add(b0.getRelative(BlockFace.EAST))
             blocks.add(b0.getRelative(BlockFace.NORTH))
@@ -463,18 +463,18 @@ class GameMgr : Listener {
             blocks.add(b0.getRelative(BlockFace.SOUTH_EAST))
             blocks.add(b0.getRelative(BlockFace.SOUTH_WEST))
             for (block in blocks) {
-                if (block.getType() == Material.WHITE_STAINED_GLASS) {
+                if (block.type == Material.WHITE_STAINED_GLASS) {
                     val pdata = PaintData(block)
                     pdata.match = match
                     pdata.team = match.team0
-                    pdata.setOrigianlType(block.getType())
+                    pdata.setOrigianlType(block.type)
                     setPaintDataFromBlock(block, pdata)
-                    block.setType(match.team0!!.teamColor!!.glass!!)
+                    block.type = match.team0!!.teamColor!!.glass!!
                 }
             }
 
             // Equipment
-            player.getInventory().clear()
+            player.inventory.clear()
 
             for (`as` in beaconMap.values) {
                 if (getBeaconFromplayer(player) === `as`) `as`!!.remove()
@@ -486,65 +486,65 @@ class GameMgr : Listener {
             return
         }
 
-        setUUIDData(player.getUniqueId().toString(), data)
-        player.setWalkSpeed(0.2f)
+        setUUIDData(player.uniqueId.toString(), data)
+        player.walkSpeed = 0.2f
         SquidMgr.squidRunnable(player)
 
-        player.getInventory().clear()
+        player.inventory.clear()
         if (Sclat.type != ServerType.LOBBY) {
             player.teleport(Sclat.lobby!!)
         } else {
-            if (PlayerStatusMgr.getTutorialState(player.getUniqueId().toString()) == 1) {
+            if (PlayerStatusMgr.getTutorialState(player.uniqueId.toString()) == 1) {
                 val worldName =
-                    Sclat.Companion.conf!!
+                    Sclat.conf!!
                         .config!!
                         .getString("Tutorial.WorldName")
                 val w = Bukkit.getWorld(worldName!!)
                 val ix =
-                    Sclat.Companion.conf!!
+                    Sclat.conf!!
                         .config!!
                         .getInt("Tutorial.X")
                 val iy =
-                    Sclat.Companion.conf!!
+                    Sclat.conf!!
                         .config!!
                         .getInt("Tutorial.Y")
                 val iz =
-                    Sclat.Companion.conf!!
+                    Sclat.conf!!
                         .config!!
                         .getInt("Tutorial.Z")
                 val iyaw =
-                    Sclat.Companion.conf!!
+                    Sclat.conf!!
                         .config!!
                         .getInt("Tutorial.Yaw")
                 val tutorial = Location(w, ix + 0.5, iy.toDouble(), iz + 0.5)
-                tutorial.setYaw(iyaw.toFloat())
+                tutorial.yaw = iyaw.toFloat()
                 player.teleport(tutorial)
             } else {
                 player.teleport(Sclat.lobby!!)
             }
         }
         if (Sclat.type != ServerType.MATCH) {
-            if (PlayerStatusMgr.getTutorialState(player.getUniqueId().toString()) == 2) {
+            if (PlayerStatusMgr.getTutorialState(player.uniqueId.toString()) == 2) {
                 val join = ItemStack(Material.CHEST)
-                val joinmeta = join.getItemMeta()
+                val joinmeta = join.itemMeta
                 joinmeta!!.setDisplayName(ChatColor.GOLD.toString() + "右クリックでメインメニューを開く")
-                join.setItemMeta(joinmeta)
-                player.getInventory().clear()
-                player.getInventory().setItem(0, join)
+                join.itemMeta = joinmeta
+                player.inventory.clear()
+                player.inventory.setItem(0, join)
             }
         } else {
             val b = ItemStack(Material.BARRIER)
-            val bmeta = b.getItemMeta()
+            val bmeta = b.itemMeta
             bmeta!!.setDisplayName("§c§n右クリックで退出")
-            b.setItemMeta(bmeta)
-            player.getInventory().clear()
-            player.getInventory().setItem(8, b)
+            b.itemMeta = bmeta
+            player.inventory.clear()
+            player.inventory.setItem(8, b)
 
             val join = ItemStack(Material.LIME_STAINED_GLASS)
-            val joinmeta = join.getItemMeta()
+            val joinmeta = join.itemMeta
             joinmeta!!.setDisplayName("§a§n右クリックで参加")
-            join.setItemMeta(joinmeta)
-            player.getInventory().setItem(0, join)
+            join.itemMeta = joinmeta
+            player.inventory.setItem(0, join)
         }
 
         if (Sclat.type == ServerType.LOBBY) {
@@ -553,11 +553,11 @@ class GameMgr : Listener {
             runnable.runTaskTimerAsynchronously(plugin, 0, 10)
         }
 
-        val match = getMatchFromId(Int.Companion.MAX_VALUE)
+        val match = getMatchFromId(Int.MAX_VALUE)
         data.match = match
         data.team = match!!.team0
 
-        if (!playerIsQuitMap.containsKey(player.getUniqueId().toString())) {
+        if (!playerIsQuitMap.containsKey(player.uniqueId.toString())) {
             setPlayerIsQuit(uuid, false)
         }
 
@@ -565,24 +565,24 @@ class GameMgr : Listener {
 
         if (Sclat.type == ServerType.LOBBY) {
             // if(PlayerStatusMgr.getTutorialState(player.getUniqueId().toString()) == 0){
-            if (PlayerStatusMgr.getTutorialState(player.getUniqueId().toString()) == 0) {
-                e.setJoinMessage(ChatColor.GREEN.toString() + player.getName() + " が初めてこのサーバーにログインしました！")
-                PlayerStatusMgr.setTutorialState(player.getUniqueId().toString(), 2)
+            if (PlayerStatusMgr.getTutorialState(player.uniqueId.toString()) == 0) {
+                e.joinMessage = ChatColor.GREEN.toString() + player.name + " が初めてこのサーバーにログインしました！"
+                PlayerStatusMgr.setTutorialState(player.uniqueId.toString(), 2)
 
                 val join = ItemStack(Material.CHEST)
-                val joinmeta = join.getItemMeta()
+                val joinmeta = join.itemMeta
                 joinmeta!!.setDisplayName(ChatColor.GOLD.toString() + "右クリックでメインメニューを開く")
-                join.setItemMeta(joinmeta)
-                player.getInventory().clear()
-                player.getInventory().setItem(0, join)
+                join.itemMeta = joinmeta
+                player.inventory.clear()
+                player.inventory.setItem(0, join)
             }
             // 操作説明本
             val termsBook = ItemStack(Material.WRITTEN_BOOK)
-            val bookMeta = termsBook.getItemMeta() as BookMeta?
+            val bookMeta = termsBook.itemMeta as BookMeta?
 
             // 本のタイトルと著者を設定
-            bookMeta!!.setTitle(ChatColor.DARK_GREEN.toString() + "操作説明")
-            bookMeta.setAuthor(ChatColor.GRAY.toString() + "Sclat運営")
+            bookMeta!!.title = ChatColor.DARK_GREEN.toString() + "操作説明"
+            bookMeta.author = ChatColor.GRAY.toString() + "Sclat運営"
 
             // 利用規約の内容を追加
             bookMeta.addPage(
@@ -732,11 +732,11 @@ class GameMgr : Listener {
             )
 
             // 作成したBookMetaを設定
-            termsBook.setItemMeta(bookMeta)
+            termsBook.itemMeta = bookMeta
 
             // プレイヤーのインベントリをクリアし、利用規約の本をアイテムスロットに追加
             // player.getInventory().clear();
-            player.getInventory().setItem(2, termsBook)
+            player.inventory.setItem(2, termsBook)
             // 操作説明本終
             // player.sendTitle("", "チュートリアルサーバーへ転送中...", 0, 20, 0);
             // Sclat.sendMessage("§bチュートリアルサーバーへ転送中...", MessageType.PLAYER, player);
@@ -761,19 +761,17 @@ class GameMgr : Listener {
     fun onPlayerSwapHandItems(event: PlayerSwapHandItemsEvent) {
         val player = event.getPlayer()
         if (getPlayerData(player)!!.isInMatch) OpenGUI.superJumpGUI(player)
-        event.setCancelled(true)
+        event.isCancelled = true
     }
 
     @EventHandler
     fun onDamageByFall(event: EntityDamageEvent) {
-        if (event.getCause() == EntityDamageEvent.DamageCause.FALL || event.getCause() == EntityDamageEvent.DamageCause.SUFFOCATION) {
-            event.setCancelled(
-                true,
-            )
+        if (event.cause == EntityDamageEvent.DamageCause.FALL || event.cause == EntityDamageEvent.DamageCause.SUFFOCATION) {
+            event.isCancelled = true
         }
         if (event.getEntity() is Player) {
             val target = event.getEntity() as Player
-            if (event.getCause() == EntityDamageEvent.DamageCause.POISON) {
+            if (event.cause == EntityDamageEvent.DamageCause.POISON) {
                 getPlayerData(target)!!.isPoisonCoolTime = (true)
                 SquidMgr.poisonCoolTime(target)
             }
@@ -783,7 +781,7 @@ class GameMgr : Listener {
                     val p: Player = target
 
                     override fun run() {
-                        target.setNoDamageTicks(0)
+                        target.noDamageTicks = 0
                     }
                 }
             task.runTaskLater(plugin, 1)
@@ -801,16 +799,16 @@ class GameMgr : Listener {
     @EventHandler
     fun onPlaceBlockByEntity(event: EntityChangeBlockEvent) {
         if (event.getEntity() !is Player) {
-            event.setCancelled(true)
+            event.isCancelled = true
             if (event
-                    .getBlock()
-                    .getType()
+                    .block
+                    .type
                     .toString()
                     .contains("CONCRETE")
             ) {
                 event
-                    .getBlock()
-                    .getState()
+                    .block
+                    .state
                     .update(false, false)
             }
         }
@@ -830,29 +828,29 @@ class GameMgr : Listener {
 
     @EventHandler
     fun onLeavesDecay(event: LeavesDecayEvent) {
-        event.setCancelled(true)
+        event.isCancelled = true
     }
 
     @EventHandler
     fun onBlockFall(event: BlockPhysicsEvent) {
-        if (event.getChangedType().toString().contains("CONCRETE")) event.setCancelled(true)
+        if (event.changedType.toString().contains("CONCRETE")) event.isCancelled = true
     }
 
     @EventHandler
     fun onPickItem(event: EntityPickupItemEvent) {
         if (event.getEntity() is Player) {
-            if ((event.getEntity() as Player).getGameMode() != GameMode.CREATIVE) event.setCancelled(true)
+            if ((event.getEntity() as Player).gameMode != GameMode.CREATIVE) event.isCancelled = true
         }
     }
 
     @EventHandler
     fun onWeatherChange(event: WeatherChangeEvent) {
-        event.setCancelled(true)
+        event.isCancelled = true
     }
 
     @EventHandler
     fun onPlayerDropItem(event: PlayerDropItemEvent) {
-        event.setCancelled(true)
+        event.isCancelled = true
         val player = event.getPlayer()
         val data = getPlayerData(player)
         if (data!!.isInMatch && data.sPGauge == 100) {
@@ -870,19 +868,19 @@ class GameMgr : Listener {
     @EventHandler
     fun onClickSign(e: PlayerInteractEvent) {
         val player = e.getPlayer()
-        val action = e.getAction()
-        if (e.getClickedBlock() != null) {
+        e.getAction()
+        if (e.clickedBlock != null) {
             if (e
-                    .getClickedBlock()!!
-                    .getType()
+                    .clickedBlock!!
+                    .type
                     .toString()
                     .endsWith("SIGN")
             ) {
-                val sign = e.getClickedBlock()!!.getState() as Sign
+                val sign = e.clickedBlock!!.state as Sign
 
                 if (Sclat.type == ServerType.LOBBY) {
                     for (ss in ServerStatusManager.serverList) {
-                        if (ss.sign == e.getClickedBlock()) {
+                        if (ss.sign == e.clickedBlock) {
                             if (ss.restartingServer) {
                                 sendMessage(
                                     "§c§nこのサーバーは再起動中です1~2分程度お待ちください",
@@ -960,7 +958,7 @@ class GameMgr : Listener {
                         // player.setResourcePack(conf.getConfig().getString("ResourcePackURL"));
                         player.sendMessage("以下のURLからリソースパックをダウンロードしてください")
                         player.sendMessage(
-                            Sclat.Companion.conf!!
+                            Sclat.conf!!
                                 .config!!
                                 .getString("ResourcePackURL")!!,
                         )
@@ -974,7 +972,7 @@ class GameMgr : Listener {
 
                     "Click To Download" -> {
                         player.setResourcePack(
-                            Sclat.Companion.conf!!
+                            Sclat.conf!!
                                 .config!!
                                 .getString("ResourcePackURL")!!,
                         )
@@ -1034,12 +1032,12 @@ class GameMgr : Listener {
                     }
 
                     "[ give chest ]" -> {
-                        PlayerStatusMgr.setTutorialState(player.getUniqueId().toString(), 2)
+                        PlayerStatusMgr.setTutorialState(player.uniqueId.toString(), 2)
                         val chest = ItemStack(Material.CHEST)
-                        val chestmeta = chest.getItemMeta()
+                        val chestmeta = chest.itemMeta
                         chestmeta!!.setDisplayName("右クリックでメインメニューを開く")
-                        chest.setItemMeta(chestmeta)
-                        player.getInventory().setItem(0, chest)
+                        chest.itemMeta = chestmeta
+                        player.inventory.setItem(0, chest)
                     }
 
                     "[ trade ticket ]" -> {
@@ -1062,7 +1060,7 @@ class GameMgr : Listener {
                         BungeeCordMgr.playerSendServer(player, list.get(Random().nextInt(list.size)))
                         getPlayerData(player)!!
                             .setServerName(
-                                Sclat.Companion.conf!!
+                                Sclat.conf!!
                                     .servers!!
                                     .getString("Tutorial.DisplayName"),
                             )
@@ -1086,14 +1084,13 @@ class GameMgr : Listener {
 
                     "[ PatchNote ]" -> {
                         val component = TextComponent()
-                        component.setText("[パッチノートを見るにはここをクリック]")
-                        component.setColor(net.md_5.bungee.api.ChatColor.AQUA)
-                        component.setClickEvent(
+                        component.text = "[パッチノートを見るにはここをクリック]"
+                        component.color = net.md_5.bungee.api.ChatColor.AQUA
+                        component.clickEvent =
                             ClickEvent(
                                 ClickEvent.Action.OPEN_URL,
                                 "https://be4rjp.github.io/Sclat-PatchNote/note/v102b/note.html",
-                            ),
-                        )
+                            )
                         player.spigot().sendMessage(component)
                     }
                 }
@@ -1103,11 +1100,11 @@ class GameMgr : Listener {
 
     @EventHandler
     fun onFrameBreak(event: HangingBreakByEntityEvent) {
-        if (event.getRemover() !is Player) return
-        val player = event.getRemover() as Player?
-        if (player!!.getGameMode() == GameMode.CREATIVE) return
-        if (event.getEntity() is ItemFrame) {
-            event.setCancelled(true)
+        if (event.remover !is Player) return
+        val player = event.remover as Player?
+        if (player!!.gameMode == GameMode.CREATIVE) return
+        if (event.entity is ItemFrame) {
+            event.isCancelled = true
         }
     }
 
@@ -1119,18 +1116,18 @@ class GameMgr : Listener {
         // PacketHandler
         val channel =
             (player as CraftPlayer)
-                .getHandle()
+                .handle
                 .playerConnection.networkManager.channel
         channel.eventLoop().submit<Any?>(
             Callable {
-                channel.pipeline().remove(player.getName())
+                channel.pipeline().remove(player.name)
                 null
             },
         )
 
         if (Sclat.type == ServerType.MATCH) {
             if (DataMgr.joinedList.contains(player)) {
-                setPlayerIsQuit(player.getUniqueId().toString(), true)
+                setPlayerIsQuit(player.uniqueId.toString(), true)
                 if (data!!.match!!.canJoin()) data.match!!.subJoinedPlayerCount()
 
                 val team = data.team
@@ -1142,42 +1139,42 @@ class GameMgr : Listener {
 
         val server = getPlayerData(player)!!.servername
         if (!server!!.isEmpty()) {
-            event.setQuitMessage("§6" + player.getName() + " switched to " + server)
+            event.quitMessage = "§6" + player.name + " switched to " + server
 
             if (Sclat.type == ServerType.LOBBY) {
-                for (serverName in Sclat.Companion.conf!!
+                for (serverName in Sclat.conf!!
                     .servers!!
                     .getConfigurationSection("Servers")!!
                     .getKeys(false)) {
                     val name =
-                        Sclat.Companion.conf!!
+                        Sclat.conf!!
                             .servers!!
                             .getString("Servers." + serverName + ".Server")
                     val displayName =
-                        Sclat.Companion.conf!!
+                        Sclat.conf!!
                             .servers!!
                             .getString("Servers." + serverName + ".DisplayName")
                     if (displayName == server) {
                         val commands: MutableList<String?> = ArrayList<String?>()
-                        commands.add("set weapon " + data!!.weaponClass!!.className + " " + player.getUniqueId())
-                        commands.add("set gear " + data.gearNumber + " " + player.getUniqueId())
-                        commands.add("set rank " + PlayerStatusMgr.getRank(player) + " " + player.getUniqueId())
+                        commands.add("set weapon " + data!!.weaponClass!!.className + " " + player.uniqueId)
+                        commands.add("set gear " + data.gearNumber + " " + player.uniqueId)
+                        commands.add("set rank " + PlayerStatusMgr.getRank(player) + " " + player.uniqueId)
                         commands.add(
                             (
                                 "setting " +
-                                    Sclat.Companion.conf!!
+                                    Sclat.conf!!
                                         .playerSettings
-                                        .getString("Settings." + player.getUniqueId()) +
-                                    " " + player.getUniqueId()
+                                        .getString("Settings." + player.uniqueId) +
+                                    " " + player.uniqueId
                             ),
                         )
                         commands.add("stop")
                         val sc =
                             EquipmentClient(
-                                Sclat.Companion.conf!!
+                                Sclat.conf!!
                                     .config!!
                                     .getString("EquipShare." + name + ".Host"),
-                                Sclat.Companion.conf!!
+                                Sclat.conf!!
                                     .config!!
                                     .getInt("EquipShare." + name + ".Port"),
                                 commands,
@@ -1187,24 +1184,24 @@ class GameMgr : Listener {
                 }
                 if (server == "sclattest") {
                     val commands: MutableList<String?> = ArrayList<String?>()
-                    commands.add("set rank " + PlayerStatusMgr.getRank(player) + " " + player.getUniqueId())
-                    commands.add("set lv " + PlayerStatusMgr.getLv(player) + " " + player.getUniqueId())
+                    commands.add("set rank " + PlayerStatusMgr.getRank(player) + " " + player.uniqueId)
+                    commands.add("set lv " + PlayerStatusMgr.getLv(player) + " " + player.uniqueId)
                     commands.add(
                         (
                             "setting " +
-                                Sclat.Companion.conf!!
+                                Sclat.conf!!
                                     .playerSettings
-                                    .getString("Settings." + player.getUniqueId()) +
-                                " " + player.getUniqueId()
+                                    .getString("Settings." + player.uniqueId) +
+                                " " + player.uniqueId
                         ),
                     )
                     commands.add("stop")
                     val sc =
                         EquipmentClient(
-                            Sclat.Companion.conf!!
+                            Sclat.conf!!
                                 .config!!
                                 .getString("EquipShare.Trial.Host"),
-                            Sclat.Companion.conf!!
+                            Sclat.conf!!
                                 .config!!
                                 .getInt("EquipShare.Trial.Port"),
                             commands,

@@ -49,41 +49,41 @@ object ArmorStandMgr {
                 val c: Int = 0
 
                 override fun run() {
-                    for (`as` in world.getEntities()) {
+                    for (`as` in world.entities) {
                         if (`as` is ArmorStand) {
-                            if (`as`.getCustomName() == null) continue
-                            if (!`as`.isVisible()) continue
-                            if ((`as`.getCustomName() != "Path") &&
-                                (`as`.getCustomName() != "21") &&
-                                (`as`.getCustomName() != "100") &&
-                                (`as`.getCustomName() != "SplashShield") &&
-                                (`as`.getCustomName() != "Kasa")
+                            if (`as`.customName == null) continue
+                            if (!`as`.isVisible) continue
+                            if ((`as`.customName != "Path") &&
+                                (`as`.customName != "21") &&
+                                (`as`.customName != "100") &&
+                                (`as`.customName != "SplashShield") &&
+                                (`as`.customName != "Kasa")
                             ) {
-                                for (o_player in plugin.getServer().getOnlinePlayers()) {
-                                    (o_player as CraftPlayer).getHandle().playerConnection.sendPacket(
+                                for (o_player in plugin.server.onlinePlayers) {
+                                    (o_player as CraftPlayer).handle.playerConnection.sendPacket(
                                         PacketPlayOutEntityEquipment(
-                                            `as`.getEntityId(),
+                                            `as`.entityId,
                                             EnumItemSlot.HEAD,
                                             CraftItemStack.asNMSCopy(ItemStack(Material.LEATHER_HELMET)),
                                         ),
                                     )
-                                    o_player.getHandle().playerConnection.sendPacket(
+                                    o_player.handle.playerConnection.sendPacket(
                                         PacketPlayOutEntityEquipment(
-                                            `as`.getEntityId(),
+                                            `as`.entityId,
                                             EnumItemSlot.CHEST,
                                             CraftItemStack.asNMSCopy(ItemStack(Material.LEATHER_CHESTPLATE)),
                                         ),
                                     )
-                                    o_player.getHandle().playerConnection.sendPacket(
+                                    o_player.handle.playerConnection.sendPacket(
                                         PacketPlayOutEntityEquipment(
-                                            `as`.getEntityId(),
+                                            `as`.entityId,
                                             EnumItemSlot.LEGS,
                                             CraftItemStack.asNMSCopy(ItemStack(Material.LEATHER_LEGGINGS)),
                                         ),
                                     )
-                                    o_player.getHandle().playerConnection.sendPacket(
+                                    o_player.handle.playerConnection.sendPacket(
                                         PacketPlayOutEntityEquipment(
-                                            `as`.getEntityId(),
+                                            `as`.entityId,
                                             EnumItemSlot.FEET,
                                             CraftItemStack.asNMSCopy(ItemStack(Material.LEATHER_BOOTS)),
                                         ),
@@ -98,15 +98,15 @@ object ArmorStandMgr {
     }
 
     fun armorStandSetup(player: Player) {
-        for (e in player.getWorld().getEntities()) {
+        for (e in player.world.entities) {
             if (e is ArmorStand || e is Snowball) {
-                if (e.getCustomName() == null) continue
-                if (e.getCustomName() == "Path") continue
+                if (e.customName == null) continue
+                if (e.customName == "Path") continue
                 e.remove()
             }
         }
 
-        for (name in Sclat.Companion.conf!!
+        for (name in Sclat.conf!!
             .armorStandSettings!!
             .getConfigurationSection("ArmorStand")!!
             .getKeys(false)) {
@@ -114,37 +114,37 @@ object ArmorStandMgr {
                 Bukkit
                     .getServer()
                     .getWorld(
-                        Sclat.Companion.conf!!
+                        Sclat.conf!!
                             .armorStandSettings!!
                             .getString("ArmorStand." + name + ".WorldName")!!,
                     )
             val ix =
-                Sclat.Companion.conf!!
+                Sclat.conf!!
                     .armorStandSettings!!
                     .getInt("ArmorStand." + name + ".X")
             val iy =
-                Sclat.Companion.conf!!
+                Sclat.conf!!
                     .armorStandSettings!!
                     .getInt("ArmorStand." + name + ".Y")
             val iz =
-                Sclat.Companion.conf!!
+                Sclat.conf!!
                     .armorStandSettings!!
                     .getInt("ArmorStand." + name + ".Z")
             val iyaw =
-                Sclat.Companion.conf!!
+                Sclat.conf!!
                     .armorStandSettings!!
                     .getInt("ArmorStand." + name + ".Yaw")
             val il = Location(w, ix + 0.5, iy.toDouble(), iz + 0.5)
-            il.setYaw(iyaw.toFloat())
+            il.yaw = iyaw.toFloat()
             val `as` = w!!.spawnEntity(il, EntityType.ARMOR_STAND) as ArmorStand
             // as.setHelmet(new ItemStack(Material.LEATHER_HELMET));
             // as.setChestplate(new ItemStack(Material.LEATHER_CHESTPLATE));
             // as.setLeggings(new ItemStack(Material.LEATHER_LEGGINGS));
             // as.setBoots(new ItemStack(Material.LEATHER_BOOTS));
-            `as`.setInvulnerable(true)
-            `as`.setCustomName("20.0")
-            `as`.setCustomNameVisible(true)
-            `as`.setVisible(true)
+            `as`.isInvulnerable = true
+            `as`.customName = "20.0"
+            `as`.isCustomNameVisible = true
+            `as`.isVisible = true
             setArmorStandPlayer(`as`, player)
         }
     }
@@ -152,7 +152,7 @@ object ArmorStandMgr {
     @JvmStatic
     fun beaconArmorStandSetup(player: Player) {
         val al: Location?
-        if (Sclat.Companion.conf!!
+        if (Sclat.conf!!
                 .config!!
                 .getString("WorkMode") == "Trial"
         ) {
@@ -160,13 +160,13 @@ object ArmorStandMgr {
         } else {
             al = getPlayerData(player)!!.matchLocation
         }
-        val `as` = player.getWorld().spawnEntity(al!!, EntityType.ARMOR_STAND) as ArmorStand
-        `as`.setVisible(false)
-        `as`.setSmall(true)
+        val `as` = player.world.spawnEntity(al!!, EntityType.ARMOR_STAND) as ArmorStand
+        `as`.isVisible = false
+        `as`.isSmall = true
         `as`.setGravity(false)
-        `as`.setCustomName("100")
+        `as`.customName = "100"
         `as`.setBasePlate(false)
-        `as`.setCustomNameVisible(false)
+        `as`.isCustomNameVisible = false
         setArmorStandPlayer(`as`, player)
         setBeaconFromPlayer(player, `as`)
         val effect: BukkitRunnable =
@@ -175,15 +175,15 @@ object ArmorStandMgr {
                 var c: Int = 0
 
                 override fun run() {
-                    if (`as`.getCustomName() == "21") {
+                    if (`as`.customName == "21") {
                         val dustOptions =
                             Particle.DustOptions(
                                 getPlayerData(p)!!.team!!.teamColor!!.bukkitColor!!,
                                 1f,
                             )
-                        p.getWorld().spawnParticle<Particle.DustOptions?>(
+                        p.world.spawnParticle<Particle.DustOptions?>(
                             Particle.REDSTONE,
-                            `as`.getLocation().add(0.0, 0.7, 0.0),
+                            `as`.location.add(0.0, 0.7, 0.0),
                             3,
                             0.3,
                             0.3,
@@ -192,11 +192,11 @@ object ArmorStandMgr {
                             dustOptions,
                         )
                         if (c % 10 == 0) {
-                            for (player in plugin.getServer().getOnlinePlayers()) {
-                                if (`as`.getWorld() === player.getWorld()) {
-                                    (player as CraftPlayer).getHandle().playerConnection.sendPacket(
+                            for (player in plugin.server.onlinePlayers) {
+                                if (`as`.world === player.world) {
+                                    (player as CraftPlayer).handle.playerConnection.sendPacket(
                                         PacketPlayOutEntityEquipment(
-                                            `as`.getEntityId(),
+                                            `as`.entityId,
                                             EnumItemSlot.HEAD,
                                             CraftItemStack.asNMSCopy(ItemStack(Material.IRON_TRAPDOOR)),
                                         ),
@@ -207,9 +207,9 @@ object ArmorStandMgr {
                             // 索敵機能
                             val distance = 8.0
 
-                            for (target in plugin.getServer().getOnlinePlayers()) {
-                                if (!getPlayerData(target)!!.isInMatch || target.getWorld() !== p.getWorld()) continue
-                                if (target.getLocation().distance(`as`.getLocation()) <= distance) {
+                            for (target in plugin.server.onlinePlayers) {
+                                if (!getPlayerData(target)!!.isInMatch || target.world !== p.world) continue
+                                if (target.location.distance(`as`.location) <= distance) {
                                     if (getPlayerData(player)!!.team!!.iD !=
                                         getPlayerData(target)!!
                                             .team!!
@@ -220,16 +220,16 @@ object ArmorStandMgr {
                                 }
                             }
 
-                            for (as1 in player.getWorld().getEntities()) {
-                                if (as1.getLocation().distance(`as`.getLocation()) <= distance) {
-                                    if (as1.getCustomName() != null) {
-                                        if (as1.getCustomName() == null) continue
+                            for (as1 in player.world.entities) {
+                                if (as1.location.distance(`as`.location) <= distance) {
+                                    if (as1.customName != null) {
+                                        if (as1.customName == null) continue
                                         if (as1 is ArmorStand &&
-                                            (as1.getCustomName() != "Path") &&
-                                            (as1.getCustomName() != "21") &&
-                                            (as1.getCustomName() != "100") &&
-                                            (as1.getCustomName() != "SplashShield") &&
-                                            (as1.getCustomName() != "Kasa")
+                                            (as1.customName != "Path") &&
+                                            (as1.customName != "21") &&
+                                            (as1.customName != "100") &&
+                                            (as1.customName != "SplashShield") &&
+                                            (as1.customName != "Kasa")
                                         ) {
                                             as1
                                                 .addPotionEffect(PotionEffect(PotionEffectType.GLOWING, 40, 1))
@@ -241,11 +241,11 @@ object ArmorStandMgr {
                         c++
                     } else {
                         if (c % 10 == 0) {
-                            for (player in plugin.getServer().getOnlinePlayers()) {
-                                if (`as`.getWorld() === player.getWorld()) {
-                                    (player as CraftPlayer).getHandle().playerConnection.sendPacket(
+                            for (player in plugin.server.onlinePlayers) {
+                                if (`as`.world === player.world) {
+                                    (player as CraftPlayer).handle.playerConnection.sendPacket(
                                         PacketPlayOutEntityEquipment(
-                                            `as`.getEntityId(),
+                                            `as`.entityId,
                                             EnumItemSlot.HEAD,
                                             CraftItemStack.asNMSCopy(ItemStack(Material.AIR)),
                                         ),
@@ -254,7 +254,7 @@ object ArmorStandMgr {
                             }
                         }
                     }
-                    if (!getPlayerData(p)!!.isInMatch || !p.isOnline()) cancel()
+                    if (!getPlayerData(p)!!.isInMatch || !p.isOnline) cancel()
                 }
             }
         effect.runTaskTimer(plugin, 0, 4)
@@ -264,13 +264,13 @@ object ArmorStandMgr {
                 val p: Player = player
 
                 override fun run() {
-                    val loc = `as`.getLocation()
-                    var yaw = `as`.getLocation().getYaw()
+                    val loc = `as`.location
+                    var yaw = `as`.location.yaw
                     if (yaw >= 175) yaw = -180f
                     yaw += 3f
-                    loc.setYaw(yaw)
+                    loc.yaw = yaw
                     `as`.teleport(loc)
-                    if (!getPlayerData(p)!!.isInMatch || !p.isOnline()) cancel()
+                    if (!getPlayerData(p)!!.isInMatch || !p.isOnline) cancel()
                 }
             }
         task2.runTaskTimer(plugin, 0, 2)
@@ -279,7 +279,7 @@ object ArmorStandMgr {
     @JvmStatic
     fun sprinklerArmorStandSetup(player: Player) {
         val al: Location?
-        if (Sclat.Companion.conf!!
+        if (Sclat.conf!!
                 .config!!
                 .getString("WorkMode") == "Trial"
         ) {
@@ -287,13 +287,13 @@ object ArmorStandMgr {
         } else {
             al = getPlayerData(player)!!.matchLocation
         }
-        val `as` = player.getWorld().spawnEntity(al!!, EntityType.ARMOR_STAND) as ArmorStand
-        `as`.setVisible(false)
-        `as`.setSmall(true)
+        val `as` = player.world.spawnEntity(al!!, EntityType.ARMOR_STAND) as ArmorStand
+        `as`.isVisible = false
+        `as`.isSmall = true
         `as`.setGravity(false)
-        `as`.setCustomName("100")
+        `as`.customName = "100"
         `as`.setBasePlate(false)
-        `as`.setCustomNameVisible(false)
+        `as`.isCustomNameVisible = false
         setArmorStandPlayer(`as`, player)
         setSprinklerFromPlayer(player, `as`)
         val task: BukkitRunnable =
@@ -302,15 +302,15 @@ object ArmorStandMgr {
                 var c: Int = 0
 
                 override fun run() {
-                    if (`as`.getCustomName() == "21") {
+                    if (`as`.customName == "21") {
                         val dustOptions =
                             Particle.DustOptions(
                                 getPlayerData(p)!!.team!!.teamColor!!.bukkitColor!!,
                                 1f,
                             )
-                        p.getWorld().spawnParticle<Particle.DustOptions?>(
+                        p.world.spawnParticle<Particle.DustOptions?>(
                             Particle.REDSTONE,
-                            `as`.getLocation().add(0.0, 0.7, 0.0),
+                            `as`.location.add(0.0, 0.7, 0.0),
                             3,
                             0.3,
                             0.3,
@@ -319,14 +319,14 @@ object ArmorStandMgr {
                             dustOptions,
                         )
                         if (c % 10 == 0) {
-                            for (player in plugin.getServer().getOnlinePlayers()) {
-                                if (`as`.getWorld() === player.getWorld()) {
+                            for (player in plugin.server.onlinePlayers) {
+                                if (`as`.world === player.world) {
                                     (player as CraftPlayer)
-                                        .getHandle()
+                                        .handle
                                         .playerConnection
                                         .sendPacket(
                                             PacketPlayOutEntityEquipment(
-                                                `as`.getEntityId(),
+                                                `as`.entityId,
                                                 EnumItemSlot.HEAD,
                                                 CraftItemStack.asNMSCopy(
                                                     ItemStack(
@@ -341,11 +341,11 @@ object ArmorStandMgr {
                         c++
                     } else {
                         if (c % 10 == 0) {
-                            for (player in plugin.getServer().getOnlinePlayers()) {
-                                if (`as`.getWorld() === player.getWorld()) {
-                                    (player as CraftPlayer).getHandle().playerConnection.sendPacket(
+                            for (player in plugin.server.onlinePlayers) {
+                                if (`as`.world === player.world) {
+                                    (player as CraftPlayer).handle.playerConnection.sendPacket(
                                         PacketPlayOutEntityEquipment(
-                                            `as`.getEntityId(),
+                                            `as`.entityId,
                                             EnumItemSlot.HEAD,
                                             CraftItemStack.asNMSCopy(ItemStack(Material.AIR)),
                                         ),
@@ -354,7 +354,7 @@ object ArmorStandMgr {
                             }
                         }
                     }
-                    if (!getPlayerData(p)!!.isInMatch || !p.isOnline()) cancel()
+                    if (!getPlayerData(p)!!.isInMatch || !p.isOnline) cancel()
                 }
             }
         task.runTaskTimer(plugin, 0, 4)
@@ -364,13 +364,13 @@ object ArmorStandMgr {
                 val p: Player = player
 
                 override fun run() {
-                    val loc = `as`.getLocation()
-                    var yaw = `as`.getLocation().getYaw()
+                    val loc = `as`.location
+                    var yaw = `as`.location.yaw
                     if (yaw >= 175) yaw = -180f
                     yaw += 3f
-                    loc.setYaw(yaw)
+                    loc.yaw = yaw
                     `as`.teleport(loc)
-                    if (!getPlayerData(p)!!.isInMatch || !p.isOnline()) cancel()
+                    if (!getPlayerData(p)!!.isInMatch || !p.isOnline) cancel()
                 }
             }
         task2.runTaskTimer(plugin, 0, 2)
@@ -380,8 +380,8 @@ object ArmorStandMgr {
                 val p: Player = player
 
                 override fun run() {
-                    if (`as`.getCustomName() == "21") {
-                        val b = `as`.getLocation().add(0.0, 0.5, 0.0).getBlock()
+                    if (`as`.customName == "21") {
+                        val b = `as`.location.add(0.0, 0.5, 0.0).block
                         val u = b.getRelative(BlockFace.UP)
                         val n = b.getRelative(BlockFace.NORTH)
                         val s = b.getRelative(BlockFace.SOUTH)
@@ -391,14 +391,14 @@ object ArmorStandMgr {
 
                         var vec = Vector(0, 1, 0)
 
-                        if (n.getType() != Material.AIR) vec = Vector(0.0, 0.0, 0.5)
-                        if (s.getType() != Material.AIR) vec = Vector(0.0, 0.0, -0.5)
-                        if (w.getType() != Material.AIR) vec = Vector(0.5, 0.0, 0.0)
-                        if (e.getType() != Material.AIR) vec = Vector(-0.5, 0.0, 0.0)
-                        if (u.getType() != Material.AIR) vec = Vector(0.0, -0.5, 0.0)
-                        if (d.getType() != Material.AIR) vec = Vector(0.0, 0.5, 0.0)
+                        if (n.type != Material.AIR) vec = Vector(0.0, 0.0, 0.5)
+                        if (s.type != Material.AIR) vec = Vector(0.0, 0.0, -0.5)
+                        if (w.type != Material.AIR) vec = Vector(0.5, 0.0, 0.0)
+                        if (e.type != Material.AIR) vec = Vector(-0.5, 0.0, 0.0)
+                        if (u.type != Material.AIR) vec = Vector(0.0, -0.5, 0.0)
+                        if (d.type != Material.AIR) vec = Vector(0.0, 0.5, 0.0)
                         SprinklerMgr.sprinklerShoot(p, `as`, vec)
-                        if (!getPlayerData(p)!!.isInMatch || !p.isOnline()) cancel()
+                        if (!getPlayerData(p)!!.isInMatch || !p.isOnline) cancel()
                     }
                 }
             }
@@ -411,90 +411,86 @@ object ArmorStandMgr {
         damage: Double,
         shooter: Player,
     ) {
-        if (`as`.getCustomName() == null) return
+        if (`as`.customName == null) return
 
-        if (`as`.getCustomName()!!.contains("§")) return
+        if (`as`.customName!!.contains("§")) return
 
-        if (`as`.getCustomName() == "SplashShield") {
+        if (`as`.customName == "SplashShield") {
             val ssdata = getSplashShieldDataFromArmorStand(`as`)
             if (getPlayerData(ssdata!!.player)!!.team != getPlayerData(shooter)!!.team) {
                 ssdata.damage = (ssdata.damage + damage)
                 // ssdata.setDamage(ssdata.damage +
                 // DataMgr.getPlayerData(shooter).weaponClass.mainWeapon.damage);
-                `as`.getWorld().playSound(`as`.getLocation(), Sound.ENTITY_PLAYER_HURT, 0.8f, 1.2f)
+                `as`.world.playSound(`as`.location, Sound.ENTITY_PLAYER_HURT, 0.8f, 1.2f)
             }
             return
         }
 
-        if (`as`.getCustomName() == "Kasa") {
+        if (`as`.customName == "Kasa") {
             val ssdata = getKasaDataFromArmorStand(`as`)
             if (getPlayerData(ssdata!!.player)!!.team != getPlayerData(shooter)!!.team) {
                 ssdata.damage = (ssdata.damage + damage)
                 if (ssdata.damage > 200) {
                     `as`
-                        .getWorld()
-                        .playSound(`as`.getLocation(), Sound.ENTITY_ITEM_BREAK, 0.8f, 0.8f)
+                        .world
+                        .playSound(`as`.location, Sound.ENTITY_ITEM_BREAK, 0.8f, 0.8f)
                 }
-                `as`.getWorld().playSound(`as`.getLocation(), Sound.ENTITY_PLAYER_HURT, 0.8f, 1.2f)
+                `as`.world.playSound(`as`.location, Sound.ENTITY_PLAYER_HURT, 0.8f, 1.2f)
             }
             return
         }
 
-        if (`as`.getCustomName() == "Path") {
+        if (`as`.customName == "Path") {
             for (path in getPlayerData(shooter)!!.match!!.mapData!!.pathList) {
                 if (path!!.armorStand == `as`) path.setTeam(getPlayerData(shooter)!!.team)
             }
             return
         }
 
-        val health = `as`.getCustomName()!!.toDouble()
+        val health = `as`.customName!!.toDouble()
         if (health <= 20.0) {
-            if (`as`.isVisible()) {
+            if (`as`.isVisible) {
                 if (health > damage) {
                     val h = health - damage
                     val rh = (Math.round(h * 10).toDouble()) / 10
-                    `as`.setCustomName(rh.toString())
-                    `as`.getLocation().getWorld()!!.playSound(`as`.getLocation(), Sound.ENTITY_PLAYER_HURT, 1f, 1f)
+                    `as`.customName = rh.toString()
+                    `as`.location.world!!.playSound(`as`.location, Sound.ENTITY_PLAYER_HURT, 1f, 1f)
                 } else {
-                    createInkExplosionEffect(`as`.getEyeLocation().add(0.0, -1.0, 0.0), 3.0, 30, shooter)
-                    shooter.playSound(shooter.getLocation(), Sound.ENTITY_ARROW_HIT_PLAYER, 1f, 10f)
-                    val drop1 = `as`.getWorld().dropItem(`as`.getEyeLocation(), ItemStack(Material.LEATHER_HELMET))
+                    createInkExplosionEffect(`as`.eyeLocation.add(0.0, -1.0, 0.0), 3.0, 30, shooter)
+                    shooter.playSound(shooter.location, Sound.ENTITY_ARROW_HIT_PLAYER, 1f, 10f)
+                    val drop1 = `as`.world.dropItem(`as`.eyeLocation, ItemStack(Material.LEATHER_HELMET))
                     val drop2 =
-                        `as`.getWorld().dropItem(
-                            `as`.getEyeLocation(),
+                        `as`.world.dropItem(
+                            `as`.eyeLocation,
                             ItemStack(Material.LEATHER_CHESTPLATE),
                         )
-                    val drop3 = `as`.getWorld().dropItem(`as`.getEyeLocation(), ItemStack(Material.LEATHER_LEGGINGS))
-                    val drop4 = `as`.getWorld().dropItem(`as`.getEyeLocation(), ItemStack(Material.LEATHER_BOOTS))
+                    val drop3 = `as`.world.dropItem(`as`.eyeLocation, ItemStack(Material.LEATHER_LEGGINGS))
+                    val drop4 = `as`.world.dropItem(`as`.eyeLocation, ItemStack(Material.LEATHER_BOOTS))
                     val random = 0.4
-                    drop1.setVelocity(
+                    drop1.velocity =
                         Vector(
                             Math.random() * random - random / 2,
                             random * 2 / 3,
                             Math.random() * random - random / 2,
-                        ),
-                    )
-                    drop2.setVelocity(
+                        )
+                    drop2.velocity =
                         Vector(
                             Math.random() * random - random / 2,
                             random * 2 / 3,
                             Math.random() * random - random / 2,
-                        ),
-                    )
-                    drop3.setVelocity(
+                        )
+                    drop3.velocity =
                         Vector(
                             Math.random() * random - random / 2,
                             random * 2 / 3,
                             Math.random() * random - random / 2,
-                        ),
-                    )
-                    drop4.setVelocity(
+                        )
+                    drop4.velocity =
                         Vector(
                             Math.random() * random - random / 2,
                             random * 2 / 3,
                             Math.random() * random - random / 2,
-                        ),
-                    )
+                        )
 
                     val bd =
                         getPlayerData(shooter)!!
@@ -502,9 +498,9 @@ object ArmorStandMgr {
                             .teamColor!!
                             .wool!!
                             .createBlockData()
-                    `as`.getWorld().spawnParticle<BlockData?>(
+                    `as`.world.spawnParticle<BlockData?>(
                         Particle.BLOCK_DUST,
-                        `as`.getEyeLocation(),
+                        `as`.eyeLocation,
                         15,
                         1.0,
                         1.0,
@@ -513,9 +509,9 @@ object ArmorStandMgr {
                         bd,
                     )
 
-                    `as`.setCustomNameVisible(false)
-                    `as`.setVisible(false)
-                    `as`.setMarker(true)
+                    `as`.isCustomNameVisible = false
+                    `as`.isVisible = false
+                    `as`.isMarker = true
 
                     // as.setHelmet(new ItemStack(Material.AIR));
                     // as.setChestplate(new ItemStack(Material.AIR));
@@ -528,58 +524,58 @@ object ArmorStandMgr {
                     // 塗る
                     var i = 0
                     while (i <= maxDist) {
-                        val pLocs: MutableList<Location> = getSphere(`as`.getLocation(), i.toDouble(), 20)
+                        val pLocs: MutableList<Location> = getSphere(`as`.location, i.toDouble(), 20)
                         for (loc in pLocs) {
                             PaintMgr.paint(loc, shooter, false)
                         }
                         i++
                     }
 
-                    for (o_player in plugin.getServer().getOnlinePlayers()) {
+                    for (o_player in plugin.server.onlinePlayers) {
                         (o_player as CraftPlayer)
-                            .getHandle()
+                            .handle
                             .playerConnection
                             .sendPacket(
                                 PacketPlayOutEntityEquipment(
-                                    `as`.getEntityId(),
+                                    `as`.entityId,
                                     EnumItemSlot.HEAD,
                                     CraftItemStack.asNMSCopy(ItemStack(Material.AIR)),
                                 ),
                             )
                         o_player
-                            .getHandle()
+                            .handle
                             .playerConnection
                             .sendPacket(
                                 PacketPlayOutEntityEquipment(
-                                    `as`.getEntityId(),
+                                    `as`.entityId,
                                     EnumItemSlot.CHEST,
                                     CraftItemStack.asNMSCopy(ItemStack(Material.AIR)),
                                 ),
                             )
                         o_player
-                            .getHandle()
+                            .handle
                             .playerConnection
                             .sendPacket(
                                 PacketPlayOutEntityEquipment(
-                                    `as`.getEntityId(),
+                                    `as`.entityId,
                                     EnumItemSlot.LEGS,
                                     CraftItemStack.asNMSCopy(ItemStack(Material.AIR)),
                                 ),
                             )
                         o_player
-                            .getHandle()
+                            .handle
                             .playerConnection
                             .sendPacket(
                                 PacketPlayOutEntityEquipment(
-                                    `as`.getEntityId(),
+                                    `as`.entityId,
                                     EnumItemSlot.FEET,
                                     CraftItemStack.asNMSCopy(ItemStack(Material.AIR)),
                                 ),
                             )
                         o_player
-                            .getHandle()
+                            .handle
                             .playerConnection
-                            .sendPacket(PacketPlayOutEntityDestroy(`as`.getEntityId()))
+                            .sendPacket(PacketPlayOutEntityDestroy(`as`.entityId))
                     }
 
                     val delay: BukkitRunnable =
@@ -590,21 +586,21 @@ object ArmorStandMgr {
                                 drop3.remove()
                                 drop4.remove()
                                 for (o_player in plugin
-                                    .getServer()
-                                    .getOnlinePlayers()) {
-                                    (o_player as CraftPlayer).getHandle().playerConnection.sendPacket(
-                                        PacketPlayOutSpawnEntityLiving((`as` as CraftArmorStand).getHandle()),
+                                    .server
+                                    .onlinePlayers) {
+                                    (o_player as CraftPlayer).handle.playerConnection.sendPacket(
+                                        PacketPlayOutSpawnEntityLiving((`as` as CraftArmorStand).handle),
                                     )
                                 }
-                                `as`.setCustomNameVisible(true)
-                                `as`.setVisible(true)
-                                `as`.setMarker(false)
-                                `as`.getWorld().playSound(`as`.getLocation(), Sound.ITEM_ARMOR_EQUIP_LEATHER, 1f, 1f)
+                                `as`.isCustomNameVisible = true
+                                `as`.isVisible = true
+                                `as`.isMarker = false
+                                `as`.world.playSound(`as`.location, Sound.ITEM_ARMOR_EQUIP_LEATHER, 1f, 1f)
                                 // as.setHelmet(new ItemStack(Material.LEATHER_HELMET));
                                 // as.setChestplate(new ItemStack(Material.LEATHER_CHESTPLATE));
                                 // as.setLeggings(new ItemStack(Material.LEATHER_LEGGINGS));
                                 // as.setBoots(new ItemStack(Material.LEATHER_BOOTS));
-                                `as`.setCustomName("20.0")
+                                `as`.customName = "20.0"
                             }
                         }
                     delay.runTaskLater(plugin, 60)
@@ -613,24 +609,24 @@ object ArmorStandMgr {
         } else if (health == 21.0) {
             val player = getArmorStandPlayer(`as`)
             if (getPlayerData(shooter)!!.team != getPlayerData(player)!!.team) {
-                `as`.setCustomName("100")
-                `as`.setVisible(false)
-                for (op in plugin.getServer().getOnlinePlayers()) {
-                    if (`as`.getWorld() === op.getWorld()) {
+                `as`.customName = "100"
+                `as`.isVisible = false
+                for (op in plugin.server.onlinePlayers) {
+                    if (`as`.world === op.world) {
                         (op as CraftPlayer)
-                            .getHandle()
+                            .handle
                             .playerConnection
                             .sendPacket(
                                 PacketPlayOutEntityEquipment(
-                                    `as`.getEntityId(),
+                                    `as`.entityId,
                                     EnumItemSlot.HEAD,
                                     CraftItemStack.asNMSCopy(ItemStack(Material.AIR)),
                                 ),
                             )
                     }
                 }
-                `as`.getLocation().getWorld()!!.playSound(`as`.getLocation(), Sound.ENTITY_ARROW_HIT, 1f, 2f)
-                `as`.teleport(`as`.getLocation().add(0.0, -1.0, 0.0))
+                `as`.location.world!!.playSound(`as`.location, Sound.ENTITY_ARROW_HIT, 1f, 2f)
+                `as`.teleport(`as`.location.add(0.0, -1.0, 0.0))
             }
         }
     }

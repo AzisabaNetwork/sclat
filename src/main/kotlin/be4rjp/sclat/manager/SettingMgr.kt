@@ -10,69 +10,69 @@ object SettingMgr {
         settings: PlayerSettings,
         player: Player,
     ) {
-        val uuid: String? = player.getUniqueId().toString()
+        val uuid: String = player.uniqueId.toString()
         val def = "011111111"
-        if (Sclat.Companion.conf!!
+        if (Sclat.conf!!
                 .playerSettings
                 .contains("Settings." + uuid)
         ) {
-            if (Sclat.Companion.conf!!
+            if (Sclat.conf!!
                     .playerSettings
                     .getString("Settings." + uuid)!!
                     .get(1) == '0'
             ) {
                 settings.sShowEffectMainWeaponInk()
             }
-            if (Sclat.Companion.conf!!
+            if (Sclat.conf!!
                     .playerSettings
                     .getString("Settings." + uuid)!!
                     .get(2) == '0'
             ) {
                 settings.sShowEffectChargerLine()
             }
-            if (Sclat.Companion.conf!!
+            if (Sclat.conf!!
                     .playerSettings
                     .getString("Settings." + uuid)!!
                     .get(3) == '0'
             ) {
                 settings.sShowEffectSPWeapon()
             }
-            if (Sclat.Companion.conf!!
+            if (Sclat.conf!!
                     .playerSettings
                     .getString("Settings." + uuid)!!
                     .get(4) == '0'
             ) {
                 settings.sShowEffectSPWeaponRegion()
             }
-            if (Sclat.Companion.conf!!
+            if (Sclat.conf!!
                     .playerSettings
                     .getString("Settings." + uuid)!!
                     .get(5) == '0'
             ) {
                 settings.sShowSnowBall()
             }
-            if (Sclat.Companion.conf!!
+            if (Sclat.conf!!
                     .playerSettings
                     .getString("Settings." + uuid)!!
                     .get(0) == '0'
             ) {
                 settings.sPlayBGM()
             }
-            if (Sclat.Companion.conf!!
+            if (Sclat.conf!!
                     .playerSettings
                     .getString("Settings." + uuid)!!
                     .get(6) == '0'
             ) {
                 settings.sShowEffectBomb()
             }
-            if (Sclat.Companion.conf!!
+            if (Sclat.conf!!
                     .playerSettings
                     .getString("Settings." + uuid)!!
                     .get(7) == '0'
             ) {
                 settings.sShowEffectBombEx()
             }
-            if (Sclat.Companion.conf!!
+            if (Sclat.conf!!
                     .playerSettings
                     .getString("Settings." + uuid)!!
                     .get(8) == '0'
@@ -80,7 +80,7 @@ object SettingMgr {
                 settings.sDoChargeKeep()
             }
         } else {
-            Sclat.Companion.conf!!
+            Sclat.conf!!
                 .playerSettings
                 .set("Settings." + uuid, def)
             settings.sPlayBGM()

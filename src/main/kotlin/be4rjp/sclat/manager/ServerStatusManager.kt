@@ -20,61 +20,61 @@ object ServerStatusManager {
     var task: BukkitRunnable? = null
 
     fun setupServerStatusGUI() {
-        for (server in Sclat.Companion.conf!!
+        for (server in Sclat.conf!!
             .servers!!
             .getConfigurationSection("Servers")!!
             .getKeys(false)) {
             val serverName =
-                Sclat.Companion.conf!!
+                Sclat.conf!!
                     .servers!!
                     .getString("Servers." + server + ".Server")
             val displayName =
-                Sclat.Companion.conf!!
+                Sclat.conf!!
                     .servers!!
                     .getString("Servers." + server + ".DisplayName")
             val maxPlayer =
-                Sclat.Companion.conf!!
+                Sclat.conf!!
                     .servers!!
                     .getInt("Servers." + server + ".MaxPlayer")
             val host =
-                Sclat.Companion.conf!!
+                Sclat.conf!!
                     .servers!!
                     .getString("Servers." + server + ".Host")
             val port =
-                Sclat.Companion.conf!!
+                Sclat.conf!!
                     .servers!!
                     .getInt("Servers." + server + ".Port")
             val period =
-                Sclat.Companion.conf!!
+                Sclat.conf!!
                     .servers!!
                     .getInt("Servers." + server + ".Period")
 
             val worldName =
-                Sclat.Companion.conf!!
+                Sclat.conf!!
                     .servers!!
                     .getString("Servers." + server + ".Sign.WorldName")
             val w = Bukkit.getWorld(worldName!!)
             val ix =
-                Sclat.Companion.conf!!
+                Sclat.conf!!
                     .servers!!
                     .getInt("Servers." + server + ".Sign.X")
             val iy =
-                Sclat.Companion.conf!!
+                Sclat.conf!!
                     .servers!!
                     .getInt("Servers." + server + ".Sign.Y")
             val iz =
-                Sclat.Companion.conf!!
+                Sclat.conf!!
                     .servers!!
                     .getInt("Servers." + server + ".Sign.Z")
             val loc = Location(w, ix.toDouble(), iy.toDouble(), iz.toDouble())
 
             var info: String? = ""
-            if (Sclat.Companion.conf!!
+            if (Sclat.conf!!
                     .servers!!
                     .contains("Servers." + server + ".Info")
             ) {
                 info =
-                    Sclat.Companion.conf!!
+                    Sclat.conf!!
                         .servers!!
                         .getString("Servers." + server + ".Info")
             }
@@ -87,16 +87,16 @@ object ServerStatusManager {
                     port,
                     maxPlayer,
                     period,
-                    loc.getBlock(),
+                    loc.block,
                     info,
                 )
 
-            if (Sclat.Companion.conf!!
+            if (Sclat.conf!!
                     .servers!!
                     .contains("Servers." + server + ".maintenance")
             ) {
                 ss.isMaintenance =
-                    Sclat.Companion.conf!!
+                    Sclat.conf!!
                         .servers!!
                         .getBoolean("Servers." + server + ".maintenance")
             }
@@ -113,18 +113,18 @@ object ServerStatusManager {
                         var i = 0
                         while (i <= 17) {
                             val `is` = ItemStack(Material.BLACK_STAINED_GLASS_PANE)
-                            val ism = `is`.getItemMeta()
+                            val ism = `is`.itemMeta
                             ism!!.setDisplayName(".")
-                            `is`.setItemMeta(ism)
+                            `is`.itemMeta = ism
                             inv.setItem(i, `is`)
                             i++
                         }
                     }
 
                     val ism = ItemStack(Material.OAK_DOOR)
-                    val ismm = ism.getItemMeta()
+                    val ismm = ism.itemMeta
                     ismm!!.setDisplayName("戻る")
-                    ism.setItemMeta(ismm)
+                    ism.itemMeta = ismm
                     inv.setItem(17, ism)
 
                     var i = 0
@@ -135,7 +135,7 @@ object ServerStatusManager {
                         if (!ss.isOnline || ss.restartingServer) mt = Material.IRON_BARS
 
                         val `is` = ItemStack(mt)
-                        val itemMeta = `is`.getItemMeta()
+                        val itemMeta = `is`.itemMeta
                         itemMeta!!.setDisplayName(ss.displayName)
                         val role: MutableList<String?> = ArrayList<String?>()
                         if (ss.restartingServer) {
@@ -145,7 +145,7 @@ object ServerStatusManager {
                             if (ss.isOnline) {
                                 var amount = 1
                                 if (0 < ss.playerCount && ss.playerCount <= 64) amount = ss.playerCount
-                                `is`.setAmount(amount)
+                                `is`.amount = amount
                                 role.add("")
                                 role.add("§r§7[Player]  §r§a" + ss.playerCount + "§r§7 / " + ss.maxPlayer)
                                 role.add("")
@@ -165,8 +165,8 @@ object ServerStatusManager {
                                 role.add(if (ss.isMaintenance) "§r§7[Status]  §cMAINTENANCE" else "§r§7[Status]  §cOFFLINE")
                             }
                         }
-                        itemMeta.setLore(role)
-                        `is`.setItemMeta(itemMeta)
+                        itemMeta.lore = role
+                        `is`.itemMeta = itemMeta
 
                         inv.setItem(i, `is`)
                         i++

@@ -34,14 +34,14 @@ object PlayerStatusMgr {
     var list2: MutableMap<Player?, EntityArmorStand> = HashMap<Player?, EntityArmorStand>()
 
     fun setupPlayerStatus(player: Player) {
-        val playerUuid: String? = player.getUniqueId().toString()
+        val playerUuid: String = player.uniqueId.toString()
 
-        if (!Sclat.Companion.conf!!
+        if (!Sclat.conf!!
                 .playerStatus
                 .contains("Status." + playerUuid)
         ) {
             setDefaultStatus(player)
-        } else if (!Sclat.Companion.conf!!
+        } else if (!Sclat.conf!!
                 .playerStatus
                 .contains("Status." + playerUuid + ".Money")
         ) {
@@ -50,51 +50,51 @@ object PlayerStatusMgr {
     }
 
     fun setDefaultStatus(player: Player) {
-        Sclat.Companion.conf!!
+        Sclat.conf!!
             .playerStatus
-            .set("Status." + player.getUniqueId() + ".Money", 10000)
-        Sclat.Companion.conf!!
+            .set("Status." + player.uniqueId + ".Money", 10000)
+        Sclat.conf!!
             .playerStatus
-            .set("Status." + player.getUniqueId() + ".Lv", 0)
-        Sclat.Companion.conf!!
+            .set("Status." + player.uniqueId + ".Lv", 0)
+        Sclat.conf!!
             .playerStatus
-            .set("Status." + player.getUniqueId() + ".Rank", 0)
+            .set("Status." + player.uniqueId + ".Rank", 0)
         val wlist: MutableList<String?> = ArrayList<String?>()
         wlist.add(
-            Sclat.Companion.conf!!
+            Sclat.conf!!
                 .config!!
                 .getString("DefaultClass"),
         )
-        Sclat.Companion.conf!!
+        Sclat.conf!!
             .playerStatus
-            .set("Status." + player.getUniqueId() + ".WeaponClass", wlist)
+            .set("Status." + player.uniqueId + ".WeaponClass", wlist)
         val glist: MutableList<Int?> = ArrayList<Int?>()
         glist.add(0)
-        Sclat.Companion.conf!!
+        Sclat.conf!!
             .playerStatus
-            .set("Status." + player.getUniqueId() + ".GearList", glist)
-        Sclat.Companion.conf!!
+            .set("Status." + player.uniqueId + ".GearList", glist)
+        Sclat.conf!!
             .playerStatus
-            .set("Status." + player.getUniqueId() + ".Gear", 0)
-        Sclat.Companion.conf!!
+            .set("Status." + player.uniqueId + ".Gear", 0)
+        Sclat.conf!!
             .playerStatus
-            .set("Status." + player.getUniqueId() + ".Kill", 0)
-        Sclat.Companion.conf!!
+            .set("Status." + player.uniqueId + ".Kill", 0)
+        Sclat.conf!!
             .playerStatus
-            .set("Status." + player.getUniqueId() + ".Paint", 0)
-        Sclat.Companion.conf!!.playerStatus.set(
-            "Status." + player.getUniqueId() + ".EquiptClass",
-            Sclat.Companion.conf!!
+            .set("Status." + player.uniqueId + ".Paint", 0)
+        Sclat.conf!!.playerStatus.set(
+            "Status." + player.uniqueId + ".EquiptClass",
+            Sclat.conf!!
                 .config!!
                 .getString("DefaultClass"),
         )
-        Sclat.Companion.conf!!
+        Sclat.conf!!
             .playerStatus
-            .set("Status." + player.getUniqueId() + ".Tutorial", 0)
+            .set("Status." + player.uniqueId + ".Tutorial", 0)
         // ガチャチケ用
-        Sclat.Companion.conf!!
+        Sclat.conf!!
             .playerStatus
-            .set("Status." + player.getUniqueId() + ".Ticket", 0)
+            .set("Status." + player.uniqueId + ".Ticket", 0)
         addGear(player, 9)
         setGear(player, 9)
     }
@@ -102,83 +102,79 @@ object PlayerStatusMgr {
     fun sendHologram(player: Player) {
         val w =
             Bukkit.getWorld(
-                Sclat.Companion.conf!!
+                Sclat.conf!!
                     .config!!
                     .getString("Hologram.WorldName")!!,
             )
         val ix =
-            Sclat.Companion.conf!!
+            Sclat.conf!!
                 .config!!
                 .getInt("Hologram.X")
         val iy =
-            Sclat.Companion.conf!!
+            Sclat.conf!!
                 .config!!
                 .getInt("Hologram.Y")
         val iz =
-            Sclat.Companion.conf!!
+            Sclat.conf!!
                 .config!!
                 .getInt("Hologram.Z")
         val iyaw =
-            Sclat.Companion.conf!!
+            Sclat.conf!!
                 .config!!
                 .getInt("Hologram.Yaw")
         val location = Location(w, ix + 0.5, iy.toDouble(), iz + 0.5)
-        location.setYaw(iyaw.toFloat())
+        location.yaw = iyaw.toFloat()
 
-        val nmsServer: MinecraftServer = (Bukkit.getServer() as CraftServer).getServer()
-        val nmsWorld = (location.getWorld() as CraftWorld).getHandle()
-        val gameProfile = GameProfile(player.getUniqueId(), player.getName())
+        val nmsServer: MinecraftServer = (Bukkit.getServer() as CraftServer).server
+        val nmsWorld = (location.world as CraftWorld).handle
+        val gameProfile = GameProfile(player.uniqueId, player.name)
 
         val npc = EntityPlayer(nmsServer, nmsWorld, gameProfile, PlayerInteractManager(nmsWorld))
-        npc.setLocation(location.getX(), location.getY(), location.getZ(), location.getYaw(), 0f)
-        npc.getDataWatcher().set<Byte?>(DataWatcherRegistry.a.a(15), 127.toByte())
+        npc.setLocation(location.x, location.y, location.z, location.yaw, 0f)
+        npc.dataWatcher.set<Byte?>(DataWatcherRegistry.a.a(15), 127.toByte())
 
-        val connection = (player as CraftPlayer).getHandle().playerConnection
+        val connection = (player as CraftPlayer).handle.playerConnection
         connection
             .sendPacket(PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, npc))
         connection.sendPacket(PacketPlayOutNamedEntitySpawn(npc))
         connection.sendPacket(
             PacketPlayOutEntityHeadRotation(
                 npc,
-                ((location.getYaw() * 256.0f) / 360.0f).toInt().toByte(),
+                ((location.yaw * 256.0f) / 360.0f).toInt().toByte(),
             ),
         )
         connection.sendPacket(PacketPlayOutAnimation(npc, 0))
-        connection.sendPacket(PacketPlayOutEntityMetadata(npc.getId(), npc.getDataWatcher(), true))
+        connection.sendPacket(PacketPlayOutEntityMetadata(npc.id, npc.dataWatcher, true))
 
-        val `as` = EntityArmorStand(nmsWorld, location.getX(), location.getY() + 0.8, location.getZ())
-        `as`.setLocation(location.getX(), location.getY() + 0.8, location.getZ(), location.getYaw(), 0f)
-        `as`.setInvisible(true)
-        `as`.setCustomNameVisible(true)
-        `as`.setNoGravity(true)
-        `as`.setCustomName(
-            CraftChatMessage.fromStringOrNull("§aMoney : §r" + getMoney(player) + "  §aLv : §r" + getLv(player)),
-        )
+        val `as` = EntityArmorStand(nmsWorld, location.x, location.y + 0.8, location.z)
+        `as`.setLocation(location.x, location.y + 0.8, location.z, location.yaw, 0f)
+        `as`.isInvisible = true
+        `as`.customNameVisible = true
+        `as`.isNoGravity = true
+        `as`.customName = CraftChatMessage.fromStringOrNull("§aMoney : §r" + getMoney(player) + "  §aLv : §r" + getLv(player))
 
         list.put(player, `as`)
 
-        val as1 = EntityArmorStand(nmsWorld, location.getX(), location.getY() + 1.2, location.getZ())
-        as1.setLocation(location.getX(), location.getY() + 1.2, location.getZ(), location.getYaw(), 0f)
-        as1.setInvisible(true)
-        as1.setCustomNameVisible(true)
-        as1.setNoGravity(true)
-        as1.setCustomName(
+        val as1 = EntityArmorStand(nmsWorld, location.x, location.y + 1.2, location.z)
+        as1.setLocation(location.x, location.y + 1.2, location.z, location.yaw, 0f)
+        as1.isInvisible = true
+        as1.customNameVisible = true
+        as1.isNoGravity = true
+        as1.customName =
             CraftChatMessage.fromStringOrNull(
                 "§6Rank : §r" + getRank(player) + "  [ §b" + RankMgr.toABCRank(getRank(player)) + " §r]",
-            ),
-        )
+            )
 
         list1.put(player, as1)
 
-        val as2 = EntityArmorStand(nmsWorld, location.getX(), location.getY() + 0.4, location.getZ())
-        as2.setLocation(location.getX(), location.getY() + 0.4, location.getZ(), location.getYaw(), 0f)
-        as2.setInvisible(true)
-        as2.setCustomNameVisible(true)
-        as2.setNoGravity(true)
-        as2.setCustomName(
+        val as2 = EntityArmorStand(nmsWorld, location.x, location.y + 0.4, location.z)
+        as2.setLocation(location.x, location.y + 0.4, location.z, location.yaw, 0f)
+        as2.isInvisible = true
+        as2.customNameVisible = true
+        as2.isNoGravity = true
+        as2.customName =
             CraftChatMessage
-                .fromStringOrNull("§aPaints : §r" + getPaint(player) + "  §aKills : §r" + getKill(player)),
-        )
+                .fromStringOrNull("§aPaints : §r" + getPaint(player) + "  §aKills : §r" + getKill(player))
 
         list2.put(player, as2)
 
@@ -191,32 +187,29 @@ object PlayerStatusMgr {
         val task: BukkitRunnable =
             object : BukkitRunnable() {
                 override fun run() {
-                    if (!player.isOnline()) cancel()
+                    if (!player.isOnline) cancel()
                     try {
                         val `as`: EntityArmorStand = list.get(player)!!
-                        val connection = (player as CraftPlayer).getHandle().playerConnection
-                        connection.sendPacket(PacketPlayOutEntityDestroy(`as`.getBukkitEntity().getEntityId()))
-                        `as`.setCustomName(
+                        val connection = (player as CraftPlayer).handle.playerConnection
+                        connection.sendPacket(PacketPlayOutEntityDestroy(`as`.bukkitEntity.entityId))
+                        `as`.customName =
                             CraftChatMessage
-                                .fromStringOrNull("§aMoney : §r" + getMoney(player) + "  §aLv : §r" + getLv(player)),
-                        )
+                                .fromStringOrNull("§aMoney : §r" + getMoney(player) + "  §aLv : §r" + getLv(player))
                         connection.sendPacket(PacketPlayOutSpawnEntityLiving(`as`))
 
                         val as1: EntityArmorStand = list1.get(player)!!
-                        connection.sendPacket(PacketPlayOutEntityDestroy(as1.getBukkitEntity().getEntityId()))
-                        as1.setCustomName(
+                        connection.sendPacket(PacketPlayOutEntityDestroy(as1.bukkitEntity.entityId))
+                        as1.customName =
                             CraftChatMessage.fromStringOrNull(
                                 "§6Rank : §r" + getRank(player) + "  [ §b" + RankMgr.toABCRank(getRank(player)) + " §r]",
-                            ),
-                        )
+                            )
                         connection.sendPacket(PacketPlayOutSpawnEntityLiving(as1))
 
                         val as2: EntityArmorStand = list2.get(player)!!
-                        connection.sendPacket(PacketPlayOutEntityDestroy(as2.getBukkitEntity().getEntityId()))
-                        as2.setCustomName(
+                        connection.sendPacket(PacketPlayOutEntityDestroy(as2.bukkitEntity.entityId))
+                        as2.customName =
                             CraftChatMessage
-                                .fromStringOrNull("§aPaints : §r" + getPaint(player) + "  §aKills : §r" + getKill(player)),
-                        )
+                                .fromStringOrNull("§aPaints : §r" + getPaint(player) + "  §aKills : §r" + getKill(player))
                         connection.sendPacket(PacketPlayOutSpawnEntityLiving(as2))
                     } catch (e: Exception) {
                     }
@@ -225,7 +218,7 @@ object PlayerStatusMgr {
         task.runTaskTimer(
             plugin,
             0,
-            Sclat.Companion.conf!!
+            Sclat.conf!!
                 .config!!
                 .getInt("HologramUpdatePeriod")
                 .toLong(),
@@ -235,11 +228,9 @@ object PlayerStatusMgr {
     @JvmStatic
     fun sendHologramUpdate(player: Player) {
         val `as`: EntityArmorStand = list.get(player)!!
-        val connection = (player as CraftPlayer).getHandle().playerConnection
-        connection.sendPacket(PacketPlayOutEntityDestroy(`as`.getBukkitEntity().getEntityId()))
-        `as`.setCustomName(
-            CraftChatMessage.fromStringOrNull("§aMoney : §r" + getMoney(player) + "  §aLv : §r" + getLv(player)),
-        )
+        val connection = (player as CraftPlayer).handle.playerConnection
+        connection.sendPacket(PacketPlayOutEntityDestroy(`as`.bukkitEntity.entityId))
+        `as`.customName = CraftChatMessage.fromStringOrNull("§aMoney : §r" + getMoney(player) + "  §aLv : §r" + getLv(player))
         connection.sendPacket(PacketPlayOutSpawnEntityLiving(`as`))
     }
 
@@ -249,9 +240,9 @@ object PlayerStatusMgr {
         wname: String?,
     ): Boolean {
         val wlist =
-            Sclat.Companion.conf!!
+            Sclat.conf!!
                 .playerStatus
-                .getStringList("Status." + player.getUniqueId() + ".WeaponClass")
+                .getStringList("Status." + player.uniqueId + ".WeaponClass")
         return wlist.contains(wname)
     }
 
@@ -261,9 +252,9 @@ object PlayerStatusMgr {
         g: Int,
     ): Boolean {
         val glist =
-            Sclat.Companion.conf!!
+            Sclat.conf!!
                 .playerStatus
-                .getIntegerList("Status." + player.getUniqueId() + ".GearList")
+                .getIntegerList("Status." + player.uniqueId + ".GearList")
         return glist.contains(g)
     }
 
@@ -271,8 +262,8 @@ object PlayerStatusMgr {
         player: Player,
         rank: Int,
     ) {
-        val uuid: String? = player.getUniqueId().toString()
-        Sclat.Companion.conf!!
+        val uuid: String = player.uniqueId.toString()
+        Sclat.conf!!
             .playerStatus
             .set("Status." + uuid + ".Rank", rank)
     }
@@ -281,7 +272,7 @@ object PlayerStatusMgr {
         uuid: String?,
         rank: Int,
     ) {
-        Sclat.Companion.conf!!
+        Sclat.conf!!
             .playerStatus
             .set("Status." + uuid + ".Rank", rank)
     }
@@ -290,7 +281,7 @@ object PlayerStatusMgr {
         uuid: String?,
         lv: Int,
     ) {
-        Sclat.Companion.conf!!
+        Sclat.conf!!
             .playerStatus
             .set("Status." + uuid + ".Lv", lv)
     }
@@ -300,8 +291,8 @@ object PlayerStatusMgr {
         player: Player,
         g: Int,
     ) {
-        val uuid: String? = player.getUniqueId().toString()
-        Sclat.Companion.conf!!
+        val uuid: String = player.uniqueId.toString()
+        Sclat.conf!!
             .playerStatus
             .set("Status." + uuid + ".Gear", g)
     }
@@ -310,8 +301,8 @@ object PlayerStatusMgr {
         player: Player,
         name: String?,
     ) {
-        val uuid: String? = player.getUniqueId().toString()
-        Sclat.Companion.conf!!
+        val uuid: String = player.uniqueId.toString()
+        Sclat.conf!!
             .playerStatus
             .set("Status." + uuid + ".EquiptClass", name)
     }
@@ -320,7 +311,7 @@ object PlayerStatusMgr {
         uuid: String?,
         g: Int,
     ) {
-        Sclat.Companion.conf!!
+        Sclat.conf!!
             .playerStatus
             .set("Status." + uuid + ".Tutorial", g)
     }
@@ -331,13 +322,13 @@ object PlayerStatusMgr {
         wname: String?,
     ) {
         val wlist =
-            Sclat.Companion.conf!!
+            Sclat.conf!!
                 .playerStatus
-                .getStringList("Status." + player.getUniqueId() + ".WeaponClass")
+                .getStringList("Status." + player.uniqueId + ".WeaponClass")
         wlist.add(wname)
-        Sclat.Companion.conf!!
+        Sclat.conf!!
             .playerStatus
-            .set("Status." + player.getUniqueId() + ".WeaponClass", wlist)
+            .set("Status." + player.uniqueId + ".WeaponClass", wlist)
     }
 
     @JvmStatic
@@ -346,13 +337,13 @@ object PlayerStatusMgr {
         g: Int,
     ) {
         val glist =
-            Sclat.Companion.conf!!
+            Sclat.conf!!
                 .playerStatus
-                .getIntegerList("Status." + player.getUniqueId() + ".GearList")
+                .getIntegerList("Status." + player.uniqueId + ".GearList")
         glist.add(g)
-        Sclat.Companion.conf!!
+        Sclat.conf!!
             .playerStatus
-            .set("Status." + player.getUniqueId() + ".GearList", glist)
+            .set("Status." + player.uniqueId + ".GearList", glist)
     }
 
     @JvmStatic
@@ -360,10 +351,10 @@ object PlayerStatusMgr {
         player: Player,
         m: Int,
     ) {
-        val uuid: String? = player.getUniqueId().toString()
-        Sclat.Companion.conf!!.playerStatus.set(
+        val uuid: String = player.uniqueId.toString()
+        Sclat.conf!!.playerStatus.set(
             "Status." + uuid + ".Money",
-            Sclat.Companion.conf!!
+            Sclat.conf!!
                 .playerStatus
                 .getInt("Status." + uuid + ".Money") + m,
         )
@@ -373,9 +364,9 @@ object PlayerStatusMgr {
         uuid: String?,
         m: Int,
     ) {
-        Sclat.Companion.conf!!.playerStatus.set(
+        Sclat.conf!!.playerStatus.set(
             "Status." + uuid + ".Money",
-            Sclat.Companion.conf!!
+            Sclat.conf!!
                 .playerStatus
                 .getInt("Status." + uuid + ".Money") + m,
         )
@@ -386,10 +377,10 @@ object PlayerStatusMgr {
         player: Player,
         m: Int,
     ) {
-        val uuid: String? = player.getUniqueId().toString()
-        Sclat.Companion.conf!!.playerStatus.set(
+        val uuid: String = player.uniqueId.toString()
+        Sclat.conf!!.playerStatus.set(
             "Status." + uuid + ".Money",
-            Sclat.Companion.conf!!
+            Sclat.conf!!
                 .playerStatus
                 .getInt("Status." + uuid + ".Money") - m,
         )
@@ -399,10 +390,10 @@ object PlayerStatusMgr {
         player: Player,
         m: Int,
     ) {
-        val uuid: String? = player.getUniqueId().toString()
-        Sclat.Companion.conf!!.playerStatus.set(
+        val uuid: String = player.uniqueId.toString()
+        Sclat.conf!!.playerStatus.set(
             "Status." + uuid + ".Lv",
-            Sclat.Companion.conf!!
+            Sclat.conf!!
                 .playerStatus
                 .getInt("Status." + uuid + ".Lv") + m,
         )
@@ -412,16 +403,16 @@ object PlayerStatusMgr {
         player: Player,
         m: Int,
     ) {
-        val uuid: String? = player.getUniqueId().toString()
+        val uuid: String = player.uniqueId.toString()
         if (getRank(player) + m > 0) {
-            Sclat.Companion.conf!!.playerStatus.set(
+            Sclat.conf!!.playerStatus.set(
                 "Status." + uuid + ".Rank",
-                Sclat.Companion.conf!!
+                Sclat.conf!!
                     .playerStatus
                     .getInt("Status." + uuid + ".Rank") + m,
             )
         } else {
-            Sclat.Companion.conf!!
+            Sclat.conf!!
                 .playerStatus
                 .set("Status." + uuid + ".Rank", 0)
         }
@@ -431,10 +422,10 @@ object PlayerStatusMgr {
         player: Player,
         m: Int,
     ) {
-        val uuid: String? = player.getUniqueId().toString()
-        Sclat.Companion.conf!!.playerStatus.set(
+        val uuid: String = player.uniqueId.toString()
+        Sclat.conf!!.playerStatus.set(
             "Status." + uuid + ".Kill",
-            Sclat.Companion.conf!!
+            Sclat.conf!!
                 .playerStatus
                 .getInt("Status." + uuid + ".Kill") + m,
         )
@@ -444,10 +435,10 @@ object PlayerStatusMgr {
         player: Player,
         m: Int,
     ) {
-        val uuid: String? = player.getUniqueId().toString()
-        Sclat.Companion.conf!!.playerStatus.set(
+        val uuid: String = player.uniqueId.toString()
+        Sclat.conf!!.playerStatus.set(
             "Status." + uuid + ".Paint",
-            Sclat.Companion.conf!!
+            Sclat.conf!!
                 .playerStatus
                 .getInt("Status." + uuid + ".Paint") + m,
         )
@@ -457,9 +448,9 @@ object PlayerStatusMgr {
         uuid: String?,
         m: Int,
     ) {
-        Sclat.Companion.conf!!.playerStatus.set(
+        Sclat.conf!!.playerStatus.set(
             "Status." + uuid + ".Lv",
-            Sclat.Companion.conf!!
+            Sclat.conf!!
                 .playerStatus
                 .getInt("Status." + uuid + ".Lv") + m,
         )
@@ -470,14 +461,14 @@ object PlayerStatusMgr {
         m: Int,
     ) {
         if (getRank(uuid) + m > 0) {
-            Sclat.Companion.conf!!.playerStatus.set(
+            Sclat.conf!!.playerStatus.set(
                 "Status." + uuid + ".Rank",
-                Sclat.Companion.conf!!
+                Sclat.conf!!
                     .playerStatus
                     .getInt("Status." + uuid + ".Rank") + m,
             )
         } else {
-            Sclat.Companion.conf!!
+            Sclat.conf!!
                 .playerStatus
                 .set("Status." + uuid + ".Rank", 0)
         }
@@ -487,9 +478,9 @@ object PlayerStatusMgr {
         uuid: String?,
         m: Int,
     ) {
-        Sclat.Companion.conf!!.playerStatus.set(
+        Sclat.conf!!.playerStatus.set(
             "Status." + uuid + ".Kill",
-            Sclat.Companion.conf!!
+            Sclat.conf!!
                 .playerStatus
                 .getInt("Status." + uuid + ".Kill") + m,
         )
@@ -499,9 +490,9 @@ object PlayerStatusMgr {
         uuid: String?,
         m: Int,
     ) {
-        Sclat.Companion.conf!!.playerStatus.set(
+        Sclat.conf!!.playerStatus.set(
             "Status." + uuid + ".Paint",
-            Sclat.Companion.conf!!
+            Sclat.conf!!
                 .playerStatus
                 .getInt("Status." + uuid + ".Paint") + m,
         )
@@ -509,80 +500,80 @@ object PlayerStatusMgr {
 
     @JvmStatic
     fun getMoney(player: Player): Int {
-        val uuid: String? = player.getUniqueId().toString()
-        return Sclat.Companion.conf!!
+        val uuid: String = player.uniqueId.toString()
+        return Sclat.conf!!
             .playerStatus
             .getInt("Status." + uuid + ".Money")
     }
 
     @JvmStatic
     fun getLv(player: Player): Int {
-        val uuid: String? = player.getUniqueId().toString()
-        return Sclat.Companion.conf!!
+        val uuid: String = player.uniqueId.toString()
+        return Sclat.conf!!
             .playerStatus
             .getInt("Status." + uuid + ".Lv")
     }
 
     fun getLv(uuid: String?): Int =
-        Sclat.Companion.conf!!
+        Sclat.conf!!
             .playerStatus
             .getInt("Status." + uuid + ".Lv")
 
     @JvmStatic
     fun getRank(player: Player): Int {
-        val uuid: String? = player.getUniqueId().toString()
-        return Sclat.Companion.conf!!
+        val uuid: String = player.uniqueId.toString()
+        return Sclat.conf!!
             .playerStatus
             .getInt("Status." + uuid + ".Rank")
     }
 
     fun getRank(uuid: String?): Int =
-        Sclat.Companion.conf!!
+        Sclat.conf!!
             .playerStatus
             .getInt("Status." + uuid + ".Rank")
 
     fun getGear(player: Player): Int {
-        val uuid: String? = player.getUniqueId().toString()
-        return Sclat.Companion.conf!!
+        val uuid: String = player.uniqueId.toString()
+        return Sclat.conf!!
             .playerStatus
             .getInt("Status." + uuid + ".Gear")
     }
 
     @JvmStatic
     fun getKill(player: Player): Int {
-        val uuid: String? = player.getUniqueId().toString()
-        return Sclat.Companion.conf!!
+        val uuid: String = player.uniqueId.toString()
+        return Sclat.conf!!
             .playerStatus
             .getInt("Status." + uuid + ".Kill")
     }
 
     fun getKill(uuid: String?): Int =
-        Sclat.Companion.conf!!
+        Sclat.conf!!
             .playerStatus
             .getInt("Status." + uuid + ".Kill")
 
     @JvmStatic
     fun getPaint(player: Player): Int {
-        val uuid: String? = player.getUniqueId().toString()
-        return Sclat.Companion.conf!!
+        val uuid: String = player.uniqueId.toString()
+        return Sclat.conf!!
             .playerStatus
             .getInt("Status." + uuid + ".Paint")
     }
 
     fun getPaint(uuid: String?): Int =
-        Sclat.Companion.conf!!
+        Sclat.conf!!
             .playerStatus
             .getInt("Status." + uuid + ".Paint")
 
     fun getEquiptClass(player: Player): String? {
-        val uuid: String? = player.getUniqueId().toString()
-        return Sclat.Companion.conf!!
+        val uuid: String = player.uniqueId.toString()
+        return Sclat.conf!!
             .playerStatus
             .getString("Status." + uuid + ".EquiptClass")
     }
 
     fun getTutorialState(uuid: String?): Int =
-        Sclat.Companion.conf!!
+        Sclat.conf!!
             .playerStatus
             .getInt("Status." + uuid + ".Tutorial")
 
@@ -590,18 +581,18 @@ object PlayerStatusMgr {
         player: Player,
         m: Int,
     ) {
-        val uuid: String? = player.getUniqueId().toString()
-        if (!Sclat.Companion.conf!!
+        val uuid: String = player.uniqueId.toString()
+        if (!Sclat.conf!!
                 .playerStatus
                 .contains("Status." + uuid + ".Ticket")
         ) {
-            Sclat.Companion.conf!!
+            Sclat.conf!!
                 .playerStatus
                 .set("Status." + uuid + ".Ticket", 0)
         }
-        Sclat.Companion.conf!!.playerStatus.set(
+        Sclat.conf!!.playerStatus.set(
             "Status." + uuid + ".Ticket",
-            Sclat.Companion.conf!!
+            Sclat.conf!!
                 .playerStatus
                 .getInt("Status." + uuid + ".Ticket") + m,
         )
@@ -611,17 +602,17 @@ object PlayerStatusMgr {
         uuid: String?,
         m: Int,
     ) {
-        if (!Sclat.Companion.conf!!
+        if (!Sclat.conf!!
                 .playerStatus
                 .contains("Status." + uuid + ".Ticket")
         ) {
-            Sclat.Companion.conf!!
+            Sclat.conf!!
                 .playerStatus
                 .set("Status." + uuid + ".Ticket", 0)
         }
-        Sclat.Companion.conf!!.playerStatus.set(
+        Sclat.conf!!.playerStatus.set(
             "Status." + uuid + ".Ticket",
-            Sclat.Companion.conf!!
+            Sclat.conf!!
                 .playerStatus
                 .getInt("Status." + uuid + ".Ticket") + m,
         )
@@ -632,18 +623,18 @@ object PlayerStatusMgr {
         player: Player,
         m: Int,
     ) {
-        if (!Sclat.Companion.conf!!
+        if (!Sclat.conf!!
                 .playerStatus
-                .contains("Status." + player.getUniqueId() + ".Ticket")
+                .contains("Status." + player.uniqueId + ".Ticket")
         ) {
-            Sclat.Companion.conf!!
+            Sclat.conf!!
                 .playerStatus
-                .set("Status." + player.getUniqueId() + ".Ticket", 0)
+                .set("Status." + player.uniqueId + ".Ticket", 0)
         }
-        val uuid: String? = player.getUniqueId().toString()
-        Sclat.Companion.conf!!.playerStatus.set(
+        val uuid: String = player.uniqueId.toString()
+        Sclat.conf!!.playerStatus.set(
             "Status." + uuid + ".Ticket",
-            Sclat.Companion.conf!!
+            Sclat.conf!!
                 .playerStatus
                 .getInt("Status." + uuid + ".Ticket") - m,
         )
@@ -651,16 +642,16 @@ object PlayerStatusMgr {
 
     @JvmStatic
     fun getTicket(player: Player): Int {
-        if (!Sclat.Companion.conf!!
+        if (!Sclat.conf!!
                 .playerStatus
-                .contains("Status." + player.getUniqueId() + ".Ticket")
+                .contains("Status." + player.uniqueId + ".Ticket")
         ) {
-            Sclat.Companion.conf!!
+            Sclat.conf!!
                 .playerStatus
-                .set("Status." + player.getUniqueId() + ".Ticket", 0)
+                .set("Status." + player.uniqueId + ".Ticket", 0)
         }
-        val uuid: String? = player.getUniqueId().toString()
-        return Sclat.Companion.conf!!
+        val uuid: String = player.uniqueId.toString()
+        return Sclat.conf!!
             .playerStatus
             .getInt("Status." + uuid + ".Ticket")
     }
