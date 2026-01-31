@@ -2,7 +2,7 @@ name: Build
 
 on:
   push:
-    paths: &build_paths
+    paths:
       - '**/*.java'
       - '**/*.kt'
       - '**/*.gradle'
@@ -10,12 +10,6 @@ on:
       - 'gradle/**'
       - 'resources/**'
       - '.github/**'
-  pull_request:
-    branches:
-      - kotlin
-      - master
-      - develop
-    paths: *build_paths
   workflow_dispatch:
 
 concurrency:
