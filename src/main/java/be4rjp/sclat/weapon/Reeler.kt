@@ -33,7 +33,7 @@ import java.util.Random
 
 object Reeler {
     @JvmStatic
-    fun ReelerShootRunnable(player: Player) {
+    fun reelerShootRunnable(player: Player) {
         val delay: BukkitRunnable =
             object : BukkitRunnable() {
                 var p: Player = player
@@ -48,15 +48,15 @@ object Reeler {
                         return
                     }
 
-                    if (data.getIsUsingManeuver()) {
+                    if (data.isUsingManeuver) {
                         val clickType = Sclat.dadadaCheckerAPI!!.getPlayerClickType(player)
                         if ((clickType == ClickType.FIRST_CLICK || clickType == ClickType.RENDA || clickType == ClickType.NAGAOSI) &&
                             data.isInMatch
                         ) {
-                            ReelerShoot(p)
+                            reelerShoot(p)
                             data.tick = (
                                 data.tick +
-                                    getPlayerData(p)!!.weaponClass.mainWeapon!!.shootTick
+                                    getPlayerData(p)!!.weaponClass!!.mainWeapon!!.shootTick
                                 )
                         }
                     }
@@ -66,7 +66,7 @@ object Reeler {
             plugin,
             0,
             getPlayerData(player)!!
-                .weaponClass
+                .weaponClass!!
                 .mainWeapon!!
                 .slidingShootTick
                 .toLong(),
@@ -74,7 +74,7 @@ object Reeler {
     }
 
     @JvmStatic
-    fun ReelerRunnable(player: Player) {
+    fun reelerRunnable(player: Player) {
         val delay: BukkitRunnable =
             object : BukkitRunnable() {
                 var p: Player = player
@@ -82,9 +82,9 @@ object Reeler {
 
                 // int sl = 0;
                 // スライドの仕様改変
-                var sl_recharge_1: Boolean = true
+                var slRecharge1: Boolean = true
                 var killcount: Int = getPlayerData(p)!!.killCount
-                var gr_recharge: Int = 100
+                var grRecharge: Int = 100
 
                 // スライドに使う変数の定義Trueの時は使用可能Falseの時は使用不可能を表している
                 var check: Boolean = true
@@ -103,21 +103,21 @@ object Reeler {
                     val vec = p.eyeLocation.direction
 
                     // float ink = data.getWeaponClass().getMainWeapon().getSlideNeedINK();
-                    if (gr_recharge <= 100) {
-                        gr_recharge++
+                    if (grRecharge <= 100) {
+                        grRecharge++
                     }
                     if (killcount < data.killCount) {
-                        gr_recharge = 100
+                        grRecharge = 100
                         killcount = data.killCount
                     }
-                    if (data.isSneaking && gr_recharge >= 100 && sl_recharge_1 && !data.isSliding && (
+                    if (data.isSneaking && grRecharge >= 100 && slRecharge1 && !data.isSliding && (
                             p
                                 .inventory
                                 .itemInMainHand
                                 .type
                                 ==
                                 data
-                                    .weaponClass
+                                    .weaponClass!!
                                     .mainWeapon!!
                                     .weaponIteamStack!!
                                     .type
@@ -128,7 +128,8 @@ object Reeler {
                         // エフェクト
                         val bd =
                             getPlayerData(player)!!
-                                .team.teamColor!!
+                                .team!!
+                                .teamColor!!
                                 .wool!!
                                 .createBlockData()
                         val random = 1.0
@@ -141,7 +142,7 @@ object Reeler {
                                 )
                             val erv = ev.clone().add(randomVector)
                             for (o_player in plugin.server.onlinePlayers) {
-                                if (getPlayerData(o_player)!!.settings.ShowEffect_BombEx()) {
+                                if (getPlayerData(o_player)!!.settings!!.ShowEffect_BombEx()) {
                                     if (o_player.world === location.world) {
                                         if (o_player
                                                 .location
@@ -194,17 +195,17 @@ object Reeler {
                             val dest = grap(player)
                             if (dest !== player) {
                                 grapple(player, dest)
-                                gr_recharge = 0
+                                grRecharge = 0
                                 data.canShoot = false
                                 task1.runTaskLater(plugin, 9)
                                 task.runTaskTimer(plugin, 0, 1)
                             }
                         } else {
-                            var destarm: ArmorStand? = null
+                            var destarm: ArmorStand?
                             destarm = graptest(player)
                             if (destarm != null) {
                                 grappletest(player, destarm)
-                                gr_recharge = 0
+                                grRecharge = 0
                                 data.canShoot = false
                                 task1.runTaskLater(plugin, 9)
                                 task.runTaskTimer(plugin, 0, 1)
@@ -212,7 +213,7 @@ object Reeler {
                         }
                         data.isSneaking = false
                         // 優先順位が高い方のスライドがFalseだった場合に低い方をFalseにするようにしました高い方がtrueであった場合は高い方がFalseになります
-                        sl_recharge_1 = false
+                        slRecharge1 = false
                         // sl++;
                         // BukkitRunnable task2 = new BukkitRunnable() {
                         // @Override
@@ -225,7 +226,7 @@ object Reeler {
                             object : BukkitRunnable() {
                                 // 二つのtaskの追加でそれぞれのスライドを管理しています
                                 override fun run() {
-                                    sl_recharge_1 = true
+                                    slRecharge1 = true
                                     // check = true;
                                 }
                             }
@@ -238,10 +239,10 @@ object Reeler {
                     // }
                     if (data.isSliding) {
                         if (p.isOnGround) {
-                            data.setIsUsingManeuver(false)
+                            data.isUsingManeuver = false
                             data.isSliding = false
                         } else {
-                            data.setIsUsingManeuver(true)
+                            data.isUsingManeuver = true
                         }
                     }
 
@@ -306,7 +307,7 @@ object Reeler {
                             p.velocity = shot
                             val pdata = getPlayerData(p)
                             pdata!!.isSliding = true
-                            pdata.setIsUsingManeuver(true)
+                            pdata.isUsingManeuver = true
                             if (pdata.armor > 9999) {
                                 pdata.armor = 0.0
                             }
@@ -371,7 +372,7 @@ object Reeler {
                             }
                             p.velocity = shot
                             getPlayerData(p)!!.isSliding = true
-                            getPlayerData(p)!!.setIsUsingManeuver(true)
+                            getPlayerData(p)!!.isUsingManeuver = true
                         }
                     }
                     i++
@@ -392,13 +393,14 @@ object Reeler {
             if (block.type != Material.AIR) {
                 break
             }
-            if (getPlayerData(player)!!.settings.ShowEffect_MainWeaponInk()) {
+            if (getPlayerData(player)!!.settings!!.ShowEffect_MainWeaponInk()) {
                 if (it < 10) {
                     if (player.world === position.world) {
                         if (player.location.distanceSquared(position) < Sclat.particleRenderDistanceSquared) {
                             val bd =
                                 getPlayerData(player)!!
-                                    .team.teamColor!!
+                                    .team!!
+                                    .teamColor!!
                                     .wool!!
                                     .createBlockData()
                             player.spawnParticle<BlockData?>(Particle.BLOCK_DUST, position, 1, 0.0, 0.0, 0.0, 1.0, bd)
@@ -438,13 +440,14 @@ object Reeler {
             if (block.type != Material.AIR) {
                 break
             }
-            if (getPlayerData(player)!!.settings.ShowEffect_MainWeaponInk()) {
+            if (getPlayerData(player)!!.settings!!.ShowEffect_MainWeaponInk()) {
                 if (it < 10) {
                     if (player.world === position.world) {
                         if (player.location.distanceSquared(position) < Sclat.particleRenderDistanceSquared) {
                             val bd =
                                 getPlayerData(player)!!
-                                    .team.teamColor!!
+                                    .team!!
+                                    .teamColor!!
                                     .wool!!
                                     .createBlockData()
                             player.spawnParticle<BlockData?>(Particle.BLOCK_DUST, position, 1, 0.0, 0.0, 0.0, 1.0, bd)
@@ -507,13 +510,13 @@ object Reeler {
         return dest
     }
 
-    fun ReelerShoot(player: Player) {
+    fun reelerShoot(player: Player) {
         if (player.gameMode == GameMode.SPECTATOR) return
 
         val data = getPlayerData(player)
         if (player.exp <=
             (
-                data!!.weaponClass.mainWeapon!!.needInk
+                data!!.weaponClass!!.mainWeapon!!.needInk
                     * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) /
                     Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)
                 ).toFloat()
@@ -524,19 +527,19 @@ object Reeler {
         }
         player.exp = player.exp -
             (
-                data.weaponClass.mainWeapon!!.needInk
+                data.weaponClass?.mainWeapon!!.needInk
                     * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) /
                     Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)
                 ).toFloat()
         val rayTrace = RayTrace(player.eyeLocation.toVector(), player.eyeLocation.direction)
         val positions =
             rayTrace.traverse(
-                data.weaponClass.mainWeapon!!.shootSpeed
-                    * data.weaponClass.mainWeapon!!.distanceTick,
+                data.weaponClass?.mainWeapon!!.shootSpeed
+                    * data.weaponClass?.mainWeapon!!.distanceTick,
                 0.7,
             )
         var isLockOnPlayer = false
-        if (data.weaponClass.mainWeapon!!.maxRandom == 0.0) {
+        if (data.weaponClass?.mainWeapon!!.maxRandom == 0.0) {
             check@ for (vector in positions) {
                 val position = vector.toLocation(player.location.world!!)
                 for (target in plugin.server.onlinePlayers) {
@@ -551,7 +554,7 @@ object Reeler {
                 for (`as` in player.world.entities) {
                     if (`as` is ArmorStand) {
                         if (`as`.customName != null) {
-                            if (`as`.location.distanceSquared(position) <= 4 /* 2*2 */) {
+                            if (`as`.location.distanceSquared(position) <= 4) { // 2*2
                                 isLockOnPlayer = true
                                 break@check
                             }
@@ -564,15 +567,15 @@ object Reeler {
         PaintMgr.PaintHightestBlock(player.location, player, true, true)
 
         val ball = player.launchProjectile<Snowball>(Snowball::class.java)
-        (ball as CraftSnowball).handle.setItem(CraftItemStack.asNMSCopy(ItemStack(getPlayerData(player)!!.team.teamColor!!.wool!!)))
+        (ball as CraftSnowball).handle.setItem(CraftItemStack.asNMSCopy(ItemStack(getPlayerData(player)!!.team!!.teamColor!!.wool!!)))
         player.world.playSound(player.location, Sound.ENTITY_PIG_STEP, 0.3f, 1f)
         val vec =
             player
                 .location
                 .direction
-                .multiply(getPlayerData(player)!!.weaponClass.mainWeapon!!.slideNeedINK)
-        val random = data.weaponClass.mainWeapon!!.chargeRatio
-        val distick = getPlayerData(player)!!.weaponClass.mainWeapon!!.maxCharge
+                .multiply(getPlayerData(player)!!.weaponClass!!.mainWeapon!!.slideNeedINK)
+        val random = data.weaponClass?.mainWeapon!!.chargeRatio
+        val distick = getPlayerData(player)!!.weaponClass!!.mainWeapon!!.maxCharge
         vec.add(Vector(Math.random() * random - random / 2, 0.0, Math.random() * random - random / 2))
         ball.velocity = vec
         ball.shooter = player
@@ -617,11 +620,12 @@ object Reeler {
                     if (i != 0) {
                         val bd =
                             getPlayerData(p)!!
-                                .team.teamColor!!
+                                .team!!
+                                .teamColor!!
                                 .wool!!
                                 .createBlockData()
                         for (o_player in plugin.server.onlinePlayers) {
-                            if (getPlayerData(o_player)!!.settings.ShowEffect_MainWeaponInk()) {
+                            if (getPlayerData(o_player)!!.settings!!.ShowEffect_MainWeaponInk()) {
                                 if (o_player.world ===
                                     inkball!!.world
                                 ) {

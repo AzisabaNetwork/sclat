@@ -83,7 +83,7 @@ public class MainWeaponMgr {
 				sn = (float) (conf.getWeaponConfig().getDouble("MainWeapon." + weaponname + ".SlideNeedInk"));
 
 			MainWeapon mw = new MainWeapon(weaponname);
-			mw.setWeaponType(WeaponType);
+			mw.weaponType = (WeaponType);
 			ItemStack is = new ItemStack(WeaponMaterial);
 			ItemMeta itemMeta = is.getItemMeta();
 			itemMeta.setDisplayName(weaponname);
@@ -171,7 +171,7 @@ public class MainWeaponMgr {
 	public static boolean equalWeapon(Player player) {
 		try {
 			PlayerData data = DataMgr.getPlayerData(player);
-			String wname = data.getWeaponClass().getMainWeapon().getWeaponIteamStack().getItemMeta().getDisplayName();
+			String wname = data.weaponClass.mainWeapon.getWeaponIteamStack().getItemMeta().getDisplayName();
 			if (player.getInventory().getItemInMainHand().getItemMeta().getDisplayName() == null)
 				return false;
 			String itemname = player.getInventory().getItemInMainHand().getItemMeta().getDisplayName();
@@ -191,34 +191,34 @@ public class MainWeaponMgr {
 			ClickType clickType = Sclat.dadadaCheckerAPI.getPlayerClickType(player);
 
 			PlayerData data = DataMgr.getPlayerData(player);
-			if (data.getCanCharge())
+			if (data.canCharge)
 				data.tick = 0;
-			if (!data.getWeaponClass().getMainWeapon().getWeaponType().equals("Shooter")
-					&& !data.getWeaponClass().getMainWeapon().getWeaponType().equals("Blaster"))
-				data.setIsHolding(true);
-			if (data.getWeaponClass().getMainWeapon().getWeaponType().equals("Blaster"))
+			if (!data.weaponClass.mainWeapon.weaponType.equals("Shooter")
+					&& !data.weaponClass.mainWeapon.weaponType.equals("Blaster"))
+				data.isHolding = (true);
+			if (data.weaponClass.mainWeapon.weaponType.equals("Blaster"))
 				Blaster.ShootBlaster(player);
-			if (data.getWeaponClass().getMainWeapon().getWeaponType().equals("Burst"))
+			if (data.weaponClass.mainWeapon.weaponType.equals("Burst"))
 				Burst.BurstCooltime(player);
-			if (data.getWeaponClass().getMainWeapon().getWeaponType().equals("Roller")) {
-				if (data.getWeaponClass().getMainWeapon().isHude) {
-					if (data.getCanShoot() || clickType == ClickType.RENDA) {
-						data.setCanShoot(false);
+			if (data.weaponClass.mainWeapon.weaponType.equals("Roller")) {
+				if (data.weaponClass.mainWeapon.isHude) {
+					if (data.canShoot || clickType == ClickType.RENDA) {
+						data.canShoot = (false);
 						Brush.ShootPaintRunnable(player);
 					}
 				} else {
-					if (data.getCanShoot()) {
-						data.setCanShoot(false);
-						Roller.ShootPaintRunnable(player);
+					if (data.canShoot) {
+						data.canShoot = (false);
+						Roller.shootPaintRunnable(player);
 					}
 				}
 			}
-			if (data.getWeaponClass().getMainWeapon().getWeaponType().equals("Bucket"))
+			if (data.weaponClass.mainWeapon.weaponType.equals("Bucket"))
 				Bucket.ShootBucket(player);
-			if (data.getWeaponClass().getMainWeapon().getWeaponType().equals("Slosher"))
-				Slosher.ShootSlosher(player);
-			if (data.getWeaponClass().getMainWeapon().getWeaponType().equals("Kasa")
-					|| data.getWeaponClass().getMainWeapon().getWeaponType().equals("Camping"))
+			if (data.weaponClass.mainWeapon.weaponType.equals("Slosher"))
+				Slosher.shootSlosher(player);
+			if (data.weaponClass.mainWeapon.weaponType.equals("Kasa")
+					|| data.weaponClass.mainWeapon.weaponType.equals("Camping"))
 				Kasa.shootKasa(player);
 		}
 	}

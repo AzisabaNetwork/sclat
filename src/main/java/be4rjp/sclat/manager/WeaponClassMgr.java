@@ -23,7 +23,7 @@ public class WeaponClassMgr {
 			String SubWeaponName = conf.getClassConfig().getString("WeaponClass." + classname + ".SubWeaponName");
 			String SPWeaponName = conf.getClassConfig().getString("WeaponClass." + classname + ".SPWeaponName");
 			WeaponClass wc = new WeaponClass(classname);
-			wc.setMainWeapon(DataMgr.getWeapon(WeaponName));
+			wc.mainWeapon = (DataMgr.getWeapon(WeaponName));
 			wc.setSubWeaponName(SubWeaponName);
 			wc.setSPWeaponName(SPWeaponName);
 
@@ -34,14 +34,14 @@ public class WeaponClassMgr {
 	public static void setWeaponClass(Player player) {
 		player.getInventory().clear();
 		PlayerData data = DataMgr.getPlayerData(player);
-		ItemStack main = data.getWeaponClass().getMainWeapon().getWeaponIteamStack().clone();
-		if (data.getMainItemGlow()) {
+		ItemStack main = data.weaponClass.mainWeapon.getWeaponIteamStack().clone();
+		if (data.mainItemGlow) {
 			Sclat.glow.enchantGlow(main);
 			main.addEnchantment(Sclat.glow, 1);
 		}
 		player.getInventory().setItem(0, main);
-		if (data.getWeaponClass().getMainWeapon().isManeuver)
-			player.getInventory().setItem(40, data.getWeaponClass().getMainWeapon().getWeaponIteamStack().clone());
+		if (data.weaponClass.mainWeapon.isManeuver)
+			player.getInventory().setItem(40, data.weaponClass.mainWeapon.getWeaponIteamStack().clone());
 		ItemStack is = SubWeaponMgr.getSubWeapon(player);
 		player.getInventory().setItem(2, is);
 		ItemStack co = new ItemStack(Material.BOOK);
@@ -49,10 +49,10 @@ public class WeaponClassMgr {
 		meta.setDisplayName("スーパージャンプ");
 		co.setItemMeta(meta);
 		player.getInventory().setItem(6, co);
-		if (!data.getIsSquid())
+		if (!data.isSquid)
 			player.getEquipment().setHelmet(DataMgr.getPlayerData(player).team.getTeamColor().bougu);
 
-		if (data.getSPGauge() == 100)
+		if (data.sPGauge == 100)
 			SPWeaponMgr.setSPWeapon(player);
 
 		if (conf.config.getString("WorkMode").equals("Trial") && !Sclat.tutorial) {

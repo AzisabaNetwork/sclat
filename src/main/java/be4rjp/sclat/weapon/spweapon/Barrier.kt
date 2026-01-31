@@ -41,14 +41,15 @@ object Barrier {
 
                     val s_locs = getSphere(loc, 2.0, 23)
                     for (o_player in plugin.server.onlinePlayers) {
-                        if (getPlayerData(o_player)!!.settings.ShowEffect_SPWeapon() && o_player != player) {
+                        if (getPlayerData(o_player)!!.settings!!.ShowEffect_SPWeapon() && o_player != player) {
                             val dustOptions =
                                 Particle.DustOptions(
-                                    data.team.teamColor!!.bukkitColor!!,
+                                    data.team!!.teamColor!!.bukkitColor!!,
                                     1f,
                                 )
                             getPlayerData(p)!!
-                                .team.teamColor!!
+                                .team!!
+                                .teamColor!!
                                 .wool!!
                                 .createBlockData()
                             for (e_loc in s_locs) {

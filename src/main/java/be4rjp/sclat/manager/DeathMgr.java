@@ -30,13 +30,13 @@ import org.bukkit.util.Vector;
 public class DeathMgr {
 	public static void PlayerDeathRunnable(Player target, Player shooter, String type) {
 
-		DataMgr.getPlayerData(target).setIsDead(true);
+		DataMgr.getPlayerData(target).isDead = (true);
 		target.setGameMode(GameMode.SPECTATOR);
 
-		DataMgr.getPlayerData(target).setPoison(false);
+		DataMgr.getPlayerData(target).poison = (false);
 
 		Item drop1 = target.getWorld().dropItem(target.getEyeLocation(),
-				DataMgr.getPlayerData(target).getWeaponClass().getMainWeapon().getWeaponIteamStack());
+				DataMgr.getPlayerData(target).weaponClass.mainWeapon.getWeaponIteamStack());
 		Item drop2 = target.getWorld().dropItem(target.getEyeLocation(),
 				DataMgr.getPlayerData(target).team.getTeamColor().bougu);
 		final double random = 0.4;
@@ -48,7 +48,7 @@ public class DeathMgr {
 		SclatUtil.createInkExplosionEffect(target.getEyeLocation().add(0, -1, 0), 3, 30, shooter);
 
 		if (Gear.getGearInfluence(target, Gear.Type.PENA_DOWN) == 1.0) {
-			DataMgr.getPlayerData(target).setSPGauge((int) (DataMgr.getPlayerData(target).getSPGauge() * 0.7));
+			DataMgr.getPlayerData(target).sPGauge = ((int) (DataMgr.getPlayerData(target).sPGauge * 0.7));
 		}
 
 		// 半径
@@ -79,14 +79,14 @@ public class DeathMgr {
 		if (type.equals("killed") || type.equals("subWeapon") || type.equals("spWeapon")) {
 			DataMgr.getPlayerData(shooter).addKillCount();
 			DataMgr.getPlayerData(shooter).team.addKillCount();
-			if (!DataMgr.getPlayerData(shooter).getIsUsingSP())
+			if (!DataMgr.getPlayerData(shooter).isUsingSP)
 				for (int i = 0; i < 10; i++)
 					SPWeaponMgr.addSPCharge(shooter);
 		} else if (DataMgr.getPlayerData(target).lastAttack != target) {
 			Player Lastattacker = DataMgr.getPlayerData(target).lastAttack;
 			DataMgr.getPlayerData(Lastattacker).addKillCount();
 			DataMgr.getPlayerData(Lastattacker).team.addKillCount();
-			if (!DataMgr.getPlayerData(Lastattacker).getIsUsingSP())
+			if (!DataMgr.getPlayerData(Lastattacker).isUsingSP)
 				for (int i = 0; i < 10; i++)
 					SPWeaponMgr.addSPCharge(Lastattacker);
 		}
@@ -100,7 +100,7 @@ public class DeathMgr {
 			@Override
 			public void run() {
 				try {
-					if (!DataMgr.getPlayerData(t).isInMatch()) {
+					if (!DataMgr.getPlayerData(t).isInMatch) {
 						cancel();
 						return;
 					}
@@ -116,9 +116,9 @@ public class DeathMgr {
 						}
 
 						PlayerData sdata = DataMgr.getPlayerData(s);
-						String msg = sdata.team.getTeamColor().getColorCode()
-								+ s.getDisplayName() + ChatColor.RESET + "に" + ChatColor.BOLD + sdata.getWeaponClass()
-										.getMainWeapon().getWeaponIteamStack().getItemMeta().getDisplayName()
+						String msg = sdata.team.getTeamColor().getColorCode() + s.getDisplayName() + ChatColor.RESET
+								+ "に" + ChatColor.BOLD
+								+ sdata.weaponClass.mainWeapon.getWeaponIteamStack().getItemMeta().getDisplayName()
 								+ ChatColor.RESET + "でやられた！";
 						if (i == 0) {
 							t.sendTitle(ChatColor.GREEN + "復活まであと: 5秒", msg, 0, 21, 0);
@@ -127,8 +127,8 @@ public class DeathMgr {
 										sdata.team.getTeamColor().getColorCode() + s.getDisplayName() + ChatColor.RESET
 												+ "が" + DataMgr.getPlayerData(t).team.getTeamColor().getColorCode()
 												+ t.getDisplayName() + ChatColor.RESET + "を" + ChatColor.BOLD
-												+ sdata.getWeaponClass().getMainWeapon().getWeaponIteamStack()
-														.getItemMeta().getDisplayName()
+												+ sdata.weaponClass.mainWeapon.getWeaponIteamStack().getItemMeta()
+														.getDisplayName()
 												+ ChatColor.RESET + "で倒した！");
 								s.spigot().sendMessage(ChatMessageType.ACTION_BAR,
 										TextComponent.fromLegacyText(
@@ -149,24 +149,24 @@ public class DeathMgr {
 							t.sendTitle(ChatColor.GREEN + "復活まであと: 1秒", msg, 0, 18, 2);
 						// t.sendTitle("", sdata.getTeam().getTeamColor().getColorCode() +
 						// s.displayName + ChatColor.RESET + "に" + ChatColor.BOLD +
-						// sdata.getWeaponClass().getMainWeapon().getWeaponIteamStack().getItemMeta().displayName
+						// sdata.weaponClass.mainWeapon.getWeaponIteamStack().getItemMeta().displayName
 						// + ChatColor.RESET + "でやられた！", 0, 5, 2);
 						if (i == 100) {
-							DataMgr.getPlayerData(target).setIsDead(false);
-							Location loc = DataMgr.getPlayerData(t).getMatchLocation();
+							DataMgr.getPlayerData(target).isDead = (false);
+							Location loc = DataMgr.getPlayerData(t).matchLocation;
 							t.teleport(loc);
 							t.setGameMode(GameMode.ADVENTURE);
 							t.getInventory().setItem(0,
-									DataMgr.getPlayerData(t).getWeaponClass().getMainWeapon().getWeaponIteamStack());
-							t.getWorld().playSound(DataMgr.getPlayerData(t).getMatchLocation(),
-									Sound.ENTITY_PLAYER_SWIM, 1, 1);
+									DataMgr.getPlayerData(t).weaponClass.mainWeapon.getWeaponIteamStack());
+							t.getWorld().playSound(DataMgr.getPlayerData(t).matchLocation, Sound.ENTITY_PLAYER_SWIM, 1,
+									1);
 							t.setExp(0.99F);
 							t.setHealth(20);
 							// DataMgr.getPlayerData(t).setLastAttack(t);
 							WeaponClassMgr.setWeaponClass(t);
 							BarrierEffectRunnable(t, 120);
 							SuperArmor.setArmor(t, Double.MAX_VALUE, 120, false);
-							if (DataMgr.getPlayerData(t).getSPGauge() == 100)
+							if (DataMgr.getPlayerData(t).sPGauge == 100)
 								SPWeaponMgr.setSPWeapon(t);
 							cancel();
 						}
@@ -185,16 +185,16 @@ public class DeathMgr {
 
 						PlayerData sdata = DataMgr.getPlayerData(s);
 						String msg = sdata.team.getTeamColor().getColorCode() + s.getDisplayName() + ChatColor.RESET
-								+ "に" + ChatColor.BOLD + sdata.getWeaponClass().getSubWeaponName() + ChatColor.RESET
+								+ "に" + ChatColor.BOLD + sdata.weaponClass.getSubWeaponName() + ChatColor.RESET
 								+ "でやられた！";
 						if (i == 0) {
 							t.sendTitle(ChatColor.GREEN + "復活まであと: 5秒", msg, 0, 21, 0);
 							for (Player player : Sclat.getPlugin(Sclat.class).getServer().getOnlinePlayers()) {
-								player.sendMessage(sdata.team.getTeamColor().getColorCode() + s.getDisplayName()
-										+ ChatColor.RESET + "が"
-										+ DataMgr.getPlayerData(t).team.getTeamColor().getColorCode()
-										+ t.getDisplayName() + ChatColor.RESET + "を" + ChatColor.BOLD
-										+ sdata.getWeaponClass().getSubWeaponName() + ChatColor.RESET + "で倒した！");
+								player.sendMessage(
+										sdata.team.getTeamColor().getColorCode() + s.getDisplayName() + ChatColor.RESET
+												+ "が" + DataMgr.getPlayerData(t).team.getTeamColor().getColorCode()
+												+ t.getDisplayName() + ChatColor.RESET + "を" + ChatColor.BOLD
+												+ sdata.weaponClass.getSubWeaponName() + ChatColor.RESET + "で倒した！");
 								s.spigot().sendMessage(ChatMessageType.ACTION_BAR,
 										TextComponent.fromLegacyText(
 												DataMgr.getPlayerData(t).team.getTeamColor().getColorCode()
@@ -214,24 +214,24 @@ public class DeathMgr {
 							t.sendTitle(ChatColor.GREEN + "復活まであと: 1秒", msg, 0, 18, 2);
 						// t.sendTitle("", sdata.getTeam().getTeamColor().getColorCode() +
 						// s.displayName + ChatColor.RESET + "に" + ChatColor.BOLD +
-						// sdata.getWeaponClass().getMainWeapon().getWeaponIteamStack().getItemMeta().displayName
+						// sdata.weaponClass.mainWeapon.getWeaponIteamStack().getItemMeta().displayName
 						// + ChatColor.RESET + "でやられた！", 0, 5, 2);
 						if (i == 100) {
-							DataMgr.getPlayerData(target).setIsDead(false);
-							Location loc = DataMgr.getPlayerData(t).getMatchLocation();
+							DataMgr.getPlayerData(target).isDead = (false);
+							Location loc = DataMgr.getPlayerData(t).matchLocation;
 							t.teleport(loc);
 							t.setGameMode(GameMode.ADVENTURE);
 							t.getInventory().setItem(0,
-									DataMgr.getPlayerData(t).getWeaponClass().getMainWeapon().getWeaponIteamStack());
-							t.getWorld().playSound(DataMgr.getPlayerData(t).getMatchLocation(),
-									Sound.ENTITY_PLAYER_SWIM, 1, 1);
+									DataMgr.getPlayerData(t).weaponClass.mainWeapon.getWeaponIteamStack());
+							t.getWorld().playSound(DataMgr.getPlayerData(t).matchLocation, Sound.ENTITY_PLAYER_SWIM, 1,
+									1);
 							t.setExp(0.99F);
 							t.setHealth(20);
 							// DataMgr.getPlayerData(t).setLastAttack(t);
 							WeaponClassMgr.setWeaponClass(t);
 							BarrierEffectRunnable(t, 120);
 							SuperArmor.setArmor(t, Double.MAX_VALUE, 120, false);
-							if (DataMgr.getPlayerData(t).getSPGauge() == 100)
+							if (DataMgr.getPlayerData(t).sPGauge == 100)
 								SPWeaponMgr.setSPWeapon(t);
 							cancel();
 						}
@@ -250,7 +250,7 @@ public class DeathMgr {
 
 						PlayerData sdata = DataMgr.getPlayerData(s);
 						String msg = sdata.team.getTeamColor().getColorCode() + s.getDisplayName() + ChatColor.RESET
-								+ "に" + ChatColor.BOLD + sdata.getWeaponClass().getSPWeaponName() + ChatColor.RESET
+								+ "に" + ChatColor.BOLD + sdata.weaponClass.getSPWeaponName() + ChatColor.RESET
 								+ "でやられた！";
 						if (i == 0) {
 							t.sendTitle(ChatColor.GREEN + "復活まであと: 5秒", msg, 0, 21, 0);
@@ -259,7 +259,7 @@ public class DeathMgr {
 										sdata.team.getTeamColor().getColorCode() + s.getDisplayName() + ChatColor.RESET
 												+ "が" + DataMgr.getPlayerData(t).team.getTeamColor().getColorCode()
 												+ t.getDisplayName() + ChatColor.RESET + "を" + ChatColor.BOLD
-												+ sdata.getWeaponClass().getSPWeaponName() + ChatColor.RESET + "で倒した！");
+												+ sdata.weaponClass.getSPWeaponName() + ChatColor.RESET + "で倒した！");
 								s.spigot().sendMessage(ChatMessageType.ACTION_BAR,
 										TextComponent.fromLegacyText(
 												DataMgr.getPlayerData(t).team.getTeamColor().getColorCode()
@@ -279,24 +279,24 @@ public class DeathMgr {
 							t.sendTitle(ChatColor.GREEN + "復活まであと: 1秒", msg, 0, 18, 2);
 						// t.sendTitle("", sdata.getTeam().getTeamColor().getColorCode() +
 						// s.displayName + ChatColor.RESET + "に" + ChatColor.BOLD +
-						// sdata.getWeaponClass().getMainWeapon().getWeaponIteamStack().getItemMeta().displayName
+						// sdata.weaponClass.mainWeapon.getWeaponIteamStack().getItemMeta().displayName
 						// + ChatColor.RESET + "でやられた！", 0, 5, 2);
 						if (i == 100) {
-							DataMgr.getPlayerData(target).setIsDead(false);
-							Location loc = DataMgr.getPlayerData(t).getMatchLocation();
+							DataMgr.getPlayerData(target).isDead = (false);
+							Location loc = DataMgr.getPlayerData(t).matchLocation;
 							t.teleport(loc);
 							t.setGameMode(GameMode.ADVENTURE);
 							t.getInventory().setItem(0,
-									DataMgr.getPlayerData(t).getWeaponClass().getMainWeapon().getWeaponIteamStack());
-							t.getWorld().playSound(DataMgr.getPlayerData(t).getMatchLocation(),
-									Sound.ENTITY_PLAYER_SWIM, 1, 1);
+									DataMgr.getPlayerData(t).weaponClass.mainWeapon.getWeaponIteamStack());
+							t.getWorld().playSound(DataMgr.getPlayerData(t).matchLocation, Sound.ENTITY_PLAYER_SWIM, 1,
+									1);
 							t.setExp(0.99F);
 							t.setHealth(20);
 							// DataMgr.getPlayerData(t).setLastAttack(t);
 							WeaponClassMgr.setWeaponClass(t);
 							BarrierEffectRunnable(t, 120);
 							SuperArmor.setArmor(t, Double.MAX_VALUE, 120, false);
-							if (DataMgr.getPlayerData(t).getSPGauge() == 100)
+							if (DataMgr.getPlayerData(t).sPGauge == 100)
 								SPWeaponMgr.setSPWeapon(t);
 							cancel();
 						}
@@ -343,21 +343,21 @@ public class DeathMgr {
 						if (i == 80)
 							t.sendTitle(ChatColor.GREEN + "復活まであと: 1秒", "溺れてしまった！", 0, 18, 2);
 						if (i == 100) {
-							DataMgr.getPlayerData(target).setIsDead(false);
-							Location loc1 = DataMgr.getPlayerData(t).getMatchLocation();
+							DataMgr.getPlayerData(target).isDead = (false);
+							Location loc1 = DataMgr.getPlayerData(t).matchLocation;
 							t.teleport(loc1);
 							t.setGameMode(GameMode.ADVENTURE);
 							t.getInventory().setItem(0,
-									DataMgr.getPlayerData(t).getWeaponClass().getMainWeapon().getWeaponIteamStack());
-							t.getWorld().playSound(DataMgr.getPlayerData(t).getMatchLocation(),
-									Sound.ENTITY_PLAYER_SWIM, 1, 1);
+									DataMgr.getPlayerData(t).weaponClass.mainWeapon.getWeaponIteamStack());
+							t.getWorld().playSound(DataMgr.getPlayerData(t).matchLocation, Sound.ENTITY_PLAYER_SWIM, 1,
+									1);
 							t.setExp(0.99F);
 							t.setHealth(20);
 							// DataMgr.getPlayerData(t).setLastAttack(t);
 							WeaponClassMgr.setWeaponClass(t);
 							BarrierEffectRunnable(t, 120);
 							SuperArmor.setArmor(t, Double.MAX_VALUE, 120, false);
-							if (DataMgr.getPlayerData(t).getSPGauge() == 100)
+							if (DataMgr.getPlayerData(t).sPGauge == 100)
 								SPWeaponMgr.setSPWeapon(t);
 							cancel();
 						}
@@ -402,21 +402,21 @@ public class DeathMgr {
 						if (i == 80)
 							t.sendTitle(ChatColor.GREEN + "復活まであと: 1秒", "マップの外に落ちてしまった！", 0, 18, 2);
 						if (i == 100) {
-							DataMgr.getPlayerData(target).setIsDead(false);
-							Location loc1 = DataMgr.getPlayerData(t).getMatchLocation();
+							DataMgr.getPlayerData(target).isDead = (false);
+							Location loc1 = DataMgr.getPlayerData(t).matchLocation;
 							t.teleport(loc1);
 							t.setGameMode(GameMode.ADVENTURE);
 							t.getInventory().setItem(0,
-									DataMgr.getPlayerData(t).getWeaponClass().getMainWeapon().getWeaponIteamStack());
-							t.getWorld().playSound(DataMgr.getPlayerData(t).getMatchLocation(),
-									Sound.ENTITY_PLAYER_SWIM, 1, 1);
+									DataMgr.getPlayerData(t).weaponClass.mainWeapon.getWeaponIteamStack());
+							t.getWorld().playSound(DataMgr.getPlayerData(t).matchLocation, Sound.ENTITY_PLAYER_SWIM, 1,
+									1);
 							t.setExp(0.99F);
 							t.setHealth(20);
 							// DataMgr.getPlayerData(t).setLastAttack(t);
 							WeaponClassMgr.setWeaponClass(t);
 							BarrierEffectRunnable(t, 120);
 							SuperArmor.setArmor(t, Double.MAX_VALUE, 120, false);
-							if (DataMgr.getPlayerData(t).getSPGauge() == 100)
+							if (DataMgr.getPlayerData(t).sPGauge == 100)
 								SPWeaponMgr.setSPWeapon(t);
 							cancel();
 						}
@@ -427,18 +427,17 @@ public class DeathMgr {
 
 					i++;
 				} catch (Exception e) {
-					DataMgr.getPlayerData(target).setIsDead(false);
-					Location loc1 = DataMgr.getPlayerData(t).getMatchLocation();
+					DataMgr.getPlayerData(target).isDead = (false);
+					Location loc1 = DataMgr.getPlayerData(t).matchLocation;
 					t.teleport(loc1);
 					t.setGameMode(GameMode.ADVENTURE);
-					t.getInventory().setItem(0,
-							DataMgr.getPlayerData(t).getWeaponClass().getMainWeapon().getWeaponIteamStack());
-					t.getWorld().playSound(DataMgr.getPlayerData(t).getMatchLocation(), Sound.ENTITY_PLAYER_SWIM, 1, 1);
+					t.getInventory().setItem(0, DataMgr.getPlayerData(t).weaponClass.mainWeapon.getWeaponIteamStack());
+					t.getWorld().playSound(DataMgr.getPlayerData(t).matchLocation, Sound.ENTITY_PLAYER_SWIM, 1, 1);
 					t.setExp(0.99F);
 					t.setHealth(20);
 					WeaponClassMgr.setWeaponClass(t);
 					SuperArmor.setArmor(t, Double.MAX_VALUE, 120, false);
-					if (DataMgr.getPlayerData(t).getSPGauge() == 100)
+					if (DataMgr.getPlayerData(t).sPGauge == 100)
 						SPWeaponMgr.setSPWeapon(t);
 					cancel();
 					VariablesKt.getPlugin().getLogger().warning(e.getMessage());
@@ -457,7 +456,7 @@ public class DeathMgr {
 			int c = 0;
 			@Override
 			public void run() {
-				if (!data.isInMatch() || !player.getGameMode().equals(GameMode.ADVENTURE) || !p.isOnline()) {
+				if (!data.isInMatch || !player.getGameMode().equals(GameMode.ADVENTURE) || !p.isOnline()) {
 					cancel();
 				}
 				Location loc = p.getLocation().add(0, 0.5, 0);

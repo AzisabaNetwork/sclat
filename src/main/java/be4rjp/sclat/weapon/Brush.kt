@@ -51,9 +51,9 @@ object Brush {
 
                     val clickType = Sclat.dadadaCheckerAPI!!.getPlayerClickType(player)
 
-                    if ( /* data.getTick() >= 6 */clickType == ClickType.NO_CLICK && data.isInMatch) {
+                    if (data.tick >= 6 && clickType == ClickType.NO_CLICK && data.isInMatch) {
                         data.tick = 7
-                        data.setIsHolding(false)
+                        data.isHolding = false
                         data.canPaint = false
                         data.canShoot = true
                     }
@@ -73,12 +73,12 @@ object Brush {
                         val data = getPlayerData(p)
                         if (!data!!.isInMatch || !p.isOnline) cancel()
 
-                        if (data.getIsHolding() && data.canPaint && data.isInMatch &&
+                        if (data.isHolding && data.canPaint && data.isInMatch &&
                             Sclat.dadadaCheckerAPI!!.getPlayerClickType(p) != ClickType.RENDA && p.gameMode != GameMode.SPECTATOR
                         ) {
                             if (player.exp <=
                                 (
-                                    data.weaponClass.mainWeapon!!.rollerNeedInk
+                                    data.weaponClass?.mainWeapon!!.rollerNeedInk
                                         * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) /
                                         Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)
                                     ).toFloat()
@@ -89,7 +89,7 @@ object Brush {
                             }
                             p.exp = p.exp -
                                 (
-                                    data.weaponClass.mainWeapon!!.rollerNeedInk
+                                    data.weaponClass?.mainWeapon!!.rollerNeedInk
                                         * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) /
                                         Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)
                                     ).toFloat()
@@ -101,17 +101,18 @@ object Brush {
                             // rayTrace1.traverse(data.getWeaponClass().getMainWeapon().rollerWidth,
                             // 0.5);
                             var front = eloc.add(vec.getX() * 2, -0.9, vec.getZ() * 2)
-                            if (data.weaponClass.mainWeapon!!.isHude) {
+                            if (data.weaponClass?.mainWeapon!!.isHude) {
                                 front =
                                     eloc.add(vec.getX() * 1.5, -0.9, vec.getZ() * 1.5)
                             }
                             val bd =
                                 getPlayerData(p)!!
-                                    .team.teamColor!!
+                                    .team
+                                    ?.teamColor!!
                                     .wool!!
                                     .createBlockData()
                             for (target in plugin.server.onlinePlayers) {
-                                if (getPlayerData(target)!!.settings.ShowEffect_MainWeaponInk()) {
+                                if (getPlayerData(target)!!.settings?.ShowEffect_MainWeaponInk()!!) {
                                     if (target.world ===
                                         p.world
                                     ) {
@@ -137,7 +138,7 @@ object Brush {
                             Vector(vec.getZ(), 0.0, vec.getX() * -1)
 
                             // 筆系武器
-                            if (data.weaponClass.mainWeapon!!.isHude) {
+                            if (data.weaponClass?.mainWeapon!!.isHude) {
                                 val position = p.location
                                 PaintMgr.PaintHightestBlock(front, p, false, true)
                                 p.location.world!!.spawnParticle<BlockData?>(
@@ -152,7 +153,7 @@ object Brush {
                                 )
 
                                 for (target in plugin.server.onlinePlayers) {
-                                    if (getPlayerData(target)!!.settings.ShowEffect_MainWeaponInk()) {
+                                    if (getPlayerData(target)!!.settings?.ShowEffect_MainWeaponInk()!!) {
                                         if (target.world ===
                                             p.world
                                         ) {
@@ -185,7 +186,7 @@ object Brush {
                                             val damage =
                                                 getPlayerData(p)!!
                                                     .weaponClass
-                                                    .mainWeapon!!
+                                                    ?.mainWeapon!!
                                                     .rollerDamage
 
                                             giveDamage(p, target, damage, "killed")
@@ -200,7 +201,7 @@ object Brush {
                                                 val damage =
                                                     getPlayerData(p)!!
                                                         .weaponClass
-                                                        .mainWeapon!!
+                                                        ?.mainWeapon!!
                                                         .rollerDamage
                                                 ArmorStandMgr.giveDamageArmorStand(`as`, damage, player)
                                             }
@@ -209,7 +210,7 @@ object Brush {
                                 }
                                 p.walkSpeed =
                                     (
-                                        data.weaponClass.mainWeapon!!.usingWalkSpeed
+                                        data.weaponClass?.mainWeapon!!.usingWalkSpeed
                                             * Gear.getGearInfluence(p, Gear.Type.MAIN_SPEC_UP)
                                         ).toFloat()
                                 return
@@ -217,7 +218,7 @@ object Brush {
                             PaintMgr.PaintHightestBlock(eloc, p, false, true)
                             p.walkSpeed =
                                 (
-                                    data.weaponClass.mainWeapon!!.usingWalkSpeed
+                                    data.weaponClass?.mainWeapon!!.usingWalkSpeed
                                         * Gear.getGearInfluence(p, Gear.Type.MAIN_SPEC_UP)
                                     ).toFloat()
                         }
@@ -226,7 +227,7 @@ object Brush {
                     }
                 }
             }
-        if (getPlayerData(player)!!.weaponClass.mainWeapon!!.isHude) {
+        if (getPlayerData(player)!!.weaponClass?.mainWeapon!!.isHude) {
             task.runTaskTimer(plugin, 0, 1)
         } else {
             task.runTaskTimer(plugin, 0, 5)
@@ -254,7 +255,7 @@ object Brush {
                     ) {
                         return
                     }
-                    if (player.exp >= data!!.weaponClass.mainWeapon!!.needInk) {
+                    if (player.exp >= data!!.weaponClass?.mainWeapon!!.needInk) {
                         p
                             .world
                             .playSound(p.location, Sound.ITEM_BUCKET_EMPTY, 1f, 1f)
@@ -265,8 +266,8 @@ object Brush {
                         player
                             .location
                             .direction
-                            .multiply(getPlayerData(player)!!.weaponClass.mainWeapon!!.shootSpeed)
-                    val random = data!!.weaponClass.mainWeapon!!.hudeRandom
+                            .multiply(getPlayerData(player)!!.weaponClass?.mainWeapon!!.shootSpeed)
+                    val random = data!!.weaponClass?.mainWeapon!!.hudeRandom
                     vec.add(
                         Vector(
                             Math.random() * random - random / 2,
@@ -274,8 +275,8 @@ object Brush {
                             Math.random() * random - random / 2,
                         ),
                     )
-                    for (i in 0..<data!!.weaponClass.mainWeapon!!.rollerShootQuantity) {
-                        if (data!!.weaponClass.mainWeapon!!.isHude) {
+                    for (i in 0..<data!!.weaponClass?.mainWeapon!!.rollerShootQuantity) {
+                        if (data!!.weaponClass?.mainWeapon!!.isHude) {
                             Shoot(p, vec)
                         } else {
                             Shoot(p, null)
@@ -290,7 +291,7 @@ object Brush {
                 plugin,
                 pdata
                     .weaponClass
-                    .mainWeapon!!
+                    ?.mainWeapon!!
                     .shootTick
                     .toLong(),
             )
@@ -310,7 +311,7 @@ object Brush {
             plugin,
             data!!
                 .weaponClass
-                .mainWeapon!!
+                ?.mainWeapon!!
                 .shootTick
                 .toLong(),
         )
@@ -325,7 +326,7 @@ object Brush {
         val data = getPlayerData(player)
         if (player.exp <=
             (
-                data!!.weaponClass.mainWeapon!!.needInk
+                data!!.weaponClass?.mainWeapon!!.needInk
                     * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) /
                     Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)
                 ).toFloat()
@@ -336,21 +337,21 @@ object Brush {
         }
         player.exp = player.exp -
             (
-                data.weaponClass.mainWeapon!!.needInk
+                data.weaponClass?.mainWeapon!!.needInk
                     * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) /
                     Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)
                 ).toFloat()
         val ball = player.launchProjectile<Snowball>(Snowball::class.java)
-        (ball as CraftSnowball).handle.setItem(CraftItemStack.asNMSCopy(ItemStack(getPlayerData(player)!!.team.teamColor!!.wool!!)))
+        (ball as CraftSnowball).handle.setItem(CraftItemStack.asNMSCopy(ItemStack(getPlayerData(player)!!.team?.teamColor!!.wool!!)))
         var vec: Vector? =
             player
                 .location
                 .direction
-                .multiply(getPlayerData(player)!!.weaponClass.mainWeapon!!.shootSpeed)
+                .multiply(getPlayerData(player)!!.weaponClass?.mainWeapon!!.shootSpeed)
         if (v != null) vec = v
-        val random = getPlayerData(player)!!.weaponClass.mainWeapon!!.random
-        val distick = getPlayerData(player)!!.weaponClass.mainWeapon!!.distanceTick
-        if (!data.weaponClass.mainWeapon!!.isHude) {
+        val random = getPlayerData(player)!!.weaponClass?.mainWeapon!!.random
+        val distick = getPlayerData(player)!!.weaponClass?.mainWeapon!!.distanceTick
+        if (!data.weaponClass?.mainWeapon!!.isHude) {
             if (player.isOnGround) {
                 vec!!.add(
                     Vector(
@@ -361,7 +362,7 @@ object Brush {
                 )
             }
             if (!player.isOnGround) {
-                if (data.weaponClass.mainWeapon!!.canTatehuri) {
+                if (data.weaponClass?.mainWeapon!!.canTatehuri) {
                     vec!!.add(
                         Vector(
                             Math.random() * random / 4 - random / 8,
@@ -370,7 +371,7 @@ object Brush {
                         ),
                     )
                 }
-                if (!data.weaponClass.mainWeapon!!.canTatehuri) {
+                if (!data.weaponClass?.mainWeapon!!.canTatehuri) {
                     vec!!.add(
                         Vector(
                             Math.random() * random - random / 2,
@@ -409,7 +410,7 @@ object Brush {
                         inkball!!.velocity.getX(),
                         inkball!!.velocity.getY(),
                         inkball!!.velocity.getZ(),
-                    ).multiply(getPlayerData(p)!!.weaponClass.mainWeapon!!.shootSpeed / 17)
+                    ).multiply(getPlayerData(p)!!.weaponClass?.mainWeapon!!.shootSpeed / 17)
 
                 override fun run() {
                     inkball = mainSnowballNameMap.get(name)
@@ -421,10 +422,11 @@ object Brush {
                     if (i != 0) {
                         for (target in plugin.server.onlinePlayers) {
                             if (target.world !== p.world) continue
-                            if (!getPlayerData(target)!!.settings.ShowEffect_MainWeaponInk()) continue
+                            if (!getPlayerData(target)!!.settings?.ShowEffect_MainWeaponInk()!!) continue
                             val bd =
                                 getPlayerData(p)!!
-                                    .team.teamColor!!
+                                    .team
+                                    ?.teamColor!!
                                     .wool!!
                                     .createBlockData()
                             target.spawnParticle<BlockData?>(

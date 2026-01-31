@@ -32,7 +32,7 @@ public class PaintMgr {
 		if (Sclat.type == ServerType.LOBBY)
 			return;
 
-		MainWeapon mw = DataMgr.getPlayerData(player).getWeaponClass().getMainWeapon();
+		MainWeapon mw = DataMgr.getPlayerData(player).weaponClass.mainWeapon;
 		List<Block> blocks = new ArrayList<>();
 		blocks.add(location.getBlock());
 		if (sphere)
@@ -56,17 +56,17 @@ public class PaintMgr {
 				if (DataMgr.getSpongeMap().containsKey(block)) {
 					Sponge sponge = DataMgr.getSpongeFromBlock(block);
 					PlayerData pdata = DataMgr.getPlayerData(player);
-					if (pdata.getWeaponClass().getMainWeapon().getWeaponType().equals("Charger"))
+					if (pdata.weaponClass.mainWeapon.weaponType.equals("Charger"))
 						sponge.giveDamage(15, pdata.team);
 					else
-						sponge.giveDamage(pdata.getWeaponClass().getMainWeapon().damage, pdata.team);
+						sponge.giveDamage(pdata.weaponClass.mainWeapon.damage, pdata.team);
 				} else if (block.getType().equals(Material.WET_SPONGE)) {
 					Sponge sponge = new Sponge(block);
 					PlayerData pdata = DataMgr.getPlayerData(player);
 					sponge.match = (pdata.match);
 					sponge.team = (pdata.team);
 					DataMgr.setSpongeWithBlock(block, sponge);
-					sponge.giveDamage(pdata.getWeaponClass().getMainWeapon().damage, pdata.team);
+					sponge.giveDamage(pdata.weaponClass.mainWeapon.damage, pdata.team);
 				}
 			}
 
@@ -91,8 +91,8 @@ public class PaintMgr {
 								ATeam.getTeamColor().wool);
 						DataMgr.getPlayerData(player).addPaintCount();
 						if (new Random().nextInt((int) (12 / Gear.getGearInfluence(player, Gear.Type.SPECIAL_UP)
-								/ DataMgr.getPlayerData(player).getWeaponClass().getMainWeapon().getSPRate())) == 0
-								&& !DataMgr.getPlayerData(player).getIsUsingSP())
+								/ DataMgr.getPlayerData(player).weaponClass.mainWeapon.getSPRate())) == 0
+								&& !DataMgr.getPlayerData(player).isUsingSP)
 							SPWeaponMgr.addSPCharge(player);
 					}
 				} else {
@@ -109,8 +109,8 @@ public class PaintMgr {
 					DataMgr.getPlayerData(player).match.getBlockUpdater().setBlock(block, team.getTeamColor().wool);
 					DataMgr.getPlayerData(player).addPaintCount();
 					if (new Random().nextInt((int) (13 / Gear.getGearInfluence(player, Gear.Type.SPECIAL_UP)
-							/ DataMgr.getPlayerData(player).getWeaponClass().getMainWeapon().getSPRate())) == 0
-							&& !DataMgr.getPlayerData(player).getIsUsingSP())
+							/ DataMgr.getPlayerData(player).weaponClass.mainWeapon.getSPRate())) == 0
+							&& !DataMgr.getPlayerData(player).isUsingSP)
 						SPWeaponMgr.addSPCharge(player);
 				}
 

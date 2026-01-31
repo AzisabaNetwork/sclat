@@ -32,8 +32,8 @@ public class LootBox {
 		double nextLootSeed = 0;
 		String name = "";
 		for (String ClassName : conf.getClassConfig().getConfigurationSection("WeaponClass").getKeys(false)) {
-			if (DataMgr.getWeaponClass(ClassName).getMainWeapon().islootbox) {
-				double lootpro = DataMgr.getWeaponClass(ClassName).getMainWeapon().lootpro;
+			if (DataMgr.getWeaponClass(ClassName).mainWeapon.islootbox) {
+				double lootpro = DataMgr.getWeaponClass(ClassName).mainWeapon.lootpro;
 				if (nextLootSeed <= LootSeed && LootSeed < lootpro + nextLootSeed) {
 					isHit = true;
 					if (!PlayerStatusMgr.haveWeapon(player, ClassName)) {
@@ -78,11 +78,10 @@ public class LootBox {
 		int slotnum = 0;
 		double nextLootpro = 0;
 		for (String ClassName : conf.getClassConfig().getConfigurationSection("WeaponClass").getKeys(false)) {
-			if (DataMgr.getWeaponClass(ClassName).getMainWeapon().islootbox) {
-				double Lootpro = DataMgr.getWeaponClass(ClassName).getMainWeapon().lootpro;
+			if (DataMgr.getWeaponClass(ClassName).mainWeapon.islootbox) {
+				double Lootpro = DataMgr.getWeaponClass(ClassName).mainWeapon.lootpro;
 				if (Lootpro != 0) {
-					ItemStack item = new ItemStack(
-							DataMgr.getWeaponClass(ClassName).getMainWeapon().getWeaponIteamStack());
+					ItemStack item = new ItemStack(DataMgr.getWeaponClass(ClassName).mainWeapon.getWeaponIteamStack());
 					ItemMeta itemm = item.getItemMeta();
 					itemm.setDisplayName(ClassName);
 					List<String> lores = new ArrayList<>();

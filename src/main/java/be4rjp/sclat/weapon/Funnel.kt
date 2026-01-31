@@ -69,12 +69,13 @@ object Funnel {
                 break
             }
             for (target in plugin.server.onlinePlayers) {
-                if (getPlayerData(target)!!.settings.ShowEffect_MainWeaponInk()) {
+                if (getPlayerData(target)!!.settings!!.ShowEffect_MainWeaponInk()) {
                     if (target.world === position.world) {
                         if (target.location.distanceSquared(position) < Sclat.particleRenderDistanceSquared) {
                             val bd =
                                 getPlayerData(player)!!
-                                    .team.teamColor!!
+                                    .team!!
+                                    .teamColor!!
                                     .wool!!
                                     .createBlockData()
                             target.spawnParticle<BlockData?>(Particle.BLOCK_DUST, position, 1, 0.0, 0.0, 0.0, 1.0, bd)
@@ -273,7 +274,7 @@ object Funnel {
                                                 CraftItemStack.asNMSCopy(
                                                     ItemStack(
                                                         Material.getMaterial(
-                                                            team.teamColor!!.glass.toString() + "_PANE",
+                                                            team!!.teamColor!!.glass.toString() + "_PANE",
                                                         )!!,
                                                     ),
                                                 ),
@@ -358,7 +359,7 @@ object Funnel {
                                                 CraftItemStack.asNMSCopy(
                                                     ItemStack(
                                                         Material.getMaterial(
-                                                            team.teamColor!!.glass.toString() + "_PANE",
+                                                            team?.teamColor!!.glass.toString() + "_PANE",
                                                         )!!,
                                                     ),
                                                 ),
@@ -443,7 +444,7 @@ object Funnel {
                                                 CraftItemStack.asNMSCopy(
                                                     ItemStack(
                                                         Material.getMaterial(
-                                                            team.teamColor!!.glass.toString() + "_PANE",
+                                                            team!!.teamColor!!.glass.toString() + "_PANE",
                                                         )!!,
                                                     ),
                                                 ),
@@ -606,7 +607,7 @@ object Funnel {
                                             CraftItemStack.asNMSCopy(
                                                 ItemStack(
                                                     Material.getMaterial(
-                                                        team.teamColor!!.glass.toString() + "_PANE",
+                                                        team!!.teamColor!!.glass.toString() + "_PANE",
                                                     )!!,
                                                 ),
                                             ),
@@ -848,7 +849,7 @@ object Funnel {
                                                     CraftItemStack.asNMSCopy(
                                                         ItemStack(
                                                             Material.getMaterial(
-                                                                team.teamColor!!.glass.toString() + "_PANE",
+                                                                team!!.teamColor!!.glass.toString() + "_PANE",
                                                             )!!,
                                                         ),
                                                     ),
@@ -978,7 +979,7 @@ object Funnel {
                                                     CraftItemStack.asNMSCopy(
                                                         ItemStack(
                                                             Material.getMaterial(
-                                                                team.teamColor!!.glass.toString() + "_PANE",
+                                                                team!!.teamColor!!.glass.toString() + "_PANE",
                                                             )!!,
                                                         ),
                                                     ),
@@ -1121,7 +1122,7 @@ object Funnel {
                                                     CraftItemStack.asNMSCopy(
                                                         ItemStack(
                                                             Material.getMaterial(
-                                                                team.teamColor!!.glass.toString() + "_PANE",
+                                                                team!!.teamColor!!.glass.toString() + "_PANE",
                                                             )!!,
                                                         ),
                                                     ),
@@ -1195,7 +1196,7 @@ object Funnel {
                                 if (block.type != Material.AIR) {
                                     break
                                 }
-                                if (getPlayerData(player)!!.settings.ShowEffect_MainWeaponInk()) {
+                                if (getPlayerData(player)!!.settings!!.ShowEffect_MainWeaponInk()) {
                                     if (it < 10) {
                                         if (player.world === position.world) {
                                             if (player
@@ -1204,7 +1205,7 @@ object Funnel {
                                             ) {
                                                 val bd =
                                                     getPlayerData(player)!!
-                                                        .team
+                                                        .team!!
                                                         .teamColor!!
                                                         .wool!!
                                                         .createBlockData()
@@ -1450,7 +1451,7 @@ object Funnel {
                 override fun run() {
                     for (ai in 0..2) {
                         try {
-                            locd = data!!.getArmorlist(ai).eyeLocation
+                            locd = data!!.getArmorlist(ai)!!.eyeLocation
                             val vec =
                                 Vector(
                                     loct.x - locd!!.x,
@@ -1473,7 +1474,7 @@ object Funnel {
                                     ) {
                                         val dustOptions =
                                             Particle.DustOptions(
-                                                data!!.team.teamColor!!.bukkitColor!!,
+                                                data!!.team!!.teamColor!!.bukkitColor!!,
                                                 1f,
                                             )
                                         player.spawnParticle<Particle.DustOptions?>(
@@ -1490,7 +1491,7 @@ object Funnel {
                                 }
                                 for (target in plugin.server.onlinePlayers) {
                                     if (target == p ||
-                                        getPlayerData(target)!!.settings.ShowEffect_ChargerLine()
+                                        getPlayerData(target)!!.settings!!.ShowEffect_ChargerLine()
                                     ) {
                                         if (target.world === p.world) {
                                             if (target
@@ -1499,7 +1500,7 @@ object Funnel {
                                             ) {
                                                 val dustOptions =
                                                     Particle.DustOptions(
-                                                        data!!.team.teamColor!!.bukkitColor!!,
+                                                        data!!.team!!.teamColor!!.bukkitColor!!,
                                                         1f,
                                                     )
                                                 target.spawnParticle<Particle.DustOptions?>(
@@ -1553,7 +1554,7 @@ object Funnel {
                 override fun run() {
                     for (ai in 0..2) {
                         try {
-                            locd = data!!.getArmorlist(ai).eyeLocation
+                            locd = data!!.getArmorlist(ai)!!.eyeLocation
                             val vec =
                                 Vector(
                                     loct.x - locd!!.x,
@@ -1576,7 +1577,7 @@ object Funnel {
                                     ) {
                                         val dustOptions =
                                             Particle.DustOptions(
-                                                data!!.team.teamColor!!.bukkitColor!!,
+                                                data!!.team!!.teamColor!!.bukkitColor!!,
                                                 1f,
                                             )
                                         player.spawnParticle<Particle.DustOptions?>(
@@ -1593,7 +1594,7 @@ object Funnel {
                                 }
                                 for (target in plugin.server.onlinePlayers) {
                                     if (target == p ||
-                                        getPlayerData(target)!!.settings.ShowEffect_ChargerLine()
+                                        getPlayerData(target)!!.settings!!.ShowEffect_ChargerLine()
                                     ) {
                                         if (target.world === p.world) {
                                             if (target
@@ -1602,7 +1603,7 @@ object Funnel {
                                             ) {
                                                 val dustOptions =
                                                     Particle.DustOptions(
-                                                        data!!.team.teamColor!!.bukkitColor!!,
+                                                        data!!.team!!.teamColor!!.bukkitColor!!,
                                                         1f,
                                                     )
                                                 target.spawnParticle<Particle.DustOptions?>(

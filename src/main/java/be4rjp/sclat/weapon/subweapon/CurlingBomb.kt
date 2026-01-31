@@ -38,7 +38,7 @@ import org.bukkit.util.Vector
  */
 object CurlingBomb {
     @JvmStatic
-    fun CurlingBombRunnable(player: Player) {
+    fun curlingBombRunnable(player: Player) {
         val pVector = player.eyeLocation.direction
         val vec = Vector(pVector.getX(), 0.0, pVector.getZ()).normalize().multiply(0.5)
         val task: BukkitRunnable =
@@ -99,12 +99,12 @@ object CurlingBomb {
                             fb!!.dropItem = false
                             fb!!.setHurtEntities(false)
 
-                            as2!!.addPassenger(fb!!)
+                            as2.addPassenger(fb!!)
                         }
 
-                        val aloc = as1!!.location.add(0.0, -0.4, 0.0)
+                        val aloc = as1.location.add(0.0, -0.4, 0.0)
                         aloc.yaw = 90f
-                        val as1l = as1!!.location
+                        val as1l = as1.location
                         (as2 as CraftArmorStand).handle.setPositionRotation(
                             as1l.x,
                             as1l.y,
@@ -112,10 +112,10 @@ object CurlingBomb {
                             0f,
                             0f,
                         )
-                        as3!!.teleport(aloc)
+                        as3.teleport(aloc)
                         fb!!.ticksLived = 1
 
-                        if (i >= 10 && as1!!.isOnGround) {
+                        if (i >= 10 && as1.isOnGround) {
                             if (bloc!!.x == as1l.x && bloc!!.z != as1l.z) {
                                 aVec =
                                     Vector(aVec.getX() * -1, 0.0, aVec.getZ())
@@ -126,7 +126,7 @@ object CurlingBomb {
                             }
                         }
 
-                        if (as1!!.isOnGround) as1!!.velocity = aVec
+                        if (as1.isOnGround) as1.velocity = aVec
 
                         PaintMgr.PaintHightestBlock(as1l, player, false, true)
 
@@ -141,11 +141,11 @@ object CurlingBomb {
                                     .playerConnection
                                     .sendPacket(
                                         PacketPlayOutEntityEquipment(
-                                            as3!!.entityId,
+                                            as3.entityId,
                                             EnumItemSlot.HEAD,
                                             CraftItemStack.asNMSCopy(
                                                 ItemStack(
-                                                    getPlayerData(player)!!.team.teamColor!!.wool!!,
+                                                    getPlayerData(player)!!.team!!.teamColor!!.wool!!,
                                                 ),
                                             ),
                                         ),
@@ -161,11 +161,12 @@ object CurlingBomb {
                         if (i % 2 == 0) {
                             val bd =
                                 getPlayerData(player)!!
-                                    .team.teamColor!!
+                                    .team!!
+                                    .teamColor!!
                                     .wool!!
                                     .createBlockData()
                             for (target in plugin.server.onlinePlayers) {
-                                if (getPlayerData(target)!!.settings.ShowEffect_Bomb()) {
+                                if (getPlayerData(target)!!.settings!!.ShowEffect_Bomb()) {
                                     if (target.world ===
                                         player.world
                                     ) {
@@ -189,7 +190,7 @@ object CurlingBomb {
                             }
                             // 攻撃判定
                             for (target in plugin.server.onlinePlayers) {
-                                if (getPlayerData(target)!!.settings.ShowEffect_Bomb()) {
+                                if (getPlayerData(target)!!.settings!!.ShowEffect_Bomb()) {
                                     if (target.world === player.world) {
                                         if (target.location.distance(as1l) <= 1.2) {
                                             val damage = 2.0
@@ -268,9 +269,9 @@ object CurlingBomb {
                                                         getPlayerData(player)!!
                                                             .team
                                                     ) {
-                                                        as1!!.remove()
+                                                        as1.remove()
                                                         as2.remove()
-                                                        as3!!.remove()
+                                                        as3.remove()
                                                         fb!!.remove()
                                                         cancel()
                                                     }
@@ -280,9 +281,9 @@ object CurlingBomb {
                                                         getPlayerData(player)!!
                                                             .team
                                                     ) {
-                                                        as1!!.remove()
+                                                        as1.remove()
                                                         as2.remove()
-                                                        as3!!.remove()
+                                                        as3.remove()
                                                         fb!!.remove()
                                                         cancel()
                                                     }
@@ -336,18 +337,18 @@ object CurlingBomb {
                                 }
                             }
 
-                            as1!!.remove()
+                            as1.remove()
                             as2.remove()
-                            as3!!.remove()
+                            as3.remove()
                             fb!!.remove()
                             cancel()
                         }
 
                         i++
                     } catch (e: Exception) {
-                        as1!!.remove()
-                        as2!!.remove()
-                        as3!!.remove()
+                        as1.remove()
+                        as2.remove()
+                        as3.remove()
                         fb!!.remove()
                         cancel()
                     }

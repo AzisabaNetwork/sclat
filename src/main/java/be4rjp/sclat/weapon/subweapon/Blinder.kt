@@ -24,7 +24,7 @@ import org.bukkit.scheduler.BukkitRunnable
 import org.bukkit.util.Vector
 
 object Blinder {
-    fun BlinderRunnable(player: Player) {
+    fun blinderRunnable(player: Player) {
         val p = player
         val reach = 35
 
@@ -39,14 +39,14 @@ object Blinder {
             if (!getPlayerData(player)!!.isBombRush) {
                 p.exp = player.exp - 0.35f
             }
-            Shootblind(p, reach)
+            shootblind(p, reach)
         } else {
             p.sendTitle("", ChatColor.RED.toString() + "インクが足りません", 0, 5, 2)
             p.playSound(player.location, Sound.UI_BUTTON_CLICK, 1f, 1.63f)
         }
     }
 
-    fun Shootblind(
+    fun shootblind(
         player: Player,
         reach: Int,
     ) {
@@ -54,7 +54,7 @@ object Blinder {
         val rayTrace = RayTrace(player.eyeLocation.toVector(), player.eyeLocation.direction)
         val positions: ArrayList<Vector> = rayTrace.traverse(reach.toDouble(), 0.15)
         loop@ for (i in positions.indices) {
-            val position = positions.get(i)!!.toLocation(player.location.world!!)
+            val position = positions.get(i).toLocation(player.location.world!!)
             val block = player.location.world!!.getBlockAt(position)
 
             if (block.type != Material.AIR) {
@@ -64,12 +64,13 @@ object Blinder {
             // PaintMgr.PaintHightestBlock(position, player, false, true);
             // }
             for (target in plugin.server.onlinePlayers) {
-                if (!getPlayerData(target)!!.settings.ShowEffect_MainWeaponInk()) continue
+                if (!getPlayerData(target)!!.settings!!.ShowEffect_MainWeaponInk()) continue
                 if (target.world === position.world) {
                     if (target.location.distanceSquared(position) < Sclat.particleRenderDistanceSquared) {
                         val bd =
                             getPlayerData(player)!!
-                                .team.teamColor!!
+                                .team!!
+                                .teamColor!!
                                 .wool!!
                                 .createBlockData()
                         target.spawnParticle<BlockData?>(Particle.BLOCK_DUST, position, 1, 0.0, 0.0, 0.0, 1.0, bd)
@@ -85,20 +86,20 @@ object Blinder {
                 ) {
                     if (target.location.distanceSquared(position) <= maxDistSquad) {
                         if (rayTrace.intersects(BoundingBox(target as Entity), reach.toDouble(), 0.2)) {
-                            val Weapontype =
+                            val weaponType =
                                 getPlayerData(target)!!
-                                    .weaponClass
+                                    .weaponClass!!
                                     .mainWeapon!!
                                     .weaponType
                             var effecttime = 40
-                            if (Weapontype == "Charger" || Weapontype == "Spinner" ||
-                                getPlayerData(target)!!.weaponClass.mainWeapon!!.isManeuver
+                            if (weaponType == "Charger" || weaponType == "Spinner" ||
+                                getPlayerData(target)!!.weaponClass!!.mainWeapon!!.isManeuver
                             ) {
                                 effecttime += 25
-                            } else if (Weapontype == "Blaster" || Weapontype == "Hound") {
+                            } else if (weaponType == "Blaster" || weaponType == "Hound") {
                                 effecttime += 10
-                            } else if (Weapontype == "Roller" || Weapontype == "Slosher" ||
-                                Weapontype == "Bucket"
+                            } else if (weaponType == "Roller" || weaponType == "Slosher" ||
+                                weaponType == "Bucket"
                             ) {
                                 effecttime -= 10
                             }
@@ -122,8 +123,8 @@ object Blinder {
                             } else if (target.hasPotionEffect(PotionEffectType.FIRE_RESISTANCE)) {
                                 player.playSound(player.location, Sound.ENTITY_BLAZE_HURT, 1.2f, 1.3f)
                             } else {
-                                getPlayerData(target)!!.setPoison(true)
-                                PoisonRunnable3(
+                                getPlayerData(target)!!.poison = true
+                                poisonRunnable3(
                                     target,
                                     (effecttime * Gear.getGearInfluence(player, Gear.Type.SUB_SPEC_UP) - 10).toInt(),
                                 )
@@ -197,14 +198,14 @@ object Blinder {
         }
     }
 
-    fun PoisonRunnable3(
+    fun poisonRunnable3(
         player: Player?,
         delay: Int,
     ) {
         val cooltime: BukkitRunnable =
             object : BukkitRunnable() {
                 override fun run() {
-                    getPlayerData(player)!!.setPoison(false)
+                    getPlayerData(player)!!.poison = false
                 }
             }
         cooltime.runTaskLater(plugin, delay.toLong())

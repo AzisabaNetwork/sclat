@@ -34,7 +34,7 @@ import org.bukkit.util.Vector
 
 object Boomerang {
     @JvmStatic
-    fun BoomerangRunnable(player: Player) {
+    fun boomerangRunnable(player: Player) {
         val pVector = player.eyeLocation.direction
         val vec = Vector(pVector.getX(), pVector.getY(), pVector.getZ()).normalize().multiply(0.6)
         val task: BukkitRunnable =
@@ -100,12 +100,12 @@ object Boomerang {
                             fb!!.dropItem = false
                             fb!!.setHurtEntities(false)
 
-                            as2!!.addPassenger(fb!!)
+                            as2.addPassenger(fb!!)
                         }
 
-                        val aloc = as1!!.location.add(0.0, -0.8, 0.0)
+                        val aloc = as1.location.add(0.0, -0.8, 0.0)
                         aloc.yaw = 90f
-                        val as1l = as1!!.location
+                        val as1l = as1.location
                         (as2 as CraftArmorStand).handle.setPositionRotation(
                             as1l.x,
                             as1l.y,
@@ -113,12 +113,12 @@ object Boomerang {
                             0f,
                             0f,
                         )
-                        as3!!.teleport(aloc)
+                        as3.teleport(aloc)
                         fb!!.ticksLived = 1
 
                         if (i >= 5 && !cumbackBoomeran) {
-                            if (bloc!!.x == as1l.x && bloc!!.z != as1l.z ||
-                                bloc!!.z == as1l.z && bloc!!.x != as1l.x
+                            if ((bloc!!.x == as1l.x && bloc!!.z != as1l.z) ||
+                                (bloc!!.z == as1l.z && bloc!!.x != as1l.x)
                             ) {
                                 aVec =
                                     Vector(
@@ -129,12 +129,12 @@ object Boomerang {
                                 cumbackBoomeran = true
                                 cumbacktime = i
                                 for (painti in 0..2) {
-                                    val p_locs: MutableList<Location> = getSphere(as1l, painti.toDouble(), 20)
-                                    for (loc in p_locs) {
+                                    val pLocs: MutableList<Location> = getSphere(as1l, painti.toDouble(), 20)
+                                    for (loc in pLocs) {
                                         PaintMgr.Paint(loc, player, false)
                                     }
                                 }
-                            } else if (as1!!.isOnGround) {
+                            } else if (as1.isOnGround) {
                                 aVec =
                                     Vector(
                                         player.location.x - bloc!!.x,
@@ -155,8 +155,8 @@ object Boomerang {
                             }
                         }
                         if (i >= cumbacktime + 5) {
-                            if (bloc!!.x == as1l.x && bloc!!.z != as1l.z ||
-                                bloc!!.z == as1l.z && bloc!!.x != as1l.x
+                            if ((bloc!!.x == as1l.x && bloc!!.z != as1l.z) ||
+                                (bloc!!.z == as1l.z && bloc!!.x != as1l.x)
                             ) {
                                 explode = true
                             }
@@ -164,7 +164,7 @@ object Boomerang {
                         if (i >= cumbacktime + 15) {
                             explode = true
                         }
-                        as1!!.velocity = aVec
+                        as1.velocity = aVec
 
                         PaintMgr.PaintHightestBlock(as1l, player, false, true)
 
@@ -179,11 +179,11 @@ object Boomerang {
                                     .playerConnection
                                     .sendPacket(
                                         PacketPlayOutEntityEquipment(
-                                            as3!!.entityId,
+                                            as3.entityId,
                                             EnumItemSlot.HEAD,
                                             CraftItemStack.asNMSCopy(
                                                 ItemStack(
-                                                    getPlayerData(player)!!.team.teamColor!!.wool!!,
+                                                    getPlayerData(player)!!.team!!.teamColor!!.wool!!,
                                                 ),
                                             ),
                                         ),
@@ -199,11 +199,12 @@ object Boomerang {
                         if (i % 2 == 0) {
                             val bd =
                                 getPlayerData(player)!!
-                                    .team.teamColor!!
+                                    .team!!
+                                    .teamColor!!
                                     .wool!!
                                     .createBlockData()
                             for (target in plugin.server.onlinePlayers) {
-                                if (getPlayerData(target)!!.settings.ShowEffect_Bomb()) {
+                                if (getPlayerData(target)!!.settings!!.ShowEffect_Bomb()) {
                                     if (target.world ===
                                         player.world
                                     ) {
@@ -227,7 +228,7 @@ object Boomerang {
                             }
                             // 攻撃判定
                             for (target in plugin.server.onlinePlayers) {
-                                if (getPlayerData(target)!!.settings.ShowEffect_Bomb()) {
+                                if (getPlayerData(target)!!.settings!!.ShowEffect_Bomb()) {
                                     if (target.world === player.world) {
                                         if (target.location.distance(as1l) <= 1.2) {
                                             val damage = 0.2
@@ -286,8 +287,8 @@ object Boomerang {
                             run {
                                 var i = 0
                                 while (i <= maxDist) {
-                                    val p_locs: MutableList<Location> = getSphere(as1l, i.toDouble(), 20)
-                                    for (loc in p_locs) {
+                                    val pLocs: MutableList<Location> = getSphere(as1l, i.toDouble(), 20)
+                                    for (loc in pLocs) {
                                         PaintMgr.Paint(loc, player, false)
                                     }
                                     i++
@@ -306,9 +307,9 @@ object Boomerang {
                                                         getPlayerData(player)!!
                                                             .team
                                                     ) {
-                                                        as1!!.remove()
+                                                        as1.remove()
                                                         as2.remove()
-                                                        as3!!.remove()
+                                                        as3.remove()
                                                         fb!!.remove()
                                                         cancel()
                                                     }
@@ -318,9 +319,9 @@ object Boomerang {
                                                         getPlayerData(player)!!
                                                             .team
                                                     ) {
-                                                        as1!!.remove()
+                                                        as1.remove()
                                                         as2.remove()
-                                                        as3!!.remove()
+                                                        as3.remove()
                                                         fb!!.remove()
                                                         cancel()
                                                     }
@@ -377,18 +378,18 @@ object Boomerang {
                                 }
                             }
 
-                            as1!!.remove()
+                            as1.remove()
                             as2.remove()
-                            as3!!.remove()
+                            as3.remove()
                             fb!!.remove()
                             cancel()
                         }
 
                         i++
                     } catch (e: Exception) {
-                        as1!!.remove()
-                        as2!!.remove()
-                        as3!!.remove()
+                        as1.remove()
+                        as2.remove()
+                        as3.remove()
                         fb!!.remove()
                         cancel()
                     }

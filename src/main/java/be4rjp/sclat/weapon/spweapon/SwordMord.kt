@@ -43,7 +43,7 @@ object SwordMord {
     @JvmStatic
     fun setSwordMord(player: Player) {
         getPlayerData(player)!!.isUsingSP = true
-        getPlayerData(player)!!.setIsUsingSS(true)
+        getPlayerData(player)!!.isUsingSS = true
         SPWeaponMgr.setSPCoolTimeAnimation(player, 160)
 
         val it: BukkitRunnable =
@@ -66,7 +66,7 @@ object SwordMord {
                     player.addPotionEffect(PotionEffect(PotionEffectType.LUCK, 161, 1))
                     // player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 161, 0));
                     // SwordPaintRunnable(p);
-                    SwordGurdRunnable(p)
+                    swordGurdRunnable(p)
                 }
             }
         it.runTaskLater(plugin, 2)
@@ -78,7 +78,7 @@ object SwordMord {
                 override fun run() {
                     if (getPlayerData(p)!!.isInMatch) {
                         getPlayerData(p)!!.isUsingSP = false
-                        getPlayerData(p)!!.setIsUsingSS(false)
+                        getPlayerData(p)!!.isUsingSS = false
                         player.inventory.clear()
                         WeaponClassMgr.setWeaponClass(p)
                     }
@@ -88,7 +88,7 @@ object SwordMord {
     }
 
     @JvmStatic
-    fun AttackSword(player: Player) {
+    fun attackSword(player: Player) {
         if (player.hasPotionEffect(PotionEffectType.LUCK)) {
             if (!player.isSneaking) {
                 player.world.playSound(player.location, Sound.ENTITY_PLAYER_ATTACK_SWEEP, 1.4f, 1.5f)
@@ -103,7 +103,7 @@ object SwordMord {
                                 .multiply(2.4),
                         )
                 for (target in plugin.server.onlinePlayers) {
-                    if (getPlayerData(target)!!.settings.ShowEffect_Bomb()) {
+                    if (getPlayerData(target)!!.settings!!.ShowEffect_Bomb()) {
                         if (target.world ===
                             player.world
                         ) {
@@ -122,8 +122,8 @@ object SwordMord {
                 }
                 val maxDist = 3
                 for (i in 0..maxDist - 1) {
-                    val p_locs = getSphere(vec, i.toDouble(), 20)
-                    for (loc in p_locs) {
+                    val pLocs = getSphere(vec, i.toDouble(), 20)
+                    for (loc in pLocs) {
                         PaintMgr.Paint(loc, player, false)
                         PaintMgr.PaintHightestBlock(loc, player, false, false)
                     }
@@ -174,7 +174,7 @@ object SwordMord {
         }
     }
 
-    fun SwordPaintRunnable(player: Player) {
+    fun swordPaintRunnable(player: Player) {
         val task: BukkitRunnable =
             object : BukkitRunnable() {
                 var p: Player = player
@@ -205,7 +205,7 @@ object SwordMord {
         task.runTaskTimer(plugin, 0, 1)
     }
 
-    fun SwordGurdRunnable(player: Player) {
+    fun swordGurdRunnable(player: Player) {
         val task: BukkitRunnable =
             object : BukkitRunnable() {
                 var kdata: KasaData = KasaData(player)
@@ -341,7 +341,7 @@ object SwordMord {
                             }
                         }
                         if (p.gameMode != GameMode.SPECTATOR && p.isSneaking && gurd && kdata.damage != 0.0) {
-                            ShootCounter(player)
+                            shootCounter(player)
                             kdata.damage = (0).toDouble()
                         }
                     } catch (e: Exception) {
@@ -352,15 +352,15 @@ object SwordMord {
         task.runTaskTimer(plugin, 0, 1)
     }
 
-    fun ShootCounter(player: Player) {
-        val QuadroShootSpeed = 1.0
+    fun shootCounter(player: Player) {
+        val quadroShootSpeed = 1.0
         if (player.gameMode == GameMode.SPECTATOR) return
         PaintMgr.PaintHightestBlock(player.location, player, true, true)
 
         val ball = player.launchProjectile<Snowball>(Snowball::class.java)
-        (ball as CraftSnowball).handle.setItem(CraftItemStack.asNMSCopy(ItemStack(getPlayerData(player)!!.team.teamColor!!.wool!!)))
+        (ball as CraftSnowball).handle.setItem(CraftItemStack.asNMSCopy(ItemStack(getPlayerData(player)!!.team!!.teamColor!!.wool!!)))
         player.world.playSound(player.location, Sound.ENTITY_PIG_STEP, 0.3f, 1f)
-        val vec = player.location.direction.multiply(QuadroShootSpeed)
+        val vec = player.location.direction.multiply(quadroShootSpeed)
         val random = 0.1
         vec.add(Vector(Math.random() * random - random / 2, 0.0, Math.random() * random - random / 2))
         ball.velocity = vec
@@ -371,7 +371,7 @@ object SwordMord {
         ball.customName = name
         mainSnowballNameMap.put(name, ball)
         setSnowballHitCount(name, 0)
-        val SpinnerTask: BukkitRunnable =
+        val spinnerTask: BukkitRunnable =
             object : BukkitRunnable() {
                 var i: Int = 0
                 var tick: Int = 4
@@ -391,7 +391,7 @@ object SwordMord {
                         inkball!!.velocity.getX(),
                         inkball!!.velocity.getY(),
                         inkball!!.velocity.getZ(),
-                    ).multiply(QuadroShootSpeed / 35)
+                    ).multiply(quadroShootSpeed / 35)
 
                 override fun run() {
                     inkball = mainSnowballNameMap.get(name)
@@ -404,11 +404,12 @@ object SwordMord {
                     if (i != 0) {
                         val bd =
                             getPlayerData(p)!!
-                                .team.teamColor!!
+                                .team!!
+                                .teamColor!!
                                 .wool!!
                                 .createBlockData()
                         for (o_player in plugin.server.onlinePlayers) {
-                            if (getPlayerData(o_player)!!.settings.ShowEffect_MainWeaponInk()) {
+                            if (getPlayerData(o_player)!!.settings!!.ShowEffect_MainWeaponInk()) {
                                 if (o_player.world ===
                                     inkball!!.world
                                 ) {
@@ -448,6 +449,6 @@ object SwordMord {
                     i++
                 }
             }
-        SpinnerTask.runTaskTimer(plugin, 0, 1)
+        spinnerTask.runTaskTimer(plugin, 0, 1)
     }
 }

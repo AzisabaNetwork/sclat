@@ -19,9 +19,8 @@ class SPWeapon : Listener {
         val action = event.getAction()
         getPlayerData(player)
 
-        if (player.inventory.itemInMainHand == null || player.inventory.itemInMainHand
-                .itemMeta == null || player.inventory.itemInMainHand.itemMeta!!
-                .displayName == null
+        if (player.inventory.itemInMainHand
+                .itemMeta == null
         ) {
             return
         }
@@ -29,7 +28,8 @@ class SPWeapon : Listener {
         if (action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK) {
             SPWeaponMgr.UseSPWeapon(
                 player,
-                player.inventory.itemInMainHand.itemMeta!!.displayName,
+                player.inventory.itemInMainHand.itemMeta!!
+                    .displayName,
             )
         }
     }

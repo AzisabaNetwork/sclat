@@ -33,7 +33,7 @@ import org.bukkit.util.Vector
  */
 object MegaLaser {
     @JvmStatic
-    fun MegaLaserRunnable(player: Player) {
+    fun megaLaserRunnable(player: Player) {
         val api = BlockStudio.getBlockStudioAPI()
         val objectData = api.getObjectData("mega")
         val bsObject = api.createObjectFromObjectData("mega", player.location, objectData, false)
@@ -61,7 +61,7 @@ object MegaLaser {
                         }
                         player.updateInventory()
 
-                        getPlayerData(p)!!.setIsUsingMM(true)
+                        getPlayerData(p)!!.isUsingMM = true
                     }
 
                     val direction = player.eyeLocation.direction
@@ -74,9 +74,9 @@ object MegaLaser {
                     bsObject.setDirection(player.eyeLocation.direction)
                     bsObject.move()
 
-                    if (!getPlayerData(p)!!.getIsUsingMM() || c == 400) {
-                        getPlayerData(p)!!.setIsUsingMM(false)
-                        MegaLaserShootRunnable(player, bsObject)
+                    if (!getPlayerData(p)!!.isUsingMM || c == 400) {
+                        getPlayerData(p)!!.isUsingMM = false
+                        megaLaserShootRunnable(player, bsObject)
                         WeaponClassMgr.setWeaponClass(p)
                         if (p.hasPotionEffect(PotionEffectType.SLOW)) p.removePotionEffect(PotionEffectType.SLOW)
                         cancel()
@@ -84,7 +84,7 @@ object MegaLaser {
 
                     if (!p.isOnline || !getPlayerData(p)!!.isInMatch || p.gameMode == GameMode.SPECTATOR) {
                         if (p.hasPotionEffect(PotionEffectType.SLOW)) p.removePotionEffect(PotionEffectType.SLOW)
-                        getPlayerData(p)!!.setIsUsingMM(false)
+                        getPlayerData(p)!!.isUsingMM = false
                         bsObject.remove()
                         cancel()
                     }
@@ -111,7 +111,7 @@ object MegaLaser {
         }
     }
 
-    fun MegaLaserShootRunnable(
+    fun megaLaserShootRunnable(
         player: Player,
         bsObject: BSObject,
     ) {
@@ -185,7 +185,7 @@ object MegaLaser {
                         if (i == 3) r = 3
                         if (i >= 4) r = 5
 
-                        val position = positions.get(i)!!.toLocation(objectLoc.world!!)
+                        val position = positions.get(i).toLocation(objectLoc.world!!)
 
                         for (plus in plusList) {
                             val eloc = position.clone().add(plus.clone().multiply(r))
@@ -194,10 +194,10 @@ object MegaLaser {
                                 if (eloc.distanceSquared(target.location) < Sclat.particleRenderDistanceSquared) {
                                     val targetData = getPlayerData(target)
                                     if (targetData == null) continue
-                                    if (targetData.settings.ShowEffect_SPWeaponRegion()) {
+                                    if (targetData.settings!!.ShowEffect_SPWeaponRegion()) {
                                         val dustOptions =
                                             Particle.DustOptions(
-                                                playerData.team.teamColor!!.bukkitColor!!,
+                                                playerData.team!!.teamColor!!.bukkitColor!!,
                                                 (if (c <= 3) 1 else 2).toFloat(),
                                             )
                                         target.spawnParticle<Particle.DustOptions?>(
@@ -245,12 +245,12 @@ object MegaLaser {
                                 }
                             }
                             // ここは上のループに含ませちゃってもいいのか...?
-                        /*
-                         * for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) { if
-                         * (list.contains(target)) Sclat.sendWorldBorderWarningPacket(target); else
-                         * Sclat.sendWorldBorderWarningClearPacket(target); }
-                         *
-                         */
+//                        /*
+//                         * for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) { if
+//                         * (list.contains(target)) Sclat.sendWorldBorderWarningPacket(target); else
+//                         * Sclat.sendWorldBorderWarningClearPacket(target); }
+//                         *
+//                         */
                         }
 
                         // 攻撃判定
@@ -293,28 +293,24 @@ object MegaLaser {
                                 }
                             }
 
-                            sync(
-                                Runnable {
-                                    for (`as` in player.world.entities) {
-                                        if (`as` is ArmorStand && `as`
-                                                .location
-                                                .distanceSquared(position.clone().add(0.0, -1.0, 0.0)) <= maxDistSquared
-                                        ) {
-                                            ArmorStandMgr.giveDamageArmorStand(`as`, damage, player)
-                                        }
+                            sync {
+                                for (`as` in player.world.entities) {
+                                    if (`as` is ArmorStand && `as`
+                                            .location
+                                            .distanceSquared(position.clone().add(0.0, -1.0, 0.0)) <= maxDistSquared
+                                    ) {
+                                        ArmorStandMgr.giveDamageArmorStand(`as`, damage, player)
                                     }
-                                },
-                            )
+                                }
+                            }
                         }
                     }
 
-                    sync(
-                        Runnable {
-                            for (target in damageTargets) {
-                                giveDamage(p, target, damage, "spWeapon")
-                            }
-                        },
-                    )
+                    sync {
+                        for (target in damageTargets) {
+                            giveDamage(p, target, damage, "spWeapon")
+                        }
+                    }
 
                     c++
                 }

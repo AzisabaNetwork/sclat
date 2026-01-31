@@ -63,7 +63,7 @@ object Kasa {
             delay1.runTaskLater(
                 plugin,
                 data
-                    .weaponClass
+                    .weaponClass!!
                     .mainWeapon!!
                     .coolTime
                     .toLong(),
@@ -76,7 +76,7 @@ object Kasa {
 
                 override fun run() {
                     var sound = false
-                    for (i in 0..<data.weaponClass.mainWeapon!!.rollerShootQuantity) {
+                    for (i in 0..<data.weaponClass?.mainWeapon!!.rollerShootQuantity) {
                         val `is` = shoot(player, null)
                         if (`is`) sound = true
                     }
@@ -90,7 +90,7 @@ object Kasa {
             delay.runTaskLater(
                 plugin,
                 data
-                    .weaponClass
+                    .weaponClass!!
                     .mainWeapon!!
                     .delay
                     .toLong(),
@@ -108,7 +108,7 @@ object Kasa {
         val data = getPlayerData(player)
         if (player.exp <=
             (
-                data!!.weaponClass.mainWeapon!!.needInk
+                data!!.weaponClass!!.mainWeapon!!.needInk
                     * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) /
                     Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)
                 ).toFloat()
@@ -118,20 +118,20 @@ object Kasa {
         }
         player.exp = player.exp -
             (
-                data.weaponClass.mainWeapon!!.needInk
+                data.weaponClass?.mainWeapon!!.needInk
                     * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) /
                     Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)
                 ).toFloat()
         val ball = player.launchProjectile<Snowball>(Snowball::class.java)
-        (ball as CraftSnowball).handle.setItem(CraftItemStack.asNMSCopy(ItemStack(getPlayerData(player)!!.team.teamColor!!.wool!!)))
+        (ball as CraftSnowball).handle.setItem(CraftItemStack.asNMSCopy(ItemStack(getPlayerData(player)!!.team!!.teamColor!!.wool!!)))
         var vec: Vector? =
             player
                 .location
                 .direction
-                .multiply(getPlayerData(player)!!.weaponClass.mainWeapon!!.shootSpeed)
+                .multiply(getPlayerData(player)!!.weaponClass!!.mainWeapon!!.shootSpeed)
         if (v != null) vec = v
-        val random = getPlayerData(player)!!.weaponClass.mainWeapon!!.random
-        val distick = getPlayerData(player)!!.weaponClass.mainWeapon!!.distanceTick
+        val random = getPlayerData(player)!!.weaponClass!!.mainWeapon!!.random
+        val distick = getPlayerData(player)!!.weaponClass!!.mainWeapon!!.distanceTick
         vec!!.add(
             Vector(
                 Math.random() * random - random / 2,
@@ -158,7 +158,7 @@ object Kasa {
                         inkball!!.velocity.getX(),
                         inkball!!.velocity.getY(),
                         inkball!!.velocity.getZ(),
-                    ).multiply(getPlayerData(p)!!.weaponClass.mainWeapon!!.shootSpeed / 17)
+                    ).multiply(getPlayerData(p)!!.weaponClass!!.mainWeapon!!.shootSpeed / 17)
 
                 override fun run() {
                     inkball = mainSnowballNameMap.get(name)
@@ -170,7 +170,7 @@ object Kasa {
 
                     if (i != 0) {
                         for (target in plugin.server.onlinePlayers) {
-                            if (!getPlayerData(target)!!.settings.ShowEffect_MainWeaponInk()) continue
+                            if (!getPlayerData(target)!!.settings!!.ShowEffect_MainWeaponInk()) continue
                             if (target.world === inkball!!.world) {
                                 if (target
                                         .location
@@ -178,7 +178,8 @@ object Kasa {
                                 ) {
                                     val bd =
                                         getPlayerData(p)!!
-                                            .team.teamColor!!
+                                            .team!!
+                                            .teamColor!!
                                             .wool!!
                                             .createBlockData()
                                     target.spawnParticle<BlockData?>(
@@ -410,10 +411,10 @@ object Kasa {
                 var i: Int = 0
                 var c: Int = 0
                 var `is`: Boolean = true
-                var pageCooltime: Int = getPlayerData(p)!!.weaponClass.mainWeapon!!.rollerWidth
+                var pageCooltime: Int = getPlayerData(p)!!.weaponClass!!.mainWeapon!!.rollerWidth
 
                 override fun run() {
-                    if (p.isSneaking && `is` && p.gameMode != GameMode.SPECTATOR && !getPlayerData(p)!!.getIsUsingTyakuti()) {
+                    if (p.isSneaking && `is` && p.gameMode != GameMode.SPECTATOR && !getPlayerData(p)!!.isUsingTyakuti) {
                         `is` = false
                         camping(p)
                         getPlayerData(p)!!.mainItemGlow = false
@@ -453,8 +454,8 @@ object Kasa {
                 var i: Int = 0
                 var bp: Boolean = false
                 var squid: Boolean = true
-                var kasaSpeed: Float = getPlayerData(p)!!.weaponClass.mainWeapon!!.rollerNeedInk
-                var pageCooltime: Int = getPlayerData(p)!!.weaponClass.mainWeapon!!.rollerWidth
+                var kasaSpeed: Float = getPlayerData(p)!!.weaponClass!!.mainWeapon!!.rollerNeedInk
+                var pageCooltime: Int = getPlayerData(p)!!.weaponClass!!.mainWeapon!!.rollerWidth
 
                 var dir: Vector = Vector(1, 0, 0)
 
@@ -641,7 +642,7 @@ object Kasa {
 
                             val aslist: MutableList<ArmorStand> = ArrayList<ArmorStand>(list)
                             kdata.armorStandList = aslist
-                            kdata.damage = (getPlayerData(p)!!.weaponClass.mainWeapon!!.slideNeedINK).toDouble()
+                            kdata.damage = (getPlayerData(p)!!.weaponClass!!.mainWeapon!!.slideNeedINK).toDouble()
 
                             for (`as` in list) {
                                 // as.setHeadPose(new EulerAngle(Math.toRadians(90), 0, 0));
@@ -691,11 +692,12 @@ object Kasa {
                                 val asl = as4!!.location
                                 val bd =
                                     getPlayerData(p)!!
-                                        .team.teamColor!!
+                                        .team!!
+                                        .teamColor!!
                                         .wool!!
                                         .createBlockData()
                                 for (target in plugin.server.onlinePlayers) {
-                                    if (getPlayerData(target)!!.settings.ShowEffect_MainWeaponInk() && target.world === p.world &&
+                                    if (getPlayerData(target)!!.settings!!.ShowEffect_MainWeaponInk() && target.world === p.world &&
                                         target
                                             .location
                                             .distanceSquared(asl) < Sclat.particleRenderDistanceSquared
@@ -749,8 +751,8 @@ object Kasa {
                             var c = 1
                             for (`as` in list) {
                                 val data = getPlayerData(player)
-                                var team = data!!.match.team0
-                                if (team == data.team) team = data.match.team1
+                                var team = data!!.match!!.team0
+                                if (team == data.team) team = data.match!!.team1
                                 for (o_player in plugin.server.onlinePlayers) {
                                     if (kdata.damage == 0.0) {
                                         (o_player as CraftPlayer)
@@ -910,7 +912,7 @@ object Kasa {
                             las!!.setGravity(true)
                             las!!.customName = "Kasa"
                             val l: MutableList<ArmorStand> = kdata.armorStandList
-                            l!!.add(las!!)
+                            l.add(las!!)
                             kdata.armorStandList = l
                             setKasaDataWithARmorStand(las, kdata)
                             p.playNote(p.location, Instrument.STICKS, Note.flat(1, Note.Tone.C))
@@ -949,8 +951,8 @@ object Kasa {
             object : BukkitRunnable() {
                 override fun run() {
                     val data = getPlayerData(player)
-                    var team = data!!.match.team0
-                    if (team == data.team) team = data.match.team1
+                    var team = data!!.match!!.team0
+                    if (team == data.team) team = data.match!!.team1
 
                     var c = 1
                     for (`as` in list) {

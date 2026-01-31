@@ -20,19 +20,19 @@ import java.util.function.Predicate
 
 object Manuber {
     @JvmStatic
-    fun ManeuverRunnable(player: Player) {
+    fun maneuverRunnable(player: Player) {
         val delay: BukkitRunnable =
             object : BukkitRunnable() {
                 var p: Player = player
                 var loc: Location = player.location
                 var loc2: Location = player.location
                 var before: Location = player.location
-                var before_2: Location = player.location
+                var before2: Location = player.location
 
                 // int sl = 0;
                 // スライドの仕様改変
-                var sl_recharge_1: Boolean = true
-                var sl_recharge_2: Boolean = true
+                var slRecharge1: Boolean = true
+                var slRecharge2: Boolean = true
 
                 // スライドに使う変数の定義Trueの時は使用可能Falseの時は使用不可能を表している
                 var distcheck: Double = 0.0
@@ -55,28 +55,28 @@ object Manuber {
                     if (x != 0.0 || z != 0.0) {
                         vec = Vector(x, 0.0, z)
                     } else {
-                        x = location.x - before_2.x
-                        z = location.z - before_2.z
+                        x = location.x - before2.x
+                        z = location.z - before2.z
                         if (x != 0.0 || z != 0.0) {
                             vec = Vector(x, 0.0, z)
                         }
                     }
-                    before_2 = before.clone()
+                    before2 = before.clone()
                     before = location.clone()
 
                     // float ink = data.getWeaponClass().getMainWeapon().getSlideNeedINK();
 
                     // マニューバー系
-                    if (data.weaponClass.mainWeapon!!.isManeuver) {
+                    if (data.weaponClass?.mainWeapon!!.isManeuver) {
                         // if(p.getExp() >= ink) {
-                        if (data.isSneaking && sl_recharge_2 && !data.isSliding && (
+                        if (data.isSneaking && slRecharge2 && !data.isSliding && (
                                 p
                                     .inventory
                                     .itemInMainHand
                                     .type
                                     ==
                                     data
-                                        .weaponClass
+                                        .weaponClass!!
                                         .mainWeapon!!
                                         .weaponIteamStack!!
                                         .type
@@ -91,7 +91,8 @@ object Manuber {
                             // エフェクト
                             val bd =
                                 getPlayerData(player)!!
-                                    .team.teamColor!!
+                                    .team!!
+                                    .teamColor!!
                                     .wool!!
                                     .createBlockData()
                             val random = 1.0
@@ -101,7 +102,7 @@ object Manuber {
                             }
                             p.world.playSound(p.location, Sound.ITEM_ARMOR_EQUIP_GENERIC, 1.4f, 1.5f)
 
-                            distcheck = EntityWallHit(p, jvec.clone())
+                            distcheck = entityWallHit(p, jvec.clone())
                             while (distcheck > 0 &&
                                 !isSafeLocation(p, location.clone().add(jvec.clone().multiply(distcheck)))
                             ) {
@@ -116,7 +117,7 @@ object Manuber {
                             p.teleport(
                                 location
                                     .clone()
-                                    .add(jvec.clone().multiply(EntityArmorstandHit(p, jvec.clone(), distcheck))),
+                                    .add(jvec.clone().multiply(entityArmorstandHit(p, jvec.clone(), distcheck))),
                             )
 
                             // effect
@@ -129,7 +130,7 @@ object Manuber {
                                     )
                                 val erv = ev.clone().add(randomVector)
                                 for (o_player in plugin.server.onlinePlayers) {
-                                    if (getPlayerData(o_player)!!.settings.ShowEffect_BombEx()) {
+                                    if (getPlayerData(o_player)!!.settings!!.ShowEffect_BombEx()) {
                                         if (o_player.world === location.world) {
                                             if (o_player
                                                     .location
@@ -164,30 +165,30 @@ object Manuber {
                             data.isSliding = true
                             data.canShoot = false
                             // 優先順位が高い方のスライドがFalseだった場合に低い方をFalseにするようにしました高い方がtrueであった場合は高い方がFalseになります
-                            if (!sl_recharge_1) {
-                                sl_recharge_2 = false
+                            if (!slRecharge1) {
+                                slRecharge2 = false
                             } else {
-                                sl_recharge_1 = false
+                                slRecharge1 = false
                             }
                             // sl++;
-                            val task0_1: BukkitRunnable =
+                            val task01: BukkitRunnable =
                                 object : BukkitRunnable() {
                                     var i: Int = 1
 
                                     override fun run() {
                                         if (i == 3) {
                                             p.velocity = Vector(0, 0, 0)
-                                            data.setIsUsingManeuver(true)
+                                            data.isUsingManeuver = (true)
                                             data.canShoot = true
                                         }
 
                                         if (i == 9) {
                                             loc = p.location
-                                            data.setIsUsingManeuver(true)
+                                            data.isUsingManeuver = (true)
                                         }
 
                                         if (i == 10) {
-                                            // data.setIsUsingManeuver(false);
+                                            // data.isUsingManeuver = (false);
                                             // if(sl_recharge_2) {
                                             data.isSliding = false
                                             // }
@@ -196,35 +197,35 @@ object Manuber {
                                         i++
                                     }
                                 }
-                            val task0_0: BukkitRunnable =
+                            val task00: BukkitRunnable =
                                 object : BukkitRunnable() {
                                     var i: Int = 1
 
                                     override fun run() {
                                         if (i == 3) {
                                             p.velocity = Vector(0, 0, 0)
-                                            data.setIsUsingManeuver(true)
+                                            data.isUsingManeuver = (true)
                                             data.canShoot = true
                                         }
 
                                         if (i == 9) {
                                             loc2 = p.location
-                                            data.setIsUsingManeuver(true)
+                                            data.isUsingManeuver = (true)
                                         }
 
                                         if (i == 10) {
-                                            // data.setIsUsingManeuver(false);
+                                            // data.isUsingManeuver = (false);
                                             data.isSliding = false
                                             cancel()
                                         }
                                         i++
                                     }
                                 }
-                            if (sl_recharge_2) {
+                            if (slRecharge2) {
                                 // task0_1.runTaskTimer(Main.getPlugin(), 0, 1);
-                                task0_1.runTaskTimer(plugin, 0, 1)
+                                task01.runTaskTimer(plugin, 0, 1)
                             } else {
-                                task0_0.runTaskTimer(plugin, 0, 1)
+                                task00.runTaskTimer(plugin, 0, 1)
                             }
                             // BukkitRunnable task2 = new BukkitRunnable() {
                             // @Override
@@ -246,7 +247,7 @@ object Manuber {
                         if ((loc.x == ploc.x && loc.z == ploc.z) ||
                             (loc2.x == ploc.x && loc2.z == ploc.z)
                         ) {
-                            data.setIsUsingManeuver(true)
+                            data.isUsingManeuver = (true)
                         } else {
                             if (check) {
                                 // p.sendMessage("現在地はX＝"+p.getLocation().getX()+" Y="+p.getLocation().getY()+"
@@ -256,7 +257,7 @@ object Manuber {
                                 val task4: BukkitRunnable =
                                     object : BukkitRunnable() {
                                         override fun run() {
-                                            sl_recharge_1 = true
+                                            slRecharge1 = true
                                             // p.sendMessage("スライド１リチャージ完了です");
                                             // check = true;
                                         }
@@ -265,20 +266,20 @@ object Manuber {
                                 val task5: BukkitRunnable =
                                     object : BukkitRunnable() {
                                         override fun run() {
-                                            sl_recharge_1 = true
-                                            sl_recharge_2 = true
+                                            slRecharge1 = true
+                                            slRecharge2 = true
                                             // p.sendMessage("スライド2リチャージ完了です");
                                             // check = true;
                                         }
                                     }
-                                if (sl_recharge_2) {
+                                if (slRecharge2) {
                                     task4.runTaskLater(plugin, 64)
                                 } else {
                                     task5.runTaskLater(plugin, 64)
                                 }
                                 check = false
                             }
-                            data.setIsUsingManeuver(false)
+                            data.isUsingManeuver = (false)
                         }
                     }
 
@@ -288,7 +289,7 @@ object Manuber {
         delay.runTaskTimer(plugin, 0, 1)
     }
 
-    private fun EntityWallHit(
+    private fun entityWallHit(
         p: Player,
         direction: Vector,
     ): Double {
@@ -310,14 +311,14 @@ object Manuber {
         }
     }
 
-    private fun EntityArmorstandHit(
+    private fun entityArmorstandHit(
         p: Player,
         direction: Vector,
         dist: Double,
     ): Double {
         val entityLocation = p.location.clone()
         val distance = dist // レイの長さ
-        var distance2 = dist
+        var distance2: Double
         val world = p.world
         // if (result != null && result.getHitBlock() != null) {
         val isArmorStand = Predicate { entity: Entity? -> entity!!.type == EntityType.ARMOR_STAND }

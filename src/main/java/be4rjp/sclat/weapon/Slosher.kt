@@ -33,7 +33,7 @@ import org.bukkit.util.Vector
  */
 object Slosher {
     @JvmStatic
-    fun ShootSlosher(player: Player) {
+    fun shootSlosher(player: Player) {
         val data = getPlayerData(player)
         val delay1: BukkitRunnable =
             object : BukkitRunnable() {
@@ -48,7 +48,7 @@ object Slosher {
             delay1.runTaskLater(
                 plugin,
                 data
-                    .weaponClass
+                    .weaponClass!!
                     .mainWeapon!!
                     .coolTime
                     .toLong(),
@@ -60,8 +60,8 @@ object Slosher {
                 var p: Player? = player
 
                 override fun run() {
-                    for (i in 0..<data.weaponClass.mainWeapon!!.rollerShootQuantity) {
-                        Shoot(player, null)
+                    for (i in 0..<data.weaponClass?.mainWeapon!!.rollerShootQuantity) {
+                        shoot(player, null)
                     }
                 }
             }
@@ -69,7 +69,7 @@ object Slosher {
             delay.runTaskLater(
                 plugin,
                 data
-                    .weaponClass
+                    .weaponClass!!
                     .mainWeapon!!
                     .delay
                     .toLong(),
@@ -78,7 +78,7 @@ object Slosher {
         }
     }
 
-    fun Shoot(
+    fun shoot(
         player: Player,
         v: Vector?,
     ) {
@@ -87,7 +87,7 @@ object Slosher {
         val data = getPlayerData(player)
         if (player.exp <=
             (
-                data!!.weaponClass.mainWeapon!!.needInk
+                data!!.weaponClass!!.mainWeapon!!.needInk
                     * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) /
                     Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)
                 ).toFloat()
@@ -98,20 +98,20 @@ object Slosher {
         }
         player.exp = player.exp -
             (
-                data.weaponClass.mainWeapon!!.needInk
+                data.weaponClass?.mainWeapon!!.needInk
                     * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) /
                     Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)
                 ).toFloat()
         val ball = player.launchProjectile<Snowball>(Snowball::class.java)
-        (ball as CraftSnowball).handle.setItem(CraftItemStack.asNMSCopy(ItemStack(getPlayerData(player)!!.team.teamColor!!.wool!!)))
+        (ball as CraftSnowball).handle.setItem(CraftItemStack.asNMSCopy(ItemStack(getPlayerData(player)!!.team!!.teamColor!!.wool!!)))
         var vec: Vector? =
             player
                 .location
                 .direction
-                .multiply(getPlayerData(player)!!.weaponClass.mainWeapon!!.shootSpeed)
+                .multiply(getPlayerData(player)!!.weaponClass!!.mainWeapon!!.shootSpeed)
         if (v != null) vec = v
-        val random = getPlayerData(player)!!.weaponClass.mainWeapon!!.random
-        val distick = getPlayerData(player)!!.weaponClass.mainWeapon!!.distanceTick
+        val random = getPlayerData(player)!!.weaponClass!!.mainWeapon!!.random
+        val distick = getPlayerData(player)!!.weaponClass!!.mainWeapon!!.distanceTick
         vec!!.add(
             Vector(
                 Math.random() * random - random / 2,
@@ -138,7 +138,7 @@ object Slosher {
                         inkball!!.velocity.getX(),
                         inkball!!.velocity.getY(),
                         inkball!!.velocity.getZ(),
-                    ).multiply(getPlayerData(p)!!.weaponClass.mainWeapon!!.shootSpeed / 17)
+                    ).multiply(getPlayerData(p)!!.weaponClass!!.mainWeapon!!.shootSpeed / 17)
 
                 override fun run() {
                     try {
@@ -149,7 +149,7 @@ object Slosher {
                             setSnowballHitCount(name, 0)
                         }
                         for (target in plugin.server.onlinePlayers) {
-                            if (!getPlayerData(target)!!.settings.ShowEffect_MainWeaponInk()) continue
+                            if (!getPlayerData(target)!!.settings!!.ShowEffect_MainWeaponInk()) continue
                             if (target.world === inkball!!.world) {
                                 if (target
                                         .location
@@ -157,7 +157,8 @@ object Slosher {
                                 ) {
                                     val bd =
                                         getPlayerData(p)!!
-                                            .team.teamColor!!
+                                            .team!!
+                                            .teamColor!!
                                             .wool!!
                                             .createBlockData()
                                     target.spawnParticle<BlockData?>(
@@ -185,7 +186,7 @@ object Slosher {
                         }
                         if (inkball!!.isDead) {
                             // 半径
-                            val maxDist = data.weaponClass.mainWeapon!!.blasterExHankei
+                            val maxDist = data.weaponClass?.mainWeapon!!.blasterExHankei
 
                             // 爆発音
                             player
@@ -199,8 +200,8 @@ object Slosher {
                             run {
                                 var i = 0
                                 while (i <= maxDist) {
-                                    val p_locs = getSphere(inkball!!.location, i.toDouble(), 20)
-                                    for (loc in p_locs) {
+                                    val pLocs = getSphere(inkball!!.location, i.toDouble(), 20)
+                                    for (loc in pLocs) {
                                         PaintMgr.Paint(loc, p, false)
                                         PaintMgr.PaintHightestBlock(loc, p, false, false)
                                     }
@@ -214,7 +215,7 @@ object Slosher {
                                 if (target.location.distanceSquared(inkball!!.location) <= maxDist * maxDist) {
                                     val damage = (
                                         (maxDist - target.location.distance(inkball!!.location)) *
-                                            data.weaponClass.mainWeapon!!.blasterExDamage
+                                            data.weaponClass?.mainWeapon!!.blasterExDamage
                                         )
                                     if (getPlayerData(player)!!.team != getPlayerData(target)!!.team &&
                                         target.gameMode == GameMode.ADVENTURE
@@ -240,7 +241,7 @@ object Slosher {
                                     if (`as`.location.distanceSquared(inkball!!.location) <= maxDist * maxDist) {
                                         val damage = (
                                             (maxDist - `as`.location.distance(inkball!!.location)) *
-                                                data.weaponClass.mainWeapon!!.blasterExDamage
+                                                data.weaponClass?.mainWeapon!!.blasterExDamage
                                             )
                                         ArmorStandMgr.giveDamageArmorStand(`as`, damage, p)
                                     }

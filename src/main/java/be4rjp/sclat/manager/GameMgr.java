@@ -103,7 +103,7 @@ public class GameMgr implements Listener {
 		String uuid = player.getUniqueId().toString();
 		PlayerSettings settings = new PlayerSettings(player);
 		data.settings = settings;
-		data.setWeaponClass(DataMgr.getWeaponClass(conf.config.getString("DefaultClass")));
+		data.weaponClass = (DataMgr.getWeaponClass(conf.config.getString("DefaultClass")));
 		DataMgr.setPlayerData(player, data);
 
 		// ((LivingEntity)player).setCollidable(false);
@@ -121,7 +121,7 @@ public class GameMgr implements Listener {
 
 		if (Sclat.type != ServerType.MATCH) {
 			data.gearNumber = PlayerStatusMgr.getGear(player);
-			data.setWeaponClass(DataMgr.getWeaponClass(PlayerStatusMgr.getEquiptClass(player)));
+			data.weaponClass = (DataMgr.getWeaponClass(PlayerStatusMgr.getEquiptClass(player)));
 		}
 		// 処理の分散
 		BukkitRunnable task = new BukkitRunnable() {
@@ -145,7 +145,7 @@ public class GameMgr implements Listener {
 								meta.setOwningPlayer(player);
 								meta.setDisplayName(player.getName());
 								item.setItemMeta(meta);
-								data.setPlayerHead(CraftItemStack.asNMSCopy(item));
+								data.playerHead = (CraftItemStack.asNMSCopy(item));
 							}
 						};
 						head.runTaskAsynchronously(VariablesKt.getPlugin());
@@ -197,7 +197,7 @@ public class GameMgr implements Listener {
 				final Player p = player;
 				@Override
 				public void run() {
-					// WeaponClassMgr.setWeaponClass(p);
+					// WeaponClassMgr.weaponClass = (p);
 					player.getInventory().clear();
 					ItemStack join = new ItemStack(Material.CHEST);
 					ItemMeta joinmeta = join.getItemMeta();
@@ -215,8 +215,8 @@ public class GameMgr implements Listener {
 					} else {
 						player.getInventory().clear();
 						DataMgr.getPlayerData(player).reset();
-						DataMgr.getPlayerData(player).setIsInMatch(false);
-						DataMgr.getPlayerData(player).setIsJoined(false);
+						DataMgr.getPlayerData(player).isInMatch = false;
+						DataMgr.getPlayerData(player).isJoined = false;
 
 						for (ArmorStand as : DataMgr.getBeaconMap().values()) {
 							if (DataMgr.getBeaconFromplayer(player) == as)
@@ -231,97 +231,83 @@ public class GameMgr implements Listener {
 							final Player p = player;
 							@Override
 							public void run() {
-								DataMgr.getPlayerData(p).setIsInMatch(true);
-								DataMgr.getPlayerData(p).setIsJoined(true);
-								DataMgr.getPlayerData(p).setMainItemGlow(false);
+								DataMgr.getPlayerData(p).isInMatch = (true);
+								DataMgr.getPlayerData(p).isJoined = (true);
+								DataMgr.getPlayerData(p).mainItemGlow = (false);
 								DataMgr.getPlayerData(p).tick = 10;
 								WeaponClass wc = DataMgr.getWeaponClass(conf.config.getString("DefaultClass"));
-								DataMgr.getPlayerData(p).setWeaponClass(wc);
-								if (DataMgr.getPlayerData(p).getWeaponClass().getSubWeaponName().equals("ビーコン"))
+								DataMgr.getPlayerData(p).weaponClass = (wc);
+								if (DataMgr.getPlayerData(p).weaponClass.getSubWeaponName().equals("ビーコン"))
 									ArmorStandMgr.BeaconArmorStandSetup(p);
-								if (DataMgr.getPlayerData(p).getWeaponClass().getSubWeaponName().equals("スプリンクラー"))
+								if (DataMgr.getPlayerData(p).weaponClass.getSubWeaponName().equals("スプリンクラー"))
 									ArmorStandMgr.SprinklerArmorStandSetup(p);
-								if (DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getIsSwap()) {
+								if (DataMgr.getPlayerData(p).weaponClass.mainWeapon.getIsSwap()) {
 									Swapper.SwapperRunnable(p);
-									if (DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon()
-											.getSlidingShootTick() > 1) {
-										Shooter.ManeuverShootRunnable(p);
-										DataMgr.getPlayerData(p).setIsUsingManeuver(true);
+									if (DataMgr.getPlayerData(p).weaponClass.mainWeapon.getSlidingShootTick() > 1) {
+										Shooter.maneuverShootRunnable(p);
+										DataMgr.getPlayerData(p).isUsingManeuver = (true);
 									}
 								}
-								if (DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getWeaponType()
-										.equals("Shooter")) {
-									Shooter.ShooterRunnable(p);
-									if (DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().isManeuver) {
+								if (DataMgr.getPlayerData(p).weaponClass.mainWeapon.weaponType.equals("Shooter")) {
+									Shooter.shooterRunnable(p);
+									if (DataMgr.getPlayerData(p).weaponClass.mainWeapon.isManeuver) {
 										if (DataMgr.getPlayerData(p).settings.doChargeKeep()) {
-											Shooter.ManeuverRunnable(p);
+											Shooter.maneuverRunnable(p);
 										} else {
-											Manuber.ManeuverRunnable(p);
+											Manuber.maneuverRunnable(p);
 										}
-										Shooter.ManeuverShootRunnable(p);
+										Shooter.maneuverShootRunnable(p);
 									}
 								}
-								if (DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getWeaponType()
-										.equals("Reeler")) {
-									Shooter.ShooterRunnable(p);
-									Reeler.ReelerRunnable(p);
-									Reeler.ReelerShootRunnable(p);
+								if (DataMgr.getPlayerData(p).weaponClass.mainWeapon.weaponType.equals("Reeler")) {
+									Shooter.shooterRunnable(p);
+									Reeler.reelerRunnable(p);
+									Reeler.reelerShootRunnable(p);
 								}
-								if (DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getWeaponType()
-										.equals("Blaster")) {
-									if (DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().isManeuver) {
-										Shooter.ManeuverRunnable(p);
+								if (DataMgr.getPlayerData(p).weaponClass.mainWeapon.weaponType.equals("Blaster")) {
+									if (DataMgr.getPlayerData(p).weaponClass.mainWeapon.isManeuver) {
+										Shooter.maneuverRunnable(p);
 									}
 								}
-								if (DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getWeaponType()
-										.equals("Buckler")) {
-									Shooter.ShooterRunnable(p);
+								if (DataMgr.getPlayerData(p).weaponClass.mainWeapon.weaponType.equals("Buckler")) {
+									Shooter.shooterRunnable(p);
 									Buckler.BucklerRunnable(p);
 								}
-								if (DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getWeaponType()
-										.equals("Bucket"))
+								if (DataMgr.getPlayerData(p).weaponClass.mainWeapon.weaponType.equals("Bucket"))
 									Bucket.BucketHealRunnable(p, 1);
-								if (DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getWeaponType()
-										.equals("Slosher"))
+								if (DataMgr.getPlayerData(p).weaponClass.mainWeapon.weaponType.equals("Slosher"))
 									Bucket.BucketHealRunnable(p, 0);
-								if (DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getWeaponType()
-										.equals("Charger")) {
+								if (DataMgr.getPlayerData(p).weaponClass.mainWeapon.weaponType.equals("Charger")) {
 									Charger.ChargerRunnable(p);
 									Decoy.DecoyRunnable(p);
 								}
-								if (DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getWeaponType()
-										.equals("Spinner"))
-									Spinner.SpinnerRunnable(p);
-								if (DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getWeaponType()
-										.equals("Roller")) {
-									if (DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().isHude) {
+								if (DataMgr.getPlayerData(p).weaponClass.mainWeapon.weaponType.equals("Spinner"))
+									Spinner.spinnerRunnable(p);
+								if (DataMgr.getPlayerData(p).weaponClass.mainWeapon.weaponType.equals("Roller")) {
+									if (DataMgr.getPlayerData(p).weaponClass.mainWeapon.isHude) {
 										Brush.HoldRunnable(p);
 										Brush.RollPaintRunnable(p);
 									} else {
-										Roller.HoldRunnable(p);
-										Roller.RollPaintRunnable(p);
+										Roller.holdRunnable(p);
+										Roller.rollPaintRunnable(p);
 									}
 								}
 
-								if (DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getWeaponType()
-										.equals("Kasa")) {
+								if (DataMgr.getPlayerData(p).weaponClass.mainWeapon.weaponType.equals("Kasa")) {
 									Kasa.kasaRunnable(p, false);
 								}
 
-								if (DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getWeaponType()
-										.equals("Camping")) {
+								if (DataMgr.getPlayerData(p).weaponClass.mainWeapon.weaponType.equals("Camping")) {
 									Kasa.kasaRunnable(p, true);
-									DataMgr.getPlayerData(p).setMainItemGlow(true);
+									DataMgr.getPlayerData(p).mainItemGlow = (true);
 									WeaponClassMgr.setWeaponClass(p);
 								}
-								if (DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getWeaponType()
-										.equals("Hound")) {
-									Hound.HoundRunnable(p);
-									Hound.HoundEXRunnable(p);
+								if (DataMgr.getPlayerData(p).weaponClass.mainWeapon.weaponType.equals("Hound")) {
+									Hound.houndRunnable(p);
+									Hound.houndEXRunnable(p);
 								}
-								if (DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getWeaponType()
-										.equals("Funnel")) {
-									Shooter.ShooterRunnable(p);
+								if (DataMgr.getPlayerData(p).weaponClass.mainWeapon.weaponType.equals("Funnel")) {
+									Shooter.shooterRunnable(p);
 									Funnel.funnelFloat(p);
 								}
 								WeaponClassMgr.setWeaponClass(p);
@@ -553,7 +539,7 @@ public class GameMgr implements Listener {
 	@EventHandler
 	public void onPlayerSwapHandItems(PlayerSwapHandItemsEvent event) {
 		Player player = event.getPlayer();
-		if (DataMgr.getPlayerData(player).isInMatch())
+		if (DataMgr.getPlayerData(player).isInMatch)
 			OpenGUI.SuperJumpGUI(player);
 		event.setCancelled(true);
 	}
@@ -566,7 +552,7 @@ public class GameMgr implements Listener {
 
 			Player target = (Player) event.getEntity();
 			if (event.getCause() == DamageCause.POISON) {
-				DataMgr.getPlayerData(target).setIsPoisonCoolTime(true);
+				DataMgr.getPlayerData(target).isPoisonCoolTime = (true);
 				SquidMgr.PoisonCoolTime(target);
 			}
 			// AntiDamageTime
@@ -640,11 +626,11 @@ public class GameMgr implements Listener {
 		event.setCancelled(true);
 		Player player = event.getPlayer();
 		PlayerData data = DataMgr.getPlayerData(player);
-		if (data.isInMatch() && data.getSPGauge() == 100)
-			SPWeaponMgr.UseSPWeapon(player, data.getWeaponClass().getSPWeaponName());
+		if (data.isInMatch && data.sPGauge == 100)
+			SPWeaponMgr.UseSPWeapon(player, data.weaponClass.getSPWeaponName());
 
 		// if(data.isInMatch())
-		// WeaponClassMgr.setWeaponClass(player);
+		// WeaponClassMgr.weaponClass = (player);
 	}
 
 	// sign
@@ -737,8 +723,8 @@ public class GameMgr implements Listener {
 						DataMgr.getPlayerData(player).setServerName("Sclat");
 						break;
 					case "[Charge special]" :
-						if (DataMgr.getPlayerData(player).isInMatch() && !DataMgr.getPlayerData(player).getIsUsingSP())
-							DataMgr.getPlayerData(player).setSPGauge(100);
+						if (DataMgr.getPlayerData(player).isInMatch && !DataMgr.getPlayerData(player).isUsingSP)
+							DataMgr.getPlayerData(player).sPGauge = (100);
 						break;
 					case "[ Sclat ]" :
 						BungeeCordMgr.PlayerSendServer(player, "sclat");
@@ -848,7 +834,7 @@ public class GameMgr implements Listener {
 			}
 		}
 
-		String server = DataMgr.getPlayerData(player).getServername();
+		String server = DataMgr.getPlayerData(player).servername;
 		if (!server.isEmpty()) {
 			event.setQuitMessage("§6" + player.getName() + " switched to " + server);
 
@@ -858,7 +844,7 @@ public class GameMgr implements Listener {
 					String displayName = conf.getServers().getString("Servers." + serverName + ".DisplayName");
 					if (displayName.equals(server)) {
 						List<String> commands = new ArrayList<>();
-						commands.add("set weapon " + data.getWeaponClass().getClassName() + " " + player.getUniqueId());
+						commands.add("set weapon " + data.weaponClass.getClassName() + " " + player.getUniqueId());
 						commands.add("set gear " + data.gearNumber + " " + player.getUniqueId());
 						commands.add("set rank " + PlayerStatusMgr.getRank(player) + " " + player.getUniqueId());
 						commands.add("setting " + conf.getPlayerSettings().getString("Settings." + player.getUniqueId())
@@ -883,14 +869,14 @@ public class GameMgr implements Listener {
 			}
 		}
 
-		if (data.getWeaponClass().getSubWeaponName().equals("ビーコン") && data.isInMatch()) {
+		if (data.weaponClass.getSubWeaponName().equals("ビーコン") && data.isInMatch) {
 			DataMgr.getBeaconFromplayer(player).remove();
 		}
-		if (data.getWeaponClass().getSubWeaponName().equals("スプリンクラー") && data.isInMatch()) {
+		if (data.weaponClass.getSubWeaponName().equals("スプリンクラー") && data.isInMatch) {
 			DataMgr.getSprinklerFromplayer(player).remove();
 		}
 
-		if (data.getWeaponClass() != null)
-			PlayerStatusMgr.setEquiptClass(player, data.getWeaponClass().getClassName());
+		if (data.weaponClass != null)
+			PlayerStatusMgr.setEquiptClass(player, data.weaponClass.getClassName());
 	}
 }

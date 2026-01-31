@@ -33,12 +33,12 @@ import org.bukkit.scheduler.BukkitRunnable
 object LitterFiveG {
     private val Hash_charge = HashMap<Player?, Int?>()
     private val Hash_cps = HashMap<Player?, Int?>()
-    private const val max_charge = 44
+    private const val MAX_CHARGE = 44
 
     @JvmStatic
     fun setLitterFiveG(player: Player) {
         getPlayerData(player)!!.isUsingSP = true
-        getPlayerData(player)!!.setIsUsingSS(false)
+        getPlayerData(player)!!.isUsingSS = false
         SPWeaponMgr.setSPCoolTimeAnimation(player, 280)
         if (Hash_charge.containsKey(player)) {
             Hash_charge.replace(player, 0)
@@ -62,7 +62,7 @@ object LitterFiveG {
                         player.inventory.setItem(count, item)
                     }
                     player.updateInventory()
-                    charge_bar(player)
+                    chargeBar(player)
                 }
             }
         it.runTaskLater(plugin, 2)
@@ -74,7 +74,7 @@ object LitterFiveG {
                 override fun run() {
                     if (getPlayerData(p)!!.isInMatch) {
                         getPlayerData(p)!!.isUsingSP = false
-                        getPlayerData(p)!!.setIsUsingSS(false)
+                        getPlayerData(p)!!.isUsingSS = false
                         player.inventory.clear()
                         WeaponClassMgr.setWeaponClass(p)
                     }
@@ -83,10 +83,10 @@ object LitterFiveG {
         task.runTaskLater(plugin, 281)
     }
 
-    fun charge_bar(player: Player) {
+    fun chargeBar(player: Player) {
         val bar =
             plugin.server.createBossBar(
-                getPlayerData(player)!!.team.teamColor!!.colorCode + "§cCharge",
+                getPlayerData(player)!!.team!!.teamColor!!.colorCode + "§cCharge",
                 BarColor.RED,
                 BarStyle.SOLID,
                 BarFlag.CREATE_FOG,
@@ -94,7 +94,7 @@ object LitterFiveG {
         bar.progress = 0.0
         bar.addPlayer(player)
 
-        val overheat_anime: BukkitRunnable =
+        val overheatAnime: BukkitRunnable =
             object : BukkitRunnable() {
                 var p: Player = player
                 var bell: Boolean = false
@@ -106,8 +106,8 @@ object LitterFiveG {
                         visible = false
                     }
                     if (Hash_charge.containsKey(p)) {
-                        if (Hash_charge.get(p)!! < max_charge) {
-                            bar.progress = Hash_charge.get(p)!!.toDouble() / max_charge
+                        if (Hash_charge.get(p)!! < MAX_CHARGE) {
+                            bar.progress = Hash_charge.get(p)!!.toDouble() / MAX_CHARGE
                             if (!bar.players.contains(p)) {
                                 bar.addPlayer(p)
                             }
@@ -132,16 +132,16 @@ object LitterFiveG {
                             bar.removeAll()
                             cancel()
                         }
-                        if (data.settings.ShowEffect_ChargerLine()) {
-                            if (Hash_charge.get(p)!! < max_charge) {
+                        if (data.settings!!.ShowEffect_ChargerLine()) {
+                            if (Hash_charge.get(p)!! < MAX_CHARGE) {
                                 Hash_charge.replace(p, Hash_charge.get(p)!! + Hash_cps.get(p)!!)
                             }
                         } else {
-                            if (Hash_charge.get(p)!! < max_charge && data.getIsUsingSS()) {
+                            if (Hash_charge.get(p)!! < MAX_CHARGE && data.isUsingSS) {
                                 Hash_charge.replace(p, Hash_charge.get(p)!! + Hash_cps.get(p)!!)
                             }
-                            if (Hash_charge.get(p) != 0 && !data.getIsUsingSS()) {
-                                Shoot_LitterFiveG(p)
+                            if (Hash_charge.get(p) != 0 && !data.isUsingSS) {
+                                shootLitterFiveG(p)
                             }
                         }
                         if (player.inventory.itemInMainHand.itemMeta == null) {
@@ -150,8 +150,8 @@ object LitterFiveG {
                         }
                         val rayTrace = RayTrace(p.eyeLocation.toVector(), p.eyeLocation.direction)
                         var range = Hash_charge.get(p)!!.toDouble()
-                        if (range > max_charge) {
-                            range = max_charge.toDouble()
+                        if (range > MAX_CHARGE) {
+                            range = MAX_CHARGE.toDouble()
                         }
                         val positions = rayTrace.traverse((range * 1.8).toInt().toDouble(), 0.7)
                         if (visible) {
@@ -170,7 +170,7 @@ object LitterFiveG {
                                             ) {
                                                 val dustOptions =
                                                     Particle.DustOptions(
-                                                        data.team.teamColor!!.bukkitColor!!,
+                                                        data.team!!.teamColor!!.bukkitColor!!,
                                                         1f,
                                                     )
                                                 target.spawnParticle<Particle.DustOptions?>(
@@ -192,18 +192,18 @@ object LitterFiveG {
                     }
                 }
             }
-        overheat_anime.runTaskTimer(plugin, 0, 2)
+        overheatAnime.runTaskTimer(plugin, 0, 2)
     }
 
     @JvmStatic
-    fun Shoot_LitterFiveG(player: Player) {
+    fun shootLitterFiveG(player: Player) {
         if (player.gameMode == GameMode.SPECTATOR || !getPlayerData(player)!!.isUsingSP) return
         var range: Int = Hash_charge.get(player)!!
         var damage = (Hash_charge.get(player)!! / 5).toDouble()
         // 半径
         var maxDist = 2.0
-        if (range >= max_charge) {
-            range = max_charge
+        if (range >= MAX_CHARGE) {
+            range = MAX_CHARGE
             damage = 22.1
             maxDist = 4.0
             Hash_cps.replace(player, Hash_cps.get(player)!! + 1)
@@ -222,7 +222,7 @@ object LitterFiveG {
 
             if (block.type != Material.AIR) {
                 for (o_player in plugin.server.onlinePlayers) {
-                    if (getPlayerData(o_player)!!.settings.ShowEffect_MainWeaponInk()) {
+                    if (getPlayerData(o_player)!!.settings!!.ShowEffect_MainWeaponInk()) {
                         // 爆発音
                         player.world.playSound(position, Sound.ENTITY_GENERIC_EXPLODE, 1f, 1f)
 
@@ -232,8 +232,8 @@ object LitterFiveG {
                         // 塗る
                         var `in` = 0
                         while (`in` <= maxDist - 1) {
-                            val p_locs = getSphere(position, `in`.toDouble(), 20)
-                            for (loc in p_locs) {
+                            val pLocs = getSphere(position, `in`.toDouble(), 20)
+                            for (loc in pLocs) {
                                 PaintMgr.Paint(loc, player, false)
                                 PaintMgr.PaintHightestBlock(loc, player, false, false)
                             }
@@ -245,12 +245,13 @@ object LitterFiveG {
             }
             // PaintMgr.PaintHightestBlock(position, player, false, true);
             for (target in plugin.server.onlinePlayers) {
-                if (!getPlayerData(target)!!.settings.ShowEffect_MainWeaponInk()) continue
+                if (!getPlayerData(target)!!.settings!!.ShowEffect_MainWeaponInk()) continue
                 if (target.world === position.world) {
                     if (target.location.distanceSquared(position) < Sclat.particleRenderDistanceSquared) {
                         val bd =
                             getPlayerData(player)!!
-                                .team.teamColor!!
+                                .team
+                                ?.let { it.teamColor!! }!!
                                 .wool!!
                                 .createBlockData()
                         target.spawnParticle<BlockData?>(Particle.BLOCK_DUST, position, 1, 0.0, 0.0, 0.0, 1.0, bd)
@@ -359,24 +360,24 @@ object LitterFiveG {
                     getPlayerData(p)!!.canUseSubWeapon = true
                 }
             }
-        if (getPlayerData(player)!!.settings.ShowEffect_ChargerLine()) {
+        if (getPlayerData(player)!!.settings!!.ShowEffect_ChargerLine()) {
             task2.runTaskLater(plugin, 8)
         }
     }
 
     @JvmStatic
-    fun Charge_LitterFiveG(player: Player?) {
-        getPlayerData(player)!!.setIsUsingSS(true)
+    fun chargeLitterFiveG(player: Player?) {
+        getPlayerData(player)!!.isUsingSS = true
 
         val task3: BukkitRunnable =
             object : BukkitRunnable() {
                 var p: Player? = player
 
                 override fun run() {
-                    getPlayerData(p)!!.setIsUsingSS(false)
+                    getPlayerData(p)!!.isUsingSS = false
                 }
             }
         task3.runTaskLater(plugin, 8)
-        getPlayerData(player)!!.setIsUsingSS(true)
+        getPlayerData(player)!!.isUsingSS = true
     }
 }

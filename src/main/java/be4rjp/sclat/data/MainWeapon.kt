@@ -9,6 +9,7 @@ import org.bukkit.inventory.ItemStack
 class MainWeapon(
     private val WeaponName: String?,
 ) {
+    @JvmField
     var weaponType: String? = null
     var weaponIteamStack: ItemStack? = null
         private set

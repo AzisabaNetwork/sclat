@@ -14,8 +14,9 @@ class Team(
     private val mapname: String? = null
     var point: Int = 0
         private set
+
+    @JvmField
     var killCount: Int = 0
-        private set
     var team: Team? = null
     var gatiCount: Int = 0
         private set

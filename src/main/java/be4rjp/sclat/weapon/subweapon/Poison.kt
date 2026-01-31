@@ -31,15 +31,15 @@ import org.bukkit.util.Vector
  */
 object Poison {
     @JvmStatic
-    fun PoisonRunnable(player: Player) {
+    fun poisonRunnable(player: Player) {
         val task: BukkitRunnable =
             object : BukkitRunnable() {
                 var p: Player = player
-                var p_vec: Vector? = null
+                var pVec: Vector? = null
                 var x: Double = 0.0
                 var z: Double = 0.0
                 var collision: Boolean = false
-                var block_check: Boolean = false
+                var blockCheck: Boolean = false
                 var c: Int = 0
                 var drop: Item? = null
                 var ball: Snowball? = null
@@ -47,14 +47,14 @@ object Poison {
                 override fun run() {
                     try {
                         if (c == 0) {
-                            p_vec = p.eyeLocation.direction
+                            pVec = p.eyeLocation.direction
                             if (!getPlayerData(player)!!.isBombRush) p.exp = p.exp - 0.39f
                             val bom = ItemStack(Material.PRISMARINE).clone()
-                            val bom_m = bom.itemMeta
-                            bom_m!!.setLocalizedName(notDuplicateNumber.toString())
-                            bom.itemMeta = bom_m
+                            val bomM = bom.itemMeta
+                            bomM!!.setLocalizedName(notDuplicateNumber.toString())
+                            bom.itemMeta = bomM
                             drop = p.world.dropItem(p.eyeLocation, bom)
-                            drop!!.velocity = p_vec!!
+                            drop!!.velocity = pVec!!
                             // 雪玉をスポーンさせた瞬間にプレイヤーに雪玉がデスポーンした偽のパケットを送信する
                             ball = player.launchProjectile<Snowball>(Snowball::class.java)
                             ball!!.velocity = Vector(0, 0, 0)
@@ -64,7 +64,7 @@ object Poison {
                                 val connection = (o_player as CraftPlayer).handle.playerConnection
                                 connection.sendPacket(PacketPlayOutEntityDestroy(ball!!.entityId))
                             }
-                            p_vec = p.eyeLocation.direction
+                            pVec = p.eyeLocation.direction
                         }
 
                         if (!drop!!.isOnGround &&
@@ -91,10 +91,10 @@ object Poison {
                             player.world.playSound(drop!!.location, Sound.ENTITY_ARROW_SHOOT, 1f, 2f)
 
                             // 爆発エフェクト
-                            val s_locs = getSphere(drop!!.location, maxDist, 15)
+                            val sLocs = getSphere(drop!!.location, maxDist, 15)
                             for (o_player in plugin.server.onlinePlayers) {
-                                if (getPlayerData(o_player)!!.settings.ShowEffect_BombEx()) {
-                                    for (loc in s_locs) {
+                                if (getPlayerData(o_player)!!.settings!!.ShowEffect_BombEx()) {
+                                    for (loc in sLocs) {
                                         if (o_player.world === loc.world) {
                                             if (o_player
                                                     .location
@@ -121,14 +121,14 @@ object Poison {
                             for (target in plugin.server.onlinePlayers) {
                                 if (!getPlayerData(target)!!.isInMatch || target.world !== p.world) continue
                                 if (target.location.distance(drop!!.location) <= maxDist) {
-                                    if (getPlayerData(player)!!.team.iD !=
+                                    if (getPlayerData(player)!!.team!!.iD !=
                                         getPlayerData(target)!!
-                                            .team
+                                            .team!!
                                             .iD
                                     ) {
                                         target.addPotionEffect(PotionEffect(PotionEffectType.GLOWING, 80, 2))
-                                        getPlayerData(target)!!.setPoison(true)
-                                        PoisonRunnable2(target)
+                                        getPlayerData(target)!!.poison = true
+                                        poisonRunnable2(target)
                                     }
                                 }
                             }
@@ -156,7 +156,7 @@ object Poison {
 
                         // ボムの視認用エフェクト
                         for (o_player in plugin.server.onlinePlayers) {
-                            if (getPlayerData(o_player)!!.settings.ShowEffect_Bomb()) {
+                            if (getPlayerData(o_player)!!.settings!!.ShowEffect_Bomb()) {
                                 if (o_player.world === drop!!.location.world) {
                                     if (o_player
                                             .location
@@ -164,7 +164,7 @@ object Poison {
                                     ) {
                                         val dustOptions =
                                             Particle.DustOptions(
-                                                getPlayerData(p)!!.team.teamColor!!.bukkitColor!!,
+                                                getPlayerData(p)!!.team!!.teamColor!!.bukkitColor!!,
                                                 1f,
                                             )
                                         o_player.spawnParticle<Particle.DustOptions?>(
@@ -215,11 +215,11 @@ object Poison {
         }
     }
 
-    fun PoisonRunnable2(player: Player?) {
+    fun poisonRunnable2(player: Player?) {
         val cooltime: BukkitRunnable =
             object : BukkitRunnable() {
                 override fun run() {
-                    getPlayerData(player)!!.setPoison(false)
+                    getPlayerData(player)!!.poison = false
                 }
             }
         cooltime.runTaskLater(plugin, 80)

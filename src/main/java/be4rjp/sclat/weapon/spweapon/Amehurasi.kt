@@ -33,15 +33,15 @@ import java.util.Random
  */
 object Amehurasi {
     @JvmStatic
-    fun AmehurasiDropRunnable(player: Player) {
+    fun amehurasiDropRunnable(player: Player) {
         val task: BukkitRunnable =
             object : BukkitRunnable() {
                 var p: Player = player
-                var p_vec: Vector? = null
+                var pVec: Vector? = null
                 var x: Double = 0.0
                 var z: Double = 0.0
                 var collision: Boolean = false
-                var block_check: Boolean = false
+                var blockCheck: Boolean = false
                 var cb: Boolean = false
                 var l: Location = p.location
                 var cc: Int = 0
@@ -54,17 +54,17 @@ object Amehurasi {
                         if (c == 0) {
                             getPlayerData(player)!!.isUsingAmehurashi = true
                             val bom = ItemStack(Material.BEACON).clone()
-                            val bom_m = bom.itemMeta
-                            bom_m!!.setLocalizedName(notDuplicateNumber.toString())
-                            bom.itemMeta = bom_m
+                            val bomM = bom.itemMeta
+                            bomM!!.setLocalizedName(notDuplicateNumber.toString())
+                            bom.itemMeta = bomM
                             drop = p.world.dropItem(p.eyeLocation, bom)
                             drop!!.velocity = p.eyeLocation.direction
-                            p_vec = p.eyeLocation.direction
-                            vec = Vector(p_vec!!.getX(), 0.0, p_vec!!.getZ()).normalize()
+                            pVec = p.eyeLocation.direction
+                            vec = Vector(pVec!!.getX(), 0.0, pVec!!.getZ()).normalize()
                         }
 
                         if (drop!!.isOnGround) {
-                            AmehurasiRunnable(p, drop!!.location, vec!!)
+                            amehurasiRunnable(p, drop!!.location, vec!!)
                             drop!!.remove()
                             cancel()
                         }
@@ -77,7 +77,7 @@ object Amehurasi {
 
                         // 視認用エフェクト
                         for (o_player in plugin.server.onlinePlayers) {
-                            if (getPlayerData(o_player)!!.settings.ShowEffect_Bomb()) {
+                            if (getPlayerData(o_player)!!.settings!!.ShowEffect_Bomb()) {
                                 if (o_player.world === drop!!.world) {
                                     if (o_player
                                             .location
@@ -85,7 +85,7 @@ object Amehurasi {
                                     ) {
                                         val dustOptions =
                                             Particle.DustOptions(
-                                                getPlayerData(p)!!.team.teamColor!!.bukkitColor!!,
+                                                getPlayerData(p)!!.team!!.teamColor!!.bukkitColor!!,
                                                 1f,
                                             )
                                         o_player.spawnParticle<Particle.DustOptions?>(
@@ -120,7 +120,7 @@ object Amehurasi {
         if (!getPlayerData(player)!!.isUsingAmehurashi) task.runTaskTimer(plugin, 0, 1)
     }
 
-    fun AmehurasiRunnable(
+    fun amehurasiRunnable(
         player: Player,
         loc: Location,
         vec: Vector,
@@ -150,7 +150,7 @@ object Amehurasi {
                         // 雲エフェクト
                         if (c % 2 == 0) {
                             for (o_player in plugin.server.onlinePlayers) {
-                                if (getPlayerData(o_player)!!.settings.ShowEffect_SPWeapon()) {
+                                if (getPlayerData(o_player)!!.settings!!.ShowEffect_SPWeapon()) {
                                     for (loc in locList) {
                                         if (Random().nextInt(3) == 1) {
                                             if (o_player.world === loc.world) {
@@ -160,7 +160,7 @@ object Amehurasi {
                                                 ) {
                                                     val dustOptions =
                                                         Particle.DustOptions(
-                                                            getPlayerData(p)!!.team.teamColor!!.bukkitColor!!,
+                                                            getPlayerData(p)!!.team!!.teamColor!!.bukkitColor!!,
                                                             3f,
                                                         )
                                                     o_player.spawnParticle<Particle.DustOptions?>(
@@ -190,7 +190,7 @@ object Amehurasi {
                                 )
                             val positions4: ArrayList<Vector> = rayTrace4.traverse(300.0, 1.0)
                             for (i in 1..<positions4.size) {
-                                val position = positions4.get(i)!!.toLocation(p.location.world!!)
+                                val position = positions4.get(i).toLocation(p.location.world!!)
 
                                 if (position.block.type != Material.AIR) break
 
@@ -234,7 +234,7 @@ object Amehurasi {
                         }
 
                         for (loc in locList) {
-                            if (Random().nextInt(200) == 1) SnowballAmehurasiRunnable(p, loc)
+                            if (Random().nextInt(200) == 1) snowballAmehurasiRunnable(p, loc)
                         }
                         if (c == 260 || !getPlayerData(p)!!.isInMatch) {
                             getPlayerData(player)!!.isUsingSP = false
@@ -251,12 +251,12 @@ object Amehurasi {
         task.runTaskTimer(plugin, 0, 1)
     }
 
-    fun SnowballAmehurasiRunnable(
+    fun snowballAmehurasiRunnable(
         player: Player,
         loc: Location,
     ) {
         val ball = player.world.spawnEntity(loc, EntityType.SNOWBALL) as Snowball
-        (ball as CraftSnowball).handle.setItem(CraftItemStack.asNMSCopy(ItemStack(getPlayerData(player)!!.team.teamColor!!.wool!!)))
+        (ball as CraftSnowball).handle.setItem(CraftItemStack.asNMSCopy(ItemStack(getPlayerData(player)!!.team!!.teamColor!!.wool!!)))
         ball.shooter = player
         ball.customName = "Amehurasi"
         val task: BukkitRunnable =
@@ -269,11 +269,12 @@ object Amehurasi {
                     if (i % 2 == 0) {
                         val bd =
                             getPlayerData(p)!!
-                                .team.teamColor!!
+                                .team!!
+                                .teamColor!!
                                 .wool!!
                                 .createBlockData()
                         for (o_player in plugin.server.onlinePlayers) {
-                            if (getPlayerData(o_player)!!.settings.ShowEffect_SPWeapon()) {
+                            if (getPlayerData(o_player)!!.settings!!.ShowEffect_SPWeapon()) {
                                 if (o_player.world ===
                                     inkball.world
                                 ) {

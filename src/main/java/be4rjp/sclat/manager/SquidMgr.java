@@ -53,7 +53,7 @@ public class SquidMgr {
 					cancel();
 				}
 
-				if (!data.isInMatch()) {
+				if (!data.isInMatch) {
 					if (p.hasPotionEffect(PotionEffectType.REGENERATION))
 						p.removePotionEffect(PotionEffectType.REGENERATION);
 					if (p.hasPotionEffect(PotionEffectType.INVISIBILITY))
@@ -66,7 +66,7 @@ public class SquidMgr {
 						p.setExp(0F);
 					}
 
-					if (data.getCanFly()) {
+					if (data.canFly) {
 						p.setAllowFlight(true);
 						p.setFlying(true);
 					} else {
@@ -89,13 +89,12 @@ public class SquidMgr {
 					p.setVelocity(new Vector(0, 0.5, 0));
 				}
 
-				if (data.getWeaponClass().getMainWeapon().isManeuver) {
+				if (data.weaponClass.mainWeapon.isManeuver) {
 					if (p.getInventory().getItemInMainHand().getType()
-							.equals(data.getWeaponClass().getMainWeapon().getWeaponIteamStack().getType())) {
+							.equals(data.weaponClass.mainWeapon.getWeaponIteamStack().getType())) {
 						if (!p.getInventory().getItemInOffHand().getType()
-								.equals(data.getWeaponClass().getMainWeapon().getWeaponIteamStack().getType()))
-							p.getInventory().setItem(40,
-									data.getWeaponClass().getMainWeapon().getWeaponIteamStack().clone());
+								.equals(data.weaponClass.mainWeapon.getWeaponIteamStack().getType()))
+							p.getInventory().setItem(40, data.weaponClass.mainWeapon.getWeaponIteamStack().clone());
 					} else {
 						p.getInventory().setItem(40, new ItemStack(Material.AIR));
 					}
@@ -104,7 +103,7 @@ public class SquidMgr {
 				Block down = p.getLocation().getBlock().getRelative(BlockFace.DOWN);
 				if (DataMgr.getBlockDataMap().containsKey(down) && p.getGameMode().equals(GameMode.ADVENTURE)) {
 					if (DataMgr.getBlockDataMap().get(down).team != data.team) {
-						if (data.armor <= 0 && !data.getIsPoisonCoolTime()) {
+						if (data.armor <= 0 && !data.isPoisonCoolTime) {
 							p.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 200, 3));
 						}
 					} else {
@@ -114,7 +113,7 @@ public class SquidMgr {
 				} else {
 					if (Sclat.tutorial && down.getType().toString().contains("WOOL")) {
 						if (down.getType() != data.team.getTeamColor().wool) {
-							if (data.armor <= 0 && !data.getIsPoisonCoolTime()) {
+							if (data.armor <= 0 && !data.isPoisonCoolTime) {
 								p.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 200, 3));
 							}
 						}
@@ -124,33 +123,33 @@ public class SquidMgr {
 
 				if (i > 2) {
 					i = 0;
-					data.setIsSquid(player.getInventory().getItemInMainHand().getType() == Material.AIR);
+					data.isSquid = (player.getInventory().getItemInMainHand().getType() == Material.AIR);
 				}
 				i++;
 				/*
 				 * if(Main.tutorial && down.getType().toString().contains("WOOL")){
 				 * if(down.getType() != data.getTeam().getTeamColor().wool){ if(data.getArmor()
-				 * <= 0 && !data.getIsPoisonCoolTime()){ p.addPotionEffect(new
+				 * <= 0 && !data.isPoisonCoolTime){ p.addPotionEffect(new
 				 * PotionEffect(PotionEffectType.POISON, 200, 3)); } } }
 				 */
 
-				if (data.getIsPoisonCoolTime())
+				if (data.isPoisonCoolTime)
 					if (p.hasPotionEffect(PotionEffectType.POISON))
 						p.removePotionEffect(PotionEffectType.POISON);
 
-				if ((data.getIsOnInk() && data.getIsSquid()) || data.getIsOnPath()) {
+				if ((data.isOnInk && data.isSquid) || data.isOnPath) {
 					is2 = false;
 					if (!is) {
 						p.playSound(p.getLocation(), Sound.ITEM_BUCKET_FILL, 0.5F, 1F);
 						is = true;
 						p.setFoodLevel(20);
 					}
-					if (data.getIsUsingJetPack())
+					if (data.isUsingJetPack)
 						p.setFlySpeed(0.1F);
 
 					if (p.getExp() <= (0.99F - (float) (conf.config.getDouble("SquidRecovery")
 							* Gear.getGearInfluence(p, Gear.Type.INK_RECOVERY_UP)))) {
-						if (data.getCanUseSubWeapon())
+						if (data.canUseSubWeapon)
 							p.setExp(p.getExp() + (float) (conf.config.getDouble("SquidRecovery")
 									* Gear.getGearInfluence(p, Gear.Type.INK_RECOVERY_UP)));
 					}
@@ -177,7 +176,7 @@ public class SquidMgr {
 					if (data.speed != 0)
 						speed = data.speed;
 
-					if (!DataMgr.getPlayerData(p).getPoison())
+					if (!DataMgr.getPlayerData(p).poison)
 						p.setWalkSpeed((float) speed);
 					else
 						p.setWalkSpeed((float) ((speed - speed / 3) * Gear.getGearInfluence(p, Gear.Type.PENA_DOWN)));
@@ -198,8 +197,8 @@ public class SquidMgr {
 					double speed = 0.2;
 
 					if (p.getInventory().getItemInMainHand().getType()
-							.equals(data.getWeaponClass().getMainWeapon().getWeaponIteamStack().getType()))
-						speed = (double) data.getWeaponClass().getMainWeapon().getInHoldSpeed()
+							.equals(data.weaponClass.mainWeapon.getWeaponIteamStack().getType()))
+						speed = (double) data.weaponClass.mainWeapon.getInHoldSpeed()
 								* Gear.getGearInfluence(p, Gear.Type.HITO_SPEED_UP);
 					else
 						speed = conf.config.getDouble("PlayerWalkSpeed")
@@ -212,17 +211,16 @@ public class SquidMgr {
 						p.setExp(p.getExp() + (float) conf.config.getDouble("NormalRecovery"));
 					}
 
-					if (data.getIsHolding() && data.getCanPaint()
-							&& p.getExp() >= data.getWeaponClass().getMainWeapon().getNeedInk()) {
+					if (data.isHolding && data.canPaint && p.getExp() >= data.weaponClass.mainWeapon.getNeedInk()) {
 						p.setSprinting(true);
 					} else {
-						if (!DataMgr.getPlayerData(p).getPoison())
+						if (!DataMgr.getPlayerData(p).poison)
 							p.setWalkSpeed((float) speed);
-						if (DataMgr.getPlayerData(p).getPoison())
+						if (DataMgr.getPlayerData(p).poison)
 							p.setWalkSpeed((float) (speed * Gear.getGearInfluence(p, Gear.Type.PENA_DOWN) - speed / 3));
 					}
 
-					if (!p.getGameMode().equals(GameMode.CREATIVE) && !data.getIsUsingJetPack()) {
+					if (!p.getGameMode().equals(GameMode.CREATIVE) && !data.isUsingJetPack) {
 						p.setAllowFlight(false);
 						p.setFlying(false);
 					}
@@ -324,7 +322,7 @@ public class SquidMgr {
 					Location loc = player.getLocation();
 					es.setLocation(loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), 0);
 
-					if (!data.getIsOnInk() && data.getIsSquid() && !data.getIsOnPath()) {
+					if (!data.isOnInk && data.isSquid && !data.isOnPath) {
 						is2 = false;
 						if (!is) {
 							is = true;
@@ -360,15 +358,15 @@ public class SquidMgr {
 				} catch (Exception e) {
 				}
 
-				if (data.getIsSquid()) {
+				if (data.isSquid) {
 					is4 = false;
 					if (!is3) {
 						is3 = true;
 						p.getEquipment().setHelmet(new ItemStack(Material.AIR));
-						if (data.getWeaponClass().getMainWeapon().getWeaponType().equals("Buckler")) {
+						if (data.weaponClass.mainWeapon.weaponType.equals("Buckler")) {
 							p.getInventory().setItem(40, new ItemStack(Material.AIR));
 						}
-						if (data.getWeaponClass().getMainWeapon().isManeuver)
+						if (data.weaponClass.mainWeapon.isManeuver)
 							p.getInventory().setItem(40, new ItemStack(Material.AIR));
 					}
 					p.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 200, 1));
@@ -377,18 +375,18 @@ public class SquidMgr {
 					if (!is4) {
 						is4 = true;
 						p.getEquipment().setHelmet(DataMgr.getPlayerData(p).team.getTeamColor().bougu);
-						if (data.getWeaponClass().getMainWeapon().getWeaponType().equals("Buckler")) {
+						if (data.weaponClass.mainWeapon.weaponType.equals("Buckler")) {
 							p.getInventory().setItem(40, new ItemStack(Material.SLIME_BALL));
 						}
-						if (data.getWeaponClass().getMainWeapon().isManeuver)
-							p.getInventory().setItem(40, DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon()
-									.getWeaponIteamStack().clone());
+						if (data.weaponClass.mainWeapon.isManeuver)
+							p.getInventory().setItem(40,
+									DataMgr.getPlayerData(p).weaponClass.mainWeapon.getWeaponIteamStack().clone());
 					}
 					if (p.hasPotionEffect(PotionEffectType.INVISIBILITY))
 						p.removePotionEffect(PotionEffectType.INVISIBILITY);
 				}
 
-				if (p.getGameMode().equals(GameMode.SPECTATOR) && !data.getIsJumping()) {
+				if (p.getGameMode().equals(GameMode.SPECTATOR) && !data.isJumping) {
 					try {
 						PacketPlayOutEntityDestroy packet = new PacketPlayOutEntityDestroy(
 								es.getBukkitEntity().getEntityId());
@@ -401,7 +399,7 @@ public class SquidMgr {
 					}
 				}
 
-				if (!data.isInMatch() || !p.isOnline()) {
+				if (!data.isInMatch || !p.isOnline()) {
 					try {
 						PacketPlayOutEntityDestroy packet = new PacketPlayOutEntityDestroy(
 								es.getBukkitEntity().getEntityId());
@@ -425,7 +423,7 @@ public class SquidMgr {
 			final Player p = player;
 			@Override
 			public void run() {
-				DataMgr.getPlayerData(p).setIsPoisonCoolTime(false);
+				DataMgr.getPlayerData(p).isPoisonCoolTime = false;
 			}
 		};
 		task.runTaskLater(VariablesKt.getPlugin(), 10);

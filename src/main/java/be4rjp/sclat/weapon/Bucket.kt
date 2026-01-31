@@ -46,7 +46,7 @@ object Bucket {
                 plugin,
                 data
                     .weaponClass
-                    .mainWeapon!!
+                    ?.mainWeapon!!
                     .coolTime
                     .toLong(),
             )
@@ -55,7 +55,7 @@ object Bucket {
         object : BukkitRunnable() {
             override fun run() {
                 var sound = false
-                for (i in 0..<data.weaponClass.mainWeapon!!.rollerShootQuantity) {
+                for (i in 0..<data.weaponClass?.mainWeapon!!.rollerShootQuantity) {
                     val `is` = Shoot(player, null)
                     if (`is`) sound = true
                 }
@@ -71,7 +71,7 @@ object Bucket {
                 override fun run() {
                     c++
                     val q = 2
-                    for (i in 0..<data.weaponClass.mainWeapon!!.rollerShootQuantity) {
+                    for (i in 0..<data.weaponClass?.mainWeapon!!.rollerShootQuantity) {
                         val `is` = Shoot(player, null)
                         if (`is`) sound = true
                     }
@@ -87,7 +87,7 @@ object Bucket {
                 0,
                 data
                     .weaponClass
-                    .mainWeapon!!
+                    ?.mainWeapon!!
                     .delay
                     .toLong(),
             )
@@ -104,7 +104,7 @@ object Bucket {
         val data = getPlayerData(player)
         if (player.exp <=
             (
-                data!!.weaponClass.mainWeapon!!.needInk
+                data!!.weaponClass?.mainWeapon!!.needInk
                     * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) /
                     Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)
                 ).toFloat()
@@ -114,20 +114,20 @@ object Bucket {
         }
         player.exp = player.exp -
             (
-                data.weaponClass.mainWeapon!!.needInk
+                data.weaponClass?.mainWeapon!!.needInk
                     * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) /
                     Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)
                 ).toFloat()
         val ball = player.launchProjectile<Snowball>(Snowball::class.java)
-        (ball as CraftSnowball).handle.setItem(CraftItemStack.asNMSCopy(ItemStack(getPlayerData(player)!!.team.teamColor!!.wool!!)))
+        (ball as CraftSnowball).handle.setItem(CraftItemStack.asNMSCopy(ItemStack(getPlayerData(player)!!.team?.teamColor!!.wool!!)))
         var vec: Vector? =
             player
                 .location
                 .direction
-                .multiply(getPlayerData(player)!!.weaponClass.mainWeapon!!.shootSpeed)
+                .multiply(getPlayerData(player)!!.weaponClass?.mainWeapon!!.shootSpeed)
         if (v != null) vec = v
-        val random = getPlayerData(player)!!.weaponClass.mainWeapon!!.random
-        val distick = getPlayerData(player)!!.weaponClass.mainWeapon!!.distanceTick
+        val random = getPlayerData(player)!!.weaponClass?.mainWeapon!!.random
+        val distick = getPlayerData(player)!!.weaponClass?.mainWeapon!!.distanceTick
         vec!!.add(
             Vector(
                 Math.random() * random - random / 2,
@@ -154,7 +154,7 @@ object Bucket {
                         inkball!!.velocity.getX(),
                         inkball!!.velocity.getY(),
                         inkball!!.velocity.getZ(),
-                    ).multiply(getPlayerData(p)!!.weaponClass.mainWeapon!!.shootSpeed / 17)
+                    ).multiply(getPlayerData(p)!!.weaponClass?.mainWeapon!!.shootSpeed / 17)
 
                 override fun run() {
                     inkball = mainSnowballNameMap.get(name)
@@ -166,7 +166,7 @@ object Bucket {
                     if (i != 0) {
                         for (target in plugin.server.onlinePlayers) {
                             if (target.world !== p.world) continue
-                            if (!getPlayerData(target)!!.settings.ShowEffect_MainWeaponInk()) continue
+                            if (!getPlayerData(target)!!.settings?.ShowEffect_MainWeaponInk()!!) continue
                             if (target.world === inkball!!.world) {
                                 if (target
                                         .location
@@ -174,7 +174,8 @@ object Bucket {
                                 ) {
                                     val bd =
                                         getPlayerData(p)!!
-                                            .team.teamColor!!
+                                            .team
+                                            ?.teamColor!!
                                             .wool!!
                                             .createBlockData()
                                     target.spawnParticle<BlockData?>(

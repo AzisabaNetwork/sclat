@@ -75,7 +75,7 @@ public class SuperJumpMgr {
 		Location to = toloc;
 		Vector vec = new Vector(to.getX() - from.getX(), to.getY() - from.getY(), to.getZ() - from.getZ()).normalize();
 		player.setGameMode(GameMode.SPECTATOR);
-		DataMgr.getPlayerData(player).setIsJumping(true);
+		DataMgr.getPlayerData(player).isJumping = (true);
 		RayTrace rayTrace1 = new RayTrace(from.toVector(), vec);
 		ArrayList<Vector> positions = rayTrace1.traverse(from.distance(to), 1);
 
@@ -101,7 +101,7 @@ public class SuperJumpMgr {
 			int t = 0;
 			@Override
 			public void run() {
-				if (DataMgr.getPlayerData(p).getIsDead())
+				if (DataMgr.getPlayerData(p).isDead)
 					cancel();
 
 				Location position = positions.get(i).toLocation(p.getLocation().getWorld());
@@ -127,13 +127,13 @@ public class SuperJumpMgr {
 					p.closeInventory();
 					p.getInventory().setHeldItemSlot(0);
 					p.teleport(toloc.clone().add(0, 4, 0));
-					DataMgr.getPlayerData(player).setIsJumping(false);
+					DataMgr.getPlayerData(player).isJumping = (false);
 					cancel();
 				}
 
-				if (i == positions.size() || !DataMgr.getPlayerData(p).isInMatch() || !p.isOnline()
-						|| DataMgr.getPlayerData(p).getIsUsingTyakuti()) {
-					DataMgr.getPlayerData(player).setIsJumping(false);
+				if (i == positions.size() || !DataMgr.getPlayerData(p).isInMatch || !p.isOnline()
+						|| DataMgr.getPlayerData(p).isUsingTyakuti) {
+					DataMgr.getPlayerData(player).isJumping = (false);
 					cancel();
 				}
 
@@ -176,7 +176,7 @@ public class SuperJumpMgr {
 				Particle.DustOptions dustOptions = new Particle.DustOptions(
 						DataMgr.getPlayerData(p).team.getTeamColor().getBukkitColor(), 1);
 				p.getWorld().spawnParticle(Particle.REDSTONE, tl, 1, 0, 0.1, 0, 50, dustOptions);
-				if (p.getGameMode().equals(GameMode.ADVENTURE) || !DataMgr.getPlayerData(p).isInMatch()
+				if (p.getGameMode().equals(GameMode.ADVENTURE) || !DataMgr.getPlayerData(p).isInMatch
 						|| !p.isOnline()) {
 					for (Player target : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
 						if (p.getWorld() == target.getWorld()) {

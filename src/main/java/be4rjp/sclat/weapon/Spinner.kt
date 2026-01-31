@@ -30,29 +30,26 @@ import org.bukkit.util.Vector
  */
 object Spinner {
     @JvmStatic
-    fun SpinnerRunnable(player: Player) {
+    fun spinnerRunnable(player: Player) {
         val task: BukkitRunnable =
             object : BukkitRunnable() {
                 var p: Player = player
                 var charge: Int = 0
                 var keeping: Int = 0
-                var max: Int = getPlayerData(p)!!.weaponClass.mainWeapon!!.maxCharge
+                var max: Int = getPlayerData(p)!!.weaponClass!!.mainWeapon!!.maxCharge
 
                 override fun run() {
                     val data = getPlayerData(p)
 
                     data!!.tick = data.tick + 1
 
-                    if (keeping == data.weaponClass.mainWeapon!!.chargeKeepingTime && data.weaponClass.mainWeapon!!.canChargeKeep &&
-                        data.settings.doChargeKeep()
+                    if (keeping == data.weaponClass?.mainWeapon!!.chargeKeepingTime && data.weaponClass?.mainWeapon!!.canChargeKeep &&
+                        data.settings!!.doChargeKeep()
                     ) {
                         charge =
                             0
                     }
-
-                    if (data.getIsUsingMM() || data.getIsUsingJetPack() || data.getIsUsingTyakuti() ||
-                        data.getIsUsingSS()
-                    ) {
+                    if (data.isUsingMM || data.isUsingJetPack || data.isUsingTyakuti || data.isUsingSS) {
                         charge = 0
                         data.tick = 8
                         return
@@ -61,7 +58,7 @@ object Spinner {
                     if (data.tick <= 6 && data.isInMatch) {
                         val w =
                             data
-                                .weaponClass
+                                .weaponClass!!
                                 .mainWeapon!!
                                 .weaponIteamStack!!
                                 .clone()
@@ -73,21 +70,21 @@ object Spinner {
                         wm!!.setDisplayName(
                             (
                                 wm.displayName + "§7[" +
-                                    toGauge(charge, max, data.team.teamColor!!.colorCode, "§7") + "]"
+                                    toGauge(charge, max, data.team!!.teamColor!!.colorCode, "§7") + "]"
                                 ),
                         )
                         w.itemMeta = wm
                         p.inventory.setItem(0, w)
                     }
 
-                    if (charge == max || data.weaponClass.mainWeapon!!.hanbunCharge) {
+                    if (charge == max || data.weaponClass?.mainWeapon!!.hanbunCharge) {
                         if (p
                                 .inventory
                                 .itemInMainHand
                                 .type == Material.AIR
                         ) {
-                            if (data.weaponClass.mainWeapon!!.canChargeKeep) {
-                                if (data.settings.doChargeKeep()) {
+                            if (data.weaponClass?.mainWeapon!!.canChargeKeep) {
+                                if (data.settings!!.doChargeKeep()) {
                                     data.tick =
                                         11
                                 }
@@ -97,23 +94,23 @@ object Spinner {
 
                     if (p.gameMode == GameMode.SPECTATOR) charge = 0
 
-                    if (data.tick >= 11 && (charge == max || data.weaponClass.mainWeapon!!.hanbunCharge)) {
+                    if (data.tick >= 11 && (charge == max || data.weaponClass?.mainWeapon!!.hanbunCharge)) {
                         keeping++
                     } else {
                         keeping = 0
                     }
 
                     if (data.tick == 7 && data.isInMatch) {
-                        if (p.exp > data.weaponClass.mainWeapon!!.needInk * charge) {
-                            SpinnerShootRunnable(
-                                (charge * data.weaponClass.mainWeapon!!.chargeRatio).toInt(),
+                        if (p.exp > data.weaponClass?.mainWeapon!!.needInk * charge) {
+                            spinnerShootRunnable(
+                                (charge * data.weaponClass?.mainWeapon!!.chargeRatio).toInt(),
                                 p,
                             )
                         } else {
-                            val reach = (p.exp / data.weaponClass.mainWeapon!!.needInk).toInt()
+                            val reach = (p.exp / data.weaponClass?.mainWeapon!!.needInk).toInt()
                             if (reach >= 2) {
-                                SpinnerShootRunnable(
-                                    (reach * data.weaponClass.mainWeapon!!.chargeRatio).toInt(),
+                                spinnerShootRunnable(
+                                    (reach * data.weaponClass?.mainWeapon!!.chargeRatio).toInt(),
                                     p,
                                 )
                             } else {
@@ -122,9 +119,9 @@ object Spinner {
                             }
                         }
                         charge = 0
-                        p.inventory.setItem(0, data.weaponClass.mainWeapon!!.weaponIteamStack)
+                        p.inventory.setItem(0, data.weaponClass?.mainWeapon!!.weaponIteamStack)
                         data.tick = 8
-                        data.setIsHolding(false)
+                        data.isHolding = false
                     }
 
                     if (!data.isInMatch || !p.isOnline) cancel()
@@ -133,7 +130,7 @@ object Spinner {
         task.runTaskTimer(plugin, 0, 1)
     }
 
-    fun SpinnerShootRunnable(
+    fun spinnerShootRunnable(
         charge: Int,
         player: Player,
     ) {
@@ -149,14 +146,14 @@ object Spinner {
                         cancel()
                     }
                     val data = getPlayerData(p)
-                    if (data!!.getIsUsingMM() || data.getIsUsingJetPack() || data.getIsUsingTyakuti() ||
-                        data.getIsUsingSS()
+                    if (data!!.isUsingMM || data.isUsingJetPack || data.isUsingTyakuti ||
+                        data.isUsingSS
                     ) {
                         cancel()
                     }
-                    Shoot(
+                    shoot(
                         p,
-                        (charge / getPlayerData(p)!!.weaponClass.mainWeapon!!.chargeRatio).toInt(),
+                        (charge / getPlayerData(p)!!.weaponClass!!.mainWeapon!!.chargeRatio).toInt(),
                     )
                     c++
                 }
@@ -165,14 +162,14 @@ object Spinner {
             plugin,
             2,
             getPlayerData(player)!!
-                .weaponClass
+                .weaponClass!!
                 .mainWeapon!!
                 .shootTick
                 .toLong(),
         )
     }
 
-    fun Shoot(
+    fun shoot(
         player: Player,
         charge: Int,
     ) {
@@ -181,7 +178,7 @@ object Spinner {
         val data = getPlayerData(player)
         if (player.exp <=
             (
-                data!!.weaponClass.mainWeapon!!.needInk
+                data!!.weaponClass!!.mainWeapon!!.needInk
                     * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) /
                     Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)
                 ).toFloat()
@@ -192,20 +189,20 @@ object Spinner {
         }
         player.exp = player.exp -
             (
-                data.weaponClass.mainWeapon!!.needInk
+                data.weaponClass?.mainWeapon!!.needInk
                     * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) /
                     Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)
                 ).toFloat()
         val ball = player.launchProjectile<Snowball>(Snowball::class.java)
-        (ball as CraftSnowball).handle.setItem(CraftItemStack.asNMSCopy(ItemStack(getPlayerData(player)!!.team.teamColor!!.wool!!)))
+        (ball as CraftSnowball).handle.setItem(CraftItemStack.asNMSCopy(ItemStack(getPlayerData(player)!!.team!!.teamColor!!.wool!!)))
         player.world.playSound(player.location, Sound.ENTITY_PIG_STEP, 0.3f, 1.1f)
         val vec =
             player
                 .location
                 .direction
-                .multiply(getPlayerData(player)!!.weaponClass.mainWeapon!!.shootSpeed * charge)
-        val random = getPlayerData(player)!!.weaponClass.mainWeapon!!.random
-        val distick = getPlayerData(player)!!.weaponClass.mainWeapon!!.distanceTick
+                .multiply(getPlayerData(player)!!.weaponClass!!.mainWeapon!!.shootSpeed * charge)
+        val random = getPlayerData(player)!!.weaponClass!!.mainWeapon!!.random
+        val distick = getPlayerData(player)!!.weaponClass!!.mainWeapon!!.distanceTick
         vec.add(
             Vector(
                 Math.random() * random - random / 2,
@@ -235,7 +232,7 @@ object Spinner {
                         inkball!!.velocity.getX(),
                         inkball!!.velocity.getY(),
                         inkball!!.velocity.getZ(),
-                    ).multiply(getPlayerData(p)!!.weaponClass.mainWeapon!!.shootSpeed / 17)
+                    ).multiply(getPlayerData(p)!!.weaponClass!!.mainWeapon!!.shootSpeed / 17)
 
                 override fun run() {
                     inkball = mainSnowballNameMap.get(name)
@@ -248,11 +245,12 @@ object Spinner {
                     if (i != 0) {
                         val bd =
                             getPlayerData(p)!!
-                                .team.teamColor!!
+                                .team!!
+                                .teamColor!!
                                 .wool!!
                                 .createBlockData()
                         for (o_player in plugin.server.onlinePlayers) {
-                            if (getPlayerData(o_player)!!.settings.ShowEffect_MainWeaponInk()) {
+                            if (getPlayerData(o_player)!!.settings!!.ShowEffect_MainWeaponInk()) {
                                 if (o_player.world ===
                                     inkball!!.world
                                 ) {

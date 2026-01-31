@@ -36,14 +36,14 @@ import org.bukkit.util.Vector
  */
 object QuickBomb {
     @JvmStatic
-    fun QuickBomRunnable(player: Player) {
+    fun quickBomRunnable(player: Player) {
         val task: BukkitRunnable =
             object : BukkitRunnable() {
                 var p: Player = player
-                var p_vec: Vector? = null
+                var pVec: Vector? = null
                 var x: Double = 0.0
                 var z: Double = 0.0
-                var block_check: Boolean = false
+                var blockCheck: Boolean = false
                 var c: Int = 0
                 var drop: Item? = null
                 var ball: Snowball? = null
@@ -51,14 +51,14 @@ object QuickBomb {
                 override fun run() {
                     try {
                         if (c == 0) {
-                            p_vec = p.eyeLocation.direction
+                            pVec = p.eyeLocation.direction
                             if (!getPlayerData(player)!!.isBombRush) p.exp = p.exp - 0.39f
-                            val bom = ItemStack(getPlayerData(p)!!.team.teamColor!!.wool!!).clone()
-                            val bom_m = bom.itemMeta
-                            bom_m!!.setLocalizedName(notDuplicateNumber.toString())
-                            bom.itemMeta = bom_m
+                            val bom = ItemStack(getPlayerData(p)!!.team!!.teamColor!!.wool!!).clone()
+                            val bomM = bom.itemMeta
+                            bomM!!.setLocalizedName(notDuplicateNumber.toString())
+                            bom.itemMeta = bomM
                             drop = p.world.dropItem(p.eyeLocation, bom)
-                            drop!!.velocity = p_vec!!.clone()
+                            drop!!.velocity = pVec!!.clone()
                             // 雪玉をスポーンさせた瞬間にプレイヤーに雪玉がデスポーンした偽のパケットを送信する
                             ball = player.launchProjectile<Snowball>(Snowball::class.java)
                             ball!!.velocity = Vector(0, 0, 0)
@@ -68,7 +68,7 @@ object QuickBomb {
                                 val connection = (o_player as CraftPlayer).handle.playerConnection
                                 connection.sendPacket(PacketPlayOutEntityDestroy(ball!!.entityId))
                             }
-                            p_vec = p.eyeLocation.direction
+                            pVec = p.eyeLocation.direction
                         }
 
                         if (!drop!!.isOnGround &&
@@ -103,8 +103,8 @@ object QuickBomb {
                             // 塗る
                             var i = 0
                             while (i <= maxDist) {
-                                val p_locs: MutableList<Location> = getSphere(drop!!.location, i.toDouble(), 20)
-                                for (loc in p_locs) {
+                                val pLocs: MutableList<Location> = getSphere(drop!!.location, i.toDouble(), 20)
+                                for (loc in pLocs) {
                                     PaintMgr.Paint(loc, p, false)
                                 }
                                 i++
@@ -193,7 +193,7 @@ object QuickBomb {
 
                         // ボムの視認用エフェクト
                         for (o_player in plugin.server.onlinePlayers) {
-                            if (getPlayerData(o_player)!!.settings.ShowEffect_Bomb()) {
+                            if (getPlayerData(o_player)!!.settings!!.ShowEffect_Bomb()) {
                                 if (o_player.world === drop!!.location.world) {
                                     if (o_player
                                             .location
@@ -201,7 +201,7 @@ object QuickBomb {
                                     ) {
                                         val dustOptions =
                                             Particle.DustOptions(
-                                                getPlayerData(p)!!.team.teamColor!!.bukkitColor!!,
+                                                getPlayerData(p)!!.team!!.teamColor!!.bukkitColor!!,
                                                 1f,
                                             )
                                         o_player.spawnParticle<Particle.DustOptions?>(

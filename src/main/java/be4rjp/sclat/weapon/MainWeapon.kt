@@ -28,20 +28,20 @@ class MainWeapon : Listener {
     fun onClickWeapon(e: PlayerInteractEvent) {
         val player = e.getPlayer()
 
-        if (e.getAction() == null || e.getItem() == null) return
+        if (e.getItem() == null) return
         if (!getPlayerData(player)!!.isInMatch) return
-
-        if (e.getItem()!!.itemMeta!!.displayName == null) return
 
         val action = e.getAction()
         if (action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK) {
             MainWeaponMgr.UseMainWeapon(player)
         }
-        if (action == Action.LEFT_CLICK_AIR || action == Action.LEFT_CLICK_BLOCK) if (getPlayerData(player)!!.isInMatch) {
-            SubWeaponMgr.UseSubWeapon(
-                player,
-                getPlayerData(player)!!.weaponClass.subWeaponName,
-            )
+        if (action == Action.LEFT_CLICK_AIR || action == Action.LEFT_CLICK_BLOCK) {
+            if (getPlayerData(player)!!.isInMatch) {
+                SubWeaponMgr.UseSubWeapon(
+                    player,
+                    getPlayerData(player)!!.weaponClass!!.subWeaponName,
+                )
+            }
         }
     }
 
@@ -50,20 +50,20 @@ class MainWeapon : Listener {
         val player = event.getPlayer()
         val data = getPlayerData(player)
         data!!.isSneaking = true
-        val task: BukkitRunnable = object : BukkitRunnable() {
-            override fun run() {
-                data.isSneaking = false
+        val task: BukkitRunnable =
+            object : BukkitRunnable() {
+                override fun run() {
+                    data.isSneaking = false
+                }
             }
-        }
         task.runTaskLater(plugin, 5)
     }
 
     @EventHandler
-    fun PlayerRightClick(event: PlayerInteractEntityEvent) {
+    fun playerRightClick(event: PlayerInteractEntityEvent) {
         val player = event.getPlayer()
-        if (player.inventory.itemInMainHand == null || player.inventory.itemInMainHand
-                .itemMeta == null || player.inventory.itemInMainHand.itemMeta!!
-                .displayName == null
+        if (player.inventory.itemInMainHand
+                .itemMeta == null
         ) {
             return
         }
@@ -75,7 +75,8 @@ class MainWeapon : Listener {
         if (getPlayerData(player)!!.isInMatch) {
             SPWeaponMgr.UseSPWeapon(
                 player,
-                player.inventory.itemInMainHand.itemMeta!!.displayName,
+                player.inventory.itemInMainHand.itemMeta!!
+                    .displayName,
             )
         }
     }
@@ -83,9 +84,8 @@ class MainWeapon : Listener {
     @EventHandler
     fun onPlayerInteractAtEntity(event: PlayerInteractAtEntityEvent) {
         val player = event.getPlayer()
-        if (player.inventory.itemInMainHand == null || player.inventory.itemInMainHand
-                .itemMeta == null || player.inventory.itemInMainHand.itemMeta!!
-                .displayName == null
+        if (player.inventory.itemInMainHand
+                .itemMeta == null
         ) {
             return
         }
@@ -96,7 +96,8 @@ class MainWeapon : Listener {
         if (getPlayerData(player)!!.isInMatch) {
             SPWeaponMgr.UseSPWeapon(
                 player,
-                player.inventory.itemInMainHand.itemMeta!!.displayName,
+                player.inventory.itemInMainHand.itemMeta!!
+                    .displayName,
             )
         }
     }
@@ -105,9 +106,8 @@ class MainWeapon : Listener {
     fun onArmorStand(event: PlayerArmorStandManipulateEvent) {
         val player = event.getPlayer()
 
-        if (player.inventory.itemInMainHand == null || player.inventory.itemInMainHand
-                .itemMeta == null || player.inventory.itemInMainHand.itemMeta!!
-                .displayName == null
+        if (player.inventory.itemInMainHand
+                .itemMeta == null
         ) {
             return
         }
@@ -118,7 +118,8 @@ class MainWeapon : Listener {
         if (getPlayerData(player)!!.isInMatch) {
             SPWeaponMgr.UseSPWeapon(
                 player,
-                player.inventory.itemInMainHand.itemMeta!!.displayName,
+                player.inventory.itemInMainHand.itemMeta!!
+                    .displayName,
             )
         }
     }

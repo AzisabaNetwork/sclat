@@ -28,7 +28,7 @@ import org.bukkit.util.Vector
 
 object Hound {
     @JvmStatic
-    fun HoundRunnable(player: Player) {
+    fun houndRunnable(player: Player) {
         val delay: BukkitRunnable =
             object : BukkitRunnable() {
                 var p: Player = player
@@ -41,15 +41,15 @@ object Hound {
                         return
                     }
 
-                    if (!data.getIsUsingManeuver() && data.canShoot) {
+                    if (!data.isUsingManeuver && data.canShoot) {
                         val clickType = Sclat.dadadaCheckerAPI!!.getPlayerClickType(player)
                         if ((clickType == ClickType.FIRST_CLICK || clickType == ClickType.RENDA || clickType == ClickType.NAGAOSI) &&
                             data.isInMatch &&
                             data.canRollerShoot
                         ) {
-                            Shoot(p)
+                            shoot(p)
                             data.canRollerShoot = false
-                            HoundCooltime(p)
+                            houndCooltime(p)
                         }
                     }
                 }
@@ -58,14 +58,14 @@ object Hound {
             plugin,
             0,
             getPlayerData(player)!!
-                .weaponClass
+                .weaponClass!!
                 .mainWeapon!!
                 .shootTick
                 .toLong(),
         )
     }
 
-    fun HoundCooltime(player: Player?) {
+    fun houndCooltime(player: Player?) {
         val data = getPlayerData(player)
         val delay1: BukkitRunnable =
             object : BukkitRunnable() {
@@ -79,7 +79,7 @@ object Hound {
         delay1.runTaskLater(
             plugin,
             data!!
-                .weaponClass
+                .weaponClass!!
                 .mainWeapon!!
                 .coolTime
                 .toLong(),
@@ -87,7 +87,7 @@ object Hound {
     }
 
     @JvmStatic
-    fun HoundEXRunnable(player: Player) {
+    fun houndEXRunnable(player: Player) {
         val delay: BukkitRunnable =
             object : BukkitRunnable() {
                 var p: Player = player
@@ -112,7 +112,7 @@ object Hound {
         delay.runTaskTimer(plugin, 0, 1)
     }
 
-    fun Shoot(player: Player) {
+    fun shoot(player: Player) {
         if (player.gameMode == GameMode.SPECTATOR) return
 
         val data = getPlayerData(player)
@@ -120,7 +120,7 @@ object Hound {
         val vec =
             Vector(pVector.getX(), 0.0, pVector.getZ())
                 .normalize()
-                .multiply(data!!.weaponClass.mainWeapon!!.shootSpeed)
+                .multiply(data!!.weaponClass!!.mainWeapon!!.shootSpeed)
         val task: BukkitRunnable =
             object : BukkitRunnable() {
                 var aVec: Vector = vec.clone()
@@ -132,8 +132,8 @@ object Hound {
                 // 半径
                 var maxDist: Double = 1.0
                 var saveY: Double = 0.0
-                var explodetick: Int = data.weaponClass.mainWeapon!!.rollerShootQuantity
-                var climbSpeed: Float = getPlayerData(player)!!.weaponClass.mainWeapon!!.rollerNeedInk
+                var explodetick: Int = data.weaponClass?.mainWeapon!!.rollerShootQuantity
+                var climbSpeed: Float = getPlayerData(player)!!.weaponClass!!.mainWeapon!!.rollerNeedInk
 
                 override fun run() {
                     try {
@@ -141,7 +141,7 @@ object Hound {
                             saveY = player.location.y
                             player.exp = player.exp -
                                 (
-                                    data.weaponClass.mainWeapon!!.needInk
+                                    data.weaponClass?.mainWeapon!!.needInk
                                         * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) /
                                         Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)
                                     ).toFloat()
@@ -165,19 +165,19 @@ object Hound {
 
                         if (i >= 5) {
                             if ((bloc!!.x == as1l.x || bloc!!.z == as1l.z)) {
-                                if (EntityWallHit(as1!!, pVector)) {
+                                if (entityWallHit(as1!!, pVector)) {
                                     aVec = Vector(pVector.getX() * 0.03, climbSpeed.toDouble(), pVector.getZ() * 0.03)
                                 } else {
                                     aVec = Vector(vec.getX(), -0.4, vec.getZ())
                                 }
                                 // 壁を塗る
                                 for (i in 0..1) {
-                                    val p_locs: MutableList<Location> = getSphere(as1l, i.toDouble(), 30)
-                                    for (loc in p_locs) {
+                                    val pLocs: MutableList<Location> = getSphere(as1l, i.toDouble(), 30)
+                                    for (loc in pLocs) {
                                         PaintMgr.Paint(loc, player, false)
                                     }
                                 }
-                            } else if (aVec.getY() > 0 && !EntityWallHit(as1!!, pVector)) {
+                            } else if (aVec.getY() > 0 && !entityWallHit(as1!!, pVector)) {
                                 aVec = Vector(vec.getX(), 0.0, vec.getZ())
                             } else if (!as1!!.isOnGround) {
                                 aVec = Vector(vec.getX(), -0.4, vec.getZ())
@@ -197,7 +197,8 @@ object Hound {
                         // エフェクト
                         if (i % 2 == 0) {
                             val bd =
-                                data.team.teamColor!!
+                                data.team!!
+                                    .teamColor!!
                                     .wool!!
                                     .createBlockData()
                             for (target in plugin.server.onlinePlayers) {
@@ -231,18 +232,18 @@ object Hound {
                             }
                             heightdiff = as1!!.location.y - saveY
                             if (heightdiff > 7.9) {
-                                maxDist = data.weaponClass.mainWeapon!!.blasterExHankei + 2
+                                maxDist = data.weaponClass?.mainWeapon!!.blasterExHankei + 2
                             } else if (1.8 < heightdiff && heightdiff <= 7.9) {
-                                maxDist = data.weaponClass.mainWeapon!!.blasterExHankei + 1
+                                maxDist = data.weaponClass?.mainWeapon!!.blasterExHankei + 1
                             } else if (-1.5 <= heightdiff && heightdiff <= 1.8) {
-                                maxDist = data.weaponClass.mainWeapon!!.blasterExHankei
+                                maxDist = data.weaponClass?.mainWeapon!!.blasterExHankei
                             } else if (-10 <= heightdiff && heightdiff < -1.5) {
-                                maxDist = data.weaponClass.mainWeapon!!.blasterExHankei - 1
+                                maxDist = data.weaponClass?.mainWeapon!!.blasterExHankei - 1
                                 if (maxDist <= 0) {
                                     maxDist = 1.0
                                 }
                             } else if (heightdiff < -10) {
-                                maxDist = data.weaponClass.mainWeapon!!.blasterExHankei - 2
+                                maxDist = data.weaponClass?.mainWeapon!!.blasterExHankei - 2
                                 if (maxDist <= 0) {
                                     maxDist = 1.0
                                 }
@@ -263,8 +264,8 @@ object Hound {
                             run {
                                 var i = 0
                                 while (i <= maxDist) {
-                                    val p_locs: MutableList<Location> = getSphere(as1l, i.toDouble(), 20)
-                                    for (loc in p_locs) {
+                                    val pLocs: MutableList<Location> = getSphere(as1l, i.toDouble(), 20)
+                                    for (loc in pLocs) {
                                         PaintMgr.Paint(loc, player, false)
                                     }
                                     i++
@@ -304,7 +305,7 @@ object Hound {
                                         exdamage(
                                             heightdiff,
                                             maxDist - target.location.distance(as1l),
-                                            data.weaponClass.mainWeapon!!.blasterExDamage
+                                            data.weaponClass?.mainWeapon!!.blasterExDamage
                                                 * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP),
                                         )
                                     if (data.team != getPlayerData(target)!!.team &&
@@ -333,7 +334,7 @@ object Hound {
                                             exdamage(
                                                 heightdiff,
                                                 maxDist - `as`.location.distance(as1l),
-                                                data.weaponClass.mainWeapon!!.blasterExDamage
+                                                data.weaponClass?.mainWeapon!!.blasterExDamage
                                                     * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP),
                                             )
                                         ArmorStandMgr.giveDamageArmorStand(`as`, damage, player)
@@ -362,7 +363,7 @@ object Hound {
             }
         if (player.exp >
             (
-                data.weaponClass.mainWeapon!!.needInk
+                data.weaponClass?.mainWeapon!!.needInk
                     * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) /
                     Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)
                 ).toFloat()
@@ -382,7 +383,7 @@ object Hound {
         // cooltime.runTaskLater(Main.getPlugin(), 10);
     }
 
-    private fun EntityWallHit(
+    private fun entityWallHit(
         stand: ArmorStand,
         direction: Vector,
     ): Boolean {

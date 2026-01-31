@@ -31,227 +31,281 @@ import org.bukkit.scheduler.BukkitRunnable
 object Charger {
     @JvmStatic
     fun ChargerRunnable(player: Player) {
-        val task: BukkitRunnable = object : BukkitRunnable() {
-            var p: Player = player
-            var charge: Int = 0
-            var keeping: Int = 0
-            var max: Int = getPlayerData(p)!!.weaponClass.mainWeapon!!.maxCharge
-            var min: Int = max * 2 / 3 // インク消費軽減チャージ
-            override fun run() {
-                val data = getPlayerData(p)
+        val task: BukkitRunnable =
+            object : BukkitRunnable() {
+                var p: Player = player
+                var charge: Int = 0
+                var keeping: Int = 0
+                var max: Int = getPlayerData(p)!!.weaponClass?.mainWeapon!!.maxCharge
+                var min: Int = max * 2 / 3 // インク消費軽減チャージ
 
-                data!!.tick = data.tick + 1
+                override fun run() {
+                    val data = getPlayerData(p)
 
-                if (data.getIsUsingMM() || data.getIsUsingJetPack() || data.getIsUsingTyakuti() ||
-                    data.getIsUsingSS()
-                ) {
-                    charge = 0
-                    data.tick = 8
-                    return
-                }
+                    data!!.tick = data.tick + 1
 
-                if (keeping == data.weaponClass.mainWeapon!!.chargeKeepingTime && data.weaponClass.mainWeapon!!.canChargeKeep && data.settings.doChargeKeep()) {
-                    charge =
-                        0
-                }
-
-                if (data.tick <= 6 && data.isInMatch) {
-                    val w = data.weaponClass.mainWeapon!!.weaponIteamStack!!.clone()
-                    val wm = w.itemMeta
-
-                    if (data.weaponClass.mainWeapon!!.scope) {
-                        data.isCharging = true
+                    if (data.isUsingMM || data.isUsingJetPack || data.isUsingTyakuti ||
+                        data.isUsingSS
+                    ) {
+                        charge = 0
+                        data.tick = 8
+                        return
                     }
 
-                    // data.setTick(data.getTick() + 1);
-                    if (charge < max) charge++
+                    if (keeping == data.weaponClass?.mainWeapon!!.chargeKeepingTime && data.weaponClass?.mainWeapon!!.canChargeKeep &&
+                        data.settings?.doChargeKeep()!!
+                    ) {
+                        charge =
+                            0
+                    }
 
-                    if (data.weaponClass.mainWeapon!!.scope) {
+                    if (data.tick <= 6 && data.isInMatch) {
+                        val w =
+                            data.weaponClass
+                                ?.mainWeapon!!
+                                .weaponIteamStack!!
+                                .clone()
+                        val wm = w.itemMeta
+
+                        if (data.weaponClass?.mainWeapon!!.scope) {
+                            data.isCharging = true
+                        }
+
+                        // data.setTick(data.getTick() + 1);
+                        if (charge < max) charge++
+
+                        if (data.weaponClass?.mainWeapon!!.scope) {
                         /*
                          * if(charge != max) p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,
                          * 1, (int)charge / 3)); else p.addPotionEffect(new
                          * PotionEffect(PotionEffectType.SLOW, 40000, (int)charge / 3));
                          */
-                        if (charge < max) {
-                            setPlayerFOV(p, -0.1f / (charge.toFloat() / 19.0f))
+                            if (charge < max) {
+                                setPlayerFOV(p, -0.1f / (charge.toFloat() / 19.0f))
+                            }
+                        }
+
+                        wm!!.setDisplayName(
+                            (
+                                wm.displayName + "§7[" +
+                                    toGauge(charge, max, data.team?.teamColor!!.colorCode, "§7") + "]"
+                                ),
+                        )
+                        w.itemMeta = wm
+                        p.inventory.setItem(0, w)
+                        val rayTrace = RayTrace(p.eyeLocation.toVector(), p.eyeLocation.direction)
+                        val positions =
+                            rayTrace.traverse(
+                                (
+                                    charge.toDouble() * data.weaponClass?.mainWeapon!!.chargeRatio *
+                                        data.weaponClass
+                                            ?.mainWeapon!!
+                                            .distanceTick
+                                            .toDouble()
+                                    ).toInt()
+                                    .toDouble(),
+                                0.7,
+                            )
+                        check@ for (vector in positions) {
+                            val position = vector.toLocation(p.location.world!!)
+                            player.world.getBlockAt(position)
+                            if (position.block.type != Material.AIR) {
+                                // if(rayTrace.intersects(new BoundingBox(block), (int)(charge / 2 *
+                                // data.getWeaponClass().getMainWeapon().getDistanceTick()), 0.1))
+                                break
+                            }
+                            // if(i % 2 == 0){
+                            // for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
+                            // if (target.equals(p) ||
+                            // !DataMgr.getPlayerData(target).getSettings().ShowEffect_ChargerLine())
+                            // continue;
+                            // if (target.getWorld() == p.getWorld()) {
+                            // if (target.getLocation().distanceSquared(position) <
+                            // Main.PARTICLE_RENDER_DISTANCE_SQUARED) {
+                            // Particle.DustOptions dustOptions = new
+                            // Particle.DustOptions(data.getTeam().getTeamColor().getBukkitColor(), 1);
+                            // target.spawnParticle(Particle.REDSTONE, position, 1, 0, 0, 0, 50,
+                            // dustOptions);
+                            // }
+                            // }
+                            // }
+                            // }
                         }
                     }
 
-                    wm!!.setDisplayName(
-                        (
-                            wm.displayName + "§7[" +
-                                toGauge(charge, max, data.team.teamColor!!.colorCode, "§7") + "]"
-                            ),
-                    )
-                    w.itemMeta = wm
-                    p.inventory.setItem(0, w)
-                    val rayTrace = RayTrace(p.eyeLocation.toVector(), p.eyeLocation.direction)
-                    val positions = rayTrace.traverse(
-                        (charge.toDouble() * data.weaponClass.mainWeapon!!.chargeRatio * data.weaponClass.mainWeapon!!.distanceTick.toDouble()).toInt()
-                            .toDouble(),
-                        0.7,
-                    )
-                    check@ for (vector in positions) {
-                        val position = vector.toLocation(p.location.world!!)
-                        player.world.getBlockAt(position)
-                        if (position.block.type != Material.AIR) {
-                            // if(rayTrace.intersects(new BoundingBox(block), (int)(charge / 2 *
-                            // data.getWeaponClass().getMainWeapon().getDistanceTick()), 0.1))
-                            break
+                    if (charge == max || data.weaponClass?.mainWeapon!!.hanbunCharge) {
+                        if (p.inventory
+                                .itemInMainHand.type == Material.AIR
+                        ) {
+                            if (data.weaponClass?.mainWeapon!!.canChargeKeep) {
+                                if (data.settings?.doChargeKeep()!!) {
+                                    data.tick =
+                                        11
+                                }
+                            }
                         }
-                        // if(i % 2 == 0){
-                        // for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
-                        // if (target.equals(p) ||
-                        // !DataMgr.getPlayerData(target).getSettings().ShowEffect_ChargerLine())
-                        // continue;
-                        // if (target.getWorld() == p.getWorld()) {
-                        // if (target.getLocation().distanceSquared(position) <
-                        // Main.PARTICLE_RENDER_DISTANCE_SQUARED) {
-                        // Particle.DustOptions dustOptions = new
-                        // Particle.DustOptions(data.getTeam().getTeamColor().getBukkitColor(), 1);
-                        // target.spawnParticle(Particle.REDSTONE, position, 1, 0, 0, 0, 50,
-                        // dustOptions);
-                        // }
-                        // }
-                        // }
-                        // }
                     }
-                }
 
-                if (charge == max || data.weaponClass.mainWeapon!!.hanbunCharge) if (p.inventory
-                        .itemInMainHand.type == Material.AIR
-                ) if (data.weaponClass.mainWeapon!!.canChargeKeep) if (data.settings.doChargeKeep()) {
-                    data.tick =
-                        11
-                }
+                    if (p.gameMode == GameMode.SPECTATOR) charge = 0
 
-                if (p.gameMode == GameMode.SPECTATOR) charge = 0
+                    if (data.tick >= 11 && (charge == max || data.weaponClass?.mainWeapon!!.hanbunCharge)) {
+                        keeping++
+                    } else {
+                        keeping = 0
+                    }
 
-                if (data.tick >= 11 && (charge == max || data.weaponClass.mainWeapon!!.hanbunCharge)) {
-                    keeping++
-                } else {
-                    keeping = 0
-                }
-
-                if (data.tick == 7 && data.isInMatch) {
+                    if (data.tick == 7 && data.isInMatch) {
                     /*
                      * if(player.hasPotionEffect(PotionEffectType.SLOW))
                      * player.removePotionEffect(PotionEffectType.SLOW);
                      */
-                    if (data.weaponClass.mainWeapon!!.scope) {
-                        data.isCharging = false
-                        setPlayerFOV(player, 0.06f)
-                    }
-                    if (charge <= min) {
-                        if (p.exp > (
-                                data.weaponClass.mainWeapon!!.needInk
-                                    * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) * charge
-                                ) / 2
+                        if (data.weaponClass?.mainWeapon!!.scope) {
+                            data.isCharging = false
+                            setPlayerFOV(player, 0.06f)
+                        }
+                        if (charge <= min) {
+                            if (p.exp > (
+                                    data.weaponClass?.mainWeapon!!.needInk
+                                        * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) * charge
+                                    ) / 2
+                            ) {
+                                p.exp = p.exp -
+                                    (
+                                        (data.weaponClass?.mainWeapon!!.needInk / 2) *
+                                            Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) /
+                                            Gear.getGearInfluence(
+                                                player,
+                                                Gear.Type.MAIN_INK_EFFICIENCY_UP,
+                                            ) * charge
+                                        ).toFloat()
+                                Shoot(
+                                    p,
+                                    (
+                                        charge.toDouble() * data.weaponClass?.mainWeapon!!.chargeRatio *
+                                            data.weaponClass
+                                                ?.mainWeapon!!
+                                                .distanceTick
+                                                .toDouble()
+                                        ).toInt(),
+                                    data.weaponClass?.mainWeapon!!.damage * charge,
+                                    data.weaponClass?.mainWeapon!!.decreaseRate,
+                                )
+                            } else {
+                                val reach = (p.exp / data.weaponClass?.mainWeapon!!.needInk).toInt()
+                                if (reach >= 2) {
+                                    charge = 0
+                                    // p.sendMessage(String.valueOf(data.getWeaponClass().getMainWeapon().getChargeRatio()));
+                                    // p.setExp(p.getExp() - (float)
+                                    // ((data.getWeaponClass().getMainWeapon().getNeedInk() * reach/2) *
+                                    // Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) /
+                                    // Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)));
+                                    p.exp = 0.0f
+                                    Shoot(
+                                        p,
+                                        (
+                                            reach.toDouble() * data.weaponClass?.mainWeapon!!.chargeRatio *
+                                                data.weaponClass
+                                                    ?.mainWeapon!!
+                                                    .distanceTick
+                                                    .toDouble()
+                                            ).toInt(),
+                                        data.weaponClass?.mainWeapon!!.damage * reach,
+                                        data.weaponClass?.mainWeapon!!.decreaseRate,
+                                    )
+                                } else {
+                                    p.sendTitle("", ChatColor.RED.toString() + "インクが足りません", 0, 10, 2)
+                                    p.playSound(p.location, Sound.UI_BUTTON_CLICK, 1f, 1.63f)
+                                }
+                            }
+                        } else if (p.exp > (
+                                data.weaponClass?.mainWeapon!!.needInk * charge
+                                    * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP)
+                                )
                         ) {
-                            p.exp = p.exp - (
-                                (data.weaponClass.mainWeapon!!.needInk / 2) *
-                                    Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) /
-                                    Gear.getGearInfluence(
-                                        player,
-                                        Gear.Type.MAIN_INK_EFFICIENCY_UP,
-                                    ) * charge
-                                ).toFloat()
+                            p.exp = p.exp -
+                                (
+                                    data.weaponClass?.mainWeapon!!.needInk
+                                        * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) /
+                                        Gear.getGearInfluence(
+                                            player,
+                                            Gear.Type.MAIN_INK_EFFICIENCY_UP,
+                                        ) * charge
+                                    ).toFloat()
                             Shoot(
                                 p,
-                                (charge.toDouble() * data.weaponClass.mainWeapon!!.chargeRatio * data.weaponClass.mainWeapon!!.distanceTick.toDouble()).toInt(),
-                                data.weaponClass.mainWeapon!!.damage * charge,
-                                data.weaponClass.mainWeapon!!.decreaseRate,
+                                (
+                                    charge.toDouble() * data.weaponClass?.mainWeapon!!.chargeRatio *
+                                        data.weaponClass
+                                            ?.mainWeapon!!
+                                            .distanceTick
+                                            .toDouble()
+                                    ).toInt(),
+                                data.weaponClass?.mainWeapon!!.damage * charge,
+                                data.weaponClass?.mainWeapon!!.decreaseRate,
                             )
                         } else {
-                            val reach = (p.exp / data.weaponClass.mainWeapon!!.needInk).toInt()
+                            val reach = (p.exp / data.weaponClass?.mainWeapon!!.needInk).toInt()
                             if (reach >= 2) {
                                 charge = 0
                                 // p.sendMessage(String.valueOf(data.getWeaponClass().getMainWeapon().getChargeRatio()));
-                                // p.setExp(p.getExp() - (float)
-                                // ((data.getWeaponClass().getMainWeapon().getNeedInk() * reach/2) *
+                                // p.setExp(p.getExp() -
+                                // (float)(data.getWeaponClass().getMainWeapon().getNeedInk() * reach *
                                 // Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) /
                                 // Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)));
                                 p.exp = 0.0f
                                 Shoot(
                                     p,
-                                    (reach.toDouble() * data.weaponClass.mainWeapon!!.chargeRatio * data.weaponClass.mainWeapon!!.distanceTick.toDouble()).toInt(),
-                                    data.weaponClass.mainWeapon!!.damage * reach,
-                                    data.weaponClass.mainWeapon!!.decreaseRate,
+                                    (
+                                        reach.toDouble() * data.weaponClass?.mainWeapon!!.chargeRatio *
+                                            data.weaponClass
+                                                ?.mainWeapon!!
+                                                .distanceTick
+                                                .toDouble()
+                                        ).toInt(),
+                                    data.weaponClass?.mainWeapon!!.damage * reach,
+                                    data.weaponClass?.mainWeapon!!.decreaseRate,
                                 )
                             } else {
                                 p.sendTitle("", ChatColor.RED.toString() + "インクが足りません", 0, 10, 2)
                                 p.playSound(p.location, Sound.UI_BUTTON_CLICK, 1f, 1.63f)
                             }
                         }
-                    } else if (p.exp > (
-                            data.weaponClass.mainWeapon!!.needInk * charge
-                                * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP)
-                            )
-                    ) {
-                        p.exp = p.exp - (
-                            data.weaponClass.mainWeapon!!.needInk
-                                * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) /
-                                Gear.getGearInfluence(
-                                    player,
-                                    Gear.Type.MAIN_INK_EFFICIENCY_UP,
-                                ) * charge
-                            ).toFloat()
-                        Shoot(
-                            p,
-                            (charge.toDouble() * data.weaponClass.mainWeapon!!.chargeRatio * data.weaponClass.mainWeapon!!.distanceTick.toDouble()).toInt(),
-                            data.weaponClass.mainWeapon!!.damage * charge,
-                            data.weaponClass.mainWeapon!!.decreaseRate,
-                        )
-                    } else {
-                        val reach = (p.exp / data.weaponClass.mainWeapon!!.needInk).toInt()
-                        if (reach >= 2) {
-                            charge = 0
-                            // p.sendMessage(String.valueOf(data.getWeaponClass().getMainWeapon().getChargeRatio()));
-                            // p.setExp(p.getExp() -
-                            // (float)(data.getWeaponClass().getMainWeapon().getNeedInk() * reach *
-                            // Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) /
-                            // Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)));
-                            p.exp = 0.0f
-                            Shoot(
-                                p,
-                                (reach.toDouble() * data.weaponClass.mainWeapon!!.chargeRatio * data.weaponClass.mainWeapon!!.distanceTick.toDouble()).toInt(),
-                                data.weaponClass.mainWeapon!!.damage * reach,
-                                data.weaponClass.mainWeapon!!.decreaseRate,
-                            )
-                        } else {
-                            p.sendTitle("", ChatColor.RED.toString() + "インクが足りません", 0, 10, 2)
-                            p.playSound(p.location, Sound.UI_BUTTON_CLICK, 1f, 1.63f)
-                        }
+                        charge = 0
+                        p.inventory.setItem(0, data.weaponClass?.mainWeapon!!.weaponIteamStack)
+                        data.tick = 8
+                        data.isHolding = false
                     }
-                    charge = 0
-                    p.inventory.setItem(0, data.weaponClass.mainWeapon!!.weaponIteamStack)
-                    data.tick = 8
-                    data.setIsHolding(false)
-                }
 
-                if (!data.isInMatch || !p.isOnline) cancel()
+                    if (!data.isInMatch || !p.isOnline) cancel()
+                }
             }
-        }
         task.runTaskTimer(plugin, 0, 1)
     }
 
-    fun Shoot(player: Player, reach: Int, damage: Double, decRate: Double) {
+    fun Shoot(
+        player: Player,
+        reach: Int,
+        damage: Double,
+        decRate: Double,
+    ) {
         if (player.gameMode == GameMode.SPECTATOR) return
         // player.sendMessage(String.valueOf(reach));
         player.world.playSound(player.location, Sound.ENTITY_FIREWORK_ROCKET_BLAST, 0.4f, 5f)
         val rayTrace = RayTrace(player.eyeLocation.toVector(), player.eyeLocation.direction)
-        val positions = rayTrace
-            .traverse((reach * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP)).toInt().toDouble(), 0.2)
+        val positions =
+            rayTrace
+                .traverse((reach * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP)).toInt().toDouble(), 0.2)
 
         val entityLocation = player.eyeLocation
         val distance = reach.toDouble() // レイの長さ
         val world = player.world
         var raydistance = distance
-        val rayresult = world.rayTraceBlocks(
-            entityLocation,
-            player.eyeLocation.direction,
-            distance,
-        )
+        val rayresult =
+            world.rayTraceBlocks(
+                entityLocation,
+                player.eyeLocation.direction,
+                distance,
+            )
         // if (result != null && result.getHitBlock() != null) {
         if (rayresult != null && rayresult.hitBlock != null) {
             val hitlocation = rayresult.hitPosition.toLocation(world)
@@ -301,17 +355,21 @@ object Charger {
             // }
             // }
             // }
-            if (getPlayerData(player)!!.settings.ShowEffect_MainWeaponInk()) {
+            if (getPlayerData(player)!!.settings?.ShowEffect_MainWeaponInk()!!) {
                 if (player.world === position.world) {
                     if (player.location.distanceSquared(position) < Sclat.particleRenderDistanceSquared) {
-                        val bd = getPlayerData(player)!!.team.teamColor!!.wool!!
-                            .createBlockData()
+                        val bd =
+                            getPlayerData(player)!!
+                                .team
+                                ?.teamColor!!
+                                .wool!!
+                                .createBlockData()
                         player.spawnParticle<BlockData?>(Particle.BLOCK_DUST, position, 1, 0.0, 0.0, 0.0, 1.0, bd)
                     }
                 }
             }
 
-            val maxDistSquad = 4.0 /* 2*2 */
+            val maxDistSquad = 4.0 // 2*2
             for (target in plugin.server.onlinePlayers) {
                 if (!getPlayerData(target)!!.isInMatch) continue
                 if (getPlayerData(player)!!.team != getPlayerData(target)!!.team &&
@@ -337,12 +395,14 @@ object Charger {
                             }
 
                             // AntiNoDamageTime
-                            val task: BukkitRunnable = object : BukkitRunnable() {
-                                var p: Player = target
-                                override fun run() {
-                                    target.noDamageTicks = 0
+                            val task: BukkitRunnable =
+                                object : BukkitRunnable() {
+                                    var p: Player = target
+
+                                    override fun run() {
+                                        target.noDamageTicks = 0
+                                    }
                                 }
-                            }
                             task.runTaskLater(plugin, 1)
                             break@loop
                         }
@@ -362,8 +422,7 @@ object Charger {
                             if (`as`.customName != null) {
                                 if (`as`.customName == "SplashShield") {
                                     val ssdata = getSplashShieldDataFromArmorStand(`as`)
-                                    if (getPlayerData(ssdata!!.player)!!.team != getPlayerData(player)!!.team
-                                    ) {
+                                    if (getPlayerData(ssdata!!.player)!!.team != getPlayerData(player)!!.team) {
                                         ArmorStandMgr.giveDamageArmorStand(`as`, damage, player)
                                         `as`.world
                                             .playSound(`as`.location, Sound.ENTITY_PLAYER_HURT, 0.8f, 1.2f)
@@ -371,21 +430,26 @@ object Charger {
                                     }
                                 } else if (`as`.customName == "Kasa") {
                                     val ssdata = getKasaDataFromArmorStand(`as`)
-                                    if (getPlayerData(ssdata!!.player)!!.team != getPlayerData(player)!!.team
-                                    ) {
+                                    if (getPlayerData(ssdata!!.player)!!.team != getPlayerData(player)!!.team) {
                                         ArmorStandMgr.giveDamageArmorStand(`as`, damage, player)
                                         `as`.world
                                             .playSound(`as`.location, Sound.ENTITY_PLAYER_HURT, 0.8f, 1.2f)
                                         break@loop
                                     }
                                 } else {
-                                    if (SclatUtil.isNumber(`as`.customName!!)) if (`as`.customName != "21" && `as`.customName != "100") if (`as`.isVisible) {
-                                        player.playSound(
-                                            player.location,
-                                            Sound.ENTITY_ARROW_HIT_PLAYER,
-                                            1.2f,
-                                            1.3f,
-                                        )
+                                    if (SclatUtil.isNumber(`as`.customName!!)) {
+                                        if (`as`.customName != "21" &&
+                                            `as`.customName != "100"
+                                        ) {
+                                            if (`as`.isVisible) {
+                                                player.playSound(
+                                                    player.location,
+                                                    Sound.ENTITY_ARROW_HIT_PLAYER,
+                                                    1.2f,
+                                                    1.3f,
+                                                )
+                                            }
+                                        }
                                     }
                                     if (IsbackstabStand(player, `as`)) {
                                         ArmorStandMgr.giveDamageArmorStand(`as`, damage * decRate, player)
@@ -409,7 +473,10 @@ object Charger {
         }
     }
 
-    fun Isbackstab(p: Player, target: Player): Boolean {
+    fun Isbackstab(
+        p: Player,
+        target: Player,
+    ): Boolean {
         var pyaw = 0.0
         var tyaw = 0.0
         if (p.eyeLocation.yaw < 0) {
@@ -429,7 +496,10 @@ object Charger {
         }
     }
 
-    fun IsbackstabStand(p: Player, target: ArmorStand): Boolean {
+    fun IsbackstabStand(
+        p: Player,
+        target: ArmorStand,
+    ): Boolean {
         var pyaw = 0.0
         var tyaw = 0.0
         if (p.eyeLocation.yaw < 0) {

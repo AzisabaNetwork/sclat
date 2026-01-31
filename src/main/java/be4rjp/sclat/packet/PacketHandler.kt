@@ -11,22 +11,31 @@ import net.minecraft.server.v1_14_R1.PacketPlayOutAbilities
 import net.minecraft.server.v1_14_R1.PacketPlayOutSpawnEntity
 import org.bukkit.entity.Player
 
-class PacketHandler(private val player: Player?) : ChannelDuplexHandler() {
+class PacketHandler(
+    private val player: Player?,
+) : ChannelDuplexHandler() {
     private val playerData: PlayerData?
     private val playerSettings: PlayerSettings
 
     init {
         this.playerData = getPlayerData(player)
-        this.playerSettings = playerData!!.settings
+        this.playerSettings = playerData?.settings!!
     }
 
     @Throws(Exception::class)
-    override fun channelRead(channelHandlerContext: ChannelHandlerContext?, packet: Any?) {
+    override fun channelRead(
+        channelHandlerContext: ChannelHandlerContext?,
+        packet: Any?,
+    ) {
         super.channelRead(channelHandlerContext, packet)
     }
 
     @Throws(Exception::class)
-    override fun write(channelHandlerContext: ChannelHandlerContext?, packet: Any?, channelPromise: ChannelPromise?) {
+    override fun write(
+        channelHandlerContext: ChannelHandlerContext?,
+        packet: Any?,
+        channelPromise: ChannelPromise?,
+    ) {
         // Snowball shown handle
 
         if (packet is PacketPlayOutSpawnEntity) {

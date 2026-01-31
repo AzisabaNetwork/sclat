@@ -2,7 +2,6 @@
 package be4rjp.sclat.manager;
 
 import be4rjp.sclat.data.DataMgr;
-import static org.bukkit.Bukkit.getServer;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -16,6 +15,7 @@ import org.bukkit.map.MapView;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
+import static org.bukkit.Bukkit.getServer;
 
 /**
  *
@@ -52,11 +52,11 @@ public class MapKitMgr {
 
 		player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 100000, 10));
 
-		DataMgr.getPlayerData(player).setPlayerMapLoc(loc);
+		DataMgr.getPlayerData(player).playerMapLoc = loc;
 	}
 
 	public static Vector getMapLocationVector(Player player) {
-		Location loc = DataMgr.getPlayerData(player).getPlayerMapLoc().clone();
+		Location loc = DataMgr.getPlayerData(player).playerMapLoc.clone();
 		Location ploc = player.getLocation().clone();
 		int x = (int) (((ploc.getYaw() + 180) - (loc.getYaw() + 180)) * 3 / 2);
 		int y = (int) ((ploc.getPitch() - loc.getPitch()) * 3 / 2);
@@ -75,7 +75,7 @@ public class MapKitMgr {
 		@Override
 		public void render(MapView view, MapCanvas canvas, Player player) {
 			MapCursorCollection cursors = new MapCursorCollection();
-			Location loc = DataMgr.getPlayerData(player).getPlayerMapLoc().clone();
+			Location loc = DataMgr.getPlayerData(player).playerMapLoc.clone();
 			Location ploc = player.getLocation().clone();
 			int x = (int) (((ploc.getYaw() + 180) - (loc.getYaw() + 180)) * 3);
 			int y = (int) ((ploc.getPitch() - loc.getPitch()) * 3);

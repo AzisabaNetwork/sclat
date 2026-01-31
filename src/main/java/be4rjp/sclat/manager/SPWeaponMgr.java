@@ -40,21 +40,21 @@ public class SPWeaponMgr {
 
 	public static void addSPCharge(Player player) {
 		PlayerData data = DataMgr.getPlayerData(player);
-		if (data.getSPGauge() < 100)
+		if (data.sPGauge < 100)
 			data.addSPGauge();
 	}
 
 	public static void resetSPCharge(Player player) {
 		PlayerData data = DataMgr.getPlayerData(player);
-		if (data.getSPGauge() > 20)
-			data.setSPGauge(20);
+		if (data.sPGauge > 20)
+			data.sPGauge = (20);
 	}
 
 	public static String getSPGauge(Player player) {
 		PlayerData data = DataMgr.getPlayerData(player);
-		if (data.getSPGauge() == 100)
+		if (data.sPGauge == 100)
 			return "§b§n! READY !";
-		return GaugeAPI.toGauge(data.getSPGauge() / 5, 20, "§a", "§7");
+		return GaugeAPI.toGauge(data.sPGauge / 5, 20, "§a", "§7");
 	}
 
 	public static void SPWeaponHuriRunnable(Player player) {
@@ -62,7 +62,7 @@ public class SPWeaponMgr {
 		BukkitRunnable task = new BukkitRunnable() {
 			@Override
 			public void run() {
-				if (!player.isOnline() || !data.isInMatch())
+				if (!player.isOnline() || !data.isInMatch)
 					cancel();
 				try {
 					int myTeam = 0;
@@ -71,10 +71,10 @@ public class SPWeaponMgr {
 						PlayerData opdata = DataMgr.getPlayerData(op);
 						if (data.match == opdata.match) {
 							if (data.team == opdata.team) {
-								if (!opdata.getIsDead())
+								if (!opdata.isDead)
 									myTeam++;
 							} else {
-								if (!opdata.getIsDead())
+								if (!opdata.isDead)
 									enemyTeam++;
 							}
 						}
@@ -99,25 +99,25 @@ public class SPWeaponMgr {
 			@Override
 			public void run() {
 				PlayerData data = DataMgr.getPlayerData(p);
-				if (data.getSPGauge() == 100) {
-					if (!data.getIsSP()) {
+				if (data.sPGauge == 100) {
+					if (!data.isSP) {
 						setSPWeapon(p);
 						p.playSound(p.getLocation(), Sound.BLOCK_CHEST_OPEN, 0.8F, 2);
 						SclatUtil.sendMessage("§6§l！ スペシャルウエポン使用可能 ！", MessageType.PLAYER, player);
-						data.setIsUsingSP(false);
+						data.isUsingSP = (false);
 					}
-					DataMgr.getPlayerData(p).setIsSP(true);
+					DataMgr.getPlayerData(p).isSP = (true);
 				} else {
-					if (!(data.getWeaponClass().getSPWeaponName().equals("インクストライク")
-							|| data.getWeaponClass().getSPWeaponName().equals("ジェットパック")
-							|| data.getWeaponClass().getSPWeaponName().equals("スーパーショット")
-							|| data.getWeaponClass().getSPWeaponName().equals("クアドロアームズ")
-							|| data.getWeaponClass().getSPWeaponName().equals("セイバーモード")
-							|| data.getWeaponClass().getSPWeaponName().equals("リッター5G")))
+					if (!(data.weaponClass.getSPWeaponName().equals("インクストライク")
+							|| data.weaponClass.getSPWeaponName().equals("ジェットパック")
+							|| data.weaponClass.getSPWeaponName().equals("スーパーショット")
+							|| data.weaponClass.getSPWeaponName().equals("クアドロアームズ")
+							|| data.weaponClass.getSPWeaponName().equals("セイバーモード")
+							|| data.weaponClass.getSPWeaponName().equals("リッター5G")))
 						p.getInventory().setItem(4, new ItemStack(Material.AIR));
-					DataMgr.getPlayerData(p).setIsSP(false);
+					DataMgr.getPlayerData(p).isSP = (false);
 				}
-				if (!DataMgr.getPlayerData(p).isInMatch())
+				if (!DataMgr.getPlayerData(p).isInMatch)
 					cancel();
 			}
 		};
@@ -132,15 +132,15 @@ public class SPWeaponMgr {
 			final Player p = player;
 			@Override
 			public void run() {
-				bar.setProgress((double) (DataMgr.getPlayerData(p).getSPGauge()) / 100D);
-				if (DataMgr.getPlayerData(p).getSPGauge() == 100)
+				bar.setProgress((double) (DataMgr.getPlayerData(p).sPGauge) / 100D);
+				if (DataMgr.getPlayerData(p).sPGauge == 100)
 					bar.setTitle("§b§lREADY");
-				else if (DataMgr.getPlayerData(p).getIsUsingSP())
-					bar.setTitle("§6§lIn Use : §r" + DataMgr.getPlayerData(p).getSPGauge() + "%");
+				else if (DataMgr.getPlayerData(p).isUsingSP)
+					bar.setTitle("§6§lIn Use : §r" + DataMgr.getPlayerData(p).sPGauge + "%");
 				else
-					bar.setTitle("§6§lSpecial Weapon : §r" + DataMgr.getPlayerData(p).getSPGauge() + "%");
-				if (!DataMgr.getPlayerData(p).isInMatch() || !p.isOnline()) {
-					DataMgr.getPlayerData(p).setIsUsingSP(false);
+					bar.setTitle("§6§lSpecial Weapon : §r" + DataMgr.getPlayerData(p).sPGauge + "%");
+				if (!DataMgr.getPlayerData(p).isInMatch || !p.isOnline()) {
+					DataMgr.getPlayerData(p).isUsingSP = (false);
 					bar.removeAll();
 					cancel();
 				}
@@ -168,7 +168,7 @@ public class SPWeaponMgr {
 				} else {
 					bar.removeAll();
 				}
-				if (!DataMgr.getPlayerData(p).isInMatch() || !p.isOnline()) {
+				if (!DataMgr.getPlayerData(p).isInMatch || !p.isOnline()) {
 					bar.removeAll();
 					cancel();
 				}
@@ -188,13 +188,13 @@ public class SPWeaponMgr {
 			@Override
 			public void run() {
 				if (t == tick)
-					data.setIsUsingSP(true);
+					data.isUsingSP = (true);
 				t--;
 				int sp = (int) (t / i * 100);
-				data.setSPGauge(sp);
+				data.sPGauge = (sp);
 				if (t <= 0) {
-					data.setIsUsingSP(false);
-					if (data.isInMatch()) {
+					data.isUsingSP = (false);
+					if (data.isInMatch) {
 						BukkitRunnable sync = new BukkitRunnable() {
 							@Override
 							public void run() {
@@ -213,7 +213,7 @@ public class SPWeaponMgr {
 
 	public static void setSPWeapon(Player p) {
 		PlayerData data = DataMgr.getPlayerData(p);
-		switch (data.getWeaponClass().getSPWeaponName()) {
+		switch (data.weaponClass.getSPWeaponName()) {
 			case "インクアーマー" :
 				ItemStack is = new ItemStack(Material.TOTEM_OF_UNDYING);
 				ItemMeta ism = is.getItemMeta();
@@ -318,7 +318,7 @@ public class SPWeaponMgr {
 	public static void UseSPWeapon(Player player, String name) {
 		PlayerData data = DataMgr.getPlayerData(player);
 
-		if (data.getIsJumping() && !name.equals("スーパーチャクチ"))
+		if (data.isJumping && !name.equals("スーパーチャクチ"))
 			return;
 
 		switch (name) {
@@ -329,14 +329,14 @@ public class SPWeaponMgr {
 				AirStrike.AirStrikeRunnable(player, true);
 				break;
 			case "プレイヤーを狙って右クリックで発射" :
-				DataMgr.getPlayerData(player).setIsUsingMM(false);
+				DataMgr.getPlayerData(player).isUsingMM = (false);
 				break;
 			case "狙って右クリックで発射" :
-				DataMgr.getPlayerData(player).setIsUsingMM(false);
+				DataMgr.getPlayerData(player).isUsingMM = (false);
 				break;
 		}
 
-		if (data.getIsUsingSP())
+		if (data.isUsingSP)
 			return;
 		switch (name) {
 			case "インクアーマー" :
@@ -400,7 +400,7 @@ public class SPWeaponMgr {
 				player.sendTitle("", "カーソルを合わせて右クリックで発射！", 3, 30, 3);
 				break;
 			case "アメフラシ" :
-				Amehurasi.AmehurasiDropRunnable(player);
+				Amehurasi.amehurasiDropRunnable(player);
 				for (int inventnum = 0; inventnum < 9; inventnum++) {
 					if (player.getInventory().getItem(inventnum) != null) {
 						if (player.getInventory().getItem(inventnum).getType() == Material.BEACON) {
@@ -412,16 +412,16 @@ public class SPWeaponMgr {
 				player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_USE, 1, 2);
 				break;
 			case "マルチミサイル" :
-				data.setIsUsingSP(true);
-				MultiMissile.MMLockRunnable(player);
+				data.isUsingSP = (true);
+				MultiMissile.mmLockRunnable(player);
 				player.getInventory().setItem(4, new ItemStack(Material.AIR));
 				player.setExp(0.99F);
 				player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_USE, 1, 2);
 				player.sendTitle("", "プレイヤーを狙って右クリックで発射！", 3, 30, 3);
 				break;
 			case "ジェットパック" :
-				data.setIsUsingSP(true);
-				JetPack.JetPackRunnable(player);
+				data.isUsingSP = (true);
+				JetPack.jetPackRunnable(player);
 				player.getInventory().setItem(4, new ItemStack(Material.AIR));
 				player.setExp(0.99F);
 				player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_USE, 1, 2);
@@ -458,13 +458,13 @@ public class SPWeaponMgr {
 				break;
 			case "スーパーチャクチ" :
 				player.getInventory().setItem(4, new ItemStack(Material.AIR));
-				SuperTyakuti.SuperTyakutiRunnable(player);
+				SuperTyakuti.superTyakutiRunnable(player);
 				player.setExp(0.99F);
 				player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_USE, 1, 2);
 				break;
 			case "メガホンレーザー" :
-				data.setIsUsingSP(true);
-				MegaLaser.MegaLaserRunnable(player);
+				data.isUsingSP = (true);
+				MegaLaser.megaLaserRunnable(player);
 				player.getInventory().setItem(4, new ItemStack(Material.AIR));
 				player.setExp(0.99F);
 				player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_USE, 1, 2);

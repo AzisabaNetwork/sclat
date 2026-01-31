@@ -46,13 +46,13 @@ public class PathMgr {
 					vec = new Vector(to.getX() - from.getX(), to.getY() - from.getY(), to.getZ() - from.getZ())
 							.normalize().multiply(0.5);
 					drop.addPassenger(p);
-					DataMgr.getPlayerData(p).setIsOnPath(true);
+					DataMgr.getPlayerData(p).isOnPath = (true);
 				}
 
 				drop.setVelocity(vec);
 
 				boolean is = drop.getLocation().distanceSquared(from) > from.distanceSquared(to)
-						|| !drop.getPassengers().contains(p) || !DataMgr.getPlayerData(p).isInMatch()
+						|| !drop.getPassengers().contains(p) || !DataMgr.getPlayerData(p).isInMatch
 						|| !p.getInventory().getItemInMainHand().getType().equals(Material.AIR);
 				if (path.getTeam() == null)
 					is = true;
@@ -60,7 +60,7 @@ public class PathMgr {
 					is = true;
 
 				if (is) {
-					DataMgr.getPlayerData(p).setIsOnPath(false);
+					DataMgr.getPlayerData(p).isOnPath = (false);
 					drop.remove();
 					cancel();
 				}
@@ -143,10 +143,10 @@ public class PathMgr {
 					Team team = path1.getTeam();
 					for (Player player : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
 						if (team != null) {
-							if (DataMgr.getPlayerData(player).isInMatch() && player.getWorld() == from.getWorld()
+							if (DataMgr.getPlayerData(player).isInMatch && player.getWorld() == from.getWorld()
 									&& player.getInventory().getItemInMainHand().getType().equals(Material.AIR)
 									&& DataMgr.getPlayerData(player).team == team
-									&& !DataMgr.getPlayerData(player).getIsOnPath()) {
+									&& !DataMgr.getPlayerData(player).isOnPath) {
 								if (player.getLocation().distanceSquared(from) < 1 /* 1*1 */)
 									setPath(player, from, to, path1);
 							}

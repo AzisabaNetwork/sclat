@@ -21,7 +21,7 @@ class LunaChatListener : Listener {
         }
         if (sender != null) {
             val data = getPlayerData(sender)
-            if (data!!.isJoined) event.message = data.team.teamColor!!.colorCode + event.message
+            if (data!!.isJoined) event.message = data.team?.teamColor!!.colorCode + event.message
         }
     }
 }

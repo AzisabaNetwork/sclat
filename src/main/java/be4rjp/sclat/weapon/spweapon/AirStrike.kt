@@ -121,7 +121,7 @@ object AirStrike {
                         val position = vector.toLocation(player.location.world!!)
                         val dustOptions =
                             Particle.DustOptions(
-                                getPlayerData(player)!!.team.teamColor!!.bukkitColor!!,
+                                getPlayerData(player)!!.team!!.teamColor!!.bukkitColor!!,
                                 1f,
                             )
                         player.world.spawnParticle<Particle.DustOptions?>(
@@ -163,7 +163,7 @@ object AirStrike {
 
                 override fun run() {
                     if (c == 0) {
-                        val bom = ItemStack(getPlayerData(p)!!.team.teamColor!!.wool!!).clone()
+                        val bom = ItemStack(getPlayerData(p)!!.team!!.teamColor!!.wool!!).clone()
                         val bom_m = bom.itemMeta
                         bom_m!!.setLocalizedName(notDuplicateNumber.toString())
                         bom.itemMeta = bom_m
@@ -246,10 +246,10 @@ object AirStrike {
 
                     // ボムの視認用エフェクト
                     for (o_player in plugin.server.onlinePlayers) {
-                        if (getPlayerData(o_player)!!.settings.ShowEffect_SPWeapon()) {
+                        if (getPlayerData(o_player)!!.settings!!.ShowEffect_SPWeapon()) {
                             val dustOptions =
                                 Particle.DustOptions(
-                                    getPlayerData(p)!!.team.teamColor!!.bukkitColor!!,
+                                    getPlayerData(p)!!.team!!.teamColor!!.bukkitColor!!,
                                     1f,
                                 )
                             o_player.spawnParticle<Particle.DustOptions?>(

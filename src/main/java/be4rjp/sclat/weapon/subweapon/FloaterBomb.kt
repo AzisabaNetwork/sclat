@@ -61,7 +61,7 @@ object FloaterBomb {
                                 p_vec = p_vec!!.normalize().multiply(0.95)
                             }
                             if (!getPlayerData(player)!!.isBombRush) p.exp = p.exp - 0.47f
-                            val bom = ItemStack(getPlayerData(p)!!.team.teamColor!!.wool!!).clone()
+                            val bom = ItemStack(getPlayerData(p)!!.team!!.teamColor!!.wool!!).clone()
                             val bom_m = bom.itemMeta
                             bom_m!!.setLocalizedName(notDuplicateNumber.toString())
                             bom.itemMeta = bom_m
@@ -242,7 +242,7 @@ object FloaterBomb {
 
                         // ボムの視認用エフェクト
                         for (o_player in plugin.server.onlinePlayers) {
-                            if (getPlayerData(o_player)!!.settings.ShowEffect_Bomb()) {
+                            if (getPlayerData(o_player)!!.settings!!.ShowEffect_Bomb()) {
                                 if (o_player.world === drop!!.location.world) {
                                     if (o_player
                                             .location
@@ -250,7 +250,7 @@ object FloaterBomb {
                                     ) {
                                         val dustOptions =
                                             Particle.DustOptions(
-                                                getPlayerData(p)!!.team.teamColor!!.bukkitColor!!,
+                                                getPlayerData(p)!!.team!!.teamColor!!.bukkitColor!!,
                                                 1f,
                                             )
                                         o_player.spawnParticle<Particle.DustOptions?>(

@@ -29,7 +29,6 @@ import org.bukkit.entity.Item
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.bukkit.scheduler.BukkitRunnable
-import org.bukkit.util.Consumer
 import org.bukkit.util.EulerAngle
 import org.bukkit.util.Vector
 
@@ -60,7 +59,7 @@ object SplashShield {
                         }
 
                         for (o_player in plugin.server.onlinePlayers) {
-                            if (getPlayerData(o_player)!!.settings.ShowEffect_Bomb()) {
+                            if (getPlayerData(o_player)!!.settings!!.ShowEffect_Bomb()) {
                                 if (drop!!.world === o_player.world) {
                                     if (o_player
                                             .location
@@ -68,7 +67,7 @@ object SplashShield {
                                     ) {
                                         val dustOptions =
                                             Particle.DustOptions(
-                                                getPlayerData(p)!!.team.teamColor!!.bukkitColor!!,
+                                                getPlayerData(p)!!.team!!.teamColor!!.bukkitColor!!,
                                                 1f,
                                             )
                                         o_player.spawnParticle<Particle.DustOptions?>(
@@ -104,7 +103,7 @@ object SplashShield {
                             try {
                                 for (ssdata in splashShieldDataMapWithPlayer.values) {
                                     if (ssdata!!.player === p) {
-                                        for (`as` in ssdata.armorStandList!!) `as`!!.remove()
+                                        for (`as` in ssdata.armorStandList) `as`.remove()
                                         ssdata.task!!.cancel()
                                     }
                                 }
@@ -172,68 +171,63 @@ object SplashShield {
                                 player.world.spawn<ArmorStand>(
                                     loc.clone().add(0.0, -0.6, 0.0),
                                     ArmorStand::class.java,
-                                    Consumer { armorStand: ArmorStand ->
-                                        armorStand.isMarker = true
-                                        armorStand.isVisible = false
-                                        armorStand.setBasePlate(false)
-                                        armorStand.setGravity(false)
-                                        armorStand.headPose = EulerAngle(0.0, 0.0, Math.toRadians(135.0))
-                                    },
-                                )
+                                ) { armorStand: ArmorStand ->
+                                    armorStand.isMarker = true
+                                    armorStand.isVisible = false
+                                    armorStand.setBasePlate(false)
+                                    armorStand.setGravity(false)
+                                    armorStand.headPose = EulerAngle(0.0, 0.0, Math.toRadians(135.0))
+                                }
                             list.add(as1)
                             val as2 =
                                 player.world.spawn<ArmorStand>(
                                     loc.clone().add(0.0, 0.0, 0.0),
                                     ArmorStand::class.java,
-                                    Consumer { armorStand: ArmorStand ->
-                                        armorStand.isMarker = true
-                                        armorStand.isVisible = false
-                                        armorStand.setBasePlate(false)
-                                        armorStand.setGravity(false)
-                                        armorStand.headPose = EulerAngle(0.0, 0.0, Math.toRadians(135.0))
-                                    },
-                                )
+                                ) { armorStand: ArmorStand ->
+                                    armorStand.isMarker = true
+                                    armorStand.isVisible = false
+                                    armorStand.setBasePlate(false)
+                                    armorStand.setGravity(false)
+                                    armorStand.headPose = EulerAngle(0.0, 0.0, Math.toRadians(135.0))
+                                }
                             list.add(as2)
                             val as3 =
                                 player.world.spawn<ArmorStand>(
                                     loc.clone().add(0.0, 0.6, 0.0),
                                     ArmorStand::class.java,
-                                    Consumer { armorStand: ArmorStand ->
-                                        armorStand.isMarker = true
-                                        armorStand.isVisible = false
-                                        armorStand.setBasePlate(false)
-                                        armorStand.setGravity(false)
-                                        armorStand.headPose = EulerAngle(0.0, 0.0, Math.toRadians(135.0))
-                                    },
-                                )
+                                ) { armorStand: ArmorStand ->
+                                    armorStand.isMarker = true
+                                    armorStand.isVisible = false
+                                    armorStand.setBasePlate(false)
+                                    armorStand.setGravity(false)
+                                    armorStand.headPose = EulerAngle(0.0, 0.0, Math.toRadians(135.0))
+                                }
                             list.add(as3)
                             val as4 =
                                 player.world.spawn<ArmorStand>(
                                     loc.clone().add(0.0, 1.05, 0.0),
                                     ArmorStand::class.java,
-                                    Consumer { armorStand: ArmorStand ->
-                                        armorStand.isMarker = true
-                                        armorStand.isVisible = false
-                                        armorStand.setBasePlate(false)
-                                        armorStand.setGravity(false)
-                                        armorStand.headPose = EulerAngle(0.0, 0.0, Math.toRadians(135.0))
-                                    },
-                                )
+                                ) { armorStand: ArmorStand ->
+                                    armorStand.isMarker = true
+                                    armorStand.isVisible = false
+                                    armorStand.setBasePlate(false)
+                                    armorStand.setGravity(false)
+                                    armorStand.headPose = EulerAngle(0.0, 0.0, Math.toRadians(135.0))
+                                }
                             list.add(as4)
                             val as5 =
                                 player.world.spawn<ArmorStand>(
                                     loc.clone().add(0.0, -0.6, 0.0),
                                     ArmorStand::class.java,
-                                    Consumer { armorStand: ArmorStand ->
-                                        armorStand.isMarker = true
-                                        armorStand.isVisible = false
-                                        armorStand.setBasePlate(false)
-                                        armorStand.setGravity(false)
-                                        armorStand.headPose = EulerAngle(0.0, 0.0, Math.toRadians(135.0))
-                                    },
-                                )
+                                ) { armorStand: ArmorStand ->
+                                    armorStand.isMarker = true
+                                    armorStand.isVisible = false
+                                    armorStand.setBasePlate(false)
+                                    armorStand.setGravity(false)
+                                    armorStand.headPose = EulerAngle(0.0, 0.0, Math.toRadians(135.0))
+                                }
                             list.add(as5)
-                            val l6 = positions2.get(5)!!.toLocation(loc.world!!).add(0.0, 0.25, 0.0)
+                            val l6 = positions2.get(5).toLocation(loc.world!!).add(0.0, 0.25, 0.0)
                             l6.yaw = yaw
                             val as6 =
                                 player
@@ -241,16 +235,15 @@ object SplashShield {
                                     .spawn<ArmorStand>(
                                         l6,
                                         ArmorStand::class.java,
-                                        Consumer { armorStand: ArmorStand ->
-                                            armorStand.isMarker = true
-                                            armorStand.isVisible = false
-                                            armorStand.setBasePlate(false)
-                                            armorStand.setGravity(false)
-                                            armorStand.headPose = EulerAngle(0.0, 0.0, Math.toRadians(270.0))
-                                        },
-                                    )
+                                    ) { armorStand: ArmorStand ->
+                                        armorStand.isMarker = true
+                                        armorStand.isVisible = false
+                                        armorStand.setBasePlate(false)
+                                        armorStand.setGravity(false)
+                                        armorStand.headPose = EulerAngle(0.0, 0.0, Math.toRadians(270.0))
+                                    }
                             list.add(as6)
-                            val l7 = positions1.get(4)!!.toLocation(loc.world!!)
+                            val l7 = positions1.get(4).toLocation(loc.world!!)
                             l7.yaw = yaw
                             val as7 =
                                 player
@@ -258,16 +251,15 @@ object SplashShield {
                                     .spawn<ArmorStand>(
                                         l7,
                                         ArmorStand::class.java,
-                                        Consumer { armorStand: ArmorStand ->
-                                            armorStand.isMarker = true
-                                            armorStand.isVisible = false
-                                            armorStand.setBasePlate(false)
-                                            armorStand.setGravity(false)
-                                            armorStand.headPose = EulerAngle(0.0, 0.0, Math.toRadians(45.0))
-                                        },
-                                    )
+                                    ) { armorStand: ArmorStand ->
+                                        armorStand.isMarker = true
+                                        armorStand.isVisible = false
+                                        armorStand.setBasePlate(false)
+                                        armorStand.setGravity(false)
+                                        armorStand.headPose = EulerAngle(0.0, 0.0, Math.toRadians(45.0))
+                                    }
                             list.add(as7)
-                            val l8 = positions1.get(7)!!.toLocation(loc.world!!)
+                            val l8 = positions1.get(7).toLocation(loc.world!!)
                             l8.yaw = yaw
                             val as8 =
                                 player
@@ -275,16 +267,15 @@ object SplashShield {
                                     .spawn<ArmorStand>(
                                         l8,
                                         ArmorStand::class.java,
-                                        Consumer { armorStand: ArmorStand ->
-                                            armorStand.isMarker = true
-                                            armorStand.isVisible = false
-                                            armorStand.setBasePlate(false)
-                                            armorStand.setGravity(false)
-                                            armorStand.headPose = EulerAngle(0.0, 0.0, Math.toRadians(45.0))
-                                        },
-                                    )
+                                    ) { armorStand: ArmorStand ->
+                                        armorStand.isMarker = true
+                                        armorStand.isVisible = false
+                                        armorStand.setBasePlate(false)
+                                        armorStand.setGravity(false)
+                                        armorStand.headPose = EulerAngle(0.0, 0.0, Math.toRadians(45.0))
+                                    }
                             list.add(as8)
-                            val l9 = positions2.get(4)!!.toLocation(loc.world!!)
+                            val l9 = positions2.get(4).toLocation(loc.world!!)
                             l9.yaw = yaw
                             val as9 =
                                 player
@@ -292,16 +283,15 @@ object SplashShield {
                                     .spawn<ArmorStand>(
                                         l9,
                                         ArmorStand::class.java,
-                                        Consumer { armorStand: ArmorStand ->
-                                            armorStand.isMarker = true
-                                            armorStand.isVisible = false
-                                            armorStand.setBasePlate(false)
-                                            armorStand.setGravity(false)
-                                            armorStand.headPose = EulerAngle(0.0, 0.0, Math.toRadians(45.0))
-                                        },
-                                    )
+                                    ) { armorStand: ArmorStand ->
+                                        armorStand.isMarker = true
+                                        armorStand.isVisible = false
+                                        armorStand.setBasePlate(false)
+                                        armorStand.setGravity(false)
+                                        armorStand.headPose = EulerAngle(0.0, 0.0, Math.toRadians(45.0))
+                                    }
                             list.add(as9)
-                            val l10 = positions2.get(7)!!.toLocation(loc.world!!)
+                            val l10 = positions2.get(7).toLocation(loc.world!!)
                             l10.yaw = yaw
                             val as10 =
                                 player
@@ -309,16 +299,15 @@ object SplashShield {
                                     .spawn<ArmorStand>(
                                         l10,
                                         ArmorStand::class.java,
-                                        Consumer { armorStand: ArmorStand ->
-                                            armorStand.isMarker = true
-                                            armorStand.isVisible = false
-                                            armorStand.setBasePlate(false)
-                                            armorStand.setGravity(false)
-                                            armorStand.headPose = EulerAngle(0.0, 0.0, Math.toRadians(45.0))
-                                        },
-                                    )
+                                    ) { armorStand: ArmorStand ->
+                                        armorStand.isMarker = true
+                                        armorStand.isVisible = false
+                                        armorStand.setBasePlate(false)
+                                        armorStand.setGravity(false)
+                                        armorStand.headPose = EulerAngle(0.0, 0.0, Math.toRadians(45.0))
+                                    }
                             list.add(as10)
-                            val l11 = positions2.get(4)!!.toLocation(loc.world!!).add(0.0, -0.45, 0.0)
+                            val l11 = positions2.get(4).toLocation(loc.world!!).add(0.0, -0.45, 0.0)
                             l11.yaw = yaw
                             val as11 =
                                 player
@@ -326,16 +315,15 @@ object SplashShield {
                                     .spawn<ArmorStand>(
                                         l11,
                                         ArmorStand::class.java,
-                                        Consumer { armorStand: ArmorStand ->
-                                            armorStand.isMarker = true
-                                            armorStand.isVisible = false
-                                            armorStand.setBasePlate(false)
-                                            armorStand.setGravity(false)
-                                        },
-                                    )
+                                    ) { armorStand: ArmorStand ->
+                                        armorStand.isMarker = true
+                                        armorStand.isVisible = false
+                                        armorStand.setBasePlate(false)
+                                        armorStand.setGravity(false)
+                                    }
                             list.add(as11)
                             val l12 =
-                                positions2.get(3)!!.toLocation(loc.world!!).clone().add(
+                                positions2.get(3).toLocation(loc.world!!).clone().add(
                                     pv2.getX(),
                                     -0.1,
                                     pv2.getZ(),
@@ -345,18 +333,17 @@ object SplashShield {
                                 player.world.spawn<ArmorStand>(
                                     l12.add(vec1.clone().normalize().multiply(0.05)),
                                     ArmorStand::class.java,
-                                    Consumer { armorStand: ArmorStand ->
-                                        armorStand.isMarker = true
-                                        armorStand.isVisible = false
-                                        armorStand.setBasePlate(false)
-                                        armorStand.setGravity(false)
-                                        armorStand.isSmall = true
-                                    },
-                                )
+                                ) { armorStand: ArmorStand ->
+                                    armorStand.isMarker = true
+                                    armorStand.isVisible = false
+                                    armorStand.setBasePlate(false)
+                                    armorStand.setGravity(false)
+                                    armorStand.isSmall = true
+                                }
                             as12.isSmall = true
                             list.add(as12)
                             val l13 =
-                                positions2.get(3)!!.toLocation(loc.world!!).clone().add(
+                                positions2.get(3).toLocation(loc.world!!).clone().add(
                                     pv2.getX(),
                                     -0.5,
                                     pv2.getZ(),
@@ -366,17 +353,16 @@ object SplashShield {
                                 player.world.spawn<ArmorStand>(
                                     l13.add(vec1.clone().normalize().multiply(0.05)),
                                     ArmorStand::class.java,
-                                    Consumer { armorStand: ArmorStand ->
-                                        armorStand.isMarker = true
-                                        armorStand.isVisible = false
-                                        armorStand.setBasePlate(false)
-                                        armorStand.setGravity(false)
-                                        armorStand.isSmall = true
-                                    },
-                                )
+                                ) { armorStand: ArmorStand ->
+                                    armorStand.isMarker = true
+                                    armorStand.isVisible = false
+                                    armorStand.setBasePlate(false)
+                                    armorStand.setGravity(false)
+                                    armorStand.isSmall = true
+                                }
                             as13.isSmall = true
                             list.add(as13)
-                            val l14 = positions2.get(10)!!.toLocation(loc.world!!)
+                            val l14 = positions2.get(10).toLocation(loc.world!!)
                             l14.yaw = yaw
                             val as14 =
                                 player
@@ -384,17 +370,16 @@ object SplashShield {
                                     .spawn<ArmorStand>(
                                         l14,
                                         ArmorStand::class.java,
-                                        Consumer { armorStand: ArmorStand ->
-                                            armorStand.isMarker = true
-                                            armorStand.isVisible = false
-                                            armorStand.setBasePlate(false)
-                                            armorStand.setGravity(false)
-                                        },
-                                    )
+                                    ) { armorStand: ArmorStand ->
+                                        armorStand.isMarker = true
+                                        armorStand.isVisible = false
+                                        armorStand.setBasePlate(false)
+                                        armorStand.setGravity(false)
+                                    }
                             list.add(as14)
 
                             ssdata.armorStandList = list
-                            ssdata.isDeploy = (false)
+                            ssdata.isDeploy = false
 
                             var i = 1
                             for (a in list) {
@@ -422,7 +407,7 @@ object SplashShield {
                                                     EnumItemSlot.HEAD,
                                                     CraftItemStack.asNMSCopy(
                                                         ItemStack(
-                                                            getPlayerData(p)!!.team.teamColor!!.glass!!,
+                                                            getPlayerData(p)!!.team!!.teamColor!!.glass!!,
                                                         ),
                                                     ),
                                                 ),
@@ -453,7 +438,7 @@ object SplashShield {
                         }
 
                         if (c == 15) {
-                            ssdata.isDeploy = (true)
+                            ssdata.isDeploy = true
                             for (a in list) {
                                 a.isMarker = false
                             }
@@ -473,11 +458,12 @@ object SplashShield {
 
                             val bd =
                                 getPlayerData(p)!!
-                                    .team.teamColor!!
+                                    .team!!
+                                    .teamColor!!
                                     .wool!!
                                     .createBlockData()
                             ray@ for (i in 0..<positions1.size - 4) {
-                                val position = positions1.get(i)!!.toLocation(p.location.world!!)
+                                val position = positions1.get(i).toLocation(p.location.world!!)
                                 PaintMgr.PaintHightestBlock(position, p, false, false)
                                 val damage = 10.0
                                 val rayTrace4 =
@@ -522,7 +508,7 @@ object SplashShield {
                             }
 
                             ray@ for (i in 0..<positions2.size - 1) {
-                                val position = positions2.get(i)!!.toLocation(p.location.world!!)
+                                val position = positions2.get(i).toLocation(p.location.world!!)
                                 PaintMgr.PaintHightestBlock(position, p, false, false)
                                 val damage = 10.0
                                 val rayTrace4 =

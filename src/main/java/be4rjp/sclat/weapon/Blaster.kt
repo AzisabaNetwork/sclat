@@ -53,7 +53,7 @@ object Blaster {
                 plugin,
                 data
                     .weaponClass
-                    .mainWeapon!!
+                    ?.mainWeapon!!
                     .coolTime
                     .toLong(),
             )
@@ -72,7 +72,7 @@ object Blaster {
                 plugin,
                 data
                     .weaponClass
-                    .mainWeapon!!
+                    ?.mainWeapon!!
                     .delay
                     .toLong(),
             )
@@ -87,7 +87,7 @@ object Blaster {
         data!!.canRollerShoot = false
         if (player.exp <=
             (
-                data.weaponClass.mainWeapon!!.needInk
+                data.weaponClass?.mainWeapon!!.needInk
                     * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) /
                     Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)
                 ).toFloat()
@@ -98,20 +98,20 @@ object Blaster {
         }
         player.exp = player.exp -
             (
-                data.weaponClass.mainWeapon!!.needInk
+                data.weaponClass?.mainWeapon!!.needInk
                     * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) /
                     Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)
                 ).toFloat()
         val ball = player.launchProjectile<Snowball>(Snowball::class.java)
-        (ball as CraftSnowball).handle.setItem(CraftItemStack.asNMSCopy(ItemStack(getPlayerData(player)!!.team.teamColor!!.wool!!)))
+        (ball as CraftSnowball).handle.setItem(CraftItemStack.asNMSCopy(ItemStack(getPlayerData(player)!!.team?.teamColor!!.wool!!)))
         player.world.playSound(player.location, Sound.ENTITY_PIG_STEP, 0.3f, 1f)
         val vec =
             player
                 .location
                 .direction
-                .multiply(getPlayerData(player)!!.weaponClass.mainWeapon!!.shootSpeed)
-        val random = getPlayerData(player)!!.weaponClass.mainWeapon!!.random
-        val distick = getPlayerData(player)!!.weaponClass.mainWeapon!!.distanceTick
+                .multiply(getPlayerData(player)!!.weaponClass?.mainWeapon!!.shootSpeed)
+        val random = getPlayerData(player)!!.weaponClass?.mainWeapon!!.random
+        val distick = getPlayerData(player)!!.weaponClass?.mainWeapon!!.distanceTick
         if (!player.isOnGround) {
             vec.add(
                 Vector(
@@ -144,7 +144,7 @@ object Blaster {
                         inkball!!.velocity.getX(),
                         inkball!!.velocity.getY(),
                         inkball!!.velocity.getZ(),
-                    ).multiply(getPlayerData(p)!!.weaponClass.mainWeapon!!.shootSpeed / 17)
+                    ).multiply(getPlayerData(p)!!.weaponClass?.mainWeapon!!.shootSpeed / 17)
 
                 override fun run() {
                     inkball = mainSnowballNameMap.get(name)
@@ -156,11 +156,12 @@ object Blaster {
 
                     val bd =
                         getPlayerData(p)!!
-                            .team.teamColor!!
+                            .team
+                            ?.teamColor!!
                             .wool!!
                             .createBlockData()
                     for (o_player in plugin.server.onlinePlayers) {
-                        if (getPlayerData(o_player)!!.settings.ShowEffect_MainWeaponInk()) {
+                        if (getPlayerData(o_player)!!.settings?.ShowEffect_MainWeaponInk()!!) {
                             if (o_player.world ===
                                 inkball!!.world
                             ) {
@@ -185,7 +186,7 @@ object Blaster {
 
                     if (i >= tick && !inkball!!.isDead) {
                         // 半径
-                        val maxDist = data.weaponClass.mainWeapon!!.blasterExHankei
+                        val maxDist = data.weaponClass?.mainWeapon!!.blasterExHankei
 
                         // 爆発音
                         player.world.playSound(inkball!!.location, Sound.ENTITY_FIREWORK_ROCKET_BLAST, 1f, 1f)
@@ -245,17 +246,17 @@ object Blaster {
                             if (!getPlayerData(target)!!.isInMatch) continue
                             if (target.location.distance(inkball!!.location) <= maxDist + 1) {
                                 var damage = 10.0
-                                if (data.weaponClass.mainWeapon!!.isManeuver) {
+                                if (data.weaponClass?.mainWeapon!!.isManeuver) {
                                     damage =
-                                        data.weaponClass.mainWeapon!!.blasterExDamage
+                                        data.weaponClass?.mainWeapon!!.blasterExDamage
                                 } else {
                                     damage = (
                                         (maxDist + 1 - target.location.distance(inkball!!.location)) *
-                                            data.weaponClass.mainWeapon!!.blasterExDamage
+                                            data.weaponClass?.mainWeapon!!.blasterExDamage
                                         )
                                 }
-                                if (damage > data.weaponClass.mainWeapon!!.damage) {
-                                    damage = data.weaponClass.mainWeapon!!.damage
+                                if (damage > data.weaponClass?.mainWeapon!!.damage) {
+                                    damage = data.weaponClass?.mainWeapon!!.damage
                                 }
                                 if (getPlayerData(player)!!.team != getPlayerData(target)!!.team &&
                                     target.gameMode == GameMode.ADVENTURE
@@ -283,10 +284,10 @@ object Blaster {
                                 ) {
                                     var damage = (
                                         (maxDist + 1 - `as`.location.distance(inkball!!.location)) *
-                                            data.weaponClass.mainWeapon!!.blasterExDamage
+                                            data.weaponClass?.mainWeapon!!.blasterExDamage
                                         )
-                                    if (damage > data.weaponClass.mainWeapon!!.damage) {
-                                        damage = data.weaponClass.mainWeapon!!.damage
+                                    if (damage > data.weaponClass?.mainWeapon!!.damage) {
+                                        damage = data.weaponClass?.mainWeapon!!.damage
                                     }
                                     ArmorStandMgr.giveDamageArmorStand(`as`, damage, p)
                                 }
@@ -309,7 +310,7 @@ object Blaster {
     ) {
         val data = getPlayerData(player)
         // 半径
-        val maxDist = data!!.weaponClass.mainWeapon!!.blasterExHankei
+        val maxDist = data!!.weaponClass?.mainWeapon!!.blasterExHankei
 
         // 爆発音
         player.world.playSound(blastcenter, Sound.ENTITY_FIREWORK_ROCKET_BLAST, 1f, 1f)
@@ -361,17 +362,17 @@ object Blaster {
             if (!getPlayerData(target)!!.isInMatch) continue
             if (target.location.distance(blastcenter) <= maxDist + 1) {
                 var damage = 10.0
-                if (data.weaponClass.mainWeapon!!.isManeuver) {
+                if (data.weaponClass?.mainWeapon!!.isManeuver) {
                     damage =
-                        data.weaponClass.mainWeapon!!.blasterExDamage
+                        data.weaponClass?.mainWeapon!!.blasterExDamage
                 } else {
                     damage = (
                         (maxDist - target.location.distance(blastcenter)) *
-                            data.weaponClass.mainWeapon!!.blasterExDamage * 0.4
+                            data.weaponClass?.mainWeapon!!.blasterExDamage * 0.4
                         )
                 }
-                if (damage > data.weaponClass.mainWeapon!!.damage) {
-                    damage = data.weaponClass.mainWeapon!!.damage
+                if (damage > data.weaponClass?.mainWeapon!!.damage) {
+                    damage = data.weaponClass?.mainWeapon!!.damage
                 }
                 if (damage < 0.1) {
                     damage = 0.1
@@ -401,10 +402,10 @@ object Blaster {
                     try {
                         var damage = (
                             (maxDist + 1 - `as`.location.distance(blastcenter)) *
-                                data.weaponClass.mainWeapon!!.blasterExDamage
+                                data.weaponClass?.mainWeapon!!.blasterExDamage
                             )
-                        if (damage > data.weaponClass.mainWeapon!!.damage) {
-                            damage = data.weaponClass.mainWeapon!!.damage
+                        if (damage > data.weaponClass?.mainWeapon!!.damage) {
+                            damage = data.weaponClass?.mainWeapon!!.damage
                         }
                         if (`as`.customName == "Kasa") {
                             val kasaData = getKasaDataFromArmorStand(`as`)

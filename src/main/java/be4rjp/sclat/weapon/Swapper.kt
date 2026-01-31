@@ -24,13 +24,13 @@ object Swapper {
                         return
                     }
                     // スワッパ―系
-                    if (data.weaponClass.mainWeapon!!.getIsSwap()) {
+                    if (data.weaponClass?.mainWeapon!!.getIsSwap()) {
                         if (data.isSneaking && sw_recharge && (
                                 p.inventory.itemInMainHand.type
                                     ==
                                     data
                                         .weaponClass
-                                        .mainWeapon!!
+                                        ?.mainWeapon!!
                                         .weaponIteamStack!!
                                         .type
                                 )
@@ -43,22 +43,22 @@ object Swapper {
                                 object : BukkitRunnable() {
                                     // チャージャーとローラーのみ対応
                                     override fun run() {
-                                        val swapname = data.weaponClass.mainWeapon!!.swap
+                                        val swapname = data.weaponClass?.mainWeapon!!.swap
                                         data.stoprun = false
                                         data.weaponClass = getWeaponClass(swapname)
                                         data.canRollerShoot = true
-                                        getPlayerData(p)!!.setIsUsingManeuver(false)
-                                        if (getPlayerData(p)!!.weaponClass.mainWeapon!!.weaponType
+                                        getPlayerData(p)!!.isUsingManeuver = false
+                                        if (getPlayerData(p)!!.weaponClass!!.mainWeapon!!.weaponType
                                             == "Shooter"
                                         ) {
                                             if (getPlayerData(p)!!
                                                     .weaponClass
-                                                    .mainWeapon!!
+                                                    ?.mainWeapon!!
                                                     .slidingShootTick > 1
                                             ) {
-                                                getPlayerData(p)!!.setIsUsingManeuver(true)
+                                                getPlayerData(p)!!.isUsingManeuver = true
                                             } else {
-                                                Shooter.ShooterRunnable(p)
+                                                Shooter.shooterRunnable(p)
                                             }
                                         }
                                         WeaponClassMgr.setWeaponClass(p)

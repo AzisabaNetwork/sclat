@@ -109,7 +109,7 @@ object Sprinkler {
 
                         // 視認用エフェクト
                         for (o_player in plugin.server.onlinePlayers) {
-                            if (getPlayerData(o_player)!!.settings.ShowEffect_Bomb()) {
+                            if (getPlayerData(o_player)!!.settings!!.ShowEffect_Bomb()) {
                                 if (o_player.world === drop!!.location.world) {
                                     if (o_player
                                             .location
@@ -117,7 +117,7 @@ object Sprinkler {
                                     ) {
                                         val dustOptions =
                                             Particle.DustOptions(
-                                                getPlayerData(p)!!.team.teamColor!!.bukkitColor!!,
+                                                getPlayerData(p)!!.team!!.teamColor!!.bukkitColor!!,
                                                 1f,
                                             )
                                         o_player.spawnParticle<Particle.DustOptions?>(
@@ -186,7 +186,7 @@ object Sprinkler {
                                 `as`.entityId,
                                 EnumItemSlot.HEAD,
                                 CraftItemStack.asNMSCopy(
-                                    ItemStack(getPlayerData(player)!!.team.teamColor!!.glass!!),
+                                    ItemStack(getPlayerData(player)!!.team!!.teamColor!!.glass!!),
                                 ),
                             ),
                         )

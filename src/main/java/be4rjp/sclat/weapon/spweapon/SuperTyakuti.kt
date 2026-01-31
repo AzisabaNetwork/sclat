@@ -28,10 +28,10 @@ import org.bukkit.util.Vector
  */
 object SuperTyakuti {
     @JvmStatic
-    fun SuperTyakutiRunnable(player: Player) {
+    fun superTyakutiRunnable(player: Player) {
         player.inventory.clear()
         getPlayerData(player)!!.isUsingSP = true
-        getPlayerData(player)!!.setIsUsingTyakuti(true)
+        getPlayerData(player)!!.isUsingTyakuti = true
         player.world.playSound(player.location, Sound.ENTITY_WITHER_SHOOT, 0.3f, 0.5f)
         SPWeaponMgr.setSPCoolTimeAnimation(player, 40)
         val task: BukkitRunnable =
@@ -81,7 +81,7 @@ object SuperTyakuti {
 
                         if (i >= 5 && i <= 23) {
                             for (o_player in plugin.server.onlinePlayers) {
-                                if (getPlayerData(o_player)!!.settings.ShowEffect_SPWeapon() &&
+                                if (getPlayerData(o_player)!!.settings!!.ShowEffect_SPWeapon() &&
                                     o_player != player
                                 ) {
                                     if (o_player.world === player.world) {
@@ -91,7 +91,7 @@ object SuperTyakuti {
                                         ) {
                                             val dustOptions =
                                                 Particle.DustOptions(
-                                                    getPlayerData(player)!!.team.teamColor!!.bukkitColor!!,
+                                                    getPlayerData(player)!!.team!!.teamColor!!.bukkitColor!!,
                                                     1f,
                                                 )
                                             o_player.spawnParticle<Particle.DustOptions?>(
@@ -132,10 +132,10 @@ object SuperTyakuti {
                                     break
                                 }
                             }
-                            val s_locs = getXZCircle(bloc.add(0.0, 1.0, 0.0), 7.0, 3.0, 40)
+                            val sLocs = getXZCircle(bloc.add(0.0, 1.0, 0.0), 7.0, 3.0, 40)
                             for (o_player in plugin.server.onlinePlayers) {
-                                if (getPlayerData(o_player)!!.settings.ShowEffect_SPWeaponRegion()) {
-                                    for (loc in s_locs) {
+                                if (getPlayerData(o_player)!!.settings!!.ShowEffect_SPWeaponRegion()) {
+                                    for (loc in sLocs) {
                                         if (o_player.world === loc.world) {
                                             if (o_player
                                                     .location
@@ -143,7 +143,7 @@ object SuperTyakuti {
                                             ) {
                                                 val bd =
                                                     getPlayerData(player)!!
-                                                        .team
+                                                        .team!!
                                                         .teamColor!!
                                                         .wool!!
                                                         .createBlockData()
@@ -188,8 +188,8 @@ object SuperTyakuti {
                             run {
                                 var i = 0
                                 while (i <= maxDist) {
-                                    val p_locs: MutableList<Location> = getSphere(player.location, i.toDouble(), 10)
-                                    for (loc in p_locs) {
+                                    val pLocs: MutableList<Location> = getSphere(player.location, i.toDouble(), 10)
+                                    for (loc in pLocs) {
                                         PaintMgr.Paint(loc, player, false)
                                     }
                                     i++
@@ -235,7 +235,7 @@ object SuperTyakuti {
                             }
                             WeaponClassMgr.setWeaponClass(player)
                             getPlayerData(player)!!.isUsingSP = false
-                            getPlayerData(player)!!.setIsUsingTyakuti(false)
+                            getPlayerData(player)!!.isUsingTyakuti = false
                             cancel()
                         }
 
@@ -248,7 +248,7 @@ object SuperTyakuti {
                                 WeaponClassMgr.setWeaponClass(player)
                             }
                             getPlayerData(player)!!.isUsingSP = false
-                            getPlayerData(player)!!.setIsUsingTyakuti(false)
+                            getPlayerData(player)!!.isUsingTyakuti = false
                             cancel()
                         }
                         i++

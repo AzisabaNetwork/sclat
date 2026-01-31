@@ -119,28 +119,28 @@ class SnowballListener : Listener {
                             }
 
                             if (projectile.customName == "SuperShot") {
-                                shooter!!.playSound(shooter.location, Sound.ENTITY_PLAYER_HURT, 0.5f, 1f)
+                                shooter.playSound(shooter.location, Sound.ENTITY_PLAYER_HURT, 0.5f, 1f)
                                 giveDamage(shooter, target, 47.0, "spWeapon")
                             }
                             if (projectile.customName!!.contains("#QuadroArmsSpinner")) {
-                                shooter!!.playSound(shooter.location, Sound.ENTITY_PLAYER_HURT, 0.5f, 1f)
-                                var Quadrodamage = 1.0
-                                var QuadroticksLived = projectile.ticksLived.toDouble() * 12.5
-                                if (QuadroticksLived > 60) QuadroticksLived = 60.0
-                                Quadrodamage += Quadrodamage * (QuadroticksLived / 30)
-                                giveDamage(shooter, target, Quadrodamage, "spWeapon")
+                                shooter.playSound(shooter.location, Sound.ENTITY_PLAYER_HURT, 0.5f, 1f)
+                                var quadroDamage = 1.0
+                                var quadroTicksLived = projectile.ticksLived.toDouble() * 12.5
+                                if (quadroTicksLived > 60) quadroTicksLived = 60.0
+                                quadroDamage += quadroDamage * (quadroTicksLived / 30)
+                                giveDamage(shooter, target, quadroDamage, "spWeapon")
                                 return
                             }
                             if (projectile.customName!!.contains("#QuadroArmsShotgun")) {
-                                shooter!!.playSound(shooter.location, Sound.ENTITY_PLAYER_HURT, 0.5f, 1f)
-                                var Quadrodamage = 9.0
-                                var QuadroticksLived = projectile.ticksLived.toDouble() * 10
-                                if (QuadroticksLived > 30) QuadroticksLived = 30.0
-                                Quadrodamage -= Quadrodamage * (QuadroticksLived / 100)
+                                shooter.playSound(shooter.location, Sound.ENTITY_PLAYER_HURT, 0.5f, 1f)
+                                var quadroDamage = 9.0
+                                var quadroTicksLived = projectile.ticksLived.toDouble() * 10
+                                if (quadroTicksLived > 30) quadroTicksLived = 30.0
+                                quadroDamage -= quadroDamage * (quadroTicksLived / 100)
                                 if (projectile.customName!!.contains("CounterShot")) {
-                                    Quadrodamage = 6.5
+                                    quadroDamage = 6.5
                                 }
-                                giveDamage(shooter, target, Quadrodamage, "spWeapon")
+                                giveDamage(shooter, target, quadroDamage, "spWeapon")
                                 return
                             }
 
@@ -150,11 +150,11 @@ class SnowballListener : Listener {
                                     if (projectile.customName!!.contains("#slided")) {
                                         dmgDouble =
                                             getPlayerData(shooter)!!
-                                                .weaponClass
+                                                .weaponClass!!
                                                 .mainWeapon!!
                                                 .decreaseRate
                                     } else if (!projectile.customName!!.contains(":")) {
-                                        shooter!!.playSound(
+                                        shooter.playSound(
                                             shooter.location,
                                             Sound.ENTITY_ARROW_HIT_PLAYER,
                                             1.2f,
@@ -176,7 +176,7 @@ class SnowballListener : Listener {
                                                 .split(":".toRegex())
                                                 .dropLastWhile { it.isEmpty() }
                                                 .toTypedArray()
-                                        when (args!![1]) {
+                                        when (args[1]) {
                                             "Burst" -> {
                                                 if (DataMgr.oto.containsKey(args[2])) {
                                                     DataMgr.oto.put(args[2], DataMgr.oto.get(args[2])!! + 1)
@@ -188,11 +188,11 @@ class SnowballListener : Listener {
 
                                         if (DataMgr.oto.get(args[2]) ==
                                             getPlayerData(shooter)!!
-                                                .weaponClass
+                                                .weaponClass!!
                                                 .mainWeapon!!
                                                 .rollerShootQuantity
                                         ) {
-                                            shooter!!.playSound(
+                                            shooter.playSound(
                                                 shooter.location,
                                                 Sound.ENTITY_ARROW_HIT_PLAYER,
                                                 1.2f,
@@ -210,15 +210,15 @@ class SnowballListener : Listener {
                                         }
                                     }
                                 }
-                                shooter!!.playSound(shooter.location, Sound.ENTITY_PLAYER_HURT, 0.5f, 1f)
+                                shooter.playSound(shooter.location, Sound.ENTITY_PLAYER_HURT, 0.5f, 1f)
                                 if (projectile.customName!!.contains("#slided")) {
                                     dmgDouble =
                                         getPlayerData(shooter)!!
-                                            .weaponClass
+                                            .weaponClass!!
                                             .mainWeapon!!
                                             .decreaseRate
                                 }
-                                var damage = getPlayerData(shooter)!!.weaponClass.mainWeapon!!.damage
+                                var damage = getPlayerData(shooter)!!.weaponClass!!.mainWeapon!!.damage
                                 if (dmgDouble != 1.0) {
                                     damage = damage * dmgDouble
                                 } else {
@@ -226,7 +226,7 @@ class SnowballListener : Listener {
                                 }
                                 val type =
                                     getPlayerData(shooter)!!
-                                        .weaponClass
+                                        .weaponClass!!
                                         .mainWeapon!!
                                         .weaponType
 
@@ -273,22 +273,22 @@ class SnowballListener : Listener {
                         timer.schedule(t, 25)
                     }
                 } else if (event.hitEntity is ArmorStand) {
-                    val `as` = event.hitEntity as ArmorStand?
+                    val armorStand = event.hitEntity as ArmorStand?
                     var dmgDouble = 1.0
                     if (projectile.customName != null) {
                         if (DataMgr.mws.contains(projectile.customName)) {
                             if (DataMgr.tsl.contains(projectile.customName)) {
-                                if (SclatUtil.isNumber(`as`!!.customName!!)) {
-                                    if (`as`.customName != "21" && `as`.customName != "100") {
-                                        if (`as`.isVisible) {
+                                if (SclatUtil.isNumber(armorStand!!.customName!!)) {
+                                    if (armorStand.customName != "21" && armorStand.customName != "100") {
+                                        if (armorStand.isVisible) {
                                             if (projectile.customName!!.contains("#slided")) {
                                                 dmgDouble =
                                                     getPlayerData(shooter)!!
-                                                        .weaponClass
+                                                        .weaponClass!!
                                                         .mainWeapon!!
                                                         .decreaseRate
                                             } else if (!projectile.customName!!.contains(":")) {
-                                                shooter!!.playSound(
+                                                shooter.playSound(
                                                     shooter.location,
                                                     Sound.ENTITY_ARROW_HIT_PLAYER,
                                                     1.2f,
@@ -310,7 +310,7 @@ class SnowballListener : Listener {
                                                         .split(":".toRegex())
                                                         .dropLastWhile { it.isEmpty() }
                                                         .toTypedArray()
-                                                when (args!![1]) {
+                                                when (args[1]) {
                                                     "Burst" -> {
                                                         if (DataMgr.oto.containsKey(args[2])) {
                                                             DataMgr.oto.put(args[2], DataMgr.oto.get(args[2])!! + 1)
@@ -322,11 +322,11 @@ class SnowballListener : Listener {
 
                                                 if (DataMgr.oto.get(args[2]) ==
                                                     getPlayerData(shooter)!!
-                                                        .weaponClass
+                                                        .weaponClass!!
                                                         .mainWeapon!!
                                                         .rollerShootQuantity
                                                 ) {
-                                                    shooter!!.playSound(
+                                                    shooter.playSound(
                                                         shooter.location,
                                                         Sound.ENTITY_ARROW_HIT_PLAYER,
                                                         1.2f,
@@ -352,48 +352,48 @@ class SnowballListener : Listener {
                         }
 
                         if (projectile.customName == "SuperShot") {
-                            ArmorStandMgr.giveDamageArmorStand(`as`, 20.0, shooter)
+                            ArmorStandMgr.giveDamageArmorStand(armorStand, 20.0, shooter)
                             return
                         }
                         if (projectile.customName!!.contains("#QuadroArmsSpinner")) {
-                            var Quadrodamage = 1.0
-                            var QuadroticksLived = projectile.ticksLived.toDouble() * 12.5
-                            if (QuadroticksLived > 60) QuadroticksLived = 60.0
-                            Quadrodamage += Quadrodamage * (QuadroticksLived / 30)
-                            ArmorStandMgr.giveDamageArmorStand(`as`, Quadrodamage, shooter)
+                            var quadroDamage = 1.0
+                            var quadroTicksLived = projectile.ticksLived.toDouble() * 12.5
+                            if (quadroTicksLived > 60) quadroTicksLived = 60.0
+                            quadroDamage += quadroDamage * (quadroTicksLived / 30)
+                            ArmorStandMgr.giveDamageArmorStand(armorStand, quadroDamage, shooter)
                             dmgDouble = 0.0
                         }
                         if (projectile.customName!!.contains("#QuadroArmsShotgun")) {
-                            var Quadrodamage = 9.0
-                            var QuadroticksLived = projectile.ticksLived.toDouble() * 10
-                            if (QuadroticksLived > 30) QuadroticksLived = 30.0
-                            Quadrodamage -= Quadrodamage * (QuadroticksLived / 100)
+                            var quadroDamage = 9.0
+                            var quadroTicksLived = projectile.ticksLived.toDouble() * 10
+                            if (quadroTicksLived > 30) quadroTicksLived = 30.0
+                            quadroDamage -= quadroDamage * (quadroTicksLived / 100)
                             if (projectile.customName!!.contains("CounterShot")) {
-                                Quadrodamage = 6.5
+                                quadroDamage = 6.5
                             }
-                            ArmorStandMgr.giveDamageArmorStand(`as`, Quadrodamage, shooter)
+                            ArmorStandMgr.giveDamageArmorStand(armorStand, quadroDamage, shooter)
                             dmgDouble = 0.0
                         }
                         if (projectile.customName == "JetPack") {
-                            ArmorStandMgr.giveDamageArmorStand(`as`, 20.0, shooter)
+                            ArmorStandMgr.giveDamageArmorStand(armorStand, 20.0, shooter)
                             return
                         }
                     }
-                    if (`as`!!.customName != null) {
-                        if ((`as`.customName != "Path") && (`as`.customName != "21") && (`as`.customName != "100") &&
-                            (`as`.customName != "SplashShield") &&
-                            (`as`.customName != "Kasa")
+                    if (armorStand!!.customName != null) {
+                        if ((armorStand.customName != "Path") && (armorStand.customName != "21") && (armorStand.customName != "100") &&
+                            (armorStand.customName != "SplashShield") &&
+                            (armorStand.customName != "Kasa")
                         ) {
-                            shooter!!.playSound(shooter.location, Sound.ENTITY_PLAYER_HURT, 0.5f, 1f)
+                            shooter.playSound(shooter.location, Sound.ENTITY_PLAYER_HURT, 0.5f, 1f)
                         }
                     }
-                    var damage = getPlayerData(shooter)!!.weaponClass.mainWeapon!!.damage
+                    var damage = getPlayerData(shooter)!!.weaponClass!!.mainWeapon!!.damage
                     if (dmgDouble != 1.0) {
-                        damage = damage * dmgDouble
+                        damage *= dmgDouble
                     } else {
-                        damage = damage * Gear.getGearInfluence(shooter, Gear.Type.MAIN_SPEC_UP)
+                        damage *= Gear.getGearInfluence(shooter, Gear.Type.MAIN_SPEC_UP)
                     }
-                    val type = getPlayerData(shooter)!!.weaponClass.mainWeapon!!.weaponType
+                    val type = getPlayerData(shooter)!!.weaponClass!!.mainWeapon!!.weaponType
 
                     if (type != "Blaster") {
                         var ticksLived = projectile.ticksLived.toDouble() * 1.2
@@ -402,22 +402,22 @@ class SnowballListener : Listener {
                     }
                     if (type == "Blaster") {
                         try {
-                            if (`as`.customName != null) {
-                                if (`as`.customName == "Kasa") {
-                                    val kasaData = getKasaDataFromArmorStand(`as` as ArmorStand)
+                            if (armorStand.customName != null) {
+                                if (armorStand.customName == "Kasa") {
+                                    val kasaData = getKasaDataFromArmorStand(armorStand)
                                     if (getPlayerData(kasaData!!.player)!!.team !=
                                         getPlayerData(shooter)!!
                                             .team
                                     ) {
-                                        Blaster.Explode(shooter, `as`.location.add(Vector(0.0, 1.0, 0.0)))
+                                        Blaster.Explode(shooter, armorStand.location.add(Vector(0.0, 1.0, 0.0)))
                                     }
-                                } else if (`as`.customName == "SplashShield") {
-                                    val splashShieldData = getSplashShieldDataFromArmorStand(`as` as ArmorStand)
+                                } else if (armorStand.customName == "SplashShield") {
+                                    val splashShieldData = getSplashShieldDataFromArmorStand(armorStand)
                                     if (getPlayerData(splashShieldData!!.player)!!.team !=
                                         getPlayerData(shooter)!!
                                             .team
                                     ) {
-                                        Blaster.Explode(shooter, `as`.location.add(Vector(0.0, 1.0, 0.0)))
+                                        Blaster.Explode(shooter, armorStand.location.add(Vector(0.0, 1.0, 0.0)))
                                     }
                                 }
                             }
@@ -425,18 +425,18 @@ class SnowballListener : Listener {
                         }
                     }
                     if (type == "Funnel") {
-                        if (`as`.customName != null && (`as`.customName != "Path") && (`as`.customName != "21") &&
-                            (`as`.customName != "100") &&
-                            (`as`.customName != "SplashShield") &&
-                            (`as`.customName != "Kasa")
+                        if (armorStand.customName != null && (armorStand.customName != "Path") && (armorStand.customName != "21") &&
+                            (armorStand.customName != "100") &&
+                            (armorStand.customName != "SplashShield") &&
+                            (armorStand.customName != "Kasa")
                         ) {
-                            damage = damage + Funnel.funnelPursuit(shooter, `as`)
+                            damage = damage + Funnel.funnelPursuit(shooter, armorStand)
                             if (damage < 0.1) {
                                 damage = 0.1
                             }
                         }
                     }
-                    ArmorStandMgr.giveDamageArmorStand(`as`, damage, shooter)
+                    ArmorStandMgr.giveDamageArmorStand(armorStand, damage, shooter)
                 }
             }
         }
@@ -527,7 +527,7 @@ class SnowballListener : Listener {
                                         ) as Snowball
                                     (ball2 as CraftSnowball).handle.setItem(
                                         CraftItemStack.asNMSCopy(
-                                            ItemStack(getPlayerData(shooter)!!.team.teamColor!!.wool!!),
+                                            ItemStack(getPlayerData(shooter)!!.team!!.teamColor!!.wool!!),
                                         ),
                                     )
                                     ball2.shooter = shooter
@@ -565,7 +565,7 @@ class SnowballListener : Listener {
                                         ) as Snowball
                                     (ball2 as CraftSnowball).handle.setItem(
                                         CraftItemStack.asNMSCopy(
-                                            ItemStack(getPlayerData(shooter)!!.team.teamColor!!.wool!!),
+                                            ItemStack(getPlayerData(shooter)!!.team!!.teamColor!!.wool!!),
                                         ),
                                     )
                                     ball2.shooter = shooter
@@ -746,11 +746,11 @@ class SnowballListener : Listener {
                                         if (projectile.customName!!.contains("#slided")) {
                                             dmgDouble =
                                                 getPlayerData(shooter)!!
-                                                    .weaponClass
+                                                    .weaponClass!!
                                                     .mainWeapon!!
                                                     .decreaseRate
                                         } else if (!projectile.customName!!.contains(":")) {
-                                            shooter!!.playSound(
+                                            shooter.playSound(
                                                 shooter.location,
                                                 Sound.ENTITY_ARROW_HIT_PLAYER,
                                                 1.2f,
@@ -772,7 +772,7 @@ class SnowballListener : Listener {
                                                     .split(":".toRegex())
                                                     .dropLastWhile { it.isEmpty() }
                                                     .toTypedArray()
-                                            when (args!![1]) {
+                                            when (args[1]) {
                                                 "Burst" -> {
                                                     if (DataMgr.oto.containsKey(args[2])) {
                                                         DataMgr.oto.put(args[2], DataMgr.oto.get(args[2])!! + 1)
@@ -784,11 +784,11 @@ class SnowballListener : Listener {
 
                                             if (DataMgr.oto.get(args[2]) ==
                                                 getPlayerData(shooter)!!
-                                                    .weaponClass
+                                                    .weaponClass!!
                                                     .mainWeapon!!
                                                     .rollerShootQuantity
                                             ) {
-                                                shooter!!.playSound(
+                                                shooter.playSound(
                                                     shooter.location,
                                                     Sound.ENTITY_ARROW_HIT_PLAYER,
                                                     1.2f,
@@ -822,22 +822,22 @@ class SnowballListener : Listener {
                         return
                     }
                     if (projectile.customName!!.contains("#QuadroArmsSpinner")) {
-                        var Quadrodamage = 1.0
-                        var QuadroticksLived = projectile.ticksLived.toDouble() * 12.5
-                        if (QuadroticksLived > 60) QuadroticksLived = 60.0
-                        Quadrodamage += Quadrodamage * (QuadroticksLived / 30)
-                        ArmorStandMgr.giveDamageArmorStand(`as`, Quadrodamage, shooter)
+                        var quadroDamage = 1.0
+                        var quadroTicksLived = projectile.ticksLived.toDouble() * 12.5
+                        if (quadroTicksLived > 60) quadroTicksLived = 60.0
+                        quadroDamage += quadroDamage * (quadroTicksLived / 30)
+                        ArmorStandMgr.giveDamageArmorStand(`as`, quadroDamage, shooter)
                         return
                     }
                     if (projectile.customName!!.contains("#QuadroArmsShotgun")) {
-                        var Quadrodamage = 9.0
-                        var QuadroticksLived = projectile.ticksLived.toDouble() * 10
-                        if (QuadroticksLived > 30) QuadroticksLived = 30.0
-                        Quadrodamage -= Quadrodamage * (QuadroticksLived / 100)
+                        var quadroDamage = 9.0
+                        var quadroTicksLived = projectile.ticksLived.toDouble() * 10
+                        if (quadroTicksLived > 30) quadroTicksLived = 30.0
+                        quadroDamage -= quadroDamage * (quadroTicksLived / 100)
                         if (projectile.customName!!.contains("CounterShot")) {
-                            Quadrodamage = 6.5
+                            quadroDamage = 6.5
                         }
-                        ArmorStandMgr.giveDamageArmorStand(`as`, Quadrodamage, shooter)
+                        ArmorStandMgr.giveDamageArmorStand(`as`, quadroDamage, shooter)
                         return
                     }
                 }
@@ -846,17 +846,17 @@ class SnowballListener : Listener {
                         (`as`.customName != "SplashShield") &&
                         (`as`.customName != "Kasa")
                     ) {
-                        shooter!!.playSound(shooter.location, Sound.ENTITY_PLAYER_HURT, 0.5f, 1f)
+                        shooter.playSound(shooter.location, Sound.ENTITY_PLAYER_HURT, 0.5f, 1f)
                     }
                 }
 
-                var damage = getPlayerData(shooter)!!.weaponClass.mainWeapon!!.damage
+                var damage = getPlayerData(shooter)!!.weaponClass!!.mainWeapon!!.damage
                 if (dmgDouble != 1.0) {
                     damage = damage * dmgDouble
                 } else {
                     damage = damage * Gear.getGearInfluence(shooter, Gear.Type.MAIN_SPEC_UP)
                 }
-                val type = getPlayerData(shooter)!!.weaponClass.mainWeapon!!.weaponType
+                val type = getPlayerData(shooter)!!.weaponClass!!.mainWeapon!!.weaponType
 
                 if (type != "Burst" && type != "Blaster") {
                     var ticksLived = projectile.ticksLived.toDouble() * 1.2

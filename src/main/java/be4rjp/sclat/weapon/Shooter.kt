@@ -33,7 +33,7 @@ import java.util.Random
  */
 object Shooter {
     @JvmStatic
-    fun ShooterRunnable(player: Player) {
+    fun shooterRunnable(player: Player) {
         val delay: BukkitRunnable =
             object : BukkitRunnable() {
                 var p: Player = player
@@ -49,28 +49,28 @@ object Shooter {
                         return
                     }
 
-                    if (!data.getIsUsingManeuver() && data.canShoot) {
+                    if (!data.isUsingManeuver && data.canShoot) {
                         val clickType = Sclat.dadadaCheckerAPI!!.getPlayerClickType(player)
                         if ((clickType == ClickType.FIRST_CLICK || clickType == ClickType.RENDA || clickType == ClickType.NAGAOSI) &&
                             data.isInMatch
                         ) {
-                            Shoot(
+                            shoot(
                                 p,
                                 false,
                                 false,
-                                maxRandomCount >= data.weaponClass.mainWeapon!!.maxRandomCount,
+                                maxRandomCount >= data.weaponClass?.mainWeapon!!.maxRandomCount,
                             )
                             data.tick = (
                                 data.tick +
-                                    getPlayerData(p)!!.weaponClass.mainWeapon!!.shootTick
+                                    getPlayerData(p)!!.weaponClass!!.mainWeapon!!.shootTick
                                 )
-                            if (data.weaponClass.mainWeapon!!.maxRandom != 0.0 &&
-                                maxRandomCount <= data.weaponClass.mainWeapon!!.maxRandomCount * 2
+                            if (data.weaponClass?.mainWeapon!!.maxRandom != 0.0 &&
+                                maxRandomCount <= data.weaponClass?.mainWeapon!!.maxRandomCount * 2
                             ) {
                                 maxRandomCount++
                             }
                         } else {
-                            if (data.weaponClass.mainWeapon!!.maxRandom != 0.0 && maxRandomCount >= 0) maxRandomCount -= 2
+                            if (data.weaponClass?.mainWeapon!!.maxRandom != 0.0 && maxRandomCount >= 0) maxRandomCount -= 2
                         }
                     }
                 }
@@ -79,7 +79,7 @@ object Shooter {
             plugin,
             0,
             getPlayerData(player)!!
-                .weaponClass
+                .weaponClass!!
                 .mainWeapon!!
                 .shootTick
                 .toLong(),
@@ -87,7 +87,7 @@ object Shooter {
     }
 
     @JvmStatic
-    fun ManeuverShootRunnable(player: Player) {
+    fun maneuverShootRunnable(player: Player) {
         val delay: BukkitRunnable =
             object : BukkitRunnable() {
                 var p: Player = player
@@ -102,15 +102,15 @@ object Shooter {
                         return
                     }
 
-                    if (data.getIsUsingManeuver()) {
+                    if (data.isUsingManeuver) {
                         val clickType = Sclat.dadadaCheckerAPI!!.getPlayerClickType(player)
                         if ((clickType == ClickType.FIRST_CLICK || clickType == ClickType.RENDA || clickType == ClickType.NAGAOSI) &&
                             data.isInMatch
                         ) {
-                            Shoot(p, true, false, false)
+                            shoot(p, true, false, false)
                             data.tick = (
                                 data.tick +
-                                    getPlayerData(p)!!.weaponClass.mainWeapon!!.shootTick
+                                    getPlayerData(p)!!.weaponClass!!.mainWeapon!!.shootTick
                                 )
                         }
                     }
@@ -120,7 +120,7 @@ object Shooter {
             plugin,
             0,
             getPlayerData(player)!!
-                .weaponClass
+                .weaponClass!!
                 .mainWeapon!!
                 .slidingShootTick
                 .toLong(),
@@ -128,18 +128,18 @@ object Shooter {
     }
 
     @JvmStatic
-    fun ManeuverRunnable(player: Player) {
+    fun maneuverRunnable(player: Player) {
         val delay: BukkitRunnable =
             object : BukkitRunnable() {
                 var p: Player = player
                 var loc: Location = player.location
                 var before: Location = player.location
-                var before_2: Location = player.location
+                var before2: Location = player.location
 
                 // int sl = 0;
                 // スライドの仕様改変
-                var sl_recharge_1: Boolean = true
-                var sl_recharge_2: Boolean = true
+                var slRecharge1: Boolean = true
+                var slRecharge2: Boolean = true
 
                 // スライドに使う変数の定義Trueの時は使用可能Falseの時は使用不可能を表している
                 var check: Boolean = true
@@ -161,28 +161,28 @@ object Shooter {
                     if (x != 0.0 || z != 0.0) {
                         vec = Vector(x, 0.0, z)
                     } else {
-                        x = location.x - before_2.x
-                        z = location.z - before_2.z
+                        x = location.x - before2.x
+                        z = location.z - before2.z
                         if (x != 0.0 || z != 0.0) {
                             vec = Vector(x, 0.0, z)
                         }
                     }
-                    before_2 = before.clone()
+                    before2 = before.clone()
                     before = location.clone()
 
                     // float ink = data.getWeaponClass().getMainWeapon().getSlideNeedINK();
 
                     // マニューバー系
-                    if (data.weaponClass.mainWeapon!!.isManeuver) {
+                    if (data.weaponClass?.mainWeapon!!.isManeuver) {
                         // if(p.getExp() >= ink) {
-                        if (data.isSneaking && sl_recharge_2 && !data.isSliding && (
+                        if (data.isSneaking && slRecharge2 && !data.isSliding && (
                                 p
                                     .inventory
                                     .itemInMainHand
                                     .type
                                     ==
                                     data
-                                        .weaponClass
+                                        .weaponClass!!
                                         .mainWeapon!!
                                         .weaponIteamStack!!
                                         .type
@@ -197,7 +197,8 @@ object Shooter {
                             // エフェクト
                             val bd =
                                 getPlayerData(player)!!
-                                    .team.teamColor!!
+                                    .team!!
+                                    .teamColor!!
                                     .wool!!
                                     .createBlockData()
                             val random = 1.0
@@ -210,7 +211,7 @@ object Shooter {
                                     )
                                 val erv = ev.clone().add(randomVector)
                                 for (o_player in plugin.server.onlinePlayers) {
-                                    if (getPlayerData(o_player)!!.settings.ShowEffect_BombEx()) {
+                                    if (getPlayerData(o_player)!!.settings!!.ShowEffect_BombEx()) {
                                         if (o_player.world === location.world) {
                                             if (o_player
                                                     .location
@@ -246,10 +247,10 @@ object Shooter {
                             data.isSliding = true
                             data.canShoot = false
                             // 優先順位が高い方のスライドがFalseだった場合に低い方をFalseにするようにしました高い方がtrueであった場合は高い方がFalseになります
-                            if (!sl_recharge_1) {
-                                sl_recharge_2 = false
+                            if (!slRecharge1) {
+                                slRecharge2 = false
                             } else {
-                                sl_recharge_1 = false
+                                slRecharge1 = false
                             }
                             // sl++;
                             val task: BukkitRunnable =
@@ -259,12 +260,12 @@ object Shooter {
                                     override fun run() {
                                         if (i == 3) {
                                             p.velocity = Vector(0, 0, 0)
-                                            data.setIsUsingManeuver(true)
+                                            data.isUsingManeuver = (true)
                                             data.canShoot = true
                                         }
 
                                         if (i == 10) {
-                                            data.setIsUsingManeuver(false)
+                                            data.isUsingManeuver = (false)
                                             loc = p.location
                                             cancel()
                                         }
@@ -315,13 +316,13 @@ object Shooter {
 
                     if (!data.isSliding) {
                         if (loc.x == ploc.x && loc.z == ploc.z) {
-                            data.setIsUsingManeuver(true)
+                            data.isUsingManeuver = (true)
                         } else {
                             if (check) {
                                 val task4: BukkitRunnable =
                                     object : BukkitRunnable() {
                                         override fun run() {
-                                            sl_recharge_1 = true
+                                            slRecharge1 = true
                                             // check = true;
                                         }
                                     }
@@ -329,19 +330,19 @@ object Shooter {
                                 val task5: BukkitRunnable =
                                     object : BukkitRunnable() {
                                         override fun run() {
-                                            sl_recharge_1 = true
-                                            sl_recharge_2 = true
+                                            slRecharge1 = true
+                                            slRecharge2 = true
                                             // check = true;
                                         }
                                     }
-                                if (sl_recharge_2) {
+                                if (slRecharge2) {
                                     task4.runTaskLater(plugin, 64)
                                 } else {
                                     task5.runTaskLater(plugin, 64)
                                 }
                                 check = false
                             }
-                            data.setIsUsingManeuver(false)
+                            data.isUsingManeuver = (false)
                         }
                     }
 
@@ -351,7 +352,7 @@ object Shooter {
         delay.runTaskTimer(plugin, 0, 1)
     }
 
-    fun Shoot(
+    fun shoot(
         player: Player,
         slided: Boolean,
         sound: Boolean,
@@ -363,7 +364,7 @@ object Shooter {
         val data = getPlayerData(player)
         if (player.exp <=
             (
-                data!!.weaponClass.mainWeapon!!.needInk
+                data!!.weaponClass!!.mainWeapon!!.needInk
                     * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) /
                     Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)
                 ).toFloat()
@@ -374,19 +375,19 @@ object Shooter {
         }
         player.exp = player.exp -
             (
-                data.weaponClass.mainWeapon!!.needInk
+                data.weaponClass?.mainWeapon!!.needInk
                     * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) /
                     Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)
                 ).toFloat()
         val rayTrace = RayTrace(player.eyeLocation.toVector(), player.eyeLocation.direction)
         val positions =
             rayTrace.traverse(
-                data.weaponClass.mainWeapon!!.shootSpeed
-                    * data.weaponClass.mainWeapon!!.distanceTick,
+                data.weaponClass?.mainWeapon!!.shootSpeed
+                    * data.weaponClass?.mainWeapon!!.distanceTick,
                 0.7,
             )
         var isLockOnPlayer = false
-        if (data.weaponClass.mainWeapon!!.maxRandom == 0.0) {
+        if (data.weaponClass?.mainWeapon!!.maxRandom == 0.0) {
             check@ for (vector in positions) {
                 val position = vector.toLocation(player.location.world!!)
                 for (target in plugin.server.onlinePlayers) {
@@ -401,7 +402,7 @@ object Shooter {
                 for (`as` in player.world.entities) {
                     if (`as` is ArmorStand) {
                         if (`as`.customName != null) {
-                            if (`as`.location.distanceSquared(position) <= 4 /* 2*2 */) {
+                            if (`as`.location.distanceSquared(position) <= 4) { // 2x2
                                 isLockOnPlayer = true
                                 break@check
                             }
@@ -416,18 +417,18 @@ object Shooter {
         PaintMgr.PaintHightestBlock(player.location, player, true, true)
 
         val ball = player.launchProjectile<Snowball>(Snowball::class.java)
-        (ball as CraftSnowball).handle.setItem(CraftItemStack.asNMSCopy(ItemStack(getPlayerData(player)!!.team.teamColor!!.wool!!)))
+        (ball as CraftSnowball).handle.setItem(CraftItemStack.asNMSCopy(ItemStack(getPlayerData(player)!!.team!!.teamColor!!.wool!!)))
         player.world.playSound(player.location, Sound.ENTITY_PIG_STEP, 0.3f, 1f)
         val vec =
             player
                 .location
                 .direction
-                .multiply(getPlayerData(player)!!.weaponClass.mainWeapon!!.shootSpeed)
-        var random = data.weaponClass.mainWeapon!!.random
-        if (maxRandom) random = data.weaponClass.mainWeapon!!.maxRandom
+                .multiply(getPlayerData(player)!!.weaponClass!!.mainWeapon!!.shootSpeed)
+        var random = data.weaponClass?.mainWeapon!!.random
+        if (maxRandom) random = data.weaponClass?.mainWeapon!!.maxRandom
         if (isLockOnPlayer) random /= 2.0
         if (slided) random /= 10.0
-        val distick = getPlayerData(player)!!.weaponClass.mainWeapon!!.distanceTick
+        val distick = getPlayerData(player)!!.weaponClass!!.mainWeapon!!.distanceTick
         vec.add(Vector(Math.random() * random - random / 2, 0.0, Math.random() * random - random / 2))
         ball.velocity = vec
         ball.shooter = player
@@ -460,7 +461,7 @@ object Shooter {
                         inkball!!.velocity.getX(),
                         inkball!!.velocity.getY(),
                         inkball!!.velocity.getZ(),
-                    ).multiply(getPlayerData(p)!!.weaponClass.mainWeapon!!.shootSpeed / 17)
+                    ).multiply(getPlayerData(p)!!.weaponClass!!.mainWeapon!!.shootSpeed / 17)
 
                 override fun run() {
                     inkball = mainSnowballNameMap.get(name)
@@ -473,11 +474,12 @@ object Shooter {
                     if (i != 0) {
                         val bd =
                             getPlayerData(p)!!
-                                .team.teamColor!!
+                                .team!!
+                                .teamColor!!
                                 .wool!!
                                 .createBlockData()
                         for (o_player in plugin.server.onlinePlayers) {
-                            if (getPlayerData(o_player)!!.settings.ShowEffect_MainWeaponInk()) {
+                            if (getPlayerData(o_player)!!.settings!!.ShowEffect_MainWeaponInk()) {
                                 if (o_player.world ===
                                     inkball!!.world
                                 ) {

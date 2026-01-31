@@ -46,7 +46,7 @@ import org.bukkit.util.Vector
  */
 object JetPack {
     @JvmStatic
-    fun JetPackRunnable(player: Player) {
+    fun jetPackRunnable(player: Player) {
         val api = BlockStudio.getBlockStudioAPI()
         val objectData = api.getObjectData("jetpack")
         val bsObject =
@@ -62,7 +62,7 @@ object JetPack {
         val task: BukkitRunnable =
             object : BukkitRunnable() {
                 var p: Player = player
-                var ol: Location = getPlayerData(player)!!.playerGroundLocation
+                var ol: Location = getPlayerData(player)!!.playerGroundLocation!!
                 var i: Int = 0
                 var id: Int = 0
                 var btl: Location = player.location
@@ -122,11 +122,11 @@ object JetPack {
                     p.isFlying = true
 
                     var vec = Vector(0, 0, 0)
-                    if (i % 2 == 0) vec = getPlayerData(p)!!.vehicleVector.clone().multiply(0.8)
+                    if (i % 2 == 0) vec = getPlayerData(p)!!.vehicleVector!!.clone().multiply(0.8)
                     val pvec = p.eyeLocation.direction
-                    val w_WASDVector = (Vector(pvec.getX(), 0.0, pvec.getZ())).multiply(vec.getX())
-                    val d_WASDVector = (Vector(pvec.getZ(), 0.0, pvec.getX() * -1)).multiply(vec.getZ())
-                    val xzVector = w_WASDVector.add(d_WASDVector)
+                    val wWasdvector = (Vector(pvec.getX(), 0.0, pvec.getZ())).multiply(vec.getX())
+                    val dWasdvector = (Vector(pvec.getZ(), 0.0, pvec.getX() * -1)).multiply(vec.getZ())
+                    val xzVector = wWasdvector.add(dWasdvector)
                     val moveVector =
                         Vector(
                             xzVector.getX(),
@@ -187,7 +187,7 @@ object JetPack {
                         val position = loc2.clone().add(0.0, -0.2, 0.0)
                         val position2 = loc3.clone().add(0.0, -0.2, 0.0)
                         for (o_player in plugin.server.onlinePlayers) {
-                            if (!getPlayerData(o_player)!!.settings.ShowEffect_SPWeapon()) continue
+                            if (!getPlayerData(o_player)!!.settings!!.ShowEffect_SPWeapon()) continue
                             if (o_player.world === position.world) {
                                 if (o_player
                                         .location
@@ -203,7 +203,7 @@ object JetPack {
                                             -0.13,
                                             Math.random() * random - random / 2,
                                             10.0,
-                                            ItemStack(getPlayerData(player)!!.team.teamColor!!.wool!!),
+                                            ItemStack(getPlayerData(player)!!.team!!.teamColor!!.wool!!),
                                         )
                                         // o_player.spawnParticle(org.bukkit.Particle.BLOCK_DUST, position, 0, 0, -2, 0,
                                         // 10, bd);
@@ -223,7 +223,7 @@ object JetPack {
                                             -0.13,
                                             Math.random() * random - random / 2,
                                             10.0,
-                                            ItemStack(getPlayerData(player)!!.team.teamColor!!.wool!!),
+                                            ItemStack(getPlayerData(player)!!.team!!.teamColor!!.wool!!),
                                         )
                                     }
                                 }
@@ -248,7 +248,7 @@ object JetPack {
                     if (i == 0) {
                         getPlayerData(p)!!.isUsingSP = true
                         SPWeaponMgr.setSPCoolTimeAnimation(player, 175)
-                        getPlayerData(p)!!.setIsUsingJetPack(true)
+                        getPlayerData(p)!!.isUsingJetPack = true
 
                         p.inventory.clear()
 
@@ -269,9 +269,10 @@ object JetPack {
                         `as`.isInvisible = true
                         `as`.isNoGravity = true
                         `as`.setBasePlate(false)
-                        `as`.customName = CraftChatMessage.fromStringOrNull(
-                            getPlayerData(p)!!.team.teamColor!!.colorCode + "↓↓↓  くコ:彡  ↓↓↓",
-                        )
+                        `as`.customName =
+                            CraftChatMessage.fromStringOrNull(
+                                getPlayerData(p)!!.team!!.teamColor!!.colorCode + "↓↓↓  くコ:彡  ↓↓↓",
+                            )
                         `as`.customNameVisible = true
                         `as`.isSmall = true
                         id = `as`.bukkitEntity.entityId
@@ -310,7 +311,7 @@ object JetPack {
                         }
                         p.inventory.clear()
                         if (p.world === ol.world && p.gameMode != GameMode.SPECTATOR) {
-                            if (p.location.distanceSquared(ol) > 9 /* 3^2 */) {
+                            if (p.location.distanceSquared(ol) > 9) { // 3^2
                                 SuperJumpMgr.SuperJumpRunnable(p, ol)
                                 p.world.playSound(p.location, Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 2f, 1.3f)
                             } else {
@@ -321,7 +322,7 @@ object JetPack {
                                 WeaponClassMgr.setWeaponClass(p)
                             }
                         }
-                        getPlayerData(p)!!.setIsUsingJetPack(false)
+                        getPlayerData(p)!!.isUsingJetPack = false
                         getPlayerData(p)!!.isUsingSP = false
                         bsObject.remove()
                         p.flySpeed = 0.1f
@@ -338,14 +339,14 @@ object JetPack {
     }
 
     @JvmStatic
-    fun ShootJetPack(player: Player) {
+    fun shootJetPack(player: Player) {
         val task: BukkitRunnable =
             object : BukkitRunnable() {
                 var p: Player = player
-                var p_vec: Vector? = null
+                var pVec: Vector? = null
                 var x: Double = 0.0
                 var z: Double = 0.0
-                var block_check: Boolean = false
+                var blockCheck: Boolean = false
                 var c: Int = 0
                 var drop: Item? = null
                 var ball: Snowball? = null
@@ -360,14 +361,14 @@ object JetPack {
                                 1.2f,
                             )
                             p.world.playSound(p.location, Sound.ENTITY_WITHER_SHOOT, 0.2f, 2f)
-                            p_vec = p.eyeLocation.direction
-                            val bom = ItemStack(getPlayerData(p)!!.team.teamColor!!.wool!!).clone()
+                            pVec = p.eyeLocation.direction
+                            val bom = ItemStack(getPlayerData(p)!!.team!!.teamColor!!.wool!!).clone()
                             val bom_m = bom.itemMeta
                             bom_m!!.setLocalizedName(notDuplicateNumber.toString())
                             bom.itemMeta = bom_m
-                            val dl = p.eyeLocation.add(p_vec!!.clone().multiply(1.5))
+                            val dl = p.eyeLocation.add(pVec!!.clone().multiply(1.5))
                             drop = p.world.dropItem(dl, bom)
-                            drop!!.velocity = p_vec!!.multiply(1.5)
+                            drop!!.velocity = pVec!!.multiply(1.5)
                             drop!!.setGravity(false)
                             // 雪玉をスポーンさせた瞬間にプレイヤーに雪玉がデスポーンした偽のパケットを送信する
                             ball = player.world.spawnEntity(dl, EntityType.SNOWBALL) as Snowball
@@ -381,7 +382,7 @@ object JetPack {
                                 val connection = (o_player as CraftPlayer).handle.playerConnection
                                 connection.sendPacket(PacketPlayOutEntityDestroy(ball!!.entityId))
                             }
-                            p_vec = p.eyeLocation.direction
+                            pVec = p.eyeLocation.direction
                         }
 
                         if (!drop!!.isOnGround &&
@@ -400,7 +401,7 @@ object JetPack {
                         }
 
                         for (target in plugin.server.onlinePlayers) {
-                            if (!getPlayerData(target)!!.settings.ShowEffect_SPWeapon()) {
+                            if (!getPlayerData(target)!!.settings!!.ShowEffect_SPWeapon()) {
                                 continue
                             }
                             if (target.world === ball!!.world) {
@@ -410,7 +411,8 @@ object JetPack {
                                 ) {
                                     val bd =
                                         getPlayerData(p)!!
-                                            .team.teamColor!!
+                                            .team
+                                            ?.let { it.teamColor!! }!!
                                             .wool!!
                                             .createBlockData()
                                     target.spawnParticle<BlockData?>(
@@ -434,7 +436,7 @@ object JetPack {
                                 ) {
                                     val dustOptions =
                                         Particle.DustOptions(
-                                            getPlayerData(p)!!.team.teamColor!!.bukkitColor!!,
+                                            getPlayerData(p)!!.team?.let { it.teamColor!! }!!.bukkitColor!!,
                                             1f,
                                         )
                                     target.spawnParticle<Particle.DustOptions?>(
@@ -465,8 +467,8 @@ object JetPack {
                             // 塗る
                             var i = 0
                             while (i <= maxDist) {
-                                val p_locs: MutableList<Location> = getSphere(drop!!.location, i.toDouble(), 20)
-                                for (loc in p_locs) {
+                                val pLocs: MutableList<Location> = getSphere(drop!!.location, i.toDouble(), 20)
+                                for (loc in pLocs) {
                                     PaintMgr.Paint(loc, p, false)
                                 }
                                 i++
@@ -475,7 +477,7 @@ object JetPack {
                             // 攻撃判定の処理
                             for (target in plugin.server.onlinePlayers) {
                                 if (!getPlayerData(target)!!.isInMatch || target.world !== p.world) continue
-                                if (target.location.distanceSquared(drop!!.location) <= 12.25 /* 3.5^2 */) {
+                                if (target.location.distanceSquared(drop!!.location) <= 12.25) { // 3.5^2
                                     val damage = (3.5 - target.location.distance(drop!!.location)) * 10
                                     if (getPlayerData(player)!!.team != getPlayerData(target)!!.team &&
                                         target.gameMode == GameMode.ADVENTURE
@@ -510,18 +512,18 @@ object JetPack {
                         }
 
                         // ちょっと上の方に移動
-                    /*
-                     * //ボムの視認用エフェクト for (Player o_player :
-                     * Main.getPlugin().getServer().getOnlinePlayers()) {
-                     * if(DataMgr.getPlayerData(o_player).getSettings().ShowEffect_SPWeapon()){
-                     * if(o_player.getWorld() == drop.getLocation().getWorld()) { if
-                     * (o_player.getLocation().distanceSquared(drop.getLocation()) <
-                     * Main.PARTICLE_RENDER_DISTANCE_SQUARED) { Particle.DustOptions dustOptions =
-                     * new Particle.DustOptions(DataMgr.getPlayerData(p).getTeam().getTeamColor().
-                     * getBukkitColor(), 1); o_player.spawnParticle(Particle.REDSTONE,
-                     * drop.getLocation(), 1, 0, 0, 0, 50, dustOptions); } } } }
-                     *
-                     */
+//                    /*
+//                     * //ボムの視認用エフェクト for (Player o_player :
+//                     * Main.getPlugin().getServer().getOnlinePlayers()) {
+//                     * if(DataMgr.getPlayerData(o_player).getSettings().ShowEffect_SPWeapon()){
+//                     * if(o_player.getWorld() == drop.getLocation().getWorld()) { if
+//                     * (o_player.getLocation().distanceSquared(drop.getLocation()) <
+//                     * Main.PARTICLE_RENDER_DISTANCE_SQUARED) { Particle.DustOptions dustOptions =
+//                     * new Particle.DustOptions(DataMgr.getPlayerData(p).getTeam().getTeamColor().
+//                     * getBukkitColor(), 1); o_player.spawnParticle(Particle.REDSTONE,
+//                     * drop.getLocation(), 1, 0, 0, 0, 50, dustOptions); } } } }
+//                     *
+//                     */
                         c++
                         x = drop!!.location.x
                         z = drop!!.location.z

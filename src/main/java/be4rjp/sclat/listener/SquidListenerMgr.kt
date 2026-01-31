@@ -41,8 +41,8 @@ object SquidListenerMgr {
         }
 
         try {
-            if (data.match.mapData!!.voidY != 0) {
-                if (player.location.y <= data.match.mapData!!.voidY) {
+            if (data.match?.mapData!!.voidY != 0) {
+                if (player.location.y <= data.match?.mapData!!.voidY) {
                     DeathMgr.PlayerDeathRunnable(player, player, "fall")
                 }
             }
@@ -57,7 +57,8 @@ object SquidListenerMgr {
         // return;
         getPlayerData(player)!!.team
         Material.getMaterial(
-            data.team.teamColor!!
+            data.team
+                ?.teamColor!!
                 .concrete
                 .toString() + "_POWDER",
         )
@@ -78,7 +79,7 @@ object SquidListenerMgr {
                     if (blockDataMap.get(block)!!.team == data.team) {
                         if (!data.isSquid || block.type == Material.AIR) continue
                         data.isOnInk = true
-                        if (!data.getIsUsingJetPack()) {
+                        if (!data.isUsingJetPack) {
                             player.allowFlight = false
                             player.isFlying = false
                         }
@@ -89,7 +90,7 @@ object SquidListenerMgr {
         }
 
         data.isOnInk = false
-        if (!data.getIsUsingJetPack()) {
+        if (!data.isUsingJetPack) {
             player.allowFlight = false
             player.isFlying = false
         }

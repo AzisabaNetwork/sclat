@@ -38,7 +38,7 @@ object SuperArmor {
         if (armor > data!!.armor) data.armor = armor
 
         // エフェクト
-        val effect_r: BukkitRunnable =
+        val effectR: BukkitRunnable =
             object : BukkitRunnable() {
                 override fun run() {
                     if (!data.isInMatch || player.gameMode != GameMode.ADVENTURE) {
@@ -46,7 +46,7 @@ object SuperArmor {
                         cancel()
                     }
                     for (o_player in plugin.server.onlinePlayers) {
-                        if (getPlayerData(o_player)!!.settings.ShowEffect_SPWeapon() && o_player != player) {
+                        if (getPlayerData(o_player)!!.settings!!.ShowEffect_SPWeapon() && o_player != player) {
                             if (o_player.world === player.world) {
                                 if (o_player
                                         .location
@@ -54,7 +54,7 @@ object SuperArmor {
                                 ) {
                                     val dustOptions =
                                         Particle.DustOptions(
-                                            data.team.teamColor!!.bukkitColor!!,
+                                            data.team!!.teamColor!!.bukkitColor!!,
                                             1f,
                                         )
                                     o_player.spawnParticle<Particle.DustOptions?>(
@@ -78,14 +78,14 @@ object SuperArmor {
                     }
                 }
             }
-        if (effect) effect_r.runTaskTimer(plugin, 0, 1)
+        if (effect) effectR.runTaskTimer(plugin, 0, 1)
 
         val task: BukkitRunnable =
             object : BukkitRunnable() {
                 override fun run() {
                     data.armor = 0.0
                     if (effect) {
-                        effect_r.cancel()
+                        effectR.cancel()
                         getPlayerData(player)!!.isUsingSP = false
                         // player.playSound(player.getLocation(), Sound.BLOCK_CHEST_CLOSE, 1, 2);
                     }
@@ -110,7 +110,7 @@ object SuperArmor {
         val data = getPlayerData(player)
         if (armor > data!!.armor) data.armor = regene
 
-        val rgene_r: BukkitRunnable =
+        val rgeneR: BukkitRunnable =
             object : BukkitRunnable() {
                 var c: Int = 0
                 var regenearmor: Int = 1
@@ -141,9 +141,9 @@ object SuperArmor {
                     c++
                 }
             }
-        rgene_r.runTaskTimer(plugin, 0, 2)
+        rgeneR.runTaskTimer(plugin, 0, 2)
         // エフェクト
-        val effect_r: BukkitRunnable =
+        val effectR: BukkitRunnable =
             object : BukkitRunnable() {
                 override fun run() {
                     if (!data.isInMatch || player.gameMode != GameMode.ADVENTURE) {
@@ -151,7 +151,7 @@ object SuperArmor {
                         cancel()
                     }
                     for (o_player in plugin.server.onlinePlayers) {
-                        if (getPlayerData(o_player)!!.settings.ShowEffect_SPWeapon() && o_player != player) {
+                        if (getPlayerData(o_player)!!.settings!!.ShowEffect_SPWeapon() && o_player != player) {
                             if (o_player.world === player.world) {
                                 if (o_player
                                         .location
@@ -159,7 +159,7 @@ object SuperArmor {
                                 ) {
                                     val dustOptions =
                                         Particle.DustOptions(
-                                            data.team.teamColor!!.bukkitColor!!,
+                                            data.team!!.teamColor!!.bukkitColor!!,
                                             1f,
                                         )
                                     o_player.spawnParticle<Particle.DustOptions?>(
@@ -183,14 +183,14 @@ object SuperArmor {
                     }
                 }
             }
-        if (effect) effect_r.runTaskTimer(plugin, 0, 1)
+        if (effect) effectR.runTaskTimer(plugin, 0, 1)
 
         val task: BukkitRunnable =
             object : BukkitRunnable() {
                 override fun run() {
                     data.armor = 0.0
                     if (effect) {
-                        effect_r.cancel()
+                        effectR.cancel()
                         getPlayerData(player)!!.isUsingSP = false
                         // player.playSound(player.getLocation(), Sound.BLOCK_CHEST_CLOSE, 1, 2);
                     }

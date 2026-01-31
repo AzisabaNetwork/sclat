@@ -47,7 +47,7 @@ import org.bukkit.util.Vector
  */
 object MultiMissile {
     @JvmStatic
-    fun MMLockRunnable(player: Player) {
+    fun mmLockRunnable(player: Player) {
         val task: BukkitRunnable =
             object : BukkitRunnable() {
                 var ps: MutableMap<Player?, EntitySquid> = HashMap<Player?, EntitySquid>()
@@ -69,7 +69,7 @@ object MultiMissile {
                             }
                             player.updateInventory()
 
-                            getPlayerData(p)!!.setIsUsingMM(true)
+                            getPlayerData(p)!!.isUsingMM = true
                             val nmsWorld = (p.world as CraftWorld).handle
                             for (op in plugin.server.onlinePlayers) {
                                 if (getPlayerData(op)!!.isInMatch && op.world === p.world && (op.name != p.name) &&
@@ -131,7 +131,7 @@ object MultiMissile {
                                     val es: EntitySquid = ps.get(op)!!
                                     val loc: Location = op.location
                                     es.setLocation(loc.x, loc.y, loc.z, loc.yaw, loc.pitch)
-                                    setGlowing(es.bukkitEntity, p, MMCheckCanLock(p, op))
+                                    setGlowing(es.bukkitEntity, p, mmCheckCanLock(p, op))
                                     (p as CraftPlayer)
                                         .handle
                                         .playerConnection
@@ -150,7 +150,7 @@ object MultiMissile {
                                         val eas: EntityArmorStand = asl.get(`as`)!!
                                         val loc = `as`.location
                                         eas.setLocation(loc.x, loc.y, loc.z, loc.yaw, loc.pitch)
-                                        setGlowing(eas.bukkitEntity, p, MMCheckCanLock(p, `as`))
+                                        setGlowing(eas.bukkitEntity, p, mmCheckCanLock(p, `as`))
                                         (p as CraftPlayer)
                                             .handle
                                             .playerConnection
@@ -159,7 +159,7 @@ object MultiMissile {
                                 }
                             }
                         }
-                        if (!getPlayerData(p)!!.getIsUsingMM() || c == 200) {
+                        if (!getPlayerData(p)!!.isUsingMM || c == 200) {
                             val targetList: MutableList<Entity> = ArrayList<Entity>()
                             var count = 0
                             for (op in plugin.server.onlinePlayers) {
@@ -173,7 +173,7 @@ object MultiMissile {
                                         .handle
                                         .playerConnection
                                         .sendPacket(PacketPlayOutEntityDestroy(es.bukkitEntity.entityId))
-                                    if (MMCheckCanLock(p, op)) {
+                                    if (mmCheckCanLock(p, op)) {
                                         op.sendTitle("", ChatColor.RED.toString() + "ミサイル接近中！", 0, 40, 4)
                                         op.playSound(op.location, Sound.BLOCK_NOTE_BLOCK_PLING, 1f, 1f)
                                         op.addPotionEffect(PotionEffect(PotionEffectType.GLOWING, 30, 1))
@@ -197,7 +197,7 @@ object MultiMissile {
                                         )
                                         val loc = `as`.location
                                         eas.setLocation(loc.x, loc.y, loc.z, loc.yaw, loc.pitch)
-                                        if (MMCheckCanLock(p, `as`)) {
+                                        if (mmCheckCanLock(p, `as`)) {
                                             targetList.add(`as`)
                                             `as`.addPotionEffect(PotionEffect(PotionEffectType.GLOWING, 30, 1))
                                             count++
@@ -206,14 +206,14 @@ object MultiMissile {
                                 }
                             }
 
-                            for (e in targetList) MMShootRunnable(p, e, if (count >= 4) 2 else 4)
+                            for (e in targetList) mmShootRunnable(p, e, if (count >= 4) 2 else 4)
 
                             if (p.hasPotionEffect(PotionEffectType.SLOW)) p.removePotionEffect(PotionEffectType.SLOW)
                             p.inventory.clear()
                             WeaponClassMgr.setWeaponClass(p)
                             getPlayerData(p)!!.isUsingSP = true
-                            getPlayerData(p)!!.setIsUsingMM(false)
-                            FireworksRunnable(p)
+                            getPlayerData(p)!!.isUsingMM = false
+                            fireworksRunnable(p)
                             SPWeaponMgr.setSPCoolTimeAnimation(p, 100)
                             cancel()
                         }
@@ -230,7 +230,7 @@ object MultiMissile {
         task.runTaskTimer(plugin, 0, 1)
     }
 
-    fun FireworksRunnable(player: Player) {
+    fun fireworksRunnable(player: Player) {
         val task: BukkitRunnable =
             object : BukkitRunnable() {
                 var p: Player = player
@@ -249,7 +249,7 @@ object MultiMissile {
         task.runTaskTimer(plugin, 0, 2)
     }
 
-    fun MMShootRunnable(
+    fun mmShootRunnable(
         shooter: Player,
         target: Entity,
         i: Int,
@@ -266,14 +266,14 @@ object MultiMissile {
                     } else {
                         if (c == i || !getPlayerData(s)!!.isInMatch) cancel()
                     }
-                    MMRunnable(s, target)
+                    mmRunnable(s, target)
                     c++
                 }
             }
         task.runTaskTimer(plugin, 0, 10)
     }
 
-    fun MMRunnable(
+    fun mmRunnable(
         shooter: Player,
         target: Entity,
     ) {
@@ -292,7 +292,7 @@ object MultiMissile {
                         drop =
                             shooter.world.dropItem(
                                 t.location.add(0.0, 40.0, 0.0),
-                                ItemStack(getPlayerData(s)!!.team.teamColor!!.wool!!),
+                                ItemStack(getPlayerData(s)!!.team!!.teamColor!!.wool!!),
                             )
                         drop!!.setGravity(false)
                         ball = s.world.spawnEntity(drop!!.location, EntityType.SNOWBALL) as Snowball
@@ -306,7 +306,7 @@ object MultiMissile {
                         if (t is Player) {
                             if (getPlayerData(t as Player)!!.isInMatch) {
                                 tl =
-                                    getPlayerData(t as Player?)!!.playerGroundLocation
+                                    getPlayerData(t as Player?)!!.playerGroundLocation!!
                             }
                         }
                         setSnowballIsHit(ball, false)
@@ -325,7 +325,7 @@ object MultiMissile {
                         ball!!.velocity = drop!!.velocity
                     }
 
-                    if (dl.distanceSquared(tl) < 100 /* 10^2 */) {
+                    if (dl.distanceSquared(tl) < 100) { // 10^2
                         reached = true
                     }
 
@@ -339,16 +339,18 @@ object MultiMissile {
                     // if(!reached)
                     // tl = t.getLocation();
                     if (!reached) {
-                        drop!!.velocity = (Vector(tl.x - dl.x, tl.y - dl.y, tl.z - dl.z))
-                            .normalize()
-                            .multiply(0.8)
+                        drop!!.velocity =
+                            (Vector(tl.x - dl.x, tl.y - dl.y, tl.z - dl.z))
+                                .normalize()
+                                .multiply(0.8)
                     } else {
                         drop!!.velocity = drop!!.velocity.add(Vector(0.0, -0.1, 0.0))
                     }
 
                     val bd =
                         getPlayerData(s)!!
-                            .team.teamColor!!
+                            .team
+                            ?.teamColor!!
                             .wool!!
                             .createBlockData()
                     for (o_player in plugin.server.onlinePlayers) {
@@ -357,7 +359,7 @@ object MultiMissile {
                                     .location
                                     .distanceSquared(drop!!.location) < Sclat.particleRenderDistanceSquared
                             ) {
-                                if (getPlayerData(o_player)!!.settings.ShowEffect_SPWeapon()) {
+                                if (getPlayerData(o_player)!!.settings!!.ShowEffect_SPWeapon()) {
                                     o_player.spawnParticle<BlockData?>(
                                         Particle.BLOCK_DUST,
                                         drop!!.location,
@@ -387,8 +389,8 @@ object MultiMissile {
                         // 塗る
                         var i = 0
                         while (i <= maxDist) {
-                            val p_locs: MutableList<Location> = getSphere(drop!!.location, i.toDouble(), 20)
-                            for (loc in p_locs) {
+                            val pLocs: MutableList<Location> = getSphere(drop!!.location, i.toDouble(), 20)
+                            for (loc in pLocs) {
                                 PaintMgr.Paint(loc, s, false)
                             }
                             i++
@@ -437,7 +439,7 @@ object MultiMissile {
         task.runTaskTimer(plugin, 0, 1)
     }
 
-    fun MMSquidRunnable(
+    fun mmSquidRunnable(
         shooter: Player,
         target: Player,
     ) {
@@ -452,7 +454,7 @@ object MultiMissile {
         (shooter as CraftPlayer).handle.playerConnection.sendPacket(PacketPlayOutSpawnEntityLiving(es))
     }
 
-    fun MMCheckCanLock(
+    fun mmCheckCanLock(
         sp: Player,
         target: Entity,
     ): Boolean {

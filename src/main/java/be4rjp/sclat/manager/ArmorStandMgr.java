@@ -127,7 +127,7 @@ public class ArmorStandMgr {
 		if (conf.config.getString("WorkMode").equals("Trial"))
 			al = Sclat.lobby;
 		else
-			al = DataMgr.getPlayerData(player).getMatchLocation();
+			al = DataMgr.getPlayerData(player).matchLocation;
 		ArmorStand as = (ArmorStand) player.getWorld().spawnEntity(al, EntityType.ARMOR_STAND);
 		as.setVisible(false);
 		as.setSmall(true);
@@ -160,7 +160,7 @@ public class ArmorStandMgr {
 						double distance = 8;
 
 						for (Player target : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
-							if (!DataMgr.getPlayerData(target).isInMatch() || target.getWorld() != p.getWorld())
+							if (!DataMgr.getPlayerData(target).isInMatch || target.getWorld() != p.getWorld())
 								continue;
 							if (target.getLocation().distance(as.getLocation()) <= distance) {
 								if (DataMgr.getPlayerData(player).team.getID() != DataMgr.getPlayerData(target).team
@@ -198,7 +198,7 @@ public class ArmorStandMgr {
 						}
 					}
 				}
-				if (!DataMgr.getPlayerData(p).isInMatch() || !p.isOnline())
+				if (!DataMgr.getPlayerData(p).isInMatch || !p.isOnline())
 					cancel();
 			}
 		};
@@ -215,7 +215,7 @@ public class ArmorStandMgr {
 				yaw += 3;
 				loc.setYaw(yaw);
 				as.teleport(loc);
-				if (!DataMgr.getPlayerData(p).isInMatch() || !p.isOnline())
+				if (!DataMgr.getPlayerData(p).isInMatch || !p.isOnline())
 					cancel();
 			}
 		};
@@ -227,7 +227,7 @@ public class ArmorStandMgr {
 		if (conf.config.getString("WorkMode").equals("Trial"))
 			al = Sclat.lobby;
 		else
-			al = DataMgr.getPlayerData(player).getMatchLocation();
+			al = DataMgr.getPlayerData(player).matchLocation;
 		ArmorStand as = (ArmorStand) player.getWorld().spawnEntity(al, EntityType.ARMOR_STAND);
 		as.setVisible(false);
 		as.setSmall(true);
@@ -269,7 +269,7 @@ public class ArmorStandMgr {
 						}
 					}
 				}
-				if (!DataMgr.getPlayerData(p).isInMatch() || !p.isOnline())
+				if (!DataMgr.getPlayerData(p).isInMatch || !p.isOnline())
 					cancel();
 			}
 		};
@@ -286,7 +286,7 @@ public class ArmorStandMgr {
 				yaw += 3;
 				loc.setYaw(yaw);
 				as.teleport(loc);
-				if (!DataMgr.getPlayerData(p).isInMatch() || !p.isOnline())
+				if (!DataMgr.getPlayerData(p).isInMatch || !p.isOnline())
 					cancel();
 			}
 		};
@@ -320,7 +320,7 @@ public class ArmorStandMgr {
 					if (!d.getType().equals(Material.AIR))
 						vec = new Vector(0, 0.5, 0);
 					SprinklerMgr.sprinklerShoot(p, as, vec);
-					if (!DataMgr.getPlayerData(p).isInMatch() || !p.isOnline())
+					if (!DataMgr.getPlayerData(p).isInMatch || !p.isOnline())
 						cancel();
 				}
 			}
@@ -342,7 +342,7 @@ public class ArmorStandMgr {
 			if (DataMgr.getPlayerData(ssdata.player).team != DataMgr.getPlayerData(shooter).team) {
 				ssdata.damage = (ssdata.damage + damage);
 				// ssdata.setDamage(ssdata.damage +
-				// DataMgr.getPlayerData(shooter).getWeaponClass().getMainWeapon().damage);
+				// DataMgr.getPlayerData(shooter).weaponClass.mainWeapon.damage);
 				as.getWorld().playSound(as.getLocation(), Sound.ENTITY_PLAYER_HURT, 0.8F, 1.2F);
 			}
 			return;

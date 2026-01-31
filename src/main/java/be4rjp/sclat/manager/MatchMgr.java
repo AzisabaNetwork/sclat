@@ -110,7 +110,7 @@ public class MatchMgr {
 					match.addJoinedPlayerCount();
 
 					data.match = match;
-					data.setIsJoined(true);
+					data.isJoined = (true);
 
 					DataMgr.joinedList.add(player);
 
@@ -233,7 +233,7 @@ public class MatchMgr {
 									for (Player jp : sortedMember) {
 										PlayerData data = DataMgr.getPlayerData(jp);
 										if (jp.isOnline()) {
-											data.setPlayerNumber(playerNumber);
+											data.playerNumber = (playerNumber);
 											data.team.addRateTotal(getRank(jp));
 											// jp.setDisplayName(data.getTeam().getTeamColor().getColorCode() +
 											// jp.getName());
@@ -476,9 +476,9 @@ public class MatchMgr {
 
 						p.setDisplayName(DataMgr.getPlayerData(p).team.getTeamColor().getColorCode() + p.getName());
 
-						DataMgr.getPlayerData(p).setCanFly(true);
+						DataMgr.getPlayerData(p).canFly = (true);
 
-						if (DataMgr.getPlayerData(p).getPlayerNumber() == 1) {
+						if (DataMgr.getPlayerData(p).playerNumber == 1) {
 							PaintMgr.PaintGlass(match);
 
 							p.getWorld().getEntities().forEach(entity -> {
@@ -511,7 +511,7 @@ public class MatchMgr {
 
 						if (DataMgr.getPlayerData(p).team == match.team0) {
 							Location l = DataMgr.getPlayerData(p).match.getMapData().getTeam0Loc();
-							int i = (DataMgr.getPlayerData(p).getPlayerNumber() + 1) / 2;
+							int i = (DataMgr.getPlayerData(p).playerNumber + 1) / 2;
 							Location sl = null;
 							if (i == 1)
 								sl = new Location(l.getWorld(), l.getBlockX() + 1.5D, l.getBlockY(),
@@ -529,11 +529,11 @@ public class MatchMgr {
 								sl = new Location(l.getWorld(), l.getBlockX() + 0.5D, l.getBlockY(),
 										l.getBlockZ() + 0.5D);
 							sl.setYaw(l.getYaw());
-							DataMgr.getPlayerData(p).setMatchLocation(sl);
+							DataMgr.getPlayerData(p).matchLocation = (sl);
 						}
 						if (DataMgr.getPlayerData(p).team == match.team1) {
 							Location l = DataMgr.getPlayerData(p).match.getMapData().getTeam1Loc();
-							int i = DataMgr.getPlayerData(p).getPlayerNumber() / 2;
+							int i = DataMgr.getPlayerData(p).playerNumber / 2;
 							Location sl = null;
 							if (i == 1)
 								sl = new Location(l.getWorld(), l.getBlockX() + 1.5D, l.getBlockY(),
@@ -551,12 +551,12 @@ public class MatchMgr {
 								sl = new Location(l.getWorld(), l.getBlockX() + 0.5D, l.getBlockY(),
 										l.getBlockZ() + 0.5D);
 							sl.setYaw(l.getYaw());
-							DataMgr.getPlayerData(p).setMatchLocation(sl);
+							DataMgr.getPlayerData(p).matchLocation = (sl);
 						}
 
-						if (DataMgr.getPlayerData(p).getPlayerNumber() <= 8) {
-							Entity e = DataMgr.getPlayerData(p).getMatchLocation().getWorld()
-									.spawnEntity(DataMgr.getPlayerData(p).getMatchLocation(), EntityType.SQUID);
+						if (DataMgr.getPlayerData(p).playerNumber <= 8) {
+							Entity e = DataMgr.getPlayerData(p).matchLocation.getWorld()
+									.spawnEntity(DataMgr.getPlayerData(p).matchLocation, EntityType.SQUID);
 							squid = (LivingEntity) e;
 							squid.setAI(false);
 							squid.setSwimming(true);
@@ -568,7 +568,7 @@ public class MatchMgr {
 						p.getInventory().clear();
 						Location introl = match.getMapData().getIntro();
 						p.teleport(introl);
-						Location location = DataMgr.getPlayerData(p).getMatchLocation();
+						Location location = DataMgr.getPlayerData(p).matchLocation;
 
 						if (conf.config.getString("WorkMode").equals("TDM"))
 							p.sendTitle("§l" + match.getMapData().getMapName(), "§7チームデスマッチ", 10, 70, 20);
@@ -626,18 +626,18 @@ public class MatchMgr {
 								org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).team.getTeamColor().wool
 										.createBlockData();
 								introl.getWorld().spawnParticle(org.bukkit.Particle.BLOCK_DUST,
-										DataMgr.getPlayerData(p).getMatchLocation(), 10, 0.3, 0.4, 0.3, 1, bd);
+										DataMgr.getPlayerData(p).matchLocation, 10, 0.3, 0.4, 0.3, 1, bd);
 
 							}
 							if (s == 120) {
-								if (DataMgr.getPlayerData(p).getPlayerNumber() <= 8)
+								if (DataMgr.getPlayerData(p).playerNumber <= 8)
 									squid.remove();
 							}
 							if (s == 100) {
-								if (DataMgr.getPlayerData(p).getPlayerNumber() <= 8) {
-									introl.getWorld().playSound(DataMgr.getPlayerData(p).getMatchLocation(),
+								if (DataMgr.getPlayerData(p).playerNumber <= 8) {
+									introl.getWorld().playSound(DataMgr.getPlayerData(p).matchLocation,
 											Sound.ENTITY_PLAYER_SWIM, 1, 1);
-									NPCMgr.createNPC(p, p.getName(), DataMgr.getPlayerData(p).getMatchLocation());
+									NPCMgr.createNPC(p, p.getName(), DataMgr.getPlayerData(p).matchLocation);
 								}
 							}
 						}
@@ -650,17 +650,17 @@ public class MatchMgr {
 								org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).team.getTeamColor().wool
 										.createBlockData();
 								introl.getWorld().spawnParticle(org.bukkit.Particle.BLOCK_DUST,
-										DataMgr.getPlayerData(p).getMatchLocation(), 10, 0.3, 0.4, 0.3, 1, bd);
+										DataMgr.getPlayerData(p).matchLocation, 10, 0.3, 0.4, 0.3, 1, bd);
 							}
 							if (s == 180) {
-								if (DataMgr.getPlayerData(p).getPlayerNumber() <= 8)
+								if (DataMgr.getPlayerData(p).playerNumber <= 8)
 									squid.remove();
 							}
 							if (s == 160) {
-								if (DataMgr.getPlayerData(p).getPlayerNumber() <= 8) {
-									introl.getWorld().playSound(DataMgr.getPlayerData(p).getMatchLocation(),
+								if (DataMgr.getPlayerData(p).playerNumber <= 8) {
+									introl.getWorld().playSound(DataMgr.getPlayerData(p).matchLocation,
 											Sound.ENTITY_PLAYER_SWIM, 1, 1);
-									NPCMgr.createNPC(p, p.getName(), DataMgr.getPlayerData(p).getMatchLocation());
+									NPCMgr.createNPC(p, p.getName(), DataMgr.getPlayerData(p).matchLocation);
 								}
 							}
 						}
@@ -676,95 +676,87 @@ public class MatchMgr {
 						p.getInventory().setItem(0, new ItemStack(org.bukkit.Material.AIR));
 						p.setGameMode(GameMode.ADVENTURE);
 						p.setExp(0.99F);
-						Location introl = DataMgr.getPlayerData(p).getMatchLocation();
+						Location introl = DataMgr.getPlayerData(p).matchLocation;
 						p.teleport(introl);
 					}
 
 					if (s == 281) {
-						DataMgr.getPlayerData(p).setCanFly(false);
+						DataMgr.getPlayerData(p).canFly = (false);
 
 						// playerclass
-						if (DataMgr.getPlayerData(p).getWeaponClass().getSubWeaponName().equals("ビーコン"))
+						if (DataMgr.getPlayerData(p).weaponClass.getSubWeaponName().equals("ビーコン"))
 							ArmorStandMgr.BeaconArmorStandSetup(p);
-						if (DataMgr.getPlayerData(p).getWeaponClass().getSubWeaponName().equals("スプリンクラー"))
+						if (DataMgr.getPlayerData(p).weaponClass.getSubWeaponName().equals("スプリンクラー"))
 							ArmorStandMgr.SprinklerArmorStandSetup(p);
 						WeaponClassMgr.setWeaponClass(p);
 
-						if (DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getIsSwap()) {
+						if (DataMgr.getPlayerData(p).weaponClass.mainWeapon.getIsSwap()) {
 							Swapper.SwapperRunnable(p);
-							if (DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getSlidingShootTick() > 1) {
-								Shooter.ManeuverShootRunnable(p);
-								DataMgr.getPlayerData(p).setIsUsingManeuver(true);
+							if (DataMgr.getPlayerData(p).weaponClass.mainWeapon.getSlidingShootTick() > 1) {
+								Shooter.maneuverShootRunnable(p);
+								DataMgr.getPlayerData(p).isUsingManeuver = (true);
 							}
 						}
-						if (DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getWeaponType()
-								.equals("Shooter")) {
-							Shooter.ShooterRunnable(p);
-							if (DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().isManeuver) {
+						if (DataMgr.getPlayerData(p).weaponClass.mainWeapon.weaponType.equals("Shooter")) {
+							Shooter.shooterRunnable(p);
+							if (DataMgr.getPlayerData(p).weaponClass.mainWeapon.isManeuver) {
 								if (DataMgr.getPlayerData(p).settings.doChargeKeep()) {
-									Shooter.ManeuverRunnable(p);
+									Shooter.maneuverRunnable(p);
 								} else {
-									Manuber.ManeuverRunnable(p);
+									Manuber.maneuverRunnable(p);
 								}
-								Shooter.ManeuverShootRunnable(p);
+								Shooter.maneuverShootRunnable(p);
 							}
 						}
-						if (DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getWeaponType()
-								.equals("Reeler")) {
-							Shooter.ShooterRunnable(p);
-							Reeler.ReelerRunnable(p);
-							Reeler.ReelerShootRunnable(p);
+						if (DataMgr.getPlayerData(p).weaponClass.mainWeapon.weaponType.equals("Reeler")) {
+							Shooter.shooterRunnable(p);
+							Reeler.reelerRunnable(p);
+							Reeler.reelerShootRunnable(p);
 						}
-						if (DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getWeaponType()
-								.equals("Blaster")) {
-							if (DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().isManeuver) {
-								Shooter.ManeuverRunnable(p);
+						if (DataMgr.getPlayerData(p).weaponClass.mainWeapon.weaponType.equals("Blaster")) {
+							if (DataMgr.getPlayerData(p).weaponClass.mainWeapon.isManeuver) {
+								Shooter.maneuverRunnable(p);
 							}
 						}
-						if (DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getWeaponType()
-								.equals("Buckler")) {
-							Shooter.ShooterRunnable(p);
+						if (DataMgr.getPlayerData(p).weaponClass.mainWeapon.weaponType.equals("Buckler")) {
+							Shooter.shooterRunnable(p);
 							Buckler.BucklerRunnable(p);
 						}
-						if (DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getWeaponType().equals("Bucket"))
+						if (DataMgr.getPlayerData(p).weaponClass.mainWeapon.weaponType.equals("Bucket"))
 							Bucket.BucketHealRunnable(p, 1);
-						if (DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getWeaponType().equals("Slosher"))
+						if (DataMgr.getPlayerData(p).weaponClass.mainWeapon.weaponType.equals("Slosher"))
 							Bucket.BucketHealRunnable(p, 0);
-						if (DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getWeaponType()
-								.equals("Charger")) {
+						if (DataMgr.getPlayerData(p).weaponClass.mainWeapon.weaponType.equals("Charger")) {
 							Charger.ChargerRunnable(p);
 							Decoy.DecoyRunnable(p);
 						}
-						if (DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getWeaponType().equals("Spinner"))
-							Spinner.SpinnerRunnable(p);
-						if (DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getWeaponType()
-								.equals("Roller")) {
-							if (DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().isHude) {
+						if (DataMgr.getPlayerData(p).weaponClass.mainWeapon.weaponType.equals("Spinner"))
+							Spinner.spinnerRunnable(p);
+						if (DataMgr.getPlayerData(p).weaponClass.mainWeapon.weaponType.equals("Roller")) {
+							if (DataMgr.getPlayerData(p).weaponClass.mainWeapon.isHude) {
 								Brush.HoldRunnable(p);
 								Brush.RollPaintRunnable(p);
 							} else {
-								Roller.HoldRunnable(p);
-								Roller.RollPaintRunnable(p);
+								Roller.holdRunnable(p);
+								Roller.rollPaintRunnable(p);
 							}
 						}
 
-						if (DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getWeaponType().equals("Kasa")) {
+						if (DataMgr.getPlayerData(p).weaponClass.mainWeapon.weaponType.equals("Kasa")) {
 							Kasa.kasaRunnable(p, false);
 						}
 
-						if (DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getWeaponType()
-								.equals("Camping")) {
+						if (DataMgr.getPlayerData(p).weaponClass.mainWeapon.weaponType.equals("Camping")) {
 							Kasa.kasaRunnable(p, true);
-							DataMgr.getPlayerData(p).setMainItemGlow(true);
+							DataMgr.getPlayerData(p).mainItemGlow = (true);
 							WeaponClassMgr.setWeaponClass(p);
 						}
-						if (DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getWeaponType().equals("Hound")) {
-							Hound.HoundRunnable(p);
-							Hound.HoundEXRunnable(p);
+						if (DataMgr.getPlayerData(p).weaponClass.mainWeapon.weaponType.equals("Hound")) {
+							Hound.houndRunnable(p);
+							Hound.houndEXRunnable(p);
 						}
-						if (DataMgr.getPlayerData(p).getWeaponClass().getMainWeapon().getWeaponType()
-								.equals("Funnel")) {
-							Shooter.ShooterRunnable(p);
+						if (DataMgr.getPlayerData(p).weaponClass.mainWeapon.weaponType.equals("Funnel")) {
+							Shooter.shooterRunnable(p);
 							Funnel.funnelFloat(p);
 						}
 
@@ -780,9 +772,9 @@ public class MatchMgr {
 						// Shooter.ShooterRunnable(p);
 
 						// SquidMgr.SquidRunnable(p);
-						DataMgr.getPlayerData(p).setIsInMatch(true);
+						DataMgr.getPlayerData(p).isInMatch = (true);
 						p.setExp(0.99F);
-						if (DataMgr.getPlayerData(p).getPlayerNumber() == 1) {
+						if (DataMgr.getPlayerData(p).playerNumber == 1) {
 							InMatchCounter(p);
 							if (conf.config.getString("WorkMode").equals("Area")) {
 								for (Area area : match.getMapData().getAreaList()) {
@@ -803,14 +795,14 @@ public class MatchMgr {
 						// p.setPlayerListName(DataMgr.getPlayerData(p).getTeam().getTeamColor().getColorCode()
 						// + p.displayName);
 
-						if (DataMgr.getPlayerData(p).getPlayerNumber() == 1 && Plugins.NOTEBLOCKAPI.isLoaded()) {
+						if (DataMgr.getPlayerData(p).playerNumber == 1 && Plugins.NOTEBLOCKAPI.isLoaded()) {
 							NoteBlockSong nbs = NoteBlockAPIMgr.getRandomNormalSong();
 							Song song = nbs.song;
 							RadioSongPlayer radio = new RadioSongPlayer(song);
 							radio.setVolume(volume);
 							for (Player oplayer : Sclat.getPlugin(Sclat.class).getServer().getOnlinePlayers()) {
 								if (DataMgr.getPlayerData(oplayer).settings.PlayBGM()
-										&& DataMgr.getPlayerData(oplayer).getIsJoined()) {
+										&& DataMgr.getPlayerData(oplayer).isJoined) {
 									radio.addPlayer(oplayer);
 									oplayer.spigot().sendMessage(ChatMessageType.ACTION_BAR,
 											TextComponent.fromLegacyText("§7Now playing : §6" + nbs.getSongName()));
@@ -823,7 +815,7 @@ public class MatchMgr {
 								StopMusic(radio, 2400, match);
 						}
 
-						if (DataMgr.getPlayerData(p).getPlayerNumber() == 1) {
+						if (DataMgr.getPlayerData(p).playerNumber == 1) {
 							PathMgr.setupPath(match);
 							if (conf.config.getString("WorkMode").equals("Area")) {
 								for (Area area : match.getMapData().getAreaList()) {
@@ -918,7 +910,7 @@ public class MatchMgr {
 		match.team1.setTeam(bteam1);
 
 		for (Player oplayer : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
-			if (DataMgr.getPlayerData(oplayer).getIsJoined()) {
+			if (DataMgr.getPlayerData(oplayer).isJoined) {
 				oplayer.setScoreboard(scoreboard);
 				if (match.team0 == DataMgr.getPlayerData(oplayer).team)
 					bteam0.addEntry(oplayer.getName());
@@ -1020,7 +1012,7 @@ public class MatchMgr {
 									if (wteam.getGatiCount() != 0) {
 										for (Player player : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
 											PlayerData data = DataMgr.getPlayerData(player);
-											if (data.team == null || !data.isInMatch())
+											if (data.team == null || !data.isInMatch)
 												continue;
 
 											if (data.team == wteam) {
@@ -1059,7 +1051,7 @@ public class MatchMgr {
 
 						if (s == 0 && entyo) {
 							for (Player oplayer : Sclat.getPlugin(Sclat.class).getServer().getOnlinePlayers()) {
-								if (DataMgr.getPlayerData(oplayer).isInMatch()) {
+								if (DataMgr.getPlayerData(oplayer).isInMatch) {
 									oplayer.sendTitle("", "§7延長戦！", 10, 20, 10);
 									SclatUtil.sendMessage("§7延長戦！", MessageType.PLAYER, oplayer);
 								}
@@ -1068,7 +1060,7 @@ public class MatchMgr {
 
 						if (match.team0.getGatiCount() == 100 || match.team1.getGatiCount() == 100) {
 							for (Player oplayer : Sclat.getPlugin(Sclat.class).getServer().getOnlinePlayers()) {
-								if (DataMgr.getPlayerData(oplayer).getIsJoined() && p != oplayer) {
+								if (DataMgr.getPlayerData(oplayer).isJoined && p != oplayer) {
 									oplayer.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
 									oplayer.getInventory().clear();
 									FinishMatch(oplayer);
@@ -1086,7 +1078,7 @@ public class MatchMgr {
 								team1nokori = true;
 
 							for (Player oplayer : Sclat.getPlugin(Sclat.class).getServer().getOnlinePlayers()) {
-								if (DataMgr.getPlayerData(oplayer).isInMatch()) {
+								if (DataMgr.getPlayerData(oplayer).isInMatch) {
 									oplayer.sendTitle("", "§7残りカウントあとわずか！", 10, 20, 10);
 									SclatUtil.sendMessage("§7残りカウントあとわずか！", MessageType.PLAYER, oplayer);
 									p.playSound(p.getLocation(), Sound.ENTITY_ZOMBIE_INFECT, 8.0F, 2.0F);
@@ -1099,18 +1091,18 @@ public class MatchMgr {
 
 					if (s == 60 && !conf.config.getString("WorkMode").equals("Area")) {
 						for (Player oplayer : Sclat.getPlugin(Sclat.class).getServer().getOnlinePlayers()) {
-							if (DataMgr.getPlayerData(oplayer).getIsJoined()) {
+							if (DataMgr.getPlayerData(oplayer).isJoined) {
 								SclatUtil.sendMessage("§6§n残り1分！", MessageType.PLAYER, oplayer);
 							}
 						}
-						if (DataMgr.getPlayerData(p).getPlayerNumber() == 1 && Plugins.NOTEBLOCKAPI.isLoaded()) {
+						if (DataMgr.getPlayerData(p).playerNumber == 1 && Plugins.NOTEBLOCKAPI.isLoaded()) {
 							NoteBlockSong nbs = NoteBlockAPIMgr.getRandomFinalSong();
 							Song song = nbs.song;
 							RadioSongPlayer radio = new RadioSongPlayer(song);
 							radio.setVolume(volume);
 							for (Player oplayer : Sclat.getPlugin(Sclat.class).getServer().getOnlinePlayers()) {
 								if (DataMgr.getPlayerData(oplayer).settings.PlayBGM()
-										&& DataMgr.getPlayerData(oplayer).getIsJoined()) {
+										&& DataMgr.getPlayerData(oplayer).isJoined) {
 									radio.addPlayer(oplayer);
 									oplayer.spigot().sendMessage(ChatMessageType.ACTION_BAR,
 											TextComponent.fromLegacyText("§7Now playing : §6" + nbs.getSongName()));
@@ -1122,7 +1114,7 @@ public class MatchMgr {
 					}
 					if (s <= 0 && !entyo) {
 						for (Player oplayer : Sclat.getPlugin(Sclat.class).getServer().getOnlinePlayers()) {
-							if (DataMgr.getPlayerData(oplayer).getIsJoined() && p != oplayer) {
+							if (DataMgr.getPlayerData(oplayer).isJoined && p != oplayer) {
 								oplayer.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
 								oplayer.getInventory().clear();
 								FinishMatch(oplayer);
@@ -1134,7 +1126,7 @@ public class MatchMgr {
 
 					if (s <= -60) {
 						for (Player oplayer : Sclat.getPlugin(Sclat.class).getServer().getOnlinePlayers()) {
-							if (DataMgr.getPlayerData(oplayer).getIsJoined() && p != oplayer) {
+							if (DataMgr.getPlayerData(oplayer).isJoined && p != oplayer) {
 								oplayer.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
 								oplayer.getInventory().clear();
 								FinishMatch(oplayer);
@@ -1146,7 +1138,7 @@ public class MatchMgr {
 
 					if (s <= 5 && s > 0) {
 						for (Player oplayer : Sclat.getPlugin(Sclat.class).getServer().getOnlinePlayers()) {
-							if (DataMgr.getPlayerData(oplayer).isInMatch())
+							if (DataMgr.getPlayerData(oplayer).isInMatch)
 								oplayer.sendTitle(ChatColor.GRAY + String.valueOf(s), "", 0, 30, 4);
 						}
 					}
@@ -1179,7 +1171,7 @@ public class MatchMgr {
 						p.setDisplayName(p.getName());
 
 						DataMgr.getPlayerData(p).match.setFinished(true);
-						if (DataMgr.getPlayerData(p).getPlayerNumber() == 1) {
+						if (DataMgr.getPlayerData(p).playerNumber == 1) {
 							for (Path path : DataMgr.getPlayerData(p).match.getMapData().getPathList()) {
 								path.stop();
 								path.reset();
@@ -1218,7 +1210,7 @@ public class MatchMgr {
 						DataMgr.getBeaconMap().clear();
 						DataMgr.getSprinklerMap().clear();
 						DataMgr.getArmorStandMap().clear();
-						DataMgr.getPlayerData(p).setIsInMatch(false);
+						DataMgr.getPlayerData(p).isInMatch = (false);
 						if (p.hasPotionEffect(PotionEffectType.SLOW))
 							p.removePotionEffect(PotionEffectType.SLOW);
 						p.playSound(p.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 3, 1.3F);
@@ -1239,7 +1231,7 @@ public class MatchMgr {
 
 					}
 					if (i == 2) {
-						DataMgr.getPlayerData(p).setCanFly(true);
+						DataMgr.getPlayerData(p).canFly = (true);
 						p.resetTitle();
 						p.sendTitle(
 								ChatColor.YELLOW + "=========================== Finish! ===========================",
@@ -1257,7 +1249,7 @@ public class MatchMgr {
 							p.hidePlayer(VariablesKt.getPlugin(), player);
 						}
 					}
-					if (i == 46 && DataMgr.getPlayerData(p).getPlayerNumber() == 1) {
+					if (i == 46 && DataMgr.getPlayerData(p).playerNumber == 1) {
 						if (conf.config.getString("WorkMode").equals("TDM")) {
 							Match match = DataMgr.getPlayerData(p).match;
 							int team0c;
@@ -1267,8 +1259,8 @@ public class MatchMgr {
 							winteam = match.team0;
 							Boolean hikiwake = false;
 
-							team0c = match.team0.getKillCount();
-							team1c = match.team1.getKillCount();
+							team0c = match.team0.killCount;
+							team1c = match.team1.killCount;
 							team0code = match.team0.getTeamColor().getColorCode();
 							team1code = match.team1.getTeamColor().getColorCode();
 
@@ -1281,7 +1273,7 @@ public class MatchMgr {
 							match.isHikiwake = (hikiwake);
 
 							for (Player oplayer : Sclat.getPlugin(Sclat.class).getServer().getOnlinePlayers()) {
-								if (DataMgr.getPlayerData(oplayer).getIsJoined())
+								if (DataMgr.getPlayerData(oplayer).isJoined)
 									Animation.tdmResultAnimation(oplayer, team0c, team1c, team0code, team1code, winteam,
 											hikiwake);
 							}
@@ -1323,7 +1315,7 @@ public class MatchMgr {
 								per = 0;
 
 							for (Player oplayer : Sclat.getPlugin(Sclat.class).getServer().getOnlinePlayers()) {
-								if (DataMgr.getPlayerData(oplayer).getIsJoined()) {
+								if (DataMgr.getPlayerData(oplayer).isJoined) {
 									if ((per == 100 || per == 0) && !hikiwake)
 										Animation.areaResultAnimation(oplayer, per, 100 - per, team0code, team1code,
 												winteam);
@@ -1375,7 +1367,7 @@ public class MatchMgr {
 								per = 0;
 
 							for (Player oplayer : Sclat.getPlugin(Sclat.class).getServer().getOnlinePlayers()) {
-								if (DataMgr.getPlayerData(oplayer).getIsJoined()) {
+								if (DataMgr.getPlayerData(oplayer).isJoined) {
 									Animation.resultAnimation(oplayer, per, 100 - per, team0code, team1code, winteam,
 											hikiwake);
 								}
@@ -1403,73 +1395,69 @@ public class MatchMgr {
 					if (i == 137) {
 						PlayerData data = DataMgr.getPlayerData(p);
 
-						// int kill = data.getKillCount();
-						// int paint = data.getPaintCount();
-						data.setCanFly(false);
+						// int kill = data.killCount;
+						// int paint = data.paintCount;
+						data.canFly = (false);
 
 						SclatUtil.sendMessage("§a----------<< Match result >>----------", MessageType.PLAYER, p);
 						SclatUtil.sendMessage("", MessageType.PLAYER, p);
 
 						for (Player op : Sclat.getPlugin(Sclat.class).getServer().getOnlinePlayers()) {
 							PlayerData odata = DataMgr.getPlayerData(op);
-							if (!odata.getIsJoined())
+							if (!odata.isJoined)
 								continue;
 							if (odata.team.getID() == data.team.getID()) {
 								if (op.equals(p)) {
 									SclatUtil.sendMessage(odata.team.getTeamColor().getColorCode() + "§l[ §l"
 											+ op.getDisplayName() + "§l ]" + ChatColor.RESET + "Kills : "
-											+ ChatColor.YELLOW + odata.getKillCount() + "   " + ChatColor.RESET
-											+ "Points : " + ChatColor.YELLOW + odata.getPaintCount(),
-											MessageType.PLAYER, p);
+											+ ChatColor.YELLOW + odata.killCount + "   " + ChatColor.RESET + "Points : "
+											+ ChatColor.YELLOW + odata.paintCount, MessageType.PLAYER, p);
 									// p.sendMessage(odata.getTeam().getTeamColor().getColorCode() + "§l[ §l" +
 									// op.displayName + "§l ]" + ChatColor.RESET + "Kills : " +
-									// ChatColor.YELLOW + odata.getKillCount() + " " + ChatColor.RESET + "Points : "
-									// + ChatColor.YELLOW + odata.getPaintCount());
+									// ChatColor.YELLOW + odata.killCount + " " + ChatColor.RESET + "Points : "
+									// + ChatColor.YELLOW + odata.paintCount);
 								} else {
 									SclatUtil.sendMessage(odata.team.getTeamColor().getColorCode() + "[ "
 											+ op.getDisplayName() + " ]" + ChatColor.RESET + "Kills : "
-											+ ChatColor.YELLOW + odata.getKillCount() + "   " + ChatColor.RESET
-											+ "Points : " + ChatColor.YELLOW + odata.getPaintCount(),
-											MessageType.PLAYER, p);
+											+ ChatColor.YELLOW + odata.killCount + "   " + ChatColor.RESET + "Points : "
+											+ ChatColor.YELLOW + odata.paintCount, MessageType.PLAYER, p);
 									// p.sendMessage(odata.getTeam().getTeamColor().getColorCode() + "[ " +
 									// op.displayName + " ]" + ChatColor.RESET + "Kills : " + ChatColor.YELLOW
-									// + odata.getKillCount() + " " + ChatColor.RESET + "Points : " +
-									// ChatColor.YELLOW + odata.getPaintCount());
+									// + odata.killCount + " " + ChatColor.RESET + "Points : " +
+									// ChatColor.YELLOW + odata.paintCount);
 								}
 							}
-							if (bestkills < odata.getKillCount()) {
-								bestkills = odata.getKillCount();
+							if (bestkills < odata.killCount) {
+								bestkills = odata.killCount;
 							}
-							if (bestpaint < odata.getPaintCount()) {
-								bestpaint = odata.getPaintCount();
+							if (bestpaint < odata.paintCount) {
+								bestpaint = odata.paintCount;
 							}
 						}
 
 						for (Player op : Sclat.getPlugin(Sclat.class).getServer().getOnlinePlayers()) {
 							PlayerData odata = DataMgr.getPlayerData(op);
-							if (!odata.getIsJoined())
+							if (!odata.isJoined)
 								continue;
 							if (odata.team.getID() != data.team.getID()) {
 								if (op.equals(p)) {
 									SclatUtil.sendMessage(odata.team.getTeamColor().getColorCode() + "§l[ §l"
 											+ op.getDisplayName() + "§l ]" + ChatColor.RESET + "Kills : "
-											+ ChatColor.YELLOW + odata.getKillCount() + "   " + ChatColor.RESET
-											+ "Points : " + ChatColor.YELLOW + odata.getPaintCount(),
-											MessageType.PLAYER, p);
+											+ ChatColor.YELLOW + odata.killCount + "   " + ChatColor.RESET + "Points : "
+											+ ChatColor.YELLOW + odata.paintCount, MessageType.PLAYER, p);
 									// p.sendMessage(odata.getTeam().getTeamColor().getColorCode() + "§l[ §l" +
 									// op.displayName + "§l ]" + ChatColor.RESET + "Kills : " +
-									// ChatColor.YELLOW + odata.getKillCount() + " " + ChatColor.RESET + "Points : "
-									// + ChatColor.YELLOW + odata.getPaintCount());
+									// ChatColor.YELLOW + odata.killCount + " " + ChatColor.RESET + "Points : "
+									// + ChatColor.YELLOW + odata.paintCount);
 								} else {
 									SclatUtil.sendMessage(odata.team.getTeamColor().getColorCode() + "[ "
 											+ op.getDisplayName() + " ]" + ChatColor.RESET + "Kills : "
-											+ ChatColor.YELLOW + odata.getKillCount() + "   " + ChatColor.RESET
-											+ "Points : " + ChatColor.YELLOW + odata.getPaintCount(),
-											MessageType.PLAYER, p);
+											+ ChatColor.YELLOW + odata.killCount + "   " + ChatColor.RESET + "Points : "
+											+ ChatColor.YELLOW + odata.paintCount, MessageType.PLAYER, p);
 									// p.sendMessage(odata.getTeam().getTeamColor().getColorCode() + "[ " +
 									// op.displayName + " ]" + ChatColor.RESET + "Kills : " + ChatColor.YELLOW
-									// + odata.getKillCount() + " " + ChatColor.RESET + "Points : " +
-									// ChatColor.YELLOW + odata.getPaintCount());
+									// + odata.killCount + " " + ChatColor.RESET + "Points : " +
+									// ChatColor.YELLOW + odata.paintCount);
 								}
 							}
 						}
@@ -1478,29 +1466,28 @@ public class MatchMgr {
 					if (i == 157) {
 						PlayerData data = DataMgr.getPlayerData(p);
 
-						int pMoney = (int) ((double) data.getKillCount() * 100D + (double) data.getPaintCount() / 5D);
-						int pTicket = (int) ((double) data.getKillCount() * 1 + 10
-								+ (double) data.getPaintCount() / 750D);
+						int pMoney = (int) ((double) data.killCount * 100D + (double) data.paintCount / 5D);
+						int pTicket = (int) ((double) data.killCount * 1 + 10 + (double) data.paintCount / 750D);
 						int pLv = 1;
 						if (data.team == data.match.getWinTeam() || data.match.isHikiwake) {
 							pLv = 2;
 							pTicket += 5;
 						}
-						int pRank = data.getKillCount() * 3;
+						int pRank = data.killCount * 3;
 						if (data.team == data.match.getWinTeam())
 							pRank = pRank + 25;
-						if (data.getKillCount() == bestkills) {
+						if (data.killCount == bestkills) {
 							pRank = pRank + 20;
 						}
-						if (data.getPaintCount() == bestpaint) {
+						if (data.paintCount == bestpaint) {
 							pRank = pRank + 10;
 						}
-						// int pRank = -60 + (int)((double)data.getKillCount() * 2.7D +
-						// (double)data.getPaintCount() / 700D);
+						// int pRank = -60 + (int)((double)data.killCount * 2.7D +
+						// (double)data.paintCount / 700D);
 						// if(data.getTeam() == data.getMatch().getWinTeam() ||
 						// data.getMatch().getIsHikiwake())
-						// pRank = 80 + (int)((double)data.getKillCount() * 2.2D +
-						// (double)data.getPaintCount() / 700D);
+						// pRank = 80 + (int)((double)data.killCount * 2.2D +
+						// (double)data.paintCount / 700D);
 						if (data.match.getJoinedPlayerCount() == 1 || !conf.config.getBoolean("RateMatch"))
 							pRank = 0;
 
@@ -1511,8 +1498,8 @@ public class MatchMgr {
 						PlayerStatusMgr.addMoney(p, pMoney);
 						PlayerStatusMgr.addTicket(p, pTicket);
 
-						PlayerStatusMgr.addPaint(p, data.getPaintCount());
-						PlayerStatusMgr.addKill(p, data.getKillCount());
+						PlayerStatusMgr.addPaint(p, data.paintCount);
+						PlayerStatusMgr.addKill(p, data.killCount);
 
 						if (Sclat.type == ServerType.MATCH) {
 							List<String> commands = new ArrayList<>();
@@ -1520,8 +1507,8 @@ public class MatchMgr {
 							commands.add("add level " + pLv + " " + p.getUniqueId());
 							commands.add("add ticket " + pTicket + " " + p.getUniqueId());
 							commands.add("add rank " + pRank + " " + p.getUniqueId());
-							commands.add("add kill " + data.getKillCount() + " " + p.getUniqueId());
-							commands.add("add paint " + data.getPaintCount() + " " + p.getUniqueId());
+							commands.add("add kill " + data.killCount + " " + p.getUniqueId());
+							commands.add("add paint " + data.paintCount + " " + p.getUniqueId());
 							commands.add("stop");
 							StatusClient sc = new StatusClient(conf.config.getString("StatusShare.Host"),
 									conf.config.getInt("StatusShare.Port"), commands);
@@ -1567,7 +1554,7 @@ public class MatchMgr {
 						int iyaw = conf.config.getInt("Lobby.Yaw");
 						Location il = new Location(w, ix, iy, iz);
 						il.setYaw(iyaw);
-						WeaponClass wc = DataMgr.getPlayerData(p).getWeaponClass();
+						WeaponClass wc = DataMgr.getPlayerData(p).weaponClass;
 						p.teleport(il);
 						if (Sclat.type != ServerType.MATCH) {
 							ItemStack join = new ItemStack(Material.CHEST);
@@ -1580,7 +1567,7 @@ public class MatchMgr {
 
 						PlayerStatusMgr.sendHologram(p);
 
-						if (DataMgr.getPlayerData(p).getPlayerNumber() == 1) {
+						if (DataMgr.getPlayerData(p).playerNumber == 1) {
 
 							RollBack();
 							matchcount++;
@@ -1608,7 +1595,7 @@ public class MatchMgr {
 						// player.setDisplayName(player.getName());
 
 						DataMgr.getPlayerData(p).reset();
-						DataMgr.getPlayerData(p).setWeaponClass(wc);
+						DataMgr.getPlayerData(p).weaponClass = (wc);
 
 						DataMgr.joinedList.clear();
 
@@ -1617,7 +1604,7 @@ public class MatchMgr {
 
 						p.setGameMode(GameMode.ADVENTURE);
 						// PlayerData data = new PlayerData(p);
-						// data.setWeaponClass(wc);
+						// data.weaponClass = (wc);
 						// DataMgr.setPlayerData(p, data);
 						for (Player player : Sclat.getPlugin(Sclat.class).getServer().getOnlinePlayers()) {
 							p.showPlayer(VariablesKt.getPlugin(), player);

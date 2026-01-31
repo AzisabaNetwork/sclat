@@ -33,7 +33,7 @@ object SuperShot {
     @JvmStatic
     fun setSuperShot(player: Player) {
         getPlayerData(player)!!.isUsingSP = true
-        getPlayerData(player)!!.setIsUsingSS(true)
+        getPlayerData(player)!!.isUsingSS = true
         SPWeaponMgr.setSPCoolTimeAnimation(player, 100)
 
         val it: BukkitRunnable =
@@ -65,7 +65,7 @@ object SuperShot {
                 override fun run() {
                     if (getPlayerData(p)!!.isInMatch) {
                         getPlayerData(p)!!.isUsingSP = false
-                        getPlayerData(p)!!.setIsUsingSS(false)
+                        getPlayerData(p)!!.isUsingSS = false
                         player.inventory.clear()
                         WeaponClassMgr.setWeaponClass(p)
                     }
@@ -75,7 +75,7 @@ object SuperShot {
     }
 
     @JvmStatic
-    fun Shot(player: Player) {
+    fun shot(player: Player) {
         if (player.hasPotionEffect(PotionEffectType.LUCK)) {
             val direction = Vector(0, 1, 0)
             var headdis = 8.5
@@ -108,10 +108,10 @@ object SuperShot {
 
             var y = 0.0
             while (y <= headdis) {
-                ShootSnowball(player, loc1.clone().add(0.0, y, 0.0), vec.clone().normalize().multiply(1.8))
-                ShootSnowball(player, loc3.clone().add(0.0, y, 0.0), vec.clone().normalize().multiply(1.8))
-                ShootSnowball(player, loc4.clone().add(0.0, y, 0.0), vec.clone().normalize().multiply(1.8))
-                ShootSnowball(player, loc5.clone().add(0.0, y, 0.0), vec.clone().normalize().multiply(1.8))
+                shootSnowball(player, loc1.clone().add(0.0, y, 0.0), vec.clone().normalize().multiply(1.8))
+                shootSnowball(player, loc3.clone().add(0.0, y, 0.0), vec.clone().normalize().multiply(1.8))
+                shootSnowball(player, loc4.clone().add(0.0, y, 0.0), vec.clone().normalize().multiply(1.8))
+                shootSnowball(player, loc5.clone().add(0.0, y, 0.0), vec.clone().normalize().multiply(1.8))
                 y += 0.5
             }
         }
@@ -127,7 +127,7 @@ object SuperShot {
         task.runTaskLater(plugin, 20)
     }
 
-    fun ShootSnowball(
+    fun shootSnowball(
         player: Player,
         loc: Location,
         vec: Vector,
@@ -135,7 +135,7 @@ object SuperShot {
         val task: BukkitRunnable =
             object : BukkitRunnable() {
                 var p: Player = player
-                var block_check: Boolean = false
+                var blockCheck: Boolean = false
                 var c: Int = 0
                 var drop: Item? = null
                 var ball: Snowball? = null
@@ -143,10 +143,10 @@ object SuperShot {
                 override fun run() {
                     try {
                         if (c == 0) {
-                            val i = ItemStack(getPlayerData(p)!!.team.teamColor!!.wool!!).clone()
-                            val i_m = i.itemMeta
-                            i_m!!.setLocalizedName(notDuplicateNumber.toString())
-                            i.itemMeta = i_m
+                            val i = ItemStack(getPlayerData(p)!!.team!!.teamColor!!.wool!!).clone()
+                            val iM = i.itemMeta
+                            iM!!.setLocalizedName(notDuplicateNumber.toString())
+                            i.itemMeta = iM
                             drop = p.world.dropItem(loc, i)
                             drop!!.velocity = vec
                             // 雪玉をスポーンさせた瞬間にプレイヤーに雪玉がデスポーンした偽のパケットを送信する
@@ -167,11 +167,12 @@ object SuperShot {
                         if (Random().nextInt(20) == 0) {
                             val bd =
                                 getPlayerData(p)!!
-                                    .team.teamColor!!
+                                    .team!!
+                                    .teamColor!!
                                     .wool!!
                                     .createBlockData()
                             for (o_player in plugin.server.onlinePlayers) {
-                                if (getPlayerData(o_player)!!.settings.ShowEffect_SPWeapon()) {
+                                if (getPlayerData(o_player)!!.settings!!.ShowEffect_SPWeapon()) {
                                     if (o_player.world ===
                                         ball!!.world
                                     ) {

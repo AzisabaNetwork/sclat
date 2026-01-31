@@ -45,7 +45,7 @@ object Burst {
                 plugin,
                 data
                     .weaponClass
-                    .mainWeapon!!
+                    ?.mainWeapon!!
                     .coolTime
                     .toLong(),
             )
@@ -64,7 +64,7 @@ object Burst {
                 plugin,
                 data
                     .weaponClass
-                    .mainWeapon!!
+                    ?.mainWeapon!!
                     .delay
                     .toLong(),
             )
@@ -81,10 +81,10 @@ object Burst {
 
                 override fun run() {
                     c++
-                    val q = getPlayerData(p)!!.weaponClass.mainWeapon!!.rollerShootQuantity
+                    val q = getPlayerData(p)!!.weaponClass?.mainWeapon!!.rollerShootQuantity
                     Shoot(
                         p,
-                        q == 3 && getPlayerData(p)!!.weaponClass.mainWeapon!!.shootTick == 2,
+                        q == 3 && getPlayerData(p)!!.weaponClass?.mainWeapon!!.shootTick == 2,
                         otoNumber,
                     )
                     if (c == q) cancel()
@@ -95,7 +95,7 @@ object Burst {
             0,
             getPlayerData(player)!!
                 .weaponClass
-                .mainWeapon!!
+                ?.mainWeapon!!
                 .shootTick
                 .toLong(),
         )
@@ -111,7 +111,7 @@ object Burst {
         val data = getPlayerData(player)
         if (player.exp <=
             (
-                data!!.weaponClass.mainWeapon!!.needInk
+                data!!.weaponClass?.mainWeapon!!.needInk
                     * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) /
                     Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)
                 ).toFloat()
@@ -122,7 +122,7 @@ object Burst {
         }
         player.exp = player.exp -
             (
-                data.weaponClass.mainWeapon!!.needInk
+                data.weaponClass?.mainWeapon!!.needInk
                     * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) /
                     Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)
                 ).toFloat()
@@ -130,15 +130,15 @@ object Burst {
         PaintMgr.PaintHightestBlock(player.location, player, true, true)
 
         val ball = player.launchProjectile<Snowball>(Snowball::class.java)
-        (ball as CraftSnowball).handle.setItem(CraftItemStack.asNMSCopy(ItemStack(getPlayerData(player)!!.team.teamColor!!.wool!!)))
+        (ball as CraftSnowball).handle.setItem(CraftItemStack.asNMSCopy(ItemStack(getPlayerData(player)!!.team?.teamColor!!.wool!!)))
         player.world.playSound(player.location, Sound.ENTITY_PIG_STEP, 0.3f, 1f)
         val vec =
             player
                 .location
                 .direction
-                .multiply(getPlayerData(player)!!.weaponClass.mainWeapon!!.shootSpeed)
-        val random = data.weaponClass.mainWeapon!!.random
-        val distick = getPlayerData(player)!!.weaponClass.mainWeapon!!.distanceTick
+                .multiply(getPlayerData(player)!!.weaponClass?.mainWeapon!!.shootSpeed)
+        val random = data.weaponClass?.mainWeapon!!.random
+        val distick = getPlayerData(player)!!.weaponClass?.mainWeapon!!.distanceTick
         vec.add(Vector(Math.random() * random - random / 2, 0.0, Math.random() * random - random / 2))
         ball.velocity = vec
         ball.shooter = player
@@ -163,7 +163,7 @@ object Burst {
                         inkball!!.velocity.getX(),
                         inkball!!.velocity.getY(),
                         inkball!!.velocity.getZ(),
-                    ).multiply(getPlayerData(p)!!.weaponClass.mainWeapon!!.shootSpeed / 17)
+                    ).multiply(getPlayerData(p)!!.weaponClass?.mainWeapon!!.shootSpeed / 17)
 
                 override fun run() {
                     inkball = mainSnowballNameMap.get(name)
@@ -176,11 +176,12 @@ object Burst {
                     if (i != 0) {
                         val bd =
                             getPlayerData(p)!!
-                                .team.teamColor!!
+                                .team
+                                ?.teamColor!!
                                 .wool!!
                                 .createBlockData()
                         for (o_player in plugin.server.onlinePlayers) {
-                            if (getPlayerData(o_player)!!.settings.ShowEffect_MainWeaponInk()) {
+                            if (getPlayerData(o_player)!!.settings?.ShowEffect_MainWeaponInk()!!) {
                                 if (o_player.world ===
                                     inkball!!.world
                                 ) {

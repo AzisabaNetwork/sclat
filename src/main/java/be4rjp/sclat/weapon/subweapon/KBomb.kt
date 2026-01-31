@@ -35,15 +35,15 @@ import org.bukkit.util.Vector
  */
 object KBomb {
     @JvmStatic
-    fun KBomRunnable(player: Player) {
+    fun kBomRunnable(player: Player) {
         val task: BukkitRunnable =
             object : BukkitRunnable() {
                 var p: Player = player
-                var p_vec: Vector? = null
+                var pVec: Vector? = null
                 var x: Double = 0.0
                 var z: Double = 0.0
                 var collision: Boolean = false
-                var block_check: Boolean = false
+                var blockCheck: Boolean = false
                 var cb: Boolean = false
                 var l: Location = p.location
                 var cc: Int = 0
@@ -56,11 +56,11 @@ object KBomb {
                     try {
                         if (c == 0) {
                             if (!getPlayerData(player)!!.isBombRush) p.exp = p.exp - 0.59f
-                            val bom = ItemStack(getPlayerData(p)!!.team.teamColor!!.concrete!!).clone()
-                            val bom_m = bom.itemMeta
+                            val bom = ItemStack(getPlayerData(p)!!.team!!.teamColor!!.concrete!!).clone()
+                            val bomM = bom.itemMeta
                             ndn = notDuplicateNumber
-                            bom_m!!.setLocalizedName(ndn.toString())
-                            bom.itemMeta = bom_m
+                            bomM!!.setLocalizedName(ndn.toString())
+                            bom.itemMeta = bomM
                             drop = p.world.dropItem(p.eyeLocation, bom)
                             drop!!.velocity = p.eyeLocation.direction
                             // 雪玉をスポーンさせた瞬間にプレイヤーに雪玉がデスポーンした偽のパケットを送信する
@@ -74,7 +74,7 @@ object KBomb {
                                 val connection = (o_player as CraftPlayer).handle.playerConnection
                                 connection.sendPacket(PacketPlayOutEntityDestroy(ball!!.entityId))
                             }
-                            p_vec = p.eyeLocation.direction
+                            pVec = p.eyeLocation.direction
                         }
 
                         ball = snowballNameMap.get(ndn.toString())
@@ -128,8 +128,8 @@ object KBomb {
                             // 塗る
                             var i = 0
                             while (i <= maxDist) {
-                                val p_locs: MutableList<Location> = getSphere(drop!!.location, i.toDouble(), 14)
-                                for (loc in p_locs) {
+                                val pLocs: MutableList<Location> = getSphere(drop!!.location, i.toDouble(), 14)
+                                for (loc in pLocs) {
                                     PaintMgr.Paint(loc, p, false)
                                 }
                                 i++
@@ -177,7 +177,7 @@ object KBomb {
 
                         // ボムの視認用エフェクト
                         for (o_player in plugin.server.onlinePlayers) {
-                            if (getPlayerData(o_player)!!.settings.ShowEffect_Bomb()) {
+                            if (getPlayerData(o_player)!!.settings!!.ShowEffect_Bomb()) {
                                 if (o_player.world === drop!!.location.world) {
                                     if (o_player
                                             .location
@@ -185,7 +185,7 @@ object KBomb {
                                     ) {
                                         val dustOptions =
                                             Particle.DustOptions(
-                                                getPlayerData(p)!!.team.teamColor!!.bukkitColor!!,
+                                                getPlayerData(p)!!.team!!.teamColor!!.bukkitColor!!,
                                                 1f,
                                             )
                                         o_player.spawnParticle<Particle.DustOptions?>(

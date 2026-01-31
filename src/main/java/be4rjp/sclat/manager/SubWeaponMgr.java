@@ -33,11 +33,11 @@ import org.bukkit.inventory.meta.ItemMeta;
 public class SubWeaponMgr {
 	public static ItemStack getSubWeapon(Player player) {
 		PlayerData data = DataMgr.getPlayerData(player);
-		// player.sendMessage(data.getWeaponClass().getSubWeaponName());
+		// player.sendMessage(data.weaponClass.getSubWeaponName());
 		ItemStack is = null;
 		ItemMeta ism = null;
 
-		switch (data.getWeaponClass().getSubWeaponName()) {
+		switch (data.weaponClass.getSubWeaponName()) {
 			case "スプラッシュボム" :
 				is = new ItemStack(data.team.getTeamColor().glass);
 				ism = is.getItemMeta();
@@ -106,102 +106,102 @@ public class SubWeaponMgr {
 
 	public static void UseSubWeapon(Player player, String name) {
 		PlayerData data = DataMgr.getPlayerData(player);
-		if (!data.getCanUseSubWeapon())
+		if (!data.canUseSubWeapon)
 			return;
 		if (player.getGameMode().equals(GameMode.SPECTATOR))
 			return;
 
 		switch (name) {
 			case "右クリックで弾を発射" :
-				JetPack.ShootJetPack(player);
-				data.setCanUseSubWeapon(false);
+				JetPack.shootJetPack(player);
+				data.canUseSubWeapon = (false);
 				break;
 			case "右クリックで発射！" :
-				SuperShot.Shot(player);
-				data.setCanUseSubWeapon(false);
+				SuperShot.shot(player);
+				data.canUseSubWeapon = (false);
 				break;
 			case "右クリックで斬撃、シフトで防御" :
-				SwordMord.AttackSword(player);
-				data.setCanUseSubWeapon(false);
+				SwordMord.attackSword(player);
+				data.canUseSubWeapon = (false);
 				break;
 			case "Quadro-BLUE" :
-				QuadroArms.QuadroCooltime(player, 1);
-				data.setCanUseSubWeapon(false);
+				QuadroArms.quadroCooltime(player, 1);
+				data.canUseSubWeapon = (false);
 				break;
 			case "Quadro-GREEN" :
-				QuadroArms.QuadroCooltime(player, 2);
-				data.setCanUseSubWeapon(false);
+				QuadroArms.quadroCooltime(player, 2);
+				data.canUseSubWeapon = (false);
 				break;
 			case "Quadro-RED" :
-				QuadroArms.QuadroCooltime(player, 3);
-				data.setCanUseSubWeapon(false);
+				QuadroArms.quadroCooltime(player, 3);
+				data.canUseSubWeapon = (false);
 				break;
 			case "Quadro-WHITE" :
-				QuadroArms.QuadroCooltime(player, 4);
-				data.setCanUseSubWeapon(false);
+				QuadroArms.quadroCooltime(player, 4);
+				data.canUseSubWeapon = (false);
 				break;
 			case "右クリックで射撃!" :
 				if (data.settings.ShowEffect_ChargerLine()) {
-					LitterFiveG.Shoot_LitterFiveG(player);
-					data.setCanUseSubWeapon(false);
+					LitterFiveG.shootLitterFiveG(player);
+					data.canUseSubWeapon = (false);
 				} else {
-					LitterFiveG.Charge_LitterFiveG(player);
-					data.setCanUseSubWeapon(true);
+					LitterFiveG.chargeLitterFiveG(player);
+					data.canUseSubWeapon = (true);
 				}
 				break;
 		}
 
-		if (data.getIsUsingJetPack())
+		if (data.isUsingJetPack)
 			return;
 
 		switch (name) {
 			case "スプラッシュボム" :
 				SplashBomb.SplashBomRunnable(player);
-				data.setCanUseSubWeapon(false);
+				data.canUseSubWeapon = (false);
 				break;
 			case "クイックボム" :
-				QuickBomb.QuickBomRunnable(player);
-				data.setCanUseSubWeapon(false);
+				QuickBomb.quickBomRunnable(player);
+				data.canUseSubWeapon = (false);
 				break;
 			case "フローターボム" :
 				FloaterBomb.FloaterBombRunnable(player);
-				data.setCanUseSubWeapon(false);
+				data.canUseSubWeapon = (false);
 				break;
 			case "センサー" :
-				Sensor.SensorRunnable(player);
-				data.setCanUseSubWeapon(false);
+				Sensor.sensorRunnable(player);
+				data.canUseSubWeapon = (false);
 				break;
 			case "ポイズン" :
-				Poison.PoisonRunnable(player);
-				data.setCanUseSubWeapon(false);
+				Poison.poisonRunnable(player);
+				data.canUseSubWeapon = (false);
 				break;
 			case "キューバンボム" :
-				KBomb.KBomRunnable(player);
-				data.setCanUseSubWeapon(false);
+				KBomb.kBomRunnable(player);
+				data.canUseSubWeapon = (false);
 				break;
 			case "ビーコン" :
 				Beacon.setBeacon(player);
-				data.setCanUseSubWeapon(false);
+				data.canUseSubWeapon = (false);
 				break;
 			case "スプリンクラー" :
 				Sprinkler.SprinklerRunnable(player);
-				data.setCanUseSubWeapon(false);
+				data.canUseSubWeapon = (false);
 				break;
 			case "スプラッシュシールド" :
 				SplashShield.splashShieldThrowRunnable(player);
-				data.setCanUseSubWeapon(false);
+				data.canUseSubWeapon = (false);
 				break;
 			case "カーリングボム" :
-				CurlingBomb.CurlingBombRunnable(player);
-				data.setCanUseSubWeapon(false);
+				CurlingBomb.curlingBombRunnable(player);
+				data.canUseSubWeapon = (false);
 				break;
 			case "ブーメランボム" :
-				Boomerang.BoomerangRunnable(player);
-				data.setCanUseSubWeapon(false);
+				Boomerang.boomerangRunnable(player);
+				data.canUseSubWeapon = (false);
 				break;
 			case "トラップ" :
 				Trap.useTrap(player);
-				data.setCanUseSubWeapon(false);
+				data.canUseSubWeapon = (false);
 				break;
 		}
 	}

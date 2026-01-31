@@ -132,7 +132,7 @@ object Decoy {
                         block = location.block.getRelative(BlockFace.DOWN)
                         if (blockDataMap.containsKey(block)) {
                             if (block!!.type.toString().contains("WOOL")) {
-                                if (block!!.type != data!!.team.teamColor!!.wool) {
+                                if (block!!.type != data!!.team?.teamColor!!.wool) {
                                     ika = true
                                 }
                             }
@@ -178,7 +178,7 @@ object Decoy {
                                     CraftItemStack.asNMSCopy(
                                         getPlayerData(player)!!
                                             .weaponClass
-                                            .mainWeapon!!
+                                            ?.mainWeapon!!
                                             .weaponIteamStack,
                                     ),
                                 ),
@@ -187,7 +187,7 @@ object Decoy {
                                 PacketPlayOutEntityEquipment(
                                     npc!!.bukkitEntity.entityId,
                                     EnumItemSlot.HEAD,
-                                    CraftItemStack.asNMSCopy(getPlayerData(player)!!.team.teamColor!!.bougu),
+                                    CraftItemStack.asNMSCopy(getPlayerData(player)!!.team?.teamColor!!.bougu),
                                 ),
                             )
                             connection.sendPacket(PacketPlayOutAnimation(npc, 0))
@@ -197,7 +197,7 @@ object Decoy {
                         block = location.block.getRelative(BlockFace.DOWN)
                         if (blockDataMap.containsKey(block)) {
                             if (block!!.type.toString().contains("WOOL")) {
-                                ika = block!!.type != data!!.team.teamColor!!.wool
+                                ika = block!!.type != data!!.team?.teamColor!!.wool
                             } else {
                                 ika = false
                             }
@@ -267,15 +267,16 @@ object Decoy {
                                         armorStand.isSmall = true
                                     },
                                 )
-                            as1!!.velocity = p
-                                .eyeLocation
-                                .direction
-                                .normalize()
-                                .multiply(2.0)
+                            as1!!.velocity =
+                                p
+                                    .eyeLocation
+                                    .direction
+                                    .normalize()
+                                    .multiply(2.0)
                         }
 
                         // デコイショットの視認用エフェクト
-                        if (getPlayerData(player)!!.settings.ShowEffect_Bomb()) {
+                        if (getPlayerData(player)!!.settings?.ShowEffect_Bomb()!!) {
                             if (player.world === as1!!.location.world) {
                                 if (player
                                         .location
@@ -283,7 +284,7 @@ object Decoy {
                                 ) {
                                     val dustOptions =
                                         Particle.DustOptions(
-                                            getPlayerData(p)!!.team.teamColor!!.bukkitColor!!,
+                                            getPlayerData(p)!!.team?.teamColor!!.bukkitColor!!,
                                             1f,
                                         )
                                     player.spawnParticle<Particle.DustOptions?>(
