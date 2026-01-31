@@ -1,97 +1,98 @@
+package be4rjp.sclat.listener
 
-package be4rjp.sclat.listener;
-
-import be4rjp.sclat.api.player.PlayerData;
-import be4rjp.sclat.api.team.Team;
-import be4rjp.sclat.data.DataMgr;
-import be4rjp.sclat.manager.DeathMgr;
-import java.util.ArrayList;
-import java.util.List;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
-import org.bukkit.entity.Player;
+import be4rjp.sclat.data.DataMgr.blockDataMap
+import be4rjp.sclat.data.DataMgr.getPlayerData
+import be4rjp.sclat.manager.DeathMgr
+import org.bukkit.GameMode
+import org.bukkit.Material
+import org.bukkit.block.Block
+import org.bukkit.block.BlockFace
+import org.bukkit.entity.Player
 
 /**
  *
  * @author Be4rJP
  */
-public class SquidListenerMgr {
-	public static void CheckOnInk(Player player) {
-		PlayerData data = DataMgr.getPlayerData(player);
-		if (!data.isInMatch())
-			return;
-		Location loc = player.getLocation();
-		Block playerblock = player.getLocation().getBlock();
-		Block b1 = loc.add(0, -0.5, 0).getBlock();
-		Block b2 = player.getLocation().getBlock().getRelative(BlockFace.NORTH);
-		Block b3 = player.getLocation().getBlock().getRelative(BlockFace.EAST);
-		Block b4 = player.getLocation().getBlock().getRelative(BlockFace.SOUTH);
-		Block b5 = player.getLocation().getBlock().getRelative(BlockFace.WEST);
+object SquidListenerMgr {
+    fun checkOnInk(player: Player) {
+        val data = getPlayerData(player)
+        if (!data!!.isInMatch()) return
+        val loc = player.getLocation()
+        val playerblock = player.getLocation().getBlock()
+        val b1 = loc.add(0.0, -0.5, 0.0).getBlock()
+        val b2 = player.getLocation().getBlock().getRelative(BlockFace.NORTH)
+        val b3 = player.getLocation().getBlock().getRelative(BlockFace.EAST)
+        val b4 = player.getLocation().getBlock().getRelative(BlockFace.SOUTH)
+        val b5 = player.getLocation().getBlock().getRelative(BlockFace.WEST)
 
-		List<Block> list = new ArrayList<>();
-		list.add(b1);
-		list.add(b2);
-		list.add(b3);
-		list.add(b4);
-		list.add(b5);
+        val list: MutableList<Block> = ArrayList<Block>()
+        list.add(b1)
+        list.add(b2)
+        list.add(b3)
+        list.add(b4)
+        list.add(b5)
 
-		if (playerblock.getType() == Material.WATER && player.getGameMode().equals(GameMode.ADVENTURE))
-			DeathMgr.PlayerDeathRunnable(player, player, "water");
+        if (playerblock.getType() == Material.WATER && player.getGameMode() == GameMode.ADVENTURE) {
+            DeathMgr.PlayerDeathRunnable(
+                player,
+                player,
+                "water",
+            )
+        }
 
-		try {
-			if (data.match.getMapData().getVoidY() != 0) {
-				if (player.getLocation().getY() <= data.match.getMapData().getVoidY()) {
-					DeathMgr.PlayerDeathRunnable(player, player, "fall");
-				}
-			}
-		} catch (Exception e) {
-		}
+        try {
+            if (data.match.mapData!!.voidY != 0) {
+                if (player.getLocation().getY() <= data.match.mapData!!.voidY) {
+                    DeathMgr.PlayerDeathRunnable(player, player, "fall")
+                }
+            }
+        } catch (e: Exception) {
+        }
 
-		// if(!DataMgr.getBlockDataMap().containsKey(b2) ||
-		// !DataMgr.getBlockDataMap().containsKey(b3) ||
-		// !DataMgr.getBlockDataMap().containsKey(b4) ||
-		// !DataMgr.getBlockDataMap().containsKey(b5) ||
-		// !DataMgr.getBlockDataMap().containsKey(b1))
-		// return;
+        // if(!DataMgr.getBlockDataMap().containsKey(b2) ||
+        // !DataMgr.getBlockDataMap().containsKey(b3) ||
+        // !DataMgr.getBlockDataMap().containsKey(b4) ||
+        // !DataMgr.getBlockDataMap().containsKey(b5) ||
+        // !DataMgr.getBlockDataMap().containsKey(b1))
+        // return;
+        val team = getPlayerData(player)!!.team
+        val p =
+            Material.getMaterial(
+                data.team.teamColor!!
+                    .concrete
+                    .toString() + "_POWDER",
+            )
 
-		Team team = DataMgr.getPlayerData(player).team;
-		Material p = Material.getMaterial(data.team.getTeamColor().concrete.toString() + "_POWDER");
+        for (block in list) {
+            if (block != b1) {
+                if (blockDataMap.containsKey(block)) {
+                    if (blockDataMap.get(block)!!.team == data.team) {
+                        if (!data.getIsSquid() || block.getType() == Material.AIR) continue
+                        data.setIsOnInk(true)
+                        player.setAllowFlight(true)
+                        player.setFlying(true)
+                        return
+                    }
+                }
+            } else {
+                if (blockDataMap.containsKey(block)) {
+                    if (blockDataMap.get(block)!!.team == data.team) {
+                        if (!data.getIsSquid() || block.getType() == Material.AIR) continue
+                        data.setIsOnInk(true)
+                        if (!data.getIsUsingJetPack()) {
+                            player.setAllowFlight(false)
+                            player.setFlying(false)
+                        }
+                        return
+                    }
+                }
+            }
+        }
 
-		for (Block block : list) {
-			if (!block.equals(b1)) {
-				if (DataMgr.getBlockDataMap().containsKey(block)) {
-					if (DataMgr.getBlockDataMap().get(block).team == data.team) {
-						if (!data.getIsSquid() || block.getType().equals(Material.AIR))
-							continue;
-						data.setIsOnInk(true);
-						player.setAllowFlight(true);
-						player.setFlying(true);
-						return;
-					}
-				}
-			} else {
-				if (DataMgr.getBlockDataMap().containsKey(block)) {
-					if (DataMgr.getBlockDataMap().get(block).team == data.team) {
-						if (!data.getIsSquid() || block.getType().equals(Material.AIR))
-							continue;
-						data.setIsOnInk(true);
-						if (!data.getIsUsingJetPack()) {
-							player.setAllowFlight(false);
-							player.setFlying(false);
-						}
-						return;
-					}
-				}
-			}
-		}
-
-		data.setIsOnInk(false);
-		if (!data.getIsUsingJetPack()) {
-			player.setAllowFlight(false);
-			player.setFlying(false);
-		}
-	}
+        data.setIsOnInk(false)
+        if (!data.getIsUsingJetPack()) {
+            player.setAllowFlight(false)
+            player.setFlying(false)
+        }
+    }
 }

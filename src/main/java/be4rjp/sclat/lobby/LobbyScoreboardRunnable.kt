@@ -1,96 +1,95 @@
-package be4rjp.sclat.lobby;
+package be4rjp.sclat.lobby
 
-import be4rjp.sclat.Sclat;
-import be4rjp.sclat.api.player.PlayerData;
-import be4rjp.sclat.api.utils.ObjectiveUtil;
-import be4rjp.sclat.api.utils.TextAnimation;
-import be4rjp.sclat.data.DataMgr;
-import be4rjp.sclat.data.ServerStatus;
-import be4rjp.sclat.manager.PlayerStatusMgr;
-import be4rjp.sclat.manager.RankMgr;
-import be4rjp.sclat.manager.ServerStatusManager;
-import java.util.ArrayList;
-import java.util.List;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scoreboard.DisplaySlot;
-import org.bukkit.scoreboard.Objective;
-import org.bukkit.scoreboard.Scoreboard;
-import org.bukkit.scoreboard.ScoreboardManager;
+import be4rjp.sclat.Sclat
+import be4rjp.sclat.api.player.PlayerData
+import be4rjp.sclat.api.utils.ObjectiveUtil
+import be4rjp.sclat.api.utils.TextAnimation
+import be4rjp.sclat.data.DataMgr.getPlayerData
+import be4rjp.sclat.manager.PlayerStatusMgr
+import be4rjp.sclat.manager.RankMgr
+import be4rjp.sclat.manager.ServerStatusManager
+import org.bukkit.Bukkit
+import org.bukkit.ChatColor
+import org.bukkit.entity.Player
+import org.bukkit.scheduler.BukkitRunnable
+import org.bukkit.scoreboard.DisplaySlot
+import org.bukkit.scoreboard.Objective
+import org.bukkit.scoreboard.Scoreboard
 
-public class LobbyScoreboardRunnable extends BukkitRunnable {
+class LobbyScoreboardRunnable(
+    private val player: Player,
+) : BukkitRunnable() {
+    private val playerData: PlayerData?
+    private val scoreboard: Scoreboard
+    private val textAnimation: TextAnimation
+    private var objective: Objective
 
-	private final Player player;
-	private final PlayerData playerData;
-	private final Scoreboard scoreboard;
-	private final TextAnimation textAnimation;
-	private Objective objective;
+    init {
+        this.playerData = getPlayerData(player)
 
-	public LobbyScoreboardRunnable(Player player) {
-		this.player = player;
-		this.playerData = DataMgr.getPlayerData(player);
+        val scoreboardManager = Bukkit.getScoreboardManager()
+        this.scoreboard = scoreboardManager!!.getNewScoreboard()
+        this.objective = scoreboard.registerNewObjective("Lobby", player.getName(), "§6§lSclat §r" + Sclat.VERSION)
+        this.objective.setDisplaySlot(DisplaySlot.SIDEBAR)
 
-		ScoreboardManager scoreboardManager = Bukkit.getScoreboardManager();
-		this.scoreboard = scoreboardManager.getNewScoreboard();
-		this.objective = scoreboard.registerNewObjective("Lobby", player.getName(), "§6§lSclat §r" + Sclat.VERSION);
-		this.objective.setDisplaySlot(DisplaySlot.SIDEBAR);
+        player.setScoreboard(scoreboard)
 
-		player.setScoreboard(scoreboard);
+        val text = ChatColor.translateAlternateColorCodes('&', Sclat.news.getConfig()!!.getString("news-message")!!)
 
-		String text = ChatColor.translateAlternateColorCodes('&', Sclat.news.getConfig().getString("news-message"));
+        this.textAnimation = TextAnimation(text, Sclat.news.getConfig()!!.getInt("scoreboard-length"))
+    }
 
-		this.textAnimation = new TextAnimation(text, Sclat.news.getConfig().getInt("scoreboard-length"));
-	}
+    override fun run() {
+        objective.unregister()
+        if (!player.isOnline()) cancel()
 
-	@Override
-	public void run() {
-		objective.unregister();
-		if (!player.isOnline())
-			cancel();
+        val lines: MutableList<String> = mutableListOf()
+        lines.add("§7§m                                  ")
+        lines.add("")
+        lines.add("§6§lステータス »")
+        lines.add("§e COIN: §r" + PlayerStatusMgr.getMoney(player))
+        lines.add("§e TICKET: §r" + PlayerStatusMgr.getTicket(player))
+        lines.add(
+            (
+                "§b RANK: §r" + RankMgr.toABCRank(PlayerStatusMgr.getRank(player)) + " [" +
+                    PlayerStatusMgr.getRank(player) + "]"
+                ),
+        )
+        lines.add(" ")
+        lines.add("§9§lサーバー »")
+        for (serverStatus in ServerStatusManager.serverList) {
+            if (serverStatus.isMaintenance) continue
+            if (!serverStatus.isOnline) continue
 
-		List<String> lines = new ArrayList<>();
-		lines.add("§7§m                                  ");
-		lines.add("");
-		lines.add("§6§lステータス »");
-		lines.add("§e COIN: §r" + PlayerStatusMgr.getMoney(player));
-		lines.add("§e TICKET: §r" + PlayerStatusMgr.getTicket(player));
-		lines.add("§b RANK: §r" + RankMgr.toABCRank(PlayerStatusMgr.getRank(player)) + " ["
-				+ PlayerStatusMgr.getRank(player) + "]");
-		lines.add(" ");
-		lines.add("§9§lサーバー »");
-		for (ServerStatus serverStatus : ServerStatusManager.serverList) {
-			if (serverStatus.isMaintenance())
-				continue;
-			if (!serverStatus.isOnline())
-				continue;
+            var line = ""
+            if (serverStatus.runningMatch) {
+                val time = System.currentTimeMillis() / 1000 - serverStatus.matchStartTime
+                val min = String.format("%02d", time % 60)
+                line = (
+                    serverStatus.playerCount.toString() + "§e人が試合中" +
+                        (if (time < 10000) " §r(" + time / 60 + ":" + min + ")" else "")
+                    )
+            } else {
+                if (serverStatus.waitingEndTime != 0L) {
+                    line = (
+                        serverStatus.playerCount.toString() + "§a人が待機中" + " §r(§b" +
+                            ((serverStatus.waitingEndTime - (System.currentTimeMillis() / 1000)).toString() + "§r秒後に開始)")
+                        )
+                } else {
+                    line = serverStatus.playerCount.toString() + "§a人が待機中"
+                }
+            }
 
-			String line = "";
-			if (serverStatus.getRunningMatch()) {
-				long time = System.currentTimeMillis() / 1000 - serverStatus.matchStartTime;
-				String min = String.format("%02d", time % 60);
-				line = serverStatus.getPlayerCount() + "§e人が試合中"
-						+ (time < 10000 ? " §r(" + time / 60 + ":" + min + ")" : "");
-			} else {
-				if (serverStatus.waitingEndTime != 0) {
-					line = serverStatus.getPlayerCount() + "§a人が待機中" + " §r(§b"
-							+ (serverStatus.waitingEndTime - (System.currentTimeMillis() / 1000) + "§r秒後に開始)");
-				} else {
-					line = serverStatus.getPlayerCount() + "§a人が待機中";
-				}
-			}
+            lines.add(" " + serverStatus.displayName + ": §r" + line)
+        }
+        lines.add("  ")
+        lines.add("§a§lNews »")
+        lines.add(textAnimation.next())
+        lines.add("   ")
+        lines.add("§7§m                                  §r")
 
-			lines.add(" " + serverStatus.displayName + ": §r" + line);
-		}
-		lines.add("  ");
-		lines.add("§a§lNews »");
-		lines.add(textAnimation.next());
-		lines.add("   ");
-		lines.add("§7§m                                  §r");
-
-		objective = scoreboard.registerNewObjective("Lobby", player.getName(), "§6§lSclat §r" + Sclat.VERSION);
-		objective.setDisplaySlot(DisplaySlot.SIDEBAR);
-		ObjectiveUtil.setLine(objective, lines);
-	}
+        objective = scoreboard.registerNewObjective("Lobby", player.getName(), "§6§lSclat §r" + Sclat.VERSION)
+        objective.setDisplaySlot(DisplaySlot.SIDEBAR)
+        ObjectiveUtil.setLine(objective, lines)
+    }
 }
