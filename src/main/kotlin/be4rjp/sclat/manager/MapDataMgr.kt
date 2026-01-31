@@ -1,0 +1,424 @@
+package be4rjp.sclat.manager
+
+import be4rjp.sclat.Sclat
+import be4rjp.sclat.api.wiremesh.WiremeshListTask
+import be4rjp.sclat.data.Area
+import be4rjp.sclat.data.DataMgr.addMapList
+import be4rjp.sclat.data.MapData
+import be4rjp.sclat.data.Path
+import be4rjp.sclat.plugin
+import org.bukkit.Bukkit
+import org.bukkit.Location
+
+/**
+ *
+ * @author Be4rJP
+ */
+object MapDataMgr {
+    var allmapcount: Int = 0
+
+    @Synchronized
+    fun setupMap() {
+        for (mapname in Sclat.conf!!
+            .mapConfig!!
+            .getConfigurationSection("Maps")!!
+            .getKeys(false)) {
+            val map = MapData(mapname)
+            val worldName =
+                Sclat.conf!!
+                    .mapConfig!!
+                    .getString("Maps." + mapname + ".WorldName")
+            val w = Bukkit.getServer().getWorld(worldName!!)
+
+            val ix =
+                Sclat.conf!!
+                    .mapConfig!!
+                    .getInt("Maps." + mapname + ".Intro.X")
+            val iy =
+                Sclat.conf!!
+                    .mapConfig!!
+                    .getInt("Maps." + mapname + ".Intro.Y")
+            val iz =
+                Sclat.conf!!
+                    .mapConfig!!
+                    .getInt("Maps." + mapname + ".Intro.Z")
+            val iyaw =
+                Sclat.conf!!
+                    .mapConfig!!
+                    .getInt("Maps." + mapname + ".Intro.Yaw")
+            val il = Location(w, ix.toDouble(), iy.toDouble(), iz.toDouble())
+            il.yaw = iyaw.toFloat()
+
+            val intromovex =
+                Sclat.conf!!
+                    .mapConfig!!
+                    .getDouble("Maps." + mapname + ".Intro.MoveX")
+            val intromovey =
+                Sclat.conf!!
+                    .mapConfig!!
+                    .getDouble("Maps." + mapname + ".Intro.MoveY")
+            val intromovez =
+                Sclat.conf!!
+                    .mapConfig!!
+                    .getDouble("Maps." + mapname + ".Intro.MoveZ")
+
+            val t0x =
+                Sclat.conf!!
+                    .mapConfig!!
+                    .getInt("Maps." + mapname + ".Team0.X")
+            val t0y =
+                Sclat.conf!!
+                    .mapConfig!!
+                    .getInt("Maps." + mapname + ".Team0.Y")
+            val t0z =
+                Sclat.conf!!
+                    .mapConfig!!
+                    .getInt("Maps." + mapname + ".Team0.Z")
+            val t0yaw =
+                Sclat.conf!!
+                    .mapConfig!!
+                    .getInt("Maps." + mapname + ".Team0.Yaw")
+            val t0l = Location(w, t0x.toDouble(), t0y.toDouble(), t0z.toDouble())
+            t0l.x = t0l.x + 0.5
+            t0l.z = t0l.z + 0.5
+            t0l.yaw = t0yaw.toFloat()
+
+            val t1x =
+                Sclat.conf!!
+                    .mapConfig!!
+                    .getInt("Maps." + mapname + ".Team1.X")
+            val t1y =
+                Sclat.conf!!
+                    .mapConfig!!
+                    .getInt("Maps." + mapname + ".Team1.Y")
+            val t1z =
+                Sclat.conf!!
+                    .mapConfig!!
+                    .getInt("Maps." + mapname + ".Team1.Z")
+            val t1yaw =
+                Sclat.conf!!
+                    .mapConfig!!
+                    .getInt("Maps." + mapname + ".Team1.Yaw")
+            val t1l = Location(w, t1x.toDouble(), t1y.toDouble(), t1z.toDouble())
+            t1l.x = t1l.x + 0.5
+            t1l.z = t1l.z + 0.5
+            t1l.yaw = t1yaw.toFloat()
+
+            val t0intx =
+                Sclat.conf!!
+                    .mapConfig!!
+                    .getInt("Maps." + mapname + ".Team0IntroLoc.X")
+            val t0inty =
+                Sclat.conf!!
+                    .mapConfig!!
+                    .getInt("Maps." + mapname + ".Team0IntroLoc.Y")
+            val t0intz =
+                Sclat.conf!!
+                    .mapConfig!!
+                    .getInt("Maps." + mapname + ".Team0IntroLoc.Z")
+            val t0intyaw =
+                Sclat.conf!!
+                    .mapConfig!!
+                    .getInt("Maps." + mapname + ".Team0IntroLoc.Yaw")
+            val t0intl = Location(w, t0intx.toDouble(), t0inty.toDouble(), t0intz.toDouble())
+            t0intl.yaw = t0intyaw.toFloat()
+
+            val t1intx =
+                Sclat.conf!!
+                    .mapConfig!!
+                    .getInt("Maps." + mapname + ".Team1IntroLoc.X")
+            val t1inty =
+                Sclat.conf!!
+                    .mapConfig!!
+                    .getInt("Maps." + mapname + ".Team1IntroLoc.Y")
+            val t1intz =
+                Sclat.conf!!
+                    .mapConfig!!
+                    .getInt("Maps." + mapname + ".Team1IntroLoc.Z")
+            val t1intyaw =
+                Sclat.conf!!
+                    .mapConfig!!
+                    .getInt("Maps." + mapname + ".Team1IntroLoc.Yaw")
+            val t1intl = Location(w, t1intx.toDouble(), t1inty.toDouble(), t1intz.toDouble())
+            t1intl.yaw = t1intyaw.toFloat()
+
+            val rlocx =
+                Sclat.conf!!
+                    .mapConfig!!
+                    .getInt("Maps." + mapname + ".ResultLoc.X")
+            val rlocy =
+                Sclat.conf!!
+                    .mapConfig!!
+                    .getInt("Maps." + mapname + ".ResultLoc.Y")
+            val rlocz =
+                Sclat.conf!!
+                    .mapConfig!!
+                    .getInt("Maps." + mapname + ".ResultLoc.Z")
+            val rlocyaw =
+                Sclat.conf!!
+                    .mapConfig!!
+                    .getInt("Maps." + mapname + ".ResultLoc.Yaw")
+            val rloc = Location(w, rlocx.toDouble(), rlocy.toDouble(), rlocz.toDouble())
+            rloc.yaw = rlocyaw.toFloat()
+            rloc.pitch = 90f
+
+            val tlocx =
+                Sclat.conf!!
+                    .mapConfig!!
+                    .getInt("Maps." + mapname + ".WaitLoc.X")
+            val tlocy =
+                Sclat.conf!!
+                    .mapConfig!!
+                    .getInt("Maps." + mapname + ".WaitLoc.Y")
+            val tlocz =
+                Sclat.conf!!
+                    .mapConfig!!
+                    .getInt("Maps." + mapname + ".WaitLoc.Z")
+            val tloc = Location(w, tlocx.toDouble(), tlocy.toDouble(), tlocz.toDouble())
+
+            val nlocx =
+                Sclat.conf!!
+                    .mapConfig!!
+                    .getInt("Maps." + mapname + ".NoBlockLoc.X")
+            val nlocy =
+                Sclat.conf!!
+                    .mapConfig!!
+                    .getInt("Maps." + mapname + ".NoBlockLoc.Y")
+            val nlocz =
+                Sclat.conf!!
+                    .mapConfig!!
+                    .getInt("Maps." + mapname + ".NoBlockLoc.Z")
+            val nloc = Location(w, nlocx.toDouble(), nlocy.toDouble(), nlocz.toDouble())
+
+            if (Sclat.conf!!
+                    .mapConfig!!
+                    .contains("Maps." + mapname + ".Path")
+            ) {
+                for (pathname in Sclat.conf!!
+                    .mapConfig!!
+                    .getConfigurationSection("Maps." + mapname + ".Path")!!
+                    .getKeys(false)) {
+                    val flocx =
+                        (
+                            Sclat.conf!!
+                                .mapConfig!!
+                                .getDouble("Maps." + mapname + ".Path." + pathname + ".From.X") +
+                                0.5
+                        )
+                    val flocy =
+                        (
+                            Sclat.conf!!
+                                .mapConfig!!
+                                .getDouble("Maps." + mapname + ".Path." + pathname + ".From.Y") +
+                                0.5
+                        )
+                    val flocz =
+                        (
+                            Sclat.conf!!
+                                .mapConfig!!
+                                .getDouble("Maps." + mapname + ".Path." + pathname + ".From.Z") +
+                                0.5
+                        )
+                    val from = Location(w, flocx, flocy, flocz)
+
+                    val tolocx =
+                        (
+                            Sclat.conf!!
+                                .mapConfig!!
+                                .getDouble("Maps." + mapname + ".Path." + pathname + ".To.X") +
+                                0.5
+                        )
+                    val tolocy =
+                        (
+                            Sclat.conf!!
+                                .mapConfig!!
+                                .getDouble("Maps." + mapname + ".Path." + pathname + ".To.Y") +
+                                0.5
+                        )
+                    val tolocz =
+                        (
+                            Sclat.conf!!
+                                .mapConfig!!
+                                .getDouble("Maps." + mapname + ".Path." + pathname + ".To.Z") +
+                                0.5
+                        )
+                    val to = Location(w, tolocx, tolocy, tolocz)
+                    val path = Path(from, to)
+                    map.addPath(path)
+                }
+            }
+
+            if (Sclat.conf!!
+                    .mapConfig!!
+                    .contains("Maps." + mapname + ".Area")
+            ) {
+                for (Areaname in Sclat.conf!!
+                    .mapConfig!!
+                    .getConfigurationSection("Maps." + mapname + ".Area")!!
+                    .getKeys(false)) {
+                    map.canAreaBattle = true
+                    val flocx =
+                        (
+                            Sclat.conf!!
+                                .mapConfig!!
+                                .getDouble("Maps." + mapname + ".Area." + Areaname + ".From.X") +
+                                0.5
+                        )
+                    val flocy =
+                        (
+                            Sclat.conf!!
+                                .mapConfig!!
+                                .getDouble("Maps." + mapname + ".Area." + Areaname + ".From.Y") +
+                                0.5
+                        )
+                    val flocz =
+                        (
+                            Sclat.conf!!
+                                .mapConfig!!
+                                .getDouble("Maps." + mapname + ".Area." + Areaname + ".From.Z") +
+                                0.5
+                        )
+                    val from = Location(w, flocx, flocy, flocz)
+
+                    val tolocx =
+                        (
+                            Sclat.conf!!
+                                .mapConfig!!
+                                .getDouble("Maps." + mapname + ".Area." + Areaname + ".To.X") +
+                                0.5
+                        )
+                    val tolocy =
+                        (
+                            Sclat.conf!!
+                                .mapConfig!!
+                                .getDouble("Maps." + mapname + ".Area." + Areaname + ".To.Y") +
+                                0.5
+                        )
+                    val tolocz =
+                        (
+                            Sclat.conf!!
+                                .mapConfig!!
+                                .getDouble("Maps." + mapname + ".Area." + Areaname + ".To.Z") +
+                                0.5
+                        )
+                    val to = Location(w, tolocx, tolocy, tolocz)
+                    val area = Area(from, to)
+                    map.addArea(area)
+                }
+            }
+
+            var canpaintbblock = false
+            if (Sclat.conf!!
+                    .mapConfig!!
+                    .contains("Maps." + mapname + ".CanPaintBarrierBlock")
+            ) {
+                canpaintbblock =
+                    Sclat.conf!!
+                        .mapConfig!!
+                        .getBoolean("Maps." + mapname + ".CanPaintBarrierBlock")
+            }
+
+            if (Sclat.conf!!
+                    .mapConfig!!
+                    .contains("Maps." + mapname + ".Wiremesh")
+            ) {
+                var trapDoor = false
+                if (Sclat.conf!!
+                        .mapConfig!!
+                        .contains("Maps." + mapname + ".Wiremesh.TrapDoor")
+                ) {
+                    trapDoor =
+                        Sclat.conf!!
+                            .mapConfig!!
+                            .getBoolean("Maps." + mapname + ".Wiremesh.TrapDoor")
+                }
+                var ironBars = false
+                if (Sclat.conf!!
+                        .mapConfig!!
+                        .contains("Maps." + mapname + ".Wiremesh.IronBars")
+                ) {
+                    ironBars =
+                        Sclat.conf!!
+                            .mapConfig!!
+                            .getBoolean("Maps." + mapname + ".Wiremesh.IronBars")
+                }
+                var fence = false
+                if (Sclat.conf!!
+                        .mapConfig!!
+                        .contains("Maps." + mapname + ".Wiremesh.Fence")
+                ) {
+                    fence =
+                        Sclat.conf!!
+                            .mapConfig!!
+                            .getBoolean("Maps." + mapname + ".Wiremesh.Fence")
+                }
+
+                val flocx =
+                    Sclat.conf!!
+                        .mapConfig!!
+                        .getDouble("Maps." + mapname + ".Wiremesh.From.X") + 0.5
+                val flocy =
+                    Sclat.conf!!
+                        .mapConfig!!
+                        .getDouble("Maps." + mapname + ".Wiremesh.From.Y")
+                val flocz =
+                    Sclat.conf!!
+                        .mapConfig!!
+                        .getDouble("Maps." + mapname + ".Wiremesh.From.Z") + 0.5
+                val from = Location(w, flocx, flocy, flocz)
+
+                val tolocx =
+                    Sclat.conf!!
+                        .mapConfig!!
+                        .getDouble("Maps." + mapname + ".Wiremesh.To.X") + 0.5
+                val tolocy =
+                    Sclat.conf!!
+                        .mapConfig!!
+                        .getDouble("Maps." + mapname + ".Wiremesh.To.Y")
+                val tolocz =
+                    Sclat.conf!!
+                        .mapConfig!!
+                        .getDouble("Maps." + mapname + ".Wiremesh.To.Z") + 0.5
+                val to = Location(w, tolocx, tolocy, tolocz)
+
+                val wmListTask = WiremeshListTask(from, to, trapDoor, ironBars, fence)
+                map.wiremeshListTask = wmListTask
+            }
+
+            if (Sclat.conf!!
+                    .mapConfig!!
+                    .contains("Maps." + mapname + ".VoidY")
+            ) {
+                map.voidY =
+                    Sclat.conf!!
+                        .mapConfig!!
+                        .getInt("Maps." + mapname + ".VoidY")
+            }
+
+            map.intro = il
+            map.team0Loc = t0l
+            map.team1Loc = t1l
+            map.team0Intro = t0intl
+            map.team1Intro = t1intl
+            map.resultLoc = rloc
+            map.setTaikibasyo(tloc)
+            map.noBlockLocation = nloc
+
+            map.introMoveX = intromovex
+            map.introMoveY = intromovey
+            map.introMoveZ = intromovez
+
+            map.setCanPaintBBlock(canpaintbblock)
+
+            // Main.getPlugin().getServer().createWorld(new WorldCreator(WorldName));
+            plugin.logger.info(mapname)
+
+            map.worldName = worldName
+
+            allmapcount++
+
+            // DataMgr.setMap(mapname, map);
+            addMapList(map)
+        }
+    }
+}
