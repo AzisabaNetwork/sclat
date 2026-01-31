@@ -77,7 +77,7 @@ internal class EquipEchoThread(
                     EquipmentServerManager.addEquipmentCommand(cmd)
 
                     val args: Array<String?> = cmd!!.split(" ".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-                    when (args!![0]) {
+                    when (args[0]) {
                         "setting" -> {
                             // setting [settingData] [uuid]
                             if (args.size == 3) {

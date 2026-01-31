@@ -86,7 +86,7 @@ internal class EchoThread(
 
                     val args: Array<String?> = cmd!!.split(" ".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
 
-                    if (args!![0] == "return" && args.size == 2) {
+                    if (args[0] == "return" && args.size == 2) {
                         if (args[1]!!.length == 36) {
                             PlayerReturnManager.addPlayerReturn(args[1])
                         }

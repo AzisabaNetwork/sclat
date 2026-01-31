@@ -525,10 +525,11 @@ class SnowballListener : Listener {
                                             ),
                                             EntityType.SNOWBALL,
                                         ) as Snowball
-                                    (ball2 as CraftSnowball).handle.item =
+                                    (ball2 as CraftSnowball).handle.setItem(
                                         CraftItemStack.asNMSCopy(
                                             ItemStack(getPlayerData(shooter)!!.team.teamColor!!.wool!!),
-                                        )
+                                        ),
+                                    )
                                     ball2.shooter = shooter
                                     ball2.velocity = vec
                                     ball2.customName = ball.customName
@@ -562,10 +563,11 @@ class SnowballListener : Listener {
                                             ),
                                             EntityType.SNOWBALL,
                                         ) as Snowball
-                                    (ball2 as CraftSnowball).handle.item =
+                                    (ball2 as CraftSnowball).handle.setItem(
                                         CraftItemStack.asNMSCopy(
                                             ItemStack(getPlayerData(shooter)!!.team.teamColor!!.wool!!),
-                                        )
+                                        ),
+                                    )
                                     ball2.shooter = shooter
                                     ball2.velocity = vec
                                     ball2.customName = ball.customName

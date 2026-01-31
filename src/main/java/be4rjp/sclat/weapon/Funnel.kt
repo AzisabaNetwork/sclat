@@ -419,13 +419,13 @@ object Funnel {
                                             locp.clone().add(0.0, 1.0, 0.0).add(r1.clone().multiply(1.5)),
                                             EntityType.ARMOR_STAND,
                                         ) as ArmorStand
-                                    as21!!.headPose = EulerAngle(Math.toRadians(-45.0), 0.0, Math.toRadians(-40.0))
-                                    as22!!.headPose = EulerAngle(Math.toRadians(-45.0), 0.0, Math.toRadians(40.0))
-                                    list2.add(as23!!)
-                                    list2.add(as21!!)
-                                    list2.add(as22!!)
+                                    as21.headPose = EulerAngle(Math.toRadians(-45.0), 0.0, Math.toRadians(-40.0))
+                                    as22.headPose = EulerAngle(Math.toRadians(-45.0), 0.0, Math.toRadians(40.0))
+                                    list2.add(as23)
+                                    list2.add(as21)
+                                    list2.add(as22)
                                     data!!.setArmorlist(as23)
-                                    GlowingAPI.setGlowing(as23!!, player, false)
+                                    GlowingAPI.setGlowing(as23, player, false)
                                     for (`as` in list2) {
                                         `as`.isSmall = true
                                         `as`.setBasePlate(false)
@@ -482,7 +482,7 @@ object Funnel {
                                     locp.clone().add(0.0, 2.5, 0.0),
                                     EntityType.ARMOR_STAND,
                                 ) as ArmorStand
-                            pv = as3!!.eyeLocation.direction.normalize()
+                            pv = as3.eyeLocation.direction.normalize()
                             vec1 =
                                 Vector(
                                     pv.clone().getX() * 0.707 - pv.clone().getZ() * 0.707,
@@ -505,9 +505,9 @@ object Funnel {
                                     locp.clone().add(0.0, 2.8, 0.0).add(vec2.clone().multiply(0.3)),
                                     EntityType.ARMOR_STAND,
                                 ) as ArmorStand
-                            list.add(as3!!)
-                            list.add(as1!!)
-                            list.add(as2!!)
+                            list.add(as3)
+                            list.add(as1)
+                            list.add(as2)
                             as13 =
                                 p.world.spawnEntity(
                                     locp.clone().add(0.0, 1.0, 0.0).add(l1.clone().multiply(1.5)),
@@ -531,9 +531,9 @@ object Funnel {
                                         .add(l1.clone().multiply(1.5)),
                                     EntityType.ARMOR_STAND,
                                 ) as ArmorStand
-                            list1.add(as13!!)
-                            list1.add(as11!!)
-                            list1.add(as12!!)
+                            list1.add(as13)
+                            list1.add(as11)
+                            list1.add(as12)
                             as23 =
                                 p.world.spawnEntity(
                                     locp.clone().add(0.0, 1.0, 0.0).add(r1.clone().multiply(1.5)),
@@ -557,9 +557,9 @@ object Funnel {
                                         .add(r1.clone().multiply(1.5)),
                                     EntityType.ARMOR_STAND,
                                 ) as ArmorStand
-                            list2.add(as23!!)
-                            list2.add(as21!!)
-                            list2.add(as22!!)
+                            list2.add(as23)
+                            list2.add(as21)
+                            list2.add(as22)
 
                             list5.add(list)
                             list5.add(list1)
@@ -586,10 +586,10 @@ object Funnel {
                                 setKasaDataWithARmorStand(`as`, kdata2)
                             }
                             for (aslist in list5) {
-                                aslist[1]!!.headPose = EulerAngle(Math.toRadians(-45.0), 0.0, Math.toRadians(-40.0))
-                                aslist[2]!!.headPose = EulerAngle(Math.toRadians(-45.0), 0.0, Math.toRadians(40.0))
+                                aslist[1].headPose = EulerAngle(Math.toRadians(-45.0), 0.0, Math.toRadians(-40.0))
+                                aslist[2].headPose = EulerAngle(Math.toRadians(-45.0), 0.0, Math.toRadians(40.0))
                                 for (`as` in aslist) {
-                                    `as`!!.isSmall = true
+                                    `as`.isSmall = true
                                     `as`.setBasePlate(false)
                                     `as`.isVisible = false
                                     `as`.setGravity(false)
@@ -601,7 +601,7 @@ object Funnel {
                                 for (aslist in list5) {
                                     (o_player as CraftPlayer).handle.playerConnection.sendPacket(
                                         PacketPlayOutEntityEquipment(
-                                            aslist[1]!!.entityId,
+                                            aslist[1].entityId,
                                             EnumItemSlot.HEAD,
                                             CraftItemStack.asNMSCopy(
                                                 ItemStack(
@@ -614,7 +614,7 @@ object Funnel {
                                     )
                                     o_player.handle.playerConnection.sendPacket(
                                         PacketPlayOutEntityEquipment(
-                                            aslist[2]!!.entityId,
+                                            aslist[2].entityId,
                                             EnumItemSlot.HEAD,
                                             CraftItemStack.asNMSCopy(
                                                 ItemStack(
@@ -627,7 +627,7 @@ object Funnel {
                                     )
                                     o_player.handle.playerConnection.sendPacket(
                                         PacketPlayOutEntityEquipment(
-                                            aslist[0]!!.entityId,
+                                            aslist[0].entityId,
                                             EnumItemSlot.HEAD,
                                             CraftItemStack.asNMSCopy(ItemStack(team.teamColor!!.wool!!)),
                                         ),
@@ -650,7 +650,7 @@ object Funnel {
                                 }
                             }
                             if (kdata.damage > funnelMaxHP && kdata.damage < 9999) {
-                                val kasaStand = kdata.armorStandList!![0]
+                                val kasaStand = kdata.armorStandList[0]
                                 data!!.subArmorlist(kasaStand)
                                 if (hashPlayer.containsKey(kasaStand)) {
                                     if (hashPlayer.get(kasaStand)!!.gameMode != GameMode.SPECTATOR) {
@@ -669,12 +669,12 @@ object Funnel {
                                     }
                                 }
                                 kdata.damage = 10000.0
-                                for (`as` in kdata.armorStandList!!) {
-                                    `as`!!.remove()
+                                for (`as` in kdata.armorStandList) {
+                                    `as`.remove()
                                 }
                             }
                             if (kdata1.damage > funnelMaxHP && kdata1.damage < 9999) {
-                                val kasaStand1 = kdata1.armorStandList!![0]
+                                val kasaStand1 = kdata1.armorStandList[0]
                                 data!!.subArmorlist(kasaStand1)
                                 if (hashPlayer.containsKey(kasaStand1)) {
                                     if (hashPlayer.get(kasaStand1)!!.gameMode != GameMode.SPECTATOR) {
@@ -693,12 +693,12 @@ object Funnel {
                                     }
                                 }
                                 kdata1.damage = 10000.0
-                                for (`as` in kdata1.armorStandList!!) {
-                                    `as`!!.remove()
+                                for (`as` in kdata1.armorStandList) {
+                                    `as`.remove()
                                 }
                             }
                             if (kdata2.damage > funnelMaxHP && kdata2.damage < 9999) {
-                                val kasaStand2 = kdata2.armorStandList!![0]
+                                val kasaStand2 = kdata2.armorStandList[0]
                                 data!!.subArmorlist(kasaStand2)
                                 if (hashPlayer.containsKey(kasaStand2)) {
                                     if (hashPlayer.get(kasaStand2)!!.gameMode != GameMode.SPECTATOR) {
@@ -717,8 +717,8 @@ object Funnel {
                                     }
                                 }
                                 kdata2.damage = 10000.0
-                                for (`as` in kdata2.armorStandList!!) {
-                                    `as`!!.remove()
+                                for (`as` in kdata2.armorStandList) {
+                                    `as`.remove()
                                 }
                             }
                             if (i == kdataReset) {
@@ -750,7 +750,7 @@ object Funnel {
                                 )
                             var io = 0
                             for (aslist in list5) {
-                                val aslistget0: ArmorStand = aslist[0]!!
+                                val aslistget0: ArmorStand = aslist[0]
                                 if (io == 0) {
                                     if (!hashPlayer.containsKey(aslistget0) &&
                                         !hashArmorstand.containsKey(aslistget0)
@@ -843,7 +843,7 @@ object Funnel {
                                         for (o_player in plugin.server.onlinePlayers) {
                                             (o_player as CraftPlayer).handle.playerConnection.sendPacket(
                                                 PacketPlayOutEntityEquipment(
-                                                    aslist[2]!!.entityId,
+                                                    aslist[2].entityId,
                                                     EnumItemSlot.HEAD,
                                                     CraftItemStack.asNMSCopy(
                                                         ItemStack(
@@ -856,7 +856,7 @@ object Funnel {
                                             )
                                             o_player.handle.playerConnection.sendPacket(
                                                 PacketPlayOutEntityEquipment(
-                                                    aslist[1]!!.entityId,
+                                                    aslist[1].entityId,
                                                     EnumItemSlot.HEAD,
                                                     CraftItemStack.asNMSCopy(
                                                         ItemStack(
@@ -869,7 +869,7 @@ object Funnel {
                                             )
                                             o_player.handle.playerConnection.sendPacket(
                                                 PacketPlayOutEntityEquipment(
-                                                    aslist[0]!!.entityId,
+                                                    aslist[0].entityId,
                                                     EnumItemSlot.HEAD,
                                                     CraftItemStack.asNMSCopy(
                                                         ItemStack(team.teamColor!!.wool!!),
@@ -973,7 +973,7 @@ object Funnel {
                                         for (o_player in plugin.server.onlinePlayers) {
                                             (o_player as CraftPlayer).handle.playerConnection.sendPacket(
                                                 PacketPlayOutEntityEquipment(
-                                                    aslist[2]!!.entityId,
+                                                    aslist[2].entityId,
                                                     EnumItemSlot.HEAD,
                                                     CraftItemStack.asNMSCopy(
                                                         ItemStack(
@@ -986,7 +986,7 @@ object Funnel {
                                             )
                                             o_player.handle.playerConnection.sendPacket(
                                                 PacketPlayOutEntityEquipment(
-                                                    aslist[1]!!.entityId,
+                                                    aslist[1].entityId,
                                                     EnumItemSlot.HEAD,
                                                     CraftItemStack.asNMSCopy(
                                                         ItemStack(
@@ -999,7 +999,7 @@ object Funnel {
                                             )
                                             o_player.handle.playerConnection.sendPacket(
                                                 PacketPlayOutEntityEquipment(
-                                                    aslist[0]!!.entityId,
+                                                    aslist[0].entityId,
                                                     EnumItemSlot.HEAD,
                                                     CraftItemStack.asNMSCopy(
                                                         ItemStack(team.teamColor!!.wool!!),
@@ -1116,7 +1116,7 @@ object Funnel {
                                         for (o_player in plugin.server.onlinePlayers) {
                                             (o_player as CraftPlayer).handle.playerConnection.sendPacket(
                                                 PacketPlayOutEntityEquipment(
-                                                    aslist[2]!!.entityId,
+                                                    aslist[2].entityId,
                                                     EnumItemSlot.HEAD,
                                                     CraftItemStack.asNMSCopy(
                                                         ItemStack(
@@ -1129,7 +1129,7 @@ object Funnel {
                                             )
                                             o_player.handle.playerConnection.sendPacket(
                                                 PacketPlayOutEntityEquipment(
-                                                    aslist[1]!!.entityId,
+                                                    aslist[1].entityId,
                                                     EnumItemSlot.HEAD,
                                                     CraftItemStack.asNMSCopy(
                                                         ItemStack(
@@ -1142,7 +1142,7 @@ object Funnel {
                                             )
                                             o_player.handle.playerConnection.sendPacket(
                                                 PacketPlayOutEntityEquipment(
-                                                    aslist[0]!!.entityId,
+                                                    aslist[0].entityId,
                                                     EnumItemSlot.HEAD,
                                                     CraftItemStack.asNMSCopy(
                                                         ItemStack(team.teamColor!!.wool!!),
@@ -1156,7 +1156,7 @@ object Funnel {
                             }
                             for (aslist in list5) {
                                 pv =
-                                    aslist[0]!!
+                                    aslist[0]
                                         .eyeLocation
                                         .direction
                                         .normalize()
@@ -1172,9 +1172,9 @@ object Funnel {
                                         0.0,
                                         -pv.clone().getX() * 0.707 + pv.clone().getZ() * 0.707,
                                     ).normalize()
-                                val floc2 = aslist[0]!!.location.clone()
-                                aslist[1]!!.teleport(floc2.clone().add(0.0, 0.3, 0.0).add(vec1.clone().multiply(0.3)))
-                                aslist[2]!!.teleport(floc2.clone().add(0.0, 0.3, 0.0).add(vec2.clone().multiply(0.3)))
+                                val floc2 = aslist[0].location.clone()
+                                aslist[1].teleport(floc2.clone().add(0.0, 0.3, 0.0).add(vec1.clone().multiply(0.3)))
+                                aslist[2].teleport(floc2.clone().add(0.0, 0.3, 0.0).add(vec2.clone().multiply(0.3)))
                             }
                         }
                         if (check && p.isSneaking && p.gameMode != GameMode.SPECTATOR) {
@@ -1246,12 +1246,12 @@ object Funnel {
                                                         2f,
                                                     )
                                                     hashPlayer[as3] = target
-                                                    GlowingAPI.setGlowing(as3!!, player, true)
-                                                    GlowingAPI.setGlowing(as3!!, target, true)
+                                                    GlowingAPI.setGlowing(as3, player, true)
+                                                    GlowingAPI.setGlowing(as3, target, true)
                                                     if (kdata.damage < funnelMaxHP2) {
                                                         kdata.damage = funnelMaxHP2.toDouble()
                                                     }
-                                                    as3!!.setGravity(true)
+                                                    as3.setGravity(true)
                                                     kdataReset = i + 210
                                                     // listremove.runTaskLater(Main.getPlugin(), 140);
                                                     list6.removeAt(list6.size - 1)
@@ -1263,12 +1263,12 @@ object Funnel {
                                                         2f,
                                                     )
                                                     hashPlayer[as13] = target
-                                                    GlowingAPI.setGlowing(as13!!, player, true)
-                                                    GlowingAPI.setGlowing(as13!!, target, true)
+                                                    GlowingAPI.setGlowing(as13, player, true)
+                                                    GlowingAPI.setGlowing(as13, target, true)
                                                     if (kdata1.damage < funnelMaxHP2) {
                                                         kdata1.damage = funnelMaxHP2.toDouble()
                                                     }
-                                                    as13!!.setGravity(true)
+                                                    as13.setGravity(true)
                                                     kdataReset1 = i + 210
                                                     // listremove1.runTaskLater(Main.getPlugin(), 140);
                                                     list6.removeAt(list6.size - 1)
@@ -1280,12 +1280,12 @@ object Funnel {
                                                         2f,
                                                     )
                                                     hashPlayer[as23] = target
-                                                    GlowingAPI.setGlowing(as23!!, player, true)
-                                                    GlowingAPI.setGlowing(as23!!, target, true)
+                                                    GlowingAPI.setGlowing(as23, player, true)
+                                                    GlowingAPI.setGlowing(as23, target, true)
                                                     if (kdata2.damage < funnelMaxHP2) {
                                                         kdata2.damage = funnelMaxHP2.toDouble()
                                                     }
-                                                    as23!!.setGravity(true)
+                                                    as23.setGravity(true)
                                                     kdataReset2 = i + 210
                                                     // listremove2.runTaskLater(Main.getPlugin(), 140);
                                                     list6.removeAt(list6.size - 1)
@@ -1343,11 +1343,11 @@ object Funnel {
                                                                 2f,
                                                             )
                                                             hashArmorstand[as3] = `as`
-                                                            GlowingAPI.setGlowing(as3!!, player, true)
+                                                            GlowingAPI.setGlowing(as3, player, true)
                                                             if (kdata.damage < funnelMaxHP2) {
                                                                 kdata.damage = funnelMaxHP2.toDouble()
                                                             }
-                                                            as3!!.setGravity(true)
+                                                            as3.setGravity(true)
                                                             kdataReset = i + 210
                                                             // listremove.runTaskLater(Main.getPlugin(), 140);
                                                             list6.removeAt(list6.size - 1)
@@ -1361,11 +1361,11 @@ object Funnel {
                                                                 2f,
                                                             )
                                                             hashArmorstand[as13] = `as`
-                                                            GlowingAPI.setGlowing(as13!!, player, true)
+                                                            GlowingAPI.setGlowing(as13, player, true)
                                                             if (kdata1.damage < funnelMaxHP2) {
                                                                 kdata1.damage = funnelMaxHP2.toDouble()
                                                             }
-                                                            as13!!.setGravity(true)
+                                                            as13.setGravity(true)
                                                             kdataReset1 = i + 210
                                                             // listremove1.runTaskLater(Main.getPlugin(), 140);
                                                             list6.removeAt(list6.size - 1)
@@ -1379,11 +1379,11 @@ object Funnel {
                                                                 2f,
                                                             )
                                                             hashArmorstand[as23] = `as`
-                                                            GlowingAPI.setGlowing(as23!!, player, true)
+                                                            GlowingAPI.setGlowing(as23, player, true)
                                                             if (kdata2.damage < funnelMaxHP2) {
                                                                 kdata2.damage = funnelMaxHP2.toDouble()
                                                             }
-                                                            as23!!.setGravity(true)
+                                                            as23.setGravity(true)
                                                             kdataReset2 = i + 210
                                                             // listremove2.runTaskLater(Main.getPlugin(), 140);
                                                             list6.removeAt(list6.size - 1)
@@ -1401,17 +1401,17 @@ object Funnel {
                         }
                         if (!p.isOnline || !data!!.isInMatch) {
                             if (getPlayerData(p)!!.isInMatch) {
-                                as1!!
+                                as1
                                     .world
-                                    .playSound(as1!!.location, Sound.ENTITY_ITEM_BREAK, 0.8f, 0.8f)
+                                    .playSound(as1.location, Sound.ENTITY_ITEM_BREAK, 0.8f, 0.8f)
                             }
 
                             for (aslist in list5) {
                                 for (`as` in aslist) {
-                                    `as`!!.remove()
+                                    `as`.remove()
                                 }
                             }
-                            las!!.remove()
+                            las.remove()
                             cancel()
                         }
 

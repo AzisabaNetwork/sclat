@@ -211,7 +211,7 @@ object Tutorial {
                         if (player.world !== w) continue
                         if (player.location.distance(loc) < 8) {
                             player.inventory.clear()
-                            getPlayerData(player)!!.isInMatch = false
+                            getPlayerData(player)!!.setIsInMatch(false)
                             getPlayerData(player)!!.isJoined = false
                         }
                     }

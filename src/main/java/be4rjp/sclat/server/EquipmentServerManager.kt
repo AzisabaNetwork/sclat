@@ -18,7 +18,7 @@ object EquipmentServerManager {
         for (cmd in commands) {
             val args: Array<String?> = cmd.split(" ".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
 
-            when (args!![0]) {
+            when (args[0]) {
                 "set" -> {
                     // add [statusName] [number or name] [uuid]
                     if (args.size == 4) {

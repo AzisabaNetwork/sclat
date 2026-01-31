@@ -124,7 +124,7 @@ object SclatUtil {
         commands.add(
             (
                 "map " + Sclat.conf?.servers!!.getString("ServerName") + " " +
-                    DataMgr.getMapRandom(if (MatchMgr.mapcount == 0) 0 else MatchMgr.mapcount - 1)?.mapName!!
+                    DataMgr.getMapRandom(if (MatchMgr.mapcount == 0) 0 else MatchMgr.mapcount - 1).mapName!!
                 ),
         )
         commands.add("stop")
