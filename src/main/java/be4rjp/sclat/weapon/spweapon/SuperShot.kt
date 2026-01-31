@@ -162,7 +162,7 @@ object SuperShot {
                         }
                         drop!!.velocity = ball!!.velocity
 
-                        PaintMgr.PaintHightestBlock(ball!!.location, p, false, false)
+                        PaintMgr.paintHightestBlock(ball!!.location, p, false, false)
 
                         if (Random().nextInt(20) == 0) {
                             val bd =

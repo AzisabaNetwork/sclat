@@ -464,7 +464,7 @@ object SplashShield {
                                     .createBlockData()
                             ray@ for (i in 0..<positions1.size - 4) {
                                 val position = positions1.get(i).toLocation(p.location.world!!)
-                                PaintMgr.PaintHightestBlock(position, p, false, false)
+                                PaintMgr.paintHightestBlock(position, p, false, false)
                                 val damage = 10.0
                                 val rayTrace4 =
                                     RayTrace(
@@ -509,7 +509,7 @@ object SplashShield {
 
                             ray@ for (i in 0..<positions2.size - 1) {
                                 val position = positions2.get(i).toLocation(p.location.world!!)
-                                PaintMgr.PaintHightestBlock(position, p, false, false)
+                                PaintMgr.paintHightestBlock(position, p, false, false)
                                 val damage = 10.0
                                 val rayTrace4 =
                                     RayTrace(

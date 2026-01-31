@@ -203,8 +203,8 @@ object Blaster {
                             while (i <= maxDist - 1) {
                                 val p_locs = getSphere(inkball!!.location, i.toDouble(), 20)
                                 for (loc in p_locs) {
-                                    PaintMgr.Paint(loc, p, false)
-                                    PaintMgr.PaintHightestBlock(loc, p, false, false)
+                                    PaintMgr.paint(loc, p, false)
+                                    PaintMgr.paintHightestBlock(loc, p, false, false)
                                 }
                                 i++
                             }
@@ -296,7 +296,7 @@ object Blaster {
 
                         inkball!!.remove()
                     }
-                    if (i != tick) PaintMgr.PaintHightestBlock(inkball!!.location, p, false, true)
+                    if (i != tick) PaintMgr.paintHightestBlock(inkball!!.location, p, false, true)
                     if (inkball!!.isDead) cancel()
                     i++
                 }
@@ -326,8 +326,8 @@ object Blaster {
         while (i <= maxDist - 1) {
             val p_locs = getSphere(blastcenter, i.toDouble(), 20)
             for (loc in p_locs) {
-                PaintMgr.Paint(loc, player, false)
-                PaintMgr.PaintHightestBlock(loc, player, false, false)
+                PaintMgr.paint(loc, player, false)
+                PaintMgr.paintHightestBlock(loc, player, false, false)
             }
             i++
         }

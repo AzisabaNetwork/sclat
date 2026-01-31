@@ -73,7 +73,7 @@ object SplashBomb {
                             while (i <= maxDist) {
                                 val p_locs: MutableList<Location> = getSphere(drop!!.location, i.toDouble(), 14)
                                 for (loc in p_locs) {
-                                    PaintMgr.Paint(loc, p, false)
+                                    PaintMgr.paint(loc, p, false)
                                 }
                                 i++
                             }

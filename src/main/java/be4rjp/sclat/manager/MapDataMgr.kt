@@ -1,196 +1,238 @@
-package be4rjp.sclat.manager;
+package be4rjp.sclat.manager
 
-import be4rjp.sclat.VariablesKt;
-import be4rjp.sclat.api.wiremesh.WiremeshListTask;
-import be4rjp.sclat.data.Area;
-import be4rjp.sclat.data.DataMgr;
-import be4rjp.sclat.data.MapData;
-import be4rjp.sclat.data.Path;
-import org.bukkit.Location;
-import org.bukkit.World;
-import static be4rjp.sclat.Sclat.conf;
-import static org.bukkit.Bukkit.getServer;
+import be4rjp.sclat.Sclat
+import be4rjp.sclat.api.wiremesh.WiremeshListTask
+import be4rjp.sclat.data.Area
+import be4rjp.sclat.data.DataMgr.addMapList
+import be4rjp.sclat.data.MapData
+import be4rjp.sclat.data.Path
+import be4rjp.sclat.plugin
+import org.bukkit.Bukkit
+import org.bukkit.Location
 
 /**
  *
  * @author Be4rJP
  */
-public class MapDataMgr {
+object MapDataMgr {
+    var allmapcount: Int = 0
 
-	public static int allmapcount = 0;
+    @Synchronized
+    fun SetupMap() {
+        for (mapname in Sclat.Companion.conf!!.mapConfig!!.getConfigurationSection("Maps")!!.getKeys(false)) {
+            val map = MapData(mapname)
+            val WorldName = Sclat.Companion.conf!!.mapConfig!!.getString("Maps." + mapname + ".WorldName")
+            val w = Bukkit.getServer().getWorld(WorldName!!)
 
-	public synchronized static void SetupMap() {
-		for (String mapname : conf.getMapConfig().getConfigurationSection("Maps").getKeys(false)) {
-			MapData map = new MapData(mapname);
-			String WorldName = conf.getMapConfig().getString("Maps." + mapname + ".WorldName");
-			World w = getServer().getWorld(WorldName);
+            val ix = Sclat.Companion.conf!!.mapConfig!!.getInt("Maps." + mapname + ".Intro.X")
+            val iy = Sclat.Companion.conf!!.mapConfig!!.getInt("Maps." + mapname + ".Intro.Y")
+            val iz = Sclat.Companion.conf!!.mapConfig!!.getInt("Maps." + mapname + ".Intro.Z")
+            val iyaw = Sclat.Companion.conf!!.mapConfig!!.getInt("Maps." + mapname + ".Intro.Yaw")
+            val il = Location(w, ix.toDouble(), iy.toDouble(), iz.toDouble())
+            il.setYaw(iyaw.toFloat())
 
-			int ix = conf.getMapConfig().getInt("Maps." + mapname + ".Intro.X");
-			int iy = conf.getMapConfig().getInt("Maps." + mapname + ".Intro.Y");
-			int iz = conf.getMapConfig().getInt("Maps." + mapname + ".Intro.Z");
-			int iyaw = conf.getMapConfig().getInt("Maps." + mapname + ".Intro.Yaw");
-			Location il = new Location(w, ix, iy, iz);
-			il.setYaw(iyaw);
+            val intromovex = Sclat.Companion.conf!!.mapConfig!!.getDouble("Maps." + mapname + ".Intro.MoveX")
+            val intromovey = Sclat.Companion.conf!!.mapConfig!!.getDouble("Maps." + mapname + ".Intro.MoveY")
+            val intromovez = Sclat.Companion.conf!!.mapConfig!!.getDouble("Maps." + mapname + ".Intro.MoveZ")
 
-			double intromovex = conf.getMapConfig().getDouble("Maps." + mapname + ".Intro.MoveX");
-			double intromovey = conf.getMapConfig().getDouble("Maps." + mapname + ".Intro.MoveY");
-			double intromovez = conf.getMapConfig().getDouble("Maps." + mapname + ".Intro.MoveZ");
+            val t0x = Sclat.Companion.conf!!.mapConfig!!.getInt("Maps." + mapname + ".Team0.X")
+            val t0y = Sclat.Companion.conf!!.mapConfig!!.getInt("Maps." + mapname + ".Team0.Y")
+            val t0z = Sclat.Companion.conf!!.mapConfig!!.getInt("Maps." + mapname + ".Team0.Z")
+            val t0yaw = Sclat.Companion.conf!!.mapConfig!!.getInt("Maps." + mapname + ".Team0.Yaw")
+            val t0l = Location(w, t0x.toDouble(), t0y.toDouble(), t0z.toDouble())
+            t0l.setX(t0l.getX() + 0.5)
+            t0l.setZ(t0l.getZ() + 0.5)
+            t0l.setYaw(t0yaw.toFloat())
 
-			int t0x = conf.getMapConfig().getInt("Maps." + mapname + ".Team0.X");
-			int t0y = conf.getMapConfig().getInt("Maps." + mapname + ".Team0.Y");
-			int t0z = conf.getMapConfig().getInt("Maps." + mapname + ".Team0.Z");
-			int t0yaw = conf.getMapConfig().getInt("Maps." + mapname + ".Team0.Yaw");
-			Location t0l = new Location(w, t0x, t0y, t0z);
-			t0l.setX(t0l.getX() + 0.5);
-			t0l.setZ(t0l.getZ() + 0.5);
-			t0l.setYaw(t0yaw);
+            val t1x = Sclat.Companion.conf!!.mapConfig!!.getInt("Maps." + mapname + ".Team1.X")
+            val t1y = Sclat.Companion.conf!!.mapConfig!!.getInt("Maps." + mapname + ".Team1.Y")
+            val t1z = Sclat.Companion.conf!!.mapConfig!!.getInt("Maps." + mapname + ".Team1.Z")
+            val t1yaw = Sclat.Companion.conf!!.mapConfig!!.getInt("Maps." + mapname + ".Team1.Yaw")
+            val t1l = Location(w, t1x.toDouble(), t1y.toDouble(), t1z.toDouble())
+            t1l.setX(t1l.getX() + 0.5)
+            t1l.setZ(t1l.getZ() + 0.5)
+            t1l.setYaw(t1yaw.toFloat())
 
-			int t1x = conf.getMapConfig().getInt("Maps." + mapname + ".Team1.X");
-			int t1y = conf.getMapConfig().getInt("Maps." + mapname + ".Team1.Y");
-			int t1z = conf.getMapConfig().getInt("Maps." + mapname + ".Team1.Z");
-			int t1yaw = conf.getMapConfig().getInt("Maps." + mapname + ".Team1.Yaw");
-			Location t1l = new Location(w, t1x, t1y, t1z);
-			t1l.setX(t1l.getX() + 0.5);
-			t1l.setZ(t1l.getZ() + 0.5);
-			t1l.setYaw(t1yaw);
+            val t0intx = Sclat.Companion.conf!!.mapConfig!!.getInt("Maps." + mapname + ".Team0IntroLoc.X")
+            val t0inty = Sclat.Companion.conf!!.mapConfig!!.getInt("Maps." + mapname + ".Team0IntroLoc.Y")
+            val t0intz = Sclat.Companion.conf!!.mapConfig!!.getInt("Maps." + mapname + ".Team0IntroLoc.Z")
+            val t0intyaw = Sclat.Companion.conf!!.mapConfig!!.getInt("Maps." + mapname + ".Team0IntroLoc.Yaw")
+            val t0intl = Location(w, t0intx.toDouble(), t0inty.toDouble(), t0intz.toDouble())
+            t0intl.setYaw(t0intyaw.toFloat())
 
-			int t0intx = conf.getMapConfig().getInt("Maps." + mapname + ".Team0IntroLoc.X");
-			int t0inty = conf.getMapConfig().getInt("Maps." + mapname + ".Team0IntroLoc.Y");
-			int t0intz = conf.getMapConfig().getInt("Maps." + mapname + ".Team0IntroLoc.Z");
-			int t0intyaw = conf.getMapConfig().getInt("Maps." + mapname + ".Team0IntroLoc.Yaw");
-			Location t0intl = new Location(w, t0intx, t0inty, t0intz);
-			t0intl.setYaw(t0intyaw);
+            val t1intx = Sclat.Companion.conf!!.mapConfig!!.getInt("Maps." + mapname + ".Team1IntroLoc.X")
+            val t1inty = Sclat.Companion.conf!!.mapConfig!!.getInt("Maps." + mapname + ".Team1IntroLoc.Y")
+            val t1intz = Sclat.Companion.conf!!.mapConfig!!.getInt("Maps." + mapname + ".Team1IntroLoc.Z")
+            val t1intyaw = Sclat.Companion.conf!!.mapConfig!!.getInt("Maps." + mapname + ".Team1IntroLoc.Yaw")
+            val t1intl = Location(w, t1intx.toDouble(), t1inty.toDouble(), t1intz.toDouble())
+            t1intl.setYaw(t1intyaw.toFloat())
 
-			int t1intx = conf.getMapConfig().getInt("Maps." + mapname + ".Team1IntroLoc.X");
-			int t1inty = conf.getMapConfig().getInt("Maps." + mapname + ".Team1IntroLoc.Y");
-			int t1intz = conf.getMapConfig().getInt("Maps." + mapname + ".Team1IntroLoc.Z");
-			int t1intyaw = conf.getMapConfig().getInt("Maps." + mapname + ".Team1IntroLoc.Yaw");
-			Location t1intl = new Location(w, t1intx, t1inty, t1intz);
-			t1intl.setYaw(t1intyaw);
+            val rlocx = Sclat.Companion.conf!!.mapConfig!!.getInt("Maps." + mapname + ".ResultLoc.X")
+            val rlocy = Sclat.Companion.conf!!.mapConfig!!.getInt("Maps." + mapname + ".ResultLoc.Y")
+            val rlocz = Sclat.Companion.conf!!.mapConfig!!.getInt("Maps." + mapname + ".ResultLoc.Z")
+            val rlocyaw = Sclat.Companion.conf!!.mapConfig!!.getInt("Maps." + mapname + ".ResultLoc.Yaw")
+            val rloc = Location(w, rlocx.toDouble(), rlocy.toDouble(), rlocz.toDouble())
+            rloc.setYaw(rlocyaw.toFloat())
+            rloc.setPitch(90f)
 
-			int rlocx = conf.getMapConfig().getInt("Maps." + mapname + ".ResultLoc.X");
-			int rlocy = conf.getMapConfig().getInt("Maps." + mapname + ".ResultLoc.Y");
-			int rlocz = conf.getMapConfig().getInt("Maps." + mapname + ".ResultLoc.Z");
-			int rlocyaw = conf.getMapConfig().getInt("Maps." + mapname + ".ResultLoc.Yaw");
-			Location rloc = new Location(w, rlocx, rlocy, rlocz);
-			rloc.setYaw(rlocyaw);
-			rloc.setPitch(90);
+            val tlocx = Sclat.Companion.conf!!.mapConfig!!.getInt("Maps." + mapname + ".WaitLoc.X")
+            val tlocy = Sclat.Companion.conf!!.mapConfig!!.getInt("Maps." + mapname + ".WaitLoc.Y")
+            val tlocz = Sclat.Companion.conf!!.mapConfig!!.getInt("Maps." + mapname + ".WaitLoc.Z")
+            val tloc = Location(w, tlocx.toDouble(), tlocy.toDouble(), tlocz.toDouble())
 
-			int tlocx = conf.getMapConfig().getInt("Maps." + mapname + ".WaitLoc.X");
-			int tlocy = conf.getMapConfig().getInt("Maps." + mapname + ".WaitLoc.Y");
-			int tlocz = conf.getMapConfig().getInt("Maps." + mapname + ".WaitLoc.Z");
-			Location tloc = new Location(w, tlocx, tlocy, tlocz);
+            val nlocx = Sclat.Companion.conf!!.mapConfig!!.getInt("Maps." + mapname + ".NoBlockLoc.X")
+            val nlocy = Sclat.Companion.conf!!.mapConfig!!.getInt("Maps." + mapname + ".NoBlockLoc.Y")
+            val nlocz = Sclat.Companion.conf!!.mapConfig!!.getInt("Maps." + mapname + ".NoBlockLoc.Z")
+            val nloc = Location(w, nlocx.toDouble(), nlocy.toDouble(), nlocz.toDouble())
 
-			int nlocx = conf.getMapConfig().getInt("Maps." + mapname + ".NoBlockLoc.X");
-			int nlocy = conf.getMapConfig().getInt("Maps." + mapname + ".NoBlockLoc.Y");
-			int nlocz = conf.getMapConfig().getInt("Maps." + mapname + ".NoBlockLoc.Z");
-			Location nloc = new Location(w, nlocx, nlocy, nlocz);
+            if (Sclat.Companion.conf!!.mapConfig!!.contains("Maps." + mapname + ".Path")) {
+                for (pathname in Sclat.Companion.conf!!.mapConfig!!.getConfigurationSection("Maps." + mapname + ".Path")!!
+                    .getKeys(false)) {
+                    val flocx =
+                        (
+                            Sclat.Companion.conf!!.mapConfig!!.getDouble("Maps." + mapname + ".Path." + pathname + ".From.X") +
+                                0.5
+                            )
+                    val flocy =
+                        (
+                            Sclat.Companion.conf!!.mapConfig!!.getDouble("Maps." + mapname + ".Path." + pathname + ".From.Y") +
+                                0.5
+                            )
+                    val flocz =
+                        (
+                            Sclat.Companion.conf!!.mapConfig!!.getDouble("Maps." + mapname + ".Path." + pathname + ".From.Z") +
+                                0.5
+                            )
+                    val from = Location(w, flocx, flocy, flocz)
 
-			if (conf.getMapConfig().contains("Maps." + mapname + ".Path")) {
-				for (String pathname : conf.getMapConfig().getConfigurationSection("Maps." + mapname + ".Path")
-						.getKeys(false)) {
-					double flocx = conf.getMapConfig().getDouble("Maps." + mapname + ".Path." + pathname + ".From.X")
-							+ 0.5;
-					double flocy = conf.getMapConfig().getDouble("Maps." + mapname + ".Path." + pathname + ".From.Y")
-							+ 0.5;
-					double flocz = conf.getMapConfig().getDouble("Maps." + mapname + ".Path." + pathname + ".From.Z")
-							+ 0.5;
-					Location from = new Location(w, flocx, flocy, flocz);
+                    val tolocx =
+                        (
+                            Sclat.Companion.conf!!.mapConfig!!.getDouble("Maps." + mapname + ".Path." + pathname + ".To.X") +
+                                0.5
+                            )
+                    val tolocy =
+                        (
+                            Sclat.Companion.conf!!.mapConfig!!.getDouble("Maps." + mapname + ".Path." + pathname + ".To.Y") +
+                                0.5
+                            )
+                    val tolocz =
+                        (
+                            Sclat.Companion.conf!!.mapConfig!!.getDouble("Maps." + mapname + ".Path." + pathname + ".To.Z") +
+                                0.5
+                            )
+                    val to = Location(w, tolocx, tolocy, tolocz)
+                    val path = Path(from, to)
+                    map.addPath(path)
+                }
+            }
 
-					double tolocx = conf.getMapConfig().getDouble("Maps." + mapname + ".Path." + pathname + ".To.X")
-							+ 0.5;
-					double tolocy = conf.getMapConfig().getDouble("Maps." + mapname + ".Path." + pathname + ".To.Y")
-							+ 0.5;
-					double tolocz = conf.getMapConfig().getDouble("Maps." + mapname + ".Path." + pathname + ".To.Z")
-							+ 0.5;
-					Location to = new Location(w, tolocx, tolocy, tolocz);
-					Path path = new Path(from, to);
-					map.addPath(path);
-				}
-			}
+            if (Sclat.Companion.conf!!.mapConfig!!.contains("Maps." + mapname + ".Area")) {
+                for (Areaname in Sclat.Companion.conf!!.mapConfig!!.getConfigurationSection("Maps." + mapname + ".Area")!!
+                    .getKeys(false)) {
+                    map.canAreaBattle = true
+                    val flocx =
+                        (
+                            Sclat.Companion.conf!!.mapConfig!!.getDouble("Maps." + mapname + ".Area." + Areaname + ".From.X") +
+                                0.5
+                            )
+                    val flocy =
+                        (
+                            Sclat.Companion.conf!!.mapConfig!!.getDouble("Maps." + mapname + ".Area." + Areaname + ".From.Y") +
+                                0.5
+                            )
+                    val flocz =
+                        (
+                            Sclat.Companion.conf!!.mapConfig!!.getDouble("Maps." + mapname + ".Area." + Areaname + ".From.Z") +
+                                0.5
+                            )
+                    val from = Location(w, flocx, flocy, flocz)
 
-			if (conf.getMapConfig().contains("Maps." + mapname + ".Area")) {
-				for (String Areaname : conf.getMapConfig().getConfigurationSection("Maps." + mapname + ".Area")
-						.getKeys(false)) {
-					map.setCanAreaBattle(true);
-					double flocx = conf.getMapConfig().getDouble("Maps." + mapname + ".Area." + Areaname + ".From.X")
-							+ 0.5;
-					double flocy = conf.getMapConfig().getDouble("Maps." + mapname + ".Area." + Areaname + ".From.Y")
-							+ 0.5;
-					double flocz = conf.getMapConfig().getDouble("Maps." + mapname + ".Area." + Areaname + ".From.Z")
-							+ 0.5;
-					Location from = new Location(w, flocx, flocy, flocz);
+                    val tolocx =
+                        (
+                            Sclat.Companion.conf!!.mapConfig!!.getDouble("Maps." + mapname + ".Area." + Areaname + ".To.X") +
+                                0.5
+                            )
+                    val tolocy =
+                        (
+                            Sclat.Companion.conf!!.mapConfig!!.getDouble("Maps." + mapname + ".Area." + Areaname + ".To.Y") +
+                                0.5
+                            )
+                    val tolocz =
+                        (
+                            Sclat.Companion.conf!!.mapConfig!!.getDouble("Maps." + mapname + ".Area." + Areaname + ".To.Z") +
+                                0.5
+                            )
+                    val to = Location(w, tolocx, tolocy, tolocz)
+                    val area = Area(from, to)
+                    map.addArea(area)
+                }
+            }
 
-					double tolocx = conf.getMapConfig().getDouble("Maps." + mapname + ".Area." + Areaname + ".To.X")
-							+ 0.5;
-					double tolocy = conf.getMapConfig().getDouble("Maps." + mapname + ".Area." + Areaname + ".To.Y")
-							+ 0.5;
-					double tolocz = conf.getMapConfig().getDouble("Maps." + mapname + ".Area." + Areaname + ".To.Z")
-							+ 0.5;
-					Location to = new Location(w, tolocx, tolocy, tolocz);
-					Area area = new Area(from, to);
-					map.addArea(area);
-				}
-			}
+            var canpaintbblock = false
+            if (Sclat.Companion.conf!!.mapConfig!!.contains("Maps." + mapname + ".CanPaintBarrierBlock")) {
+                canpaintbblock =
+                    Sclat.Companion.conf!!.mapConfig!!.getBoolean("Maps." + mapname + ".CanPaintBarrierBlock")
+            }
 
-			boolean canpaintbblock = false;
-			if (conf.getMapConfig().contains("Maps." + mapname + ".CanPaintBarrierBlock"))
-				canpaintbblock = conf.getMapConfig().getBoolean("Maps." + mapname + ".CanPaintBarrierBlock");
+            if (Sclat.Companion.conf!!.mapConfig!!.contains("Maps." + mapname + ".Wiremesh")) {
+                var trapDoor = false
+                if (Sclat.Companion.conf!!.mapConfig!!.contains("Maps." + mapname + ".Wiremesh.TrapDoor")) {
+                    trapDoor =
+                        Sclat.Companion.conf!!.mapConfig!!.getBoolean("Maps." + mapname + ".Wiremesh.TrapDoor")
+                }
+                var ironBars = false
+                if (Sclat.Companion.conf!!.mapConfig!!.contains("Maps." + mapname + ".Wiremesh.IronBars")) {
+                    ironBars =
+                        Sclat.Companion.conf!!.mapConfig!!.getBoolean("Maps." + mapname + ".Wiremesh.IronBars")
+                }
+                var fence = false
+                if (Sclat.Companion.conf!!.mapConfig!!.contains("Maps." + mapname + ".Wiremesh.Fence")) {
+                    fence =
+                        Sclat.Companion.conf!!.mapConfig!!.getBoolean("Maps." + mapname + ".Wiremesh.Fence")
+                }
 
-			if (conf.getMapConfig().contains("Maps." + mapname + ".Wiremesh")) {
-				boolean trapDoor = false;
-				if (conf.getMapConfig().contains("Maps." + mapname + ".Wiremesh.TrapDoor"))
-					trapDoor = conf.getMapConfig().getBoolean("Maps." + mapname + ".Wiremesh.TrapDoor");
-				boolean ironBars = false;
-				if (conf.getMapConfig().contains("Maps." + mapname + ".Wiremesh.IronBars"))
-					ironBars = conf.getMapConfig().getBoolean("Maps." + mapname + ".Wiremesh.IronBars");
-				boolean fence = false;
-				if (conf.getMapConfig().contains("Maps." + mapname + ".Wiremesh.Fence"))
-					fence = conf.getMapConfig().getBoolean("Maps." + mapname + ".Wiremesh.Fence");
+                val flocx = Sclat.Companion.conf!!.mapConfig!!.getDouble("Maps." + mapname + ".Wiremesh.From.X") + 0.5
+                val flocy = Sclat.Companion.conf!!.mapConfig!!.getDouble("Maps." + mapname + ".Wiremesh.From.Y")
+                val flocz = Sclat.Companion.conf!!.mapConfig!!.getDouble("Maps." + mapname + ".Wiremesh.From.Z") + 0.5
+                val from = Location(w, flocx, flocy, flocz)
 
-				double flocx = conf.getMapConfig().getDouble("Maps." + mapname + ".Wiremesh.From.X") + 0.5;
-				double flocy = conf.getMapConfig().getDouble("Maps." + mapname + ".Wiremesh.From.Y");
-				double flocz = conf.getMapConfig().getDouble("Maps." + mapname + ".Wiremesh.From.Z") + 0.5;
-				Location from = new Location(w, flocx, flocy, flocz);
+                val tolocx = Sclat.Companion.conf!!.mapConfig!!.getDouble("Maps." + mapname + ".Wiremesh.To.X") + 0.5
+                val tolocy = Sclat.Companion.conf!!.mapConfig!!.getDouble("Maps." + mapname + ".Wiremesh.To.Y")
+                val tolocz = Sclat.Companion.conf!!.mapConfig!!.getDouble("Maps." + mapname + ".Wiremesh.To.Z") + 0.5
+                val to = Location(w, tolocx, tolocy, tolocz)
 
-				double tolocx = conf.getMapConfig().getDouble("Maps." + mapname + ".Wiremesh.To.X") + 0.5;
-				double tolocy = conf.getMapConfig().getDouble("Maps." + mapname + ".Wiremesh.To.Y");
-				double tolocz = conf.getMapConfig().getDouble("Maps." + mapname + ".Wiremesh.To.Z") + 0.5;
-				Location to = new Location(w, tolocx, tolocy, tolocz);
+                val wmListTask = WiremeshListTask(from, to, trapDoor, ironBars, fence)
+                map.wiremeshListTask = wmListTask
+            }
 
-				WiremeshListTask wmListTask = new WiremeshListTask(from, to, trapDoor, ironBars, fence);
-				map.setWiremeshListTask(wmListTask);
-			}
+            if (Sclat.Companion.conf!!.mapConfig!!.contains("Maps." + mapname + ".VoidY")) {
+                map.voidY = Sclat.Companion.conf!!.mapConfig!!.getInt("Maps." + mapname + ".VoidY")
+            }
 
-			if (conf.getMapConfig().contains("Maps." + mapname + ".VoidY")) {
-				map.setVoidY(conf.getMapConfig().getInt("Maps." + mapname + ".VoidY"));
-			}
+            map.intro = il
+            map.team0Loc = t0l
+            map.team1Loc = t1l
+            map.team0Intro = t0intl
+            map.team1Intro = t1intl
+            map.resultLoc = rloc
+            map.setTaikibasyo(tloc)
+            map.noBlockLocation = nloc
 
-			map.setIntro(il);
-			map.setTeam0Loc(t0l);
-			map.setTeam1Loc(t1l);
-			map.setTeam0Intro(t0intl);
-			map.setTeam1Intro(t1intl);
-			map.setResultLoc(rloc);
-			map.setTaikibasyo(tloc);
-			map.setNoBlockLocation(nloc);
+            map.introMoveX = intromovex
+            map.introMoveY = intromovey
+            map.introMoveZ = intromovez
 
-			map.setIntroMoveX(intromovex);
-			map.setIntroMoveY(intromovey);
-			map.setIntroMoveZ(intromovez);
+            map.setCanPaintBBlock(canpaintbblock)
 
-			map.setCanPaintBBlock(canpaintbblock);
+            // Main.getPlugin().getServer().createWorld(new WorldCreator(WorldName));
+            plugin.getLogger().info(mapname)
 
-			// Main.getPlugin().getServer().createWorld(new WorldCreator(WorldName));
+            map.worldName = WorldName
 
-			VariablesKt.getPlugin().getLogger().info(mapname);
+            allmapcount++
 
-			map.setWorldName(WorldName);
-
-			allmapcount++;
-
-			// DataMgr.setMap(mapname, map);
-			DataMgr.addMapList(map);
-		}
-	}
+            // DataMgr.setMap(mapname, map);
+            addMapList(map)
+        }
+    }
 }

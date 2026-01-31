@@ -1,1634 +1,2082 @@
+package be4rjp.sclat.manager
 
-package be4rjp.sclat.manager;
-
-import be4rjp.sclat.Sclat;
-import be4rjp.sclat.VariablesKt;
-import be4rjp.sclat.api.Animation;
-import be4rjp.sclat.api.MessageType;
-import be4rjp.sclat.api.Plugins;
-import be4rjp.sclat.api.SclatUtil;
-import be4rjp.sclat.api.ServerType;
-import be4rjp.sclat.api.SoundType;
-import be4rjp.sclat.api.player.PlayerData;
-import be4rjp.sclat.api.player.PlayerSettings;
-import be4rjp.sclat.api.team.Team;
-import be4rjp.sclat.api.utils.ObjectiveUtil;
-import be4rjp.sclat.api.wiremesh.Wiremesh;
-import be4rjp.sclat.data.Area;
-import be4rjp.sclat.data.BlockUpdater;
-import be4rjp.sclat.data.Color;
-import be4rjp.sclat.data.DataMgr;
-import be4rjp.sclat.data.MapData;
-import be4rjp.sclat.data.Match;
-import be4rjp.sclat.data.NoteBlockSong;
-import be4rjp.sclat.data.PaintData;
-import be4rjp.sclat.data.Path;
-import be4rjp.sclat.data.WeaponClass;
-import be4rjp.sclat.gui.OpenGUI;
-import be4rjp.sclat.server.EquipmentServerManager;
-import be4rjp.sclat.server.StatusClient;
-import be4rjp.sclat.weapon.Brush;
-import be4rjp.sclat.weapon.Bucket;
-import be4rjp.sclat.weapon.Buckler;
-import be4rjp.sclat.weapon.Charger;
-import be4rjp.sclat.weapon.Decoy;
-import be4rjp.sclat.weapon.Funnel;
-import be4rjp.sclat.weapon.Gear;
-import be4rjp.sclat.weapon.Hound;
-import be4rjp.sclat.weapon.Kasa;
-import be4rjp.sclat.weapon.Manuber;
-import be4rjp.sclat.weapon.Reeler;
-import be4rjp.sclat.weapon.Roller;
-import be4rjp.sclat.weapon.Shooter;
-import be4rjp.sclat.weapon.Spinner;
-import be4rjp.sclat.weapon.Swapper;
-import be4rjp.sclat.weapon.spweapon.SuperArmor;
-import com.xxmicloxx.NoteBlockAPI.model.Song;
-import com.xxmicloxx.NoteBlockAPI.songplayer.RadioSongPlayer;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
-import net.md_5.bungee.api.ChatMessageType;
-import net.md_5.bungee.api.chat.TextComponent;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Sound;
-import org.bukkit.World;
-import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.FallingBlock;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.potion.PotionEffectType;
-import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scoreboard.DisplaySlot;
-import org.bukkit.scoreboard.Objective;
-import org.bukkit.scoreboard.Scoreboard;
-import org.bukkit.scoreboard.ScoreboardManager;
-import static be4rjp.sclat.Sclat.conf;
-import static be4rjp.sclat.manager.PlayerStatusMgr.getRank;
-import static org.bukkit.Bukkit.getServer;
+import be4rjp.sclat.Sclat
+import be4rjp.sclat.api.Animation.areaResultAnimation
+import be4rjp.sclat.api.Animation.resultAnimation
+import be4rjp.sclat.api.Animation.tdmResultAnimation
+import be4rjp.sclat.api.MessageType
+import be4rjp.sclat.api.Plugins
+import be4rjp.sclat.api.SclatUtil
+import be4rjp.sclat.api.SclatUtil.playGameSound
+import be4rjp.sclat.api.SclatUtil.restartServer
+import be4rjp.sclat.api.SclatUtil.sendMessage
+import be4rjp.sclat.api.SclatUtil.sendWorldBorderWarningClearPacket
+import be4rjp.sclat.api.ServerType
+import be4rjp.sclat.api.SoundType
+import be4rjp.sclat.api.player.PlayerSettings
+import be4rjp.sclat.api.team.Team
+import be4rjp.sclat.api.utils.ObjectiveUtil
+import be4rjp.sclat.data.BlockUpdater
+import be4rjp.sclat.data.DataMgr
+import be4rjp.sclat.data.DataMgr.ColorShuffle
+import be4rjp.sclat.data.DataMgr.MapDataShuffle
+import be4rjp.sclat.data.DataMgr.armorStandMap
+import be4rjp.sclat.data.DataMgr.beaconMap
+import be4rjp.sclat.data.DataMgr.blockDataMap
+import be4rjp.sclat.data.DataMgr.getColorRandom
+import be4rjp.sclat.data.DataMgr.getMapRandom
+import be4rjp.sclat.data.DataMgr.getMatchFromId
+import be4rjp.sclat.data.DataMgr.getPlayerData
+import be4rjp.sclat.data.DataMgr.getPlayerIsQuit
+import be4rjp.sclat.data.DataMgr.setMatch
+import be4rjp.sclat.data.DataMgr.setPlayerIsQuit
+import be4rjp.sclat.data.DataMgr.setTeam
+import be4rjp.sclat.data.DataMgr.spongeMap
+import be4rjp.sclat.data.DataMgr.sprinklerMap
+import be4rjp.sclat.data.Match
+import be4rjp.sclat.gui.OpenGUI
+import be4rjp.sclat.plugin
+import be4rjp.sclat.server.EquipmentServerManager.doCommands
+import be4rjp.sclat.server.StatusClient
+import be4rjp.sclat.weapon.Brush.HoldRunnable
+import be4rjp.sclat.weapon.Brush.RollPaintRunnable
+import be4rjp.sclat.weapon.Bucket.BucketHealRunnable
+import be4rjp.sclat.weapon.Buckler.BucklerRunnable
+import be4rjp.sclat.weapon.Charger.ChargerRunnable
+import be4rjp.sclat.weapon.Decoy.DecoyRunnable
+import be4rjp.sclat.weapon.Funnel.funnelFloat
+import be4rjp.sclat.weapon.Gear
+import be4rjp.sclat.weapon.Gear.getGearInfluence
+import be4rjp.sclat.weapon.Hound.houndEXRunnable
+import be4rjp.sclat.weapon.Hound.houndRunnable
+import be4rjp.sclat.weapon.Kasa.kasaRunnable
+import be4rjp.sclat.weapon.Manuber
+import be4rjp.sclat.weapon.Reeler.reelerRunnable
+import be4rjp.sclat.weapon.Reeler.reelerShootRunnable
+import be4rjp.sclat.weapon.Roller.holdRunnable
+import be4rjp.sclat.weapon.Roller.rollPaintRunnable
+import be4rjp.sclat.weapon.Shooter
+import be4rjp.sclat.weapon.Shooter.maneuverShootRunnable
+import be4rjp.sclat.weapon.Shooter.shooterRunnable
+import be4rjp.sclat.weapon.Spinner.spinnerRunnable
+import be4rjp.sclat.weapon.Swapper.SwapperRunnable
+import be4rjp.sclat.weapon.spweapon.SuperArmor.setArmor
+import com.xxmicloxx.NoteBlockAPI.songplayer.RadioSongPlayer
+import net.md_5.bungee.api.ChatMessageType
+import net.md_5.bungee.api.chat.TextComponent
+import org.bukkit.Bukkit
+import org.bukkit.ChatColor
+import org.bukkit.GameMode
+import org.bukkit.Location
+import org.bukkit.Material
+import org.bukkit.Particle
+import org.bukkit.Sound
+import org.bukkit.World
+import org.bukkit.block.data.BlockData
+import org.bukkit.entity.Entity
+import org.bukkit.entity.EntityType
+import org.bukkit.entity.FallingBlock
+import org.bukkit.entity.LivingEntity
+import org.bukkit.entity.Player
+import org.bukkit.inventory.ItemStack
+import org.bukkit.potion.PotionEffectType
+import org.bukkit.scheduler.BukkitRunnable
+import org.bukkit.scoreboard.DisplaySlot
+import org.bukkit.scoreboard.Objective
+import org.bukkit.scoreboard.Scoreboard
+import java.util.Collections
+import java.util.TreeMap
+import java.util.function.Consumer
 
 /**
  *
  * @author Be4rJP
  */
-public class MatchMgr {
-
-	public static int matchcount = 0;
-	public static int mapcount = 0;
-	public static byte volume = 20;
-	public static boolean canRollback = true;
-
-	public static List<String> matchedPlayerList = new ArrayList<>();
-
-	public static void PlayerJoinMatch(Player player) {
-		PlayerData data = DataMgr.getPlayerData(player);
-
-		/*
-		 * if(DataMgr.getPlayerIsQuit(player.getUniqueId().toString())){
-		 * Sclat.sendMessage("§c§n途中で退出した場合再参加はできません", MessageType.PLAYER, player);
-		 * Sclat.playGameSound(player, SoundType.ERROR); return; }
-		 */
-
-		if (!DataMgr.joinedList.contains(player)) {
-
-			Match match = DataMgr.getMatchFromId(matchcount);
-			if (match.canJoin()) {
-				match.addPlayerCount();
-				int playercount = match.getPlayerCount();
-				if (match.getJoinedPlayerCount() < conf.config.getInt("MaxPlayerCount")) {
-					match.addJoinedPlayerCount();
-
-					data.match = match;
-					data.isJoined = (true);
-
-					DataMgr.joinedList.add(player);
-
-					SclatUtil.sendMessage("§b§n" + player.getDisplayName() + " joined the match",
-							MessageType.ALL_PLAYER);
-
-					player.teleport(match.getMapData().getTaikibayso());
-					if (conf.config.getBoolean("CanVoting")
-							&& !DataMgr.getPlayerIsQuit(player.getUniqueId().toString()))
-						OpenGUI.MatchTohyoGUI(player);
-
-					int startPlayerCount = conf.config.getInt("StartPlayerCount");
-
-					if (match.getJoinedPlayerCount() < startPlayerCount) {
-						SclatUtil.sendMessage("§a人数が足りないため試合を開始することができません", MessageType.ALL_PLAYER);
-						SclatUtil.sendMessage("§aあと§c" + (startPlayerCount - match.getJoinedPlayerCount()) + "§a人必要です",
-								MessageType.ALL_PLAYER);
-					}
-
-					if (match.getJoinedPlayerCount() == startPlayerCount && !match.isStarted && !match.isStartedCount) {
-						match.isStarted = (true);
-						match.isStartedCount = (true);
-						BukkitRunnable task = new BukkitRunnable() {
-							int s = 0;
-							final Player p = player;
-							@Override
-							public void run() {
-								if (match.getJoinedPlayerCount() < startPlayerCount) {
-									SclatUtil.sendMessage("§a人数が足りないため試合を開始することができません", MessageType.ALL_PLAYER);
-									SclatUtil.sendMessage(
-											"§aあと§c" + (startPlayerCount - match.getJoinedPlayerCount()) + "§a人必要です",
-											MessageType.ALL_PLAYER);
-									match.isStartedCount = (false);
-									match.isStarted = (false);
-									// Send match status
-									if (Sclat.type == ServerType.MATCH) {
-										List<String> commands = new ArrayList<>();
-										commands.add("cdc " + conf.getServers().getString("ServerName"));
-										commands.add("stop");
-										StatusClient sc = new StatusClient(conf.config.getString("StatusShare.Host"),
-												conf.config.getInt("StatusShare.Port"), commands);
-										sc.startClient();
-									}
-									cancel();
-								}
-								if (s == 0) {
-									// Send match status
-									if (Sclat.type == ServerType.MATCH) {
-										List<String> commands = new ArrayList<>();
-										commands.add("cd " + conf.getServers().getString("ServerName") + " "
-												+ (System.currentTimeMillis() / 1000 + 30));
-										commands.add("stop");
-										StatusClient sc = new StatusClient(conf.config.getString("StatusShare.Host"),
-												conf.config.getInt("StatusShare.Port"), commands);
-										sc.startClient();
-									}
-									SclatUtil.sendMessage("§a試合開始まで後§c30§a秒", MessageType.ALL_PLAYER);
-								}
-								if (s == 10)
-									SclatUtil.sendMessage("§a試合開始まで後§c20§a秒", MessageType.ALL_PLAYER);
-								if (s == 20)
-									SclatUtil.sendMessage("§a試合開始まで後§c10§a秒", MessageType.ALL_PLAYER);
-								if (s == 25)
-									SclatUtil.sendMessage("§a試合開始まで後§c5§a秒", MessageType.ALL_PLAYER);
-								if (s == 26)
-									SclatUtil.sendMessage("§a試合開始まで後§c4§a秒", MessageType.ALL_PLAYER);
-								if (s == 27)
-									SclatUtil.sendMessage("§a試合開始まで後§c3§a秒", MessageType.ALL_PLAYER);
-								if (s == 28)
-									SclatUtil.sendMessage("§a試合開始まで後§c2§a秒", MessageType.ALL_PLAYER);
-								if (s == 29)
-									SclatUtil.sendMessage("§a試合開始まで後§c1§a秒", MessageType.ALL_PLAYER);
-								if (s == 30) {
-									match.setCanJoin(false);
-
-									// かぶらないようにマッピング
-									Map<Integer, Player> playerMap = new HashMap<>();
-									for (Player jp : DataMgr.joinedList) {
-										int rate = getRank(jp);
-										while (playerMap.containsKey(rate)) {
-											rate++;
-										}
-										playerMap.put(rate, jp);
-									}
-
-									// ソート
-									List<Player> sortedMember = new ArrayList<>();
-									if (conf.config.getBoolean("RateMatch")) {
-										Map<Integer, Player> treeMap = new TreeMap<>(playerMap);
-										/*
-										 * if(match.getJoinedPlayerCount() == 3){ List<Player> list = new ArrayList<>();
-										 * for (Integer key : treeMap.keySet()) list.add(treeMap.get(key));
-										 * sortedMember.add(list.get(0)); sortedMember.add(list.get(2));
-										 * sortedMember.add(list.get(1)); }else{
-										 */
-										int index = 0;
-										for (Integer key : treeMap.keySet()) {
-											sortedMember.add(treeMap.get(key));
-
-											index++;
-										}
-										Collections.shuffle(sortedMember);
-										// }
-									} else {
-										sortedMember = DataMgr.joinedList;
-										Collections.shuffle(sortedMember);
-									}
-
-									int i = 0;
-									for (Player jp : sortedMember) {
-										PlayerData data = DataMgr.getPlayerData(jp);
-										if (i % 2 == 0)
-											data.team = match.team0;
-										else
-											data.team = match.team1;
-										i++;
-									}
-
-									int playerNumber = 1;
-									for (Player jp : sortedMember) {
-										PlayerData data = DataMgr.getPlayerData(jp);
-										if (jp.isOnline()) {
-											data.playerNumber = (playerNumber);
-											data.team.addRateTotal(getRank(jp));
-											// jp.setDisplayName(data.getTeam().getTeamColor().getColorCode() +
-											// jp.getName());
-										}
-										playerNumber++;
-									}
-
-									// Settings
-									if (Sclat.type == ServerType.MATCH) {
-										for (Player op : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
-											PlayerSettings playerSettings = new PlayerSettings(op);
-											SettingMgr.setSettings(playerSettings, op);
-										}
-									}
-
-									SclatUtil.sendMessage("§6試合が開始されました", MessageType.BROADCAST);
-									if (conf.config.getBoolean("RateMatch")) {
-										SclatUtil.sendMessage("", MessageType.ALL_PLAYER);
-										SclatUtil.sendMessage(
-												"§b試合の総合レート : §r"
-														+ (match.team0.getRateTotal() + match.team1.getRateTotal()),
-												MessageType.ALL_PLAYER);
-									}
-									EquipmentServerManager.doCommands();
-									if (conf.config.getBoolean("CanVoting")) {
-										if (match.getNawabariTCount() >= match.getTdmTCount()
-												&& match.getNawabariTCount() >= match.getGatiareaTCount()) {
-											conf.config.set("WorkMode", "Normal");
-										} else if (match.getTdmTCount() >= match.getGatiareaTCount()) {
-											conf.config.set("WorkMode", "TDM");
-										} else {
-											conf.config.set("WorkMode", "Area");
-										}
-									}
-									StartMatch(match);
-									for (Entity entity : p.getWorld().getEntities()) {
-										if (!(entity instanceof Player) && !(entity instanceof FallingBlock)) {
-											entity.remove();
-										}
-									}
-
-									// Send match status
-									if (Sclat.type == ServerType.MATCH) {
-										List<String> commands = new ArrayList<>();
-										commands.add("started " + conf.getServers().getString("ServerName") + " "
-												+ System.currentTimeMillis() / 1000);
-										commands.add("stop");
-										StatusClient sc = new StatusClient(conf.config.getString("StatusShare.Host"),
-												conf.config.getInt("StatusShare.Port"), commands);
-										sc.startClient();
-									}
-
-									cancel();
-								}
-								s++;
-							}
-						};
-						task.runTaskTimer(VariablesKt.getPlugin(), 0, 20);
-					}
-				} else {
-					SclatUtil.sendMessage("§c§n上限人数を超えているため参加できません", MessageType.PLAYER, player);
-					SclatUtil.playGameSound(player, SoundType.ERROR);
-				}
-			} else {
-				SclatUtil.sendMessage("§c§nこのマッチには既に開始しているため参加できません", MessageType.PLAYER, player);
-				SclatUtil.playGameSound(player, SoundType.ERROR);
-			}
-		} else {
-			SclatUtil.sendMessage("§c§n既にチームに参加しています", MessageType.PLAYER, player);
-			SclatUtil.playGameSound(player, SoundType.ERROR);
-		}
-
-	}
-
-	public static synchronized void MatchSetup() {
-		// 再起動オプション
-		if (conf.config.contains("RestartMatchCount"))
-			if (conf.config.getInt("RestartMatchCount") == matchcount)
-				SclatUtil.restartServer();
-
-		final int id = matchcount;
-		Match match = new Match(id);
-		Team team0 = new Team(id * 2);
-		Team team1 = new Team(id * 2 + 1);
-		DataMgr.setTeam(id * 2, team0);
-		DataMgr.setTeam(id * 2 + 1, team1);
-
-		BlockUpdater bur = new BlockUpdater();
-		if (conf.config.contains("BlockUpdateRate"))
-			bur.setMaxBlockInOneTick(conf.config.getInt("BlockUpdateRate"));
-		bur.start();
-		match.setBlockUpdater(bur);
-
-		DataMgr.ColorShuffle();
-		Color color0 = DataMgr.getColorRandom(0);
-		Color color1 = DataMgr.getColorRandom(1);
-		team0.setTeamColor(color0);
-		team1.setTeamColor(color1);
-
-		match.team0 = (team0);
-		match.team1 = (team1);
-
-		if (id == 0)
-			DataMgr.MapDataShuffle();
-
-		MapData map = DataMgr.getMapRandom(mapcount);
-		match.setMapData(map);
-
-		mapcount++;
-
-		if (mapcount == MapDataMgr.allmapcount) {
-			mapcount = 0;
-			// DataMgr.MapDataShuffle();
-		}
-
-		DataMgr.setMatch(id, match);
-
-		// lobby待機者用
-		final int id2 = Integer.MAX_VALUE;
-		Match lobby_m = new Match(id2);
-		Team lobby_t0 = new Team(id2);
-		Team lobby_t1 = new Team(id2 - 1);
-		DataMgr.setTeam(id2, lobby_t0);
-		DataMgr.setTeam(id2 - 1, lobby_t1);
-
-		DataMgr.ColorShuffle();
-		Color lc0 = DataMgr.getColorRandom(0);
-		Color lc1 = DataMgr.getColorRandom(1);
-		lobby_t0.setTeamColor(lc0);
-		lobby_t1.setTeamColor(lc1);
-
-		lobby_m.team0 = (lobby_t0);
-		lobby_m.team1 = (lobby_t1);
-
-		MapData map1 = DataMgr.getMapRandom(0);
-		lobby_m.setMapData(map1);
-
-		DataMgr.setMatch(id2, lobby_m);
-
-		// TeamLoc teamloc = new TeamLoc(map);
-		// teamloc.SetupTeam0Loc();
-		// teamloc.SetupTeam1Loc();
-		// DataMgr.setTeamLoc(map, teamloc);
-
-		if (conf.config.getString("WorkMode").equals("Trial")) {
-			ScoreboardManager manager = Bukkit.getScoreboardManager();
-			Scoreboard scoreboard = manager.getNewScoreboard();
-
-			org.bukkit.scoreboard.Team bteam0 = scoreboard.registerNewTeam(match.team0.getTeamColor().getColorName());
-			bteam0.setColor(match.team0.getTeamColor().getChatColor());
-			bteam0.setOption(org.bukkit.scoreboard.Team.Option.NAME_TAG_VISIBILITY,
-					org.bukkit.scoreboard.Team.OptionStatus.FOR_OTHER_TEAMS);
-			bteam0.setOption(org.bukkit.scoreboard.Team.Option.COLLISION_RULE,
-					org.bukkit.scoreboard.Team.OptionStatus.FOR_OWN_TEAM);
-
-			org.bukkit.scoreboard.Team bteam1 = scoreboard.registerNewTeam(match.team1.getTeamColor().getColorName());
-			bteam1.setColor(match.team1.getTeamColor().getChatColor());
-			bteam1.setOption(org.bukkit.scoreboard.Team.Option.NAME_TAG_VISIBILITY,
-					org.bukkit.scoreboard.Team.OptionStatus.FOR_OTHER_TEAMS);
-			bteam1.setOption(org.bukkit.scoreboard.Team.Option.COLLISION_RULE,
-					org.bukkit.scoreboard.Team.OptionStatus.FOR_OWN_TEAM);
-
-			team0.setTeam(bteam0);
-			team1.setTeam(bteam1);
-
-			match.scoreboard = (scoreboard);
-		}
-	}
-
-	public static void RollBack() {
-		if (!canRollback && conf.config.getString("WorkMode").equals("Trial"))
-			return;
-		for (PaintData data : DataMgr.getBlockDataMap().values()) {
-			data.getBlock().setType(data.getOriginalType());
-			if (data.blockData != null)
-				data.getBlock().setBlockData(data.blockData);
-			data = null;
-		}
-		DataMgr.getBlockDataMap().clear();
-		DataMgr.getSpongeMap().clear();
-		canRollback = false;
-
-		/*
-		 * for(Block block : DataMgr.rblist){ block.setType(Material.AIR);
-		 * DataMgr.rblist.remove(block); }
-		 */
-
-		BukkitRunnable task = new BukkitRunnable() {
-			@Override
-			public void run() {
-				canRollback = true;
-			}
-		};
-		task.runTaskLater(VariablesKt.getPlugin(), 3600);
-	}
-
-	public static void StartCount(Player player) {
-		BukkitRunnable task = new BukkitRunnable() {
-			final Player p = player;
-			int i = 0;
-			@Override
-			public void run() {
-				if (i == 10)
-					p.sendTitle("R§7EADY?", "", 0, 56, 0);
-				if (i == 12)
-					p.sendTitle("RE§7ADY?", "", 0, 46, 0);
-				if (i == 14)
-					p.sendTitle("REA§7DY?", "", 0, 36, 0);
-				if (i == 16)
-					p.sendTitle("READ§7Y?", "", 0, 26, 0);
-				if (i == 18)
-					p.sendTitle("READY§7?", "", 0, 16, 0);
-				if (i == 20)
-					p.sendTitle("READY?", "", 0, 6, 2);
-				if (i == 47)
-					p.sendTitle(DataMgr.getPlayerData(p).team.getTeamColor().getColorCode() + "GO!", "", 2, 6, 2);
-				i++;
-			}
-		};
-		task.runTaskTimer(VariablesKt.getPlugin(), 230, 1);
-	}
-
-	public static void MatchRunnable(Player player, Match match) {
-		BukkitRunnable task;
-		task = new BukkitRunnable() {
-			int s = 0;
-			final Player p = player;
-			final World w = VariablesKt.getPlugin().getServer().getWorld(match.getMapData().getWorldName());
-			Location intromove;
-			// EntitySquid squid;
-
-			LivingEntity squid;
-			// LivingEntity npcle;
-
-			@Override
-			public void run() {
-				try {
-
-					if (s == 0) {
-
-						p.setDisplayName(DataMgr.getPlayerData(p).team.getTeamColor().getColorCode() + p.getName());
-
-						DataMgr.getPlayerData(p).canFly = (true);
-
-						if (DataMgr.getPlayerData(p).playerNumber == 1) {
-							PaintMgr.PaintGlass(match);
-
-							p.getWorld().getEntities().forEach(entity -> {
-								if (entity.getType() == EntityType.SHULKER) {
-									entity.remove();
-								}
-							});
-
-							if (conf.config.getString("WorkMode").equals("Area")) {
-								for (Area area : match.getMapData().getAreaList()) {
-									area.setup(match);
-								}
-							}
-						}
-
-						switch (conf.config.getString("WorkMode")) {
-							case "Normal" :
-								SclatUtil.sendMessage("§6ゲームモード : §b§lナワバリバトル", MessageType.PLAYER, p);
-								SclatUtil.sendMessage("§f§l敵よりもたくさんナワバリを確保しろ！", MessageType.PLAYER, p);
-								break;
-							case "TDM" :
-								SclatUtil.sendMessage("§6ゲームモード : §b§lチームデスマッチ", MessageType.PLAYER, p);
-								SclatUtil.sendMessage("§f§l敵よりもキルをしろ！", MessageType.PLAYER, p);
-								break;
-							case "Area" :
-								SclatUtil.sendMessage("§6ゲームモード : §b§lガチエリア", MessageType.PLAYER, p);
-								SclatUtil.sendMessage("§f§lエリアを確保して守り抜け！", MessageType.PLAYER, p);
-								break;
-						}
-
-						if (DataMgr.getPlayerData(p).team == match.team0) {
-							Location l = DataMgr.getPlayerData(p).match.getMapData().getTeam0Loc();
-							int i = (DataMgr.getPlayerData(p).playerNumber + 1) / 2;
-							Location sl = null;
-							if (i == 1)
-								sl = new Location(l.getWorld(), l.getBlockX() + 1.5D, l.getBlockY(),
-										l.getBlockZ() + 1.5D);
-							else if (i == 2)
-								sl = new Location(l.getWorld(), l.getBlockX() - 0.5D, l.getBlockY(),
-										l.getBlockZ() + 1.5D);
-							else if (i == 3)
-								sl = new Location(l.getWorld(), l.getBlockX() + 1.5D, l.getBlockY(),
-										l.getBlockZ() - 0.5D);
-							else if (i == 4)
-								sl = new Location(l.getWorld(), l.getBlockX() - 0.5D, l.getBlockY(),
-										l.getBlockZ() - 0.5D);
-							else
-								sl = new Location(l.getWorld(), l.getBlockX() + 0.5D, l.getBlockY(),
-										l.getBlockZ() + 0.5D);
-							sl.setYaw(l.getYaw());
-							DataMgr.getPlayerData(p).matchLocation = (sl);
-						}
-						if (DataMgr.getPlayerData(p).team == match.team1) {
-							Location l = DataMgr.getPlayerData(p).match.getMapData().getTeam1Loc();
-							int i = DataMgr.getPlayerData(p).playerNumber / 2;
-							Location sl = null;
-							if (i == 1)
-								sl = new Location(l.getWorld(), l.getBlockX() + 1.5D, l.getBlockY(),
-										l.getBlockZ() + 1.5D);
-							else if (i == 2)
-								sl = new Location(l.getWorld(), l.getBlockX() - 0.5D, l.getBlockY(),
-										l.getBlockZ() + 1.5D);
-							else if (i == 3)
-								sl = new Location(l.getWorld(), l.getBlockX() + 1.5D, l.getBlockY(),
-										l.getBlockZ() - 0.5D);
-							else if (i == 4)
-								sl = new Location(l.getWorld(), l.getBlockX() - 0.5D, l.getBlockY(),
-										l.getBlockZ() - 0.5D);
-							else
-								sl = new Location(l.getWorld(), l.getBlockX() + 0.5D, l.getBlockY(),
-										l.getBlockZ() + 0.5D);
-							sl.setYaw(l.getYaw());
-							DataMgr.getPlayerData(p).matchLocation = (sl);
-						}
-
-						if (DataMgr.getPlayerData(p).playerNumber <= 8) {
-							Entity e = DataMgr.getPlayerData(p).matchLocation.getWorld()
-									.spawnEntity(DataMgr.getPlayerData(p).matchLocation, EntityType.SQUID);
-							squid = (LivingEntity) e;
-							squid.setAI(false);
-							squid.setSwimming(true);
-							squid.setCustomName(p.getName());
-							squid.setCustomNameVisible(true);
-						}
-
-						p.setGameMode(GameMode.SPECTATOR);
-						p.getInventory().clear();
-						Location introl = match.getMapData().getIntro();
-						p.teleport(introl);
-						Location location = DataMgr.getPlayerData(p).matchLocation;
-
-						if (conf.config.getString("WorkMode").equals("TDM"))
-							p.sendTitle("§l" + match.getMapData().getMapName(), "§7チームデスマッチ", 10, 70, 20);
-						else if (conf.config.getString("WorkMode").equals("Area"))
-							p.sendTitle("§l" + match.getMapData().getMapName(), "§7ガチエリア", 10, 70, 20);
-						else
-							p.sendTitle("§l" + match.getMapData().getMapName(), "§7ナワバリバトル", 10, 70, 20);
-
-						StartCount(p);
-
-						ScoreboardManager manager = Bukkit.getScoreboardManager();
-						Scoreboard scoreboard = manager.getNewScoreboard();
-
-						Objective objective = scoreboard.registerNewObjective("match", "intro",
-								"§6§lSclat§r " + Sclat.VERSION);
-						objective.setDisplaySlot(DisplaySlot.SIDEBAR);
-
-						List<String> lines = new ArrayList<>();
-
-						lines.add("");
-						lines.add("§a§lマップ名 » §6" + DataMgr.getPlayerData(p).match.getMapData().getMapName());
-						lines.add(" ");
-
-						if (conf.config.getString("WorkMode").equals("TDM"))
-							lines.add(ChatColor.YELLOW + "§lゲームモード » §rチームデスマッチ");
-						else if (conf.config.getString("WorkMode").equals("Area"))
-							lines.add(ChatColor.YELLOW + "§lゲームモード » §rガチエリア");
-						else
-							lines.add(ChatColor.YELLOW + "§lゲームモード » §rナワバリバトル");
-						lines.add("  ");
-						lines.add("§b§l残り時間 » §r3:00");
-
-						ObjectiveUtil.setLine(objective, lines);
-
-						p.setScoreboard(scoreboard);
-
-						for (Player player : Sclat.getPlugin(Sclat.class).getServer().getOnlinePlayers()) {
-							p.hidePlayer(VariablesKt.getPlugin(), player);
-						}
-
-					}
-					if (s >= 1 && s <= 100) {
-						if (s == 1)
-							intromove = match.getMapData().getIntro().clone();
-						MapData map = DataMgr.getPlayerData(p).match.getMapData();
-						intromove.add(map.getIntroMoveX(), map.getIntroMoveY(), map.getIntroMoveZ());
-						p.teleport(intromove);
-					}
-
-					if (s >= 100 && s <= 160) {
-						Location introl = match.getMapData().getTeam0Intro().clone().add(0.5, 0, 0.5);
-						p.teleport(introl);
-						if (DataMgr.getPlayerData(p).team == match.team0) {
-							if (s >= 101 && s <= 120) {
-								org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).team.getTeamColor().wool
-										.createBlockData();
-								introl.getWorld().spawnParticle(org.bukkit.Particle.BLOCK_DUST,
-										DataMgr.getPlayerData(p).matchLocation, 10, 0.3, 0.4, 0.3, 1, bd);
-
-							}
-							if (s == 120) {
-								if (DataMgr.getPlayerData(p).playerNumber <= 8)
-									squid.remove();
-							}
-							if (s == 100) {
-								if (DataMgr.getPlayerData(p).playerNumber <= 8) {
-									introl.getWorld().playSound(DataMgr.getPlayerData(p).matchLocation,
-											Sound.ENTITY_PLAYER_SWIM, 1, 1);
-									NPCMgr.createNPC(p, p.getName(), DataMgr.getPlayerData(p).matchLocation);
-								}
-							}
-						}
-					}
-					if (s >= 160 && s <= 220) {
-						Location introl = match.getMapData().getTeam1Intro().clone().add(0.5, 0, 0.5);
-						p.teleport(introl);
-						if (DataMgr.getPlayerData(p).team == match.team1) {
-							if (s >= 161 && s <= 180) {
-								org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).team.getTeamColor().wool
-										.createBlockData();
-								introl.getWorld().spawnParticle(org.bukkit.Particle.BLOCK_DUST,
-										DataMgr.getPlayerData(p).matchLocation, 10, 0.3, 0.4, 0.3, 1, bd);
-							}
-							if (s == 180) {
-								if (DataMgr.getPlayerData(p).playerNumber <= 8)
-									squid.remove();
-							}
-							if (s == 160) {
-								if (DataMgr.getPlayerData(p).playerNumber <= 8) {
-									introl.getWorld().playSound(DataMgr.getPlayerData(p).matchLocation,
-											Sound.ENTITY_PLAYER_SWIM, 1, 1);
-									NPCMgr.createNPC(p, p.getName(), DataMgr.getPlayerData(p).matchLocation);
-								}
-							}
-						}
-					}
-
-					if (s == 221) {
-						for (Player player : Sclat.getPlugin(Sclat.class).getServer().getOnlinePlayers()) {
-							p.showPlayer(VariablesKt.getPlugin(), player);
-						}
-					}
-
-					if (s >= 221 && s <= 280) {
-						p.getInventory().setItem(0, new ItemStack(org.bukkit.Material.AIR));
-						p.setGameMode(GameMode.ADVENTURE);
-						p.setExp(0.99F);
-						Location introl = DataMgr.getPlayerData(p).matchLocation;
-						p.teleport(introl);
-					}
-
-					if (s == 281) {
-						DataMgr.getPlayerData(p).canFly = (false);
-
-						// playerclass
-						if (DataMgr.getPlayerData(p).weaponClass.getSubWeaponName().equals("ビーコン"))
-							ArmorStandMgr.BeaconArmorStandSetup(p);
-						if (DataMgr.getPlayerData(p).weaponClass.getSubWeaponName().equals("スプリンクラー"))
-							ArmorStandMgr.SprinklerArmorStandSetup(p);
-						WeaponClassMgr.setWeaponClass(p);
-
-						if (DataMgr.getPlayerData(p).weaponClass.mainWeapon.getIsSwap()) {
-							Swapper.SwapperRunnable(p);
-							if (DataMgr.getPlayerData(p).weaponClass.mainWeapon.getSlidingShootTick() > 1) {
-								Shooter.maneuverShootRunnable(p);
-								DataMgr.getPlayerData(p).isUsingManeuver = (true);
-							}
-						}
-						if (DataMgr.getPlayerData(p).weaponClass.mainWeapon.weaponType.equals("Shooter")) {
-							Shooter.shooterRunnable(p);
-							if (DataMgr.getPlayerData(p).weaponClass.mainWeapon.isManeuver) {
-								if (DataMgr.getPlayerData(p).settings.doChargeKeep()) {
-									Shooter.maneuverRunnable(p);
-								} else {
-									Manuber.maneuverRunnable(p);
-								}
-								Shooter.maneuverShootRunnable(p);
-							}
-						}
-						if (DataMgr.getPlayerData(p).weaponClass.mainWeapon.weaponType.equals("Reeler")) {
-							Shooter.shooterRunnable(p);
-							Reeler.reelerRunnable(p);
-							Reeler.reelerShootRunnable(p);
-						}
-						if (DataMgr.getPlayerData(p).weaponClass.mainWeapon.weaponType.equals("Blaster")) {
-							if (DataMgr.getPlayerData(p).weaponClass.mainWeapon.isManeuver) {
-								Shooter.maneuverRunnable(p);
-							}
-						}
-						if (DataMgr.getPlayerData(p).weaponClass.mainWeapon.weaponType.equals("Buckler")) {
-							Shooter.shooterRunnable(p);
-							Buckler.BucklerRunnable(p);
-						}
-						if (DataMgr.getPlayerData(p).weaponClass.mainWeapon.weaponType.equals("Bucket"))
-							Bucket.BucketHealRunnable(p, 1);
-						if (DataMgr.getPlayerData(p).weaponClass.mainWeapon.weaponType.equals("Slosher"))
-							Bucket.BucketHealRunnable(p, 0);
-						if (DataMgr.getPlayerData(p).weaponClass.mainWeapon.weaponType.equals("Charger")) {
-							Charger.ChargerRunnable(p);
-							Decoy.DecoyRunnable(p);
-						}
-						if (DataMgr.getPlayerData(p).weaponClass.mainWeapon.weaponType.equals("Spinner"))
-							Spinner.spinnerRunnable(p);
-						if (DataMgr.getPlayerData(p).weaponClass.mainWeapon.weaponType.equals("Roller")) {
-							if (DataMgr.getPlayerData(p).weaponClass.mainWeapon.isHude) {
-								Brush.HoldRunnable(p);
-								Brush.RollPaintRunnable(p);
-							} else {
-								Roller.holdRunnable(p);
-								Roller.rollPaintRunnable(p);
-							}
-						}
-
-						if (DataMgr.getPlayerData(p).weaponClass.mainWeapon.weaponType.equals("Kasa")) {
-							Kasa.kasaRunnable(p, false);
-						}
-
-						if (DataMgr.getPlayerData(p).weaponClass.mainWeapon.weaponType.equals("Camping")) {
-							Kasa.kasaRunnable(p, true);
-							DataMgr.getPlayerData(p).mainItemGlow = (true);
-							WeaponClassMgr.setWeaponClass(p);
-						}
-						if (DataMgr.getPlayerData(p).weaponClass.mainWeapon.weaponType.equals("Hound")) {
-							Hound.houndRunnable(p);
-							Hound.houndEXRunnable(p);
-						}
-						if (DataMgr.getPlayerData(p).weaponClass.mainWeapon.weaponType.equals("Funnel")) {
-							Shooter.shooterRunnable(p);
-							Funnel.funnelFloat(p);
-						}
-
-						SquidMgr.SquidShowRunnable(p);
-
-						p.getEquipment().setHelmet(DataMgr.getPlayerData(p).team.getTeamColor().bougu);
-
-						SuperArmor.setArmor(p, 31, 100, false);
-						SPWeaponMgr.SPWeaponRunnable(p);
-						SPWeaponMgr.ArmorRunnable(p);
-
-						DataMgr.getPlayerData(p).tick = 10;
-						// Shooter.ShooterRunnable(p);
-
-						// SquidMgr.SquidRunnable(p);
-						DataMgr.getPlayerData(p).isInMatch = (true);
-						p.setExp(0.99F);
-						if (DataMgr.getPlayerData(p).playerNumber == 1) {
-							InMatchCounter(p);
-							if (conf.config.getString("WorkMode").equals("Area")) {
-								for (Area area : match.getMapData().getAreaList()) {
-									area.setupAreaTeam();
-								}
-							}
-						}
-						p.playSound(p.getLocation(), Sound.ENTITY_ZOMBIE_INFECT, 10.0F, 2.0F);
-
-						if (Gear.getGearInfluence(p, Gear.Type.MAX_HEALTH_UP) == 1.2) {
-							p.setMaxHealth(22);
-						} else {
-							p.setMaxHealth(20);
-						}
-
-						SPWeaponMgr.SPWeaponHuriRunnable(p);
-
-						// p.setPlayerListName(DataMgr.getPlayerData(p).getTeam().getTeamColor().getColorCode()
-						// + p.displayName);
-
-						if (DataMgr.getPlayerData(p).playerNumber == 1 && Plugins.NOTEBLOCKAPI.isLoaded()) {
-							NoteBlockSong nbs = NoteBlockAPIMgr.getRandomNormalSong();
-							Song song = nbs.song;
-							RadioSongPlayer radio = new RadioSongPlayer(song);
-							radio.setVolume(volume);
-							for (Player oplayer : Sclat.getPlugin(Sclat.class).getServer().getOnlinePlayers()) {
-								if (DataMgr.getPlayerData(oplayer).settings.PlayBGM()
-										&& DataMgr.getPlayerData(oplayer).isJoined) {
-									radio.addPlayer(oplayer);
-									oplayer.spigot().sendMessage(ChatMessageType.ACTION_BAR,
-											TextComponent.fromLegacyText("§7Now playing : §6" + nbs.getSongName()));
-								}
-							}
-							radio.setPlaying(true);
-							if (conf.config.getString("WorkMode").equals("Area"))
-								StopMusic(radio, 6000, match);
-							else
-								StopMusic(radio, 2400, match);
-						}
-
-						if (DataMgr.getPlayerData(p).playerNumber == 1) {
-							PathMgr.setupPath(match);
-							if (conf.config.getString("WorkMode").equals("Area")) {
-								for (Area area : match.getMapData().getAreaList()) {
-									area.start();
-								}
-							}
-
-							try {
-								for (Wiremesh wiremesh : match.getMapData().getWiremeshListTask().wiremeshsList) {
-									wiremesh.startTask();
-								}
-							} catch (Exception e) {
-							}
-						}
-
-						p.setCollidable(true);
-
-						cancel();
-					}
-					s++;
-				} catch (Exception e) {
-					cancel();
-				}
-			}
-		};
-		task.runTaskTimer(VariablesKt.getPlugin(), 0, 1);
-	}
-
-	public static void StopMusic(RadioSongPlayer radio, long delay, Match match) {
-		BukkitRunnable task = new BukkitRunnable() {
-			@Override
-			public void run() {
-				radio.setPlaying(false);
-			}
-		};
-		task.runTaskLater(VariablesKt.getPlugin(), delay);
-
-		BukkitRunnable task2 = new BukkitRunnable() {
-			@Override
-			public void run() {
-				if (match.isFinished()) {
-					radio.setPlaying(false);
-					task.cancel();
-					cancel();
-				}
-			}
-		};
-		task2.runTaskTimer(VariablesKt.getPlugin(), 0, 1);
-	}
-
-	public static void StartMatch(Match match) {
-		for (Player player : Sclat.getPlugin(Sclat.class).getServer().getOnlinePlayers()) {
-			PlayerData data = DataMgr.getPlayerData(player);
-			if (data.match == match) {
-				MatchRunnable(player, match);
-				data.lastAttack = player;
-			}
-		}
-		/*
-		 * Player leader = match.getLeaderPlayer();
-		 * if(DataMgr.getPlayerIsQuit(leader.getUniqueId().toString()))
-		 * MatchRunnable(leader, match);
-		 */
-	}
-
-	public static void InMatchCounter(Player player) {
-		ScoreboardManager manager = Bukkit.getScoreboardManager();
-		Scoreboard scoreboard = manager.getNewScoreboard();
-
-		Match match = DataMgr.getPlayerData(player).match;
-		match.scoreboard = (scoreboard);
-
-		org.bukkit.scoreboard.Team bteam0 = scoreboard.registerNewTeam(match.team0.getTeamColor().getColorName());
-		bteam0.setColor(match.team0.getTeamColor().getChatColor());
-		bteam0.setOption(org.bukkit.scoreboard.Team.Option.NAME_TAG_VISIBILITY,
-				org.bukkit.scoreboard.Team.OptionStatus.FOR_OTHER_TEAMS);
-		// bteam0.setNameTagVisibility(NameTagVisibility.HIDE_FOR_OTHER_TEAMS);
-		bteam0.setOption(org.bukkit.scoreboard.Team.Option.COLLISION_RULE,
-				org.bukkit.scoreboard.Team.OptionStatus.FOR_OWN_TEAM);
-		bteam0.setPrefix(match.team0.getTeamColor().getColorCode());
-
-		org.bukkit.scoreboard.Team bteam1 = scoreboard.registerNewTeam(match.team1.getTeamColor().getColorName());
-		bteam1.setColor(match.team1.getTeamColor().getChatColor());
-		// bteam1.setNameTagVisibility(NameTagVisibility.HIDE_FOR_OTHER_TEAMS);
-		bteam1.setOption(org.bukkit.scoreboard.Team.Option.NAME_TAG_VISIBILITY,
-				org.bukkit.scoreboard.Team.OptionStatus.FOR_OTHER_TEAMS);
-		bteam1.setOption(org.bukkit.scoreboard.Team.Option.COLLISION_RULE,
-				org.bukkit.scoreboard.Team.OptionStatus.FOR_OWN_TEAM);
-		bteam1.setPrefix(match.team1.getTeamColor().getColorCode());
-
-		match.team0.setTeam(bteam0);
-		match.team1.setTeam(bteam1);
-
-		for (Player oplayer : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
-			if (DataMgr.getPlayerData(oplayer).isJoined) {
-				oplayer.setScoreboard(scoreboard);
-				if (match.team0 == DataMgr.getPlayerData(oplayer).team)
-					bteam0.addEntry(oplayer.getName());
-				if (match.team1 == DataMgr.getPlayerData(oplayer).team)
-					bteam1.addEntry(oplayer.getName());
-			}
-		}
-
-		BukkitRunnable task = new BukkitRunnable() {
-			final Scoreboard sb = scoreboard;
-			Objective objective = sb.registerNewObjective("match", "run", "§6§lSclat§r " + Sclat.VERSION);
-			int s = 180;
-			final Player p = player;
-
-			boolean team0nokori = false;
-			boolean team1nokori = false;
-
-			@Override
-			public void run() {
-				try {
-
-					if (objective != null)
-						objective.unregister();
-
-					objective = scoreboard.registerNewObjective("match", "intro", "§6§lSclat§r " + Sclat.VERSION);
-					objective.setDisplaySlot(DisplaySlot.SIDEBAR);
-
-					String min = String.format("%02d", s % 60);
-
-					List<String> lines = new ArrayList<>();
-
-					lines.add("");
-					lines.add("§a§lマップ名 » §6" + DataMgr.getPlayerData(p).match.getMapData().getMapName());
-					lines.add(" ");
-
-					if (conf.config.getString("WorkMode").equals("TDM"))
-						lines.add(ChatColor.YELLOW + "§lゲームモード » §6チームデスマッチ");
-					else if (conf.config.getString("WorkMode").equals("Area"))
-						lines.add(ChatColor.YELLOW + "§lゲームモード » §6ガチエリア");
-					else
-						lines.add(ChatColor.YELLOW + "§lゲームモード » §6ナワバリバトル");
-					lines.add("  ");
-					lines.add("§b§l残り時間 » §r" + s / 60 + ":" + min);
-
-					Team gcteam = null;
-					boolean isgc = false;
-					boolean entyo = false;
-
-					// ガチエリアカウント
-					if (conf.config.getString("WorkMode").equals("Area")) {
-
-						List<Team> list = new ArrayList<>();
-						for (Area area : match.getMapData().getAreaList()) {
-							list.add(area.getTeam());
-						}
-
-						boolean is = true;
-						int i = 0;
-						Team t = null;
-						for (Team team : list) {
-							if (i == 0) {
-								if (team != null) {
-									t = team;
-								} else {
-									is = false;
-									break;
-								}
-							} else {
-								if (team != null) {
-									if (team != t) {
-										is = false;
-										break;
-									}
-								} else {
-									is = false;
-									break;
-								}
-							}
-							i++;
-						}
-
-						if (list.size() == 1) {
-							if (list.get(0) != null) {
-								is = true;
-							}
-						}
-
-						if (is) {
-
-							Team wteam = t; // エリアを確保しているチーム
-							Team lteam = t; // エリアを確保できていないチーム
-							if (match.team0 == t)
-								lteam = match.team1;
-							else
-								lteam = match.team0;
-
-							if (wteam.getGatiCount() == lteam.getGatiCount()) {
-								if (wteam.getGatiCount() + 1 > lteam.getGatiCount()) {
-									if (wteam.getGatiCount() != 0) {
-										for (Player player : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
-											PlayerData data = DataMgr.getPlayerData(player);
-											if (data.team == null || !data.isInMatch)
-												continue;
-
-											if (data.team == wteam) {
-												SclatUtil.sendMessage("§b§lカウントリードした!", MessageType.PLAYER, player);
-												player.sendTitle("", "§b§lカウントリードした!", 10, 20, 10);
-												SclatUtil.playGameSound(player, SoundType.CONGRATULATIONS);
-											} else {
-												SclatUtil.sendMessage("§c§lカウントリードされた!", MessageType.PLAYER, player);
-												player.sendTitle("", "§c§lカウントリードされた!", 10, 20, 10);
-												player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_PLACE, 1F, 3F);
-											}
-										}
-									}
-								}
-							}
-
-							list.get(0).addGatiCount();
-							isgc = is;
-							gcteam = list.get(0);
-						}
-
-						lines.add("   ");
-						lines.add("§lカウント » ");
-						lines.add(match.team0.getTeamColor().getColorCode() + match.team0.getTeamColor().getColorName()
-								+ " : " + (100 - match.team0.getGatiCount()) + "  "
-								+ match.team1.getTeamColor().getColorCode() + match.team1.getTeamColor().getColorName()
-								+ " : " + (100 - match.team1.getGatiCount()));
-
-						if (isgc) {
-							Team ngcteam = match.team0;
-							if (match.team0 == gcteam)
-								ngcteam = match.team1;
-							if (gcteam.getGatiCount() <= ngcteam.getGatiCount())
-								entyo = true;
-						}
-
-						if (s == 0 && entyo) {
-							for (Player oplayer : Sclat.getPlugin(Sclat.class).getServer().getOnlinePlayers()) {
-								if (DataMgr.getPlayerData(oplayer).isInMatch) {
-									oplayer.sendTitle("", "§7延長戦！", 10, 20, 10);
-									SclatUtil.sendMessage("§7延長戦！", MessageType.PLAYER, oplayer);
-								}
-							}
-						}
-
-						if (match.team0.getGatiCount() == 100 || match.team1.getGatiCount() == 100) {
-							for (Player oplayer : Sclat.getPlugin(Sclat.class).getServer().getOnlinePlayers()) {
-								if (DataMgr.getPlayerData(oplayer).isJoined && p != oplayer) {
-									oplayer.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
-									oplayer.getInventory().clear();
-									FinishMatch(oplayer);
-								}
-							}
-							FinishMatch(p);
-							cancel();
-						}
-						if ((match.team0.getGatiCount() == 95 && !team0nokori)
-								|| (match.team1.getGatiCount() == 95 && !team1nokori)) {
-
-							if (match.team0.getGatiCount() == 95)
-								team0nokori = true;
-							if (match.team1.getGatiCount() == 95)
-								team1nokori = true;
-
-							for (Player oplayer : Sclat.getPlugin(Sclat.class).getServer().getOnlinePlayers()) {
-								if (DataMgr.getPlayerData(oplayer).isInMatch) {
-									oplayer.sendTitle("", "§7残りカウントあとわずか！", 10, 20, 10);
-									SclatUtil.sendMessage("§7残りカウントあとわずか！", MessageType.PLAYER, oplayer);
-									p.playSound(p.getLocation(), Sound.ENTITY_ZOMBIE_INFECT, 8.0F, 2.0F);
-								}
-							}
-						}
-					}
-
-					ObjectiveUtil.setLine(objective, lines);
-
-					if (s == 60 && !conf.config.getString("WorkMode").equals("Area")) {
-						for (Player oplayer : Sclat.getPlugin(Sclat.class).getServer().getOnlinePlayers()) {
-							if (DataMgr.getPlayerData(oplayer).isJoined) {
-								SclatUtil.sendMessage("§6§n残り1分！", MessageType.PLAYER, oplayer);
-							}
-						}
-						if (DataMgr.getPlayerData(p).playerNumber == 1 && Plugins.NOTEBLOCKAPI.isLoaded()) {
-							NoteBlockSong nbs = NoteBlockAPIMgr.getRandomFinalSong();
-							Song song = nbs.song;
-							RadioSongPlayer radio = new RadioSongPlayer(song);
-							radio.setVolume(volume);
-							for (Player oplayer : Sclat.getPlugin(Sclat.class).getServer().getOnlinePlayers()) {
-								if (DataMgr.getPlayerData(oplayer).settings.PlayBGM()
-										&& DataMgr.getPlayerData(oplayer).isJoined) {
-									radio.addPlayer(oplayer);
-									oplayer.spigot().sendMessage(ChatMessageType.ACTION_BAR,
-											TextComponent.fromLegacyText("§7Now playing : §6" + nbs.getSongName()));
-								}
-							}
-							radio.setPlaying(true);
-							StopMusic(radio, 1200, match);
-						}
-					}
-					if (s <= 0 && !entyo) {
-						for (Player oplayer : Sclat.getPlugin(Sclat.class).getServer().getOnlinePlayers()) {
-							if (DataMgr.getPlayerData(oplayer).isJoined && p != oplayer) {
-								oplayer.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
-								oplayer.getInventory().clear();
-								FinishMatch(oplayer);
-							}
-						}
-						FinishMatch(p);
-						cancel();
-					}
-
-					if (s <= -60) {
-						for (Player oplayer : Sclat.getPlugin(Sclat.class).getServer().getOnlinePlayers()) {
-							if (DataMgr.getPlayerData(oplayer).isJoined && p != oplayer) {
-								oplayer.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
-								oplayer.getInventory().clear();
-								FinishMatch(oplayer);
-							}
-						}
-						FinishMatch(p);
-						cancel();
-					}
-
-					if (s <= 5 && s > 0) {
-						for (Player oplayer : Sclat.getPlugin(Sclat.class).getServer().getOnlinePlayers()) {
-							if (DataMgr.getPlayerData(oplayer).isInMatch)
-								oplayer.sendTitle(ChatColor.GRAY + String.valueOf(s), "", 0, 30, 4);
-						}
-					}
-					// Main.getPlugin().getServer().broadcastMessage(ChatColor.GOLD + "試合終了まで: " +
-					// String.valueOf(s));
-
-					s--;
-				} catch (Exception e) {
-					cancel();
-				}
-			}
-		};
-		task.runTaskTimer(VariablesKt.getPlugin(), 0, 20);
-
-	}
-
-	public static void FinishMatch(Player player) {
-		BukkitRunnable task = new BukkitRunnable() {
-			final Player p = player;
-			Location loc;
-			Team winteam = DataMgr.getPlayerData(player).match.team0;
-			int i = 0;
-			int bestkills = 0;
-			int bestpaint = 0;
-			@Override
-			public void run() {
-				try {
-					if (i == 0) {
-
-						p.setDisplayName(p.getName());
-
-						DataMgr.getPlayerData(p).match.setFinished(true);
-						if (DataMgr.getPlayerData(p).playerNumber == 1) {
-							for (Path path : DataMgr.getPlayerData(p).match.getMapData().getPathList()) {
-								path.stop();
-								path.reset();
-							}
-							if (conf.config.getString("WorkMode").equals("Area")) {
-								for (Area area : DataMgr.getPlayerData(p).match.getMapData().getAreaList()) {
-									area.stop();
-								}
-							}
-							for (Player oplayer : Sclat.getPlugin(Sclat.class).getServer().getOnlinePlayers()) {
-								oplayer.setMaxHealth(20);
-							}
-
-							for (String uuid : DataMgr.pul) {
-								DataMgr.setPlayerIsQuit(uuid, false);
-							}
-
-							DataMgr.getPlayerData(p).match.getBlockUpdater().stop();
-
-							for (Player target : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
-								SclatUtil.sendWorldBorderWarningClearPacket(target);
-							}
-
-							try {
-								for (Wiremesh wiremesh : DataMgr.getPlayerData(p).match.getMapData()
-										.getWiremeshListTask().wiremeshsList) {
-									wiremesh.startTask();
-								}
-							} catch (Exception e) {
-							}
-						}
-						for (ArmorStand as : DataMgr.getBeaconMap().values())
-							as.remove();
-						for (ArmorStand as : DataMgr.getSprinklerMap().values())
-							as.remove();
-						DataMgr.getBeaconMap().clear();
-						DataMgr.getSprinklerMap().clear();
-						DataMgr.getArmorStandMap().clear();
-						DataMgr.getPlayerData(p).isInMatch = (false);
-						if (p.hasPotionEffect(PotionEffectType.SLOW))
-							p.removePotionEffect(PotionEffectType.SLOW);
-						p.playSound(p.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 3, 1.3F);
-						loc = p.getLocation();
-
-						p.getInventory().clear();
-						// p.setPlayerListName(p.displayName);
-
-						ScoreboardManager manager = Bukkit.getScoreboardManager();
-						Scoreboard scoreboard = manager.getNewScoreboard();
-
-						/*
-						 * org.bukkit.scoreboard.Team team = scoreboard.registerNewTeam("");
-						 * team.addPlayer(p); team.setColor(ChatColor.WHITE);
-						 */
-
-						p.setScoreboard(scoreboard);
-
-					}
-					if (i == 2) {
-						DataMgr.getPlayerData(p).canFly = (true);
-						p.resetTitle();
-						p.sendTitle(
-								ChatColor.YELLOW + "=========================== Finish! ===========================",
-								"", 3, 30, 10);
-					}
-
-					if (i >= 1 && i <= 45) {
-						p.teleport(loc);
-						p.getInventory().clear();
-						if (p.hasPotionEffect(PotionEffectType.POISON))
-							p.removePotionEffect(PotionEffectType.POISON);
-					}
-					if (i == 46) {
-						for (Player player : Sclat.getPlugin(Sclat.class).getServer().getOnlinePlayers()) {
-							p.hidePlayer(VariablesKt.getPlugin(), player);
-						}
-					}
-					if (i == 46 && DataMgr.getPlayerData(p).playerNumber == 1) {
-						if (conf.config.getString("WorkMode").equals("TDM")) {
-							Match match = DataMgr.getPlayerData(p).match;
-							int team0c;
-							int team1c;
-							String team0code;
-							String team1code;
-							winteam = match.team0;
-							Boolean hikiwake = false;
-
-							team0c = match.team0.killCount;
-							team1c = match.team1.killCount;
-							team0code = match.team0.getTeamColor().getColorCode();
-							team1code = match.team1.getTeamColor().getColorCode();
-
-							if (team0c < team1c)
-								winteam = match.team1;
-							else if (team0c == team1c)
-								hikiwake = true;
-
-							match.setWinTeam(winteam);
-							match.isHikiwake = (hikiwake);
-
-							for (Player oplayer : Sclat.getPlugin(Sclat.class).getServer().getOnlinePlayers()) {
-								if (DataMgr.getPlayerData(oplayer).isJoined)
-									Animation.tdmResultAnimation(oplayer, team0c, team1c, team0code, team1code, winteam,
-											hikiwake);
-							}
-						} else if (conf.config.getString("WorkMode").equals("Area")) {
-							Match match = DataMgr.getPlayerData(p).match;
-							int team0;
-							int team1;
-							double dper;
-							int per;
-							String team0code;
-							String team1code;
-							winteam = match.team0;
-							Boolean hikiwake = false;
-
-							team0 = match.team0.getGatiCount();
-							team1 = match.team1.getGatiCount();
-							team0code = match.team0.getTeamColor().getColorCode();
-							team1code = match.team1.getTeamColor().getColorCode();
-							dper = (double) team0 / (double) (team0 + team1) * 100;
-							per = (int) dper;
-
-							if (match.team0.getGatiCount() > match.team1.getGatiCount()) {
-								winteam = match.team0;
-								per++;
-								// match.team0.addPaintCount();
-							} else if (match.team0.getGatiCount() == match.team1.getGatiCount()) {
-								hikiwake = true;
-							} else {
-								winteam = match.team1;
-								per--;
-							}
-
-							match.setWinTeam(winteam);
-							match.isHikiwake = (hikiwake);
-
-							if (per > 100)
-								per = 100;
-							if (per < 0)
-								per = 0;
-
-							for (Player oplayer : Sclat.getPlugin(Sclat.class).getServer().getOnlinePlayers()) {
-								if (DataMgr.getPlayerData(oplayer).isJoined) {
-									if ((per == 100 || per == 0) && !hikiwake)
-										Animation.areaResultAnimation(oplayer, per, 100 - per, team0code, team1code,
-												winteam);
-									else if (team0 == 100)
-										Animation.areaResultAnimation(oplayer, 100, 0, team0code, team1code, winteam);
-									else if (team1 == 100)
-										Animation.areaResultAnimation(oplayer, 0, 100, team0code, team1code, winteam);
-									else
-										Animation.resultAnimation(oplayer, per, 100 - per, team0code, team1code,
-												winteam, hikiwake);
-								}
-							}
-
-						} else {
-							Match match = DataMgr.getPlayerData(p).match;
-							int team0;
-							int team1;
-							double dper;
-							int per;
-							String team0code;
-							String team1code;
-							winteam = match.team0;
-							Boolean hikiwake = false;
-
-							team0 = match.team0.getPoint();
-							team1 = match.team1.getPoint();
-							team0code = match.team0.getTeamColor().getColorCode();
-							team1code = match.team1.getTeamColor().getColorCode();
-							dper = (double) team0 / (double) (team0 + team1) * 100;
-							per = (int) dper;
-
-							if (match.team0.getPoint() > match.team1.getPoint()) {
-								winteam = match.team0;
-								per++;
-								// match.team0.addPaintCount();
-							} else if (match.team0.getPoint() == match.team1.getPoint()) {
-								hikiwake = true;
-							} else {
-								winteam = match.team1;
-								per--;
-							}
-
-							match.setWinTeam(winteam);
-							match.isHikiwake = (hikiwake);
-
-							if (per > 100)
-								per = 100;
-							if (per < 0)
-								per = 0;
-
-							for (Player oplayer : Sclat.getPlugin(Sclat.class).getServer().getOnlinePlayers()) {
-								if (DataMgr.getPlayerData(oplayer).isJoined) {
-									Animation.resultAnimation(oplayer, per, 100 - per, team0code, team1code, winteam,
-											hikiwake);
-								}
-							}
-						}
-					}
-
-					if (i == 46 && p.isOnline())
-						p.setGameMode(GameMode.ADVENTURE);
-
-					if (i >= 46 && i <= 156) {
-						p.teleport(DataMgr.getPlayerData(p).match.getMapData().getResultLoc());
-					}
-
-					if (i == 80) {
-						PlayerData data = DataMgr.getPlayerData(p);
-						List<String> commands = new ArrayList<>();
-						commands.add("return " + p.getUniqueId());
-						commands.add("stop");
-						StatusClient sc = new StatusClient(conf.config.getString("StatusShare.Host"),
-								conf.config.getInt("StatusShare.Port"), commands);
-						sc.startClient();
-					}
-
-					if (i == 137) {
-						PlayerData data = DataMgr.getPlayerData(p);
-
-						// int kill = data.killCount;
-						// int paint = data.paintCount;
-						data.canFly = (false);
-
-						SclatUtil.sendMessage("§a----------<< Match result >>----------", MessageType.PLAYER, p);
-						SclatUtil.sendMessage("", MessageType.PLAYER, p);
-
-						for (Player op : Sclat.getPlugin(Sclat.class).getServer().getOnlinePlayers()) {
-							PlayerData odata = DataMgr.getPlayerData(op);
-							if (!odata.isJoined)
-								continue;
-							if (odata.team.getID() == data.team.getID()) {
-								if (op.equals(p)) {
-									SclatUtil.sendMessage(odata.team.getTeamColor().getColorCode() + "§l[ §l"
-											+ op.getDisplayName() + "§l ]" + ChatColor.RESET + "Kills : "
-											+ ChatColor.YELLOW + odata.killCount + "   " + ChatColor.RESET + "Points : "
-											+ ChatColor.YELLOW + odata.paintCount, MessageType.PLAYER, p);
-									// p.sendMessage(odata.getTeam().getTeamColor().getColorCode() + "§l[ §l" +
-									// op.displayName + "§l ]" + ChatColor.RESET + "Kills : " +
-									// ChatColor.YELLOW + odata.killCount + " " + ChatColor.RESET + "Points : "
-									// + ChatColor.YELLOW + odata.paintCount);
-								} else {
-									SclatUtil.sendMessage(odata.team.getTeamColor().getColorCode() + "[ "
-											+ op.getDisplayName() + " ]" + ChatColor.RESET + "Kills : "
-											+ ChatColor.YELLOW + odata.killCount + "   " + ChatColor.RESET + "Points : "
-											+ ChatColor.YELLOW + odata.paintCount, MessageType.PLAYER, p);
-									// p.sendMessage(odata.getTeam().getTeamColor().getColorCode() + "[ " +
-									// op.displayName + " ]" + ChatColor.RESET + "Kills : " + ChatColor.YELLOW
-									// + odata.killCount + " " + ChatColor.RESET + "Points : " +
-									// ChatColor.YELLOW + odata.paintCount);
-								}
-							}
-							if (bestkills < odata.killCount) {
-								bestkills = odata.killCount;
-							}
-							if (bestpaint < odata.paintCount) {
-								bestpaint = odata.paintCount;
-							}
-						}
-
-						for (Player op : Sclat.getPlugin(Sclat.class).getServer().getOnlinePlayers()) {
-							PlayerData odata = DataMgr.getPlayerData(op);
-							if (!odata.isJoined)
-								continue;
-							if (odata.team.getID() != data.team.getID()) {
-								if (op.equals(p)) {
-									SclatUtil.sendMessage(odata.team.getTeamColor().getColorCode() + "§l[ §l"
-											+ op.getDisplayName() + "§l ]" + ChatColor.RESET + "Kills : "
-											+ ChatColor.YELLOW + odata.killCount + "   " + ChatColor.RESET + "Points : "
-											+ ChatColor.YELLOW + odata.paintCount, MessageType.PLAYER, p);
-									// p.sendMessage(odata.getTeam().getTeamColor().getColorCode() + "§l[ §l" +
-									// op.displayName + "§l ]" + ChatColor.RESET + "Kills : " +
-									// ChatColor.YELLOW + odata.killCount + " " + ChatColor.RESET + "Points : "
-									// + ChatColor.YELLOW + odata.paintCount);
-								} else {
-									SclatUtil.sendMessage(odata.team.getTeamColor().getColorCode() + "[ "
-											+ op.getDisplayName() + " ]" + ChatColor.RESET + "Kills : "
-											+ ChatColor.YELLOW + odata.killCount + "   " + ChatColor.RESET + "Points : "
-											+ ChatColor.YELLOW + odata.paintCount, MessageType.PLAYER, p);
-									// p.sendMessage(odata.getTeam().getTeamColor().getColorCode() + "[ " +
-									// op.displayName + " ]" + ChatColor.RESET + "Kills : " + ChatColor.YELLOW
-									// + odata.killCount + " " + ChatColor.RESET + "Points : " +
-									// ChatColor.YELLOW + odata.paintCount);
-								}
-							}
-						}
-					}
-
-					if (i == 157) {
-						PlayerData data = DataMgr.getPlayerData(p);
-
-						int pMoney = (int) ((double) data.killCount * 100D + (double) data.paintCount / 5D);
-						int pTicket = (int) ((double) data.killCount * 1 + 10 + (double) data.paintCount / 750D);
-						int pLv = 1;
-						if (data.team == data.match.getWinTeam() || data.match.isHikiwake) {
-							pLv = 2;
-							pTicket += 5;
-						}
-						int pRank = data.killCount * 3;
-						if (data.team == data.match.getWinTeam())
-							pRank = pRank + 25;
-						if (data.killCount == bestkills) {
-							pRank = pRank + 20;
-						}
-						if (data.paintCount == bestpaint) {
-							pRank = pRank + 10;
-						}
-						// int pRank = -60 + (int)((double)data.killCount * 2.7D +
-						// (double)data.paintCount / 700D);
-						// if(data.getTeam() == data.getMatch().getWinTeam() ||
-						// data.getMatch().getIsHikiwake())
-						// pRank = 80 + (int)((double)data.killCount * 2.2D +
-						// (double)data.paintCount / 700D);
-						if (data.match.getJoinedPlayerCount() == 1 || !conf.config.getBoolean("RateMatch"))
-							pRank = 0;
-
-						int pMoveRank = RankMgr.IndicateRankPointmove(p, pRank);
-						PlayerStatusMgr.addRank(p, pRank);
-
-						PlayerStatusMgr.addLv(p, pLv);
-						PlayerStatusMgr.addMoney(p, pMoney);
-						PlayerStatusMgr.addTicket(p, pTicket);
-
-						PlayerStatusMgr.addPaint(p, data.paintCount);
-						PlayerStatusMgr.addKill(p, data.killCount);
-
-						if (Sclat.type == ServerType.MATCH) {
-							List<String> commands = new ArrayList<>();
-							commands.add("add money " + pMoney + " " + p.getUniqueId());
-							commands.add("add level " + pLv + " " + p.getUniqueId());
-							commands.add("add ticket " + pTicket + " " + p.getUniqueId());
-							commands.add("add rank " + pRank + " " + p.getUniqueId());
-							commands.add("add kill " + data.killCount + " " + p.getUniqueId());
-							commands.add("add paint " + data.paintCount + " " + p.getUniqueId());
-							commands.add("stop");
-							StatusClient sc = new StatusClient(conf.config.getString("StatusShare.Host"),
-									conf.config.getInt("StatusShare.Port"), commands);
-							sc.startClient();
-						}
-
-						SclatUtil.sendMessage("", MessageType.PLAYER, p);
-						SclatUtil.sendMessage("§a----------<< Match bonus >>----------", MessageType.PLAYER, p);
-
-						SclatUtil.sendMessage("", MessageType.PLAYER, p);
-						SclatUtil.sendMessage(ChatColor.GREEN + " Money : " + ChatColor.RESET + "+" + pMoney
-								+ ChatColor.AQUA + "  Lv : " + ChatColor.RESET + "+" + pLv + ChatColor.GOLD
-								+ " Ticket : " + ChatColor.RESET + pTicket, MessageType.PLAYER, p);
-						SclatUtil.sendMessage("", MessageType.PLAYER, p);
-						if (pRank < 0)
-							SclatUtil.sendMessage(ChatColor.GOLD + " RankPoint : " + ChatColor.RESET + pRank
-									+ (Sclat.type == ServerType.NORMAL
-											? "  [ §b" + RankMgr.toABCRank(getRank(player)) + " §r]"
-											: ""),
-									MessageType.PLAYER, p);
-						else
-							SclatUtil.sendMessage(ChatColor.GOLD + " RankPoint : " + ChatColor.RESET + "+" + pMoveRank
-									+ (Sclat.type == ServerType.NORMAL
-											? "  [ §b" + RankMgr.toABCRank(getRank(player)) + " §r]"
-											: ""),
-									MessageType.PLAYER, p);
-						SclatUtil.sendMessage("", MessageType.PLAYER, p);
-						SclatUtil.sendMessage("§a-----------------------------------", MessageType.PLAYER, p);
-						/*
-						 * p.sendMessage(ChatColor.GREEN + "##########################");
-						 * p.sendMessage(ChatColor.GREEN + "          試合結果");
-						 * p.sendMessage(ChatColor.GOLD + "     Kills  : " + ChatColor.YELLOW + kill);
-						 * p.sendMessage(ChatColor.GOLD + "     Points : " + ChatColor.YELLOW + paint);
-						 * p.sendMessage(ChatColor.GREEN + "##########################");
-						 */
-
-						String WorldName = conf.config.getString("Lobby.WorldName");
-						World w = getServer().getWorld(WorldName);
-
-						int ix = conf.config.getInt("Lobby.X");
-						int iy = conf.config.getInt("Lobby.Y");
-						int iz = conf.config.getInt("Lobby.Z");
-						int iyaw = conf.config.getInt("Lobby.Yaw");
-						Location il = new Location(w, ix, iy, iz);
-						il.setYaw(iyaw);
-						WeaponClass wc = DataMgr.getPlayerData(p).weaponClass;
-						p.teleport(il);
-						if (Sclat.type != ServerType.MATCH) {
-							ItemStack join = new ItemStack(Material.CHEST);
-							ItemMeta joinmeta = join.getItemMeta();
-							joinmeta.setDisplayName("メインメニュー");
-							join.setItemMeta(joinmeta);
-							p.getInventory().clear();
-							p.getInventory().setItem(0, join);
-						}
-
-						PlayerStatusMgr.sendHologram(p);
-
-						if (DataMgr.getPlayerData(p).playerNumber == 1) {
-
-							RollBack();
-							matchcount++;
-							MatchSetup();
-
-							// Send match status
-							if (Sclat.type == ServerType.MATCH) {
-								List<String> commands = new ArrayList<>();
-								commands.add("stopped " + conf.getServers().getString("ServerName"));
-								commands.add("map " + conf.getServers().getString("ServerName") + " " + DataMgr
-										.getMapRandom(MatchMgr.mapcount == 0 ? 0 : MatchMgr.mapcount - 1).getMapName());
-								commands.add("stop");
-								StatusClient sc = new StatusClient(conf.config.getString("StatusShare.Host"),
-										conf.config.getInt("StatusShare.Port"), commands);
-								sc.startClient();
-							}
-
-							// DataMgr.getPlayerData(p).reset();
-							for (String uuid : DataMgr.pul) {
-								DataMgr.setPlayerIsQuit(uuid, false);
-							}
-
-						}
-
-						// player.setDisplayName(player.getName());
-
-						DataMgr.getPlayerData(p).reset();
-						DataMgr.getPlayerData(p).weaponClass = (wc);
-
-						DataMgr.joinedList.clear();
-
-						p.setWalkSpeed(0.2F);
-						p.setHealth(20);
-
-						p.setGameMode(GameMode.ADVENTURE);
-						// PlayerData data = new PlayerData(p);
-						// data.weaponClass = (wc);
-						// DataMgr.setPlayerData(p, data);
-						for (Player player : Sclat.getPlugin(Sclat.class).getServer().getOnlinePlayers()) {
-							p.showPlayer(VariablesKt.getPlugin(), player);
-						}
-
-						if (Sclat.type == ServerType.MATCH) {
-							try {
-								BungeeCordMgr.PlayerSendServer(p, "sclat");
-								DataMgr.getPlayerData(p).setServerName("Sclat");
-							} catch (Exception e) {
-							}
-						}
-
-						cancel();
-
-					}
-
-					i++;
-				} catch (Exception e) {
-					cancel();
-				}
-			}
-		};
-		task.runTaskTimer(VariablesKt.getPlugin(), 0, 1);
-	}
-
+object MatchMgr {
+    @JvmField
+    var matchcount: Int = 0
+    var mapcount: Int = 0
+    var volume: Byte = 20
+
+    @JvmField
+    var canRollback: Boolean = true
+
+    var matchedPlayerList: MutableList<String?> = ArrayList<String?>()
+
+    @JvmStatic
+    fun PlayerJoinMatch(player: Player) {
+        val data = getPlayerData(player)
+
+        /*
+         * if(DataMgr.getPlayerIsQuit(player.getUniqueId().toString())){
+         * Sclat.sendMessage("§c§n途中で退出した場合再参加はできません", MessageType.PLAYER, player);
+         * Sclat.playGameSound(player, SoundType.ERROR); return; }
+         */
+        if (!DataMgr.joinedList.contains(player)) {
+            val match = getMatchFromId(matchcount)
+            if (match!!.canJoin()) {
+                match.addPlayerCount()
+                val playercount = match.playerCount
+                if (match.joinedPlayerCount <
+                    Sclat.Companion.conf!!
+                        .config!!
+                        .getInt("MaxPlayerCount")
+                ) {
+                    match.addJoinedPlayerCount()
+
+                    data!!.match = match
+                    data.isJoined = (true)
+
+                    DataMgr.joinedList.add(player)
+
+                    sendMessage(
+                        "§b§n" + player.getDisplayName() + " joined the match",
+                        MessageType.ALL_PLAYER,
+                    )
+
+                    player.teleport(match.mapData!!.taikibayso!!)
+                    if (Sclat.Companion.conf!!
+                            .config!!
+                            .getBoolean("CanVoting") &&
+                        !getPlayerIsQuit(player.getUniqueId().toString())
+                    ) {
+                        OpenGUI.MatchTohyoGUI(player)
+                    }
+
+                    val startPlayerCount =
+                        Sclat.Companion.conf!!
+                            .config!!
+                            .getInt("StartPlayerCount")
+
+                    if (match.joinedPlayerCount < startPlayerCount) {
+                        sendMessage("§a人数が足りないため試合を開始することができません", MessageType.ALL_PLAYER)
+                        sendMessage(
+                            "§aあと§c" + (startPlayerCount - match.joinedPlayerCount) + "§a人必要です",
+                            MessageType.ALL_PLAYER,
+                        )
+                    }
+
+                    if (match.joinedPlayerCount == startPlayerCount && !match.isStarted && !match.isStartedCount) {
+                        match.isStarted = (true)
+                        match.isStartedCount = (true)
+                        val task: BukkitRunnable =
+                            object : BukkitRunnable() {
+                                var s: Int = 0
+                                val p: Player = player
+
+                                override fun run() {
+                                    if (match.joinedPlayerCount < startPlayerCount) {
+                                        sendMessage(
+                                            "§a人数が足りないため試合を開始することができません",
+                                            MessageType.ALL_PLAYER,
+                                        )
+                                        sendMessage(
+                                            "§aあと§c" + (startPlayerCount - match.joinedPlayerCount) + "§a人必要です",
+                                            MessageType.ALL_PLAYER,
+                                        )
+                                        match.isStartedCount = (false)
+                                        match.isStarted = (false)
+                                        // Send match status
+                                        if (Sclat.type == ServerType.MATCH) {
+                                            val commands: MutableList<String?> = ArrayList<String?>()
+                                            commands.add(
+                                                "cdc " +
+                                                    Sclat.Companion.conf!!
+                                                        .servers!!
+                                                        .getString("ServerName"),
+                                            )
+                                            commands.add("stop")
+                                            val sc =
+                                                StatusClient(
+                                                    Sclat.Companion.conf!!
+                                                        .config!!
+                                                        .getString("StatusShare.Host"),
+                                                    Sclat.Companion.conf!!
+                                                        .config!!
+                                                        .getInt("StatusShare.Port"),
+                                                    commands,
+                                                )
+                                            sc.startClient()
+                                        }
+                                        cancel()
+                                    }
+                                    if (s == 0) {
+                                        // Send match status
+                                        if (Sclat.type == ServerType.MATCH) {
+                                            val commands: MutableList<String?> = ArrayList<String?>()
+                                            commands.add(
+                                                (
+                                                    "cd " +
+                                                        Sclat.Companion.conf!!
+                                                            .servers!!
+                                                            .getString("ServerName") + " " +
+                                                        (System.currentTimeMillis() / 1000 + 30)
+                                                    ),
+                                            )
+                                            commands.add("stop")
+                                            val sc =
+                                                StatusClient(
+                                                    Sclat.Companion.conf!!
+                                                        .config!!
+                                                        .getString("StatusShare.Host"),
+                                                    Sclat.Companion.conf!!
+                                                        .config!!
+                                                        .getInt("StatusShare.Port"),
+                                                    commands,
+                                                )
+                                            sc.startClient()
+                                        }
+                                        sendMessage("§a試合開始まで後§c30§a秒", MessageType.ALL_PLAYER)
+                                    }
+                                    if (s == 10) sendMessage("§a試合開始まで後§c20§a秒", MessageType.ALL_PLAYER)
+                                    if (s == 20) sendMessage("§a試合開始まで後§c10§a秒", MessageType.ALL_PLAYER)
+                                    if (s == 25) sendMessage("§a試合開始まで後§c5§a秒", MessageType.ALL_PLAYER)
+                                    if (s == 26) sendMessage("§a試合開始まで後§c4§a秒", MessageType.ALL_PLAYER)
+                                    if (s == 27) sendMessage("§a試合開始まで後§c3§a秒", MessageType.ALL_PLAYER)
+                                    if (s == 28) sendMessage("§a試合開始まで後§c2§a秒", MessageType.ALL_PLAYER)
+                                    if (s == 29) sendMessage("§a試合開始まで後§c1§a秒", MessageType.ALL_PLAYER)
+                                    if (s == 30) {
+                                        match.setCanJoin(false)
+
+                                        // かぶらないようにマッピング
+                                        val playerMap: MutableMap<Int?, Player?> = HashMap<Int?, Player?>()
+                                        for (jp in DataMgr.joinedList) {
+                                            var rate = PlayerStatusMgr.getRank(jp!!)
+                                            while (playerMap.containsKey(rate)) {
+                                                rate++
+                                            }
+                                            playerMap.put(rate, jp)
+                                        }
+
+                                        // ソート
+                                        var sortedMember: MutableList<Player?> = ArrayList<Player?>()
+                                        if (Sclat.Companion.conf!!
+                                                .config!!
+                                                .getBoolean("RateMatch")
+                                        ) {
+                                            val treeMap: MutableMap<Int?, Player?> = TreeMap<Int?, Player?>(playerMap)
+                                        /*
+                                         * if(match.getJoinedPlayerCount() == 3){ List<Player> list = new ArrayList<>();
+                                         * for (Integer key : treeMap.keySet()) list.add(treeMap.get(key));
+                                         * sortedMember.add(list.get(0)); sortedMember.add(list.get(2));
+                                         * sortedMember.add(list.get(1)); }else{
+                                         */
+                                            var index = 0
+                                            for (key in treeMap.keys) {
+                                                sortedMember.add(treeMap.get(key))
+
+                                                index++
+                                            }
+                                            Collections.shuffle(sortedMember)
+                                            // }
+                                        } else {
+                                            sortedMember = DataMgr.joinedList
+                                            Collections.shuffle(sortedMember)
+                                        }
+
+                                        var i = 0
+                                        for (jp in sortedMember) {
+                                            val data = getPlayerData(jp)
+                                            if (i % 2 == 0) {
+                                                data!!.team = match.team0
+                                            } else {
+                                                data!!.team = match.team1
+                                            }
+                                            i++
+                                        }
+
+                                        var playerNumber = 1
+                                        for (jp in sortedMember) {
+                                            val data = getPlayerData(jp)
+                                            if (jp!!.isOnline()) {
+                                                data!!.playerNumber = (playerNumber)
+                                                data.team!!.addRateTotal(PlayerStatusMgr.getRank(jp))
+                                                // jp.setDisplayName(data.getTeam().getTeamColor().getColorCode() +
+                                                // jp.getName());
+                                            }
+                                            playerNumber++
+                                        }
+
+                                        // Settings
+                                        if (Sclat.type == ServerType.MATCH) {
+                                            for (op in plugin.getServer().getOnlinePlayers()) {
+                                                val playerSettings = PlayerSettings(op)
+                                                SettingMgr.setSettings(playerSettings, op)
+                                            }
+                                        }
+
+                                        sendMessage("§6試合が開始されました", MessageType.BROADCAST)
+                                        if (Sclat.Companion.conf!!
+                                                .config!!
+                                                .getBoolean("RateMatch")
+                                        ) {
+                                            sendMessage("", MessageType.ALL_PLAYER)
+                                            sendMessage(
+                                                "§b試合の総合レート : §r" +
+                                                    (match.team0!!.rateTotal + match.team1!!.rateTotal),
+                                                MessageType.ALL_PLAYER,
+                                            )
+                                        }
+                                        doCommands()
+                                        if (Sclat.Companion.conf!!
+                                                .config!!
+                                                .getBoolean("CanVoting")
+                                        ) {
+                                            if (match.nawabariTCount >= match.tdmTCount &&
+                                                match.nawabariTCount >= match.gatiareaTCount
+                                            ) {
+                                                Sclat.Companion.conf!!
+                                                    .config!!
+                                                    .set("WorkMode", "Normal")
+                                            } else if (match.tdmTCount >= match.gatiareaTCount) {
+                                                Sclat.Companion.conf!!
+                                                    .config!!
+                                                    .set("WorkMode", "TDM")
+                                            } else {
+                                                Sclat.Companion.conf!!
+                                                    .config!!
+                                                    .set("WorkMode", "Area")
+                                            }
+                                        }
+                                        MatchMgr.StartMatch(match)
+                                        for (entity in p.getWorld().getEntities()) {
+                                            if (entity !is Player && entity !is FallingBlock) {
+                                                entity.remove()
+                                            }
+                                        }
+
+                                        // Send match status
+                                        if (Sclat.type == ServerType.MATCH) {
+                                            val commands: MutableList<String?> = ArrayList<String?>()
+                                            commands.add(
+                                                (
+                                                    "started " +
+                                                        Sclat.Companion.conf!!
+                                                            .servers!!
+                                                            .getString("ServerName") + " " +
+                                                        System.currentTimeMillis() / 1000
+                                                    ),
+                                            )
+                                            commands.add("stop")
+                                            val sc =
+                                                StatusClient(
+                                                    Sclat.Companion.conf!!
+                                                        .config!!
+                                                        .getString("StatusShare.Host"),
+                                                    Sclat.Companion.conf!!
+                                                        .config!!
+                                                        .getInt("StatusShare.Port"),
+                                                    commands,
+                                                )
+                                            sc.startClient()
+                                        }
+
+                                        cancel()
+                                    }
+                                    s++
+                                }
+                            }
+                        task.runTaskTimer(plugin, 0, 20)
+                    }
+                } else {
+                    sendMessage("§c§n上限人数を超えているため参加できません", MessageType.PLAYER, player)
+                    playGameSound(player, SoundType.ERROR)
+                }
+            } else {
+                sendMessage("§c§nこのマッチには既に開始しているため参加できません", MessageType.PLAYER, player)
+                playGameSound(player, SoundType.ERROR)
+            }
+        } else {
+            sendMessage("§c§n既にチームに参加しています", MessageType.PLAYER, player)
+            playGameSound(player, SoundType.ERROR)
+        }
+    }
+
+    @Synchronized
+    fun MatchSetup() {
+        // 再起動オプション
+        if (Sclat.Companion.conf!!
+                .config!!
+                .contains("RestartMatchCount")
+        ) {
+            if (Sclat.Companion.conf!!
+                    .config!!
+                    .getInt("RestartMatchCount") ==
+                matchcount
+            ) {
+                restartServer()
+            }
+        }
+
+        val id = matchcount
+        val match = Match(id)
+        val team0 = Team(id * 2)
+        val team1 = Team(id * 2 + 1)
+        setTeam(id * 2, team0)
+        setTeam(id * 2 + 1, team1)
+
+        val bur = BlockUpdater()
+        if (Sclat.Companion.conf!!
+                .config!!
+                .contains("BlockUpdateRate")
+        ) {
+            bur.setMaxBlockInOneTick(
+                Sclat.Companion.conf!!.config!!.getInt(
+                    "BlockUpdateRate",
+                ),
+            )
+        }
+        bur.start()
+        match.blockUpdater = bur
+
+        ColorShuffle()
+        val color0 = getColorRandom(0)
+        val color1 = getColorRandom(1)
+        team0.teamColor = color0
+        team1.teamColor = color1
+
+        match.team0 = (team0)
+        match.team1 = (team1)
+
+        if (id == 0) MapDataShuffle()
+
+        val map = getMapRandom(mapcount)
+        match.mapData = map
+
+        mapcount++
+
+        if (mapcount == MapDataMgr.allmapcount) {
+            mapcount = 0
+            // DataMgr.MapDataShuffle();
+        }
+
+        setMatch(id, match)
+
+        // lobby待機者用
+        val id2 = Int.Companion.MAX_VALUE
+        val lobby_m = Match(id2)
+        val lobby_t0 = Team(id2)
+        val lobby_t1 = Team(id2 - 1)
+        setTeam(id2, lobby_t0)
+        setTeam(id2 - 1, lobby_t1)
+
+        ColorShuffle()
+        val lc0 = getColorRandom(0)
+        val lc1 = getColorRandom(1)
+        lobby_t0.teamColor = lc0
+        lobby_t1.teamColor = lc1
+
+        lobby_m.team0 = (lobby_t0)
+        lobby_m.team1 = (lobby_t1)
+
+        val map1 = getMapRandom(0)
+        lobby_m.mapData = map1
+
+        setMatch(id2, lobby_m)
+
+        // TeamLoc teamloc = new TeamLoc(map);
+        // teamloc.SetupTeam0Loc();
+        // teamloc.SetupTeam1Loc();
+        // DataMgr.setTeamLoc(map, teamloc);
+        if (Sclat.Companion.conf!!
+                .config!!
+                .getString("WorkMode") == "Trial"
+        ) {
+            val manager = Bukkit.getScoreboardManager()
+            val scoreboard = manager!!.getNewScoreboard()
+
+            val bteam0 = scoreboard.registerNewTeam(match.team0!!.teamColor!!.colorName!!)
+            bteam0.setColor(match.team0!!.teamColor!!.chatColor!!)
+            bteam0.setOption(
+                org.bukkit.scoreboard.Team.Option.NAME_TAG_VISIBILITY,
+                org.bukkit.scoreboard.Team.OptionStatus.FOR_OTHER_TEAMS,
+            )
+            bteam0.setOption(
+                org.bukkit.scoreboard.Team.Option.COLLISION_RULE,
+                org.bukkit.scoreboard.Team.OptionStatus.FOR_OWN_TEAM,
+            )
+
+            val bteam1 = scoreboard.registerNewTeam(match.team1!!.teamColor!!.colorName!!)
+            bteam1.setColor(match.team1!!.teamColor!!.chatColor!!)
+            bteam1.setOption(
+                org.bukkit.scoreboard.Team.Option.NAME_TAG_VISIBILITY,
+                org.bukkit.scoreboard.Team.OptionStatus.FOR_OTHER_TEAMS,
+            )
+            bteam1.setOption(
+                org.bukkit.scoreboard.Team.Option.COLLISION_RULE,
+                org.bukkit.scoreboard.Team.OptionStatus.FOR_OWN_TEAM,
+            )
+
+            team0.team = bteam0
+            team1.team = bteam1
+
+            match.scoreboard = (scoreboard)
+        }
+    }
+
+    @JvmStatic
+    fun RollBack() {
+        if (!canRollback && Sclat.Companion.conf!!
+                .config!!
+                .getString("WorkMode") == "Trial"
+        ) {
+            return
+        }
+        for (data in blockDataMap.values) {
+            var data = data
+            data!!.block!!.setType(data.originalType!!)
+            if (data.blockData != null) data.block.setBlockData(data.blockData!!)
+            data = null
+        }
+        blockDataMap.clear()
+        spongeMap.clear()
+        canRollback = false
+
+        /*
+         * for(Block block : DataMgr.rblist){ block.setType(Material.AIR);
+         * DataMgr.rblist.remove(block); }
+         */
+        val task: BukkitRunnable =
+            object : BukkitRunnable() {
+                override fun run() {
+                    canRollback = true
+                }
+            }
+        task.runTaskLater(plugin, 3600)
+    }
+
+    fun StartCount(player: Player) {
+        val task: BukkitRunnable =
+            object : BukkitRunnable() {
+                val p: Player = player
+                var i: Int = 0
+
+                override fun run() {
+                    if (i == 10) p.sendTitle("R§7EADY?", "", 0, 56, 0)
+                    if (i == 12) p.sendTitle("RE§7ADY?", "", 0, 46, 0)
+                    if (i == 14) p.sendTitle("REA§7DY?", "", 0, 36, 0)
+                    if (i == 16) p.sendTitle("READ§7Y?", "", 0, 26, 0)
+                    if (i == 18) p.sendTitle("READY§7?", "", 0, 16, 0)
+                    if (i == 20) p.sendTitle("READY?", "", 0, 6, 2)
+                    if (i == 47) p.sendTitle(getPlayerData(p)!!.team!!.teamColor!!.colorCode + "GO!", "", 2, 6, 2)
+                    i++
+                }
+            }
+        task.runTaskTimer(plugin, 230, 1)
+    }
+
+    fun MatchRunnable(
+        player: Player,
+        match: Match,
+    ) {
+        val task: BukkitRunnable?
+        task =
+            object : BukkitRunnable() {
+                var s: Int = 0
+                val p: Player = player
+                val w: World? = plugin.getServer().getWorld(match.mapData!!.worldName!!)
+                var intromove: Location? = null
+
+                // EntitySquid squid;
+                var squid: LivingEntity? = null
+
+                // LivingEntity npcle;
+                override fun run() {
+                    try {
+                        if (s == 0) {
+                            p.setDisplayName(getPlayerData(p)!!.team!!.teamColor!!.colorCode + p.getName())
+
+                            getPlayerData(p)!!.canFly = (true)
+
+                            if (getPlayerData(p)!!.playerNumber == 1) {
+                                PaintMgr.paintGlass(match)
+
+                                p.getWorld().getEntities().forEach(
+                                    Consumer { entity: Entity? ->
+                                        if (entity!!.getType() == EntityType.SHULKER) {
+                                            entity.remove()
+                                        }
+                                    },
+                                )
+
+                                if (Sclat.Companion.conf!!
+                                        .config!!
+                                        .getString("WorkMode") == "Area"
+                                ) {
+                                    for (area in match.mapData!!.areaList) {
+                                        area!!.setup(match)
+                                    }
+                                }
+                            }
+
+                            when (
+                                Sclat.Companion.conf!!
+                                    .config!!
+                                    .getString("WorkMode")
+                            ) {
+                                "Normal" -> {
+                                    sendMessage("§6ゲームモード : §b§lナワバリバトル", MessageType.PLAYER, p)
+                                    sendMessage("§f§l敵よりもたくさんナワバリを確保しろ！", MessageType.PLAYER, p)
+                                }
+
+                                "TDM" -> {
+                                    sendMessage("§6ゲームモード : §b§lチームデスマッチ", MessageType.PLAYER, p)
+                                    sendMessage("§f§l敵よりもキルをしろ！", MessageType.PLAYER, p)
+                                }
+
+                                "Area" -> {
+                                    sendMessage("§6ゲームモード : §b§lガチエリア", MessageType.PLAYER, p)
+                                    sendMessage("§f§lエリアを確保して守り抜け！", MessageType.PLAYER, p)
+                                }
+                            }
+
+                            if (getPlayerData(p)!!.team == match.team0) {
+                                val l = getPlayerData(p)!!.match!!.mapData!!.team0Loc
+                                val i = (getPlayerData(p)!!.playerNumber + 1) / 2
+                                var sl: Location? = null
+                                if (i == 1) {
+                                    sl =
+                                        Location(
+                                            l!!.getWorld(),
+                                            l.getBlockX() + 1.5,
+                                            l.getBlockY().toDouble(),
+                                            l.getBlockZ() + 1.5,
+                                        )
+                                } else if (i == 2) {
+                                    sl =
+                                        Location(
+                                            l!!.getWorld(),
+                                            l.getBlockX() - 0.5,
+                                            l.getBlockY().toDouble(),
+                                            l.getBlockZ() + 1.5,
+                                        )
+                                } else if (i == 3) {
+                                    sl =
+                                        Location(
+                                            l!!.getWorld(),
+                                            l.getBlockX() + 1.5,
+                                            l.getBlockY().toDouble(),
+                                            l.getBlockZ() - 0.5,
+                                        )
+                                } else if (i == 4) {
+                                    sl =
+                                        Location(
+                                            l!!.getWorld(),
+                                            l.getBlockX() - 0.5,
+                                            l.getBlockY().toDouble(),
+                                            l.getBlockZ() - 0.5,
+                                        )
+                                } else {
+                                    sl =
+                                        Location(
+                                            l!!.getWorld(),
+                                            l.getBlockX() + 0.5,
+                                            l.getBlockY().toDouble(),
+                                            l.getBlockZ() + 0.5,
+                                        )
+                                }
+                                sl.setYaw(l.getYaw())
+                                getPlayerData(p)!!.matchLocation = (sl)
+                            }
+                            if (getPlayerData(p)!!.team == match.team1) {
+                                val l = getPlayerData(p)!!.match!!.mapData!!.team1Loc
+                                val i = getPlayerData(p)!!.playerNumber / 2
+                                var sl: Location? = null
+                                if (i == 1) {
+                                    sl =
+                                        Location(
+                                            l!!.getWorld(),
+                                            l.getBlockX() + 1.5,
+                                            l.getBlockY().toDouble(),
+                                            l.getBlockZ() + 1.5,
+                                        )
+                                } else if (i == 2) {
+                                    sl =
+                                        Location(
+                                            l!!.getWorld(),
+                                            l.getBlockX() - 0.5,
+                                            l.getBlockY().toDouble(),
+                                            l.getBlockZ() + 1.5,
+                                        )
+                                } else if (i == 3) {
+                                    sl =
+                                        Location(
+                                            l!!.getWorld(),
+                                            l.getBlockX() + 1.5,
+                                            l.getBlockY().toDouble(),
+                                            l.getBlockZ() - 0.5,
+                                        )
+                                } else if (i == 4) {
+                                    sl =
+                                        Location(
+                                            l!!.getWorld(),
+                                            l.getBlockX() - 0.5,
+                                            l.getBlockY().toDouble(),
+                                            l.getBlockZ() - 0.5,
+                                        )
+                                } else {
+                                    sl =
+                                        Location(
+                                            l!!.getWorld(),
+                                            l.getBlockX() + 0.5,
+                                            l.getBlockY().toDouble(),
+                                            l.getBlockZ() + 0.5,
+                                        )
+                                }
+                                sl.setYaw(l.getYaw())
+                                getPlayerData(p)!!.matchLocation = (sl)
+                            }
+
+                            if (getPlayerData(p)!!.playerNumber <= 8) {
+                                val e =
+                                    getPlayerData(p)!!
+                                        .matchLocation!!
+                                        .getWorld()!!
+                                        .spawnEntity(getPlayerData(p)!!.matchLocation!!, EntityType.SQUID)
+                                squid = e as LivingEntity
+                                squid!!.setAI(false)
+                                squid!!.setSwimming(true)
+                                squid!!.setCustomName(p.getName())
+                                squid!!.setCustomNameVisible(true)
+                            }
+
+                            p.setGameMode(GameMode.SPECTATOR)
+                            p.getInventory().clear()
+                            val introl = match.mapData!!.intro
+                            p.teleport(introl!!)
+                            val location = getPlayerData(p)!!.matchLocation
+
+                            if (Sclat.Companion.conf!!
+                                    .config!!
+                                    .getString("WorkMode") == "TDM"
+                            ) {
+                                p.sendTitle(
+                                    "§l" + match.mapData!!.mapName,
+                                    "§7チームデスマッチ",
+                                    10,
+                                    70,
+                                    20,
+                                )
+                            } else if (Sclat.Companion.conf!!
+                                    .config!!
+                                    .getString("WorkMode") == "Area"
+                            ) {
+                                p.sendTitle(
+                                    "§l" + match.mapData!!.mapName,
+                                    "§7ガチエリア",
+                                    10,
+                                    70,
+                                    20,
+                                )
+                            } else {
+                                p.sendTitle("§l" + match.mapData!!.mapName, "§7ナワバリバトル", 10, 70, 20)
+                            }
+
+                            StartCount(p)
+
+                            val manager = Bukkit.getScoreboardManager()
+                            val scoreboard = manager!!.getNewScoreboard()
+
+                            val objective =
+                                scoreboard.registerNewObjective(
+                                    "match",
+                                    "intro",
+                                    "§6§lSclat§r " + Sclat.VERSION,
+                                )
+                            objective.setDisplaySlot(DisplaySlot.SIDEBAR)
+
+                            val lines: MutableList<String> = mutableListOf()
+
+                            lines.add("")
+                            lines.add("§a§lマップ名 » §6" + getPlayerData(p)!!.match!!.mapData!!.mapName)
+                            lines.add(" ")
+
+                            if (Sclat.Companion.conf!!
+                                    .config!!
+                                    .getString("WorkMode") == "TDM"
+                            ) {
+                                lines.add(ChatColor.YELLOW.toString() + "§lゲームモード » §rチームデスマッチ")
+                            } else if (Sclat.Companion.conf!!
+                                    .config!!
+                                    .getString("WorkMode") == "Area"
+                            ) {
+                                lines.add(ChatColor.YELLOW.toString() + "§lゲームモード » §rガチエリア")
+                            } else {
+                                lines.add(ChatColor.YELLOW.toString() + "§lゲームモード » §rナワバリバトル")
+                            }
+                            lines.add("  ")
+                            lines.add("§b§l残り時間 » §r3:00")
+
+                            ObjectiveUtil.setLine(objective, lines)
+
+                            p.setScoreboard(scoreboard)
+
+                            for (player in plugin.getServer().getOnlinePlayers()) {
+                                p.hidePlayer(plugin, player)
+                            }
+                        }
+                        if (s >= 1 && s <= 100) {
+                            if (s == 1) intromove = match.mapData!!.intro!!.clone()
+                            val map = getPlayerData(p)!!.match!!.mapData
+                            intromove!!.add(map!!.introMoveX, map.introMoveY, map.introMoveZ)
+                            p.teleport(intromove!!)
+                        }
+
+                        if (s >= 100 && s <= 160) {
+                            val introl =
+                                match.mapData!!
+                                    .team0Intro!!
+                                    .clone()
+                                    .add(0.5, 0.0, 0.5)
+                            p.teleport(introl)
+                            if (getPlayerData(p)!!.team == match.team0) {
+                                if (s >= 101 && s <= 120) {
+                                    val bd =
+                                        getPlayerData(p)!!
+                                            .team!!
+                                            .teamColor!!
+                                            .wool!!
+                                            .createBlockData()
+                                    introl.getWorld()!!.spawnParticle<BlockData?>(
+                                        Particle.BLOCK_DUST,
+                                        getPlayerData(p)!!.matchLocation!!,
+                                        10,
+                                        0.3,
+                                        0.4,
+                                        0.3,
+                                        1.0,
+                                        bd,
+                                    )
+                                }
+                                if (s == 120) {
+                                    if (getPlayerData(p)!!.playerNumber <= 8) squid!!.remove()
+                                }
+                                if (s == 100) {
+                                    if (getPlayerData(p)!!.playerNumber <= 8) {
+                                        introl.getWorld()!!.playSound(
+                                            getPlayerData(p)!!.matchLocation!!,
+                                            Sound.ENTITY_PLAYER_SWIM,
+                                            1f,
+                                            1f,
+                                        )
+                                        NPCMgr.createNPC(p, p.getName(), getPlayerData(p)!!.matchLocation!!)
+                                    }
+                                }
+                            }
+                        }
+                        if (s >= 160 && s <= 220) {
+                            val introl =
+                                match.mapData!!
+                                    .team1Intro!!
+                                    .clone()
+                                    .add(0.5, 0.0, 0.5)
+                            p.teleport(introl)
+                            if (getPlayerData(p)!!.team == match.team1) {
+                                if (s >= 161 && s <= 180) {
+                                    val bd =
+                                        getPlayerData(p)!!
+                                            .team!!
+                                            .teamColor!!
+                                            .wool!!
+                                            .createBlockData()
+                                    introl.getWorld()!!.spawnParticle<BlockData?>(
+                                        Particle.BLOCK_DUST,
+                                        getPlayerData(p)!!.matchLocation!!,
+                                        10,
+                                        0.3,
+                                        0.4,
+                                        0.3,
+                                        1.0,
+                                        bd,
+                                    )
+                                }
+                                if (s == 180) {
+                                    if (getPlayerData(p)!!.playerNumber <= 8) squid!!.remove()
+                                }
+                                if (s == 160) {
+                                    if (getPlayerData(p)!!.playerNumber <= 8) {
+                                        introl.getWorld()!!.playSound(
+                                            getPlayerData(p)!!.matchLocation!!,
+                                            Sound.ENTITY_PLAYER_SWIM,
+                                            1f,
+                                            1f,
+                                        )
+                                        NPCMgr.createNPC(p, p.getName(), getPlayerData(p)!!.matchLocation!!)
+                                    }
+                                }
+                            }
+                        }
+
+                        if (s == 221) {
+                            for (player in plugin.getServer().getOnlinePlayers()) {
+                                p.showPlayer(plugin, player)
+                            }
+                        }
+
+                        if (s >= 221 && s <= 280) {
+                            p.getInventory().setItem(0, ItemStack(Material.AIR))
+                            p.setGameMode(GameMode.ADVENTURE)
+                            p.setExp(0.99f)
+                            val introl = getPlayerData(p)!!.matchLocation
+                            p.teleport(introl!!)
+                        }
+
+                        if (s == 281) {
+                            getPlayerData(p)!!.canFly = (false)
+
+                            // playerclass
+                            if (getPlayerData(p)!!.weaponClass!!.subWeaponName == "ビーコン") {
+                                ArmorStandMgr.BeaconArmorStandSetup(
+                                    p,
+                                )
+                            }
+                            if (getPlayerData(p)!!.weaponClass!!.subWeaponName == "スプリンクラー") {
+                                ArmorStandMgr.SprinklerArmorStandSetup(
+                                    p,
+                                )
+                            }
+                            WeaponClassMgr.setWeaponClass(p)
+
+                            if (getPlayerData(p)!!.weaponClass!!.mainWeapon!!.getIsSwap()) {
+                                SwapperRunnable(p)
+                                if (getPlayerData(p)!!.weaponClass!!.mainWeapon!!.slidingShootTick > 1) {
+                                    maneuverShootRunnable(p)
+                                    getPlayerData(p)!!.isUsingManeuver = (true)
+                                }
+                            }
+                            if (getPlayerData(p)!!.weaponClass!!.mainWeapon!!.weaponType == "Shooter") {
+                                shooterRunnable(p)
+                                if (getPlayerData(p)!!.weaponClass!!.mainWeapon!!.isManeuver) {
+                                    if (getPlayerData(p)!!.settings!!.doChargeKeep()) {
+                                        Shooter.maneuverRunnable(p)
+                                    } else {
+                                        Manuber.maneuverRunnable(p)
+                                    }
+                                    maneuverShootRunnable(p)
+                                }
+                            }
+                            if (getPlayerData(p)!!.weaponClass!!.mainWeapon!!.weaponType == "Reeler") {
+                                shooterRunnable(p)
+                                reelerRunnable(p)
+                                reelerShootRunnable(p)
+                            }
+                            if (getPlayerData(p)!!.weaponClass!!.mainWeapon!!.weaponType == "Blaster") {
+                                if (getPlayerData(p)!!.weaponClass!!.mainWeapon!!.isManeuver) {
+                                    Shooter.maneuverRunnable(p)
+                                }
+                            }
+                            if (getPlayerData(p)!!.weaponClass!!.mainWeapon!!.weaponType == "Buckler") {
+                                shooterRunnable(p)
+                                BucklerRunnable(p)
+                            }
+                            if (getPlayerData(p)!!.weaponClass!!.mainWeapon!!.weaponType == "Bucket") {
+                                BucketHealRunnable(
+                                    p,
+                                    1,
+                                )
+                            }
+                            if (getPlayerData(p)!!.weaponClass!!.mainWeapon!!.weaponType == "Slosher") {
+                                BucketHealRunnable(
+                                    p,
+                                    0,
+                                )
+                            }
+                            if (getPlayerData(p)!!.weaponClass!!.mainWeapon!!.weaponType == "Charger") {
+                                ChargerRunnable(p)
+                                DecoyRunnable(p)
+                            }
+                            if (getPlayerData(p)!!.weaponClass!!.mainWeapon!!.weaponType == "Spinner") spinnerRunnable(p)
+                            if (getPlayerData(p)!!.weaponClass!!.mainWeapon!!.weaponType == "Roller") {
+                                if (getPlayerData(p)!!.weaponClass!!.mainWeapon!!.isHude) {
+                                    HoldRunnable(p)
+                                    RollPaintRunnable(p)
+                                } else {
+                                    holdRunnable(p)
+                                    rollPaintRunnable(p)
+                                }
+                            }
+
+                            if (getPlayerData(p)!!.weaponClass!!.mainWeapon!!.weaponType == "Kasa") {
+                                kasaRunnable(p, false)
+                            }
+
+                            if (getPlayerData(p)!!.weaponClass!!.mainWeapon!!.weaponType == "Camping") {
+                                kasaRunnable(p, true)
+                                getPlayerData(p)!!.mainItemGlow = (true)
+                                WeaponClassMgr.setWeaponClass(p)
+                            }
+                            if (getPlayerData(p)!!.weaponClass!!.mainWeapon!!.weaponType == "Hound") {
+                                houndRunnable(p)
+                                houndEXRunnable(p)
+                            }
+                            if (getPlayerData(p)!!.weaponClass!!.mainWeapon!!.weaponType == "Funnel") {
+                                shooterRunnable(p)
+                                funnelFloat(p)
+                            }
+
+                            SquidMgr.SquidShowRunnable(p)
+
+                            p.getEquipment()!!.setHelmet(getPlayerData(p)!!.team!!.teamColor!!.bougu)
+
+                            setArmor(p, 31.0, 100, false)
+                            SPWeaponMgr.SPWeaponRunnable(p)
+                            SPWeaponMgr.ArmorRunnable(p)
+
+                            getPlayerData(p)!!.tick = 10
+
+                            // Shooter.ShooterRunnable(p);
+
+                            // SquidMgr.SquidRunnable(p);
+                            getPlayerData(p)!!.isInMatch = (true)
+                            p.setExp(0.99f)
+                            if (getPlayerData(p)!!.playerNumber == 1) {
+                                InMatchCounter(p)
+                                if (Sclat.Companion.conf!!
+                                        .config!!
+                                        .getString("WorkMode") == "Area"
+                                ) {
+                                    for (area in match.mapData!!.areaList) {
+                                        area!!.setupAreaTeam()
+                                    }
+                                }
+                            }
+                            p.playSound(p.getLocation(), Sound.ENTITY_ZOMBIE_INFECT, 10.0f, 2.0f)
+
+                            @Suppress("DEPRECATION")
+                            if (getGearInfluence(p, Gear.Type.MAX_HEALTH_UP) == 1.2) {
+                                p.setMaxHealth(22.0)
+                            } else {
+                                p.setMaxHealth(20.0)
+                            }
+
+                            SPWeaponMgr.SPWeaponHuriRunnable(p)
+
+                            // p.setPlayerListName(DataMgr.getPlayerData(p).getTeam().getTeamColor().getColorCode()
+                            // + p.displayName);
+                            if (getPlayerData(p)!!.playerNumber == 1 && Plugins.NOTEBLOCKAPI.isLoaded) {
+                                val nbs = NoteBlockAPIMgr.randomNormalSong
+                                val song = nbs.song
+                                val radio = RadioSongPlayer(song)
+                                radio.setVolume(volume)
+                                for (oplayer in plugin.getServer().getOnlinePlayers()) {
+                                    if (getPlayerData(oplayer)!!.settings!!.PlayBGM() &&
+                                        getPlayerData(oplayer)!!.isJoined
+                                    ) {
+                                        radio.addPlayer(oplayer)
+                                        oplayer.spigot().sendMessage(
+                                            ChatMessageType.ACTION_BAR,
+                                            *TextComponent.fromLegacyText("§7Now playing : §6" + nbs.songName),
+                                        )
+                                    }
+                                }
+                                radio.setPlaying(true)
+                                if (Sclat.Companion.conf!!
+                                        .config!!
+                                        .getString("WorkMode") == "Area"
+                                ) {
+                                    StopMusic(
+                                        radio,
+                                        6000,
+                                        match,
+                                    )
+                                } else {
+                                    StopMusic(radio, 2400, match)
+                                }
+                            }
+
+                            if (getPlayerData(p)!!.playerNumber == 1) {
+                                PathMgr.setupPath(match)
+                                if (Sclat.Companion.conf!!
+                                        .config!!
+                                        .getString("WorkMode") == "Area"
+                                ) {
+                                    for (area in match.mapData!!.areaList) {
+                                        area!!.start()
+                                    }
+                                }
+
+                                try {
+                                    for (wiremesh in match.mapData!!.wiremeshListTask!!.wiremeshsList) {
+                                        wiremesh!!.startTask()
+                                    }
+                                } catch (e: Exception) {
+                                }
+                            }
+
+                            p.setCollidable(true)
+
+                            cancel()
+                        }
+                        s++
+                    } catch (e: Exception) {
+                        cancel()
+                    }
+                }
+            }
+        task.runTaskTimer(plugin, 0, 1)
+    }
+
+    fun StopMusic(
+        radio: RadioSongPlayer,
+        delay: Long,
+        match: Match,
+    ) {
+        val task: BukkitRunnable =
+            object : BukkitRunnable() {
+                override fun run() {
+                    radio.setPlaying(false)
+                }
+            }
+        task.runTaskLater(plugin, delay)
+
+        val task2: BukkitRunnable =
+            object : BukkitRunnable() {
+                override fun run() {
+                    if (match.isFinished) {
+                        radio.setPlaying(false)
+                        task.cancel()
+                        cancel()
+                    }
+                }
+            }
+        task2.runTaskTimer(plugin, 0, 1)
+    }
+
+    fun StartMatch(match: Match) {
+        for (player in plugin.getServer().getOnlinePlayers()) {
+            val data = getPlayerData(player)
+            if (data!!.match == match) {
+                MatchRunnable(player, match)
+                data.lastAttack = player
+            }
+        }
+        /*
+         * Player leader = match.getLeaderPlayer();
+         * if(DataMgr.getPlayerIsQuit(leader.getUniqueId().toString()))
+         * MatchRunnable(leader, match);
+         */
+    }
+
+    fun InMatchCounter(player: Player) {
+        val manager = Bukkit.getScoreboardManager()
+        val scoreboard = manager!!.getNewScoreboard()
+
+        val match = getPlayerData(player)!!.match
+        match!!.scoreboard = (scoreboard)
+
+        val bteam0 = scoreboard.registerNewTeam(match.team0!!.teamColor!!.colorName!!)
+        bteam0.setColor(match.team0!!.teamColor!!.chatColor!!)
+        bteam0.setOption(
+            org.bukkit.scoreboard.Team.Option.NAME_TAG_VISIBILITY,
+            org.bukkit.scoreboard.Team.OptionStatus.FOR_OTHER_TEAMS,
+        )
+        // bteam0.setNameTagVisibility(NameTagVisibility.HIDE_FOR_OTHER_TEAMS);
+        bteam0.setOption(
+            org.bukkit.scoreboard.Team.Option.COLLISION_RULE,
+            org.bukkit.scoreboard.Team.OptionStatus.FOR_OWN_TEAM,
+        )
+        bteam0.setPrefix(match.team0!!.teamColor!!.colorCode!!)
+
+        val bteam1 = scoreboard.registerNewTeam(match.team1!!.teamColor!!.colorName!!)
+        bteam1.setColor(match.team1!!.teamColor!!.chatColor!!)
+        // bteam1.setNameTagVisibility(NameTagVisibility.HIDE_FOR_OTHER_TEAMS);
+        bteam1.setOption(
+            org.bukkit.scoreboard.Team.Option.NAME_TAG_VISIBILITY,
+            org.bukkit.scoreboard.Team.OptionStatus.FOR_OTHER_TEAMS,
+        )
+        bteam1.setOption(
+            org.bukkit.scoreboard.Team.Option.COLLISION_RULE,
+            org.bukkit.scoreboard.Team.OptionStatus.FOR_OWN_TEAM,
+        )
+        bteam1.setPrefix(match.team1!!.teamColor!!.colorCode!!)
+
+        match.team0!!.team = bteam0
+        match.team1!!.team = bteam1
+
+        for (oplayer in plugin.getServer().getOnlinePlayers()) {
+            if (getPlayerData(oplayer)!!.isJoined) {
+                oplayer.setScoreboard(scoreboard)
+                if (match.team0 == getPlayerData(oplayer)!!.team) bteam0.addEntry(oplayer.getName())
+                if (match.team1 == getPlayerData(oplayer)!!.team) bteam1.addEntry(oplayer.getName())
+            }
+        }
+
+        val task: BukkitRunnable =
+            object : BukkitRunnable() {
+                val sb: Scoreboard = scoreboard
+                var objective: Objective? = sb.registerNewObjective("match", "run", "§6§lSclat§r " + Sclat.VERSION)
+                var s: Int = 180
+                val p: Player = player
+
+                var team0nokori: Boolean = false
+                var team1nokori: Boolean = false
+
+                override fun run() {
+                    try {
+                        if (objective != null) objective!!.unregister()
+
+                        objective = scoreboard.registerNewObjective("match", "intro", "§6§lSclat§r " + Sclat.VERSION)
+                        objective!!.setDisplaySlot(DisplaySlot.SIDEBAR)
+
+                        val min = String.format("%02d", s % 60)
+
+                        val lines: MutableList<String> = mutableListOf()
+
+                        lines.add("")
+                        lines.add("§a§lマップ名 » §6" + getPlayerData(p)!!.match!!.mapData!!.mapName)
+                        lines.add(" ")
+
+                        if (Sclat.Companion.conf!!
+                                .config!!
+                                .getString("WorkMode") == "TDM"
+                        ) {
+                            lines.add(ChatColor.YELLOW.toString() + "§lゲームモード » §6チームデスマッチ")
+                        } else if (Sclat.Companion.conf!!
+                                .config!!
+                                .getString("WorkMode") == "Area"
+                        ) {
+                            lines.add(ChatColor.YELLOW.toString() + "§lゲームモード » §6ガチエリア")
+                        } else {
+                            lines.add(ChatColor.YELLOW.toString() + "§lゲームモード » §6ナワバリバトル")
+                        }
+                        lines.add("  ")
+                        lines.add("§b§l残り時間 » §r" + s / 60 + ":" + min)
+
+                        var gcteam: Team? = null
+                        var isgc = false
+                        var entyo = false
+
+                        // ガチエリアカウント
+                        if (Sclat.Companion.conf!!
+                                .config!!
+                                .getString("WorkMode") == "Area"
+                        ) {
+                            val list: MutableList<Team?> = ArrayList<Team?>()
+                            for (area in match.mapData!!.areaList) {
+                                list.add(area!!.team)
+                            }
+
+                            var `is` = true
+                            var i = 0
+                            var t: Team? = null
+                            for (team in list) {
+                                if (i == 0) {
+                                    if (team != null) {
+                                        t = team
+                                    } else {
+                                        `is` = false
+                                        break
+                                    }
+                                } else {
+                                    if (team != null) {
+                                        if (team != t) {
+                                            `is` = false
+                                            break
+                                        }
+                                    } else {
+                                        `is` = false
+                                        break
+                                    }
+                                }
+                                i++
+                            }
+
+                            if (list.size == 1) {
+                                if (list.get(0) != null) {
+                                    `is` = true
+                                }
+                            }
+
+                            if (`is`) {
+                                val wteam = t // エリアを確保しているチーム
+                                var lteam = t // エリアを確保できていないチーム
+                                if (match.team0 == t) {
+                                    lteam = match.team1
+                                } else {
+                                    lteam = match.team0
+                                }
+
+                                if (wteam!!.gatiCount == lteam!!.gatiCount) {
+                                    if (wteam.gatiCount + 1 > lteam.gatiCount) {
+                                        if (wteam.gatiCount != 0) {
+                                            for (player in plugin.getServer().getOnlinePlayers()) {
+                                                val data = getPlayerData(player)
+                                                if (data!!.team == null || !data.isInMatch) continue
+
+                                                if (data.team == wteam) {
+                                                    sendMessage("§b§lカウントリードした!", MessageType.PLAYER, player)
+                                                    player.sendTitle("", "§b§lカウントリードした!", 10, 20, 10)
+                                                    playGameSound(player, SoundType.CONGRATULATIONS)
+                                                } else {
+                                                    sendMessage("§c§lカウントリードされた!", MessageType.PLAYER, player)
+                                                    player.sendTitle("", "§c§lカウントリードされた!", 10, 20, 10)
+                                                    player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_PLACE, 1f, 3f)
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+
+                                list.get(0)!!.addGatiCount()
+                                isgc = `is`
+                                gcteam = list.get(0)
+                            }
+
+                            lines.add("   ")
+                            lines.add("§lカウント » ")
+                            lines.add(
+                                (
+                                    match.team0!!.teamColor!!.colorCode + match.team0!!.teamColor!!.colorName +
+                                        " : " + (100 - match.team0!!.gatiCount) + "  " +
+                                        match.team1!!.teamColor!!.colorCode + match.team1!!.teamColor!!.colorName +
+                                        " : " + (100 - match.team1!!.gatiCount)
+                                    ),
+                            )
+
+                            if (isgc) {
+                                var ngcteam: Team = match.team0!!
+                                if (match.team0 == gcteam) ngcteam = match.team1!!
+                                if (gcteam!!.gatiCount <= ngcteam.gatiCount) entyo = true
+                            }
+
+                            if (s == 0 && entyo) {
+                                for (oplayer in plugin.getServer().getOnlinePlayers()) {
+                                    if (getPlayerData(oplayer)!!.isInMatch) {
+                                        oplayer.sendTitle("", "§7延長戦！", 10, 20, 10)
+                                        SclatUtil.sendMessage("§7延長戦！", MessageType.PLAYER, oplayer)
+                                    }
+                                }
+                            }
+
+                            if (match.team0!!.gatiCount == 100 || match.team1!!.gatiCount == 100) {
+                                for (oplayer in plugin.getServer().getOnlinePlayers()) {
+                                    if (getPlayerData(oplayer)!!.isJoined && p !== oplayer) {
+                                        oplayer.setScoreboard(Bukkit.getScoreboardManager()!!.getNewScoreboard())
+                                        oplayer.getInventory().clear()
+                                        FinishMatch(oplayer)
+                                    }
+                                }
+                                FinishMatch(p)
+                                cancel()
+                            }
+                            if ((match.team0!!.gatiCount == 95 && !team0nokori) ||
+                                (match.team1!!.gatiCount == 95 && !team1nokori)
+                            ) {
+                                if (match.team0!!.gatiCount == 95) team0nokori = true
+                                if (match.team1!!.gatiCount == 95) team1nokori = true
+
+                                for (oplayer in plugin.getServer().getOnlinePlayers()) {
+                                    if (getPlayerData(oplayer)!!.isInMatch) {
+                                        oplayer.sendTitle("", "§7残りカウントあとわずか！", 10, 20, 10)
+                                        SclatUtil.sendMessage("§7残りカウントあとわずか！", MessageType.PLAYER, oplayer)
+                                        p.playSound(p.getLocation(), Sound.ENTITY_ZOMBIE_INFECT, 8.0f, 2.0f)
+                                    }
+                                }
+                            }
+                        }
+
+                        ObjectiveUtil.setLine(objective!!, lines)
+
+                        if (s == 60 && Sclat.Companion.conf!!
+                                .config!!
+                                .getString("WorkMode") != "Area"
+                        ) {
+                            for (oplayer in plugin.getServer().getOnlinePlayers()) {
+                                if (getPlayerData(oplayer)!!.isJoined) {
+                                    SclatUtil.sendMessage("§6§n残り1分！", MessageType.PLAYER, oplayer)
+                                }
+                            }
+                            if (getPlayerData(p)!!.playerNumber == 1 && Plugins.NOTEBLOCKAPI.isLoaded) {
+                                val nbs = NoteBlockAPIMgr.randomFinalSong
+                                val song = nbs.song
+                                val radio = RadioSongPlayer(song)
+                                radio.setVolume(volume)
+                                for (oplayer in plugin.getServer().getOnlinePlayers()) {
+                                    if (getPlayerData(oplayer)!!.settings!!.PlayBGM() &&
+                                        getPlayerData(oplayer)!!.isJoined
+                                    ) {
+                                        radio.addPlayer(oplayer)
+                                        oplayer.spigot().sendMessage(
+                                            ChatMessageType.ACTION_BAR,
+                                            *TextComponent.fromLegacyText("§7Now playing : §6" + nbs.songName),
+                                        )
+                                    }
+                                }
+                                radio.setPlaying(true)
+                                MatchMgr.StopMusic(radio, 1200, match)
+                            }
+                        }
+                        if (s <= 0 && !entyo) {
+                            for (oplayer in plugin.getServer().getOnlinePlayers()) {
+                                if (getPlayerData(oplayer)!!.isJoined && p !== oplayer) {
+                                    oplayer.setScoreboard(Bukkit.getScoreboardManager()!!.getNewScoreboard())
+                                    oplayer.getInventory().clear()
+                                    FinishMatch(oplayer)
+                                }
+                            }
+                            FinishMatch(p)
+                            cancel()
+                        }
+
+                        if (s <= -60) {
+                            for (oplayer in plugin.getServer().getOnlinePlayers()) {
+                                if (getPlayerData(oplayer)!!.isJoined && p !== oplayer) {
+                                    oplayer.setScoreboard(Bukkit.getScoreboardManager()!!.getNewScoreboard())
+                                    oplayer.getInventory().clear()
+                                    FinishMatch(oplayer)
+                                }
+                            }
+                            FinishMatch(p)
+                            cancel()
+                        }
+
+                        if (s <= 5 && s > 0) {
+                            for (oplayer in plugin.getServer().getOnlinePlayers()) {
+                                if (getPlayerData(oplayer)!!.isInMatch) {
+                                    oplayer.sendTitle(
+                                        ChatColor.GRAY.toString() + s.toString(),
+                                        "",
+                                        0,
+                                        30,
+                                        4,
+                                    )
+                                }
+                            }
+                        }
+
+                        // Main.getPlugin().getServer().broadcastMessage(ChatColor.GOLD + "試合終了まで: " +
+                        // String.valueOf(s));
+                        s--
+                    } catch (e: Exception) {
+                        cancel()
+                    }
+                }
+            }
+        task.runTaskTimer(plugin, 0, 20)
+    }
+
+    fun FinishMatch(player: Player) {
+        val task: BukkitRunnable =
+            object : BukkitRunnable() {
+                val p: Player = player
+                var loc: Location? = null
+                var winteam: Team? = getPlayerData(player)!!.match!!.team0
+                var i: Int = 0
+                var bestkills: Int = 0
+                var bestpaint: Int = 0
+
+                override fun run() {
+                    try {
+                        if (i == 0) {
+                            p.setDisplayName(p.getName())
+
+                            getPlayerData(p)!!.match!!.isFinished = true
+                            if (getPlayerData(p)!!.playerNumber == 1) {
+                                for (path in getPlayerData(p)!!.match!!.mapData!!.pathList) {
+                                    path!!.stop()
+                                    path.reset()
+                                }
+                                if (Sclat.Companion.conf!!
+                                        .config!!
+                                        .getString("WorkMode") == "Area"
+                                ) {
+                                    for (area in getPlayerData(p)!!.match!!.mapData!!.areaList) {
+                                        area!!.stop()
+                                    }
+                                }
+                                for (oplayer in plugin.getServer().getOnlinePlayers()) {
+                                    @Suppress("DEPRECATION")
+                                    oplayer.setMaxHealth(20.0)
+                                }
+
+                                for (uuid in DataMgr.pul) {
+                                    setPlayerIsQuit(uuid, false)
+                                }
+
+                                getPlayerData(p)!!.match!!.blockUpdater!!.stop()
+
+                                for (target in plugin.getServer().getOnlinePlayers()) {
+                                    sendWorldBorderWarningClearPacket(target)
+                                }
+
+                                try {
+                                    for (wiremesh in getPlayerData(p)!!
+                                        .match!!
+                                        .mapData!!
+                                        .wiremeshListTask!!
+                                        .wiremeshsList) {
+                                        wiremesh!!.startTask()
+                                    }
+                                } catch (e: Exception) {
+                                }
+                            }
+                            for (`as` in beaconMap.values) `as`!!.remove()
+                            for (`as` in sprinklerMap.values) `as`!!.remove()
+                            beaconMap.clear()
+                            sprinklerMap.clear()
+                            armorStandMap.clear()
+                            getPlayerData(p)!!.isInMatch = (false)
+                            if (p.hasPotionEffect(PotionEffectType.SLOW)) p.removePotionEffect(PotionEffectType.SLOW)
+                            p.playSound(p.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 3f, 1.3f)
+                            loc = p.getLocation()
+
+                            p.getInventory().clear()
+
+                            // p.setPlayerListName(p.displayName);
+                            val manager = Bukkit.getScoreboardManager()
+                            val scoreboard = manager!!.getNewScoreboard()
+
+                        /*
+                         * org.bukkit.scoreboard.Team team = scoreboard.registerNewTeam("");
+                         * team.addPlayer(p); team.setColor(ChatColor.WHITE);
+                         */
+                            p.setScoreboard(scoreboard)
+                        }
+                        if (i == 2) {
+                            getPlayerData(p)!!.canFly = (true)
+                            p.resetTitle()
+                            p.sendTitle(
+                                ChatColor.YELLOW.toString() + "=========================== Finish! ===========================",
+                                "",
+                                3,
+                                30,
+                                10,
+                            )
+                        }
+
+                        if (i >= 1 && i <= 45) {
+                            p.teleport(loc!!)
+                            p.getInventory().clear()
+                            if (p.hasPotionEffect(PotionEffectType.POISON)) p.removePotionEffect(PotionEffectType.POISON)
+                        }
+                        if (i == 46) {
+                            for (player in plugin.getServer().getOnlinePlayers()) {
+                                p.hidePlayer(plugin, player)
+                            }
+                        }
+                        if (i == 46 && getPlayerData(p)!!.playerNumber == 1) {
+                            if (Sclat.Companion.conf!!
+                                    .config!!
+                                    .getString("WorkMode") == "TDM"
+                            ) {
+                                val match = getPlayerData(p)!!.match
+                                val team0c: Int
+                                val team1c: Int
+                                val team0code: String?
+                                val team1code: String?
+                                winteam = match!!.team0
+                                var hikiwake = false
+
+                                team0c = match.team0!!.killCount
+                                team1c = match.team1!!.killCount
+                                team0code = match.team0!!.teamColor!!.colorCode
+                                team1code = match.team1!!.teamColor!!.colorCode
+
+                                if (team0c < team1c) {
+                                    winteam = match.team1
+                                } else if (team0c == team1c) {
+                                    hikiwake = true
+                                }
+
+                                match.winTeam = winteam
+                                match.isHikiwake = (hikiwake)
+
+                                for (oplayer in plugin.getServer().getOnlinePlayers()) {
+                                    if (getPlayerData(oplayer)!!.isJoined) {
+                                        tdmResultAnimation(
+                                            oplayer,
+                                            team0c,
+                                            team1c,
+                                            team0code,
+                                            team1code,
+                                            winteam,
+                                            hikiwake,
+                                        )
+                                    }
+                                }
+                            } else if (Sclat.Companion.conf!!
+                                    .config!!
+                                    .getString("WorkMode") == "Area"
+                            ) {
+                                val match = getPlayerData(p)!!.match
+                                val team0: Int
+                                val team1: Int
+                                val dper: Double
+                                var per: Int
+                                val team0code: String?
+                                val team1code: String?
+                                winteam = match!!.team0
+                                var hikiwake = false
+
+                                team0 = match.team0!!.gatiCount
+                                team1 = match.team1!!.gatiCount
+                                team0code = match.team0!!.teamColor!!.colorCode
+                                team1code = match.team1!!.teamColor!!.colorCode
+                                dper = team0.toDouble() / (team0 + team1).toDouble() * 100
+                                per = dper.toInt()
+
+                                if (match.team0!!.gatiCount > match.team1!!.gatiCount) {
+                                    winteam = match.team0
+                                    per++
+                                    // match.team0.addPaintCount();
+                                } else if (match.team0!!.gatiCount == match.team1!!.gatiCount) {
+                                    hikiwake = true
+                                } else {
+                                    winteam = match.team1
+                                    per--
+                                }
+
+                                match.winTeam = winteam
+                                match.isHikiwake = (hikiwake)
+
+                                if (per > 100) per = 100
+                                if (per < 0) per = 0
+
+                                for (oplayer in plugin.getServer().getOnlinePlayers()) {
+                                    if (getPlayerData(oplayer)!!.isJoined) {
+                                        if ((per == 100 || per == 0) && !hikiwake) {
+                                            areaResultAnimation(
+                                                oplayer,
+                                                per,
+                                                100 - per,
+                                                team0code,
+                                                team1code,
+                                                winteam,
+                                            )
+                                        } else if (team0 == 100) {
+                                            areaResultAnimation(
+                                                oplayer,
+                                                100,
+                                                0,
+                                                team0code,
+                                                team1code,
+                                                winteam,
+                                            )
+                                        } else if (team1 == 100) {
+                                            areaResultAnimation(
+                                                oplayer,
+                                                0,
+                                                100,
+                                                team0code,
+                                                team1code,
+                                                winteam,
+                                            )
+                                        } else {
+                                            resultAnimation(
+                                                oplayer,
+                                                per,
+                                                100 - per,
+                                                team0code,
+                                                team1code,
+                                                winteam,
+                                                hikiwake,
+                                            )
+                                        }
+                                    }
+                                }
+                            } else {
+                                val match = getPlayerData(p)!!.match
+                                val team0: Int
+                                val team1: Int
+                                val dper: Double
+                                var per: Int
+                                val team0code: String?
+                                val team1code: String?
+                                winteam = match!!.team0
+                                var hikiwake = false
+
+                                team0 = match.team0!!.point
+                                team1 = match.team1!!.point
+                                team0code = match.team0!!.teamColor!!.colorCode
+                                team1code = match.team1!!.teamColor!!.colorCode
+                                dper = team0.toDouble() / (team0 + team1).toDouble() * 100
+                                per = dper.toInt()
+
+                                if (match.team0!!.point > match.team1!!.point) {
+                                    winteam = match.team0
+                                    per++
+                                    // match.team0.addPaintCount();
+                                } else if (match.team0!!.point == match.team1!!.point) {
+                                    hikiwake = true
+                                } else {
+                                    winteam = match.team1
+                                    per--
+                                }
+
+                                match.winTeam = winteam
+                                match.isHikiwake = (hikiwake)
+
+                                if (per > 100) per = 100
+                                if (per < 0) per = 0
+
+                                for (oplayer in plugin.getServer().getOnlinePlayers()) {
+                                    if (getPlayerData(oplayer)!!.isJoined) {
+                                        resultAnimation(
+                                            oplayer,
+                                            per,
+                                            100 - per,
+                                            team0code,
+                                            team1code,
+                                            winteam,
+                                            hikiwake,
+                                        )
+                                    }
+                                }
+                            }
+                        }
+
+                        if (i == 46 && p.isOnline()) p.setGameMode(GameMode.ADVENTURE)
+
+                        if (i >= 46 && i <= 156) {
+                            p.teleport(getPlayerData(p)!!.match!!.mapData!!.resultLoc!!)
+                        }
+
+                        if (i == 80) {
+                            val data = getPlayerData(p)
+                            val commands: MutableList<String?> = ArrayList<String?>()
+                            commands.add("return " + p.getUniqueId())
+                            commands.add("stop")
+                            val sc =
+                                StatusClient(
+                                    Sclat.Companion.conf!!
+                                        .config!!
+                                        .getString("StatusShare.Host"),
+                                    Sclat.Companion.conf!!
+                                        .config!!
+                                        .getInt("StatusShare.Port"),
+                                    commands,
+                                )
+                            sc.startClient()
+                        }
+
+                        if (i == 137) {
+                            val data = getPlayerData(p)
+
+                            // int kill = data.killCount;
+                            // int paint = data.paintCount;
+                            data!!.canFly = (false)
+
+                            sendMessage("§a----------<< Match result >>----------", MessageType.PLAYER, p)
+                            sendMessage("", MessageType.PLAYER, p)
+
+                            for (op in plugin.getServer().getOnlinePlayers()) {
+                                val odata = getPlayerData(op)
+                                if (!odata!!.isJoined) continue
+                                if (odata.team!!.iD == data.team!!.iD) {
+                                    if (op == p) {
+                                        sendMessage(
+                                            (
+                                                odata.team!!.teamColor!!.colorCode + "§l[ §l" +
+                                                    op.getDisplayName() + "§l ]" + ChatColor.RESET + "Kills : " +
+                                                    ChatColor.YELLOW + odata.killCount + "   " + ChatColor.RESET + "Points : " +
+                                                    ChatColor.YELLOW + odata.paintCount
+                                                ),
+                                            MessageType.PLAYER,
+                                            p,
+                                        )
+                                        // p.sendMessage(odata.getTeam().getTeamColor().getColorCode() + "§l[ §l" +
+                                        // op.displayName + "§l ]" + ChatColor.RESET + "Kills : " +
+                                        // ChatColor.YELLOW + odata.killCount + " " + ChatColor.RESET + "Points : "
+                                        // + ChatColor.YELLOW + odata.paintCount);
+                                    } else {
+                                        sendMessage(
+                                            (
+                                                odata.team!!.teamColor!!.colorCode + "[ " +
+                                                    op.getDisplayName() + " ]" + ChatColor.RESET + "Kills : " +
+                                                    ChatColor.YELLOW + odata.killCount + "   " + ChatColor.RESET + "Points : " +
+                                                    ChatColor.YELLOW + odata.paintCount
+                                                ),
+                                            MessageType.PLAYER,
+                                            p,
+                                        )
+                                        // p.sendMessage(odata.getTeam().getTeamColor().getColorCode() + "[ " +
+                                        // op.displayName + " ]" + ChatColor.RESET + "Kills : " + ChatColor.YELLOW
+                                        // + odata.killCount + " " + ChatColor.RESET + "Points : " +
+                                        // ChatColor.YELLOW + odata.paintCount);
+                                    }
+                                }
+                                if (bestkills < odata.killCount) {
+                                    bestkills = odata.killCount
+                                }
+                                if (bestpaint < odata.paintCount) {
+                                    bestpaint = odata.paintCount
+                                }
+                            }
+
+                            for (op in plugin.getServer().getOnlinePlayers()) {
+                                val odata = getPlayerData(op)
+                                if (!odata!!.isJoined) continue
+                                if (odata.team!!.iD != data.team!!.iD) {
+                                    if (op == p) {
+                                        sendMessage(
+                                            (
+                                                odata.team!!.teamColor!!.colorCode + "§l[ §l" +
+                                                    op.getDisplayName() + "§l ]" + ChatColor.RESET + "Kills : " +
+                                                    ChatColor.YELLOW + odata.killCount + "   " + ChatColor.RESET + "Points : " +
+                                                    ChatColor.YELLOW + odata.paintCount
+                                                ),
+                                            MessageType.PLAYER,
+                                            p,
+                                        )
+                                        // p.sendMessage(odata.getTeam().getTeamColor().getColorCode() + "§l[ §l" +
+                                        // op.displayName + "§l ]" + ChatColor.RESET + "Kills : " +
+                                        // ChatColor.YELLOW + odata.killCount + " " + ChatColor.RESET + "Points : "
+                                        // + ChatColor.YELLOW + odata.paintCount);
+                                    } else {
+                                        sendMessage(
+                                            (
+                                                odata.team!!.teamColor!!.colorCode + "[ " +
+                                                    op.getDisplayName() + " ]" + ChatColor.RESET + "Kills : " +
+                                                    ChatColor.YELLOW + odata.killCount + "   " + ChatColor.RESET + "Points : " +
+                                                    ChatColor.YELLOW + odata.paintCount
+                                                ),
+                                            MessageType.PLAYER,
+                                            p,
+                                        )
+                                        // p.sendMessage(odata.getTeam().getTeamColor().getColorCode() + "[ " +
+                                        // op.displayName + " ]" + ChatColor.RESET + "Kills : " + ChatColor.YELLOW
+                                        // + odata.killCount + " " + ChatColor.RESET + "Points : " +
+                                        // ChatColor.YELLOW + odata.paintCount);
+                                    }
+                                }
+                            }
+                        }
+
+                        if (i == 157) {
+                            val data = getPlayerData(p)
+
+                            val pMoney = (data!!.killCount.toDouble() * 100.0 + data.paintCount.toDouble() / 5.0).toInt()
+                            var pTicket =
+                                (data.killCount.toDouble() * 1 + 10 + data.paintCount.toDouble() / 750.0).toInt()
+                            var pLv = 1
+                            if (data.team == data.match!!.winTeam || data.match!!.isHikiwake) {
+                                pLv = 2
+                                pTicket += 5
+                            }
+                            var pRank = data.killCount * 3
+                            if (data.team == data.match!!.winTeam) pRank = pRank + 25
+                            if (data.killCount == bestkills) {
+                                pRank = pRank + 20
+                            }
+                            if (data.paintCount == bestpaint) {
+                                pRank = pRank + 10
+                            }
+                            // int pRank = -60 + (int)((double)data.killCount * 2.7D +
+                            // (double)data.paintCount / 700D);
+                            // if(data.getTeam() == data.getMatch().getWinTeam() ||
+                            // data.getMatch().getIsHikiwake())
+                            // pRank = 80 + (int)((double)data.killCount * 2.2D +
+                            // (double)data.paintCount / 700D);
+                            if (data.match!!.joinedPlayerCount == 1 ||
+                                !Sclat.Companion.conf!!
+                                    .config!!
+                                    .getBoolean("RateMatch")
+                            ) {
+                                pRank =
+                                    0
+                            }
+
+                            val pMoveRank = RankMgr.IndicateRankPointmove(p, pRank)
+                            PlayerStatusMgr.addRank(p, pRank)
+
+                            PlayerStatusMgr.addLv(p, pLv)
+                            PlayerStatusMgr.addMoney(p, pMoney)
+                            PlayerStatusMgr.addTicket(p, pTicket)
+
+                            PlayerStatusMgr.addPaint(p, data.paintCount)
+                            PlayerStatusMgr.addKill(p, data.killCount)
+
+                            if (Sclat.type == ServerType.MATCH) {
+                                val commands: MutableList<String?> = ArrayList<String?>()
+                                commands.add("add money " + pMoney + " " + p.getUniqueId())
+                                commands.add("add level " + pLv + " " + p.getUniqueId())
+                                commands.add("add ticket " + pTicket + " " + p.getUniqueId())
+                                commands.add("add rank " + pRank + " " + p.getUniqueId())
+                                commands.add("add kill " + data.killCount + " " + p.getUniqueId())
+                                commands.add("add paint " + data.paintCount + " " + p.getUniqueId())
+                                commands.add("stop")
+                                val sc =
+                                    StatusClient(
+                                        Sclat.Companion.conf!!
+                                            .config!!
+                                            .getString("StatusShare.Host"),
+                                        Sclat.Companion.conf!!
+                                            .config!!
+                                            .getInt("StatusShare.Port"),
+                                        commands,
+                                    )
+                                sc.startClient()
+                            }
+
+                            sendMessage("", MessageType.PLAYER, p)
+                            sendMessage("§a----------<< Match bonus >>----------", MessageType.PLAYER, p)
+
+                            sendMessage("", MessageType.PLAYER, p)
+                            sendMessage(
+                                (
+                                    ChatColor.GREEN.toString() + " Money : " + ChatColor.RESET + "+" + pMoney +
+                                        ChatColor.AQUA + "  Lv : " + ChatColor.RESET + "+" + pLv + ChatColor.GOLD +
+                                        " Ticket : " + ChatColor.RESET + pTicket
+                                    ),
+                                MessageType.PLAYER,
+                                p,
+                            )
+                            sendMessage("", MessageType.PLAYER, p)
+                            if (pRank < 0) {
+                                sendMessage(
+                                    (
+                                        ChatColor.GOLD.toString() + " RankPoint : " + ChatColor.RESET + pRank +
+                                            (
+                                                if (Sclat.type == ServerType.NORMAL) {
+                                                    "  [ §b" + RankMgr.toABCRank(PlayerStatusMgr.getRank(player)) + " §r]"
+                                                } else {
+                                                    ""
+                                                }
+                                                )
+                                        ),
+                                    MessageType.PLAYER,
+                                    p,
+                                )
+                            } else {
+                                sendMessage(
+                                    (
+                                        ChatColor.GOLD.toString() + " RankPoint : " + ChatColor.RESET + "+" + pMoveRank +
+                                            (
+                                                if (Sclat.type == ServerType.NORMAL) {
+                                                    "  [ §b" + RankMgr.toABCRank(PlayerStatusMgr.getRank(player)) + " §r]"
+                                                } else {
+                                                    ""
+                                                }
+                                                )
+                                        ),
+                                    MessageType.PLAYER,
+                                    p,
+                                )
+                            }
+                            sendMessage("", MessageType.PLAYER, p)
+                            sendMessage("§a-----------------------------------", MessageType.PLAYER, p)
+
+                        /*
+                         * p.sendMessage(ChatColor.GREEN + "##########################");
+                         * p.sendMessage(ChatColor.GREEN + "          試合結果");
+                         * p.sendMessage(ChatColor.GOLD + "     Kills  : " + ChatColor.YELLOW + kill);
+                         * p.sendMessage(ChatColor.GOLD + "     Points : " + ChatColor.YELLOW + paint);
+                         * p.sendMessage(ChatColor.GREEN + "##########################");
+                         */
+                            val WorldName =
+                                Sclat.Companion.conf!!
+                                    .config!!
+                                    .getString("Lobby.WorldName")
+                            val w = Bukkit.getServer().getWorld(WorldName!!)
+
+                            val ix =
+                                Sclat.Companion.conf!!
+                                    .config!!
+                                    .getInt("Lobby.X")
+                            val iy =
+                                Sclat.Companion.conf!!
+                                    .config!!
+                                    .getInt("Lobby.Y")
+                            val iz =
+                                Sclat.Companion.conf!!
+                                    .config!!
+                                    .getInt("Lobby.Z")
+                            val iyaw =
+                                Sclat.Companion.conf!!
+                                    .config!!
+                                    .getInt("Lobby.Yaw")
+                            val il = Location(w, ix.toDouble(), iy.toDouble(), iz.toDouble())
+                            il.setYaw(iyaw.toFloat())
+                            val wc = getPlayerData(p)!!.weaponClass
+                            p.teleport(il)
+                            if (Sclat.type != ServerType.MATCH) {
+                                val join = ItemStack(Material.CHEST)
+                                val joinmeta = join.getItemMeta()
+                                joinmeta!!.setDisplayName("メインメニュー")
+                                join.setItemMeta(joinmeta)
+                                p.getInventory().clear()
+                                p.getInventory().setItem(0, join)
+                            }
+
+                            PlayerStatusMgr.sendHologram(p)
+
+                            if (getPlayerData(p)!!.playerNumber == 1) {
+                                RollBack()
+                                matchcount++
+                                MatchSetup()
+
+                                // Send match status
+                                if (Sclat.type == ServerType.MATCH) {
+                                    val commands: MutableList<String?> = ArrayList<String?>()
+                                    commands.add(
+                                        "stopped " +
+                                            Sclat.Companion.conf!!
+                                                .servers!!
+                                                .getString("ServerName"),
+                                    )
+                                    commands.add(
+                                        "map " +
+                                            Sclat.Companion.conf!!
+                                                .servers!!
+                                                .getString("ServerName") + " " +
+                                            getMapRandom(
+                                                if (mapcount == 0) 0 else mapcount - 1,
+                                            ).mapName,
+                                    )
+                                    commands.add("stop")
+                                    val sc =
+                                        StatusClient(
+                                            Sclat.Companion.conf!!
+                                                .config!!
+                                                .getString("StatusShare.Host"),
+                                            Sclat.Companion.conf!!
+                                                .config!!
+                                                .getInt("StatusShare.Port"),
+                                            commands,
+                                        )
+                                    sc.startClient()
+                                }
+
+                                // DataMgr.getPlayerData(p).reset();
+                                for (uuid in DataMgr.pul) {
+                                    setPlayerIsQuit(uuid, false)
+                                }
+                            }
+
+                            // player.setDisplayName(player.getName());
+                            getPlayerData(p)!!.reset()
+                            getPlayerData(p)!!.weaponClass = (wc)
+
+                            DataMgr.joinedList.clear()
+
+                            p.setWalkSpeed(0.2f)
+                            p.setHealth(20.0)
+
+                            p.setGameMode(GameMode.ADVENTURE)
+                            // PlayerData data = new PlayerData(p);
+                            // data.weaponClass = (wc);
+                            // DataMgr.setPlayerData(p, data);
+                            for (player in plugin.getServer().getOnlinePlayers()) {
+                                p.showPlayer(plugin, player)
+                            }
+
+                            if (Sclat.type == ServerType.MATCH) {
+                                try {
+                                    BungeeCordMgr.PlayerSendServer(p, "sclat")
+                                    getPlayerData(p)!!.setServerName("Sclat")
+                                } catch (e: Exception) {
+                                }
+                            }
+
+                            cancel()
+                        }
+
+                        i++
+                    } catch (e: Exception) {
+                        cancel()
+                    }
+                }
+            }
+        task.runTaskTimer(plugin, 0, 1)
+    }
 }

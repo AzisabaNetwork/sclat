@@ -131,7 +131,7 @@ object Boomerang {
                                 for (painti in 0..2) {
                                     val pLocs: MutableList<Location> = getSphere(as1l, painti.toDouble(), 20)
                                     for (loc in pLocs) {
-                                        PaintMgr.Paint(loc, player, false)
+                                        PaintMgr.paint(loc, player, false)
                                     }
                                 }
                             } else if (as1.isOnGround) {
@@ -166,7 +166,7 @@ object Boomerang {
                         }
                         as1.velocity = aVec
 
-                        PaintMgr.PaintHightestBlock(as1l, player, false, true)
+                        PaintMgr.paintHightestBlock(as1l, player, false, true)
 
                         bloc = as1l.clone()
 
@@ -289,7 +289,7 @@ object Boomerang {
                                 while (i <= maxDist) {
                                     val pLocs: MutableList<Location> = getSphere(as1l, i.toDouble(), 20)
                                     for (loc in pLocs) {
-                                        PaintMgr.Paint(loc, player, false)
+                                        PaintMgr.paint(loc, player, false)
                                     }
                                     i++
                                 }

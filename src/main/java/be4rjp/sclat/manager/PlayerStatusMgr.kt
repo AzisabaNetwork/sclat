@@ -1,382 +1,667 @@
+package be4rjp.sclat.manager
 
-package be4rjp.sclat.manager;
-
-import be4rjp.sclat.VariablesKt;
-import com.mojang.authlib.GameProfile;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import net.minecraft.server.v1_14_R1.DataWatcherRegistry;
-import net.minecraft.server.v1_14_R1.EntityArmorStand;
-import net.minecraft.server.v1_14_R1.EntityPlayer;
-import net.minecraft.server.v1_14_R1.MinecraftServer;
-import net.minecraft.server.v1_14_R1.PacketPlayOutAnimation;
-import net.minecraft.server.v1_14_R1.PacketPlayOutEntityDestroy;
-import net.minecraft.server.v1_14_R1.PacketPlayOutEntityHeadRotation;
-import net.minecraft.server.v1_14_R1.PacketPlayOutEntityMetadata;
-import net.minecraft.server.v1_14_R1.PacketPlayOutNamedEntitySpawn;
-import net.minecraft.server.v1_14_R1.PacketPlayOutPlayerInfo;
-import net.minecraft.server.v1_14_R1.PacketPlayOutSpawnEntityLiving;
-import net.minecraft.server.v1_14_R1.PlayerConnection;
-import net.minecraft.server.v1_14_R1.PlayerInteractManager;
-import net.minecraft.server.v1_14_R1.WorldServer;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.World;
-import org.bukkit.craftbukkit.v1_14_R1.CraftServer;
-import org.bukkit.craftbukkit.v1_14_R1.CraftWorld;
-import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
-import org.bukkit.craftbukkit.v1_14_R1.util.CraftChatMessage;
-import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
-import static be4rjp.sclat.Sclat.conf;
+import be4rjp.sclat.Sclat
+import be4rjp.sclat.plugin
+import com.mojang.authlib.GameProfile
+import net.minecraft.server.v1_14_R1.DataWatcherRegistry
+import net.minecraft.server.v1_14_R1.EntityArmorStand
+import net.minecraft.server.v1_14_R1.EntityPlayer
+import net.minecraft.server.v1_14_R1.MinecraftServer
+import net.minecraft.server.v1_14_R1.PacketPlayOutAnimation
+import net.minecraft.server.v1_14_R1.PacketPlayOutEntityDestroy
+import net.minecraft.server.v1_14_R1.PacketPlayOutEntityHeadRotation
+import net.minecraft.server.v1_14_R1.PacketPlayOutEntityMetadata
+import net.minecraft.server.v1_14_R1.PacketPlayOutNamedEntitySpawn
+import net.minecraft.server.v1_14_R1.PacketPlayOutPlayerInfo
+import net.minecraft.server.v1_14_R1.PacketPlayOutSpawnEntityLiving
+import net.minecraft.server.v1_14_R1.PlayerInteractManager
+import org.bukkit.Bukkit
+import org.bukkit.Location
+import org.bukkit.craftbukkit.v1_14_R1.CraftServer
+import org.bukkit.craftbukkit.v1_14_R1.CraftWorld
+import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer
+import org.bukkit.craftbukkit.v1_14_R1.util.CraftChatMessage
+import org.bukkit.entity.Player
+import org.bukkit.scheduler.BukkitRunnable
 
 /**
  *
  * @author Be4rJP
  */
-public class PlayerStatusMgr {
+object PlayerStatusMgr {
+    var list: MutableMap<Player?, EntityArmorStand> = HashMap<Player?, EntityArmorStand>()
+    var list1: MutableMap<Player?, EntityArmorStand> = HashMap<Player?, EntityArmorStand>()
+    var list2: MutableMap<Player?, EntityArmorStand> = HashMap<Player?, EntityArmorStand>()
 
-	public static Map<Player, EntityArmorStand> list = new HashMap<>();
-	public static Map<Player, EntityArmorStand> list1 = new HashMap<>();
-	public static Map<Player, EntityArmorStand> list2 = new HashMap<>();
+    fun setupPlayerStatus(player: Player) {
+        val playerUuid: String? = player.getUniqueId().toString()
 
-	public static void setupPlayerStatus(Player player) {
-		String playerUuid = player.getUniqueId().toString();
+        if (!Sclat.Companion.conf!!
+                .playerStatus
+                .contains("Status." + playerUuid)
+        ) {
+            setDefaultStatus(player)
+        } else if (!Sclat.Companion.conf!!
+                .playerStatus
+                .contains("Status." + playerUuid + ".Money")
+        ) {
+            setDefaultStatus(player)
+        }
+    }
 
-		if (!conf.getPlayerStatus().contains("Status." + playerUuid)) {
-			setDefaultStatus(player);
-		} else if (!conf.getPlayerStatus().contains("Status." + playerUuid + ".Money")) {
-			setDefaultStatus(player);
-		}
-	}
+    fun setDefaultStatus(player: Player) {
+        Sclat.Companion.conf!!
+            .playerStatus
+            .set("Status." + player.getUniqueId() + ".Money", 10000)
+        Sclat.Companion.conf!!
+            .playerStatus
+            .set("Status." + player.getUniqueId() + ".Lv", 0)
+        Sclat.Companion.conf!!
+            .playerStatus
+            .set("Status." + player.getUniqueId() + ".Rank", 0)
+        val wlist: MutableList<String?> = ArrayList<String?>()
+        wlist.add(
+            Sclat.Companion.conf!!
+                .config!!
+                .getString("DefaultClass"),
+        )
+        Sclat.Companion.conf!!
+            .playerStatus
+            .set("Status." + player.getUniqueId() + ".WeaponClass", wlist)
+        val glist: MutableList<Int?> = ArrayList<Int?>()
+        glist.add(0)
+        Sclat.Companion.conf!!
+            .playerStatus
+            .set("Status." + player.getUniqueId() + ".GearList", glist)
+        Sclat.Companion.conf!!
+            .playerStatus
+            .set("Status." + player.getUniqueId() + ".Gear", 0)
+        Sclat.Companion.conf!!
+            .playerStatus
+            .set("Status." + player.getUniqueId() + ".Kill", 0)
+        Sclat.Companion.conf!!
+            .playerStatus
+            .set("Status." + player.getUniqueId() + ".Paint", 0)
+        Sclat.Companion.conf!!.playerStatus.set(
+            "Status." + player.getUniqueId() + ".EquiptClass",
+            Sclat.Companion.conf!!
+                .config!!
+                .getString("DefaultClass"),
+        )
+        Sclat.Companion.conf!!
+            .playerStatus
+            .set("Status." + player.getUniqueId() + ".Tutorial", 0)
+        // ガチャチケ用
+        Sclat.Companion.conf!!
+            .playerStatus
+            .set("Status." + player.getUniqueId() + ".Ticket", 0)
+        addGear(player, 9)
+        setGear(player, 9)
+    }
 
-	public static void setDefaultStatus(Player player) {
-		conf.getPlayerStatus().set("Status." + player.getUniqueId() + ".Money", 10000);
-		conf.getPlayerStatus().set("Status." + player.getUniqueId() + ".Lv", 0);
-		conf.getPlayerStatus().set("Status." + player.getUniqueId() + ".Rank", 0);
-		List<String> wlist = new ArrayList<>();
-		wlist.add(conf.config.getString("DefaultClass"));
-		conf.getPlayerStatus().set("Status." + player.getUniqueId() + ".WeaponClass", wlist);
-		List<Integer> glist = new ArrayList<>();
-		glist.add(0);
-		conf.getPlayerStatus().set("Status." + player.getUniqueId() + ".GearList", glist);
-		conf.getPlayerStatus().set("Status." + player.getUniqueId() + ".Gear", 0);
-		conf.getPlayerStatus().set("Status." + player.getUniqueId() + ".Kill", 0);
-		conf.getPlayerStatus().set("Status." + player.getUniqueId() + ".Paint", 0);
-		conf.getPlayerStatus().set("Status." + player.getUniqueId() + ".EquiptClass",
-				conf.config.getString("DefaultClass"));
-		conf.getPlayerStatus().set("Status." + player.getUniqueId() + ".Tutorial", 0);
-		// ガチャチケ用
-		conf.getPlayerStatus().set("Status." + player.getUniqueId() + ".Ticket", 0);
-		PlayerStatusMgr.addGear(player, 9);
-		PlayerStatusMgr.setGear(player, 9);
-	}
+    fun sendHologram(player: Player) {
+        val w =
+            Bukkit.getWorld(
+                Sclat.Companion.conf!!
+                    .config!!
+                    .getString("Hologram.WorldName")!!,
+            )
+        val ix =
+            Sclat.Companion.conf!!
+                .config!!
+                .getInt("Hologram.X")
+        val iy =
+            Sclat.Companion.conf!!
+                .config!!
+                .getInt("Hologram.Y")
+        val iz =
+            Sclat.Companion.conf!!
+                .config!!
+                .getInt("Hologram.Z")
+        val iyaw =
+            Sclat.Companion.conf!!
+                .config!!
+                .getInt("Hologram.Yaw")
+        val location = Location(w, ix + 0.5, iy.toDouble(), iz + 0.5)
+        location.setYaw(iyaw.toFloat())
 
-	public static void sendHologram(Player player) {
-		World w = Bukkit.getWorld(conf.config.getString("Hologram.WorldName"));
-		int ix = conf.config.getInt("Hologram.X");
-		int iy = conf.config.getInt("Hologram.Y");
-		int iz = conf.config.getInt("Hologram.Z");
-		int iyaw = conf.config.getInt("Hologram.Yaw");
-		Location location = new Location(w, ix + 0.5D, iy, iz + 0.5D);
-		location.setYaw(iyaw);
+        val nmsServer: MinecraftServer = (Bukkit.getServer() as CraftServer).getServer()
+        val nmsWorld = (location.getWorld() as CraftWorld).getHandle()
+        val gameProfile = GameProfile(player.getUniqueId(), player.getName())
 
-		MinecraftServer nmsServer = ((CraftServer) Bukkit.getServer()).getServer();
-		WorldServer nmsWorld = ((CraftWorld) location.getWorld()).getHandle();
-		GameProfile gameProfile = new GameProfile(player.getUniqueId(), player.getName());
+        val npc = EntityPlayer(nmsServer, nmsWorld, gameProfile, PlayerInteractManager(nmsWorld))
+        npc.setLocation(location.getX(), location.getY(), location.getZ(), location.getYaw(), 0f)
+        npc.getDataWatcher().set<Byte?>(DataWatcherRegistry.a.a(15), 127.toByte())
 
-		EntityPlayer npc = new EntityPlayer(nmsServer, nmsWorld, gameProfile, new PlayerInteractManager(nmsWorld));
-		npc.setLocation(location.getX(), location.getY(), location.getZ(), location.getYaw(), 0);
-		npc.getDataWatcher().set(DataWatcherRegistry.a.a(15), (byte) 127);
+        val connection = (player as CraftPlayer).getHandle().playerConnection
+        connection
+            .sendPacket(PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, npc))
+        connection.sendPacket(PacketPlayOutNamedEntitySpawn(npc))
+        connection.sendPacket(
+            PacketPlayOutEntityHeadRotation(
+                npc,
+                ((location.getYaw() * 256.0f) / 360.0f).toInt().toByte(),
+            ),
+        )
+        connection.sendPacket(PacketPlayOutAnimation(npc, 0))
+        connection.sendPacket(PacketPlayOutEntityMetadata(npc.getId(), npc.getDataWatcher(), true))
 
-		PlayerConnection connection = ((CraftPlayer) player).getHandle().playerConnection;
-		connection
-				.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, npc));
-		connection.sendPacket(new PacketPlayOutNamedEntitySpawn(npc));
-		connection.sendPacket(new PacketPlayOutEntityHeadRotation(npc, (byte) ((location.getYaw() * 256.0F) / 360.0F)));
-		connection.sendPacket(new PacketPlayOutAnimation(npc, 0));
-		connection.sendPacket(new PacketPlayOutEntityMetadata(npc.getId(), npc.getDataWatcher(), true));
+        val `as` = EntityArmorStand(nmsWorld, location.getX(), location.getY() + 0.8, location.getZ())
+        `as`.setLocation(location.getX(), location.getY() + 0.8, location.getZ(), location.getYaw(), 0f)
+        `as`.setInvisible(true)
+        `as`.setCustomNameVisible(true)
+        `as`.setNoGravity(true)
+        `as`.setCustomName(
+            CraftChatMessage.fromStringOrNull("§aMoney : §r" + getMoney(player) + "  §aLv : §r" + getLv(player)),
+        )
 
-		EntityArmorStand as = new EntityArmorStand(nmsWorld, location.getX(), location.getY() + 0.8D, location.getZ());
-		as.setLocation(location.getX(), location.getY() + 0.8D, location.getZ(), location.getYaw(), 0);
-		as.setInvisible(true);
-		as.setCustomNameVisible(true);
-		as.setNoGravity(true);
-		as.setCustomName(
-				CraftChatMessage.fromStringOrNull("§aMoney : §r" + getMoney(player) + "  §aLv : §r" + getLv(player)));
+        list.put(player, `as`)
 
-		list.put(player, as);
+        val as1 = EntityArmorStand(nmsWorld, location.getX(), location.getY() + 1.2, location.getZ())
+        as1.setLocation(location.getX(), location.getY() + 1.2, location.getZ(), location.getYaw(), 0f)
+        as1.setInvisible(true)
+        as1.setCustomNameVisible(true)
+        as1.setNoGravity(true)
+        as1.setCustomName(
+            CraftChatMessage.fromStringOrNull(
+                "§6Rank : §r" + getRank(player) + "  [ §b" + RankMgr.toABCRank(getRank(player)) + " §r]",
+            ),
+        )
 
-		EntityArmorStand as1 = new EntityArmorStand(nmsWorld, location.getX(), location.getY() + 1.2D, location.getZ());
-		as1.setLocation(location.getX(), location.getY() + 1.2D, location.getZ(), location.getYaw(), 0);
-		as1.setInvisible(true);
-		as1.setCustomNameVisible(true);
-		as1.setNoGravity(true);
-		as1.setCustomName(CraftChatMessage.fromStringOrNull(
-				"§6Rank : §r" + getRank(player) + "  [ §b" + RankMgr.toABCRank(getRank(player)) + " §r]"));
+        list1.put(player, as1)
 
-		list1.put(player, as1);
+        val as2 = EntityArmorStand(nmsWorld, location.getX(), location.getY() + 0.4, location.getZ())
+        as2.setLocation(location.getX(), location.getY() + 0.4, location.getZ(), location.getYaw(), 0f)
+        as2.setInvisible(true)
+        as2.setCustomNameVisible(true)
+        as2.setNoGravity(true)
+        as2.setCustomName(
+            CraftChatMessage
+                .fromStringOrNull("§aPaints : §r" + getPaint(player) + "  §aKills : §r" + getKill(player)),
+        )
 
-		EntityArmorStand as2 = new EntityArmorStand(nmsWorld, location.getX(), location.getY() + 0.4D, location.getZ());
-		as2.setLocation(location.getX(), location.getY() + 0.4D, location.getZ(), location.getYaw(), 0);
-		as2.setInvisible(true);
-		as2.setCustomNameVisible(true);
-		as2.setNoGravity(true);
-		as2.setCustomName(CraftChatMessage
-				.fromStringOrNull("§aPaints : §r" + getPaint(player) + "  §aKills : §r" + getKill(player)));
+        list2.put(player, as2)
 
-		list2.put(player, as2);
+        connection.sendPacket(PacketPlayOutSpawnEntityLiving(`as`))
+        connection.sendPacket(PacketPlayOutSpawnEntityLiving(as1))
+        connection.sendPacket(PacketPlayOutSpawnEntityLiving(as2))
+    }
 
-		connection.sendPacket(new PacketPlayOutSpawnEntityLiving(as));
-		connection.sendPacket(new PacketPlayOutSpawnEntityLiving(as1));
-		connection.sendPacket(new PacketPlayOutSpawnEntityLiving(as2));
-	}
+    fun HologramUpdateRunnable(player: Player) {
+        val task: BukkitRunnable =
+            object : BukkitRunnable() {
+                override fun run() {
+                    if (!player.isOnline()) cancel()
+                    try {
+                        val `as`: EntityArmorStand = list.get(player)!!
+                        val connection = (player as CraftPlayer).getHandle().playerConnection
+                        connection.sendPacket(PacketPlayOutEntityDestroy(`as`.getBukkitEntity().getEntityId()))
+                        `as`.setCustomName(
+                            CraftChatMessage
+                                .fromStringOrNull("§aMoney : §r" + getMoney(player) + "  §aLv : §r" + getLv(player)),
+                        )
+                        connection.sendPacket(PacketPlayOutSpawnEntityLiving(`as`))
 
-	public static void HologramUpdateRunnable(Player player) {
-		BukkitRunnable task = new BukkitRunnable() {
-			@Override
-			public void run() {
-				if (!player.isOnline())
-					cancel();
-				try {
-					EntityArmorStand as = list.get(player);
-					PlayerConnection connection = ((CraftPlayer) player).getHandle().playerConnection;
-					connection.sendPacket(new PacketPlayOutEntityDestroy(as.getBukkitEntity().getEntityId()));
-					as.setCustomName(CraftChatMessage
-							.fromStringOrNull("§aMoney : §r" + getMoney(player) + "  §aLv : §r" + getLv(player)));
-					connection.sendPacket(new PacketPlayOutSpawnEntityLiving(as));
+                        val as1: EntityArmorStand = list1.get(player)!!
+                        connection.sendPacket(PacketPlayOutEntityDestroy(as1.getBukkitEntity().getEntityId()))
+                        as1.setCustomName(
+                            CraftChatMessage.fromStringOrNull(
+                                "§6Rank : §r" + getRank(player) + "  [ §b" + RankMgr.toABCRank(getRank(player)) + " §r]",
+                            ),
+                        )
+                        connection.sendPacket(PacketPlayOutSpawnEntityLiving(as1))
 
-					EntityArmorStand as1 = list1.get(player);
-					connection.sendPacket(new PacketPlayOutEntityDestroy(as1.getBukkitEntity().getEntityId()));
-					as1.setCustomName(CraftChatMessage.fromStringOrNull(
-							"§6Rank : §r" + getRank(player) + "  [ §b" + RankMgr.toABCRank(getRank(player)) + " §r]"));
-					connection.sendPacket(new PacketPlayOutSpawnEntityLiving(as1));
+                        val as2: EntityArmorStand = list2.get(player)!!
+                        connection.sendPacket(PacketPlayOutEntityDestroy(as2.getBukkitEntity().getEntityId()))
+                        as2.setCustomName(
+                            CraftChatMessage
+                                .fromStringOrNull("§aPaints : §r" + getPaint(player) + "  §aKills : §r" + getKill(player)),
+                        )
+                        connection.sendPacket(PacketPlayOutSpawnEntityLiving(as2))
+                    } catch (e: Exception) {
+                    }
+                }
+            }
+        task.runTaskTimer(
+            plugin,
+            0,
+            Sclat.Companion.conf!!
+                .config!!
+                .getInt("HologramUpdatePeriod")
+                .toLong(),
+        )
+    }
 
-					EntityArmorStand as2 = list2.get(player);
-					connection.sendPacket(new PacketPlayOutEntityDestroy(as2.getBukkitEntity().getEntityId()));
-					as2.setCustomName(CraftChatMessage
-							.fromStringOrNull("§aPaints : §r" + getPaint(player) + "  §aKills : §r" + getKill(player)));
-					connection.sendPacket(new PacketPlayOutSpawnEntityLiving(as2));
-				} catch (Exception e) {
-				}
-			}
-		};
-		task.runTaskTimer(VariablesKt.getPlugin(), 0, conf.config.getInt("HologramUpdatePeriod"));
-	}
+    @JvmStatic
+    fun sendHologramUpdate(player: Player) {
+        val `as`: EntityArmorStand = list.get(player)!!
+        val connection = (player as CraftPlayer).getHandle().playerConnection
+        connection.sendPacket(PacketPlayOutEntityDestroy(`as`.getBukkitEntity().getEntityId()))
+        `as`.setCustomName(
+            CraftChatMessage.fromStringOrNull("§aMoney : §r" + getMoney(player) + "  §aLv : §r" + getLv(player)),
+        )
+        connection.sendPacket(PacketPlayOutSpawnEntityLiving(`as`))
+    }
 
-	public static void sendHologramUpdate(Player player) {
-		EntityArmorStand as = list.get(player);
-		PlayerConnection connection = ((CraftPlayer) player).getHandle().playerConnection;
-		connection.sendPacket(new PacketPlayOutEntityDestroy(as.getBukkitEntity().getEntityId()));
-		as.setCustomName(
-				CraftChatMessage.fromStringOrNull("§aMoney : §r" + getMoney(player) + "  §aLv : §r" + getLv(player)));
-		connection.sendPacket(new PacketPlayOutSpawnEntityLiving(as));
-	}
+    @JvmStatic
+    fun haveWeapon(
+        player: Player,
+        wname: String?,
+    ): Boolean {
+        val wlist =
+            Sclat.Companion.conf!!
+                .playerStatus
+                .getStringList("Status." + player.getUniqueId() + ".WeaponClass")
+        return wlist.contains(wname)
+    }
 
-	public static boolean haveWeapon(Player player, String wname) {
-		List<String> wlist = conf.getPlayerStatus().getStringList("Status." + player.getUniqueId() + ".WeaponClass");
-		return wlist.contains(wname);
-	}
+    @JvmStatic
+    fun haveGear(
+        player: Player,
+        g: Int,
+    ): Boolean {
+        val glist =
+            Sclat.Companion.conf!!
+                .playerStatus
+                .getIntegerList("Status." + player.getUniqueId() + ".GearList")
+        return glist.contains(g)
+    }
 
-	public static boolean haveGear(Player player, int g) {
-		List<Integer> glist = conf.getPlayerStatus().getIntegerList("Status." + player.getUniqueId() + ".GearList");
-		return glist.contains(g);
-	}
+    fun setRank(
+        player: Player,
+        rank: Int,
+    ) {
+        val uuid: String? = player.getUniqueId().toString()
+        Sclat.Companion.conf!!
+            .playerStatus
+            .set("Status." + uuid + ".Rank", rank)
+    }
 
-	public static void setRank(Player player, int rank) {
-		String uuid = player.getUniqueId().toString();
-		conf.getPlayerStatus().set("Status." + uuid + ".Rank", rank);
-	}
+    fun setRank(
+        uuid: String?,
+        rank: Int,
+    ) {
+        Sclat.Companion.conf!!
+            .playerStatus
+            .set("Status." + uuid + ".Rank", rank)
+    }
 
-	public static void setRank(String uuid, int rank) {
-		conf.getPlayerStatus().set("Status." + uuid + ".Rank", rank);
-	}
+    fun setLv(
+        uuid: String?,
+        lv: Int,
+    ) {
+        Sclat.Companion.conf!!
+            .playerStatus
+            .set("Status." + uuid + ".Lv", lv)
+    }
 
-	public static void setLv(String uuid, int lv) {
-		conf.getPlayerStatus().set("Status." + uuid + ".Lv", lv);
-	}
+    @JvmStatic
+    fun setGear(
+        player: Player,
+        g: Int,
+    ) {
+        val uuid: String? = player.getUniqueId().toString()
+        Sclat.Companion.conf!!
+            .playerStatus
+            .set("Status." + uuid + ".Gear", g)
+    }
 
-	public static void setGear(Player player, int g) {
-		String uuid = player.getUniqueId().toString();
-		conf.getPlayerStatus().set("Status." + uuid + ".Gear", g);
-	}
+    fun setEquiptClass(
+        player: Player,
+        name: String?,
+    ) {
+        val uuid: String? = player.getUniqueId().toString()
+        Sclat.Companion.conf!!
+            .playerStatus
+            .set("Status." + uuid + ".EquiptClass", name)
+    }
 
-	public static void setEquiptClass(Player player, String name) {
-		String uuid = player.getUniqueId().toString();
-		conf.getPlayerStatus().set("Status." + uuid + ".EquiptClass", name);
-	}
+    fun setTutorialState(
+        uuid: String?,
+        g: Int,
+    ) {
+        Sclat.Companion.conf!!
+            .playerStatus
+            .set("Status." + uuid + ".Tutorial", g)
+    }
 
-	public static void setTutorialState(String uuid, int g) {
-		conf.getPlayerStatus().set("Status." + uuid + ".Tutorial", g);
-	}
+    @JvmStatic
+    fun addWeapon(
+        player: Player,
+        wname: String?,
+    ) {
+        val wlist =
+            Sclat.Companion.conf!!
+                .playerStatus
+                .getStringList("Status." + player.getUniqueId() + ".WeaponClass")
+        wlist.add(wname)
+        Sclat.Companion.conf!!
+            .playerStatus
+            .set("Status." + player.getUniqueId() + ".WeaponClass", wlist)
+    }
 
-	public static void addWeapon(Player player, String wname) {
-		List<String> wlist = conf.getPlayerStatus().getStringList("Status." + player.getUniqueId() + ".WeaponClass");
-		wlist.add(wname);
-		conf.getPlayerStatus().set("Status." + player.getUniqueId() + ".WeaponClass", wlist);
-	}
+    @JvmStatic
+    fun addGear(
+        player: Player,
+        g: Int,
+    ) {
+        val glist =
+            Sclat.Companion.conf!!
+                .playerStatus
+                .getIntegerList("Status." + player.getUniqueId() + ".GearList")
+        glist.add(g)
+        Sclat.Companion.conf!!
+            .playerStatus
+            .set("Status." + player.getUniqueId() + ".GearList", glist)
+    }
 
-	public static void addGear(Player player, int g) {
-		List<Integer> glist = conf.getPlayerStatus().getIntegerList("Status." + player.getUniqueId() + ".GearList");
-		glist.add(g);
-		conf.getPlayerStatus().set("Status." + player.getUniqueId() + ".GearList", glist);
-	}
+    @JvmStatic
+    fun addMoney(
+        player: Player,
+        m: Int,
+    ) {
+        val uuid: String? = player.getUniqueId().toString()
+        Sclat.Companion.conf!!.playerStatus.set(
+            "Status." + uuid + ".Money",
+            Sclat.Companion.conf!!
+                .playerStatus
+                .getInt("Status." + uuid + ".Money") + m,
+        )
+    }
 
-	public static void addMoney(Player player, int m) {
-		String uuid = player.getUniqueId().toString();
-		conf.getPlayerStatus().set("Status." + uuid + ".Money",
-				conf.getPlayerStatus().getInt("Status." + uuid + ".Money") + m);
-	}
+    fun addMoney(
+        uuid: String?,
+        m: Int,
+    ) {
+        Sclat.Companion.conf!!.playerStatus.set(
+            "Status." + uuid + ".Money",
+            Sclat.Companion.conf!!
+                .playerStatus
+                .getInt("Status." + uuid + ".Money") + m,
+        )
+    }
 
-	public static void addMoney(String uuid, int m) {
-		conf.getPlayerStatus().set("Status." + uuid + ".Money",
-				conf.getPlayerStatus().getInt("Status." + uuid + ".Money") + m);
-	}
+    @JvmStatic
+    fun subMoney(
+        player: Player,
+        m: Int,
+    ) {
+        val uuid: String? = player.getUniqueId().toString()
+        Sclat.Companion.conf!!.playerStatus.set(
+            "Status." + uuid + ".Money",
+            Sclat.Companion.conf!!
+                .playerStatus
+                .getInt("Status." + uuid + ".Money") - m,
+        )
+    }
 
-	public static void subMoney(Player player, int m) {
-		String uuid = player.getUniqueId().toString();
-		conf.getPlayerStatus().set("Status." + uuid + ".Money",
-				conf.getPlayerStatus().getInt("Status." + uuid + ".Money") - m);
-	}
+    fun addLv(
+        player: Player,
+        m: Int,
+    ) {
+        val uuid: String? = player.getUniqueId().toString()
+        Sclat.Companion.conf!!.playerStatus.set(
+            "Status." + uuid + ".Lv",
+            Sclat.Companion.conf!!
+                .playerStatus
+                .getInt("Status." + uuid + ".Lv") + m,
+        )
+    }
 
-	public static void addLv(Player player, int m) {
-		String uuid = player.getUniqueId().toString();
-		conf.getPlayerStatus().set("Status." + uuid + ".Lv",
-				conf.getPlayerStatus().getInt("Status." + uuid + ".Lv") + m);
-	}
+    fun addRank(
+        player: Player,
+        m: Int,
+    ) {
+        val uuid: String? = player.getUniqueId().toString()
+        if (getRank(player) + m > 0) {
+            Sclat.Companion.conf!!.playerStatus.set(
+                "Status." + uuid + ".Rank",
+                Sclat.Companion.conf!!
+                    .playerStatus
+                    .getInt("Status." + uuid + ".Rank") + m,
+            )
+        } else {
+            Sclat.Companion.conf!!
+                .playerStatus
+                .set("Status." + uuid + ".Rank", 0)
+        }
+    }
 
-	public static void addRank(Player player, int m) {
-		String uuid = player.getUniqueId().toString();
-		if (PlayerStatusMgr.getRank(player) + m > 0) {
-			conf.getPlayerStatus().set("Status." + uuid + ".Rank",
-					conf.getPlayerStatus().getInt("Status." + uuid + ".Rank") + m);
-		} else {
-			conf.getPlayerStatus().set("Status." + uuid + ".Rank", 0);
-		}
-	}
+    fun addKill(
+        player: Player,
+        m: Int,
+    ) {
+        val uuid: String? = player.getUniqueId().toString()
+        Sclat.Companion.conf!!.playerStatus.set(
+            "Status." + uuid + ".Kill",
+            Sclat.Companion.conf!!
+                .playerStatus
+                .getInt("Status." + uuid + ".Kill") + m,
+        )
+    }
 
-	public static void addKill(Player player, int m) {
-		String uuid = player.getUniqueId().toString();
-		conf.getPlayerStatus().set("Status." + uuid + ".Kill",
-				conf.getPlayerStatus().getInt("Status." + uuid + ".Kill") + m);
-	}
+    fun addPaint(
+        player: Player,
+        m: Int,
+    ) {
+        val uuid: String? = player.getUniqueId().toString()
+        Sclat.Companion.conf!!.playerStatus.set(
+            "Status." + uuid + ".Paint",
+            Sclat.Companion.conf!!
+                .playerStatus
+                .getInt("Status." + uuid + ".Paint") + m,
+        )
+    }
 
-	public static void addPaint(Player player, int m) {
-		String uuid = player.getUniqueId().toString();
-		conf.getPlayerStatus().set("Status." + uuid + ".Paint",
-				conf.getPlayerStatus().getInt("Status." + uuid + ".Paint") + m);
-	}
+    fun addLv(
+        uuid: String?,
+        m: Int,
+    ) {
+        Sclat.Companion.conf!!.playerStatus.set(
+            "Status." + uuid + ".Lv",
+            Sclat.Companion.conf!!
+                .playerStatus
+                .getInt("Status." + uuid + ".Lv") + m,
+        )
+    }
 
-	public static void addLv(String uuid, int m) {
-		conf.getPlayerStatus().set("Status." + uuid + ".Lv",
-				conf.getPlayerStatus().getInt("Status." + uuid + ".Lv") + m);
-	}
+    fun addRank(
+        uuid: String?,
+        m: Int,
+    ) {
+        if (getRank(uuid) + m > 0) {
+            Sclat.Companion.conf!!.playerStatus.set(
+                "Status." + uuid + ".Rank",
+                Sclat.Companion.conf!!
+                    .playerStatus
+                    .getInt("Status." + uuid + ".Rank") + m,
+            )
+        } else {
+            Sclat.Companion.conf!!
+                .playerStatus
+                .set("Status." + uuid + ".Rank", 0)
+        }
+    }
 
-	public static void addRank(String uuid, int m) {
-		if (PlayerStatusMgr.getRank(uuid) + m > 0) {
-			conf.getPlayerStatus().set("Status." + uuid + ".Rank",
-					conf.getPlayerStatus().getInt("Status." + uuid + ".Rank") + m);
-		} else {
-			conf.getPlayerStatus().set("Status." + uuid + ".Rank", 0);
-		}
-	}
+    fun addKill(
+        uuid: String?,
+        m: Int,
+    ) {
+        Sclat.Companion.conf!!.playerStatus.set(
+            "Status." + uuid + ".Kill",
+            Sclat.Companion.conf!!
+                .playerStatus
+                .getInt("Status." + uuid + ".Kill") + m,
+        )
+    }
 
-	public static void addKill(String uuid, int m) {
-		conf.getPlayerStatus().set("Status." + uuid + ".Kill",
-				conf.getPlayerStatus().getInt("Status." + uuid + ".Kill") + m);
-	}
+    fun addPaint(
+        uuid: String?,
+        m: Int,
+    ) {
+        Sclat.Companion.conf!!.playerStatus.set(
+            "Status." + uuid + ".Paint",
+            Sclat.Companion.conf!!
+                .playerStatus
+                .getInt("Status." + uuid + ".Paint") + m,
+        )
+    }
 
-	public static void addPaint(String uuid, int m) {
-		conf.getPlayerStatus().set("Status." + uuid + ".Paint",
-				conf.getPlayerStatus().getInt("Status." + uuid + ".Paint") + m);
-	}
+    @JvmStatic
+    fun getMoney(player: Player): Int {
+        val uuid: String? = player.getUniqueId().toString()
+        return Sclat.Companion.conf!!
+            .playerStatus
+            .getInt("Status." + uuid + ".Money")
+    }
 
-	public static int getMoney(Player player) {
-		String uuid = player.getUniqueId().toString();
-		return conf.getPlayerStatus().getInt("Status." + uuid + ".Money");
-	}
+    @JvmStatic
+    fun getLv(player: Player): Int {
+        val uuid: String? = player.getUniqueId().toString()
+        return Sclat.Companion.conf!!
+            .playerStatus
+            .getInt("Status." + uuid + ".Lv")
+    }
 
-	public static int getLv(Player player) {
-		String uuid = player.getUniqueId().toString();
-		return conf.getPlayerStatus().getInt("Status." + uuid + ".Lv");
-	}
+    fun getLv(uuid: String?): Int =
+        Sclat.Companion.conf!!
+            .playerStatus
+            .getInt("Status." + uuid + ".Lv")
 
-	public static int getLv(String uuid) {
-		return conf.getPlayerStatus().getInt("Status." + uuid + ".Lv");
-	}
+    @JvmStatic
+    fun getRank(player: Player): Int {
+        val uuid: String? = player.getUniqueId().toString()
+        return Sclat.Companion.conf!!
+            .playerStatus
+            .getInt("Status." + uuid + ".Rank")
+    }
 
-	public static int getRank(Player player) {
-		String uuid = player.getUniqueId().toString();
-		return conf.getPlayerStatus().getInt("Status." + uuid + ".Rank");
-	}
+    fun getRank(uuid: String?): Int =
+        Sclat.Companion.conf!!
+            .playerStatus
+            .getInt("Status." + uuid + ".Rank")
 
-	public static int getRank(String uuid) {
-		return conf.getPlayerStatus().getInt("Status." + uuid + ".Rank");
-	}
+    fun getGear(player: Player): Int {
+        val uuid: String? = player.getUniqueId().toString()
+        return Sclat.Companion.conf!!
+            .playerStatus
+            .getInt("Status." + uuid + ".Gear")
+    }
 
-	public static int getGear(Player player) {
-		String uuid = player.getUniqueId().toString();
-		return conf.getPlayerStatus().getInt("Status." + uuid + ".Gear");
-	}
+    @JvmStatic
+    fun getKill(player: Player): Int {
+        val uuid: String? = player.getUniqueId().toString()
+        return Sclat.Companion.conf!!
+            .playerStatus
+            .getInt("Status." + uuid + ".Kill")
+    }
 
-	public static int getKill(Player player) {
-		String uuid = player.getUniqueId().toString();
-		return conf.getPlayerStatus().getInt("Status." + uuid + ".Kill");
-	}
+    fun getKill(uuid: String?): Int =
+        Sclat.Companion.conf!!
+            .playerStatus
+            .getInt("Status." + uuid + ".Kill")
 
-	public static int getKill(String uuid) {
-		return conf.getPlayerStatus().getInt("Status." + uuid + ".Kill");
-	}
+    @JvmStatic
+    fun getPaint(player: Player): Int {
+        val uuid: String? = player.getUniqueId().toString()
+        return Sclat.Companion.conf!!
+            .playerStatus
+            .getInt("Status." + uuid + ".Paint")
+    }
 
-	public static int getPaint(Player player) {
-		String uuid = player.getUniqueId().toString();
-		return conf.getPlayerStatus().getInt("Status." + uuid + ".Paint");
-	}
+    fun getPaint(uuid: String?): Int =
+        Sclat.Companion.conf!!
+            .playerStatus
+            .getInt("Status." + uuid + ".Paint")
 
-	public static int getPaint(String uuid) {
-		return conf.getPlayerStatus().getInt("Status." + uuid + ".Paint");
-	}
+    fun getEquiptClass(player: Player): String? {
+        val uuid: String? = player.getUniqueId().toString()
+        return Sclat.Companion.conf!!
+            .playerStatus
+            .getString("Status." + uuid + ".EquiptClass")
+    }
 
-	public static String getEquiptClass(Player player) {
-		String uuid = player.getUniqueId().toString();
-		return conf.getPlayerStatus().getString("Status." + uuid + ".EquiptClass");
-	}
+    fun getTutorialState(uuid: String?): Int =
+        Sclat.Companion.conf!!
+            .playerStatus
+            .getInt("Status." + uuid + ".Tutorial")
 
-	public static int getTutorialState(String uuid) {
-		return conf.getPlayerStatus().getInt("Status." + uuid + ".Tutorial");
-	}
-	public static void addTicket(Player player, int m) {
-		String uuid = player.getUniqueId().toString();
-		if (!conf.getPlayerStatus().contains("Status." + uuid + ".Ticket")) {
-			conf.getPlayerStatus().set("Status." + uuid + ".Ticket", 0);
-		}
-		conf.getPlayerStatus().set("Status." + uuid + ".Ticket",
-				conf.getPlayerStatus().getInt("Status." + uuid + ".Ticket") + m);
-	}
+    fun addTicket(
+        player: Player,
+        m: Int,
+    ) {
+        val uuid: String? = player.getUniqueId().toString()
+        if (!Sclat.Companion.conf!!
+                .playerStatus
+                .contains("Status." + uuid + ".Ticket")
+        ) {
+            Sclat.Companion.conf!!
+                .playerStatus
+                .set("Status." + uuid + ".Ticket", 0)
+        }
+        Sclat.Companion.conf!!.playerStatus.set(
+            "Status." + uuid + ".Ticket",
+            Sclat.Companion.conf!!
+                .playerStatus
+                .getInt("Status." + uuid + ".Ticket") + m,
+        )
+    }
 
-	public static void addTicketUuid(String uuid, int m) {
-		if (!conf.getPlayerStatus().contains("Status." + uuid + ".Ticket")) {
-			conf.getPlayerStatus().set("Status." + uuid + ".Ticket", 0);
-		}
-		conf.getPlayerStatus().set("Status." + uuid + ".Ticket",
-				conf.getPlayerStatus().getInt("Status." + uuid + ".Ticket") + m);
-	}
+    fun addTicketUuid(
+        uuid: String?,
+        m: Int,
+    ) {
+        if (!Sclat.Companion.conf!!
+                .playerStatus
+                .contains("Status." + uuid + ".Ticket")
+        ) {
+            Sclat.Companion.conf!!
+                .playerStatus
+                .set("Status." + uuid + ".Ticket", 0)
+        }
+        Sclat.Companion.conf!!.playerStatus.set(
+            "Status." + uuid + ".Ticket",
+            Sclat.Companion.conf!!
+                .playerStatus
+                .getInt("Status." + uuid + ".Ticket") + m,
+        )
+    }
 
-	public static void subTicket(Player player, int m) {
-		if (!conf.getPlayerStatus().contains("Status." + player.getUniqueId() + ".Ticket")) {
-			conf.getPlayerStatus().set("Status." + player.getUniqueId() + ".Ticket", 0);
-		}
-		String uuid = player.getUniqueId().toString();
-		conf.getPlayerStatus().set("Status." + uuid + ".Ticket",
-				conf.getPlayerStatus().getInt("Status." + uuid + ".Ticket") - m);
-	}
-	public static int getTicket(Player player) {
-		if (!conf.getPlayerStatus().contains("Status." + player.getUniqueId() + ".Ticket")) {
-			conf.getPlayerStatus().set("Status." + player.getUniqueId() + ".Ticket", 0);
-		}
-		String uuid = player.getUniqueId().toString();
-		return conf.getPlayerStatus().getInt("Status." + uuid + ".Ticket");
-	}
+    @JvmStatic
+    fun subTicket(
+        player: Player,
+        m: Int,
+    ) {
+        if (!Sclat.Companion.conf!!
+                .playerStatus
+                .contains("Status." + player.getUniqueId() + ".Ticket")
+        ) {
+            Sclat.Companion.conf!!
+                .playerStatus
+                .set("Status." + player.getUniqueId() + ".Ticket", 0)
+        }
+        val uuid: String? = player.getUniqueId().toString()
+        Sclat.Companion.conf!!.playerStatus.set(
+            "Status." + uuid + ".Ticket",
+            Sclat.Companion.conf!!
+                .playerStatus
+                .getInt("Status." + uuid + ".Ticket") - m,
+        )
+    }
+
+    @JvmStatic
+    fun getTicket(player: Player): Int {
+        if (!Sclat.Companion.conf!!
+                .playerStatus
+                .contains("Status." + player.getUniqueId() + ".Ticket")
+        ) {
+            Sclat.Companion.conf!!
+                .playerStatus
+                .set("Status." + player.getUniqueId() + ".Ticket", 0)
+        }
+        val uuid: String? = player.getUniqueId().toString()
+        return Sclat.Companion.conf!!
+            .playerStatus
+            .getInt("Status." + uuid + ".Ticket")
+    }
 }

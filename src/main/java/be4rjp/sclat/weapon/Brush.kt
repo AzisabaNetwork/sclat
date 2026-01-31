@@ -140,7 +140,7 @@ object Brush {
                             // 筆系武器
                             if (data.weaponClass?.mainWeapon!!.isHude) {
                                 val position = p.location
-                                PaintMgr.PaintHightestBlock(front, p, false, true)
+                                PaintMgr.paintHightestBlock(front, p, false, true)
                                 p.location.world!!.spawnParticle<BlockData?>(
                                     Particle.BLOCK_DUST,
                                     position,
@@ -215,7 +215,7 @@ object Brush {
                                         ).toFloat()
                                 return
                             }
-                            PaintMgr.PaintHightestBlock(eloc, p, false, true)
+                            PaintMgr.paintHightestBlock(eloc, p, false, true)
                             p.walkSpeed =
                                 (
                                     data.weaponClass?.mainWeapon!!.usingWalkSpeed
@@ -449,7 +449,7 @@ object Brush {
                     if (i >= tick && i <= tick + 15) {
                         inkball!!.velocity = inkball!!.velocity.add(Vector(0.0, -0.1, 0.0))
                     }
-                    if (i != tick) PaintMgr.PaintHightestBlock(inkball!!.location, p, true, true)
+                    if (i != tick) PaintMgr.paintHightestBlock(inkball!!.location, p, true, true)
                     if (inkball!!.isDead) cancel()
 
                     i++

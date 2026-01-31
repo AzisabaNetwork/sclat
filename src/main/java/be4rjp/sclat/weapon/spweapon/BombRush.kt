@@ -16,7 +16,7 @@ object BombRush {
         val data = getPlayerData(player)
         data!!.isBombRush = true
         data.isUsingSP = true
-        SPWeaponMgr.setSPCoolTimeAnimation(player, 120)
+        SPWeaponMgr.setSPCoolTimeAnimation(player!!, 120)
         val task: BukkitRunnable =
             object : BukkitRunnable() {
                 override fun run() {

@@ -207,7 +207,7 @@ class Area(
         for (block in this.blist) {
             // Block b =
             // block.getLocation().getWorld().getHighestBlockAt(block.getLocation());
-            PaintMgr.PaintByTeam(block, team, match)
+            PaintMgr.paintByTeam(block, team!!, match!!)
         }
 
         for (sl in this.shulkerBoxes) {

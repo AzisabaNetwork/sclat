@@ -207,7 +207,7 @@ class Sclat :
             match.team0!!.team = bteam0
             match.team1!!.team = bteam1
 
-            ArmorStandMgr.ArmorStandEquipPacketSender(w)
+            ArmorStandMgr.ArmorStandEquipPacketSender(w!!)
         }
 
         // -------------------------------------------------------------------

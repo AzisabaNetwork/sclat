@@ -1,882 +1,1227 @@
-package be4rjp.sclat.manager;
+package be4rjp.sclat.manager
 
-import be4rjp.sclat.Sclat;
-import be4rjp.sclat.VariablesKt;
-import be4rjp.sclat.api.MessageType;
-import be4rjp.sclat.api.SclatUtil;
-import be4rjp.sclat.api.ServerType;
-import be4rjp.sclat.api.SoundType;
-import be4rjp.sclat.api.player.PlayerData;
-import be4rjp.sclat.api.player.PlayerSettings;
-import be4rjp.sclat.api.team.Team;
-import be4rjp.sclat.data.DataMgr;
-import be4rjp.sclat.data.Match;
-import be4rjp.sclat.data.PaintData;
-import be4rjp.sclat.data.ServerStatus;
-import be4rjp.sclat.data.WeaponClass;
-import be4rjp.sclat.gui.LootBox;
-import be4rjp.sclat.gui.OpenGUI;
-import be4rjp.sclat.lobby.LobbyScoreboardRunnable;
-import be4rjp.sclat.packet.PacketHandler;
-import be4rjp.sclat.server.EquipmentClient;
-import be4rjp.sclat.server.EquipmentServerManager;
-import be4rjp.sclat.tutorial.Tutorial;
-import be4rjp.sclat.weapon.Brush;
-import be4rjp.sclat.weapon.Bucket;
-import be4rjp.sclat.weapon.Buckler;
-import be4rjp.sclat.weapon.Charger;
-import be4rjp.sclat.weapon.Decoy;
-import be4rjp.sclat.weapon.Funnel;
-import be4rjp.sclat.weapon.Hound;
-import be4rjp.sclat.weapon.Kasa;
-import be4rjp.sclat.weapon.Manuber;
-import be4rjp.sclat.weapon.Reeler;
-import be4rjp.sclat.weapon.Roller;
-import be4rjp.sclat.weapon.Shooter;
-import be4rjp.sclat.weapon.Spinner;
-import be4rjp.sclat.weapon.Swapper;
-import io.netty.channel.Channel;
-import io.netty.channel.ChannelPipeline;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import net.md_5.bungee.api.chat.ClickEvent;
-import net.md_5.bungee.api.chat.TextComponent;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
-import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
-import org.bukkit.block.Sign;
-import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
-import org.bukkit.craftbukkit.v1_14_R1.inventory.CraftItemStack;
-import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.ItemFrame;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
-import org.bukkit.event.block.BlockPhysicsEvent;
-import org.bukkit.event.block.LeavesDecayEvent;
-import org.bukkit.event.entity.EntityChangeBlockEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
-import org.bukkit.event.entity.EntityPickupItemEvent;
-import org.bukkit.event.hanging.HangingBreakByEntityEvent;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
-import org.bukkit.event.player.PlayerDropItemEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.event.player.PlayerSwapHandItemsEvent;
-import org.bukkit.event.weather.WeatherChangeEvent;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.BookMeta;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.SkullMeta;
-import org.bukkit.scheduler.BukkitRunnable;
-import static be4rjp.sclat.Sclat.conf;
+import be4rjp.sclat.Sclat
+import be4rjp.sclat.api.MessageType
+import be4rjp.sclat.api.SclatUtil.playGameSound
+import be4rjp.sclat.api.SclatUtil.sendMessage
+import be4rjp.sclat.api.ServerType
+import be4rjp.sclat.api.SoundType
+import be4rjp.sclat.api.player.PlayerData
+import be4rjp.sclat.api.player.PlayerSettings
+import be4rjp.sclat.data.DataMgr
+import be4rjp.sclat.data.DataMgr.beaconMap
+import be4rjp.sclat.data.DataMgr.getBeaconFromplayer
+import be4rjp.sclat.data.DataMgr.getMatchFromId
+import be4rjp.sclat.data.DataMgr.getPlayerData
+import be4rjp.sclat.data.DataMgr.getSprinklerFromplayer
+import be4rjp.sclat.data.DataMgr.getWeaponClass
+import be4rjp.sclat.data.DataMgr.playerIsQuitMap
+import be4rjp.sclat.data.DataMgr.setPaintDataFromBlock
+import be4rjp.sclat.data.DataMgr.setPlayerData
+import be4rjp.sclat.data.DataMgr.setPlayerIsQuit
+import be4rjp.sclat.data.DataMgr.setUUIDData
+import be4rjp.sclat.data.DataMgr.sprinklerMap
+import be4rjp.sclat.data.PaintData
+import be4rjp.sclat.gui.LootBox
+import be4rjp.sclat.gui.OpenGUI
+import be4rjp.sclat.lobby.LobbyScoreboardRunnable
+import be4rjp.sclat.packet.PacketHandler
+import be4rjp.sclat.plugin
+import be4rjp.sclat.server.EquipmentClient
+import be4rjp.sclat.server.EquipmentServerManager.doCommands
+import be4rjp.sclat.tutorial.Tutorial
+import be4rjp.sclat.tutorial.Tutorial.setInkResetTimer
+import be4rjp.sclat.weapon.Brush.HoldRunnable
+import be4rjp.sclat.weapon.Brush.RollPaintRunnable
+import be4rjp.sclat.weapon.Bucket.BucketHealRunnable
+import be4rjp.sclat.weapon.Buckler.BucklerRunnable
+import be4rjp.sclat.weapon.Charger.ChargerRunnable
+import be4rjp.sclat.weapon.Decoy.DecoyRunnable
+import be4rjp.sclat.weapon.Funnel.funnelFloat
+import be4rjp.sclat.weapon.Hound.houndEXRunnable
+import be4rjp.sclat.weapon.Hound.houndRunnable
+import be4rjp.sclat.weapon.Kasa.kasaRunnable
+import be4rjp.sclat.weapon.Manuber
+import be4rjp.sclat.weapon.Reeler.reelerRunnable
+import be4rjp.sclat.weapon.Reeler.reelerShootRunnable
+import be4rjp.sclat.weapon.Roller.holdRunnable
+import be4rjp.sclat.weapon.Roller.rollPaintRunnable
+import be4rjp.sclat.weapon.Shooter
+import be4rjp.sclat.weapon.Shooter.maneuverShootRunnable
+import be4rjp.sclat.weapon.Shooter.shooterRunnable
+import be4rjp.sclat.weapon.Spinner.spinnerRunnable
+import be4rjp.sclat.weapon.Swapper.SwapperRunnable
+import net.md_5.bungee.api.chat.ClickEvent
+import net.md_5.bungee.api.chat.TextComponent
+import org.bukkit.Bukkit
+import org.bukkit.ChatColor
+import org.bukkit.GameMode
+import org.bukkit.Location
+import org.bukkit.Material
+import org.bukkit.block.Block
+import org.bukkit.block.BlockFace
+import org.bukkit.block.Sign
+import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer
+import org.bukkit.craftbukkit.v1_14_R1.inventory.CraftItemStack
+import org.bukkit.entity.ItemFrame
+import org.bukkit.entity.Player
+import org.bukkit.event.EventHandler
+import org.bukkit.event.Listener
+import org.bukkit.event.block.BlockPhysicsEvent
+import org.bukkit.event.block.LeavesDecayEvent
+import org.bukkit.event.entity.EntityChangeBlockEvent
+import org.bukkit.event.entity.EntityDamageEvent
+import org.bukkit.event.entity.EntityPickupItemEvent
+import org.bukkit.event.hanging.HangingBreakByEntityEvent
+import org.bukkit.event.player.AsyncPlayerChatEvent
+import org.bukkit.event.player.PlayerDropItemEvent
+import org.bukkit.event.player.PlayerInteractEvent
+import org.bukkit.event.player.PlayerJoinEvent
+import org.bukkit.event.player.PlayerQuitEvent
+import org.bukkit.event.player.PlayerSwapHandItemsEvent
+import org.bukkit.event.weather.WeatherChangeEvent
+import org.bukkit.inventory.ItemStack
+import org.bukkit.inventory.meta.BookMeta
+import org.bukkit.inventory.meta.SkullMeta
+import org.bukkit.scheduler.BukkitRunnable
+import java.util.Random
+import java.util.concurrent.Callable
 
 /**
  *
  * @author Be4rJP
  */
-public class GameMgr implements Listener {
-	@EventHandler
-	public void onPlayerJoin(PlayerJoinEvent e) {
-		Player player = e.getPlayer();
-		player.getInventory().clear();
-		player.getInventory().setHeldItemSlot(0);
+class GameMgr : Listener {
+    @EventHandler
+    fun onPlayerJoin(e: PlayerJoinEvent) {
+        val player = e.getPlayer()
+        player.getInventory().clear()
+        player.getInventory().setHeldItemSlot(0)
 
-		player.setCollidable(false);
-		// player.setDisplayName(player.getName());
+        player.setCollidable(false)
 
-		if (PlayerReturnManager.isReturned(player.getUniqueId().toString()))
-			e.setJoinMessage(ChatColor.GOLD + player.getName() + " returned from a match.");
+        // player.setDisplayName(player.getName());
+        if (PlayerReturnManager.isReturned(
+                player.getUniqueId().toString(),
+            )
+        ) {
+            e.setJoinMessage(ChatColor.GOLD.toString() + player.getName() + " returned from a match.")
+        }
 
-		player.setGameMode(GameMode.ADVENTURE);
-		PlayerData data = new PlayerData(player);
+        player.setGameMode(GameMode.ADVENTURE)
+        val data = PlayerData(player)
 
-		String uuid = player.getUniqueId().toString();
-		PlayerSettings settings = new PlayerSettings(player);
-		data.settings = settings;
-		data.weaponClass = (DataMgr.getWeaponClass(conf.config.getString("DefaultClass")));
-		DataMgr.setPlayerData(player, data);
+        val uuid: String? = player.getUniqueId().toString()
+        val settings = PlayerSettings(player)
+        data.settings = settings
+        data.weaponClass = (
+            getWeaponClass(
+                Sclat.Companion.conf!!
+                    .config!!
+                    .getString("DefaultClass"),
+            )
+            )
+        setPlayerData(player, data)
 
-		// ((LivingEntity)player).setCollidable(false);
+        // ((LivingEntity)player).setCollidable(false);
+        PlayerStatusMgr.setupPlayerStatus(player)
 
-		PlayerStatusMgr.setupPlayerStatus(player);
+        Sclat.Companion.conf!!
+            .uUIDCash
+            .set(player.getUniqueId().toString(), player.getName())
+        if (Sclat.type == ServerType.LOBBY) {
+            // Add user-specific hologram
+            // RankingHolograms rankingHolograms = new RankingHolograms(player);
+            // DataMgr.setRankingHolograms(player, rankingHolograms);
+            // PlayerStatusMgr.HologramUpdateRunnable(player);
+            Sclat.playerHolograms.add(player)
+        }
 
-		conf.getUUIDCash().set(player.getUniqueId().toString(), player.getName());
-		if (Sclat.type == ServerType.LOBBY) {
-			// Add user-specific hologram
-			// RankingHolograms rankingHolograms = new RankingHolograms(player);
-			// DataMgr.setRankingHolograms(player, rankingHolograms);
-			// PlayerStatusMgr.HologramUpdateRunnable(player);
-			Sclat.playerHolograms.add(player);
-		}
+        if (Sclat.type != ServerType.MATCH) {
+            data.gearNumber = PlayerStatusMgr.getGear(player)
+            data.weaponClass = (getWeaponClass(PlayerStatusMgr.getEquiptClass(player)))
+        }
+        // 処理の分散
+        val task: BukkitRunnable =
+            object : BukkitRunnable() {
+                var i: Int = 0
 
-		if (Sclat.type != ServerType.MATCH) {
-			data.gearNumber = PlayerStatusMgr.getGear(player);
-			data.weaponClass = (DataMgr.getWeaponClass(PlayerStatusMgr.getEquiptClass(player)));
-		}
-		// 処理の分散
-		BukkitRunnable task = new BukkitRunnable() {
-			int i = 0;
-			@Override
-			public void run() {
-				switch (i) {
-					case 0 : {// ----------------------------------------------------------------------------
-						if (!conf.config.getString("WorkMode").equals("Trial") && Sclat.type != ServerType.MATCH)
-							PlayerStatusMgr.sendHologram(player);
-					}
-					case 1 : {// ----------------------------------------------------------------------------
-						SettingMgr.setSettings(settings, player);
-					}
-					case 2 : {// ----------------------------------------------------------------------------
-						BukkitRunnable head = new BukkitRunnable() {
-							@Override
-							public void run() {
-								ItemStack item = new ItemStack(Material.PLAYER_HEAD);
-								SkullMeta meta = (SkullMeta) item.getItemMeta();
-								meta.setOwningPlayer(player);
-								meta.setDisplayName(player.getName());
-								item.setItemMeta(meta);
-								data.playerHead = (CraftItemStack.asNMSCopy(item));
-							}
-						};
-						head.runTaskAsynchronously(VariablesKt.getPlugin());
-						if (Sclat.type == ServerType.MATCH) {
-							if (Sclat.modList.contains(player.getName()))
-								Sclat.modList.remove(player.getName());
-							else
-								MatchMgr.PlayerJoinMatch(player);
-						}
-					}
-					case 3 : {
-						cancel();
-					}
-				}
+                override fun run() {
+                    when (i) {
+                        0 -> {
+                            run {
+                                // ----------------------------------------------------------------------------
+                                if (Sclat.Companion.conf!!
+                                        .config!!
+                                        .getString("WorkMode") != "Trial" && Sclat.type != ServerType.MATCH
+                                ) {
+                                    PlayerStatusMgr.sendHologram(
+                                        player,
+                                    )
+                                }
+                            }
+                            run {
+                                // ----------------------------------------------------------------------------
+                                SettingMgr.setSettings(settings, player)
+                            }
+                            run {
+                                // ----------------------------------------------------------------------------
+                                val head: BukkitRunnable =
+                                    object : BukkitRunnable() {
+                                        override fun run() {
+                                            val item = ItemStack(Material.PLAYER_HEAD)
+                                            val meta = item.getItemMeta() as SkullMeta?
+                                            meta!!.setOwningPlayer(player)
+                                            meta.setDisplayName(player.getName())
+                                            item.setItemMeta(meta)
+                                            data.playerHead = (CraftItemStack.asNMSCopy(item))
+                                        }
+                                    }
+                                head.runTaskAsynchronously(plugin)
+                                if (Sclat.type == ServerType.MATCH) {
+                                    if (Sclat.modList.contains(player.getName())) {
+                                        Sclat.modList.remove(player.getName())
+                                    } else {
+                                        MatchMgr.PlayerJoinMatch(player)
+                                    }
+                                }
+                            }
+                            run {
+                                cancel()
+                            }
+                        }
 
-				i++;
-			}
-		};
-		task.runTaskTimer(VariablesKt.getPlugin(), 0, 5);
+                        1 -> {
+                            run {
+                                SettingMgr.setSettings(settings, player)
+                            }
+                            run {
+                                val head: BukkitRunnable =
+                                    object : BukkitRunnable() {
+                                        override fun run() {
+                                            val item = ItemStack(Material.PLAYER_HEAD)
+                                            val meta = item.getItemMeta() as SkullMeta?
+                                            meta!!.setOwningPlayer(player)
+                                            meta.setDisplayName(player.getName())
+                                            item.setItemMeta(meta)
+                                            data.playerHead = (CraftItemStack.asNMSCopy(item))
+                                        }
+                                    }
+                                head.runTaskAsynchronously(plugin)
+                                if (Sclat.type == ServerType.MATCH) {
+                                    if (Sclat.modList.contains(player.getName())) {
+                                        Sclat.modList.remove(player.getName())
+                                    } else {
+                                        MatchMgr.PlayerJoinMatch(player)
+                                    }
+                                }
+                            }
+                            run {
+                                cancel()
+                            }
+                        }
 
-		// PacketHandler
-		PacketHandler packetHandler = new PacketHandler(player);
-		ChannelPipeline pipeline = ((CraftPlayer) player).getHandle().playerConnection.networkManager.channel
-				.pipeline();
-		pipeline.addBefore("packet_handler", "SclatPacketInjector:" + player.getName(), packetHandler);
+                        2 -> {
+                            run {
+                                val head: BukkitRunnable =
+                                    object : BukkitRunnable() {
+                                        override fun run() {
+                                            val item = ItemStack(Material.PLAYER_HEAD)
+                                            val meta = item.getItemMeta() as SkullMeta?
+                                            meta!!.setOwningPlayer(player)
+                                            meta.setDisplayName(player.getName())
+                                            item.setItemMeta(meta)
+                                            data.playerHead = (CraftItemStack.asNMSCopy(item))
+                                        }
+                                    }
+                                head.runTaskAsynchronously(plugin)
+                                if (Sclat.type == ServerType.MATCH) {
+                                    if (Sclat.modList.contains(player.getName())) {
+                                        Sclat.modList.remove(player.getName())
+                                    } else {
+                                        MatchMgr.PlayerJoinMatch(player)
+                                    }
+                                }
+                            }
+                            run {
+                                cancel()
+                            }
+                        }
 
-		// 試し撃ちモード
-		if (conf.config.getString("WorkMode").equals("Trial")) {
-			Match match = DataMgr.getMatchFromId(MatchMgr.matchcount);
-			data.match = match;
-			data.team = match.team0;
-			player.teleport(Sclat.lobby);
-			ItemStack join = new ItemStack(Material.CHEST);
-			ItemMeta joinmeta = join.getItemMeta();
-			joinmeta.setDisplayName(ChatColor.GOLD + "右クリックでメインメニューを開く");
-			join.setItemMeta(joinmeta);
-			player.getInventory().clear();
-			SquidMgr.SquidRunnable(player);
-			SquidMgr.SquidShowRunnable(player);
-			player.setExp(0.99F);
-			player.getInventory().setItem(7, join);
+                        3 -> {
+                            cancel()
+                        }
+                    }
 
-			if (Sclat.tutorial) {
-				Tutorial.setInkResetTimer(player);
-				Tutorial.clearList.add(player);
-			}
+                    i++
+                }
+            }
+        task.runTaskTimer(plugin, 0, 5)
 
-			BukkitRunnable delay = new BukkitRunnable() {
-				final Player p = player;
-				@Override
-				public void run() {
-					// WeaponClassMgr.weaponClass = (p);
-					player.getInventory().clear();
-					ItemStack join = new ItemStack(Material.CHEST);
-					ItemMeta joinmeta = join.getItemMeta();
-					joinmeta.setDisplayName(ChatColor.GOLD + "右クリックでメインメニューを開く");
-					join.setItemMeta(joinmeta);
-					if (!Sclat.tutorial)
-						player.getInventory().setItem(7, join);
-					player.setExp(0F);
-					SPWeaponMgr.SPWeaponRunnable(player);
-					SPWeaponMgr.ArmorRunnable(p);
-					SquidMgr.SquidShowRunnable(player);
-					if (!Sclat.tutorial) {
-						EquipmentServerManager.doCommands();
-						OpenGUI.openWeaponSelect(p, "Main", "null", false);
-					} else {
-						player.getInventory().clear();
-						DataMgr.getPlayerData(player).reset();
-						DataMgr.getPlayerData(player).isInMatch = false;
-						DataMgr.getPlayerData(player).isJoined = false;
+        // PacketHandler
+        val packetHandler = PacketHandler(player)
+        val pipeline =
+            (player as CraftPlayer)
+                .getHandle()
+                .playerConnection.networkManager.channel
+                .pipeline()
+        pipeline.addBefore("packet_handler", "SclatPacketInjector:" + player.getName(), packetHandler)
 
-						for (ArmorStand as : DataMgr.getBeaconMap().values()) {
-							if (DataMgr.getBeaconFromplayer(player) == as)
-								as.remove();
-						}
-						for (ArmorStand as : DataMgr.getSprinklerMap().values()) {
-							if (DataMgr.getSprinklerFromplayer(player) == as)
-								as.remove();
-						}
+        // 試し撃ちモード
+        if (Sclat.Companion.conf!!
+                .config!!
+                .getString("WorkMode") == "Trial"
+        ) {
+            val match = getMatchFromId(MatchMgr.matchcount)
+            data.match = match
+            data.team = match!!.team0
+            player.teleport(Sclat.lobby!!)
+            val join = ItemStack(Material.CHEST)
+            val joinmeta = join.getItemMeta()
+            joinmeta!!.setDisplayName(ChatColor.GOLD.toString() + "右クリックでメインメニューを開く")
+            join.setItemMeta(joinmeta)
+            player.getInventory().clear()
+            SquidMgr.SquidRunnable(player)
+            SquidMgr.SquidShowRunnable(player)
+            player.setExp(0.99f)
+            player.getInventory().setItem(7, join)
 
-						BukkitRunnable delay = new BukkitRunnable() {
-							final Player p = player;
-							@Override
-							public void run() {
-								DataMgr.getPlayerData(p).isInMatch = (true);
-								DataMgr.getPlayerData(p).isJoined = (true);
-								DataMgr.getPlayerData(p).mainItemGlow = (false);
-								DataMgr.getPlayerData(p).tick = 10;
-								WeaponClass wc = DataMgr.getWeaponClass(conf.config.getString("DefaultClass"));
-								DataMgr.getPlayerData(p).weaponClass = (wc);
-								if (DataMgr.getPlayerData(p).weaponClass.getSubWeaponName().equals("ビーコン"))
-									ArmorStandMgr.BeaconArmorStandSetup(p);
-								if (DataMgr.getPlayerData(p).weaponClass.getSubWeaponName().equals("スプリンクラー"))
-									ArmorStandMgr.SprinklerArmorStandSetup(p);
-								if (DataMgr.getPlayerData(p).weaponClass.mainWeapon.getIsSwap()) {
-									Swapper.SwapperRunnable(p);
-									if (DataMgr.getPlayerData(p).weaponClass.mainWeapon.getSlidingShootTick() > 1) {
-										Shooter.maneuverShootRunnable(p);
-										DataMgr.getPlayerData(p).isUsingManeuver = (true);
-									}
-								}
-								if (DataMgr.getPlayerData(p).weaponClass.mainWeapon.weaponType.equals("Shooter")) {
-									Shooter.shooterRunnable(p);
-									if (DataMgr.getPlayerData(p).weaponClass.mainWeapon.isManeuver) {
-										if (DataMgr.getPlayerData(p).settings.doChargeKeep()) {
-											Shooter.maneuverRunnable(p);
-										} else {
-											Manuber.maneuverRunnable(p);
-										}
-										Shooter.maneuverShootRunnable(p);
-									}
-								}
-								if (DataMgr.getPlayerData(p).weaponClass.mainWeapon.weaponType.equals("Reeler")) {
-									Shooter.shooterRunnable(p);
-									Reeler.reelerRunnable(p);
-									Reeler.reelerShootRunnable(p);
-								}
-								if (DataMgr.getPlayerData(p).weaponClass.mainWeapon.weaponType.equals("Blaster")) {
-									if (DataMgr.getPlayerData(p).weaponClass.mainWeapon.isManeuver) {
-										Shooter.maneuverRunnable(p);
-									}
-								}
-								if (DataMgr.getPlayerData(p).weaponClass.mainWeapon.weaponType.equals("Buckler")) {
-									Shooter.shooterRunnable(p);
-									Buckler.BucklerRunnable(p);
-								}
-								if (DataMgr.getPlayerData(p).weaponClass.mainWeapon.weaponType.equals("Bucket"))
-									Bucket.BucketHealRunnable(p, 1);
-								if (DataMgr.getPlayerData(p).weaponClass.mainWeapon.weaponType.equals("Slosher"))
-									Bucket.BucketHealRunnable(p, 0);
-								if (DataMgr.getPlayerData(p).weaponClass.mainWeapon.weaponType.equals("Charger")) {
-									Charger.ChargerRunnable(p);
-									Decoy.DecoyRunnable(p);
-								}
-								if (DataMgr.getPlayerData(p).weaponClass.mainWeapon.weaponType.equals("Spinner"))
-									Spinner.spinnerRunnable(p);
-								if (DataMgr.getPlayerData(p).weaponClass.mainWeapon.weaponType.equals("Roller")) {
-									if (DataMgr.getPlayerData(p).weaponClass.mainWeapon.isHude) {
-										Brush.HoldRunnable(p);
-										Brush.RollPaintRunnable(p);
-									} else {
-										Roller.holdRunnable(p);
-										Roller.rollPaintRunnable(p);
-									}
-								}
+            if (Sclat.tutorial) {
+                setInkResetTimer(player)
+                Tutorial.clearList.add(player)
+            }
 
-								if (DataMgr.getPlayerData(p).weaponClass.mainWeapon.weaponType.equals("Kasa")) {
-									Kasa.kasaRunnable(p, false);
-								}
+            val delay: BukkitRunnable =
+                object : BukkitRunnable() {
+                    val p: Player = player
 
-								if (DataMgr.getPlayerData(p).weaponClass.mainWeapon.weaponType.equals("Camping")) {
-									Kasa.kasaRunnable(p, true);
-									DataMgr.getPlayerData(p).mainItemGlow = (true);
-									WeaponClassMgr.setWeaponClass(p);
-								}
-								if (DataMgr.getPlayerData(p).weaponClass.mainWeapon.weaponType.equals("Hound")) {
-									Hound.houndRunnable(p);
-									Hound.houndEXRunnable(p);
-								}
-								if (DataMgr.getPlayerData(p).weaponClass.mainWeapon.weaponType.equals("Funnel")) {
-									Shooter.shooterRunnable(p);
-									Funnel.funnelFloat(p);
-								}
-								WeaponClassMgr.setWeaponClass(p);
-								player.setExp(0.99F);
+                    override fun run() {
+                        // WeaponClassMgr.weaponClass = (p);
+                        player.getInventory().clear()
+                        val join = ItemStack(Material.CHEST)
+                        val joinmeta = join.getItemMeta()
+                        joinmeta!!.setDisplayName(ChatColor.GOLD.toString() + "右クリックでメインメニューを開く")
+                        join.setItemMeta(joinmeta)
+                        if (!Sclat.tutorial) player.getInventory().setItem(7, join)
+                        player.setExp(0f)
+                        SPWeaponMgr.SPWeaponRunnable(player)
+                        SPWeaponMgr.ArmorRunnable(p)
+                        SquidMgr.SquidShowRunnable(player)
+                        if (!Sclat.tutorial) {
+                            doCommands()
+                            OpenGUI.openWeaponSelect(p, "Main", "null", false)
+                        } else {
+                            player.getInventory().clear()
+                            getPlayerData(player)!!.reset()
+                            getPlayerData(player)!!.isInMatch = false
+                            getPlayerData(player)!!.isJoined = false
 
-								SPWeaponMgr.SPWeaponRunnable(player);
-								SquidMgr.SquidShowRunnable(player);
-							}
-						};
-						delay.runTaskLater(VariablesKt.getPlugin(), 15);
-					}
-				}
-			};
-			delay.runTaskLater(VariablesKt.getPlugin(), 15);
+                            for (`as` in beaconMap.values) {
+                                if (getBeaconFromplayer(player) === `as`) `as`!!.remove()
+                            }
+                            for (`as` in sprinklerMap.values) {
+                                if (getSprinklerFromplayer(player) === `as`) `as`!!.remove()
+                            }
 
-			BukkitRunnable armor = new BukkitRunnable() {
-				@Override
-				public void run() {
-					ArmorStandMgr.ArmorStandSetup(player);
-				}
-			};
-			if (ArmorStandMgr.getIsSpawned())
-				return;
-			armor.runTaskLater(VariablesKt.getPlugin(), 50);
-			ArmorStandMgr.setIsSpawned(true);
+                            val delay: BukkitRunnable =
+                                object : BukkitRunnable() {
+                                    val p: Player = player
 
-			List<Block> blocks = new ArrayList<>();
-			Block b0 = Sclat.lobby.getBlock().getRelative(BlockFace.DOWN);
-			blocks.add(b0);
-			blocks.add(b0.getRelative(BlockFace.EAST));
-			blocks.add(b0.getRelative(BlockFace.NORTH));
-			blocks.add(b0.getRelative(BlockFace.SOUTH));
-			blocks.add(b0.getRelative(BlockFace.WEST));
-			blocks.add(b0.getRelative(BlockFace.NORTH_EAST));
-			blocks.add(b0.getRelative(BlockFace.NORTH_WEST));
-			blocks.add(b0.getRelative(BlockFace.SOUTH_EAST));
-			blocks.add(b0.getRelative(BlockFace.SOUTH_WEST));
-			for (Block block : blocks) {
-				if (block.getType().equals(Material.WHITE_STAINED_GLASS)) {
-					PaintData pdata = new PaintData(block);
-					pdata.match = match;
-					pdata.team = match.team0;
-					pdata.setOrigianlType(block.getType());
-					DataMgr.setPaintDataFromBlock(block, pdata);
-					block.setType(match.team0.getTeamColor().glass);
-				}
-			}
+                                    override fun run() {
+                                        getPlayerData(p)!!.isInMatch = (true)
+                                        getPlayerData(p)!!.isJoined = (true)
+                                        getPlayerData(p)!!.mainItemGlow = (false)
+                                        getPlayerData(p)!!.tick = 10
+                                        val wc =
+                                            getWeaponClass(
+                                                Sclat.Companion.conf!!
+                                                    .config!!
+                                                    .getString("DefaultClass"),
+                                            )
+                                        getPlayerData(p)!!.weaponClass = (wc)
+                                        if (getPlayerData(p)!!.weaponClass!!.subWeaponName == "ビーコン") {
+                                            ArmorStandMgr.BeaconArmorStandSetup(
+                                                p,
+                                            )
+                                        }
+                                        if (getPlayerData(p)!!.weaponClass!!.subWeaponName == "スプリンクラー") {
+                                            ArmorStandMgr.SprinklerArmorStandSetup(
+                                                p,
+                                            )
+                                        }
+                                        if (getPlayerData(p)!!.weaponClass!!.mainWeapon!!.getIsSwap()) {
+                                            SwapperRunnable(p)
+                                            if (getPlayerData(p)!!.weaponClass!!.mainWeapon!!.slidingShootTick > 1) {
+                                                maneuverShootRunnable(p)
+                                                getPlayerData(p)!!.isUsingManeuver = (true)
+                                            }
+                                        }
+                                        if (getPlayerData(p)!!.weaponClass!!.mainWeapon!!.weaponType == "Shooter") {
+                                            shooterRunnable(p)
+                                            if (getPlayerData(p)!!.weaponClass!!.mainWeapon!!.isManeuver) {
+                                                if (getPlayerData(p)!!.settings!!.doChargeKeep()) {
+                                                    Shooter.maneuverRunnable(p)
+                                                } else {
+                                                    Manuber.maneuverRunnable(p)
+                                                }
+                                                maneuverShootRunnable(p)
+                                            }
+                                        }
+                                        if (getPlayerData(p)!!.weaponClass!!.mainWeapon!!.weaponType == "Reeler") {
+                                            shooterRunnable(p)
+                                            reelerRunnable(p)
+                                            reelerShootRunnable(p)
+                                        }
+                                        if (getPlayerData(p)!!.weaponClass!!.mainWeapon!!.weaponType == "Blaster") {
+                                            if (getPlayerData(p)!!.weaponClass!!.mainWeapon!!.isManeuver) {
+                                                Shooter.maneuverRunnable(p)
+                                            }
+                                        }
+                                        if (getPlayerData(p)!!.weaponClass!!.mainWeapon!!.weaponType == "Buckler") {
+                                            shooterRunnable(p)
+                                            BucklerRunnable(p)
+                                        }
+                                        if (getPlayerData(p)!!.weaponClass!!.mainWeapon!!.weaponType == "Bucket") {
+                                            BucketHealRunnable(
+                                                p,
+                                                1,
+                                            )
+                                        }
+                                        if (getPlayerData(p)!!.weaponClass!!.mainWeapon!!.weaponType == "Slosher") {
+                                            BucketHealRunnable(
+                                                p,
+                                                0,
+                                            )
+                                        }
+                                        if (getPlayerData(p)!!.weaponClass!!.mainWeapon!!.weaponType == "Charger") {
+                                            ChargerRunnable(p)
+                                            DecoyRunnable(p)
+                                        }
+                                        if (getPlayerData(p)!!.weaponClass!!.mainWeapon!!.weaponType == "Spinner") {
+                                            spinnerRunnable(
+                                                p,
+                                            )
+                                        }
+                                        if (getPlayerData(p)!!.weaponClass!!.mainWeapon!!.weaponType == "Roller") {
+                                            if (getPlayerData(p)!!.weaponClass!!.mainWeapon!!.isHude) {
+                                                HoldRunnable(p)
+                                                RollPaintRunnable(p)
+                                            } else {
+                                                holdRunnable(p)
+                                                rollPaintRunnable(p)
+                                            }
+                                        }
 
-			// Equipment
-			player.getInventory().clear();
+                                        if (getPlayerData(p)!!.weaponClass!!.mainWeapon!!.weaponType == "Kasa") {
+                                            kasaRunnable(p, false)
+                                        }
 
-			for (ArmorStand as : DataMgr.getBeaconMap().values()) {
-				if (DataMgr.getBeaconFromplayer(player) == as)
-					as.remove();
-			}
-			for (ArmorStand as : DataMgr.getSprinklerMap().values()) {
-				if (DataMgr.getSprinklerFromplayer(player) == as)
-					as.remove();
-			}
+                                        if (getPlayerData(p)!!.weaponClass!!.mainWeapon!!.weaponType == "Camping") {
+                                            kasaRunnable(p, true)
+                                            getPlayerData(p)!!.mainItemGlow = (true)
+                                            WeaponClassMgr.setWeaponClass(p)
+                                        }
+                                        if (getPlayerData(p)!!.weaponClass!!.mainWeapon!!.weaponType == "Hound") {
+                                            houndRunnable(p)
+                                            houndEXRunnable(p)
+                                        }
+                                        if (getPlayerData(p)!!.weaponClass!!.mainWeapon!!.weaponType == "Funnel") {
+                                            shooterRunnable(p)
+                                            funnelFloat(p)
+                                        }
+                                        WeaponClassMgr.setWeaponClass(p)
+                                        player.setExp(0.99f)
 
-			return;
-		}
+                                        SPWeaponMgr.SPWeaponRunnable(player)
+                                        SquidMgr.SquidShowRunnable(player)
+                                    }
+                                }
+                            delay.runTaskLater(plugin, 15)
+                        }
+                    }
+                }
+            delay.runTaskLater(plugin, 15)
 
-		DataMgr.setUUIDData(player.getUniqueId().toString(), data);
-		player.setWalkSpeed(0.2F);
-		SquidMgr.SquidRunnable(player);
+            val armor: BukkitRunnable =
+                object : BukkitRunnable() {
+                    override fun run() {
+                        ArmorStandMgr.ArmorStandSetup(player)
+                    }
+                }
+            if (ArmorStandMgr.isSpawned) return
+            armor.runTaskLater(plugin, 50)
+            ArmorStandMgr.isSpawned = true
 
-		player.getInventory().clear();
-		if (Sclat.type != ServerType.LOBBY) {
-			player.teleport(Sclat.lobby);
-		} else {
-			if (PlayerStatusMgr.getTutorialState(player.getUniqueId().toString()) == 1) {
-				String WorldName = conf.config.getString("Tutorial.WorldName");
-				World w = Bukkit.getWorld(WorldName);
-				int ix = conf.config.getInt("Tutorial.X");
-				int iy = conf.config.getInt("Tutorial.Y");
-				int iz = conf.config.getInt("Tutorial.Z");
-				int iyaw = conf.config.getInt("Tutorial.Yaw");
-				Location tutorial = new Location(w, ix + 0.5, iy, iz + 0.5);
-				tutorial.setYaw(iyaw);
-				player.teleport(tutorial);
-			} else
-				player.teleport(Sclat.lobby);
-		}
-		if (Sclat.type != ServerType.MATCH) {
-			if (PlayerStatusMgr.getTutorialState(player.getUniqueId().toString()) == 2) {
-				ItemStack join = new ItemStack(Material.CHEST);
-				ItemMeta joinmeta = join.getItemMeta();
-				joinmeta.setDisplayName(ChatColor.GOLD + "右クリックでメインメニューを開く");
-				join.setItemMeta(joinmeta);
-				player.getInventory().clear();
-				player.getInventory().setItem(0, join);
-			}
-		} else {
-			ItemStack b = new ItemStack(Material.BARRIER);
-			ItemMeta bmeta = b.getItemMeta();
-			bmeta.setDisplayName("§c§n右クリックで退出");
-			b.setItemMeta(bmeta);
-			player.getInventory().clear();
-			player.getInventory().setItem(8, b);
+            val blocks: MutableList<Block> = ArrayList()
+            val b0 = Sclat.lobby!!.getBlock().getRelative(BlockFace.DOWN)
+            blocks.add(b0)
+            blocks.add(b0.getRelative(BlockFace.EAST))
+            blocks.add(b0.getRelative(BlockFace.NORTH))
+            blocks.add(b0.getRelative(BlockFace.SOUTH))
+            blocks.add(b0.getRelative(BlockFace.WEST))
+            blocks.add(b0.getRelative(BlockFace.NORTH_EAST))
+            blocks.add(b0.getRelative(BlockFace.NORTH_WEST))
+            blocks.add(b0.getRelative(BlockFace.SOUTH_EAST))
+            blocks.add(b0.getRelative(BlockFace.SOUTH_WEST))
+            for (block in blocks) {
+                if (block.getType() == Material.WHITE_STAINED_GLASS) {
+                    val pdata = PaintData(block)
+                    pdata.match = match
+                    pdata.team = match.team0
+                    pdata.setOrigianlType(block.getType())
+                    setPaintDataFromBlock(block, pdata)
+                    block.setType(match.team0!!.teamColor!!.glass!!)
+                }
+            }
 
-			ItemStack join = new ItemStack(Material.LIME_STAINED_GLASS);
-			ItemMeta joinmeta = join.getItemMeta();
-			joinmeta.setDisplayName("§a§n右クリックで参加");
-			join.setItemMeta(joinmeta);
-			player.getInventory().setItem(0, join);
-		}
+            // Equipment
+            player.getInventory().clear()
 
-		if (Sclat.type == ServerType.LOBBY) {
-			// Scoreboard
-			LobbyScoreboardRunnable runnable = new LobbyScoreboardRunnable(player);
-			runnable.runTaskTimerAsynchronously(VariablesKt.getPlugin(), 0, 10);
-		}
+            for (`as` in beaconMap.values) {
+                if (getBeaconFromplayer(player) === `as`) `as`!!.remove()
+            }
+            for (`as` in sprinklerMap.values) {
+                if (getSprinklerFromplayer(player) === `as`) `as`!!.remove()
+            }
 
-		Match match = DataMgr.getMatchFromId(Integer.MAX_VALUE);
-		data.match = match;
-		data.team = match.team0;
+            return
+        }
 
-		if (!DataMgr.getPlayerIsQuitMap().containsKey(player.getUniqueId().toString())) {
-			DataMgr.setPlayerIsQuit(uuid, false);
-		}
+        setUUIDData(player.getUniqueId().toString(), data)
+        player.setWalkSpeed(0.2f)
+        SquidMgr.SquidRunnable(player)
 
-		if (!DataMgr.pul.contains(uuid))
-			DataMgr.pul.add(uuid);
+        player.getInventory().clear()
+        if (Sclat.type != ServerType.LOBBY) {
+            player.teleport(Sclat.lobby!!)
+        } else {
+            if (PlayerStatusMgr.getTutorialState(player.getUniqueId().toString()) == 1) {
+                val WorldName =
+                    Sclat.Companion.conf!!
+                        .config!!
+                        .getString("Tutorial.WorldName")
+                val w = Bukkit.getWorld(WorldName!!)
+                val ix =
+                    Sclat.Companion.conf!!
+                        .config!!
+                        .getInt("Tutorial.X")
+                val iy =
+                    Sclat.Companion.conf!!
+                        .config!!
+                        .getInt("Tutorial.Y")
+                val iz =
+                    Sclat.Companion.conf!!
+                        .config!!
+                        .getInt("Tutorial.Z")
+                val iyaw =
+                    Sclat.Companion.conf!!
+                        .config!!
+                        .getInt("Tutorial.Yaw")
+                val tutorial = Location(w, ix + 0.5, iy.toDouble(), iz + 0.5)
+                tutorial.setYaw(iyaw.toFloat())
+                player.teleport(tutorial)
+            } else {
+                player.teleport(Sclat.lobby!!)
+            }
+        }
+        if (Sclat.type != ServerType.MATCH) {
+            if (PlayerStatusMgr.getTutorialState(player.getUniqueId().toString()) == 2) {
+                val join = ItemStack(Material.CHEST)
+                val joinmeta = join.getItemMeta()
+                joinmeta!!.setDisplayName(ChatColor.GOLD.toString() + "右クリックでメインメニューを開く")
+                join.setItemMeta(joinmeta)
+                player.getInventory().clear()
+                player.getInventory().setItem(0, join)
+            }
+        } else {
+            val b = ItemStack(Material.BARRIER)
+            val bmeta = b.getItemMeta()
+            bmeta!!.setDisplayName("§c§n右クリックで退出")
+            b.setItemMeta(bmeta)
+            player.getInventory().clear()
+            player.getInventory().setItem(8, b)
 
-		if (Sclat.type == ServerType.LOBBY) {
-			// if(PlayerStatusMgr.getTutorialState(player.getUniqueId().toString()) == 0){
-			if (PlayerStatusMgr.getTutorialState(player.getUniqueId().toString()) == 0) {
-				e.setJoinMessage(ChatColor.GREEN + player.getName() + " が初めてこのサーバーにログインしました！");
-				PlayerStatusMgr.setTutorialState(player.getUniqueId().toString(), 2);
+            val join = ItemStack(Material.LIME_STAINED_GLASS)
+            val joinmeta = join.getItemMeta()
+            joinmeta!!.setDisplayName("§a§n右クリックで参加")
+            join.setItemMeta(joinmeta)
+            player.getInventory().setItem(0, join)
+        }
 
-				ItemStack join = new ItemStack(Material.CHEST);
-				ItemMeta joinmeta = join.getItemMeta();
-				joinmeta.setDisplayName(ChatColor.GOLD + "右クリックでメインメニューを開く");
-				join.setItemMeta(joinmeta);
-				player.getInventory().clear();
-				player.getInventory().setItem(0, join);
-			}
-			// 操作説明本
-			ItemStack termsBook = new ItemStack(Material.WRITTEN_BOOK);
-			BookMeta bookMeta = (BookMeta) termsBook.getItemMeta();
+        if (Sclat.type == ServerType.LOBBY) {
+            // Scoreboard
+            val runnable = LobbyScoreboardRunnable(player)
+            runnable.runTaskTimerAsynchronously(plugin, 0, 10)
+        }
 
-			// 本のタイトルと著者を設定
-			bookMeta.setTitle(ChatColor.DARK_GREEN + "操作説明");
-			bookMeta.setAuthor(ChatColor.GRAY + "Sclat運営");
+        val match = getMatchFromId(Int.Companion.MAX_VALUE)
+        data.match = match
+        data.team = match!!.team0
 
-			// 利用規約の内容を追加
-			bookMeta.addPage(ChatColor.BOLD + "目次\n\n" + ChatColor.RESET + "目次:P1\n\n" + "試合に参加するには:P2\n\n"
-					+ "試合中の操作方法:P3~5\n\n" + "ロビーでの操作方法:P6~7\n\n" + "武器種紹介:P8~21\n\n" + "その他コラム:P22~25");
-			bookMeta.addPage(ChatColor.BOLD + "試合に参加するには\n\n" + ChatColor.RESET + "正面にあるタワーの中にある\n"
-					+ "看板を右クリックすると試合ロビーに移動できます\n" + "※試合がすでに始まっている場合や再起動中の鯖には参加できません");
-			bookMeta.addPage(ChatColor.BOLD + "試合中の操作方法①\n\n" + ChatColor.RESET + "・試合が始まると武器が支給されます。\n\n"
-					+ "・一番左のアイテムがメイン武器で右クリックで射撃できます。\n\n" + "・経験値バーがインクゲージとなっていて、これを消費し、射撃します。");
-			bookMeta.addPage(ChatColor.BOLD + "試合中の操作方法②\n\n" + ChatColor.RESET
-					+ "・消費したインクゲージはイカになって自分のチームの色の床や壁に触れることで回復します。\n\n" + "・イカになるには手にアイテムを何も持たないとイカになります。\n\n"
-					+ "・イカの状態では自分のチーム色の壁や床を移動できます。");
-			bookMeta.addPage(ChatColor.BOLD + "試合中の操作方法③\n\n" + ChatColor.RESET
-					+ "・アイテムスロットの左から3番目のアイテムを右クリックでサブウェポンを使用できます。\n\n"
-					+ "・画面上部のゲージがMAXの状態でアイテムスロットの真ん中のアイテムを右クリックでスペシャルを使用できます。");
-			bookMeta.addPage(ChatColor.BOLD + "ロビーでの操作方法①\n\n" + ChatColor.RESET + "・アイテムスロットのチェストを右クリックでメニューを開けます。\n\n"
-					+ "・カーソルを合わせて左クリックで各項目を選択できます。");
-			bookMeta.addPage(ChatColor.BOLD + "ロビーでの操作方法②\n\n" + ChatColor.RESET
-					+ "・メニューからは装備の購入・変更、テクスチャのインストールなどが可能です。\n\n" + "・インベントリを閉じることでメニューを閉じることができます");
-			bookMeta.addPage(
-					ChatColor.BOLD + "武器紹介「シューター」\n" + ChatColor.RESET + "右クリックで射撃\n" + "汎用性に長けていてクセもなく、使い勝手がよい。");
-			bookMeta.addPage(ChatColor.BOLD + "武器紹介「ブラスター」\n" + ChatColor.RESET + "右クリックで爆発する弾を発射する。\n"
-					+ "爆風でダメージを入れやすく、\n" + "弾を直撃させることで大ダメージを与えることができる。");
-			bookMeta.addPage(ChatColor.BOLD + "武器紹介「バーストシューター」\n" + ChatColor.RESET + "一度の右クリックで弾を数発射撃する。\n"
-					+ "射撃に間隔が開くため外すと隙ができるが、高い瞬間火力を誇る。");
-			bookMeta.addPage(ChatColor.BOLD + "武器紹介「ローラー」\n" + ChatColor.RESET + "右クリックで横広に弾をばら撒く。\n"
-					+ "射撃の瞬間に空中にいると縦に広く弾をばら撒く。\n" + "右クリックを長押しすることで足元を塗りながら移動できる。");
-			bookMeta.addPage(ChatColor.BOLD + "武器紹介「ブラシ」\n" + ChatColor.RESET + "右クリックで少量の弾をばら撒く。\n"
-					+ "右クリックを長押しすることで足元を塗りながら高速で移動できる。");
-			bookMeta.addPage(ChatColor.BOLD + "武器紹介「シェルター」\n" + ChatColor.RESET + "右クリックで大量の弾をばら撒く。\n"
-					+ "シフトで盾を作り、離すか一定時間経過で盾を前進させる。");
-			bookMeta.addPage(
-					ChatColor.BOLD + "武器紹介「スロッシャー」\n" + ChatColor.RESET + "右クリックで弾をばら撒く。\n" + "シフトで一定時間追加HPを獲得する。");
-			bookMeta.addPage(ChatColor.BOLD + "武器紹介「チャージャー」\n" + ChatColor.RESET + "右クリック長押しでチャージし離すと射撃。\n"
-					+ "敵の背後から攻撃することでダメージが上昇する。\n" + "シフトでデコイを作ることができる。");
-			bookMeta.addPage(ChatColor.BOLD + "武器紹介「スピナー」\n" + ChatColor.RESET + "右クリック長押しでチャージし離すと射撃。\n"
-					+ "射程と射撃時間がチャージの量で変化する。");
-			bookMeta.addPage(ChatColor.BOLD + "武器紹介「マニューバ」\n" + ChatColor.RESET + "右クリックで射撃。\n"
-					+ "シフトで2回ブリンク可能、ブリンク後に移動するまで火力と連射力が上がる。\n" + "その代わり通常時の性能が著しく低い。");
-			bookMeta.addPage(ChatColor.BOLD + "武器紹介「ハウンド」\n" + ChatColor.RESET + "右クリックで壁を登る弾を発射。\n"
-					+ "シフトで起爆し、弾が射撃地点より高い場所であればあるほど火力と範囲が上がる。\n" + "逆に、低い場所で起爆させると火力と範囲が下がる");
-			bookMeta.addPage(
-					ChatColor.BOLD + "武器紹介「スワッパー」\n" + ChatColor.RESET + "右クリックで射撃。\n" + "シフトで変形し、武器の性能が変化する。");
-			bookMeta.addPage(ChatColor.BOLD + "武器紹介「ドラグーン」\n" + ChatColor.RESET + "右クリックで射撃。\n"
-					+ "シフトでタレットに敵を追尾させ、自動で攻撃する。\n" + "射撃命中時にタレットが追撃する。\n" + "タレットが追尾中の敵は追撃の火力が上がる。");
-			bookMeta.addPage(ChatColor.BOLD + "武器紹介「リーラ―」\n" + ChatColor.RESET + "右クリックで射撃。\n" + "シフトで敵に向かって飛ぶ事ができる。\n"
-					+ "チャクチするまでの間武器の性能が変化する。\n" + "敵をキルすることでスキルがリチャージされる。");
-			bookMeta.addPage(ChatColor.BOLD + "その他コラム①\n\n" + ChatColor.RESET
-					+ "・武器によってはシフト(キーコンフィグを変更している場合はしゃがむ)で固有のスキルを使用することができます。\n\n"
-					+ "・試合中左クリックでもサブウェポンを使用でき、武器を持っていたりイカになっていても使用できます。");
-			bookMeta.addPage(ChatColor.BOLD + "その他コラム②\n\n" + ChatColor.RESET
-					+ "・てきとうなアイテムを持ってQキーでもスペシャルを使うことができます。\n\n" + "・爆風は壁を貫通してダメージを与える事ができます。");
-			bookMeta.addPage(ChatColor.BOLD + "その他コラム③\n\n" + ChatColor.RESET + "・チャージャーのバックスタブの判定はかなり広い。\n\n"
-					+ "・敵のドラグーンのタレットは破壊可能。");
-			bookMeta.addPage(ChatColor.BOLD + "その他コラム④\n\n" + ChatColor.RESET
-					+ "・マニューバはSclatメニューの設定のチャージキープをDisableにすることで飛距離が変化しにくい方式に変わります。\n\n"
-					+ "・Optifineを導入することでバリエーション違いの武器の見た目が変化する");
+        if (!playerIsQuitMap.containsKey(player.getUniqueId().toString())) {
+            setPlayerIsQuit(uuid, false)
+        }
 
-			// 作成したBookMetaを設定
-			termsBook.setItemMeta(bookMeta);
+        if (!DataMgr.pul.contains(uuid)) DataMgr.pul.add(uuid)
 
-			// プレイヤーのインベントリをクリアし、利用規約の本をアイテムスロットに追加
-			// player.getInventory().clear();
-			player.getInventory().setItem(2, termsBook);
-			// 操作説明本終
-			// player.sendTitle("", "チュートリアルサーバーへ転送中...", 0, 20, 0);
-			// Sclat.sendMessage("§bチュートリアルサーバーへ転送中...", MessageType.PLAYER, player);
-			// BukkitRunnable run = new BukkitRunnable() {
-			// @Override
-			// public void run() {
-			// List<String> list =
-			// Main.tutorialServers.getConfig().getStringList("server-list");
-			// BungeeCordMgr.PlayerSendServer(player, list.get(new
-			// Random().nextInt(list.size())));
-			// DataMgr.getPlayerData(player).setServerName(conf.getServers().getString("Tutorial.DisplayName"));
-			// }
-			// };
-			// run.runTaskLater(Main.getPlugin(), 20);
-			// }
-		}
+        if (Sclat.type == ServerType.LOBBY) {
+            // if(PlayerStatusMgr.getTutorialState(player.getUniqueId().toString()) == 0){
+            if (PlayerStatusMgr.getTutorialState(player.getUniqueId().toString()) == 0) {
+                e.setJoinMessage(ChatColor.GREEN.toString() + player.getName() + " が初めてこのサーバーにログインしました！")
+                PlayerStatusMgr.setTutorialState(player.getUniqueId().toString(), 2)
 
-		// player.getWorld().spawnEntity(player.getLocation(), EntityType.ARMOR_STAND);
-	}
+                val join = ItemStack(Material.CHEST)
+                val joinmeta = join.getItemMeta()
+                joinmeta!!.setDisplayName(ChatColor.GOLD.toString() + "右クリックでメインメニューを開く")
+                join.setItemMeta(joinmeta)
+                player.getInventory().clear()
+                player.getInventory().setItem(0, join)
+            }
+            // 操作説明本
+            val termsBook = ItemStack(Material.WRITTEN_BOOK)
+            val bookMeta = termsBook.getItemMeta() as BookMeta?
 
-	@EventHandler
-	public void onPlayerSwapHandItems(PlayerSwapHandItemsEvent event) {
-		Player player = event.getPlayer();
-		if (DataMgr.getPlayerData(player).isInMatch)
-			OpenGUI.SuperJumpGUI(player);
-		event.setCancelled(true);
-	}
+            // 本のタイトルと著者を設定
+            bookMeta!!.setTitle(ChatColor.DARK_GREEN.toString() + "操作説明")
+            bookMeta.setAuthor(ChatColor.GRAY.toString() + "Sclat運営")
 
-	@EventHandler
-	public void onDamageByFall(EntityDamageEvent event) {
-		if (event.getCause() == DamageCause.FALL || event.getCause() == DamageCause.SUFFOCATION)
-			event.setCancelled(true);
-		if (event.getEntity() instanceof Player) {
+            // 利用規約の内容を追加
+            bookMeta.addPage(
+                (
+                    ChatColor.BOLD.toString() + "目次\n\n" + ChatColor.RESET + "目次:P1\n\n" + "試合に参加するには:P2\n\n" +
+                        "試合中の操作方法:P3~5\n\n" + "ロビーでの操作方法:P6~7\n\n" + "武器種紹介:P8~21\n\n" + "その他コラム:P22~25"
+                    ),
+            )
+            bookMeta.addPage(
+                (
+                    ChatColor.BOLD.toString() + "試合に参加するには\n\n" + ChatColor.RESET + "正面にあるタワーの中にある\n" +
+                        "看板を右クリックすると試合ロビーに移動できます\n" + "※試合がすでに始まっている場合や再起動中の鯖には参加できません"
+                    ),
+            )
+            bookMeta.addPage(
+                (
+                    ChatColor.BOLD.toString() + "試合中の操作方法①\n\n" + ChatColor.RESET + "・試合が始まると武器が支給されます。\n\n" +
+                        "・一番左のアイテムがメイン武器で右クリックで射撃できます。\n\n" + "・経験値バーがインクゲージとなっていて、これを消費し、射撃します。"
+                    ),
+            )
+            bookMeta.addPage(
+                (
+                    ChatColor.BOLD.toString() + "試合中の操作方法②\n\n" + ChatColor.RESET +
+                        "・消費したインクゲージはイカになって自分のチームの色の床や壁に触れることで回復します。\n\n" + "・イカになるには手にアイテムを何も持たないとイカになります。\n\n" +
+                        "・イカの状態では自分のチーム色の壁や床を移動できます。"
+                    ),
+            )
+            bookMeta.addPage(
+                (
+                    ChatColor.BOLD.toString() + "試合中の操作方法③\n\n" + ChatColor.RESET +
+                        "・アイテムスロットの左から3番目のアイテムを右クリックでサブウェポンを使用できます。\n\n" +
+                        "・画面上部のゲージがMAXの状態でアイテムスロットの真ん中のアイテムを右クリックでスペシャルを使用できます。"
+                    ),
+            )
+            bookMeta.addPage(
+                (
+                    ChatColor.BOLD.toString() + "ロビーでの操作方法①\n\n" + ChatColor.RESET + "・アイテムスロットのチェストを右クリックでメニューを開けます。\n\n" +
+                        "・カーソルを合わせて左クリックで各項目を選択できます。"
+                    ),
+            )
+            bookMeta.addPage(
+                (
+                    ChatColor.BOLD.toString() + "ロビーでの操作方法②\n\n" + ChatColor.RESET +
+                        "・メニューからは装備の購入・変更、テクスチャのインストールなどが可能です。\n\n" + "・インベントリを閉じることでメニューを閉じることができます"
+                    ),
+            )
+            bookMeta.addPage(
+                ChatColor.BOLD.toString() + "武器紹介「シューター」\n" + ChatColor.RESET + "右クリックで射撃\n" + "汎用性に長けていてクセもなく、使い勝手がよい。",
+            )
+            bookMeta.addPage(
+                (
+                    ChatColor.BOLD.toString() + "武器紹介「ブラスター」\n" + ChatColor.RESET + "右クリックで爆発する弾を発射する。\n" +
+                        "爆風でダメージを入れやすく、\n" + "弾を直撃させることで大ダメージを与えることができる。"
+                    ),
+            )
+            bookMeta.addPage(
+                (
+                    ChatColor.BOLD.toString() + "武器紹介「バーストシューター」\n" + ChatColor.RESET + "一度の右クリックで弾を数発射撃する。\n" +
+                        "射撃に間隔が開くため外すと隙ができるが、高い瞬間火力を誇る。"
+                    ),
+            )
+            bookMeta.addPage(
+                (
+                    ChatColor.BOLD.toString() + "武器紹介「ローラー」\n" + ChatColor.RESET + "右クリックで横広に弾をばら撒く。\n" +
+                        "射撃の瞬間に空中にいると縦に広く弾をばら撒く。\n" + "右クリックを長押しすることで足元を塗りながら移動できる。"
+                    ),
+            )
+            bookMeta.addPage(
+                (
+                    ChatColor.BOLD.toString() + "武器紹介「ブラシ」\n" + ChatColor.RESET + "右クリックで少量の弾をばら撒く。\n" +
+                        "右クリックを長押しすることで足元を塗りながら高速で移動できる。"
+                    ),
+            )
+            bookMeta.addPage(
+                (
+                    ChatColor.BOLD.toString() + "武器紹介「シェルター」\n" + ChatColor.RESET + "右クリックで大量の弾をばら撒く。\n" +
+                        "シフトで盾を作り、離すか一定時間経過で盾を前進させる。"
+                    ),
+            )
+            bookMeta.addPage(
+                ChatColor.BOLD.toString() + "武器紹介「スロッシャー」\n" + ChatColor.RESET + "右クリックで弾をばら撒く。\n" + "シフトで一定時間追加HPを獲得する。",
+            )
+            bookMeta.addPage(
+                (
+                    ChatColor.BOLD.toString() + "武器紹介「チャージャー」\n" + ChatColor.RESET + "右クリック長押しでチャージし離すと射撃。\n" +
+                        "敵の背後から攻撃することでダメージが上昇する。\n" + "シフトでデコイを作ることができる。"
+                    ),
+            )
+            bookMeta.addPage(
+                (
+                    ChatColor.BOLD.toString() + "武器紹介「スピナー」\n" + ChatColor.RESET + "右クリック長押しでチャージし離すと射撃。\n" +
+                        "射程と射撃時間がチャージの量で変化する。"
+                    ),
+            )
+            bookMeta.addPage(
+                (
+                    ChatColor.BOLD.toString() + "武器紹介「マニューバ」\n" + ChatColor.RESET + "右クリックで射撃。\n" +
+                        "シフトで2回ブリンク可能、ブリンク後に移動するまで火力と連射力が上がる。\n" + "その代わり通常時の性能が著しく低い。"
+                    ),
+            )
+            bookMeta.addPage(
+                (
+                    ChatColor.BOLD.toString() + "武器紹介「ハウンド」\n" + ChatColor.RESET + "右クリックで壁を登る弾を発射。\n" +
+                        "シフトで起爆し、弾が射撃地点より高い場所であればあるほど火力と範囲が上がる。\n" + "逆に、低い場所で起爆させると火力と範囲が下がる"
+                    ),
+            )
+            bookMeta.addPage(
+                ChatColor.BOLD.toString() + "武器紹介「スワッパー」\n" + ChatColor.RESET + "右クリックで射撃。\n" + "シフトで変形し、武器の性能が変化する。",
+            )
+            bookMeta.addPage(
+                (
+                    ChatColor.BOLD.toString() + "武器紹介「ドラグーン」\n" + ChatColor.RESET + "右クリックで射撃。\n" +
+                        "シフトでタレットに敵を追尾させ、自動で攻撃する。\n" + "射撃命中時にタレットが追撃する。\n" + "タレットが追尾中の敵は追撃の火力が上がる。"
+                    ),
+            )
+            bookMeta.addPage(
+                (
+                    ChatColor.BOLD.toString() + "武器紹介「リーラ―」\n" + ChatColor.RESET + "右クリックで射撃。\n" + "シフトで敵に向かって飛ぶ事ができる。\n" +
+                        "チャクチするまでの間武器の性能が変化する。\n" + "敵をキルすることでスキルがリチャージされる。"
+                    ),
+            )
+            bookMeta.addPage(
+                (
+                    ChatColor.BOLD.toString() + "その他コラム①\n\n" + ChatColor.RESET +
+                        "・武器によってはシフト(キーコンフィグを変更している場合はしゃがむ)で固有のスキルを使用することができます。\n\n" +
+                        "・試合中左クリックでもサブウェポンを使用でき、武器を持っていたりイカになっていても使用できます。"
+                    ),
+            )
+            bookMeta.addPage(
+                (
+                    ChatColor.BOLD.toString() + "その他コラム②\n\n" + ChatColor.RESET +
+                        "・てきとうなアイテムを持ってQキーでもスペシャルを使うことができます。\n\n" + "・爆風は壁を貫通してダメージを与える事ができます。"
+                    ),
+            )
+            bookMeta.addPage(
+                (
+                    ChatColor.BOLD.toString() + "その他コラム③\n\n" + ChatColor.RESET + "・チャージャーのバックスタブの判定はかなり広い。\n\n" +
+                        "・敵のドラグーンのタレットは破壊可能。"
+                    ),
+            )
+            bookMeta.addPage(
+                (
+                    ChatColor.BOLD.toString() + "その他コラム④\n\n" + ChatColor.RESET +
+                        "・マニューバはSclatメニューの設定のチャージキープをDisableにすることで飛距離が変化しにくい方式に変わります。\n\n" +
+                        "・Optifineを導入することでバリエーション違いの武器の見た目が変化する"
+                    ),
+            )
 
-			Player target = (Player) event.getEntity();
-			if (event.getCause() == DamageCause.POISON) {
-				DataMgr.getPlayerData(target).isPoisonCoolTime = (true);
-				SquidMgr.PoisonCoolTime(target);
-			}
-			// AntiDamageTime
-			BukkitRunnable task = new BukkitRunnable() {
-				final Player p = target;
-				@Override
-				public void run() {
-					target.setNoDamageTicks(0);
-				}
-			};
-			task.runTaskLater(VariablesKt.getPlugin(), 1);
+            // 作成したBookMetaを設定
+            termsBook.setItemMeta(bookMeta)
 
-			/*
-			 * Timer timer = new Timer(false); TimerTask t = new TimerTask(){ Player p =
-			 * target;
-			 * 
-			 * @Override public void run(){ try{ target.setNoDamageTicks(0); timer.cancel();
-			 * }catch(Exception e){ timer.cancel(); } } }; timer.schedule(t, 25);
-			 */
-		}
-	}
+            // プレイヤーのインベントリをクリアし、利用規約の本をアイテムスロットに追加
+            // player.getInventory().clear();
+            player.getInventory().setItem(2, termsBook)
+            // 操作説明本終
+            // player.sendTitle("", "チュートリアルサーバーへ転送中...", 0, 20, 0);
+            // Sclat.sendMessage("§bチュートリアルサーバーへ転送中...", MessageType.PLAYER, player);
+            // BukkitRunnable run = new BukkitRunnable() {
+            // @Override
+            // public void run() {
+            // List<String> list =
+            // Main.tutorialServers.getConfig().getStringList("server-list");
+            // BungeeCordMgr.PlayerSendServer(player, list.get(new
+            // Random().nextInt(list.size())));
+            // DataMgr.getPlayerData(player).setServerName(conf.getServers().getString("Tutorial.DisplayName"));
+            // }
+            // };
+            // run.runTaskLater(Main.getPlugin(), 20);
+            // }
+        }
 
-	@EventHandler
-	public void onPlaceBlockByEntity(EntityChangeBlockEvent event) {
-		if (!(event.getEntity() instanceof Player)) {
-			event.setCancelled(true);
-			if (event.getBlock().getType().toString().contains("CONCRETE"))
-				event.getBlock().getState().update(false, false);
-		}
+        // player.getWorld().spawnEntity(player.getLocation(), EntityType.ARMOR_STAND);
+    }
 
-	}
+    @EventHandler
+    fun onPlayerSwapHandItems(event: PlayerSwapHandItemsEvent) {
+        val player = event.getPlayer()
+        if (getPlayerData(player)!!.isInMatch) OpenGUI.SuperJumpGUI(player)
+        event.setCancelled(true)
+    }
 
-	// @EventHandler(priority = EventPriority.LOWEST)
-	public void onPlayerChat(AsyncPlayerChatEvent event) {
-		// event.setCancelled(true);
-		/*
-		 * if(!Main.LunaChat){ Player player = event.getPlayer();
-		 * if(DataMgr.getPlayerData(player).getIsJoined()) event.setFormat("<" +
-		 * DataMgr.getPlayerData(player).getTeam().getTeamColor().getColorCode() +
-		 * player.getName() + "§r> " + event.getMessage()); else event.setFormat("<" +
-		 * player.getName() + "> " + event.getMessage()); }
-		 */
-	}
+    @EventHandler
+    fun onDamageByFall(event: EntityDamageEvent) {
+        if (event.getCause() == EntityDamageEvent.DamageCause.FALL || event.getCause() == EntityDamageEvent.DamageCause.SUFFOCATION) {
+            event.setCancelled(
+                true,
+            )
+        }
+        if (event.getEntity() is Player) {
+            val target = event.getEntity() as Player
+            if (event.getCause() == EntityDamageEvent.DamageCause.POISON) {
+                getPlayerData(target)!!.isPoisonCoolTime = (true)
+                SquidMgr.PoisonCoolTime(target)
+            }
+            // AntiDamageTime
+            val task: BukkitRunnable =
+                object : BukkitRunnable() {
+                    val p: Player = target
 
-	@EventHandler
-	public void onLeavesDecay(LeavesDecayEvent event) {
-		event.setCancelled(true);
-	}
+                    override fun run() {
+                        target.setNoDamageTicks(0)
+                    }
+                }
+            task.runTaskLater(plugin, 1)
 
-	@EventHandler
-	public void onBlockFall(BlockPhysicsEvent event) {
-		if (event.getChangedType().toString().contains("CONCRETE"))
-			event.setCancelled(true);
-	}
+            /*
+             * Timer timer = new Timer(false); TimerTask t = new TimerTask(){ Player p =
+             * target;
+             *
+             * @Override public void run(){ try{ target.setNoDamageTicks(0); timer.cancel();
+             * }catch(Exception e){ timer.cancel(); } } }; timer.schedule(t, 25);
+             */
+        }
+    }
 
-	@EventHandler
-	public void onPickItem(EntityPickupItemEvent event) {
-		if (event.getEntity() instanceof Player) {
-			if (!((Player) event.getEntity()).getGameMode().equals(GameMode.CREATIVE))
-				event.setCancelled(true);
-		}
-	}
+    @EventHandler
+    fun onPlaceBlockByEntity(event: EntityChangeBlockEvent) {
+        if (event.getEntity() !is Player) {
+            event.setCancelled(true)
+            if (event
+                    .getBlock()
+                    .getType()
+                    .toString()
+                    .contains("CONCRETE")
+            ) {
+                event
+                    .getBlock()
+                    .getState()
+                    .update(false, false)
+            }
+        }
+    }
 
-	@EventHandler
-	public void onWeatherChange(WeatherChangeEvent event) {
-		event.setCancelled(true);
-	}
+    // @EventHandler(priority = EventPriority.LOWEST)
+    fun onPlayerChat(event: AsyncPlayerChatEvent?) {
+        // event.setCancelled(true);
+        /*
+         * if(!Main.LunaChat){ Player player = event.getPlayer();
+         * if(DataMgr.getPlayerData(player).getIsJoined()) event.setFormat("<" +
+         * DataMgr.getPlayerData(player).getTeam().getTeamColor().getColorCode() +
+         * player.getName() + "§r> " + event.getMessage()); else event.setFormat("<" +
+         * player.getName() + "> " + event.getMessage()); }
+         */
+    }
 
-	@EventHandler
-	public void onPlayerDropItem(PlayerDropItemEvent event) {
-		event.setCancelled(true);
-		Player player = event.getPlayer();
-		PlayerData data = DataMgr.getPlayerData(player);
-		if (data.isInMatch && data.sPGauge == 100)
-			SPWeaponMgr.UseSPWeapon(player, data.weaponClass.getSPWeaponName());
+    @EventHandler
+    fun onLeavesDecay(event: LeavesDecayEvent) {
+        event.setCancelled(true)
+    }
 
-		// if(data.isInMatch())
-		// WeaponClassMgr.weaponClass = (player);
-	}
+    @EventHandler
+    fun onBlockFall(event: BlockPhysicsEvent) {
+        if (event.getChangedType().toString().contains("CONCRETE")) event.setCancelled(true)
+    }
 
-	// sign
-	@EventHandler
-	public void onClickSign(PlayerInteractEvent e) {
-		Player player = e.getPlayer();
-		Action action = e.getAction();
-		if (e.getClickedBlock() != null) {
-			if (e.getClickedBlock().getType().toString().endsWith("SIGN")) {
-				Sign sign = (Sign) e.getClickedBlock().getState();
+    @EventHandler
+    fun onPickItem(event: EntityPickupItemEvent) {
+        if (event.getEntity() is Player) {
+            if ((event.getEntity() as Player).getGameMode() != GameMode.CREATIVE) event.setCancelled(true)
+        }
+    }
 
-				if (Sclat.type == ServerType.LOBBY) {
-					for (ServerStatus ss : ServerStatusManager.serverList) {
-						if (ss.sign.equals(e.getClickedBlock())) {
-							if (ss.getRestartingServer()) {
-								SclatUtil.sendMessage("§c§nこのサーバーは再起動中です1~2分程度お待ちください", MessageType.PLAYER, player);
-								SclatUtil.playGameSound(player, SoundType.ERROR);
-								return;
-							}
-							if (ss.isOnline()) {
-								if (ss.getPlayerCount() < ss.maxPlayer) {
-									if (ss.getRunningMatch()) {
-										SclatUtil.sendMessage("§c§nこのサーバーは試合中のため参加できません", MessageType.PLAYER, player);
-										SclatUtil.playGameSound(player, SoundType.ERROR);
-										return;
-									}
-									BungeeCordMgr.PlayerSendServer(player, ss.serverName);
-									DataMgr.getPlayerData(player).setServerName(ss.displayName);
-								} else {
-									SclatUtil.sendMessage("§c§nこのサーバーは満員のため参加できません", MessageType.PLAYER, player);
-									SclatUtil.playGameSound(player, SoundType.ERROR);
-								}
-							} else {
-								if (ss.isMaintenance())
-									SclatUtil.sendMessage("§c§nこのサーバーは現在メンテナンス中のため参加できません", MessageType.PLAYER, player);
-								else
-									SclatUtil.sendMessage("§c§nこのサーバーは現在再起動中です1~2分程度お待ちください。", MessageType.PLAYER,
-											player);
-								SclatUtil.playGameSound(player, SoundType.ERROR);
-							}
-							return;
-						}
-					}
-				}
+    @EventHandler
+    fun onWeatherChange(event: WeatherChangeEvent) {
+        event.setCancelled(true)
+    }
 
-				String line = sign.getLine(2);
-				switch (line) {
-					case "[ Join ]" :
-						if (Sclat.type == ServerType.LOBBY)
-							ServerStatusManager.openServerList(player);
-						else
-							MatchMgr.PlayerJoinMatch(player);
-						break;
-					case "[ Equipment ]" :
-						OpenGUI.equipmentGUI(player, false);
-						break;
-					case "[ Equip shop ]" :
-						OpenGUI.equipmentGUI(player, true);
-						break;
-					case "[ OpenMenu ]" :
-						OpenGUI.openMenu(player);
-						break;
-					case "Click to Download" :
-						// player.setResourcePack(conf.getConfig().getString("ResourcePackURL"));
-						player.sendMessage("以下のURLからリソースパックをダウンロードしてください");
-						player.sendMessage(conf.config.getString("ResourcePackURL"));
-						break;
-					case "Click to Vote" :
-						// player.setResourcePack(conf.getConfig().getString("ResourcePackURL"));
-						player.sendMessage("以下のURLから投票してね！");
-						player.sendMessage("https://minecraft.jp/servers/azisaba.net");
-						break;
-					case "Click To Download" :
-						player.setResourcePack(conf.config.getString("ResourcePackURL"));
-						break;
-					case "Click to Return" :
-						BungeeCordMgr.PlayerSendServer(player, "lobby");
-						DataMgr.getPlayerData(player).setServerName("Lobby");
-						break;
-					case "[ Training Mode ]" :
-						BungeeCordMgr.PlayerSendServer(player, "sclattest");
-						DataMgr.getPlayerData(player).setServerName("sclattest");
-						break;
-					case "[ Return to jg ]" :
-						BungeeCordMgr.PlayerSendServer(player, "jg");
-						DataMgr.getPlayerData(player).setServerName("JG");
-						break;
-					case "Return to sclat" :
-						BungeeCordMgr.PlayerSendServer(player, "sclat");
-						DataMgr.getPlayerData(player).setServerName("Sclat");
-						break;
-					case "[Charge special]" :
-						if (DataMgr.getPlayerData(player).isInMatch && !DataMgr.getPlayerData(player).isUsingSP)
-							DataMgr.getPlayerData(player).sPGauge = (100);
-						break;
-					case "[ Sclat ]" :
-						BungeeCordMgr.PlayerSendServer(player, "sclat");
-						DataMgr.getPlayerData(player).setServerName("Sclat");
-						break;
-					case "[ LootBox ]" :
-						LootBox.turnLootBox(player);
-						break;
-					case "[ LootBoxInfo ]" :
-						LootBox.LootBoxInfo(player);
-						break;
-					case "[ GiftForYou ]" :
-						LootBox.GiftWeapon(player, "お年玉[巳]");
-						break;
-					case "[ EasterEgg ]" :
-						LootBox.Giftbook(player);
-						break;
-					case "[ ChangeTeam ]" :
-						LootBox.changeteam(player);
-						break;
-					case "[ give chest ]" :
-						PlayerStatusMgr.setTutorialState(player.getUniqueId().toString(), 2);
-						ItemStack chest = new ItemStack(Material.CHEST);
-						ItemMeta chestmeta = chest.getItemMeta();
-						chestmeta.setDisplayName("右クリックでメインメニューを開く");
-						chest.setItemMeta(chestmeta);
-						player.getInventory().setItem(0, chest);
-						break;
-					case "[ trade ticket ]" :
-						if (PlayerStatusMgr.getMoney(player) > 1000) {
-							PlayerStatusMgr.subMoney(player, 1000);
-							PlayerStatusMgr.addTicket(player, 1);
-							SclatUtil.sendMessage("1000coinを1ticketに交換しました", MessageType.PLAYER, player);
-						} else {
-							SclatUtil.sendMessage("coinが足りません", MessageType.PLAYER, player);
-						}
-						break;
-					case "[ give ticket ]" :
-						PlayerStatusMgr.addTicket(player, 10);
-						SclatUtil.sendMessage("10ticket付与しました", MessageType.PLAYER, player);
-						break;
-					case "[ Tutorial ]" :
-						List<String> list = Sclat.tutorialServers.getConfig().getStringList("server-list");
-						BungeeCordMgr.PlayerSendServer(player, list.get(new Random().nextInt(list.size())));
-						DataMgr.getPlayerData(player)
-								.setServerName(conf.getServers().getString("Tutorial.DisplayName"));
-						break;
-					case "[ Instructions ]" :
-						player.performCommand("torisetu");
-						break;
-					case "[ Shooter ]" :
-						OpenGUI.openWeaponSelect(player, "Weapon", "Shooter", false);
-						break;
-					case "[ Roller ]" :
-						OpenGUI.openWeaponSelect(player, "Weapon", "Roller", false);
-						break;
-					case "[ Charger ]" :
-						OpenGUI.openWeaponSelect(player, "Weapon", "Charger", false);
-						break;
-					case "[ PatchNote ]" :
-						TextComponent component = new TextComponent();
-						component.setText("[パッチノートを見るにはここをクリック]");
-						component.setColor(net.md_5.bungee.api.ChatColor.AQUA);
-						component.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL,
-								"https://be4rjp.github.io/Sclat-PatchNote/note/v102b/note.html"));
-						player.spigot().sendMessage(component);
-						break;
-				}
-			}
-		}
-	}
+    @EventHandler
+    fun onPlayerDropItem(event: PlayerDropItemEvent) {
+        event.setCancelled(true)
+        val player = event.getPlayer()
+        val data = getPlayerData(player)
+        if (data!!.isInMatch && data.sPGauge == 100) {
+            SPWeaponMgr.UseSPWeapon(
+                player,
+                data.weaponClass!!.sPWeaponName!!,
+            )
+        }
 
-	@EventHandler
-	public void onFrameBreak(HangingBreakByEntityEvent event) {
-		if (!(event.getRemover() instanceof Player))
-			return;
-		Player player = (Player) event.getRemover();
-		if (player.getGameMode().equals(GameMode.CREATIVE))
-			return;
-		if (event.getEntity() instanceof ItemFrame) {
-			event.setCancelled(true);
-		}
-	}
+        // if(data.isInMatch())
+        // WeaponClassMgr.weaponClass = (player);
+    }
 
-	@EventHandler
-	public void onPlayerQuit(PlayerQuitEvent event) {
-		Player player = event.getPlayer();
-		PlayerData data = DataMgr.getPlayerData(player);
+    // sign
+    @EventHandler
+    fun onClickSign(e: PlayerInteractEvent) {
+        val player = e.getPlayer()
+        val action = e.getAction()
+        if (e.getClickedBlock() != null) {
+            if (e
+                    .getClickedBlock()!!
+                    .getType()
+                    .toString()
+                    .endsWith("SIGN")
+            ) {
+                val sign = e.getClickedBlock()!!.getState() as Sign
 
-		// PacketHandler
-		Channel channel = ((CraftPlayer) player).getHandle().playerConnection.networkManager.channel;
-		channel.eventLoop().submit(() -> {
-			channel.pipeline().remove(player.getName());
-			return null;
-		});
+                if (Sclat.type == ServerType.LOBBY) {
+                    for (ss in ServerStatusManager.serverList) {
+                        if (ss.sign == e.getClickedBlock()) {
+                            if (ss.restartingServer) {
+                                sendMessage(
+                                    "§c§nこのサーバーは再起動中です1~2分程度お待ちください",
+                                    MessageType.PLAYER,
+                                    player,
+                                )
+                                playGameSound(player, SoundType.ERROR)
+                                return
+                            }
+                            if (ss.isOnline) {
+                                if (ss.playerCount < ss.maxPlayer) {
+                                    if (ss.runningMatch) {
+                                        sendMessage(
+                                            "§c§nこのサーバーは試合中のため参加できません",
+                                            MessageType.PLAYER,
+                                            player,
+                                        )
+                                        playGameSound(player, SoundType.ERROR)
+                                        return
+                                    }
+                                    BungeeCordMgr.PlayerSendServer(player, ss.serverName!!)
+                                    getPlayerData(player)!!.setServerName(ss.displayName)
+                                } else {
+                                    sendMessage(
+                                        "§c§nこのサーバーは満員のため参加できません",
+                                        MessageType.PLAYER,
+                                        player,
+                                    )
+                                    playGameSound(player, SoundType.ERROR)
+                                }
+                            } else {
+                                if (ss.isMaintenance) {
+                                    sendMessage(
+                                        "§c§nこのサーバーは現在メンテナンス中のため参加できません",
+                                        MessageType.PLAYER,
+                                        player,
+                                    )
+                                } else {
+                                    sendMessage(
+                                        "§c§nこのサーバーは現在再起動中です1~2分程度お待ちください。",
+                                        MessageType.PLAYER,
+                                        player,
+                                    )
+                                }
+                                playGameSound(player, SoundType.ERROR)
+                            }
+                            return
+                        }
+                    }
+                }
 
-		if (Sclat.type == ServerType.MATCH) {
-			if (DataMgr.joinedList.contains(player)) {
-				DataMgr.setPlayerIsQuit(player.getUniqueId().toString(), true);
-				if (data.match.canJoin())
-					data.match.subJoinedPlayerCount();
+                val line = sign.getLine(2)
+                when (line) {
+                    "[ Join ]" -> {
+                        if (Sclat.type == ServerType.LOBBY) {
+                            ServerStatusManager.openServerList(player)
+                        } else {
+                            MatchMgr.PlayerJoinMatch(player)
+                        }
+                    }
 
-				Team team = data.team;
-				team.subtractRateTotal(PlayerStatusMgr.getRank(player));
+                    "[ Equipment ]" -> {
+                        OpenGUI.equipmentGUI(player, false)
+                    }
 
-				DataMgr.joinedList.remove(player);
-			}
-		}
+                    "[ Equip shop ]" -> {
+                        OpenGUI.equipmentGUI(player, true)
+                    }
 
-		String server = DataMgr.getPlayerData(player).servername;
-		if (!server.isEmpty()) {
-			event.setQuitMessage("§6" + player.getName() + " switched to " + server);
+                    "[ OpenMenu ]" -> {
+                        OpenGUI.openMenu(player)
+                    }
 
-			if (Sclat.type == ServerType.LOBBY) {
-				for (String serverName : conf.getServers().getConfigurationSection("Servers").getKeys(false)) {
-					String name = conf.getServers().getString("Servers." + serverName + ".Server");
-					String displayName = conf.getServers().getString("Servers." + serverName + ".DisplayName");
-					if (displayName.equals(server)) {
-						List<String> commands = new ArrayList<>();
-						commands.add("set weapon " + data.weaponClass.getClassName() + " " + player.getUniqueId());
-						commands.add("set gear " + data.gearNumber + " " + player.getUniqueId());
-						commands.add("set rank " + PlayerStatusMgr.getRank(player) + " " + player.getUniqueId());
-						commands.add("setting " + conf.getPlayerSettings().getString("Settings." + player.getUniqueId())
-								+ " " + player.getUniqueId());
-						commands.add("stop");
-						EquipmentClient sc = new EquipmentClient(conf.config.getString("EquipShare." + name + ".Host"),
-								conf.config.getInt("EquipShare." + name + ".Port"), commands);
-						sc.startClient();
-					}
-				}
-				if (server.equals("sclattest")) {
-					List<String> commands = new ArrayList<>();
-					commands.add("set rank " + PlayerStatusMgr.getRank(player) + " " + player.getUniqueId());
-					commands.add("set lv " + PlayerStatusMgr.getLv(player) + " " + player.getUniqueId());
-					commands.add("setting " + conf.getPlayerSettings().getString("Settings." + player.getUniqueId())
-							+ " " + player.getUniqueId());
-					commands.add("stop");
-					EquipmentClient sc = new EquipmentClient(conf.config.getString("EquipShare.Trial.Host"),
-							conf.config.getInt("EquipShare.Trial.Port"), commands);
-					sc.startClient();
-				}
-			}
-		}
+                    "Click to Download" -> {
+                        // player.setResourcePack(conf.getConfig().getString("ResourcePackURL"));
+                        player.sendMessage("以下のURLからリソースパックをダウンロードしてください")
+                        player.sendMessage(
+                            Sclat.Companion.conf!!
+                                .config!!
+                                .getString("ResourcePackURL")!!,
+                        )
+                    }
 
-		if (data.weaponClass.getSubWeaponName().equals("ビーコン") && data.isInMatch) {
-			DataMgr.getBeaconFromplayer(player).remove();
-		}
-		if (data.weaponClass.getSubWeaponName().equals("スプリンクラー") && data.isInMatch) {
-			DataMgr.getSprinklerFromplayer(player).remove();
-		}
+                    "Click to Vote" -> {
+                        // player.setResourcePack(conf.getConfig().getString("ResourcePackURL"));
+                        player.sendMessage("以下のURLから投票してね！")
+                        player.sendMessage("https://minecraft.jp/servers/azisaba.net")
+                    }
 
-		if (data.weaponClass != null)
-			PlayerStatusMgr.setEquiptClass(player, data.weaponClass.getClassName());
-	}
+                    "Click To Download" -> {
+                        player.setResourcePack(
+                            Sclat.Companion.conf!!
+                                .config!!
+                                .getString("ResourcePackURL")!!,
+                        )
+                    }
+
+                    "Click to Return" -> {
+                        BungeeCordMgr.PlayerSendServer(player, "lobby")
+                        getPlayerData(player)!!.setServerName("Lobby")
+                    }
+
+                    "[ Training Mode ]" -> {
+                        BungeeCordMgr.PlayerSendServer(player, "sclattest")
+                        getPlayerData(player)!!.setServerName("sclattest")
+                    }
+
+                    "[ Return to jg ]" -> {
+                        BungeeCordMgr.PlayerSendServer(player, "jg")
+                        getPlayerData(player)!!.setServerName("JG")
+                    }
+
+                    "Return to sclat" -> {
+                        BungeeCordMgr.PlayerSendServer(player, "sclat")
+                        getPlayerData(player)!!.setServerName("Sclat")
+                    }
+
+                    "[Charge special]" -> {
+                        if (getPlayerData(player)!!.isInMatch && !getPlayerData(player)!!.isUsingSP) {
+                            getPlayerData(
+                                player,
+                            )!!.sPGauge = (100)
+                        }
+                    }
+
+                    "[ Sclat ]" -> {
+                        BungeeCordMgr.PlayerSendServer(player, "sclat")
+                        getPlayerData(player)!!.setServerName("Sclat")
+                    }
+
+                    "[ LootBox ]" -> {
+                        LootBox.turnLootBox(player)
+                    }
+
+                    "[ LootBoxInfo ]" -> {
+                        LootBox.LootBoxInfo(player)
+                    }
+
+                    "[ GiftForYou ]" -> {
+                        LootBox.GiftWeapon(player, "お年玉[巳]")
+                    }
+
+                    "[ EasterEgg ]" -> {
+                        LootBox.Giftbook(player)
+                    }
+
+                    "[ ChangeTeam ]" -> {
+                        LootBox.changeteam(player)
+                    }
+
+                    "[ give chest ]" -> {
+                        PlayerStatusMgr.setTutorialState(player.getUniqueId().toString(), 2)
+                        val chest = ItemStack(Material.CHEST)
+                        val chestmeta = chest.getItemMeta()
+                        chestmeta!!.setDisplayName("右クリックでメインメニューを開く")
+                        chest.setItemMeta(chestmeta)
+                        player.getInventory().setItem(0, chest)
+                    }
+
+                    "[ trade ticket ]" -> {
+                        if (PlayerStatusMgr.getMoney(player) > 1000) {
+                            PlayerStatusMgr.subMoney(player, 1000)
+                            PlayerStatusMgr.addTicket(player, 1)
+                            sendMessage("1000coinを1ticketに交換しました", MessageType.PLAYER, player)
+                        } else {
+                            sendMessage("coinが足りません", MessageType.PLAYER, player)
+                        }
+                    }
+
+                    "[ give ticket ]" -> {
+                        PlayerStatusMgr.addTicket(player, 10)
+                        sendMessage("10ticket付与しました", MessageType.PLAYER, player)
+                    }
+
+                    "[ Tutorial ]" -> {
+                        val list = Sclat.tutorialServers!!.getConfig()!!.getStringList("server-list")
+                        BungeeCordMgr.PlayerSendServer(player, list.get(Random().nextInt(list.size)))
+                        getPlayerData(player)!!
+                            .setServerName(
+                                Sclat.Companion.conf!!
+                                    .servers!!
+                                    .getString("Tutorial.DisplayName"),
+                            )
+                    }
+
+                    "[ Instructions ]" -> {
+                        player.performCommand("torisetu")
+                    }
+
+                    "[ Shooter ]" -> {
+                        OpenGUI.openWeaponSelect(player, "Weapon", "Shooter", false)
+                    }
+
+                    "[ Roller ]" -> {
+                        OpenGUI.openWeaponSelect(player, "Weapon", "Roller", false)
+                    }
+
+                    "[ Charger ]" -> {
+                        OpenGUI.openWeaponSelect(player, "Weapon", "Charger", false)
+                    }
+
+                    "[ PatchNote ]" -> {
+                        val component = TextComponent()
+                        component.setText("[パッチノートを見るにはここをクリック]")
+                        component.setColor(net.md_5.bungee.api.ChatColor.AQUA)
+                        component.setClickEvent(
+                            ClickEvent(
+                                ClickEvent.Action.OPEN_URL,
+                                "https://be4rjp.github.io/Sclat-PatchNote/note/v102b/note.html",
+                            ),
+                        )
+                        player.spigot().sendMessage(component)
+                    }
+                }
+            }
+        }
+    }
+
+    @EventHandler
+    fun onFrameBreak(event: HangingBreakByEntityEvent) {
+        if (event.getRemover() !is Player) return
+        val player = event.getRemover() as Player?
+        if (player!!.getGameMode() == GameMode.CREATIVE) return
+        if (event.getEntity() is ItemFrame) {
+            event.setCancelled(true)
+        }
+    }
+
+    @EventHandler
+    fun onPlayerQuit(event: PlayerQuitEvent) {
+        val player = event.getPlayer()
+        val data = getPlayerData(player)
+
+        // PacketHandler
+        val channel =
+            (player as CraftPlayer)
+                .getHandle()
+                .playerConnection.networkManager.channel
+        channel.eventLoop().submit<Any?>(
+            Callable {
+                channel.pipeline().remove(player.getName())
+                null
+            },
+        )
+
+        if (Sclat.type == ServerType.MATCH) {
+            if (DataMgr.joinedList.contains(player)) {
+                setPlayerIsQuit(player.getUniqueId().toString(), true)
+                if (data!!.match!!.canJoin()) data.match!!.subJoinedPlayerCount()
+
+                val team = data.team
+                team!!.subtractRateTotal(PlayerStatusMgr.getRank(player))
+
+                DataMgr.joinedList.remove(player)
+            }
+        }
+
+        val server = getPlayerData(player)!!.servername
+        if (!server!!.isEmpty()) {
+            event.setQuitMessage("§6" + player.getName() + " switched to " + server)
+
+            if (Sclat.type == ServerType.LOBBY) {
+                for (serverName in Sclat.Companion.conf!!
+                    .servers!!
+                    .getConfigurationSection("Servers")!!
+                    .getKeys(false)) {
+                    val name =
+                        Sclat.Companion.conf!!
+                            .servers!!
+                            .getString("Servers." + serverName + ".Server")
+                    val displayName =
+                        Sclat.Companion.conf!!
+                            .servers!!
+                            .getString("Servers." + serverName + ".DisplayName")
+                    if (displayName == server) {
+                        val commands: MutableList<String?> = ArrayList<String?>()
+                        commands.add("set weapon " + data!!.weaponClass!!.className + " " + player.getUniqueId())
+                        commands.add("set gear " + data.gearNumber + " " + player.getUniqueId())
+                        commands.add("set rank " + PlayerStatusMgr.getRank(player) + " " + player.getUniqueId())
+                        commands.add(
+                            (
+                                "setting " +
+                                    Sclat.Companion.conf!!
+                                        .playerSettings
+                                        .getString("Settings." + player.getUniqueId()) +
+                                    " " + player.getUniqueId()
+                                ),
+                        )
+                        commands.add("stop")
+                        val sc =
+                            EquipmentClient(
+                                Sclat.Companion.conf!!
+                                    .config!!
+                                    .getString("EquipShare." + name + ".Host"),
+                                Sclat.Companion.conf!!
+                                    .config!!
+                                    .getInt("EquipShare." + name + ".Port"),
+                                commands,
+                            )
+                        sc.startClient()
+                    }
+                }
+                if (server == "sclattest") {
+                    val commands: MutableList<String?> = ArrayList<String?>()
+                    commands.add("set rank " + PlayerStatusMgr.getRank(player) + " " + player.getUniqueId())
+                    commands.add("set lv " + PlayerStatusMgr.getLv(player) + " " + player.getUniqueId())
+                    commands.add(
+                        (
+                            "setting " +
+                                Sclat.Companion.conf!!
+                                    .playerSettings
+                                    .getString("Settings." + player.getUniqueId()) +
+                                " " + player.getUniqueId()
+                            ),
+                    )
+                    commands.add("stop")
+                    val sc =
+                        EquipmentClient(
+                            Sclat.Companion.conf!!
+                                .config!!
+                                .getString("EquipShare.Trial.Host"),
+                            Sclat.Companion.conf!!
+                                .config!!
+                                .getInt("EquipShare.Trial.Port"),
+                            commands,
+                        )
+                    sc.startClient()
+                }
+            }
+        }
+
+        if (data!!.weaponClass!!.subWeaponName == "ビーコン" && data.isInMatch) {
+            getBeaconFromplayer(player)!!.remove()
+        }
+        if (data.weaponClass!!.subWeaponName == "スプリンクラー" && data.isInMatch) {
+            getSprinklerFromplayer(player)!!.remove()
+        }
+
+        if (data.weaponClass != null) PlayerStatusMgr.setEquiptClass(player, data.weaponClass!!.className)
+    }
 }

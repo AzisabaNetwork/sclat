@@ -1,98 +1,119 @@
-package be4rjp.sclat.manager;
+package be4rjp.sclat.manager
 
-import be4rjp.sclat.Sclat;
-import be4rjp.sclat.VariablesKt;
-import be4rjp.sclat.data.DataMgr;
-import com.mojang.authlib.GameProfile;
-import net.minecraft.server.v1_14_R1.DataWatcherRegistry;
-import net.minecraft.server.v1_14_R1.EntityPlayer;
-import net.minecraft.server.v1_14_R1.EnumItemSlot;
-import net.minecraft.server.v1_14_R1.MinecraftServer;
-import net.minecraft.server.v1_14_R1.PacketPlayOutAnimation;
-import net.minecraft.server.v1_14_R1.PacketPlayOutEntityDestroy;
-import net.minecraft.server.v1_14_R1.PacketPlayOutEntityEquipment;
-import net.minecraft.server.v1_14_R1.PacketPlayOutEntityHeadRotation;
-import net.minecraft.server.v1_14_R1.PacketPlayOutEntityMetadata;
-import net.minecraft.server.v1_14_R1.PacketPlayOutEntityTeleport;
-import net.minecraft.server.v1_14_R1.PacketPlayOutNamedEntitySpawn;
-import net.minecraft.server.v1_14_R1.PacketPlayOutPlayerInfo;
-import net.minecraft.server.v1_14_R1.PlayerConnection;
-import net.minecraft.server.v1_14_R1.PlayerInteractManager;
-import net.minecraft.server.v1_14_R1.WorldServer;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_14_R1.CraftServer;
-import org.bukkit.craftbukkit.v1_14_R1.CraftWorld;
-import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
-import org.bukkit.craftbukkit.v1_14_R1.inventory.CraftItemStack;
-import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
+import be4rjp.sclat.data.DataMgr.getPlayerData
+import be4rjp.sclat.plugin
+import com.mojang.authlib.GameProfile
+import net.minecraft.server.v1_14_R1.DataWatcherRegistry
+import net.minecraft.server.v1_14_R1.EntityPlayer
+import net.minecraft.server.v1_14_R1.EnumItemSlot
+import net.minecraft.server.v1_14_R1.MinecraftServer
+import net.minecraft.server.v1_14_R1.PacketPlayOutAnimation
+import net.minecraft.server.v1_14_R1.PacketPlayOutEntityDestroy
+import net.minecraft.server.v1_14_R1.PacketPlayOutEntityEquipment
+import net.minecraft.server.v1_14_R1.PacketPlayOutEntityHeadRotation
+import net.minecraft.server.v1_14_R1.PacketPlayOutEntityMetadata
+import net.minecraft.server.v1_14_R1.PacketPlayOutEntityTeleport
+import net.minecraft.server.v1_14_R1.PacketPlayOutNamedEntitySpawn
+import net.minecraft.server.v1_14_R1.PacketPlayOutPlayerInfo
+import net.minecraft.server.v1_14_R1.PlayerInteractManager
+import org.bukkit.Bukkit
+import org.bukkit.Location
+import org.bukkit.craftbukkit.v1_14_R1.CraftServer
+import org.bukkit.craftbukkit.v1_14_R1.CraftWorld
+import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer
+import org.bukkit.craftbukkit.v1_14_R1.inventory.CraftItemStack
+import org.bukkit.entity.Player
+import org.bukkit.scheduler.BukkitRunnable
 
-public class NPCMgr {
+object NPCMgr {
+    fun createNPC(
+        player1: Player,
+        npcName1: String?,
+        location1: Location,
+    ) {
+        val task: BukkitRunnable =
+            object : BukkitRunnable() {
+                var npc: EntityPlayer? = null
 
-	public static void createNPC(Player player1, String npcName1, Location location1) {
-		BukkitRunnable task = new BukkitRunnable() {
-			EntityPlayer npc;
+                var s: Int = 0
 
-			int s = 0;
+                val player: Player = player1
+                val npcName: String? = npcName1
+                val location: Location = location1
 
-			final Player player = player1;
-			final String npcName = npcName1;
-			final Location location = location1;
+                override fun run() {
+                    if (s == 0) {
+                        location.setYaw(location1.getYaw())
 
-			@Override
-			public void run() {
-				if (s == 0) {
-					location.setYaw(location1.getYaw());
+                        val nmsServer: MinecraftServer = (Bukkit.getServer() as CraftServer).getServer()
+                        val nmsWorld = (location.getWorld() as CraftWorld).getHandle()
+                        val gameProfile = GameProfile(player.getUniqueId(), npcName)
 
-					MinecraftServer nmsServer = ((CraftServer) Bukkit.getServer()).getServer();
-					WorldServer nmsWorld = ((CraftWorld) location.getWorld()).getHandle();
-					GameProfile gameProfile = new GameProfile(player.getUniqueId(), npcName);
+                        npc = EntityPlayer(nmsServer, nmsWorld, gameProfile, PlayerInteractManager(nmsWorld))
 
-					npc = new EntityPlayer(nmsServer, nmsWorld, gameProfile, new PlayerInteractManager(nmsWorld));
+                        // 見えないところにスポーンさせて、クライアントにスキンを先に読み込ませる
+                        npc!!.setLocation(location.getX(), location.getY() - 20, location.getZ(), location.getYaw(), 0f)
+                        npc!!.getDataWatcher().set<Byte?>(DataWatcherRegistry.a.a(15), 127.toByte())
 
-					// 見えないところにスポーンさせて、クライアントにスキンを先に読み込ませる
-					npc.setLocation(location.getX(), location.getY() - 20, location.getZ(), location.getYaw(), 0);
-					npc.getDataWatcher().set(DataWatcherRegistry.a.a(15), (byte) 127);
-
-					for (Player p : Sclat.getPlugin(Sclat.class).getServer().getOnlinePlayers()) {
-						PlayerConnection connection = ((CraftPlayer) p).getHandle().playerConnection;
-						connection.sendPacket(new PacketPlayOutPlayerInfo(
-								PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, npc));
-						connection.sendPacket(new PacketPlayOutNamedEntitySpawn(npc));
-						connection.sendPacket(new PacketPlayOutEntityMetadata(npc.getId(), npc.getDataWatcher(), true));
-					}
-				}
-				if (s == 1) {
-					npc.setLocation(location.getX(), location.getY(), location.getZ(), location.getYaw(), 0);
-					for (Player p : Sclat.getPlugin(Sclat.class).getServer().getOnlinePlayers()) {
-						PlayerConnection connection = ((CraftPlayer) p).getHandle().playerConnection;
-						connection.sendPacket(new PacketPlayOutEntityTeleport(npc));
-						connection.sendPacket(new PacketPlayOutEntityHeadRotation(npc,
-								(byte) ((location.getYaw() * 256.0F) / 360.0F)));
-						connection.sendPacket(new PacketPlayOutEntityEquipment(npc.getBukkitEntity().getEntityId(),
-								EnumItemSlot.MAINHAND, CraftItemStack.asNMSCopy(
-										DataMgr.getPlayerData(player).weaponClass.mainWeapon.getWeaponIteamStack())));
-						if (DataMgr.getPlayerData(player).weaponClass.mainWeapon.isManeuver)
-							connection.sendPacket(new PacketPlayOutEntityEquipment(npc.getBukkitEntity().getEntityId(),
-									EnumItemSlot.OFFHAND,
-									CraftItemStack.asNMSCopy(DataMgr.getPlayerData(player).weaponClass.mainWeapon
-											.getWeaponIteamStack())));
-						connection.sendPacket(new PacketPlayOutAnimation(npc, 0));
-					}
-
-				}
-				if (s == 3) {
-					for (Player p : Sclat.getPlugin(Sclat.class).getServer().getOnlinePlayers()) {
-						PlayerConnection connection = ((CraftPlayer) p).getHandle().playerConnection;
-						connection.sendPacket(new PacketPlayOutEntityDestroy(npc.getBukkitEntity().getEntityId()));
-					}
-					cancel();
-				}
-				s++;
-			}
-		};
-		task.runTaskTimer(VariablesKt.getPlugin(), 0, 20);
-
-	}
+                        for (p in plugin.getServer().getOnlinePlayers()) {
+                            val connection = (p as CraftPlayer).getHandle().playerConnection
+                            connection.sendPacket(
+                                PacketPlayOutPlayerInfo(
+                                    PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER,
+                                    npc,
+                                ),
+                            )
+                            connection.sendPacket(PacketPlayOutNamedEntitySpawn(npc))
+                            connection.sendPacket(PacketPlayOutEntityMetadata(npc!!.getId(), npc!!.getDataWatcher(), true))
+                        }
+                    }
+                    if (s == 1) {
+                        npc!!.setLocation(location.getX(), location.getY(), location.getZ(), location.getYaw(), 0f)
+                        for (p in plugin.getServer().getOnlinePlayers()) {
+                            val connection = (p as CraftPlayer).getHandle().playerConnection
+                            connection.sendPacket(PacketPlayOutEntityTeleport(npc))
+                            connection.sendPacket(
+                                PacketPlayOutEntityHeadRotation(
+                                    npc,
+                                    ((location.getYaw() * 256.0f) / 360.0f).toInt().toByte(),
+                                ),
+                            )
+                            connection.sendPacket(
+                                PacketPlayOutEntityEquipment(
+                                    npc!!.getBukkitEntity().getEntityId(),
+                                    EnumItemSlot.MAINHAND,
+                                    CraftItemStack.asNMSCopy(
+                                        getPlayerData(player)!!.weaponClass!!.mainWeapon!!.weaponIteamStack,
+                                    ),
+                                ),
+                            )
+                            if (getPlayerData(player)!!.weaponClass!!.mainWeapon!!.isManeuver) {
+                                connection.sendPacket(
+                                    PacketPlayOutEntityEquipment(
+                                        npc!!.getBukkitEntity().getEntityId(),
+                                        EnumItemSlot.OFFHAND,
+                                        CraftItemStack.asNMSCopy(
+                                            getPlayerData(player)!!
+                                                .weaponClass!!
+                                                .mainWeapon!!
+                                                .weaponIteamStack,
+                                        ),
+                                    ),
+                                )
+                            }
+                            connection.sendPacket(PacketPlayOutAnimation(npc, 0))
+                        }
+                    }
+                    if (s == 3) {
+                        for (p in plugin.getServer().getOnlinePlayers()) {
+                            val connection = (p as CraftPlayer).getHandle().playerConnection
+                            connection.sendPacket(PacketPlayOutEntityDestroy(npc!!.getBukkitEntity().getEntityId()))
+                        }
+                        cancel()
+                    }
+                    s++
+                }
+            }
+        task.runTaskTimer(plugin, 0, 20)
+    }
 }

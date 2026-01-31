@@ -1,102 +1,104 @@
-package be4rjp.sclat.manager;
+package be4rjp.sclat.manager
 
-import be4rjp.sclat.Sclat;
-import be4rjp.sclat.data.Color;
-import be4rjp.sclat.data.DataMgr;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.LeatherArmorMeta;
+import be4rjp.sclat.Sclat
+import be4rjp.sclat.data.Color
+import be4rjp.sclat.data.DataMgr.addColorList
+import be4rjp.sclat.data.DataMgr.setColor
+import org.bukkit.ChatColor
+import org.bukkit.Material
+import org.bukkit.inventory.ItemStack
+import org.bukkit.inventory.meta.LeatherArmorMeta
 
 /**
  *
  * @author Be4rJP
  */
-public class ColorMgr {
-	public synchronized static void SetupColor() {
-		Color blue = new Color("Blue");
-		blue.wool = (Material.BLUE_WOOL);
-		blue.concrete = (Material.BLUE_CONCRETE);
-		blue.glass = (Material.BLUE_STAINED_GLASS);
-		blue.setColorCode("§9");
-		blue.setBukkitColor(org.bukkit.Color.BLUE);
-		ItemStack bh = new ItemStack(Material.LEATHER_HELMET, 1);
-		LeatherArmorMeta bhm = (LeatherArmorMeta) bh.getItemMeta();
-		bhm.setColor(org.bukkit.Color.BLUE);
-		bh.setItemMeta(bhm);
-		blue.bougu = (bh);
-		blue.setChatColor(ChatColor.BLUE);
-		if (Sclat.colors.isEmpty() || Sclat.colors.contains("Blue")) {
-			DataMgr.setColor("Blue", blue);
-			DataMgr.addColorList(blue);
-		}
+object ColorMgr {
+    @Synchronized
+    fun SetupColor() {
+        val blue = Color("Blue")
+        blue.wool = (Material.BLUE_WOOL)
+        blue.concrete = (Material.BLUE_CONCRETE)
+        blue.glass = (Material.BLUE_STAINED_GLASS)
+        blue.colorCode = "§9"
+        blue.bukkitColor = org.bukkit.Color.BLUE
+        val bh = ItemStack(Material.LEATHER_HELMET, 1)
+        val bhm = bh.getItemMeta() as LeatherArmorMeta?
+        bhm!!.setColor(org.bukkit.Color.BLUE)
+        bh.setItemMeta(bhm)
+        blue.bougu = (bh)
+        blue.chatColor = ChatColor.BLUE
+        if (Sclat.colors.isEmpty() || Sclat.colors.contains("Blue")) {
+            setColor("Blue", blue)
+            addColorList(blue)
+        }
 
-		Color aqua = new Color("Aqua");
-		aqua.wool = (Material.LIGHT_BLUE_WOOL);
-		aqua.concrete = (Material.LIGHT_BLUE_CONCRETE);
-		aqua.glass = (Material.LIGHT_BLUE_STAINED_GLASS);
-		aqua.setColorCode("§b");
-		aqua.setBukkitColor(org.bukkit.Color.AQUA);
-		ItemStack ah = new ItemStack(Material.LEATHER_HELMET, 1);
-		LeatherArmorMeta ahm = (LeatherArmorMeta) ah.getItemMeta();
-		ahm.setColor(org.bukkit.Color.AQUA);
-		ah.setItemMeta(ahm);
-		aqua.bougu = (ah);
-		aqua.setChatColor(ChatColor.AQUA);
-		if (Sclat.colors.isEmpty() || Sclat.colors.contains("Aqua")) {
-			DataMgr.setColor("Aqua", aqua);
-			DataMgr.addColorList(aqua);
-		}
+        val aqua = Color("Aqua")
+        aqua.wool = (Material.LIGHT_BLUE_WOOL)
+        aqua.concrete = (Material.LIGHT_BLUE_CONCRETE)
+        aqua.glass = (Material.LIGHT_BLUE_STAINED_GLASS)
+        aqua.colorCode = "§b"
+        aqua.bukkitColor = org.bukkit.Color.AQUA
+        val ah = ItemStack(Material.LEATHER_HELMET, 1)
+        val ahm = ah.getItemMeta() as LeatherArmorMeta?
+        ahm!!.setColor(org.bukkit.Color.AQUA)
+        ah.setItemMeta(ahm)
+        aqua.bougu = (ah)
+        aqua.chatColor = ChatColor.AQUA
+        if (Sclat.colors.isEmpty() || Sclat.colors.contains("Aqua")) {
+            setColor("Aqua", aqua)
+            addColorList(aqua)
+        }
 
-		Color orange = new Color("Orange");
-		orange.wool = (Material.ORANGE_WOOL);
-		orange.concrete = (Material.ORANGE_CONCRETE);
-		orange.glass = (Material.ORANGE_STAINED_GLASS);
-		orange.setColorCode("§6");
-		orange.setBukkitColor(org.bukkit.Color.ORANGE);
-		ItemStack oh = new ItemStack(Material.LEATHER_HELMET, 1);
-		LeatherArmorMeta ohm = (LeatherArmorMeta) oh.getItemMeta();
-		ohm.setColor(org.bukkit.Color.ORANGE);
-		oh.setItemMeta(ohm);
-		orange.bougu = (oh);
-		orange.setChatColor(ChatColor.GOLD);
-		if (Sclat.colors.isEmpty() || Sclat.colors.contains("Orange")) {
-			DataMgr.setColor("Orange", orange);
-			DataMgr.addColorList(orange);
-		}
+        val orange = Color("Orange")
+        orange.wool = (Material.ORANGE_WOOL)
+        orange.concrete = (Material.ORANGE_CONCRETE)
+        orange.glass = (Material.ORANGE_STAINED_GLASS)
+        orange.colorCode = "§6"
+        orange.bukkitColor = org.bukkit.Color.ORANGE
+        val oh = ItemStack(Material.LEATHER_HELMET, 1)
+        val ohm = oh.getItemMeta() as LeatherArmorMeta?
+        ohm!!.setColor(org.bukkit.Color.ORANGE)
+        oh.setItemMeta(ohm)
+        orange.bougu = (oh)
+        orange.chatColor = ChatColor.GOLD
+        if (Sclat.colors.isEmpty() || Sclat.colors.contains("Orange")) {
+            setColor("Orange", orange)
+            addColorList(orange)
+        }
 
-		Color lime = new Color("Lime");
-		lime.wool = (Material.LIME_WOOL);
-		lime.concrete = (Material.LIME_CONCRETE);
-		lime.glass = (Material.LIME_STAINED_GLASS);
-		lime.setColorCode("§a");
-		lime.setBukkitColor(org.bukkit.Color.LIME);
-		ItemStack lh = new ItemStack(Material.LEATHER_HELMET, 1);
-		LeatherArmorMeta lhm = (LeatherArmorMeta) lh.getItemMeta();
-		lhm.setColor(org.bukkit.Color.LIME);
-		lh.setItemMeta(lhm);
-		lime.bougu = (lh);
-		lime.setChatColor(ChatColor.GREEN);
-		if (Sclat.colors.isEmpty() || Sclat.colors.contains("Lime")) {
-			DataMgr.setColor("Lime", lime);
-			DataMgr.addColorList(lime);
-		}
+        val lime = Color("Lime")
+        lime.wool = (Material.LIME_WOOL)
+        lime.concrete = (Material.LIME_CONCRETE)
+        lime.glass = (Material.LIME_STAINED_GLASS)
+        lime.colorCode = "§a"
+        lime.bukkitColor = org.bukkit.Color.LIME
+        val lh = ItemStack(Material.LEATHER_HELMET, 1)
+        val lhm = lh.getItemMeta() as LeatherArmorMeta?
+        lhm!!.setColor(org.bukkit.Color.LIME)
+        lh.setItemMeta(lhm)
+        lime.bougu = (lh)
+        lime.chatColor = ChatColor.GREEN
+        if (Sclat.colors.isEmpty() || Sclat.colors.contains("Lime")) {
+            setColor("Lime", lime)
+            addColorList(lime)
+        }
 
-		Color y = new Color("Yellow");
-		y.wool = (Material.YELLOW_WOOL);
-		y.concrete = (Material.YELLOW_CONCRETE);
-		y.glass = (Material.YELLOW_STAINED_GLASS);
-		y.setColorCode("§e");
-		y.setBukkitColor(org.bukkit.Color.YELLOW);
-		ItemStack yh = new ItemStack(Material.LEATHER_HELMET, 1);
-		LeatherArmorMeta yhm = (LeatherArmorMeta) yh.getItemMeta();
-		yhm.setColor(org.bukkit.Color.YELLOW);
-		yh.setItemMeta(yhm);
-		y.bougu = (yh);
-		y.setChatColor(ChatColor.YELLOW);
-		if (Sclat.colors.isEmpty() || Sclat.colors.contains("Yellow")) {
-			DataMgr.setColor("Yellow", y);
-			DataMgr.addColorList(y);
-		}
-	}
+        val y = Color("Yellow")
+        y.wool = (Material.YELLOW_WOOL)
+        y.concrete = (Material.YELLOW_CONCRETE)
+        y.glass = (Material.YELLOW_STAINED_GLASS)
+        y.colorCode = "§e"
+        y.bukkitColor = org.bukkit.Color.YELLOW
+        val yh = ItemStack(Material.LEATHER_HELMET, 1)
+        val yhm = yh.getItemMeta() as LeatherArmorMeta?
+        yhm!!.setColor(org.bukkit.Color.YELLOW)
+        yh.setItemMeta(yhm)
+        y.bougu = (yh)
+        y.chatColor = ChatColor.YELLOW
+        if (Sclat.colors.isEmpty() || Sclat.colors.contains("Yellow")) {
+            setColor("Yellow", y)
+            addColorList(y)
+        }
+    }
 }

@@ -140,7 +140,7 @@ object Roller {
                             // 筆系武器
                             if (data.weaponClass?.mainWeapon!!.isHude) {
                                 val position = p.location
-                                PaintMgr.PaintHightestBlock(front, p, false, true)
+                                PaintMgr.paintHightestBlock(front, p, false, true)
                                 p.location.world!!.spawnParticle<BlockData?>(
                                     Particle.BLOCK_DUST,
                                     position,
@@ -232,7 +232,7 @@ object Roller {
                                 val position = vector.toLocation(p.location.world!!)
                                 val block = p.location.world!!.getBlockAt(position)
                                 if (block.type != Material.AIR) break
-                                PaintMgr.PaintHightestBlock(position, p, false, true)
+                                PaintMgr.paintHightestBlock(position, p, false, true)
                                 p.location.world!!.spawnParticle<BlockData?>(
                                     Particle.BLOCK_DUST,
                                     position,
@@ -370,7 +370,7 @@ object Roller {
                                 val position = vector.toLocation(p.location.world!!)
                                 val block = p.location.world!!.getBlockAt(position)
                                 if (block.type != Material.AIR) break
-                                PaintMgr.PaintHightestBlock(position, p, false, true)
+                                PaintMgr.paintHightestBlock(position, p, false, true)
                                 for (target in plugin.server.onlinePlayers) {
                                     if (getPlayerData(target)!!.settings!!.ShowEffect_MainWeaponInk()) {
                                         if (target.world ===
@@ -479,7 +479,7 @@ object Roller {
                                     }
                                 }
                             }
-                            PaintMgr.PaintHightestBlock(eloc, p, false, true)
+                            PaintMgr.paintHightestBlock(eloc, p, false, true)
                             p.walkSpeed =
                                 (
                                     data.weaponClass?.mainWeapon!!.usingWalkSpeed
@@ -719,7 +719,7 @@ object Roller {
                     if (i >= tick && i <= tick + 15) {
                         inkball!!.velocity = inkball!!.velocity.add(Vector(0.0, -0.1, 0.0))
                     }
-                    if (i != tick) PaintMgr.PaintHightestBlock(inkball!!.location, p, true, true)
+                    if (i != tick) PaintMgr.paintHightestBlock(inkball!!.location, p, true, true)
                     if (inkball!!.isDead) cancel()
 
                     i++

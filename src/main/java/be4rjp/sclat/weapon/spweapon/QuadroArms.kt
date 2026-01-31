@@ -324,7 +324,7 @@ object QuadroArms {
                 }
             }
         }
-        PaintMgr.PaintHightestBlock(player.location, player, true, true)
+        PaintMgr.paintHightestBlock(player.location, player, true, true)
 
         val ball = player.launchProjectile<Snowball>(Snowball::class.java)
         (ball as CraftSnowball).handle.setItem(
@@ -408,7 +408,7 @@ object QuadroArms {
                         inkball!!.velocity = inkball!!.velocity.add(Vector(0.0, -0.1, 0.0))
                     }
                     // if(i != tick)
-                    if ((Random().nextInt(7)) == 0) PaintMgr.PaintHightestBlock(inkball!!.location, p, false, true)
+                    if ((Random().nextInt(7)) == 0) PaintMgr.paintHightestBlock(inkball!!.location, p, false, true)
                     if (inkball!!.isDead) cancel()
 
                     i++
@@ -499,7 +499,7 @@ object QuadroArms {
                     if (i >= tick && i <= tick + 15) {
                         inkball!!.velocity = inkball!!.velocity.add(Vector(0.0, -0.1, 0.0))
                     }
-                    if (i != tick) PaintMgr.PaintHightestBlock(inkball!!.location, p, true, true)
+                    if (i != tick) PaintMgr.paintHightestBlock(inkball!!.location, p, true, true)
                     if (inkball!!.isDead) cancel()
 
                     i++
@@ -581,7 +581,7 @@ object QuadroArms {
                             }
                         }
 
-                        PaintMgr.PaintHightestBlock(inkball!!.location, p, false, true)
+                        PaintMgr.paintHightestBlock(inkball!!.location, p, false, true)
 
                         if (i >= tick && !addedFallVec) {
                             inkball!!.velocity = fallvec
@@ -608,8 +608,8 @@ object QuadroArms {
                                 while (i <= maxDist) {
                                     val pLocs = getSphere(inkball!!.location, i.toDouble(), 20)
                                     for (loc in pLocs) {
-                                        PaintMgr.Paint(loc, p, false)
-                                        PaintMgr.PaintHightestBlock(loc, p, false, false)
+                                        PaintMgr.paint(loc, p, false)
+                                        PaintMgr.paintHightestBlock(loc, p, false, false)
                                     }
                                     i++
                                 }

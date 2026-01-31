@@ -70,7 +70,7 @@ class SnowballListener : Listener {
                             }
                         } else if (event.hitEntity is ArmorStand) {
                             val `as` = event.hitEntity as ArmorStand?
-                            ArmorStandMgr.giveDamageArmorStand(`as`, 20.0, shooter)
+                            ArmorStandMgr.giveDamageArmorStand(`as`!!, 20.0, shooter!!)
                         }
                     }
                 }
@@ -115,7 +115,7 @@ class SnowballListener : Listener {
                                         "spWeapon",
                                     )
                                 }
-                                PaintMgr.Paint(target.location, shooter, true)
+                                PaintMgr.paint(target.location, shooter, true)
                             }
 
                             if (projectile.customName == "SuperShot") {
@@ -352,7 +352,7 @@ class SnowballListener : Listener {
                         }
 
                         if (projectile.customName == "SuperShot") {
-                            ArmorStandMgr.giveDamageArmorStand(armorStand, 20.0, shooter)
+                            ArmorStandMgr.giveDamageArmorStand(armorStand!!, 20.0, shooter)
                             return
                         }
                         if (projectile.customName!!.contains("#QuadroArmsSpinner")) {
@@ -360,7 +360,7 @@ class SnowballListener : Listener {
                             var quadroTicksLived = projectile.ticksLived.toDouble() * 12.5
                             if (quadroTicksLived > 60) quadroTicksLived = 60.0
                             quadroDamage += quadroDamage * (quadroTicksLived / 30)
-                            ArmorStandMgr.giveDamageArmorStand(armorStand, quadroDamage, shooter)
+                            ArmorStandMgr.giveDamageArmorStand(armorStand!!, quadroDamage, shooter)
                             dmgDouble = 0.0
                         }
                         if (projectile.customName!!.contains("#QuadroArmsShotgun")) {
@@ -371,11 +371,11 @@ class SnowballListener : Listener {
                             if (projectile.customName!!.contains("CounterShot")) {
                                 quadroDamage = 6.5
                             }
-                            ArmorStandMgr.giveDamageArmorStand(armorStand, quadroDamage, shooter)
+                            ArmorStandMgr.giveDamageArmorStand(armorStand!!, quadroDamage, shooter)
                             dmgDouble = 0.0
                         }
                         if (projectile.customName == "JetPack") {
-                            ArmorStandMgr.giveDamageArmorStand(armorStand, 20.0, shooter)
+                            ArmorStandMgr.giveDamageArmorStand(armorStand!!, 20.0, shooter)
                             return
                         }
                     }
@@ -585,7 +585,7 @@ class SnowballListener : Listener {
         if (event.getEntity() is Snowball) {
             if (event.hitBlock != null) {
                 val shooter = event.getEntity().shooter as Player?
-                PaintMgr.Paint(event.hitBlock!!.location, shooter, true)
+                PaintMgr.paint(event.hitBlock!!.location, shooter, true)
                 shooter!!
                     .world
                     .playSound(event.hitBlock!!.location, Sound.ENTITY_SLIME_ATTACK, 0.3f, 2.0f)
@@ -659,7 +659,7 @@ class SnowballListener : Listener {
                         }
                     } else if (event.getEntity() is ArmorStand) {
                         val `as` = event.getEntity() as ArmorStand
-                        ArmorStandMgr.giveDamageArmorStand(`as`, 20.0, shooter)
+                        ArmorStandMgr.giveDamageArmorStand(`as`, 20.0, shooter!!)
                     }
                 }
             }

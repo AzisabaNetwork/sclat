@@ -33,7 +33,7 @@ object SquidListenerMgr {
         list.add(b5)
 
         if (playerblock.type == Material.WATER && player.gameMode == GameMode.ADVENTURE) {
-            DeathMgr.PlayerDeathRunnable(
+            DeathMgr.playerDeathRunnable(
                 player,
                 player,
                 "water",
@@ -43,7 +43,7 @@ object SquidListenerMgr {
         try {
             if (data.match?.mapData!!.voidY != 0) {
                 if (player.location.y <= data.match?.mapData!!.voidY) {
-                    DeathMgr.PlayerDeathRunnable(player, player, "fall")
+                    DeathMgr.playerDeathRunnable(player, player, "fall")
                 }
             }
         } catch (e: Exception) {

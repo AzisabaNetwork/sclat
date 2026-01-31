@@ -59,7 +59,7 @@ class SubWeapon : Listener {
             if (getPlayerData(player)!!.isInMatch) {
                 SubWeaponMgr.UseSubWeapon(
                     player,
-                    getPlayerData(player)!!.weaponClass!!.subWeaponName,
+                    getPlayerData(player)!!.weaponClass!!.subWeaponName!!,
                 )
             }
         }

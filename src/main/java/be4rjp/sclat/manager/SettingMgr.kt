@@ -1,39 +1,64 @@
-package be4rjp.sclat.manager;
+package be4rjp.sclat.manager
 
-import be4rjp.sclat.api.player.PlayerSettings;
-import be4rjp.sclat.data.DataMgr;
-import org.bukkit.entity.Player;
+import be4rjp.sclat.Sclat
+import be4rjp.sclat.api.player.PlayerSettings
+import be4rjp.sclat.data.DataMgr.getPlayerData
+import org.bukkit.entity.Player
 
-import static be4rjp.sclat.Sclat.conf;
-
-public class SettingMgr {
-
-	public static void setSettings(PlayerSettings settings, Player player) {
-		String uuid = player.getUniqueId().toString();
-		String def = "011111111";
-		if (conf.getPlayerSettings().contains("Settings." + uuid)) {
-			if (conf.getPlayerSettings().getString("Settings." + uuid).charAt(1) == '0')
-				settings.S_ShowEffect_MainWeaponInk();
-			if (conf.getPlayerSettings().getString("Settings." + uuid).charAt(2) == '0')
-				settings.S_ShowEffect_ChargerLine();
-			if (conf.getPlayerSettings().getString("Settings." + uuid).charAt(3) == '0')
-				settings.S_ShowEffect_SPWeapon();
-			if (conf.getPlayerSettings().getString("Settings." + uuid).charAt(4) == '0')
-				settings.S_ShowEffect_SPWeaponRegion();
-			if (conf.getPlayerSettings().getString("Settings." + uuid).charAt(5) == '0')
-				settings.S_ShowSnowBall();
-			if (conf.getPlayerSettings().getString("Settings." + uuid).charAt(0) == '0')
-				settings.S_PlayBGM();
-			if (conf.getPlayerSettings().getString("Settings." + uuid).charAt(6) == '0')
-				settings.S_ShowEffect_Bomb();
-			if (conf.getPlayerSettings().getString("Settings." + uuid).charAt(7) == '0')
-				settings.S_ShowEffect_BombEx();
-			if (conf.getPlayerSettings().getString("Settings." + uuid).charAt(8) == '0')
-				settings.S_doChargeKeep();
-		} else {
-			conf.getPlayerSettings().set("Settings." + uuid, def);
-			settings.S_PlayBGM();
-		}
-		DataMgr.getPlayerData(player).settings = settings;
-	}
+object SettingMgr {
+    fun setSettings(settings: PlayerSettings, player: Player) {
+        val uuid: String? = player.getUniqueId().toString()
+        val def = "011111111"
+        if (Sclat.Companion.conf!!.playerSettings.contains("Settings." + uuid)) {
+            if (Sclat.Companion.conf!!.playerSettings.getString("Settings." + uuid)!!
+                    .get(1) == '0'
+            ) {
+                settings.S_ShowEffect_MainWeaponInk()
+            }
+            if (Sclat.Companion.conf!!.playerSettings.getString("Settings." + uuid)!!
+                    .get(2) == '0'
+            ) {
+                settings.S_ShowEffect_ChargerLine()
+            }
+            if (Sclat.Companion.conf!!.playerSettings.getString("Settings." + uuid)!!
+                    .get(3) == '0'
+            ) {
+                settings.S_ShowEffect_SPWeapon()
+            }
+            if (Sclat.Companion.conf!!.playerSettings.getString("Settings." + uuid)!!
+                    .get(4) == '0'
+            ) {
+                settings.S_ShowEffect_SPWeaponRegion()
+            }
+            if (Sclat.Companion.conf!!.playerSettings.getString("Settings." + uuid)!!
+                    .get(5) == '0'
+            ) {
+                settings.S_ShowSnowBall()
+            }
+            if (Sclat.Companion.conf!!.playerSettings.getString("Settings." + uuid)!!
+                    .get(0) == '0'
+            ) {
+                settings.S_PlayBGM()
+            }
+            if (Sclat.Companion.conf!!.playerSettings.getString("Settings." + uuid)!!
+                    .get(6) == '0'
+            ) {
+                settings.S_ShowEffect_Bomb()
+            }
+            if (Sclat.Companion.conf!!.playerSettings.getString("Settings." + uuid)!!
+                    .get(7) == '0'
+            ) {
+                settings.S_ShowEffect_BombEx()
+            }
+            if (Sclat.Companion.conf!!.playerSettings.getString("Settings." + uuid)!!
+                    .get(8) == '0'
+            ) {
+                settings.S_doChargeKeep()
+            }
+        } else {
+            Sclat.Companion.conf!!.playerSettings.set("Settings." + uuid, def)
+            settings.S_PlayBGM()
+        }
+        getPlayerData(player)!!.settings = settings
+    }
 }

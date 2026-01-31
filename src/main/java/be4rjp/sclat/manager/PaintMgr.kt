@@ -1,348 +1,456 @@
+package be4rjp.sclat.manager
 
-package be4rjp.sclat.manager;
-
-import be4rjp.sclat.Sclat;
-import be4rjp.sclat.api.SclatUtil;
-import be4rjp.sclat.api.ServerType;
-import be4rjp.sclat.api.player.PlayerData;
-import be4rjp.sclat.api.team.Team;
-import be4rjp.sclat.data.DataMgr;
-import be4rjp.sclat.data.MainWeapon;
-import be4rjp.sclat.data.Match;
-import be4rjp.sclat.data.PaintData;
-import be4rjp.sclat.data.Sponge;
-import be4rjp.sclat.weapon.Gear;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
-import org.bukkit.entity.Player;
-import static be4rjp.sclat.Sclat.conf;
+import be4rjp.sclat.Sclat
+import be4rjp.sclat.api.SclatUtil
+import be4rjp.sclat.api.ServerType
+import be4rjp.sclat.api.team.Team
+import be4rjp.sclat.data.DataMgr.blockDataMap
+import be4rjp.sclat.data.DataMgr.getPaintDataFromBlock
+import be4rjp.sclat.data.DataMgr.getPlayerData
+import be4rjp.sclat.data.DataMgr.getSpongeFromBlock
+import be4rjp.sclat.data.DataMgr.setPaintDataFromBlock
+import be4rjp.sclat.data.DataMgr.setSpongeWithBlock
+import be4rjp.sclat.data.DataMgr.spongeMap
+import be4rjp.sclat.data.Match
+import be4rjp.sclat.data.PaintData
+import be4rjp.sclat.data.Sponge
+import be4rjp.sclat.weapon.Gear
+import be4rjp.sclat.weapon.Gear.getGearInfluence
+import org.bukkit.Location
+import org.bukkit.Material
+import org.bukkit.block.Block
+import org.bukkit.block.BlockFace
+import org.bukkit.entity.Player
+import java.util.Random
+import kotlin.math.abs
 
 /**
  *
  * @author Be4rJP
  */
-public class PaintMgr {
-	public static void Paint(Location location, Player player, boolean sphere) {
+object PaintMgr {
+    fun paint(
+        location: Location,
+        player: Player?,
+        sphere: Boolean,
+    ) {
+        if (Sclat.type == ServerType.LOBBY) return
 
-		if (Sclat.type == ServerType.LOBBY)
-			return;
+        val mw = getPlayerData(player)!!.weaponClass!!.mainWeapon
+        var blocks: MutableList<Block> = ArrayList<Block>()
+        blocks.add(location.getBlock())
+        if (sphere) blocks = generateSphere(location, mw!!.maxPaintDis, 1.0, false, true, 0.0, mw.paintRandom)
 
-		MainWeapon mw = DataMgr.getPlayerData(player).weaponClass.mainWeapon;
-		List<Block> blocks = new ArrayList<>();
-		blocks.add(location.getBlock());
-		if (sphere)
-			blocks = generateSphere(location, mw.getMaxPaintDis(), 1, false, true, 0, mw.getPaintRandom());
-		// List<Block> blocks = getTargetBlocks(location, mw.getPaintRandom(), true, 0,
-		// mw.getMaxPaintDis());
+        // List<Block> blocks = getTargetBlocks(location, mw.getPaintRandom(), true, 0,
+        // mw.getMaxPaintDis());
+        for (block in blocks) {
+            if (block.getType() == getPlayerData(player)!!.team!!.teamColor!!.wool) continue
 
-		for (Block block : blocks) {
+            try {
+                if (block.getY() <= getPlayerData(player)!!.match!!.mapData!!.voidY) {
+                    continue
+                }
+            } catch (e: Exception) {
+            }
 
-			if (block.getType() == DataMgr.getPlayerData(player).team.getTeamColor().wool)
-				continue;
+            if (block.getType() == Material.WET_SPONGE || block.getType().toString().contains("POWDER")) {
+                if (spongeMap.containsKey(block)) {
+                    val sponge = getSpongeFromBlock(block)
+                    val pdata = getPlayerData(player)
+                    if (pdata!!.weaponClass!!.mainWeapon!!.weaponType == "Charger") {
+                        sponge!!.giveDamage(
+                            15.0,
+                            pdata.team,
+                        )
+                    } else {
+                        sponge!!.giveDamage(pdata.weaponClass!!.mainWeapon!!.damage, pdata.team)
+                    }
+                } else if (block.getType() == Material.WET_SPONGE) {
+                    val sponge = Sponge(block)
+                    val pdata = getPlayerData(player)
+                    sponge.match = (pdata!!.match)
+                    sponge.team = (pdata.team)
+                    setSpongeWithBlock(block, sponge)
+                    sponge.giveDamage(pdata.weaponClass!!.mainWeapon!!.damage, pdata.team)
+                }
+            }
 
-			try {
-				if (block.getY() <= DataMgr.getPlayerData(player).match.getMapData().getVoidY()) {
-					continue;
-				}
-			} catch (Exception e) {
-			}
+            if (block.getType() == Material.WET_SPONGE || block.getType().toString().contains("POWDER")) return
 
-			if (block.getType().equals(Material.WET_SPONGE) || block.getType().toString().contains("POWDER")) {
-				if (DataMgr.getSpongeMap().containsKey(block)) {
-					Sponge sponge = DataMgr.getSpongeFromBlock(block);
-					PlayerData pdata = DataMgr.getPlayerData(player);
-					if (pdata.weaponClass.mainWeapon.weaponType.equals("Charger"))
-						sponge.giveDamage(15, pdata.team);
-					else
-						sponge.giveDamage(pdata.weaponClass.mainWeapon.damage, pdata.team);
-				} else if (block.getType().equals(Material.WET_SPONGE)) {
-					Sponge sponge = new Sponge(block);
-					PlayerData pdata = DataMgr.getPlayerData(player);
-					sponge.match = (pdata.match);
-					sponge.team = (pdata.team);
-					DataMgr.setSpongeWithBlock(block, sponge);
-					sponge.giveDamage(pdata.weaponClass.mainWeapon.damage, pdata.team);
-				}
-			}
+            if (canPaint(block)) {
+                if (Sclat.Companion.conf!!
+                        .config!!
+                        .getString("WorkMode") !=
+                    "Trial"
+                ) {
+                    if (!getPlayerData(player)!!.match!!.mapData!!.canPaintBBlock() &&
+                        block.getType() == Material.BARRIER
+                    ) {
+                        return
+                    }
+                }
+                if (blockDataMap.containsKey(block)) {
+                    val data = getPaintDataFromBlock(block)
+                    val bTeam = data!!.team
+                    val aTeam = getPlayerData(player)!!.team
+                    if (bTeam != aTeam) {
+                        data.team = (aTeam)
+                        bTeam!!.subtractPaintCount()
+                        aTeam!!.addPaintCount()
+                        // Sclat.setBlockByNMS(block, ATeam.getTeamColor().wool, false);
+                        getPlayerData(player)!!.match!!.blockUpdater!!.setBlock(
+                            block,
+                            aTeam.teamColor!!.wool!!,
+                        )
+                        getPlayerData(player)!!.addPaintCount()
+                        if (Random().nextInt(
+                                (
+                                    (
+                                        12 / getGearInfluence(player, Gear.Type.SPECIAL_UP) /
+                                            getPlayerData(player)!!.weaponClass!!.mainWeapon!!.sPRate
+                                        )
+                                    ).toInt(),
+                            ) == 0 &&
+                            !getPlayerData(player)!!.isUsingSP
+                        ) {
+                            SPWeaponMgr.addSPCharge(player)
+                        }
+                    }
+                } else {
+                    val team = getPlayerData(player)!!.team
+                    team!!.addPaintCount()
+                    val data = PaintData(block)
+                    data.match = (getPlayerData(player)!!.match)
+                    data.team = (team)
+                    data.setOrigianlType(block.getType())
+                    data.blockData = (block.getBlockData())
+                    // data.setOriginalState(block.getState());
+                    setPaintDataFromBlock(block, data)
+                    // Sclat.setBlockByNMS(block, team.getTeamColor().wool, false);
+                    getPlayerData(player)!!.match!!.blockUpdater!!.setBlock(block, team.teamColor!!.wool!!)
+                    getPlayerData(player)!!.addPaintCount()
+                    if (Random().nextInt(
+                            (
+                                (
+                                    13 / getGearInfluence(player, Gear.Type.SPECIAL_UP) /
+                                        getPlayerData(player)!!.weaponClass!!.mainWeapon!!.sPRate
+                                    )
+                                ).toInt(),
+                        ) == 0 &&
+                        !getPlayerData(player)!!.isUsingSP
+                    ) {
+                        SPWeaponMgr.addSPCharge(player)
+                    }
+                }
+            }
+        }
+    }
 
-			if (block.getType().equals(Material.WET_SPONGE) || block.getType().toString().contains("POWDER"))
-				return;
+    fun canPaint(block: Block): Boolean =
+        !(
+            block.getType() == Material.AIR || block.getType() == Material.SHULKER_BOX || block.getType() == Material.IRON_BARS ||
+                block.getType() == Material.VINE ||
+                block
+                    .getType()
+                    .toString()
+                    .contains("SIGN") || block.getType().toString().contains("GLASS") ||
+                block.getType().toString().contains("CARPET") || block.getType().toString().contains("POWDER") ||
+                block.getType().toString().contains("FENCE") || block.getType().toString().contains("STAIR") ||
+                block
+                    .getType()
+                    .toString()
+                    .contains("PLATE") || block.getType() == Material.WATER || block.getType() == Material.OBSIDIAN ||
+                block
+                    .getType()
+                    .toString()
+                    .contains("SLAB") ||
+                block.getType().toString().contains("DOOR")
+            )
 
-			if (canPaint(block)) {
-				if (!conf.config.getString("WorkMode").equals("Trial"))
-					if (!DataMgr.getPlayerData(player).match.getMapData().canPaintBBlock()
-							&& block.getType() == Material.BARRIER)
-						return;
-				if (DataMgr.getBlockDataMap().containsKey(block)) {
-					PaintData data = DataMgr.getPaintDataFromBlock(block);
-					Team BTeam = data.team;
-					Team ATeam = DataMgr.getPlayerData(player).team;
-					if (BTeam != ATeam) {
-						data.team = (ATeam);
-						BTeam.subtractPaintCount();
-						ATeam.addPaintCount();
-						// Sclat.setBlockByNMS(block, ATeam.getTeamColor().wool, false);
-						DataMgr.getPlayerData(player).match.getBlockUpdater().setBlock(block,
-								ATeam.getTeamColor().wool);
-						DataMgr.getPlayerData(player).addPaintCount();
-						if (new Random().nextInt((int) (12 / Gear.getGearInfluence(player, Gear.Type.SPECIAL_UP)
-								/ DataMgr.getPlayerData(player).weaponClass.mainWeapon.getSPRate())) == 0
-								&& !DataMgr.getPlayerData(player).isUsingSP)
-							SPWeaponMgr.addSPCharge(player);
-					}
-				} else {
-					Team team = DataMgr.getPlayerData(player).team;
-					team.addPaintCount();
-					PaintData data = new PaintData(block);
-					data.match = (DataMgr.getPlayerData(player).match);
-					data.team = (team);
-					data.setOrigianlType(block.getType());
-					data.blockData = (block.getBlockData());
-					// data.setOriginalState(block.getState());
-					DataMgr.setPaintDataFromBlock(block, data);
-					// Sclat.setBlockByNMS(block, team.getTeamColor().wool, false);
-					DataMgr.getPlayerData(player).match.getBlockUpdater().setBlock(block, team.getTeamColor().wool);
-					DataMgr.getPlayerData(player).addPaintCount();
-					if (new Random().nextInt((int) (13 / Gear.getGearInfluence(player, Gear.Type.SPECIAL_UP)
-							/ DataMgr.getPlayerData(player).weaponClass.mainWeapon.getSPRate())) == 0
-							&& !DataMgr.getPlayerData(player).isUsingSP)
-						SPWeaponMgr.addSPCharge(player);
-				}
+    fun paintByTeam(
+        block: Block,
+        team: Team,
+        match: Match,
+    ) {
+        var team = team
+        var match = match
+        if (block.getType() == team.teamColor!!.wool) return
 
-			}
-		}
-	}
+        if (!(
+                block.getType() == Material.AIR || block.getType() == Material.SHULKER_BOX || block.getType() == Material.IRON_BARS ||
+                    block.getType() == Material.VINE ||
+                    block
+                        .getType()
+                        .toString()
+                        .contains("SIGN") || block.getType().toString().contains("GLASS") ||
+                    block.getType().toString().contains("CARPET") || block.getType().toString().contains("POWDER") ||
+                    block.getType().toString().contains("FENCE") || block.getType().toString().contains("STAIR") ||
+                    block
+                        .getType()
+                        .toString()
+                        .contains("PLATE") || block.getType() == Material.WATER || block.getType() == Material.OBSIDIAN ||
+                    block
+                        .getType()
+                        .toString()
+                        .contains("SLAB")
+                )
+        ) {
+            if (blockDataMap.containsKey(block)) {
+                val data = getPaintDataFromBlock(block)
+                val bTeam = data!!.team
+                val aTeam = team
+                if (bTeam != aTeam) {
+                    data.team = (aTeam)
+                    bTeam!!.subtractPaintCount()
+                    aTeam.addPaintCount()
+                    match.blockUpdater!!.setBlock(block, aTeam.teamColor!!.wool!!)
+                }
+            } else {
+                team.addPaintCount()
+                val data = PaintData(block)
+                data.match = (match)
+                data.team = (team)
+                data.setOrigianlType(block.getType())
+                data.blockData = (block.getBlockData())
+                setPaintDataFromBlock(block, data)
+                match.blockUpdater!!.setBlock(block, team.teamColor!!.wool!!)
+            }
+        }
+    }
 
-	public static boolean canPaint(Block block) {
-		return !(block.getType() == Material.AIR || block.getType() == Material.SHULKER_BOX
-				|| block.getType() == Material.IRON_BARS || block.getType() == Material.VINE
-				|| block.getType().toString().contains("SIGN") || block.getType().toString().contains("GLASS")
-				|| block.getType().toString().contains("CARPET") || block.getType().toString().contains("POWDER")
-				|| block.getType().toString().contains("FENCE") || block.getType().toString().contains("STAIR")
-				|| block.getType().toString().contains("PLATE") || block.getType() == Material.WATER
-				|| block.getType() == Material.OBSIDIAN || block.getType().toString().contains("SLAB")
-				|| block.getType().toString().contains("DOOR"));
-	}
+    fun getCubeBlocks(
+        start: Block,
+        radius: Int,
+    ): ArrayList<Block> {
+        val blocks = ArrayList<Block>()
+        var x = start.getLocation().getX() - radius
+        while (x <= start.getLocation().getX() + radius) {
+            var y = start.getLocation().getY() - radius
+            while (y <= start.getLocation().getY() + radius) {
+                var z = start.getLocation().getZ() - radius
+                while (z <= start.getLocation().getZ() + radius) {
+                    val loc = Location(start.getWorld(), x, y, z)
+                    blocks.add(loc.getBlock())
+                    z++
+                }
+                y++
+            }
+            x++
+        }
+        return blocks
+    }
 
-	public static void PaintByTeam(Block block, Team team, Match match) {
-		if (block.getType() == team.getTeamColor().wool)
-			return;
+    @Synchronized
+    fun getTargetBlocks(
+        loc: Location,
+        r: Int,
+        loop: Boolean,
+        loopc: Int,
+        max: Int,
+    ): MutableList<Block?> {
+        val b0 = loc.getBlock()
+        val b1 = loc.add(1.0, 0.0, 0.0).getBlock()
+        val b2 = loc.add(0.0, 0.0, 1.0).getBlock()
+        val b3 = loc.add(-1.0, 0.0, 0.0).getBlock()
+        val b4 = loc.add(0.0, 0.0, -1.0).getBlock()
+        val b5 = loc.add(0.0, 1.0, 0.0).getBlock()
+        val b6 = loc.add(0.0, -1.0, 0.0).getBlock()
 
-		if (!(block.getType() == Material.AIR || block.getType() == Material.SHULKER_BOX
-				|| block.getType() == Material.IRON_BARS || block.getType() == Material.VINE
-				|| block.getType().toString().contains("SIGN") || block.getType().toString().contains("GLASS")
-				|| block.getType().toString().contains("CARPET") || block.getType().toString().contains("POWDER")
-				|| block.getType().toString().contains("FENCE") || block.getType().toString().contains("STAIR")
-				|| block.getType().toString().contains("PLATE") || block.getType() == Material.WATER
-				|| block.getType() == Material.OBSIDIAN || block.getType().toString().contains("SLAB"))) {
-			if (DataMgr.getBlockDataMap().containsKey(block)) {
-				PaintData data = DataMgr.getPaintDataFromBlock(block);
-				Team BTeam = data.team;
-				Team ATeam = team;
-				if (BTeam != ATeam) {
-					data.team = (ATeam);
-					BTeam.subtractPaintCount();
-					ATeam.addPaintCount();
-					match.getBlockUpdater().setBlock(block, ATeam.getTeamColor().wool);
-				}
-			} else {
-				team.addPaintCount();
-				PaintData data = new PaintData(block);
-				data.match = (match);
-				data.team = (team);
-				data.setOrigianlType(block.getType());
-				data.blockData = (block.getBlockData());
-				DataMgr.setPaintDataFromBlock(block, data);
-				match.getBlockUpdater().setBlock(block, team.getTeamColor().wool);
-			}
-		}
-	}
+        val tempList: MutableList<Block?> = ArrayList<Block?>()
 
-	public static ArrayList<Block> getCubeBlocks(Block start, int radius) {
-		ArrayList<Block> blocks = new ArrayList<>();
-		for (double x = start.getLocation().getX() - radius; x <= start.getLocation().getX() + radius; x++) {
-			for (double y = start.getLocation().getY() - radius; y <= start.getLocation().getY() + radius; y++) {
-				for (double z = start.getLocation().getZ() - radius; z <= start.getLocation().getZ() + radius; z++) {
-					Location loc = new Location(start.getWorld(), x, y, z);
-					blocks.add(loc.getBlock());
-				}
-			}
-		}
-		return blocks;
-	}
+        if (loopc == 0) tempList.add(b0)
+        tempList.add(b1)
+        tempList.add(b2)
+        tempList.add(b3)
+        tempList.add(b4)
 
-	public static synchronized List<Block> getTargetBlocks(Location loc, int r, boolean loop, int loopc, int max) {
+        if (loop) {
+            val random = Random()
+            val c = random.nextInt(r)
+            val b = false
+            var loopc2 = loopc
+            if (c == 0) tempList.addAll(getTargetBlocks(b1.getLocation(), r, false, loopc2, max))
+            if (c == 1) tempList.addAll(getTargetBlocks(b2.getLocation(), r, false, loopc2, max))
+            if (c == 2) tempList.addAll(getTargetBlocks(b3.getLocation(), r, false, loopc2, max))
+            if (c == 3) tempList.addAll(getTargetBlocks(b4.getLocation(), r, false, loopc2, max))
 
-		Block b0 = loc.getBlock();
-		Block b1 = loc.add(1, 0, 0).getBlock();
-		Block b2 = loc.add(0, 0, 1).getBlock();
-		Block b3 = loc.add(-1, 0, 0).getBlock();
-		Block b4 = loc.add(0, 0, -1).getBlock();
-		Block b5 = loc.add(0, 1, 0).getBlock();
-		Block b6 = loc.add(0, -1, 0).getBlock();
+            loopc2++
 
-		List<Block> tempList = new ArrayList<>();
+            tempList.addAll(getTargetBlocks(b5.getLocation(), r, false, loopc2, max))
+            tempList.addAll(getTargetBlocks(b6.getLocation(), r, false, loopc2, max))
+        }
+        return tempList
+    }
 
-		if (loopc == 0)
-			tempList.add(b0);
-		tempList.add(b1);
-		tempList.add(b2);
-		tempList.add(b3);
-		tempList.add(b4);
+    @Synchronized
+    fun generateSphere(
+        loc: Location,
+        r: Double,
+        h: Double,
+        hollow: Boolean,
+        sphere: Boolean,
+        plus_y: Double,
+        random: Int,
+    ): MutableList<Block> {
+        val circleblocks: MutableList<Block> = ArrayList<Block>()
+        val cx = loc.getX()
+        val cy = loc.getY()
+        val cz = loc.getZ()
 
-		if (loop) {
-			Random random = new Random();
-			int c = random.nextInt(r);
-			boolean b = false;
-			int loopc2 = loopc;
-			if (c == 0)
-				tempList.addAll(getTargetBlocks(b1.getLocation(), r, false, loopc2, max));
-			if (c == 1)
-				tempList.addAll(getTargetBlocks(b2.getLocation(), r, false, loopc2, max));
-			if (c == 2)
-				tempList.addAll(getTargetBlocks(b3.getLocation(), r, false, loopc2, max));
-			if (c == 3)
-				tempList.addAll(getTargetBlocks(b4.getLocation(), r, false, loopc2, max));
+        var i = 0
 
-			loopc2++;
+        var x = cx - r
+        while (x <= cx + r) {
+            var z = cz - r
+            while (z <= cz + r) {
+                var y = (if (sphere) cy - r else cy)
+                while (y < (if (sphere) cy + r else cy + h)) {
+                    val dist = (cx - x) * (cx - x) + (cz - z) * (cz - z) + (if (sphere) (cy - y) * (cy - y) else 0.0)
+                    if (dist < r * r && !(hollow && dist < (r - 1) * (r - 1))) {
+                        val l = Location(loc.getWorld(), x, y + plus_y, z)
+                        circleblocks.add(l.getWorld()!!.getBlockAt(l))
+                        if (random < i) {
+                            val ran = Random()
+                            val rani = ran.nextInt(2)
+                            if (rani == 0) return circleblocks
+                        }
+                        i++
+                    }
+                    y++
+                }
+                z++
+            }
+            x++
+        }
+        return circleblocks
+    }
 
-			tempList.addAll(getTargetBlocks(b5.getLocation(), r, false, loopc2, max));
-			tempList.addAll(getTargetBlocks(b6.getLocation(), r, false, loopc2, max));
-		}
-		return tempList;
+    fun paintInLine(
+        l1: Location,
+        l2: Location,
+        player: Player,
+    ) {
+        val xSlope = (l1.getBlockX() - l2.getBlockX()).toDouble()
+        val ySlope = (l1.getBlockY() - l2.getBlockY()) / xSlope
+        val zSlope = (l1.getBlockZ() - l2.getBlockZ()) / xSlope
+        var y = l1.getBlockY().toDouble()
+        var z = l1.getBlockZ().toDouble()
+        val interval = 1 / (if (abs(ySlope) > abs(zSlope)) ySlope else zSlope)
+        var x = l1.getBlockX().toDouble()
+        while (x - l1.getBlockX() < abs(xSlope)) {
+            var i = y.toInt()
+            while (i > 0) {
+                if (Location(player.getWorld(), x, i.toDouble(), z).getBlock().getType() != Material.AIR) {
+                    val random = Random()
+                    val r = random.nextInt(10)
+                    if (r == 0) {
+                        paint(Location(player.getWorld(), x, i.toDouble(), z), player, true)
+                    }
+                    break
+                }
+                i--
+            }
 
-	}
+            x += interval
+            y += ySlope
+            z += zSlope
+        }
+    }
 
-	public static synchronized List<Block> generateSphere(Location loc, double r, double h, boolean hollow,
-			boolean sphere, double plus_y, int random) {
-		List<Block> circleblocks = new ArrayList<>();
-		double cx = loc.getX();
-		double cy = loc.getY();
-		double cz = loc.getZ();
+    fun paintHightestBlock(
+        loc: Location,
+        player: Player,
+        randomb: Boolean,
+        inkrandom: Boolean,
+    ) {
+        var i = loc.getBlockY()
+        val x = loc.getBlockX()
+        val z = loc.getBlockZ()
+        while (i > 0) {
+            if (Location(player.getLocation().getWorld(), x.toDouble(), i.toDouble(), z.toDouble())
+                    .getBlock()
+                    .getType() != Material.AIR
+            ) {
+                val random = Random()
+                val r = random.nextInt(8)
+                if (r == 0 && randomb) {
+                    paint(
+                        Location(player.getLocation().getWorld(), x.toDouble(), i.toDouble(), z.toDouble()),
+                        player,
+                        inkrandom,
+                    )
+                }
+                if (!randomb) {
+                    paint(
+                        Location(player.getLocation().getWorld(), x.toDouble(), i.toDouble(), z.toDouble()),
+                        player,
+                        inkrandom,
+                    )
+                }
+                break
+            }
+            i--
+        }
+    }
 
-		int i = 0;
+    fun paintGlass(match: Match) {
+        // team0
+        var match = match
+        val blocks: MutableList<Block> = ArrayList<Block>()
+        val b0 =
+            match.mapData!!
+                .team0Loc!!
+                .getBlock()
+                .getRelative(BlockFace.DOWN)
+        blocks.add(b0)
+        blocks.add(b0.getRelative(BlockFace.EAST))
+        blocks.add(b0.getRelative(BlockFace.NORTH))
+        blocks.add(b0.getRelative(BlockFace.SOUTH))
+        blocks.add(b0.getRelative(BlockFace.WEST))
+        blocks.add(b0.getRelative(BlockFace.NORTH_EAST))
+        blocks.add(b0.getRelative(BlockFace.NORTH_WEST))
+        blocks.add(b0.getRelative(BlockFace.SOUTH_EAST))
+        blocks.add(b0.getRelative(BlockFace.SOUTH_WEST))
+        for (block in blocks) {
+            if (block.getType() == Material.WHITE_STAINED_GLASS) {
+                val data = PaintData(block)
+                data.match = (match)
+                data.team = (match.team0)
+                data.setOrigianlType(block.getType())
+                setPaintDataFromBlock(block, data)
+                SclatUtil.setBlockByNMS(block, match.team0!!.teamColor!!.glass!!, false)
+                // block.setType(match.team0.getTeamColor().glass);
+                match.team0!!.addPaintCount()
+            }
+        }
 
-		for (double x = cx - r; x <= cx + r; x++) {
-			for (double z = cz - r; z <= cz + r; z++) {
-				for (double y = (sphere ? cy - r : cy); y < (sphere ? cy + r : cy + h); y++) {
-					double dist = (cx - x) * (cx - x) + (cz - z) * (cz - z) + (sphere ? (cy - y) * (cy - y) : 0);
-					if (dist < r * r && !(hollow && dist < (r - 1) * (r - 1))) {
-						Location l = new Location(loc.getWorld(), x, y + plus_y, z);
-						circleblocks.add(l.getWorld().getBlockAt(l));
-						if (random < i) {
-							Random ran = new Random();
-							int rani = ran.nextInt(2);
-							if (rani == 0)
-								return circleblocks;
-						}
-						i++;
-					}
-				}
-			}
-		}
-		return circleblocks;
-	}
-
-	public static void PaintInLine(Location l1, Location l2, Player player) {
-		double xSlope = (l1.getBlockX() - l2.getBlockX());
-		double ySlope = (l1.getBlockY() - l2.getBlockY()) / xSlope;
-		double zSlope = (l1.getBlockZ() - l2.getBlockZ()) / xSlope;
-		double y = l1.getBlockY();
-		double z = l1.getBlockZ();
-		double interval = 1 / (Math.abs(ySlope) > Math.abs(zSlope) ? ySlope : zSlope);
-		for (double x = l1.getBlockX(); x - l1.getBlockX() < Math
-				.abs(xSlope); x += interval, y += ySlope, z += zSlope) {
-			int i = (int) y;
-			while (i > 0) {
-				if (new Location(player.getWorld(), x, i, z).getBlock().getType() != Material.AIR) {
-					Random random = new Random();
-					int r = random.nextInt(10);
-					if (r == 0) {
-						Paint(new Location(player.getWorld(), x, i, z), player, true);
-
-					}
-					break;
-				}
-				i--;
-			}
-
-		}
-	}
-
-	public static void PaintHightestBlock(Location loc, Player player, boolean randomb, boolean inkrandom) {
-		int i = loc.getBlockY();
-		int x = loc.getBlockX();
-		int z = loc.getBlockZ();
-		while (i > 0) {
-			if (new Location(player.getLocation().getWorld(), x, i, z).getBlock().getType() != Material.AIR) {
-				Random random = new Random();
-				int r = random.nextInt(8);
-				if (r == 0 && randomb) {
-					Paint(new Location(player.getLocation().getWorld(), x, i, z), player, inkrandom);
-				}
-				if (!randomb)
-					Paint(new Location(player.getLocation().getWorld(), x, i, z), player, inkrandom);
-				break;
-			}
-			i--;
-		}
-	}
-
-	public static void PaintGlass(Match match) {
-		// team0
-		List<Block> blocks = new ArrayList<>();
-		Block b0 = match.getMapData().getTeam0Loc().getBlock().getRelative(BlockFace.DOWN);
-		blocks.add(b0);
-		blocks.add(b0.getRelative(BlockFace.EAST));
-		blocks.add(b0.getRelative(BlockFace.NORTH));
-		blocks.add(b0.getRelative(BlockFace.SOUTH));
-		blocks.add(b0.getRelative(BlockFace.WEST));
-		blocks.add(b0.getRelative(BlockFace.NORTH_EAST));
-		blocks.add(b0.getRelative(BlockFace.NORTH_WEST));
-		blocks.add(b0.getRelative(BlockFace.SOUTH_EAST));
-		blocks.add(b0.getRelative(BlockFace.SOUTH_WEST));
-		for (Block block : blocks) {
-			if (block.getType().equals(Material.WHITE_STAINED_GLASS)) {
-				PaintData data = new PaintData(block);
-				data.match = (match);
-				data.team = (match.team0);
-				data.setOrigianlType(block.getType());
-				DataMgr.setPaintDataFromBlock(block, data);
-				SclatUtil.setBlockByNMS(block, match.team0.getTeamColor().glass, false);
-				// block.setType(match.team0.getTeamColor().glass);
-				match.team0.addPaintCount();
-			}
-		}
-
-		// team1
-		List<Block> blocks1 = new ArrayList<>();
-		Block b1 = match.getMapData().getTeam1Loc().getBlock().getRelative(BlockFace.DOWN);
-		blocks1.add(b1);
-		blocks1.add(b1.getRelative(BlockFace.EAST));
-		blocks1.add(b1.getRelative(BlockFace.NORTH));
-		blocks1.add(b1.getRelative(BlockFace.SOUTH));
-		blocks1.add(b1.getRelative(BlockFace.WEST));
-		blocks1.add(b1.getRelative(BlockFace.NORTH_EAST));
-		blocks1.add(b1.getRelative(BlockFace.NORTH_WEST));
-		blocks1.add(b1.getRelative(BlockFace.SOUTH_EAST));
-		blocks1.add(b1.getRelative(BlockFace.SOUTH_WEST));
-		for (Block block : blocks1) {
-			if (block.getType().equals(Material.WHITE_STAINED_GLASS)) {
-				PaintData data = new PaintData(block);
-				data.match = (match);
-				data.team = (match.team1);
-				data.setOrigianlType(block.getType());
-				DataMgr.setPaintDataFromBlock(block, data);
-				SclatUtil.setBlockByNMS(block, match.team1.getTeamColor().glass, false);
-				// block.setType(match.team1.getTeamColor().glass);
-				match.team1.addPaintCount();
-			}
-		}
-	}
-
+        // team1
+        val blocks1: MutableList<Block> = ArrayList<Block>()
+        val b1 =
+            match.mapData!!
+                .team1Loc!!
+                .getBlock()
+                .getRelative(BlockFace.DOWN)
+        blocks1.add(b1)
+        blocks1.add(b1.getRelative(BlockFace.EAST))
+        blocks1.add(b1.getRelative(BlockFace.NORTH))
+        blocks1.add(b1.getRelative(BlockFace.SOUTH))
+        blocks1.add(b1.getRelative(BlockFace.WEST))
+        blocks1.add(b1.getRelative(BlockFace.NORTH_EAST))
+        blocks1.add(b1.getRelative(BlockFace.NORTH_WEST))
+        blocks1.add(b1.getRelative(BlockFace.SOUTH_EAST))
+        blocks1.add(b1.getRelative(BlockFace.SOUTH_WEST))
+        for (block in blocks1) {
+            if (block.getType() == Material.WHITE_STAINED_GLASS) {
+                val data = PaintData(block)
+                data.match = (match)
+                data.team = (match.team1)
+                data.setOrigianlType(block.getType())
+                setPaintDataFromBlock(block, data)
+                SclatUtil.setBlockByNMS(block, match.team1!!.teamColor!!.glass!!, false)
+                // block.setType(match.team1.getTeamColor().glass);
+                match.team1!!.addPaintCount()
+            }
+        }
+    }
 }

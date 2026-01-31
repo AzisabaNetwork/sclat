@@ -124,8 +124,8 @@ object SwordMord {
                 for (i in 0..maxDist - 1) {
                     val pLocs = getSphere(vec, i.toDouble(), 20)
                     for (loc in pLocs) {
-                        PaintMgr.Paint(loc, player, false)
-                        PaintMgr.PaintHightestBlock(loc, player, false, false)
+                        PaintMgr.paint(loc, player, false)
+                        PaintMgr.paintHightestBlock(loc, player, false, false)
                     }
                 }
 
@@ -195,7 +195,7 @@ object SwordMord {
                             val eloc = p.eyeLocation
                             val vec = Vector(locvec.getX(), 0.0, locvec.getZ()).normalize()
                             val front = eloc.add(vec.getX() * 0.5, -0.9, vec.getZ() * 0.5)
-                            PaintMgr.PaintHightestBlock(front, p, false, true)
+                            PaintMgr.paintHightestBlock(front, p, false, true)
                         }
                     } catch (e: Exception) {
                         cancel()
@@ -355,7 +355,7 @@ object SwordMord {
     fun shootCounter(player: Player) {
         val quadroShootSpeed = 1.0
         if (player.gameMode == GameMode.SPECTATOR) return
-        PaintMgr.PaintHightestBlock(player.location, player, true, true)
+        PaintMgr.paintHightestBlock(player.location, player, true, true)
 
         val ball = player.launchProjectile<Snowball>(Snowball::class.java)
         (ball as CraftSnowball).handle.setItem(CraftItemStack.asNMSCopy(ItemStack(getPlayerData(player)!!.team!!.teamColor!!.wool!!)))
@@ -443,7 +443,7 @@ object SwordMord {
                         inkball!!.velocity = inkball!!.velocity.add(Vector(0.0, -0.1, 0.0))
                     }
                     // if(i != tick)
-                    if ((Random().nextInt(7)) == 0) PaintMgr.PaintHightestBlock(inkball!!.location, p, false, true)
+                    if ((Random().nextInt(7)) == 0) PaintMgr.paintHightestBlock(inkball!!.location, p, false, true)
                     if (inkball!!.isDead) cancel()
 
                     i++

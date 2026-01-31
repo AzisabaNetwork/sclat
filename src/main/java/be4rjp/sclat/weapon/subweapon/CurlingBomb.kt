@@ -128,7 +128,7 @@ object CurlingBomb {
 
                         if (as1.isOnGround) as1.velocity = aVec
 
-                        PaintMgr.PaintHightestBlock(as1l, player, false, true)
+                        PaintMgr.paintHightestBlock(as1l, player, false, true)
 
                         bloc = as1l.clone()
 
@@ -251,7 +251,7 @@ object CurlingBomb {
                                 while (i <= maxDist) {
                                     val pLocs: MutableList<Location> = getSphere(as1l, i.toDouble(), 20)
                                     for (loc in pLocs) {
-                                        PaintMgr.Paint(loc, player, false)
+                                        PaintMgr.paint(loc, player, false)
                                     }
                                     i++
                                 }

@@ -1,225 +1,473 @@
+package be4rjp.sclat.manager
 
-package be4rjp.sclat.manager;
-
-import be4rjp.dadadachecker.ClickType;
-import be4rjp.sclat.Sclat;
-import be4rjp.sclat.api.player.PlayerData;
-import be4rjp.sclat.data.DataMgr;
-import be4rjp.sclat.data.MainWeapon;
-import be4rjp.sclat.weapon.Blaster;
-import be4rjp.sclat.weapon.Brush;
-import be4rjp.sclat.weapon.Bucket;
-import be4rjp.sclat.weapon.Burst;
-import be4rjp.sclat.weapon.Kasa;
-import be4rjp.sclat.weapon.Roller;
-import be4rjp.sclat.weapon.Slosher;
-import org.bukkit.Material;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import static be4rjp.sclat.Sclat.conf;
+import be4rjp.dadadachecker.ClickType
+import be4rjp.sclat.Sclat
+import be4rjp.sclat.data.DataMgr.getPlayerData
+import be4rjp.sclat.data.DataMgr.setMainWeapon
+import be4rjp.sclat.data.MainWeapon
+import be4rjp.sclat.weapon.Blaster.ShootBlaster
+import be4rjp.sclat.weapon.Brush.ShootPaintRunnable
+import be4rjp.sclat.weapon.Bucket.ShootBucket
+import be4rjp.sclat.weapon.Burst.BurstCooltime
+import be4rjp.sclat.weapon.Kasa.shootKasa
+import be4rjp.sclat.weapon.Roller.shootPaintRunnable
+import be4rjp.sclat.weapon.Slosher.shootSlosher
+import org.bukkit.Material
+import org.bukkit.entity.Player
+import org.bukkit.inventory.ItemStack
 
 /**
  *
  * @author Be4rJP
  */
-public class MainWeaponMgr {
-	public synchronized static void SetupMainWeapon() {
-		for (String weaponname : conf.getWeaponConfig().getConfigurationSection("MainWeapon").getKeys(false)) {
-			String WeaponType = conf.getWeaponConfig().getString("MainWeapon." + weaponname + ".WeaponType");
-			Material WeaponMaterial = Material
-					.getMaterial(conf.getWeaponConfig().getString("MainWeapon." + weaponname + ".WeaponMaterial"));
-			double random = conf.getWeaponConfig().getDouble("MainWeapon." + weaponname + ".ShootRandom");
-			int distick = conf.getWeaponConfig().getInt("MainWeapon." + weaponname + ".ShootDistance");
-			double shootspeed = conf.getWeaponConfig().getDouble("MainWeapon." + weaponname + ".ShootSpeed");
-			int shoottick = conf.getWeaponConfig().getInt("MainWeapon." + weaponname + ".ShootTick");
-			int paintrandom = conf.getWeaponConfig().getInt("MainWeapon." + weaponname + ".PaintRandom");
-			double maxpaintdis = conf.getWeaponConfig().getInt("MainWeapon." + weaponname + ".MaxPaintDistance");
-			float needink = (float) conf.getWeaponConfig().getDouble("MainWeapon." + weaponname + ".NeedInk");
-			double damage = conf.getWeaponConfig().getDouble("MainWeapon." + weaponname + ".Damage");
-			int maxcharge = conf.getWeaponConfig().getInt("MainWeapon." + weaponname + ".MaxCharge");
-			int rollershootQuantity = conf.getWeaponConfig()
-					.getInt("MainWeapon." + weaponname + ".RollerShootQuantity");
-			float usinwalkspeed = (float) conf.getWeaponConfig()
-					.getDouble("MainWeapon." + weaponname + ".UsingWalkSpeed");
-			int rollerWidth = conf.getWeaponConfig().getInt("MainWeapon." + weaponname + ".RollerWidth");
-			boolean tatehuri = conf.getWeaponConfig().getBoolean("MainWeapon." + weaponname + ".RollerTatehuri");
-			double rollerdamage = conf.getWeaponConfig().getDouble("MainWeapon." + weaponname + ".RollerDamage");
-			float rollerneedink = (float) conf.getWeaponConfig()
-					.getDouble("MainWeapon." + weaponname + ".RollerNeedInk");
-			double exh = 0;
-			if (conf.getWeaponConfig().contains("MainWeapon." + weaponname + ".BlasterExHankei"))
-				exh = conf.getWeaponConfig().getInt("MainWeapon." + weaponname + ".BlasterExHankei");
-			int delay = conf.getWeaponConfig().getInt("MainWeapon." + weaponname + ".Delay");
-			int cooltime = conf.getWeaponConfig().getInt("MainWeapon." + weaponname + ".Cooltime");
-			double exd = conf.getWeaponConfig().getDouble("MainWeapon." + weaponname + ".BlasterExDamage");
-			boolean hude = conf.getWeaponConfig().getBoolean("MainWeapon." + weaponname + ".IsBrush");
-			double huder = conf.getWeaponConfig().getDouble("MainWeapon." + weaponname + ".BrushRandom");
-			boolean man = false;
-			if (conf.getWeaponConfig().contains("MainWeapon." + weaponname + ".IsManeuver"))
-				man = conf.getWeaponConfig().getBoolean("MainWeapon." + weaponname + ".IsManeuver");
-			int slST = 1;
-			if (conf.getWeaponConfig().contains("MainWeapon." + weaponname + ".SlidingShootTick"))
-				slST = conf.getWeaponConfig().getInt("MainWeapon." + weaponname + ".SlidingShootTick");
+object MainWeaponMgr {
+    @Synchronized
+    fun SetupMainWeapon() {
+        for (weaponname in Sclat.Companion.conf!!
+            .weaponConfig!!
+            .getConfigurationSection("MainWeapon")!!
+            .getKeys(false)) {
+            val WeaponType =
+                Sclat.Companion.conf!!
+                    .weaponConfig!!
+                    .getString("MainWeapon." + weaponname + ".WeaponType")
+            val WeaponMaterial =
+                Material
+                    .getMaterial(
+                        Sclat.Companion.conf!!
+                            .weaponConfig!!
+                            .getString("MainWeapon." + weaponname + ".WeaponMaterial")!!,
+                    )
+            val random =
+                Sclat.Companion.conf!!
+                    .weaponConfig!!
+                    .getDouble("MainWeapon." + weaponname + ".ShootRandom")
+            val distick =
+                Sclat.Companion.conf!!
+                    .weaponConfig!!
+                    .getInt("MainWeapon." + weaponname + ".ShootDistance")
+            val shootspeed =
+                Sclat.Companion.conf!!
+                    .weaponConfig!!
+                    .getDouble("MainWeapon." + weaponname + ".ShootSpeed")
+            val shoottick =
+                Sclat.Companion.conf!!
+                    .weaponConfig!!
+                    .getInt("MainWeapon." + weaponname + ".ShootTick")
+            val paintrandom =
+                Sclat.Companion.conf!!
+                    .weaponConfig!!
+                    .getInt("MainWeapon." + weaponname + ".PaintRandom")
+            val maxpaintdis =
+                Sclat.Companion.conf!!
+                    .weaponConfig!!
+                    .getInt("MainWeapon." + weaponname + ".MaxPaintDistance")
+                    .toDouble()
+            val needink =
+                Sclat.Companion.conf!!
+                    .weaponConfig!!
+                    .getDouble("MainWeapon." + weaponname + ".NeedInk")
+                    .toFloat()
+            val damage =
+                Sclat.Companion.conf!!
+                    .weaponConfig!!
+                    .getDouble("MainWeapon." + weaponname + ".Damage")
+            val maxcharge =
+                Sclat.Companion.conf!!
+                    .weaponConfig!!
+                    .getInt("MainWeapon." + weaponname + ".MaxCharge")
+            val rollershootQuantity =
+                Sclat.Companion.conf!!
+                    .weaponConfig!!
+                    .getInt("MainWeapon." + weaponname + ".RollerShootQuantity")
+            val usinwalkspeed =
+                Sclat.Companion.conf!!
+                    .weaponConfig!!
+                    .getDouble("MainWeapon." + weaponname + ".UsingWalkSpeed")
+                    .toFloat()
+            val rollerWidth =
+                Sclat.Companion.conf!!
+                    .weaponConfig!!
+                    .getInt("MainWeapon." + weaponname + ".RollerWidth")
+            val tatehuri =
+                Sclat.Companion.conf!!
+                    .weaponConfig!!
+                    .getBoolean("MainWeapon." + weaponname + ".RollerTatehuri")
+            val rollerdamage =
+                Sclat.Companion.conf!!
+                    .weaponConfig!!
+                    .getDouble("MainWeapon." + weaponname + ".RollerDamage")
+            val rollerneedink =
+                Sclat.Companion.conf!!
+                    .weaponConfig!!
+                    .getDouble("MainWeapon." + weaponname + ".RollerNeedInk")
+                    .toFloat()
+            var exh = 0.0
+            if (Sclat.Companion.conf!!
+                    .weaponConfig!!
+                    .contains("MainWeapon." + weaponname + ".BlasterExHankei")
+            ) {
+                exh =
+                    Sclat.Companion.conf!!
+                        .weaponConfig!!
+                        .getInt("MainWeapon." + weaponname + ".BlasterExHankei")
+                        .toDouble()
+            }
+            val delay =
+                Sclat.Companion.conf!!
+                    .weaponConfig!!
+                    .getInt("MainWeapon." + weaponname + ".Delay")
+            val cooltime =
+                Sclat.Companion.conf!!
+                    .weaponConfig!!
+                    .getInt("MainWeapon." + weaponname + ".Cooltime")
+            val exd =
+                Sclat.Companion.conf!!
+                    .weaponConfig!!
+                    .getDouble("MainWeapon." + weaponname + ".BlasterExDamage")
+            val hude =
+                Sclat.Companion.conf!!
+                    .weaponConfig!!
+                    .getBoolean("MainWeapon." + weaponname + ".IsBrush")
+            val huder =
+                Sclat.Companion.conf!!
+                    .weaponConfig!!
+                    .getDouble("MainWeapon." + weaponname + ".BrushRandom")
+            var man = false
+            if (Sclat.Companion.conf!!
+                    .weaponConfig!!
+                    .contains("MainWeapon." + weaponname + ".IsManeuver")
+            ) {
+                man =
+                    Sclat.Companion.conf!!
+                        .weaponConfig!!
+                        .getBoolean("MainWeapon." + weaponname + ".IsManeuver")
+            }
+            var slST = 1
+            if (Sclat.Companion.conf!!
+                    .weaponConfig!!
+                    .contains("MainWeapon." + weaponname + ".SlidingShootTick")
+            ) {
+                slST =
+                    Sclat.Companion.conf!!
+                        .weaponConfig!!
+                        .getInt("MainWeapon." + weaponname + ".SlidingShootTick")
+            }
 
-			double cr = 1.0;
-			if (conf.getWeaponConfig().contains("MainWeapon." + weaponname + ".ChargeRatio"))
-				cr = conf.getWeaponConfig().getDouble("MainWeapon." + weaponname + ".ChargeRatio");
+            var cr = 1.0
+            if (Sclat.Companion.conf!!
+                    .weaponConfig!!
+                    .contains("MainWeapon." + weaponname + ".ChargeRatio")
+            ) {
+                cr =
+                    Sclat.Companion.conf!!
+                        .weaponConfig!!
+                        .getDouble("MainWeapon." + weaponname + ".ChargeRatio")
+            }
 
-			boolean ck = false;
-			if (conf.getWeaponConfig().contains("MainWeapon." + weaponname + ".CanChargeKeep"))
-				ck = conf.getWeaponConfig().getBoolean("MainWeapon." + weaponname + ".CanChargeKeep");
+            var ck = false
+            if (Sclat.Companion.conf!!
+                    .weaponConfig!!
+                    .contains("MainWeapon." + weaponname + ".CanChargeKeep")
+            ) {
+                ck =
+                    Sclat.Companion.conf!!
+                        .weaponConfig!!
+                        .getBoolean("MainWeapon." + weaponname + ".CanChargeKeep")
+            }
 
-			int ckt = 0;
-			if (conf.getWeaponConfig().contains("MainWeapon." + weaponname + ".ChargeKeepingTime"))
-				ckt = conf.getWeaponConfig().getInt("MainWeapon." + weaponname + ".ChargeKeepingTime");
+            var ckt = 0
+            if (Sclat.Companion.conf!!
+                    .weaponConfig!!
+                    .contains("MainWeapon." + weaponname + ".ChargeKeepingTime")
+            ) {
+                ckt =
+                    Sclat.Companion.conf!!
+                        .weaponConfig!!
+                        .getInt("MainWeapon." + weaponname + ".ChargeKeepingTime")
+            }
 
-			boolean hc = false;
-			if (conf.getWeaponConfig().contains("MainWeapon." + weaponname + ".HanbunChargeKeep"))
-				hc = conf.getWeaponConfig().getBoolean("MainWeapon." + weaponname + ".HanbunChargeKeep");
+            var hc = false
+            if (Sclat.Companion.conf!!
+                    .weaponConfig!!
+                    .contains("MainWeapon." + weaponname + ".HanbunChargeKeep")
+            ) {
+                hc =
+                    Sclat.Companion.conf!!
+                        .weaponConfig!!
+                        .getBoolean("MainWeapon." + weaponname + ".HanbunChargeKeep")
+            }
 
-			float sn = 0.2F;
-			if (conf.getWeaponConfig().contains("MainWeapon." + weaponname + ".SlideNeedInk"))
-				sn = (float) (conf.getWeaponConfig().getDouble("MainWeapon." + weaponname + ".SlideNeedInk"));
+            var sn = 0.2f
+            if (Sclat.Companion.conf!!
+                    .weaponConfig!!
+                    .contains("MainWeapon." + weaponname + ".SlideNeedInk")
+            ) {
+                sn =
+                    (
+                        Sclat.Companion.conf!!
+                            .weaponConfig!!
+                            .getDouble("MainWeapon." + weaponname + ".SlideNeedInk")
+                        ).toFloat()
+            }
 
-			MainWeapon mw = new MainWeapon(weaponname);
-			mw.weaponType = (WeaponType);
-			ItemStack is = new ItemStack(WeaponMaterial);
-			ItemMeta itemMeta = is.getItemMeta();
-			itemMeta.setDisplayName(weaponname);
-			is.setItemMeta(itemMeta);
-			mw.setWeaponItemStack(is);
-			mw.random = (random);
-			mw.setDistanceTick(distick);
-			mw.setShootSpeed(shootspeed);
-			mw.setShootTick(shoottick);
-			mw.setPaintRandom(paintrandom);
-			mw.setMaxPaintDis(maxpaintdis);
-			mw.setNeedInk(needink);
-			mw.damage = (damage);
-			mw.setMaxCharge(maxcharge);
-			mw.setRollerShootQuantity(rollershootQuantity);
-			mw.setUsingWalkSpeed(usinwalkspeed);
-			mw.rollerWidth = (rollerWidth);
-			mw.setRollerDamage(rollerdamage);
-			mw.setRollerNeedInk(rollerneedink);
-			mw.setCanTatehuri(tatehuri);
-			mw.setBlasterExHankei(exh);
-			mw.delay = (delay);
-			mw.setCoolTime(cooltime);
-			mw.setBlasterExDamage(exd);
-			mw.isHude = (hude);
-			mw.setHudeRandom(huder);
-			mw.isManeuver = (man);
-			mw.setSlidingShootTick(slST);
-			mw.setChargeRatio(cr);
-			mw.setCanChargeKeep(ck);
-			mw.chargeKeepingTime = (ckt);
-			mw.setHanbunCharge(hc);
-			mw.slideNeedINK = (sn);
+            val mw = MainWeapon(weaponname)
+            mw.weaponType = (WeaponType)
+            val `is` = ItemStack(WeaponMaterial!!)
+            val itemMeta = `is`.getItemMeta()
+            itemMeta!!.setDisplayName(weaponname)
+            `is`.setItemMeta(itemMeta)
+            mw.setWeaponItemStack(`is`)
+            mw.random = (random)
+            mw.distanceTick = distick
+            mw.shootSpeed = shootspeed
+            mw.shootTick = shoottick
+            mw.paintRandom = paintrandom
+            mw.maxPaintDis = maxpaintdis
+            mw.needInk = needink
+            mw.damage = (damage)
+            mw.maxCharge = maxcharge
+            mw.rollerShootQuantity = rollershootQuantity
+            mw.usingWalkSpeed = usinwalkspeed
+            mw.rollerWidth = (rollerWidth)
+            mw.rollerDamage = rollerdamage
+            mw.rollerNeedInk = rollerneedink
+            mw.canTatehuri = tatehuri
+            mw.blasterExHankei = exh
+            mw.delay = (delay)
+            mw.coolTime = cooltime
+            mw.blasterExDamage = exd
+            mw.isHude = (hude)
+            mw.hudeRandom = huder
+            mw.isManeuver = (man)
+            mw.slidingShootTick = slST
+            mw.chargeRatio = cr
+            mw.canChargeKeep = ck
+            mw.chargeKeepingTime = (ckt)
+            mw.hanbunCharge = hc
+            mw.slideNeedINK = (sn)
 
-			if (conf.getWeaponConfig().contains("MainWeapon." + weaponname + ".SPRate"))
-				mw.setSPRate(conf.getWeaponConfig().getDouble("MainWeapon." + weaponname + ".SPRate"));
+            if (Sclat.Companion.conf!!
+                    .weaponConfig!!
+                    .contains("MainWeapon." + weaponname + ".SPRate")
+            ) {
+                mw.sPRate =
+                    Sclat.Companion.conf!!
+                        .weaponConfig!!
+                        .getDouble("MainWeapon." + weaponname + ".SPRate")
+            }
 
-			if (conf.getWeaponConfig().contains("MainWeapon." + weaponname + ".MaxRandom"))
-				mw.maxRandom = (conf.getWeaponConfig().getDouble("MainWeapon." + weaponname + ".MaxRandom"));
+            if (Sclat.Companion.conf!!
+                    .weaponConfig!!
+                    .contains("MainWeapon." + weaponname + ".MaxRandom")
+            ) {
+                mw.maxRandom =
+                    (
+                        Sclat.Companion.conf!!
+                            .weaponConfig!!
+                            .getDouble("MainWeapon." + weaponname + ".MaxRandom")
+                        )
+            }
 
-			if (conf.getWeaponConfig().contains("MainWeapon." + weaponname + ".MaxRandomCount"))
-				mw.maxRandomCount = (conf.getWeaponConfig().getInt("MainWeapon." + weaponname + ".MaxRandomCount"));
+            if (Sclat.Companion.conf!!
+                    .weaponConfig!!
+                    .contains("MainWeapon." + weaponname + ".MaxRandomCount")
+            ) {
+                mw.maxRandomCount =
+                    (
+                        Sclat.Companion.conf!!
+                            .weaponConfig!!
+                            .getInt("MainWeapon." + weaponname + ".MaxRandomCount")
+                        )
+            }
 
-			if (conf.getWeaponConfig().contains("MainWeapon." + weaponname + ".Scope"))
-				mw.setScope(conf.getWeaponConfig().getBoolean("MainWeapon." + weaponname + ".Scope"));
+            if (Sclat.Companion.conf!!
+                    .weaponConfig!!
+                    .contains("MainWeapon." + weaponname + ".Scope")
+            ) {
+                mw.scope =
+                    Sclat.Companion.conf!!
+                        .weaponConfig!!
+                        .getBoolean("MainWeapon." + weaponname + ".Scope")
+            }
 
-			if (conf.getWeaponConfig().contains("MainWeapon." + weaponname + ".DecreaseRate"))// チャージャーの非適性ダメージ減少率
-				mw.setDecreaseRate(conf.getWeaponConfig().getDouble("MainWeapon." + weaponname + ".DecreaseRate"));
+            if (Sclat.Companion.conf!!
+                    .weaponConfig!!
+                    .contains("MainWeapon." + weaponname + ".DecreaseRate")
+            ) {
+                // チャージャーの非適性ダメージ減少率
+                mw.decreaseRate =
+                    Sclat.Companion.conf!!
+                        .weaponConfig!!
+                        .getDouble("MainWeapon." + weaponname + ".DecreaseRate")
+            }
 
-			if (conf.getWeaponConfig().contains("MainWeapon." + weaponname + ".AppDistance"))// チャージャーの非適性距離
-				mw.setAppDistance(conf.getWeaponConfig().getInt("MainWeapon." + weaponname + ".AppDistance"));
+            if (Sclat.Companion.conf!!
+                    .weaponConfig!!
+                    .contains("MainWeapon." + weaponname + ".AppDistance")
+            ) {
+                // チャージャーの非適性距離
+                mw.appDistance =
+                    Sclat.Companion.conf!!
+                        .weaponConfig!!
+                        .getInt("MainWeapon." + weaponname + ".AppDistance")
+            }
 
-			if (conf.getWeaponConfig().contains("MainWeapon." + weaponname + ".Money"))
-				mw.money = (conf.getWeaponConfig().getInt("MainWeapon." + weaponname + ".Money"));
-			else
-				mw.money = (0);
+            if (Sclat.Companion.conf!!
+                    .weaponConfig!!
+                    .contains("MainWeapon." + weaponname + ".Money")
+            ) {
+                mw.money =
+                    (
+                        Sclat.Companion.conf!!
+                            .weaponConfig!!
+                            .getInt("MainWeapon." + weaponname + ".Money")
+                        )
+            } else {
+                mw.money = (0)
+            }
 
-			if (conf.getWeaponConfig().contains("MainWeapon." + weaponname + ".Level"))
-				mw.level = (conf.getWeaponConfig().getInt("MainWeapon." + weaponname + ".Level"));
-			else
-				mw.level = (0);
+            if (Sclat.Companion.conf!!
+                    .weaponConfig!!
+                    .contains("MainWeapon." + weaponname + ".Level")
+            ) {
+                mw.level =
+                    (
+                        Sclat.Companion.conf!!
+                            .weaponConfig!!
+                            .getInt("MainWeapon." + weaponname + ".Level")
+                        )
+            } else {
+                mw.level = (0)
+            }
 
-			if (conf.getWeaponConfig().contains("MainWeapon." + weaponname + ".InHoldWalkSpeed"))
-				mw.setInHoldSpeed(
-						(float) conf.getWeaponConfig().getDouble("MainWeapon." + weaponname + ".InHoldWalkSpeed"));
-			else
-				mw.setInHoldSpeed((float) conf.config.getDouble("PlayerWalkSpeed"));
+            if (Sclat.Companion.conf!!
+                    .weaponConfig!!
+                    .contains("MainWeapon." + weaponname + ".InHoldWalkSpeed")
+            ) {
+                mw.inHoldSpeed =
+                    Sclat.Companion.conf!!
+                        .weaponConfig!!
+                        .getDouble("MainWeapon." + weaponname + ".InHoldWalkSpeed")
+                        .toFloat()
+            } else {
+                mw.inHoldSpeed =
+                    Sclat.Companion.conf!!
+                        .config!!
+                        .getDouble("PlayerWalkSpeed")
+                        .toFloat()
+            }
 
-			if (conf.getWeaponConfig().contains("MainWeapon." + weaponname + ".IsLootBox")) {// ガチャ武器用
-				mw.islootbox = (conf.getWeaponConfig().getBoolean("MainWeapon." + weaponname + ".IsLootBox"));
-			}
-			if (conf.getWeaponConfig().contains("MainWeapon." + weaponname + ".LootPro")) {// ガチャ武器用排出率
-				mw.lootpro = (conf.getWeaponConfig().getDouble("MainWeapon." + weaponname + ".LootPro"));
-			}
-			if (conf.getWeaponConfig().contains("MainWeapon." + weaponname + ".IsSwapper")) {// スワッパ―判別
-				mw.setIsSwap(conf.getWeaponConfig().getBoolean("MainWeapon." + weaponname + ".IsSwapper"));
-			}
-			if (conf.getWeaponConfig().contains("MainWeapon." + weaponname + ".SwapWeapon")) {// スワッパ―スワップ先
-				mw.swap = (conf.getWeaponConfig().getString("MainWeapon." + weaponname + ".SwapWeapon"));
-			}
-			DataMgr.setMainWeapon(weaponname, mw);
-		}
-	}
+            if (Sclat.Companion.conf!!
+                    .weaponConfig!!
+                    .contains("MainWeapon." + weaponname + ".IsLootBox")
+            ) { // ガチャ武器用
+                mw.islootbox =
+                    (
+                        Sclat.Companion.conf!!
+                            .weaponConfig!!
+                            .getBoolean("MainWeapon." + weaponname + ".IsLootBox")
+                        )
+            }
+            if (Sclat.Companion.conf!!
+                    .weaponConfig!!
+                    .contains("MainWeapon." + weaponname + ".LootPro")
+            ) { // ガチャ武器用排出率
+                mw.lootpro = (
+                    Sclat.Companion.conf!!
+                        .weaponConfig!!
+                        .getDouble("MainWeapon." + weaponname + ".LootPro")
+                    )
+            }
+            if (Sclat.Companion.conf!!
+                    .weaponConfig!!
+                    .contains("MainWeapon." + weaponname + ".IsSwapper")
+            ) { // スワッパ―判別
+                mw.setIsSwap(
+                    Sclat.Companion.conf!!
+                        .weaponConfig!!
+                        .getBoolean("MainWeapon." + weaponname + ".IsSwapper"),
+                )
+            }
+            if (Sclat.Companion.conf!!
+                    .weaponConfig!!
+                    .contains("MainWeapon." + weaponname + ".SwapWeapon")
+            ) { // スワッパ―スワップ先
+                mw.swap = (
+                    Sclat.Companion.conf!!
+                        .weaponConfig!!
+                        .getString("MainWeapon." + weaponname + ".SwapWeapon")
+                    )
+            }
+            setMainWeapon(weaponname, mw)
+        }
+    }
 
-	public static boolean equalWeapon(Player player) {
-		try {
-			PlayerData data = DataMgr.getPlayerData(player);
-			String wname = data.weaponClass.mainWeapon.getWeaponIteamStack().getItemMeta().getDisplayName();
-			if (player.getInventory().getItemInMainHand().getItemMeta().getDisplayName() == null)
-				return false;
-			String itemname = player.getInventory().getItemInMainHand().getItemMeta().getDisplayName();
-			if (itemname.length() >= wname.length())
-				return wname.equals(itemname.substring(0, wname.length()));
-			return false;
-		} catch (Exception e) {
-			return false;
-		}
-	}
+    fun equalWeapon(player: Player): Boolean {
+        try {
+            val data = getPlayerData(player)
+            val wname =
+                data!!
+                    .weaponClass!!
+                    .mainWeapon!!
+                    .weaponIteamStack!!
+                    .getItemMeta()!!
+                    .getDisplayName()
+            if (player
+                    .getInventory()
+                    .getItemInMainHand()
+                    .getItemMeta()
+                    ?.getDisplayName() == null
+            ) {
+                return false
+            }
+            val itemname =
+                player
+                    .getInventory()
+                    .getItemInMainHand()
+                    .getItemMeta()!!
+                    .getDisplayName()
+            if (itemname.length >= wname.length) return wname == itemname.substring(0, wname.length)
+            return false
+        } catch (e: Exception) {
+            return false
+        }
+    }
 
-	public static void UseMainWeapon(Player player) {
-		if (equalWeapon(player)) {
+    fun UseMainWeapon(player: Player) {
+        if (equalWeapon(player)) {
+            Sclat.dadadaCheckerAPI!!.fireClickEvent(player)
 
-			Sclat.dadadaCheckerAPI.fireClickEvent(player);
+            val clickType = Sclat.dadadaCheckerAPI!!.getPlayerClickType(player)
 
-			ClickType clickType = Sclat.dadadaCheckerAPI.getPlayerClickType(player);
-
-			PlayerData data = DataMgr.getPlayerData(player);
-			if (data.canCharge)
-				data.tick = 0;
-			if (!data.weaponClass.mainWeapon.weaponType.equals("Shooter")
-					&& !data.weaponClass.mainWeapon.weaponType.equals("Blaster"))
-				data.isHolding = (true);
-			if (data.weaponClass.mainWeapon.weaponType.equals("Blaster"))
-				Blaster.ShootBlaster(player);
-			if (data.weaponClass.mainWeapon.weaponType.equals("Burst"))
-				Burst.BurstCooltime(player);
-			if (data.weaponClass.mainWeapon.weaponType.equals("Roller")) {
-				if (data.weaponClass.mainWeapon.isHude) {
-					if (data.canShoot || clickType == ClickType.RENDA) {
-						data.canShoot = (false);
-						Brush.ShootPaintRunnable(player);
-					}
-				} else {
-					if (data.canShoot) {
-						data.canShoot = (false);
-						Roller.shootPaintRunnable(player);
-					}
-				}
-			}
-			if (data.weaponClass.mainWeapon.weaponType.equals("Bucket"))
-				Bucket.ShootBucket(player);
-			if (data.weaponClass.mainWeapon.weaponType.equals("Slosher"))
-				Slosher.shootSlosher(player);
-			if (data.weaponClass.mainWeapon.weaponType.equals("Kasa")
-					|| data.weaponClass.mainWeapon.weaponType.equals("Camping"))
-				Kasa.shootKasa(player);
-		}
-	}
+            val data = getPlayerData(player)
+            if (data!!.canCharge) data.tick = 0
+            if (data.weaponClass!!.mainWeapon!!.weaponType != "Shooter" && data.weaponClass!!.mainWeapon!!.weaponType != "Blaster") {
+                data.isHolding =
+                    true
+            }
+            if (data.weaponClass!!.mainWeapon!!.weaponType == "Blaster") ShootBlaster(player)
+            if (data.weaponClass!!.mainWeapon!!.weaponType == "Burst") BurstCooltime(player)
+            if (data.weaponClass!!.mainWeapon!!.weaponType == "Roller") {
+                if (data.weaponClass!!.mainWeapon!!.isHude) {
+                    if (data.canShoot || clickType == ClickType.RENDA) {
+                        data.canShoot = false
+                        ShootPaintRunnable(player)
+                    }
+                } else {
+                    if (data.canShoot) {
+                        data.canShoot = false
+                        shootPaintRunnable(player)
+                    }
+                }
+            }
+            if (data.weaponClass!!.mainWeapon!!.weaponType == "Bucket") ShootBucket(player)
+            if (data.weaponClass!!.mainWeapon!!.weaponType == "Slosher") shootSlosher(player)
+            if (data.weaponClass!!.mainWeapon!!.weaponType == "Kasa" ||
+                data.weaponClass!!.mainWeapon!!.weaponType == "Camping"
+            ) {
+                shootKasa(player)
+            }
+        }
+    }
 }

@@ -1,488 +1,658 @@
+package be4rjp.sclat.manager
 
-package be4rjp.sclat.manager;
-
-import be4rjp.sclat.Sclat;
-import be4rjp.sclat.VariablesKt;
-import be4rjp.sclat.api.SclatUtil;
-import be4rjp.sclat.api.Sphere;
-import be4rjp.sclat.api.player.PlayerData;
-import be4rjp.sclat.data.DataMgr;
-import be4rjp.sclat.weapon.Gear;
-import be4rjp.sclat.weapon.spweapon.SuperArmor;
-import java.util.List;
-import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.ChatMessageType;
-import net.md_5.bungee.api.chat.TextComponent;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
-import org.bukkit.Particle;
-import org.bukkit.Sound;
-import org.bukkit.entity.Item;
-import org.bukkit.entity.Player;
-import org.bukkit.potion.PotionEffectType;
-import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.util.Vector;
+import be4rjp.sclat.Sclat
+import be4rjp.sclat.api.SclatUtil.createInkExplosionEffect
+import be4rjp.sclat.api.Sphere.getSphere
+import be4rjp.sclat.data.DataMgr.getPlayerData
+import be4rjp.sclat.plugin
+import be4rjp.sclat.weapon.Gear
+import be4rjp.sclat.weapon.Gear.getGearInfluence
+import be4rjp.sclat.weapon.spweapon.SuperArmor.setArmor
+import net.md_5.bungee.api.ChatColor
+import net.md_5.bungee.api.ChatMessageType
+import net.md_5.bungee.api.chat.TextComponent
+import org.bukkit.GameMode
+import org.bukkit.Location
+import org.bukkit.Particle
+import org.bukkit.Sound
+import org.bukkit.entity.Player
+import org.bukkit.potion.PotionEffectType
+import org.bukkit.scheduler.BukkitRunnable
+import org.bukkit.util.Vector
 
 /**
  *
  * @author Be4rJP
  */
-public class DeathMgr {
-	public static void PlayerDeathRunnable(Player target, Player shooter, String type) {
+object DeathMgr {
+    fun playerDeathRunnable(
+        target: Player,
+        shooter: Player,
+        type: String,
+    ) {
+        getPlayerData(target)!!.isDead = (true)
+        target.setGameMode(GameMode.SPECTATOR)
 
-		DataMgr.getPlayerData(target).isDead = (true);
-		target.setGameMode(GameMode.SPECTATOR);
+        getPlayerData(target)!!.poison = (false)
 
-		DataMgr.getPlayerData(target).poison = (false);
+        val drop1 =
+            target.getWorld().dropItem(
+                target.getEyeLocation(),
+                getPlayerData(target)!!.weaponClass!!.mainWeapon!!.weaponIteamStack!!,
+            )
+        val drop2 =
+            target.getWorld().dropItem(
+                target.getEyeLocation(),
+                getPlayerData(target)!!.team!!.teamColor!!.bougu!!,
+            )
+        val random = 0.4
+        drop1.setVelocity(
+            Vector(Math.random() * random - random / 2, random * 2 / 3, Math.random() * random - random / 2),
+        )
+        drop2.setVelocity(
+            Vector(Math.random() * random - random / 2, random * 2 / 3, Math.random() * random - random / 2),
+        )
 
-		Item drop1 = target.getWorld().dropItem(target.getEyeLocation(),
-				DataMgr.getPlayerData(target).weaponClass.mainWeapon.getWeaponIteamStack());
-		Item drop2 = target.getWorld().dropItem(target.getEyeLocation(),
-				DataMgr.getPlayerData(target).team.getTeamColor().bougu);
-		final double random = 0.4;
-		drop1.setVelocity(
-				new Vector(Math.random() * random - random / 2, random * 2 / 3, Math.random() * random - random / 2));
-		drop2.setVelocity(
-				new Vector(Math.random() * random - random / 2, random * 2 / 3, Math.random() * random - random / 2));
+        createInkExplosionEffect(target.getEyeLocation().add(0.0, -1.0, 0.0), 3.0, 30, shooter)
 
-		SclatUtil.createInkExplosionEffect(target.getEyeLocation().add(0, -1, 0), 3, 30, shooter);
+        if (getGearInfluence(target, Gear.Type.PENA_DOWN) == 1.0) {
+            getPlayerData(target)!!.sPGauge = ((getPlayerData(target)!!.sPGauge * 0.7).toInt())
+        }
 
-		if (Gear.getGearInfluence(target, Gear.Type.PENA_DOWN) == 1.0) {
-			DataMgr.getPlayerData(target).sPGauge = ((int) (DataMgr.getPlayerData(target).sPGauge * 0.7));
-		}
+        // 半径
+        val maxDist = 3.0
 
-		// 半径
-		double maxDist = 3;
+        // 塗る
+        var i = 0
+        while (i <= maxDist) {
+            val pLocs = getSphere(target.getLocation(), i.toDouble(), 20)
+            for (loc in pLocs) {
+                PaintMgr.paint(loc, shooter, false)
+            }
+            i++
+        }
 
-		// 塗る
-		for (int i = 0; i <= maxDist; i++) {
-			List<Location> p_locs = Sphere.getSphere(target.getLocation(), i, 20);
-			for (Location loc : p_locs) {
-				PaintMgr.Paint(loc, shooter, false);
-			}
-		}
+        val clear: BukkitRunnable =
+            object : BukkitRunnable() {
+                override fun run() {
+                    drop1.remove()
+                    drop2.remove()
+                }
+            }
+        clear.runTaskLater(plugin, 50)
 
-		BukkitRunnable clear = new BukkitRunnable() {
-			@Override
-			public void run() {
-				drop1.remove();
-				drop2.remove();
-			}
-		};
-		clear.runTaskLater(VariablesKt.getPlugin(), 50);
+        if (target.hasPotionEffect(PotionEffectType.GLOWING)) target.removePotionEffect(PotionEffectType.GLOWING)
+        if (target.hasPotionEffect(PotionEffectType.SLOW)) target.removePotionEffect(PotionEffectType.SLOW)
 
-		if (target.hasPotionEffect(PotionEffectType.GLOWING))
-			target.removePotionEffect(PotionEffectType.GLOWING);
-		if (target.hasPotionEffect(PotionEffectType.SLOW))
-			target.removePotionEffect(PotionEffectType.SLOW);
+        if (type == "killed" || type == "subWeapon" || type == "spWeapon") {
+            getPlayerData(shooter)!!.addKillCount()
+            getPlayerData(shooter)!!.team!!.addKillCount()
+            if (!getPlayerData(shooter)!!.isUsingSP) for (i in 0..9) SPWeaponMgr.addSPCharge(shooter)
+        } else if (getPlayerData(target)!!.lastAttack !== target) {
+            val lastAttacker = getPlayerData(target)!!.lastAttack
+            getPlayerData(lastAttacker)!!.addKillCount()
+            getPlayerData(lastAttacker)!!.team!!.addKillCount()
+            if (!getPlayerData(lastAttacker)!!.isUsingSP) for (i in 0..9) SPWeaponMgr.addSPCharge(lastAttacker)
+        }
 
-		if (type.equals("killed") || type.equals("subWeapon") || type.equals("spWeapon")) {
-			DataMgr.getPlayerData(shooter).addKillCount();
-			DataMgr.getPlayerData(shooter).team.addKillCount();
-			if (!DataMgr.getPlayerData(shooter).isUsingSP)
-				for (int i = 0; i < 10; i++)
-					SPWeaponMgr.addSPCharge(shooter);
-		} else if (DataMgr.getPlayerData(target).lastAttack != target) {
-			Player Lastattacker = DataMgr.getPlayerData(target).lastAttack;
-			DataMgr.getPlayerData(Lastattacker).addKillCount();
-			DataMgr.getPlayerData(Lastattacker).team.addKillCount();
-			if (!DataMgr.getPlayerData(Lastattacker).isUsingSP)
-				for (int i = 0; i < 10; i++)
-					SPWeaponMgr.addSPCharge(Lastattacker);
-		}
+        val task: BukkitRunnable =
+            object : BukkitRunnable() {
+                val t: Player = target
+                val s: Player = shooter
+                var loc: Location? = null
+                var i: Int = 0
 
-		BukkitRunnable task = new BukkitRunnable() {
-			final Player t = target;
-			final Player s = shooter;
-			Location loc;
-			int i = 0;
+                override fun run() {
+                    try {
+                        if (!getPlayerData(t)!!.isInMatch) {
+                            cancel()
+                            return
+                        }
+                        if (type == "killed") {
+                            t.setGameMode(GameMode.SPECTATOR)
+                            t.getInventory().clear()
+                            getPlayerData(t)!!.tick = 10
+                            if (s.getGameMode() == GameMode.ADVENTURE) {
+                                t.setSpectatorTarget(s)
+                            } else {
+                                loc = getPlayerData(t)!!.match!!.mapData!!.intro
+                                t.teleport(loc!!)
+                            }
 
-			@Override
-			public void run() {
-				try {
-					if (!DataMgr.getPlayerData(t).isInMatch) {
-						cancel();
-						return;
-					}
-					if (type.equals("killed")) {
-						t.setGameMode(GameMode.SPECTATOR);
-						t.getInventory().clear();
-						DataMgr.getPlayerData(t).tick = 10;
-						if (s.getGameMode().equals(GameMode.ADVENTURE)) {
-							t.setSpectatorTarget(s);
-						} else {
-							loc = DataMgr.getPlayerData(t).match.getMapData().getIntro();
-							t.teleport(loc);
-						}
+                            val sdata = getPlayerData(s)
+                            val msg = (
+                                sdata!!.team!!.teamColor!!.colorCode + s.getDisplayName() + ChatColor.RESET +
+                                    "に" + ChatColor.BOLD +
+                                    sdata.weaponClass!!
+                                        .mainWeapon!!
+                                        .weaponIteamStack!!
+                                        .getItemMeta()!!
+                                        .getDisplayName() +
+                                    ChatColor.RESET + "でやられた！"
+                                )
+                            if (i == 0) {
+                                t.sendTitle(ChatColor.GREEN.toString() + "復活まであと: 5秒", msg, 0, 21, 0)
+                                for (player in plugin.getServer().getOnlinePlayers()) {
+                                    player.sendMessage(
+                                        (
+                                            sdata.team!!.teamColor!!.colorCode + s.getDisplayName() + ChatColor.RESET +
+                                                "が" + getPlayerData(t)!!.team!!.teamColor!!.colorCode +
+                                                t.getDisplayName() + ChatColor.RESET + "を" + ChatColor.BOLD +
+                                                sdata.weaponClass!!
+                                                    .mainWeapon!!
+                                                    .weaponIteamStack!!
+                                                    .getItemMeta()!!
+                                                    .getDisplayName() +
+                                                ChatColor.RESET + "で倒した！"
+                                            ),
+                                    )
+                                    s.spigot().sendMessage(
+                                        ChatMessageType.ACTION_BAR,
+                                        *TextComponent.fromLegacyText(
+                                            (
+                                                getPlayerData(t)!!.team!!.teamColor!!.colorCode +
+                                                    t.getDisplayName() + ChatColor.RESET + "を倒した！"
+                                                ),
+                                        ),
+                                    )
+                                    s.playSound(s.getLocation(), Sound.ENTITY_ARROW_HIT_PLAYER, 1f, 10f)
+                                }
+                            }
+                            if (i == 20) t.sendTitle(ChatColor.GREEN.toString() + "復活まであと: 4秒", msg, 0, 21, 0)
+                            getPlayerData(t)!!.lastAttack = t
+                            if (i == 40) t.sendTitle(ChatColor.GREEN.toString() + "復活まであと: 3秒", msg, 0, 21, 0)
+                            if (i == 60) t.sendTitle(ChatColor.GREEN.toString() + "復活まであと: 2秒", msg, 0, 21, 0)
+                            if (i == 80) t.sendTitle(ChatColor.GREEN.toString() + "復活まであと: 1秒", msg, 0, 18, 2)
+                            // t.sendTitle("", sdata.getTeam().getTeamColor().getColorCode() +
+                            // s.displayName + ChatColor.RESET + "に" + ChatColor.BOLD +
+                            // sdata.weaponClass.mainWeapon.getWeaponIteamStack().getItemMeta().displayName
+                            // + ChatColor.RESET + "でやられた！", 0, 5, 2);
+                            if (i == 100) {
+                                getPlayerData(target)!!.isDead = (false)
+                                val loc = getPlayerData(t)!!.matchLocation
+                                t.teleport(loc!!)
+                                t.setGameMode(GameMode.ADVENTURE)
+                                t.getInventory().setItem(
+                                    0,
+                                    getPlayerData(t)!!.weaponClass!!.mainWeapon!!.weaponIteamStack,
+                                )
+                                t.getWorld().playSound(
+                                    getPlayerData(t)!!.matchLocation!!,
+                                    Sound.ENTITY_PLAYER_SWIM,
+                                    1f,
+                                    1f,
+                                )
+                                t.setExp(0.99f)
+                                t.setHealth(20.0)
+                                // DataMgr.getPlayerData(t).setLastAttack(t);
+                                WeaponClassMgr.setWeaponClass(t)
+                                barrierEffectRunnable(t, 120)
+                                setArmor(t, Double.Companion.MAX_VALUE, 120, false)
+                                if (getPlayerData(t)!!.sPGauge == 100) SPWeaponMgr.setSPWeapon(t)
+                                cancel()
+                            }
+                        }
 
-						PlayerData sdata = DataMgr.getPlayerData(s);
-						String msg = sdata.team.getTeamColor().getColorCode() + s.getDisplayName() + ChatColor.RESET
-								+ "に" + ChatColor.BOLD
-								+ sdata.weaponClass.mainWeapon.getWeaponIteamStack().getItemMeta().getDisplayName()
-								+ ChatColor.RESET + "でやられた！";
-						if (i == 0) {
-							t.sendTitle(ChatColor.GREEN + "復活まであと: 5秒", msg, 0, 21, 0);
-							for (Player player : Sclat.getPlugin(Sclat.class).getServer().getOnlinePlayers()) {
-								player.sendMessage(
-										sdata.team.getTeamColor().getColorCode() + s.getDisplayName() + ChatColor.RESET
-												+ "が" + DataMgr.getPlayerData(t).team.getTeamColor().getColorCode()
-												+ t.getDisplayName() + ChatColor.RESET + "を" + ChatColor.BOLD
-												+ sdata.weaponClass.mainWeapon.getWeaponIteamStack().getItemMeta()
-														.getDisplayName()
-												+ ChatColor.RESET + "で倒した！");
-								s.spigot().sendMessage(ChatMessageType.ACTION_BAR,
-										TextComponent.fromLegacyText(
-												DataMgr.getPlayerData(t).team.getTeamColor().getColorCode()
-														+ t.getDisplayName() + ChatColor.RESET + "を倒した！"));
-								s.playSound(s.getLocation(), Sound.ENTITY_ARROW_HIT_PLAYER, 1, 10);
+                        if (type == "subWeapon") {
+                            t.setGameMode(GameMode.SPECTATOR)
+                            t.getInventory().clear()
+                            getPlayerData(t)!!.tick = 10
+                            if (s.getGameMode() == GameMode.ADVENTURE) {
+                                t.setSpectatorTarget(s)
+                            } else {
+                                loc = getPlayerData(t)!!.match!!.mapData!!.intro
+                                t.teleport(loc!!)
+                            }
 
-							}
-						}
-						if (i == 20)
-							t.sendTitle(ChatColor.GREEN + "復活まであと: 4秒", msg, 0, 21, 0);
-						DataMgr.getPlayerData(t).lastAttack = t;
-						if (i == 40)
-							t.sendTitle(ChatColor.GREEN + "復活まであと: 3秒", msg, 0, 21, 0);
-						if (i == 60)
-							t.sendTitle(ChatColor.GREEN + "復活まであと: 2秒", msg, 0, 21, 0);
-						if (i == 80)
-							t.sendTitle(ChatColor.GREEN + "復活まであと: 1秒", msg, 0, 18, 2);
-						// t.sendTitle("", sdata.getTeam().getTeamColor().getColorCode() +
-						// s.displayName + ChatColor.RESET + "に" + ChatColor.BOLD +
-						// sdata.weaponClass.mainWeapon.getWeaponIteamStack().getItemMeta().displayName
-						// + ChatColor.RESET + "でやられた！", 0, 5, 2);
-						if (i == 100) {
-							DataMgr.getPlayerData(target).isDead = (false);
-							Location loc = DataMgr.getPlayerData(t).matchLocation;
-							t.teleport(loc);
-							t.setGameMode(GameMode.ADVENTURE);
-							t.getInventory().setItem(0,
-									DataMgr.getPlayerData(t).weaponClass.mainWeapon.getWeaponIteamStack());
-							t.getWorld().playSound(DataMgr.getPlayerData(t).matchLocation, Sound.ENTITY_PLAYER_SWIM, 1,
-									1);
-							t.setExp(0.99F);
-							t.setHealth(20);
-							// DataMgr.getPlayerData(t).setLastAttack(t);
-							WeaponClassMgr.setWeaponClass(t);
-							BarrierEffectRunnable(t, 120);
-							SuperArmor.setArmor(t, Double.MAX_VALUE, 120, false);
-							if (DataMgr.getPlayerData(t).sPGauge == 100)
-								SPWeaponMgr.setSPWeapon(t);
-							cancel();
-						}
-					}
+                            val sdata = getPlayerData(s)
+                            val msg = (
+                                sdata!!.team!!.teamColor!!.colorCode + s.getDisplayName() + ChatColor.RESET +
+                                    "に" + ChatColor.BOLD + sdata.weaponClass!!.subWeaponName + ChatColor.RESET +
+                                    "でやられた！"
+                                )
+                            if (i == 0) {
+                                t.sendTitle(ChatColor.GREEN.toString() + "復活まであと: 5秒", msg, 0, 21, 0)
+                                for (player in plugin.getServer().getOnlinePlayers()) {
+                                    player.sendMessage(
+                                        (
+                                            sdata.team!!.teamColor!!.colorCode + s.getDisplayName() + ChatColor.RESET +
+                                                "が" + getPlayerData(t)!!.team!!.teamColor!!.colorCode +
+                                                t.getDisplayName() + ChatColor.RESET + "を" + ChatColor.BOLD +
+                                                sdata.weaponClass!!.subWeaponName + ChatColor.RESET + "で倒した！"
+                                            ),
+                                    )
+                                    s.spigot().sendMessage(
+                                        ChatMessageType.ACTION_BAR,
+                                        *TextComponent.fromLegacyText(
+                                            (
+                                                getPlayerData(t)!!.team!!.teamColor!!.colorCode +
+                                                    t.getDisplayName() + ChatColor.RESET + "を倒した！"
+                                                ),
+                                        ),
+                                    )
+                                    s.playSound(s.getLocation(), Sound.ENTITY_ARROW_HIT_PLAYER, 1f, 10f)
+                                }
+                            }
+                            if (i == 20) t.sendTitle(ChatColor.GREEN.toString() + "復活まであと: 4秒", msg, 0, 21, 0)
+                            getPlayerData(t)!!.lastAttack = t
+                            if (i == 40) t.sendTitle(ChatColor.GREEN.toString() + "復活まであと: 3秒", msg, 0, 21, 0)
+                            if (i == 60) t.sendTitle(ChatColor.GREEN.toString() + "復活まであと: 2秒", msg, 0, 21, 0)
+                            if (i == 80) t.sendTitle(ChatColor.GREEN.toString() + "復活まであと: 1秒", msg, 0, 18, 2)
+                            // t.sendTitle("", sdata.getTeam().getTeamColor().getColorCode() +
+                            // s.displayName + ChatColor.RESET + "に" + ChatColor.BOLD +
+                            // sdata.weaponClass.mainWeapon.getWeaponIteamStack().getItemMeta().displayName
+                            // + ChatColor.RESET + "でやられた！", 0, 5, 2);
+                            if (i == 100) {
+                                getPlayerData(target)!!.isDead = (false)
+                                val loc = getPlayerData(t)!!.matchLocation
+                                t.teleport(loc!!)
+                                t.setGameMode(GameMode.ADVENTURE)
+                                t.getInventory().setItem(
+                                    0,
+                                    getPlayerData(t)!!.weaponClass!!.mainWeapon!!.weaponIteamStack,
+                                )
+                                t.getWorld().playSound(
+                                    getPlayerData(t)!!.matchLocation!!,
+                                    Sound.ENTITY_PLAYER_SWIM,
+                                    1f,
+                                    1f,
+                                )
+                                t.setExp(0.99f)
+                                t.setHealth(20.0)
+                                // DataMgr.getPlayerData(t).setLastAttack(t);
+                                WeaponClassMgr.setWeaponClass(t)
+                                barrierEffectRunnable(t, 120)
+                                setArmor(t, Double.Companion.MAX_VALUE, 120, false)
+                                if (getPlayerData(t)!!.sPGauge == 100) SPWeaponMgr.setSPWeapon(t)
+                                cancel()
+                            }
+                        }
 
-					if (type.equals("subWeapon")) {
-						t.setGameMode(GameMode.SPECTATOR);
-						t.getInventory().clear();
-						DataMgr.getPlayerData(t).tick = 10;
-						if (s.getGameMode().equals(GameMode.ADVENTURE)) {
-							t.setSpectatorTarget(s);
-						} else {
-							loc = DataMgr.getPlayerData(t).match.getMapData().getIntro();
-							t.teleport(loc);
-						}
+                        if (type == "spWeapon") {
+                            t.setGameMode(GameMode.SPECTATOR)
+                            t.getInventory().clear()
+                            getPlayerData(t)!!.tick = 10
+                            if (s.getGameMode() == GameMode.ADVENTURE) {
+                                t.setSpectatorTarget(s)
+                            } else {
+                                loc = getPlayerData(t)!!.match!!.mapData!!.intro
+                                t.teleport(loc!!)
+                            }
 
-						PlayerData sdata = DataMgr.getPlayerData(s);
-						String msg = sdata.team.getTeamColor().getColorCode() + s.getDisplayName() + ChatColor.RESET
-								+ "に" + ChatColor.BOLD + sdata.weaponClass.getSubWeaponName() + ChatColor.RESET
-								+ "でやられた！";
-						if (i == 0) {
-							t.sendTitle(ChatColor.GREEN + "復活まであと: 5秒", msg, 0, 21, 0);
-							for (Player player : Sclat.getPlugin(Sclat.class).getServer().getOnlinePlayers()) {
-								player.sendMessage(
-										sdata.team.getTeamColor().getColorCode() + s.getDisplayName() + ChatColor.RESET
-												+ "が" + DataMgr.getPlayerData(t).team.getTeamColor().getColorCode()
-												+ t.getDisplayName() + ChatColor.RESET + "を" + ChatColor.BOLD
-												+ sdata.weaponClass.getSubWeaponName() + ChatColor.RESET + "で倒した！");
-								s.spigot().sendMessage(ChatMessageType.ACTION_BAR,
-										TextComponent.fromLegacyText(
-												DataMgr.getPlayerData(t).team.getTeamColor().getColorCode()
-														+ t.getDisplayName() + ChatColor.RESET + "を倒した！"));
-								s.playSound(s.getLocation(), Sound.ENTITY_ARROW_HIT_PLAYER, 1, 10);
+                            val sdata = getPlayerData(s)
+                            val msg = (
+                                sdata!!.team!!.teamColor!!.colorCode + s.getDisplayName() + ChatColor.RESET +
+                                    "に" + ChatColor.BOLD + sdata.weaponClass!!.sPWeaponName + ChatColor.RESET +
+                                    "でやられた！"
+                                )
+                            if (i == 0) {
+                                t.sendTitle(ChatColor.GREEN.toString() + "復活まであと: 5秒", msg, 0, 21, 0)
+                                for (player in plugin.getServer().getOnlinePlayers()) {
+                                    player.sendMessage(
+                                        (
+                                            sdata.team!!.teamColor!!.colorCode + s.getDisplayName() + ChatColor.RESET +
+                                                "が" + getPlayerData(t)!!.team!!.teamColor!!.colorCode +
+                                                t.getDisplayName() + ChatColor.RESET + "を" + ChatColor.BOLD +
+                                                sdata.weaponClass!!.sPWeaponName + ChatColor.RESET + "で倒した！"
+                                            ),
+                                    )
+                                    s.spigot().sendMessage(
+                                        ChatMessageType.ACTION_BAR,
+                                        *TextComponent.fromLegacyText(
+                                            (
+                                                getPlayerData(t)!!.team!!.teamColor!!.colorCode +
+                                                    t.getDisplayName() + ChatColor.RESET + "を倒した！"
+                                                ),
+                                        ),
+                                    )
+                                    s.playSound(s.getLocation(), Sound.ENTITY_ARROW_HIT_PLAYER, 1f, 10f)
+                                }
+                            }
+                            if (i == 20) t.sendTitle(ChatColor.GREEN.toString() + "復活まであと: 4秒", msg, 0, 21, 0)
+                            getPlayerData(t)!!.lastAttack = t
+                            if (i == 40) t.sendTitle(ChatColor.GREEN.toString() + "復活まであと: 3秒", msg, 0, 21, 0)
+                            if (i == 60) t.sendTitle(ChatColor.GREEN.toString() + "復活まであと: 2秒", msg, 0, 21, 0)
+                            if (i == 80) t.sendTitle(ChatColor.GREEN.toString() + "復活まであと: 1秒", msg, 0, 18, 2)
+                            // t.sendTitle("", sdata.getTeam().getTeamColor().getColorCode() +
+                            // s.displayName + ChatColor.RESET + "に" + ChatColor.BOLD +
+                            // sdata.weaponClass.mainWeapon.getWeaponIteamStack().getItemMeta().displayName
+                            // + ChatColor.RESET + "でやられた！", 0, 5, 2);
+                            if (i == 100) {
+                                getPlayerData(target)!!.isDead = (false)
+                                val loc = getPlayerData(t)!!.matchLocation
+                                t.teleport(loc!!)
+                                t.setGameMode(GameMode.ADVENTURE)
+                                t.getInventory().setItem(
+                                    0,
+                                    getPlayerData(t)!!.weaponClass!!.mainWeapon!!.weaponIteamStack,
+                                )
+                                t.getWorld().playSound(
+                                    getPlayerData(t)!!.matchLocation!!,
+                                    Sound.ENTITY_PLAYER_SWIM,
+                                    1f,
+                                    1f,
+                                )
+                                t.setExp(0.99f)
+                                t.setHealth(20.0)
+                                // DataMgr.getPlayerData(t).setLastAttack(t);
+                                WeaponClassMgr.setWeaponClass(t)
+                                barrierEffectRunnable(t, 120)
+                                setArmor(t, Double.Companion.MAX_VALUE, 120, false)
+                                if (getPlayerData(t)!!.sPGauge == 100) SPWeaponMgr.setSPWeapon(t)
+                                cancel()
+                            }
+                        }
 
-							}
-						}
-						if (i == 20)
-							t.sendTitle(ChatColor.GREEN + "復活まであと: 4秒", msg, 0, 21, 0);
-						DataMgr.getPlayerData(t).lastAttack = t;
-						if (i == 40)
-							t.sendTitle(ChatColor.GREEN + "復活まであと: 3秒", msg, 0, 21, 0);
-						if (i == 60)
-							t.sendTitle(ChatColor.GREEN + "復活まであと: 2秒", msg, 0, 21, 0);
-						if (i == 80)
-							t.sendTitle(ChatColor.GREEN + "復活まであと: 1秒", msg, 0, 18, 2);
-						// t.sendTitle("", sdata.getTeam().getTeamColor().getColorCode() +
-						// s.displayName + ChatColor.RESET + "に" + ChatColor.BOLD +
-						// sdata.weaponClass.mainWeapon.getWeaponIteamStack().getItemMeta().displayName
-						// + ChatColor.RESET + "でやられた！", 0, 5, 2);
-						if (i == 100) {
-							DataMgr.getPlayerData(target).isDead = (false);
-							Location loc = DataMgr.getPlayerData(t).matchLocation;
-							t.teleport(loc);
-							t.setGameMode(GameMode.ADVENTURE);
-							t.getInventory().setItem(0,
-									DataMgr.getPlayerData(t).weaponClass.mainWeapon.getWeaponIteamStack());
-							t.getWorld().playSound(DataMgr.getPlayerData(t).matchLocation, Sound.ENTITY_PLAYER_SWIM, 1,
-									1);
-							t.setExp(0.99F);
-							t.setHealth(20);
-							// DataMgr.getPlayerData(t).setLastAttack(t);
-							WeaponClassMgr.setWeaponClass(t);
-							BarrierEffectRunnable(t, 120);
-							SuperArmor.setArmor(t, Double.MAX_VALUE, 120, false);
-							if (DataMgr.getPlayerData(t).sPGauge == 100)
-								SPWeaponMgr.setSPWeapon(t);
-							cancel();
-						}
-					}
+                        if (type == "water") {
+                            t.setGameMode(GameMode.SPECTATOR)
+                            getPlayerData(t)!!.tick = 10
+                            t.getInventory().clear()
+                            if (i == 0) {
+                                loc = t.getLocation()
+                                if (getPlayerData(t)!!.lastAttack === t) {
+                                    for (player in plugin
+                                        .getServer()
+                                        .getOnlinePlayers()) {
+                                        player.sendMessage(
+                                            (
+                                                getPlayerData(t)!!.team!!.teamColor!!.colorCode +
+                                                    t.getDisplayName() + ChatColor.RESET + "は溺れてしまった！"
+                                                ),
+                                        )
+                                    }
+                                } else {
+                                    val splayer = getPlayerData(t)!!.lastAttack
+                                    val sdata = getPlayerData(splayer)
+                                    for (player in plugin
+                                        .getServer()
+                                        .getOnlinePlayers()) {
+                                        // player.sendMessage(
+                                        // DataMgr.getPlayerData(t).getTeam().getTeamColor().getColorCode() +
+                                        // t.displayName + ChatColor.RESET + "は" + ChatColor.RESET
+                                        // +sdata.getTeam().getTeamColor().getColorCode() + splayer.displayName +
+                                        // ChatColor.RESET+ "に突き落とされてしまった！");
+                                        player.sendMessage(
+                                            (
+                                                sdata!!.team!!.teamColor!!.colorCode +
+                                                    splayer!!.getDisplayName() + ChatColor.RESET + "は" + ChatColor.RESET +
+                                                    getPlayerData(t)!!.team!!.teamColor!!.colorCode +
+                                                    t.getDisplayName() + ChatColor.RESET + "を水中に落とした！"
+                                                ),
+                                        )
+                                    }
+                                }
+                            }
+                            t.teleport(loc!!)
 
-					if (type.equals("spWeapon")) {
-						t.setGameMode(GameMode.SPECTATOR);
-						t.getInventory().clear();
-						DataMgr.getPlayerData(t).tick = 10;
-						if (s.getGameMode().equals(GameMode.ADVENTURE)) {
-							t.setSpectatorTarget(s);
-						} else {
-							loc = DataMgr.getPlayerData(t).match.getMapData().getIntro();
-							t.teleport(loc);
-						}
+                            if (i == 0) {
+                                t.sendTitle(
+                                    ChatColor.GREEN.toString() + "復活まであと: 5秒",
+                                    "溺れてしまった！",
+                                    0,
+                                    21,
+                                    0,
+                                )
+                            }
+                            if (i == 20) {
+                                t.sendTitle(
+                                    ChatColor.GREEN.toString() + "復活まであと: 4秒",
+                                    "溺れてしまった！",
+                                    0,
+                                    21,
+                                    0,
+                                )
+                            }
+                            getPlayerData(t)!!.lastAttack = t
+                            if (i == 40) {
+                                t.sendTitle(
+                                    ChatColor.GREEN.toString() + "復活まであと: 3秒",
+                                    "溺れてしまった！",
+                                    0,
+                                    21,
+                                    0,
+                                )
+                            }
+                            if (i == 60) {
+                                t.sendTitle(
+                                    ChatColor.GREEN.toString() + "復活まであと: 2秒",
+                                    "溺れてしまった！",
+                                    0,
+                                    21,
+                                    0,
+                                )
+                            }
+                            if (i == 80) {
+                                t.sendTitle(
+                                    ChatColor.GREEN.toString() + "復活まであと: 1秒",
+                                    "溺れてしまった！",
+                                    0,
+                                    18,
+                                    2,
+                                )
+                            }
+                            if (i == 100) {
+                                getPlayerData(target)!!.isDead = (false)
+                                val loc1 = getPlayerData(t)!!.matchLocation
+                                t.teleport(loc1!!)
+                                t.setGameMode(GameMode.ADVENTURE)
+                                t.getInventory().setItem(
+                                    0,
+                                    getPlayerData(t)!!.weaponClass!!.mainWeapon!!.weaponIteamStack,
+                                )
+                                t.getWorld().playSound(
+                                    getPlayerData(t)!!.matchLocation!!,
+                                    Sound.ENTITY_PLAYER_SWIM,
+                                    1f,
+                                    1f,
+                                )
+                                t.setExp(0.99f)
+                                t.setHealth(20.0)
+                                // DataMgr.getPlayerData(t).setLastAttack(t);
+                                WeaponClassMgr.setWeaponClass(t)
+                                barrierEffectRunnable(t, 120)
+                                setArmor(t, Double.Companion.MAX_VALUE, 120, false)
+                                if (getPlayerData(t)!!.sPGauge == 100) SPWeaponMgr.setSPWeapon(t)
+                                cancel()
+                            }
+                        }
+                        if (type == "fall") {
+                            t.setGameMode(GameMode.SPECTATOR)
+                            getPlayerData(t)!!.tick = 10
+                            t.getInventory().clear()
+                            if (i == 0) {
+                                loc = getPlayerData(t)!!.match!!.mapData!!.intro
+                                if (getPlayerData(t)!!.lastAttack === t) {
+                                    for (player in plugin
+                                        .getServer()
+                                        .getOnlinePlayers()) {
+                                        player.sendMessage(
+                                            (
+                                                getPlayerData(t)!!.team!!.teamColor!!.colorCode +
+                                                    t.getDisplayName() + ChatColor.RESET + "は奈落に落ちてしまった！"
+                                                ),
+                                        )
+                                    }
+                                } else {
+                                    val splayer = getPlayerData(t)!!.lastAttack
+                                    val sdata = getPlayerData(splayer)
+                                    for (player in plugin
+                                        .getServer()
+                                        .getOnlinePlayers()) {
+                                        // player.sendMessage(DataMgr.getPlayerData(t).getTeam().getTeamColor().getColorCode()
+                                        // + t.displayName + ChatColor.RESET + "は" + ChatColor.RESET +
+                                        // sdata.getTeam().getTeamColor().getColorCode() + splayer.displayName +
+                                        // ChatColor.RESET + "に突き落とされてしまった！");
+                                        player.sendMessage(
+                                            (
+                                                sdata!!.team!!.teamColor!!.colorCode +
+                                                    splayer!!.getDisplayName() + ChatColor.RESET + "は" + ChatColor.RESET +
+                                                    getPlayerData(t)!!.team!!.teamColor!!.colorCode +
+                                                    t.getDisplayName() + ChatColor.RESET + "を奈落に落とした！"
+                                                ),
+                                        )
+                                    }
+                                }
+                            }
+                            t.teleport(loc!!)
 
-						PlayerData sdata = DataMgr.getPlayerData(s);
-						String msg = sdata.team.getTeamColor().getColorCode() + s.getDisplayName() + ChatColor.RESET
-								+ "に" + ChatColor.BOLD + sdata.weaponClass.getSPWeaponName() + ChatColor.RESET
-								+ "でやられた！";
-						if (i == 0) {
-							t.sendTitle(ChatColor.GREEN + "復活まであと: 5秒", msg, 0, 21, 0);
-							for (Player player : Sclat.getPlugin(Sclat.class).getServer().getOnlinePlayers()) {
-								player.sendMessage(
-										sdata.team.getTeamColor().getColorCode() + s.getDisplayName() + ChatColor.RESET
-												+ "が" + DataMgr.getPlayerData(t).team.getTeamColor().getColorCode()
-												+ t.getDisplayName() + ChatColor.RESET + "を" + ChatColor.BOLD
-												+ sdata.weaponClass.getSPWeaponName() + ChatColor.RESET + "で倒した！");
-								s.spigot().sendMessage(ChatMessageType.ACTION_BAR,
-										TextComponent.fromLegacyText(
-												DataMgr.getPlayerData(t).team.getTeamColor().getColorCode()
-														+ t.getDisplayName() + ChatColor.RESET + "を倒した！"));
-								s.playSound(s.getLocation(), Sound.ENTITY_ARROW_HIT_PLAYER, 1, 10);
+                            if (i == 0) {
+                                t.sendTitle(
+                                    ChatColor.GREEN.toString() + "復活まであと: 5秒",
+                                    "マップの外に落ちてしまった！",
+                                    0,
+                                    21,
+                                    0,
+                                )
+                            }
+                            if (i == 20) {
+                                t.sendTitle(
+                                    ChatColor.GREEN.toString() + "復活まであと: 4秒",
+                                    "マップの外に落ちてしまった！",
+                                    0,
+                                    21,
+                                    0,
+                                )
+                            }
+                            getPlayerData(t)!!.lastAttack = t
+                            if (i == 40) {
+                                t.sendTitle(
+                                    ChatColor.GREEN.toString() + "復活まであと: 3秒",
+                                    "マップの外に落ちてしまった！",
+                                    0,
+                                    21,
+                                    0,
+                                )
+                            }
+                            if (i == 60) {
+                                t.sendTitle(
+                                    ChatColor.GREEN.toString() + "復活まであと: 2秒",
+                                    "マップの外に落ちてしまった！",
+                                    0,
+                                    21,
+                                    0,
+                                )
+                            }
+                            if (i == 80) {
+                                t.sendTitle(
+                                    ChatColor.GREEN.toString() + "復活まであと: 1秒",
+                                    "マップの外に落ちてしまった！",
+                                    0,
+                                    18,
+                                    2,
+                                )
+                            }
+                            if (i == 100) {
+                                getPlayerData(target)!!.isDead = (false)
+                                val loc1 = getPlayerData(t)!!.matchLocation
+                                t.teleport(loc1!!)
+                                t.setGameMode(GameMode.ADVENTURE)
+                                t.getInventory().setItem(
+                                    0,
+                                    getPlayerData(t)!!.weaponClass!!.mainWeapon!!.weaponIteamStack,
+                                )
+                                t.getWorld().playSound(
+                                    getPlayerData(t)!!.matchLocation!!,
+                                    Sound.ENTITY_PLAYER_SWIM,
+                                    1f,
+                                    1f,
+                                )
+                                t.setExp(0.99f)
+                                t.setHealth(20.0)
+                                // DataMgr.getPlayerData(t).setLastAttack(t);
+                                WeaponClassMgr.setWeaponClass(t)
+                                barrierEffectRunnable(t, 120)
+                                setArmor(t, Double.Companion.MAX_VALUE, 120, false)
+                                if (getPlayerData(t)!!.sPGauge == 100) SPWeaponMgr.setSPWeapon(t)
+                                cancel()
+                            }
+                        }
 
-							}
-						}
-						if (i == 20)
-							t.sendTitle(ChatColor.GREEN + "復活まであと: 4秒", msg, 0, 21, 0);
-						DataMgr.getPlayerData(t).lastAttack = t;
-						if (i == 40)
-							t.sendTitle(ChatColor.GREEN + "復活まであと: 3秒", msg, 0, 21, 0);
-						if (i == 60)
-							t.sendTitle(ChatColor.GREEN + "復活まであと: 2秒", msg, 0, 21, 0);
-						if (i == 80)
-							t.sendTitle(ChatColor.GREEN + "復活まであと: 1秒", msg, 0, 18, 2);
-						// t.sendTitle("", sdata.getTeam().getTeamColor().getColorCode() +
-						// s.displayName + ChatColor.RESET + "に" + ChatColor.BOLD +
-						// sdata.weaponClass.mainWeapon.getWeaponIteamStack().getItemMeta().displayName
-						// + ChatColor.RESET + "でやられた！", 0, 5, 2);
-						if (i == 100) {
-							DataMgr.getPlayerData(target).isDead = (false);
-							Location loc = DataMgr.getPlayerData(t).matchLocation;
-							t.teleport(loc);
-							t.setGameMode(GameMode.ADVENTURE);
-							t.getInventory().setItem(0,
-									DataMgr.getPlayerData(t).weaponClass.mainWeapon.getWeaponIteamStack());
-							t.getWorld().playSound(DataMgr.getPlayerData(t).matchLocation, Sound.ENTITY_PLAYER_SWIM, 1,
-									1);
-							t.setExp(0.99F);
-							t.setHealth(20);
-							// DataMgr.getPlayerData(t).setLastAttack(t);
-							WeaponClassMgr.setWeaponClass(t);
-							BarrierEffectRunnable(t, 120);
-							SuperArmor.setArmor(t, Double.MAX_VALUE, 120, false);
-							if (DataMgr.getPlayerData(t).sPGauge == 100)
-								SPWeaponMgr.setSPWeapon(t);
-							cancel();
-						}
-					}
+                        if (i == 100) target.getInventory().setHeldItemSlot(1)
 
-					if (type.equals("water")) {
-						t.setGameMode(GameMode.SPECTATOR);
-						DataMgr.getPlayerData(t).tick = 10;
-						t.getInventory().clear();
-						if (i == 0) {
-							loc = t.getLocation();
-							if (DataMgr.getPlayerData(t).lastAttack == t) {
-								for (Player player : Sclat.getPlugin(Sclat.class).getServer().getOnlinePlayers()) {
-									player.sendMessage(DataMgr.getPlayerData(t).team.getTeamColor().getColorCode()
-											+ t.getDisplayName() + ChatColor.RESET + "は溺れてしまった！");
-								}
-							} else {
-								Player splayer = DataMgr.getPlayerData(t).lastAttack;
-								PlayerData sdata = DataMgr.getPlayerData(splayer);
-								for (Player player : Sclat.getPlugin(Sclat.class).getServer().getOnlinePlayers()) {
-									// player.sendMessage(
-									// DataMgr.getPlayerData(t).getTeam().getTeamColor().getColorCode() +
-									// t.displayName + ChatColor.RESET + "は" + ChatColor.RESET
-									// +sdata.getTeam().getTeamColor().getColorCode() + splayer.displayName +
-									// ChatColor.RESET+ "に突き落とされてしまった！");
-									player.sendMessage(sdata.team.getTeamColor().getColorCode()
-											+ splayer.getDisplayName() + ChatColor.RESET + "は" + ChatColor.RESET
-											+ DataMgr.getPlayerData(t).team.getTeamColor().getColorCode()
-											+ t.getDisplayName() + ChatColor.RESET + "を水中に落とした！");
-								}
-							}
-						}
-						t.teleport(loc);
+                        i++
+                    } catch (e: Exception) {
+                        getPlayerData(target)!!.isDead = (false)
+                        val loc1 = getPlayerData(t)!!.matchLocation
+                        t.teleport(loc1!!)
+                        t.setGameMode(GameMode.ADVENTURE)
+                        t.getInventory().setItem(0, getPlayerData(t)!!.weaponClass!!.mainWeapon!!.weaponIteamStack)
+                        t.getWorld().playSound(getPlayerData(t)!!.matchLocation!!, Sound.ENTITY_PLAYER_SWIM, 1f, 1f)
+                        t.setExp(0.99f)
+                        t.setHealth(20.0)
+                        WeaponClassMgr.setWeaponClass(t)
+                        setArmor(t, Double.Companion.MAX_VALUE, 120, false)
+                        if (getPlayerData(t)!!.sPGauge == 100) SPWeaponMgr.setSPWeapon(t)
+                        cancel()
+                        plugin.getLogger().warning(e.message)
+                    }
+                }
+            }
+        task.runTaskTimer(plugin, 0, 1)
+    }
 
-						if (i == 0)
-							t.sendTitle(ChatColor.GREEN + "復活まであと: 5秒", "溺れてしまった！", 0, 21, 0);
-						if (i == 20)
-							t.sendTitle(ChatColor.GREEN + "復活まであと: 4秒", "溺れてしまった！", 0, 21, 0);
-						DataMgr.getPlayerData(t).lastAttack = t;
-						if (i == 40)
-							t.sendTitle(ChatColor.GREEN + "復活まであと: 3秒", "溺れてしまった！", 0, 21, 0);
-						if (i == 60)
-							t.sendTitle(ChatColor.GREEN + "復活まであと: 2秒", "溺れてしまった！", 0, 21, 0);
-						if (i == 80)
-							t.sendTitle(ChatColor.GREEN + "復活まであと: 1秒", "溺れてしまった！", 0, 18, 2);
-						if (i == 100) {
-							DataMgr.getPlayerData(target).isDead = (false);
-							Location loc1 = DataMgr.getPlayerData(t).matchLocation;
-							t.teleport(loc1);
-							t.setGameMode(GameMode.ADVENTURE);
-							t.getInventory().setItem(0,
-									DataMgr.getPlayerData(t).weaponClass.mainWeapon.getWeaponIteamStack());
-							t.getWorld().playSound(DataMgr.getPlayerData(t).matchLocation, Sound.ENTITY_PLAYER_SWIM, 1,
-									1);
-							t.setExp(0.99F);
-							t.setHealth(20);
-							// DataMgr.getPlayerData(t).setLastAttack(t);
-							WeaponClassMgr.setWeaponClass(t);
-							BarrierEffectRunnable(t, 120);
-							SuperArmor.setArmor(t, Double.MAX_VALUE, 120, false);
-							if (DataMgr.getPlayerData(t).sPGauge == 100)
-								SPWeaponMgr.setSPWeapon(t);
-							cancel();
-						}
-					}
-					if (type.equals("fall")) {
-						t.setGameMode(GameMode.SPECTATOR);
-						DataMgr.getPlayerData(t).tick = 10;
-						t.getInventory().clear();
-						if (i == 0) {
-							loc = DataMgr.getPlayerData(t).match.getMapData().getIntro();
-							if (DataMgr.getPlayerData(t).lastAttack == t) {
-								for (Player player : Sclat.getPlugin(Sclat.class).getServer().getOnlinePlayers()) {
-									player.sendMessage(DataMgr.getPlayerData(t).team.getTeamColor().getColorCode()
-											+ t.getDisplayName() + ChatColor.RESET + "は奈落に落ちてしまった！");
-								}
-							} else {
-								Player splayer = DataMgr.getPlayerData(t).lastAttack;
-								PlayerData sdata = DataMgr.getPlayerData(splayer);
-								for (Player player : Sclat.getPlugin(Sclat.class).getServer().getOnlinePlayers()) {
-									// player.sendMessage(DataMgr.getPlayerData(t).getTeam().getTeamColor().getColorCode()
-									// + t.displayName + ChatColor.RESET + "は" + ChatColor.RESET +
-									// sdata.getTeam().getTeamColor().getColorCode() + splayer.displayName +
-									// ChatColor.RESET + "に突き落とされてしまった！");
-									player.sendMessage(sdata.team.getTeamColor().getColorCode()
-											+ splayer.getDisplayName() + ChatColor.RESET + "は" + ChatColor.RESET
-											+ DataMgr.getPlayerData(t).team.getTeamColor().getColorCode()
-											+ t.getDisplayName() + ChatColor.RESET + "を奈落に落とした！");
-								}
-							}
-						}
-						t.teleport(loc);
+    fun barrierEffectRunnable(
+        player: Player,
+        time: Int,
+    ) {
+        val resettime = time / 4
+        val data = getPlayerData(player)
 
-						if (i == 0)
-							t.sendTitle(ChatColor.GREEN + "復活まであと: 5秒", "マップの外に落ちてしまった！", 0, 21, 0);
-						if (i == 20)
-							t.sendTitle(ChatColor.GREEN + "復活まであと: 4秒", "マップの外に落ちてしまった！", 0, 21, 0);
-						DataMgr.getPlayerData(t).lastAttack = t;
-						if (i == 40)
-							t.sendTitle(ChatColor.GREEN + "復活まであと: 3秒", "マップの外に落ちてしまった！", 0, 21, 0);
-						if (i == 60)
-							t.sendTitle(ChatColor.GREEN + "復活まであと: 2秒", "マップの外に落ちてしまった！", 0, 21, 0);
-						if (i == 80)
-							t.sendTitle(ChatColor.GREEN + "復活まであと: 1秒", "マップの外に落ちてしまった！", 0, 18, 2);
-						if (i == 100) {
-							DataMgr.getPlayerData(target).isDead = (false);
-							Location loc1 = DataMgr.getPlayerData(t).matchLocation;
-							t.teleport(loc1);
-							t.setGameMode(GameMode.ADVENTURE);
-							t.getInventory().setItem(0,
-									DataMgr.getPlayerData(t).weaponClass.mainWeapon.getWeaponIteamStack());
-							t.getWorld().playSound(DataMgr.getPlayerData(t).matchLocation, Sound.ENTITY_PLAYER_SWIM, 1,
-									1);
-							t.setExp(0.99F);
-							t.setHealth(20);
-							// DataMgr.getPlayerData(t).setLastAttack(t);
-							WeaponClassMgr.setWeaponClass(t);
-							BarrierEffectRunnable(t, 120);
-							SuperArmor.setArmor(t, Double.MAX_VALUE, 120, false);
-							if (DataMgr.getPlayerData(t).sPGauge == 100)
-								SPWeaponMgr.setSPWeapon(t);
-							cancel();
-						}
-					}
+        // エフェクト
+        val task: BukkitRunnable =
+            object : BukkitRunnable() {
+                val p: Player = player
+                var c: Int = 0
 
-					if (i == 100)
-						target.getInventory().setHeldItemSlot(1);
+                override fun run() {
+                    if (!data!!.isInMatch || (player.getGameMode() != GameMode.ADVENTURE) || !p.isOnline()) {
+                        cancel()
+                    }
+                    val loc = p.getLocation().add(0.0, 0.5, 0.0)
 
-					i++;
-				} catch (Exception e) {
-					DataMgr.getPlayerData(target).isDead = (false);
-					Location loc1 = DataMgr.getPlayerData(t).matchLocation;
-					t.teleport(loc1);
-					t.setGameMode(GameMode.ADVENTURE);
-					t.getInventory().setItem(0, DataMgr.getPlayerData(t).weaponClass.mainWeapon.getWeaponIteamStack());
-					t.getWorld().playSound(DataMgr.getPlayerData(t).matchLocation, Sound.ENTITY_PLAYER_SWIM, 1, 1);
-					t.setExp(0.99F);
-					t.setHealth(20);
-					WeaponClassMgr.setWeaponClass(t);
-					SuperArmor.setArmor(t, Double.MAX_VALUE, 120, false);
-					if (DataMgr.getPlayerData(t).sPGauge == 100)
-						SPWeaponMgr.setSPWeapon(t);
-					cancel();
-					VariablesKt.getPlugin().getLogger().warning(e.getMessage());
-				}
-			}
-		};
-		task.runTaskTimer(VariablesKt.getPlugin(), 0, 1);
-	}
-	public static void BarrierEffectRunnable(Player player, int time) {
-		int resettime = time / 4;
-		PlayerData data = DataMgr.getPlayerData(player);
-
-		// エフェクト
-		BukkitRunnable task = new BukkitRunnable() {
-			final Player p = player;
-			int c = 0;
-			@Override
-			public void run() {
-				if (!data.isInMatch || !player.getGameMode().equals(GameMode.ADVENTURE) || !p.isOnline()) {
-					cancel();
-				}
-				Location loc = p.getLocation().add(0, 0.5, 0);
-
-				List<Location> s_locs = Sphere.getSphere(loc, 2, 23);
-				for (Player o_player : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
-					if (DataMgr.getPlayerData(o_player).settings.ShowEffect_SPWeapon() && !o_player.equals(player)) {
-						Particle.DustOptions dustOptions = new Particle.DustOptions(
-								data.team.getTeamColor().getBukkitColor(), 1);
-						org.bukkit.block.data.BlockData bd = DataMgr.getPlayerData(p).team.getTeamColor().wool
-								.createBlockData();
-						for (Location e_loc : s_locs)
-							if (o_player.getWorld() == e_loc.getWorld())
-								if (o_player.getLocation().distanceSquared(e_loc) < Sclat.particleRenderDistanceSquared)
-									o_player.spawnParticle(Particle.REDSTONE, e_loc, 0, 0, 0, 0, 70, dustOptions);
-					}
-				}
-				if (c >= resettime) {
-					cancel();
-				}
-				if (data.armor < 9999) {
-					cancel();
-				}
-				c++;
-			}
-		};
-		task.runTaskTimer(VariablesKt.getPlugin(), 0, 4);
-	}
+                    val sLocs = getSphere(loc, 2.0, 23)
+                    for (o_player in plugin.getServer().getOnlinePlayers()) {
+                        if (getPlayerData(o_player)!!.settings!!.ShowEffect_SPWeapon() && o_player != player) {
+                            val dustOptions =
+                                Particle.DustOptions(
+                                    data.team!!.teamColor!!.bukkitColor!!,
+                                    1f,
+                                )
+                            val bd =
+                                getPlayerData(p)!!
+                                    .team!!
+                                    .teamColor!!
+                                    .wool!!
+                                    .createBlockData()
+                            for (e_loc in sLocs) {
+                                if (o_player.getWorld() === e_loc.getWorld()) {
+                                    if (o_player
+                                            .getLocation()
+                                            .distanceSquared(e_loc) < Sclat.particleRenderDistanceSquared
+                                    ) {
+                                        o_player.spawnParticle<Particle.DustOptions?>(
+                                            Particle.REDSTONE,
+                                            e_loc,
+                                            0,
+                                            0.0,
+                                            0.0,
+                                            0.0,
+                                            70.0,
+                                            dustOptions,
+                                        )
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    if (c >= resettime) {
+                        cancel()
+                    }
+                    if (data.armor < 9999) {
+                        cancel()
+                    }
+                    c++
+                }
+            }
+        task.runTaskTimer(plugin, 0, 4)
+    }
 }

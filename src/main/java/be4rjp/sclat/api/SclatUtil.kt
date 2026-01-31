@@ -372,7 +372,7 @@ object SclatUtil {
             }
         } else {
             target.gameMode = GameMode.SPECTATOR
-            DeathMgr.PlayerDeathRunnable(target, player, damageType)
+            DeathMgr.playerDeathRunnable(target, player!!, damageType!!)
             targetData.armor = 0.0
             return true
         }

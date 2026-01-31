@@ -234,8 +234,8 @@ object LitterFiveG {
                         while (`in` <= maxDist - 1) {
                             val pLocs = getSphere(position, `in`.toDouble(), 20)
                             for (loc in pLocs) {
-                                PaintMgr.Paint(loc, player, false)
-                                PaintMgr.PaintHightestBlock(loc, player, false, false)
+                                PaintMgr.paint(loc, player, false)
+                                PaintMgr.paintHightestBlock(loc, player, false, false)
                             }
                             `in`++
                         }

@@ -175,7 +175,7 @@ object Slosher {
                             }
                         }
 
-                        PaintMgr.PaintHightestBlock(inkball!!.location, p, false, true)
+                        PaintMgr.paintHightestBlock(inkball!!.location, p, false, true)
 
                         if (i >= tick && !addedFallVec) {
                             inkball!!.velocity = fallvec
@@ -202,8 +202,8 @@ object Slosher {
                                 while (i <= maxDist) {
                                     val pLocs = getSphere(inkball!!.location, i.toDouble(), 20)
                                     for (loc in pLocs) {
-                                        PaintMgr.Paint(loc, p, false)
-                                        PaintMgr.PaintHightestBlock(loc, p, false, false)
+                                        PaintMgr.paint(loc, p, false)
+                                        PaintMgr.paintHightestBlock(loc, p, false, false)
                                     }
                                     i++
                                 }

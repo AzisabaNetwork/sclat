@@ -1,218 +1,254 @@
+package be4rjp.sclat.manager
 
-package be4rjp.sclat.manager;
-
-import be4rjp.sclat.Sclat;
-import be4rjp.sclat.VariablesKt;
-import be4rjp.sclat.api.holo.RankingHolograms;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
-import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
-import static be4rjp.sclat.Sclat.conf;
+import be4rjp.sclat.Sclat
+import be4rjp.sclat.api.holo.RankingHolograms
+import be4rjp.sclat.plugin
+import org.bukkit.entity.Player
+import org.bukkit.scheduler.BukkitRunnable
+import java.util.TreeMap
+import java.util.function.Consumer
 
 /**
  *
  * @author Be4rJP
  */
-public class RankMgr {
+object RankMgr {
+    private val ranks =
+        arrayOf<String>(
+            "E",
+            "D-",
+            "D",
+            "D+",
+            "C-",
+            "C",
+            "C+",
+            "B-",
+            "B",
+            "B+",
+            "A-",
+            "A",
+            "A+",
+            "S-",
+            "S",
+            "S+",
+            "MASTER",
+        )
+    private val MAX_RATE = (ranks.size - 1) * 500
 
-	private static final String[] ranks = {"E", "D-", "D", "D+", "C-", "C", "C+", "B-", "B", "B+", "A-", "A", "A+",
-			"S-", "S", "S+", "MASTER"};
-	private static final int MAX_RATE = (ranks.length - 1) * 500;
+    var ranking: MutableList<String?> = ArrayList<String?>()
+    var killRanking: MutableList<String?> = ArrayList<String?>()
+    var paintRanking: MutableList<String?> = ArrayList<String?>()
 
-	public static List<String> ranking = new ArrayList<>();
-	public static List<String> killRanking = new ArrayList<>();
-	public static List<String> paintRanking = new ArrayList<>();
+    // レートを500単位で区切ってランク付けする
+    @JvmStatic
+    fun toABCRank(ir: Int): String = if (ir >= 0) ranks[if (ir <= MAX_RATE) ir / 500 else ranks.size - 1] else "UnRanked"
 
-	// レートを500単位で区切ってランク付けする
-	public static String toABCRank(int ir) {
-		return ir >= 0 ? ranks[ir <= MAX_RATE ? ir / 500 : ranks.length - 1] : "UnRanked";
-	}
-	public static int IndicateRankPointmove(Player p, int rankPoint) {
-		if (rankPoint == 0)
-			return 0;
+    fun IndicateRankPointmove(
+        p: Player,
+        rankPoint: Int,
+    ): Int {
+        if (rankPoint == 0) return 0
 
-		int rank = PlayerStatusMgr.getRank(p);
+        val rank = PlayerStatusMgr.getRank(p)
 
-		double rank_Rate = 1.0;
+        var rank_Rate = 1.0
 
-		if (rank < 500) {
-			rank_Rate = 3.0;
-		} else if (rank < 2000) {
-			rank_Rate = 2.0;
-		} else if (rank < 3500) {
-			rank_Rate = 1.5;
-		} else if (rank < 6500) {
-			rank_Rate = 1.0;
-		} else if (rank < 8000) {
-			rank_Rate = 0.75;
-		} else if (rank < 20000) {
-			rank_Rate = 0.5;
-		} else {
-			rank_Rate = 0.2;
-		}
-		int plus = (int) ((double) rankPoint * rank_Rate);
-		return plus;
+        if (rank < 500) {
+            rank_Rate = 3.0
+        } else if (rank < 2000) {
+            rank_Rate = 2.0
+        } else if (rank < 3500) {
+            rank_Rate = 1.5
+        } else if (rank < 6500) {
+            rank_Rate = 1.0
+        } else if (rank < 8000) {
+            rank_Rate = 0.75
+        } else if (rank < 20000) {
+            rank_Rate = 0.5
+        } else {
+            rank_Rate = 0.2
+        }
+        val plus = (rankPoint.toDouble() * rank_Rate).toInt()
+        return plus
+    }
 
-	}
-	public static void addPlayerRankPoint(String uuid, int rankPoint) {
-		if (rankPoint == 0)
-			return;
+    fun addPlayerRankPoint(
+        uuid: String?,
+        rankPoint: Int,
+    ) {
+        if (rankPoint == 0) return
 
-		int rank = PlayerStatusMgr.getRank(uuid);
+        val rank = PlayerStatusMgr.getRank(uuid)
 
-		// int MAX_RATE = ranks.length * 500;
+        // int MAX_RATE = ranks.length * 500;
+        var rank_Rate = 1.0
 
-		double rank_Rate = 1.0;
+        if (rank < 500) {
+            rank_Rate = 3.0
+        } else if (rank < 2000) {
+            rank_Rate = 2.0
+        } else if (rank < 3500) {
+            rank_Rate = 1.5
+        } else if (rank < 6500) {
+            rank_Rate = 1.0
+        } else if (rank < 8000) {
+            rank_Rate = 0.75
+        } else if (rank < 20000) {
+            rank_Rate = 0.5
+        } else {
+            rank_Rate = 0.2
+        }
 
-		if (rank < 500) {
-			rank_Rate = 3.0;
-		} else if (rank < 2000) {
-			rank_Rate = 2.0;
-		} else if (rank < 3500) {
-			rank_Rate = 1.5;
-		} else if (rank < 6500) {
-			rank_Rate = 1.0;
-		} else if (rank < 8000) {
-			rank_Rate = 0.75;
-		} else if (rank < 20000) {
-			rank_Rate = 0.5;
-		} else {
-			rank_Rate = 0.2;
-		}
+        // if(rank >= MAX_RATE) {
+        // if(rankPoint < 0){
+        // double minusRate = (double)MAX_RATE / ((double)MAX_RATE - (double)rank);
+        // int minus = (int)((double)rankPoint * minusRate);
+        // PlayerStatusMgr.addRank(uuid, -minus);
+        // }
+        // return;
+        // }
+        val plus = (rankPoint.toDouble() * rank_Rate).toInt()
+        if (plus > 0) {
+            // double plusRate = ((double)MAX_RATE - (double)rank) / (double)MAX_RATE;
+            // int plus = (int)((double)rankPoint * plusRate);
+            PlayerStatusMgr.addRank(uuid, plus)
+        }
 
-		// if(rank >= MAX_RATE) {
-		// if(rankPoint < 0){
-		// double minusRate = (double)MAX_RATE / ((double)MAX_RATE - (double)rank);
-		// int minus = (int)((double)rankPoint * minusRate);
-		// PlayerStatusMgr.addRank(uuid, -minus);
-		// }
-		// return;
-		// }
-		int plus = (int) ((double) rankPoint * rank_Rate);
-		if (plus > 0) {
-			// double plusRate = ((double)MAX_RATE - (double)rank) / (double)MAX_RATE;
-			// int plus = (int)((double)rankPoint * plusRate);
-			PlayerStatusMgr.addRank(uuid, plus);
-		}
-		// }else{
-		// double minusRate = (double)MAX_RATE / ((double)MAX_RATE - (double)rank);
-		// int minus = (int)((double)rankPoint * minusRate);
-		// PlayerStatusMgr.addRank(uuid, minus);
-		// }
+        // }else{
+        // double minusRate = (double)MAX_RATE / ((double)MAX_RATE - (double)rank);
+        // int minus = (int)((double)rankPoint * minusRate);
+        // PlayerStatusMgr.addRank(uuid, minus);
+        // }
+    }
 
-	}
+    fun makeRankingAsync() {
+        val async: BukkitRunnable =
+            object : BukkitRunnable() {
+                override fun run() {
+                    try {
+                        // かぶらないようにマッピング
+                        val playerMap: MutableMap<Int, String> = HashMap()
+                        for (uuid in Sclat.Companion.conf!!
+                            .playerStatus
+                            .getConfigurationSection("Status")!!
+                            .getKeys(false)) {
+                            var rate =
+                                Sclat.Companion.conf!!
+                                    .playerStatus
+                                    .getInt("Status." + uuid + ".Rank")
+                            if (rate == 0) continue
 
-	public static void makeRankingAsync() {
-		BukkitRunnable async = new BukkitRunnable() {
-			@Override
-			public void run() {
-				try {
-					// かぶらないようにマッピング
-					Map<Integer, String> playerMap = new HashMap<>();
-					for (String uuid : conf.getPlayerStatus().getConfigurationSection("Status").getKeys(false)) {
-						int rate = conf.getPlayerStatus().getInt("Status." + uuid + ".Rank");
-						if (rate == 0)
-							continue;
+                            while (playerMap.containsKey(rate)) {
+                                rate++
+                            }
+                            playerMap.put(rate, uuid)
+                        }
 
-						while (playerMap.containsKey(rate)) {
-							rate++;
-						}
-						playerMap.put(rate, uuid);
-					}
+                        val treeMap: MutableMap<Int, String> = TreeMap(Comparator.reverseOrder<Int>())
+                        treeMap.putAll(playerMap)
+                        ranking = ArrayList<String?>()
+                        for (key in treeMap.keys) ranking.add(treeMap.get(key))
+                    } catch (e: Exception) {
+                    }
+                }
+            }
+        async.runTaskAsynchronously(plugin)
+    }
 
-					Map<Integer, String> treeMap = new TreeMap<>(Comparator.reverseOrder());
-					treeMap.putAll(playerMap);
-					ranking = new ArrayList<>();
-					for (Integer key : treeMap.keySet())
-						ranking.add(treeMap.get(key));
-				} catch (Exception e) {
-				}
-			}
-		};
-		async.runTaskAsynchronously(VariablesKt.getPlugin());
-	}
+    fun makeKillRankingAsync() {
+        val async: BukkitRunnable =
+            object : BukkitRunnable() {
+                override fun run() {
+                    try {
+                        // かぶらないようにマッピング
+                        val playerMap: MutableMap<Int, String> = HashMap()
+                        for (uuid in Sclat.conf!!
+                            .playerStatus
+                            .getConfigurationSection("Status")!!
+                            .getKeys(false)) {
+                            var rate =
+                                Sclat.Companion.conf!!
+                                    .playerStatus
+                                    .getInt("Status." + uuid + ".Kill")
+                            if (rate == 0) continue
 
-	public static void makeKillRankingAsync() {
-		BukkitRunnable async = new BukkitRunnable() {
-			@Override
-			public void run() {
-				try {
-					// かぶらないようにマッピング
-					Map<Integer, String> playerMap = new HashMap<>();
-					for (String uuid : conf.getPlayerStatus().getConfigurationSection("Status").getKeys(false)) {
-						int rate = conf.getPlayerStatus().getInt("Status." + uuid + ".Kill");
-						if (rate == 0)
-							continue;
+                            while (playerMap.containsKey(rate)) {
+                                rate++
+                            }
+                            playerMap.put(rate, uuid)
+                        }
 
-						while (playerMap.containsKey(rate)) {
-							rate++;
-						}
-						playerMap.put(rate, uuid);
-					}
+                        val treeMap: MutableMap<Int, String> = TreeMap(Comparator.reverseOrder<Int>())
+                        treeMap.putAll(playerMap)
+                        killRanking = ArrayList()
+                        for (key in treeMap.keys) killRanking.add(treeMap.get(key))
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+                }
+            }
+        async.runTaskAsynchronously(plugin)
+    }
 
-					Map<Integer, String> treeMap = new TreeMap<>(Comparator.reverseOrder());
-					treeMap.putAll(playerMap);
-					killRanking = new ArrayList<>();
-					for (Integer key : treeMap.keySet())
-						killRanking.add(treeMap.get(key));
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		};
-		async.runTaskAsynchronously(VariablesKt.getPlugin());
-	}
+    fun makePaintRankingAsync() {
+        val async: BukkitRunnable =
+            object : BukkitRunnable() {
+                override fun run() {
+                    try {
+                        // かぶらないようにマッピング
+                        val playerMap: MutableMap<Int, String> = HashMap()
+                        for (uuid in Sclat.Companion.conf!!
+                            .playerStatus
+                            .getConfigurationSection("Status")!!
+                            .getKeys(false)) {
+                            var rate =
+                                Sclat.Companion.conf!!
+                                    .playerStatus
+                                    .getInt("Status." + uuid + ".Paint")
+                            if (rate == 0) continue
 
-	public static void makePaintRankingAsync() {
-		BukkitRunnable async = new BukkitRunnable() {
-			@Override
-			public void run() {
-				try {
-					// かぶらないようにマッピング
-					Map<Integer, String> playerMap = new HashMap<>();
-					for (String uuid : conf.getPlayerStatus().getConfigurationSection("Status").getKeys(false)) {
-						int rate = conf.getPlayerStatus().getInt("Status." + uuid + ".Paint");
-						if (rate == 0)
-							continue;
+                            while (playerMap.containsKey(rate)) {
+                                rate++
+                            }
+                            playerMap.put(rate, uuid)
+                        }
 
-						while (playerMap.containsKey(rate)) {
-							rate++;
-						}
-						playerMap.put(rate, uuid);
-					}
+                        val treeMap: MutableMap<Int, String> = TreeMap(Comparator.reverseOrder<Int>())
+                        treeMap.putAll(playerMap)
+                        paintRanking = ArrayList<String?>()
+                        for (key in treeMap.keys) paintRanking.add(treeMap.get(key))
+                    } catch (e: Exception) {
+                    }
+                }
+            }
+        async.runTaskAsynchronously(plugin)
+    }
 
-					Map<Integer, String> treeMap = new TreeMap<>(Comparator.reverseOrder());
-					treeMap.putAll(playerMap);
-					paintRanking = new ArrayList<>();
-					for (Integer key : treeMap.keySet())
-						paintRanking.add(treeMap.get(key));
-				} catch (Exception e) {
-				}
-			}
-		};
-		async.runTaskAsynchronously(VariablesKt.getPlugin());
-	}
-
-	public static void makeRankingTask() {
-		BukkitRunnable task = new BukkitRunnable() {
-			@Override
-			public void run() {
-				makeRankingAsync();
-				makeKillRankingAsync();
-				makePaintRankingAsync();
-				for (Player player : VariablesKt.getPlugin().getServer().getOnlinePlayers()) {
-					try {
-						Sclat.playerHolograms.ifPresent(player, RankingHolograms::refreshRankingAsync);
-					} catch (Exception e) {
-					}
-				}
-			}
-		};
-		task.runTaskTimer(VariablesKt.getPlugin(), 0, conf.config.getInt("MakeRankingPeriod"));
-	}
+    fun makeRankingTask() {
+        val task: BukkitRunnable =
+            object : BukkitRunnable() {
+                override fun run() {
+                    makeRankingAsync()
+                    makeKillRankingAsync()
+                    makePaintRankingAsync()
+                    for (player in plugin.getServer().getOnlinePlayers()) {
+                        try {
+                            Sclat.playerHolograms.ifPresent(
+                                player,
+                                Consumer { obj: RankingHolograms? -> obj!!.refreshRankingAsync() },
+                            )
+                        } catch (e: Exception) {
+                        }
+                    }
+                }
+            }
+        task.runTaskTimer(
+            plugin,
+            0,
+            Sclat.Companion.conf!!
+                .config!!
+                .getInt("MakeRankingPeriod")
+                .toLong(),
+        )
+    }
 }

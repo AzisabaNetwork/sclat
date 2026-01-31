@@ -336,12 +336,12 @@ object Charger {
                     }
                 } else {
                     // if(rayTrace.intersects(new BoundingBox(block), reach, 0.01)){
-                    PaintMgr.Paint(position, player, true)
+                    PaintMgr.paint(position, player, true)
                     break
                     // }
                 }
             }
-            PaintMgr.PaintHightestBlock(position, player, false, true)
+            PaintMgr.paintHightestBlock(position, player, false, true)
             // for (Player target : Main.getPlugin().getServer().getOnlinePlayers()) {
             // if (!DataMgr.getPlayerData(target).getSettings().ShowEffect_MainWeaponInk())
             // continue;

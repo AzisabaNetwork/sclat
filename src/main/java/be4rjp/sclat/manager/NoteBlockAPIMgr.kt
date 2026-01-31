@@ -1,58 +1,67 @@
+package be4rjp.sclat.manager
 
-package be4rjp.sclat.manager;
-
-import be4rjp.sclat.data.NoteBlockSong;
-import com.xxmicloxx.NoteBlockAPI.model.Song;
-import com.xxmicloxx.NoteBlockAPI.utils.NBSDecoder;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import static be4rjp.sclat.Sclat.conf;
+import be4rjp.sclat.Sclat
+import be4rjp.sclat.data.NoteBlockSong
+import com.xxmicloxx.NoteBlockAPI.model.Song
+import com.xxmicloxx.NoteBlockAPI.utils.NBSDecoder
+import java.io.File
+import java.util.Random
 
 /**
  *
  * @author Be4rJP
  */
-public class NoteBlockAPIMgr {
-	private static int nBgm_C = 0;
-	private static int fBgm_C = 0;
-	// private static byte volume = 22;
-	private static final List<Song> nsList = new ArrayList<>();
-	private static final List<String> nsnList = new ArrayList<>();
-	private static final List<Song> fsList = new ArrayList<>();
-	private static final List<String> fsnList = new ArrayList<>();
+object NoteBlockAPIMgr {
+    private var nBgm_C = 0
+    private var fBgm_C = 0
 
-	public static void LoadSongFiles() {
-		for (String songname : conf.config.getConfigurationSection("nBGM").getKeys(false)) {
-			Song song = NBSDecoder.parse(new File("plugins/Sclat/BGM", conf.config.getString("nBGM." + songname)));
-			nsList.add(song);
-			nsnList.add(songname);
-			nBgm_C++;
-		}
+    // private static byte volume = 22;
+    private val nsList: MutableList<Song?> = ArrayList<Song?>()
+    private val nsnList: MutableList<String?> = ArrayList<String?>()
+    private val fsList: MutableList<Song?> = ArrayList<Song?>()
+    private val fsnList: MutableList<String?> = ArrayList<String?>()
 
-		for (String songname : conf.config.getConfigurationSection("fBGM").getKeys(false)) {
-			Song song = NBSDecoder.parse(new File("plugins/Sclat/BGM", conf.config.getString("fBGM." + songname)));
-			fsList.add(song);
-			fsnList.add(songname);
-			fBgm_C++;
-		}
-	}
+    fun LoadSongFiles() {
+        for (songname in Sclat.Companion.conf!!.config!!.getConfigurationSection("nBGM")!!.getKeys(false)) {
+            val song = NBSDecoder.parse(
+                File(
+                    "plugins/Sclat/BGM",
+                    Sclat.Companion.conf!!.config!!.getString("nBGM." + songname),
+                ),
+            )
+            nsList.add(song)
+            nsnList.add(songname)
+            nBgm_C++
+        }
 
-	public static NoteBlockSong getRandomNormalSong() {
-		int random = new Random().nextInt(nBgm_C);
-		String songname = nsnList.get(random);
-		Song song = nsList.get(random);
-		NoteBlockSong nbs = new NoteBlockSong(songname, song);
-		return nbs;
-	}
+        for (songname in Sclat.Companion.conf!!.config!!.getConfigurationSection("fBGM")!!.getKeys(false)) {
+            val song = NBSDecoder.parse(
+                File(
+                    "plugins/Sclat/BGM",
+                    Sclat.Companion.conf!!.config!!.getString("fBGM." + songname),
+                ),
+            )
+            fsList.add(song)
+            fsnList.add(songname)
+            fBgm_C++
+        }
+    }
 
-	public static NoteBlockSong getRandomFinalSong() {
-		int random = new Random().nextInt(fBgm_C);
-		String songname = fsnList.get(random);
-		Song song = fsList.get(random);
-		NoteBlockSong nbs = new NoteBlockSong(songname, song);
-		return nbs;
-	}
+    val randomNormalSong: NoteBlockSong
+        get() {
+            val random = Random().nextInt(nBgm_C)
+            val songname = nsnList.get(random)
+            val song = nsList.get(random)
+            val nbs = NoteBlockSong(songname, song)
+            return nbs
+        }
 
+    val randomFinalSong: NoteBlockSong
+        get() {
+            val random = Random().nextInt(fBgm_C)
+            val songname = fsnList.get(random)
+            val song = fsList.get(random)
+            val nbs = NoteBlockSong(songname, song)
+            return nbs
+        }
 }

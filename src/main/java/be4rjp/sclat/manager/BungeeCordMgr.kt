@@ -1,20 +1,19 @@
+package be4rjp.sclat.manager
 
-package be4rjp.sclat.manager;
-
-import be4rjp.sclat.VariablesKt;
-import com.google.common.io.ByteArrayDataOutput;
-import com.google.common.io.ByteStreams;
-import org.bukkit.entity.Player;
+import be4rjp.sclat.plugin
+import com.google.common.io.ByteStreams
+import org.bukkit.entity.Player
 
 /**
  *
  * @author Be4rJP
  */
-public class BungeeCordMgr {
-	public static void PlayerSendServer(Player player, String servername) {
-		ByteArrayDataOutput out = ByteStreams.newDataOutput();
-		out.writeUTF("Connect");
-		out.writeUTF(servername);
-		player.sendPluginMessage(VariablesKt.getPlugin(), "BungeeCord", out.toByteArray());
-	}
+object BungeeCordMgr {
+    @JvmStatic
+    fun PlayerSendServer(player: Player, servername: String) {
+        val out = ByteStreams.newDataOutput()
+        out.writeUTF("Connect")
+        out.writeUTF(servername)
+        player.sendPluginMessage(plugin, "BungeeCord", out.toByteArray())
+    }
 }

@@ -39,7 +39,7 @@ class MainWeapon : Listener {
             if (getPlayerData(player)!!.isInMatch) {
                 SubWeaponMgr.UseSubWeapon(
                     player,
-                    getPlayerData(player)!!.weaponClass!!.subWeaponName,
+                    getPlayerData(player)!!.weaponClass!!.subWeaponName!!,
                 )
             }
         }
@@ -135,7 +135,7 @@ class MainWeapon : Listener {
                     return
                 }
                 if (getPlayerData(player)!!.isInMatch) {
-                    DeathMgr.PlayerDeathRunnable(player, player, "fall")
+                    DeathMgr.playerDeathRunnable(player, player, "fall")
                 } else {
                     player.teleport(Sclat.lobby!!)
                 }

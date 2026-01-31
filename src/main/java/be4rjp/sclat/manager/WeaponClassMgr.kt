@@ -1,67 +1,93 @@
+package be4rjp.sclat.manager
 
-package be4rjp.sclat.manager;
-
-import be4rjp.sclat.Sclat;
-import be4rjp.sclat.api.player.PlayerData;
-import be4rjp.sclat.data.DataMgr;
-import be4rjp.sclat.data.WeaponClass;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import static be4rjp.sclat.Sclat.conf;
+import be4rjp.sclat.Sclat
+import be4rjp.sclat.data.DataMgr.getPlayerData
+import be4rjp.sclat.data.DataMgr.getWeapon
+import be4rjp.sclat.data.DataMgr.setWeaponClass
+import be4rjp.sclat.data.WeaponClass
+import org.bukkit.ChatColor
+import org.bukkit.Material
+import org.bukkit.entity.Player
+import org.bukkit.inventory.ItemStack
 
 /**
  *
  * @author Be4rJP
  */
-public class WeaponClassMgr {
-	public synchronized static void WeaponClassSetup() {
-		for (String classname : conf.getClassConfig().getConfigurationSection("WeaponClass").getKeys(false)) {
-			String WeaponName = conf.getClassConfig().getString("WeaponClass." + classname + ".MainWeaponName");
-			String SubWeaponName = conf.getClassConfig().getString("WeaponClass." + classname + ".SubWeaponName");
-			String SPWeaponName = conf.getClassConfig().getString("WeaponClass." + classname + ".SPWeaponName");
-			WeaponClass wc = new WeaponClass(classname);
-			wc.mainWeapon = (DataMgr.getWeapon(WeaponName));
-			wc.setSubWeaponName(SubWeaponName);
-			wc.setSPWeaponName(SPWeaponName);
+object WeaponClassMgr {
+    @Synchronized
+    fun WeaponClassSetup() {
+        for (classname in Sclat.Companion.conf!!
+            .classConfig!!
+            .getConfigurationSection("WeaponClass")!!
+            .getKeys(false)) {
+            val WeaponName =
+                Sclat.Companion.conf!!
+                    .classConfig!!
+                    .getString("WeaponClass." + classname + ".MainWeaponName")
+            val SubWeaponName =
+                Sclat.Companion.conf!!
+                    .classConfig!!
+                    .getString("WeaponClass." + classname + ".SubWeaponName")
+            val SPWeaponName =
+                Sclat.Companion.conf!!
+                    .classConfig!!
+                    .getString("WeaponClass." + classname + ".SPWeaponName")
+            val wc = WeaponClass(classname)
+            wc.mainWeapon = (getWeapon(WeaponName))
+            wc.subWeaponName = SubWeaponName
+            wc.sPWeaponName = SPWeaponName
 
-			DataMgr.setWeaponClass(classname, wc);
-		}
-	}
+            setWeaponClass(classname, wc)
+        }
+    }
 
-	public static void setWeaponClass(Player player) {
-		player.getInventory().clear();
-		PlayerData data = DataMgr.getPlayerData(player);
-		ItemStack main = data.weaponClass.mainWeapon.getWeaponIteamStack().clone();
-		if (data.mainItemGlow) {
-			Sclat.glow.enchantGlow(main);
-			main.addEnchantment(Sclat.glow, 1);
-		}
-		player.getInventory().setItem(0, main);
-		if (data.weaponClass.mainWeapon.isManeuver)
-			player.getInventory().setItem(40, data.weaponClass.mainWeapon.getWeaponIteamStack().clone());
-		ItemStack is = SubWeaponMgr.getSubWeapon(player);
-		player.getInventory().setItem(2, is);
-		ItemStack co = new ItemStack(Material.BOOK);
-		ItemMeta meta = co.getItemMeta();
-		meta.setDisplayName("スーパージャンプ");
-		co.setItemMeta(meta);
-		player.getInventory().setItem(6, co);
-		if (!data.isSquid)
-			player.getEquipment().setHelmet(DataMgr.getPlayerData(player).team.getTeamColor().bougu);
+    @JvmStatic
+    fun setWeaponClass(player: Player) {
+        player.getInventory().clear()
+        val data = getPlayerData(player)
+        val main =
+            data!!
+                .weaponClass!!
+                .mainWeapon!!
+                .weaponIteamStack!!
+                .clone()
+        if (data.mainItemGlow) {
+            Sclat.glow!!.enchantGlow(main)
+            main.addEnchantment(Sclat.glow!!, 1)
+        }
+        player.getInventory().setItem(0, main)
+        if (data.weaponClass!!.mainWeapon!!.isManeuver) {
+            player
+                .getInventory()
+                .setItem(
+                    40,
+                    data.weaponClass!!
+                        .mainWeapon!!
+                        .weaponIteamStack!!
+                        .clone(),
+                )
+        }
+        val `is` = SubWeaponMgr.getSubWeapon(player)
+        player.getInventory().setItem(2, `is`)
+        val co = ItemStack(Material.BOOK)
+        val meta = co.getItemMeta()
+        meta!!.setDisplayName("スーパージャンプ")
+        co.setItemMeta(meta)
+        player.getInventory().setItem(6, co)
+        if (!data.isSquid) player.getEquipment()!!.setHelmet(getPlayerData(player)!!.team!!.teamColor!!.bougu)
 
-		if (data.sPGauge == 100)
-			SPWeaponMgr.setSPWeapon(player);
+        if (data.sPGauge == 100) SPWeaponMgr.setSPWeapon(player)
 
-		if (conf.config.getString("WorkMode").equals("Trial") && !Sclat.tutorial) {
-			ItemStack join = new ItemStack(Material.CHEST);
-			ItemMeta joinmeta = join.getItemMeta();
-			joinmeta.setDisplayName(ChatColor.GOLD + "右クリックでメインメニューを開く");
-			join.setItemMeta(joinmeta);
-			player.getInventory().setItem(7, join);
-		}
-	}
-
+        if (Sclat.Companion.conf!!
+                .config!!
+                .getString("WorkMode") == "Trial" && !Sclat.tutorial
+        ) {
+            val join = ItemStack(Material.CHEST)
+            val joinmeta = join.getItemMeta()
+            joinmeta!!.setDisplayName(ChatColor.GOLD.toString() + "右クリックでメインメニューを開く")
+            join.setItemMeta(joinmeta)
+            player.getInventory().setItem(7, join)
+        }
+    }
 }

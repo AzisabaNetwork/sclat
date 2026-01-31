@@ -188,7 +188,7 @@ class TrapData(
                             while (i <= maxDist) {
                                 val pLocs = getSphere(location, i.toDouble(), 20)
                                 for (loc in pLocs) {
-                                    PaintMgr.Paint(loc, player, false)
+                                    PaintMgr.paint(loc, player, false)
                                 }
                                 i++
                             }

@@ -127,7 +127,7 @@ object Burst {
                     Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)
                 ).toFloat()
 
-        PaintMgr.PaintHightestBlock(player.location, player, true, true)
+        PaintMgr.paintHightestBlock(player.location, player, true, true)
 
         val ball = player.launchProjectile<Snowball>(Snowball::class.java)
         (ball as CraftSnowball).handle.setItem(CraftItemStack.asNMSCopy(ItemStack(getPlayerData(player)!!.team?.teamColor!!.wool!!)))
@@ -213,7 +213,7 @@ object Burst {
                         inkball!!.velocity = inkball!!.velocity.add(Vector(0.0, -0.1, 0.0))
                     }
                     // if(i != tick)
-                    if ((Random().nextInt(5)) == 0) PaintMgr.PaintHightestBlock(inkball!!.location, p, false, true)
+                    if ((Random().nextInt(5)) == 0) PaintMgr.paintHightestBlock(inkball!!.location, p, false, true)
                     if (inkball!!.isDead) cancel()
 
                     i++

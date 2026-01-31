@@ -16,7 +16,7 @@ object Trap {
         val data = getPlayerData(player)
         val block = player.location.add(0.0, -1.0, 0.0).block
         if (data!!.team != null && PaintMgr.canPaint(block)) {
-            PaintMgr.Paint(block.location, player, true)
+            PaintMgr.paint(block.location, player, true)
             if (player.isOnGround && getPlayerData(player)!!.isInMatch &&
                 player.exp >= 0.4 / Gear.getGearInfluence(player, Gear.Type.SUB_SPEC_UP)
             ) {

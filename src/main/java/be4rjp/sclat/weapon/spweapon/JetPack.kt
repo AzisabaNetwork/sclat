@@ -177,8 +177,8 @@ object JetPack {
                     val loc2 = loc1.clone().add(vec2.getX(), 0.0, vec2.getZ())
                     val loc3 = loc1.clone().add(vec3.getX(), 0.0, vec3.getZ())
 
-                    PaintMgr.PaintHightestBlock(loc2, player, false, true)
-                    PaintMgr.PaintHightestBlock(loc3, player, false, true)
+                    PaintMgr.paintHightestBlock(loc2, player, false, true)
+                    PaintMgr.paintHightestBlock(loc3, player, false, true)
 
                     if (i != 0) {
                         // effect
@@ -469,7 +469,7 @@ object JetPack {
                             while (i <= maxDist) {
                                 val pLocs: MutableList<Location> = getSphere(drop!!.location, i.toDouble(), 20)
                                 for (loc in pLocs) {
-                                    PaintMgr.Paint(loc, p, false)
+                                    PaintMgr.paint(loc, p, false)
                                 }
                                 i++
                             }

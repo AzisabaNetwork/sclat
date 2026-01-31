@@ -190,7 +190,7 @@ object SuperTyakuti {
                                 while (i <= maxDist) {
                                     val pLocs: MutableList<Location> = getSphere(player.location, i.toDouble(), 10)
                                     for (loc in pLocs) {
-                                        PaintMgr.Paint(loc, player, false)
+                                        PaintMgr.paint(loc, player, false)
                                     }
                                     i++
                                 }

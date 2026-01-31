@@ -191,17 +191,18 @@ class RankingHolograms(
 
                             if (rankingType == RankingType.TOTAL) {
                                 val uuid = RankMgr.ranking.get(i)
-                                val mcid = Sclat.conf?.uUIDCash!!.getString(uuid)
+                                val mcid = Sclat.conf?.uUIDCash!!.getString(uuid!!)
 
                                 val rank = PlayerStatusMgr.getRank(uuid)
 
                                 if (rank != 0) {
-                                    armorStand.customName = CraftChatMessage.fromStringOrNull(
-                                        (
-                                            "§e" + (i + 1).toString() + "位 §f" + mcid +
-                                                "  §6Rank : §r" + rank + " [§b " + RankMgr.toABCRank(rank) + " §f]"
-                                            ),
-                                    )
+                                    armorStand.customName =
+                                        CraftChatMessage.fromStringOrNull(
+                                            (
+                                                "§e" + (i + 1).toString() + "位 §f" + mcid +
+                                                    "  §6Rank : §r" + rank + " [§b " + RankMgr.toABCRank(rank) + " §f]"
+                                                ),
+                                        )
                                 } else {
                                     armorStand.customName = CraftChatMessage.fromStringOrNull("--")
                                 }
@@ -209,14 +210,15 @@ class RankingHolograms(
 
                             if (rankingType == RankingType.KILL) {
                                 val uuid = RankMgr.killRanking.get(i)
-                                val mcid = Sclat.conf?.uUIDCash!!.getString(uuid)
+                                val mcid = Sclat.conf?.uUIDCash!!.getString(uuid!!)
 
                                 val kill = PlayerStatusMgr.getKill(uuid)
 
                                 if (kill != 0) {
-                                    armorStand.customName = CraftChatMessage.fromStringOrNull(
-                                        "§e" + (i + 1).toString() + "位 §f" + mcid + "  §6Kill(s) : §r" + kill,
-                                    )
+                                    armorStand.customName =
+                                        CraftChatMessage.fromStringOrNull(
+                                            "§e" + (i + 1).toString() + "位 §f" + mcid + "  §6Kill(s) : §r" + kill,
+                                        )
                                 } else {
                                     armorStand.customName = CraftChatMessage.fromStringOrNull("--")
                                 }
@@ -224,14 +226,15 @@ class RankingHolograms(
 
                             if (rankingType == RankingType.PAINT) {
                                 val uuid = RankMgr.paintRanking.get(i)
-                                val mcid = Sclat.conf?.uUIDCash!!.getString(uuid)
+                                val mcid = Sclat.conf?.uUIDCash!!.getString(uuid!!)
 
                                 val paint = PlayerStatusMgr.getPaint(uuid)
 
                                 if (paint != 0) {
-                                    armorStand.customName = CraftChatMessage.fromStringOrNull(
-                                        "§e" + (i + 1).toString() + "位 §f" + mcid + "  §6Paint(s) : §r" + paint,
-                                    )
+                                    armorStand.customName =
+                                        CraftChatMessage.fromStringOrNull(
+                                            "§e" + (i + 1).toString() + "位 §f" + mcid + "  §6Paint(s) : §r" + paint,
+                                        )
                                 } else {
                                     armorStand.customName = CraftChatMessage.fromStringOrNull("--")
                                 }
@@ -252,12 +255,13 @@ class RankingHolograms(
 
                             val rank = PlayerStatusMgr.getRank(player.uniqueId.toString())
 
-                            you.customName = CraftChatMessage.fromStringOrNull(
-                                (
-                                    "§aYou ->> §e" + (if (rank == 0) "-" else ranking) +
-                                        "位 §f" + mcid + "  §6Rank : §r" + rank + " [§b " + RankMgr.toABCRank(rank) + " §f]"
-                                    ),
-                            )
+                            you.customName =
+                                CraftChatMessage.fromStringOrNull(
+                                    (
+                                        "§aYou ->> §e" + (if (rank == 0) "-" else ranking) +
+                                            "位 §f" + mcid + "  §6Rank : §r" + rank + " [§b " + RankMgr.toABCRank(rank) + " §f]"
+                                        ),
+                                )
                         }
 
                         if (rankingType == RankingType.KILL) {
@@ -270,12 +274,13 @@ class RankingHolograms(
 
                             val kill = PlayerStatusMgr.getKill(player.uniqueId.toString())
 
-                            you.customName = CraftChatMessage.fromStringOrNull(
-                                (
-                                    "§aYou ->> §e" + (if (kill == 0) "-" else ranking) +
-                                        "位 §f" + mcid + "  §6Kill(s) : §r" + kill
-                                    ),
-                            )
+                            you.customName =
+                                CraftChatMessage.fromStringOrNull(
+                                    (
+                                        "§aYou ->> §e" + (if (kill == 0) "-" else ranking) +
+                                            "位 §f" + mcid + "  §6Kill(s) : §r" + kill
+                                        ),
+                                )
                         }
 
                         if (rankingType == RankingType.PAINT) {
@@ -288,12 +293,13 @@ class RankingHolograms(
 
                             val paint = PlayerStatusMgr.getPaint(player.uniqueId.toString())
 
-                            you.customName = CraftChatMessage.fromStringOrNull(
-                                (
-                                    "§aYou ->> §e" +
-                                        (if (paint == 0) "-" else ranking) + "位 §f" + mcid + "  §6Paint(s) : §r" + paint
-                                    ),
-                            )
+                            you.customName =
+                                CraftChatMessage.fromStringOrNull(
+                                    (
+                                        "§aYou ->> §e" +
+                                            (if (paint == 0) "-" else ranking) + "位 §f" + mcid + "  §6Paint(s) : §r" + paint
+                                        ),
+                                )
                         }
                         list.add(you)
                     } catch (e: Exception) {

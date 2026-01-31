@@ -130,7 +130,7 @@ object KBomb {
                             while (i <= maxDist) {
                                 val pLocs: MutableList<Location> = getSphere(drop!!.location, i.toDouble(), 14)
                                 for (loc in pLocs) {
-                                    PaintMgr.Paint(loc, p, false)
+                                    PaintMgr.paint(loc, p, false)
                                 }
                                 i++
                             }

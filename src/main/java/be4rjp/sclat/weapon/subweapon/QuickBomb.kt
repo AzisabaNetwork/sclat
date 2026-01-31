@@ -105,7 +105,7 @@ object QuickBomb {
                             while (i <= maxDist) {
                                 val pLocs: MutableList<Location> = getSphere(drop!!.location, i.toDouble(), 20)
                                 for (loc in pLocs) {
-                                    PaintMgr.Paint(loc, p, false)
+                                    PaintMgr.paint(loc, p, false)
                                 }
                                 i++
                             }

@@ -204,7 +204,7 @@ object Kasa {
                     if (i >= tick && i <= tick + 15) {
                         inkball!!.velocity = inkball!!.velocity.add(Vector(0.0, -0.1, 0.0))
                     }
-                    if (i != tick) PaintMgr.PaintHightestBlock(inkball!!.location, p, true, true)
+                    if (i != tick) PaintMgr.paintHightestBlock(inkball!!.location, p, true, true)
                     if (inkball!!.isDead) cancel()
 
                     i++
@@ -716,7 +716,7 @@ object Kasa {
                                 }
 
                                 for (`as` in ul) {
-                                    PaintMgr.PaintHightestBlock(`as`.location, p, false, false)
+                                    PaintMgr.paintHightestBlock(`as`.location, p, false, false)
                                 }
                             }
 
