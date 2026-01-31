@@ -29,7 +29,7 @@ class MatchServerRunnable(
     override fun run() {
         if (waitTime == 30) {
             for (player in plugin.server.onlinePlayers) {
-                BungeeCordMgr.PlayerSendServer(player, serverStatus.serverName!!)
+                BungeeCordMgr.playerSendServer(player, serverStatus.serverName!!)
                 DataMgr.getPlayerData(player)?.setServerName(serverStatus.displayName)
             }
         }

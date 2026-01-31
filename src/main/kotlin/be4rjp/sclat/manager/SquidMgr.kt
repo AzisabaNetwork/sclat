@@ -37,7 +37,7 @@ import org.bukkit.util.Vector
  * @author Be4rJP
  */
 object SquidMgr {
-    fun SquidRunnable(player: Player) {
+    fun squidRunnable(player: Player) {
         val task: BukkitRunnable =
             object : BukkitRunnable() {
                 val p: Player = player
@@ -318,7 +318,7 @@ object SquidMgr {
     }
 
     @JvmStatic
-    fun SquidShowRunnable(player: Player) {
+    fun squidShowRunnable(player: Player) {
         val data = getPlayerData(player)
 
         /*
@@ -518,7 +518,7 @@ object SquidMgr {
         task.runTaskTimer(plugin, 30, 3)
     }
 
-    fun PoisonCoolTime(player: Player?) {
+    fun poisonCoolTime(player: Player?) {
         val task: BukkitRunnable =
             object : BukkitRunnable() {
                 val p: Player? = player

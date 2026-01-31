@@ -366,12 +366,12 @@ object DataMgr {
     }
 
     @JvmStatic
-    fun ColorShuffle() {
+    fun colorShuffle() {
         Collections.shuffle(list)
     }
 
     @JvmStatic
-    fun MapDataShuffle() {
+    fun mapDataShuffle() {
         Collections.shuffle(maplist)
     }
 

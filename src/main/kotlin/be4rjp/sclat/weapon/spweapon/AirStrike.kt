@@ -32,7 +32,7 @@ import org.bukkit.util.Vector
  */
 object AirStrike {
     @JvmStatic
-    fun AirStrikeRunnable(
+    fun airStrikeRunnable(
         player: Player,
         localized: Boolean,
     ) {
@@ -96,7 +96,7 @@ object AirStrike {
                             (y + 50).toDouble(),
                             ploc.blockZ + vec.blockZ + (Math.random() * random - random / 2),
                         )
-                    StrikeRunnable(player, localized, loc)
+                    strikeRunnable(player, localized, loc)
                     if (c == 15 || !getPlayerData(player)!!.isInMatch) {
                         // player.playSound(player.getLocation(), Sound.BLOCK_CHEST_CLOSE, 1, 2);
                         cancel()
@@ -145,7 +145,7 @@ object AirStrike {
         effect.runTaskTimer(plugin, 0, 2)
     }
 
-    fun StrikeRunnable(
+    fun strikeRunnable(
         player: Player,
         localized: Boolean,
         loc: Location,
@@ -153,20 +153,20 @@ object AirStrike {
         val task: BukkitRunnable =
             object : BukkitRunnable() {
                 var p: Player = player
-                var p_vec: Vector? = null
+                var pVec: Vector? = null
                 var x: Double = 0.0
                 var z: Double = 0.0
                 var collision: Boolean = false
-                var block_check: Boolean = false
+                var blockCheck: Boolean = false
                 var c: Int = 0
                 var drop: Item? = null
 
                 override fun run() {
                     if (c == 0) {
                         val bom = ItemStack(getPlayerData(p)!!.team!!.teamColor!!.wool!!).clone()
-                        val bom_m = bom.itemMeta
-                        bom_m!!.setLocalizedName(notDuplicateNumber.toString())
-                        bom.itemMeta = bom_m
+                        val bomM = bom.itemMeta
+                        bomM!!.setLocalizedName(notDuplicateNumber.toString())
+                        bom.itemMeta = bomM
                         drop = p.world.dropItem(loc, bom)
                         if (localized) {
                             drop!!.velocity = Vector(0, -4, 0)
@@ -194,8 +194,8 @@ object AirStrike {
                         // 塗る
                         var i = 0
                         while (i <= maxDist) {
-                            val p_locs: MutableList<Location> = getSphere(drop!!.location, i.toDouble(), 20)
-                            for (loc in p_locs) {
+                            val pLocs: MutableList<Location> = getSphere(drop!!.location, i.toDouble(), 20)
+                            for (loc in pLocs) {
                                 PaintMgr.paint(loc, p, false)
                             }
                             i++

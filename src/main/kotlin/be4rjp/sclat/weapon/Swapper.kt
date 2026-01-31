@@ -10,11 +10,11 @@ import org.bukkit.scheduler.BukkitRunnable
 
 object Swapper {
     @JvmStatic
-    fun SwapperRunnable(player: Player) {
+    fun swapperRunnable(player: Player) {
         val delay: BukkitRunnable =
             object : BukkitRunnable() {
                 var p: Player = player
-                var sw_recharge: Boolean = true
+                var swRecharge: Boolean = true
 
                 override fun run() {
                     val data = getPlayerData(p)
@@ -26,7 +26,7 @@ object Swapper {
                     // スワッパ―系
                     if (data.weaponClass?.mainWeapon!!.getIsSwap()) {
                         if (data.isSneaking &&
-                            sw_recharge &&
+                            swRecharge &&
                             (
                                 p.inventory.itemInMainHand.type
                                     ==
@@ -40,7 +40,7 @@ object Swapper {
                             data.stoprun = true
                             player.inventory.clear()
                             p.world.playSound(p.location, Sound.ITEM_ARMOR_EQUIP_GENERIC, 1.4f, 1.5f)
-                            sw_recharge = false
+                            swRecharge = false
                             val swapset: BukkitRunnable =
                                 object : BukkitRunnable() {
                                     // チャージャーとローラーのみ対応
@@ -70,7 +70,7 @@ object Swapper {
                                 object : BukkitRunnable() {
                                     // クールタイムを管理しています
                                     override fun run() {
-                                        sw_recharge = true
+                                        swRecharge = true
                                     }
                                 }
                             swapset.runTaskLater(plugin, 5)

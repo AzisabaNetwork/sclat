@@ -18,17 +18,17 @@ object MapDataMgr {
     var allmapcount: Int = 0
 
     @Synchronized
-    fun SetupMap() {
+    fun setupMap() {
         for (mapname in Sclat.Companion.conf!!
             .mapConfig!!
             .getConfigurationSection("Maps")!!
             .getKeys(false)) {
             val map = MapData(mapname)
-            val WorldName =
+            val worldName =
                 Sclat.Companion.conf!!
                     .mapConfig!!
                     .getString("Maps." + mapname + ".WorldName")
-            val w = Bukkit.getServer().getWorld(WorldName!!)
+            val w = Bukkit.getServer().getWorld(worldName!!)
 
             val ix =
                 Sclat.Companion.conf!!
@@ -413,7 +413,7 @@ object MapDataMgr {
             // Main.getPlugin().getServer().createWorld(new WorldCreator(WorldName));
             plugin.getLogger().info(mapname)
 
-            map.worldName = WorldName
+            map.worldName = worldName
 
             allmapcount++
 

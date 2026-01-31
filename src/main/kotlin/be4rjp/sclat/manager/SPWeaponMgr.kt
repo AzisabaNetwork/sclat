@@ -5,17 +5,17 @@ import be4rjp.sclat.api.MessageType
 import be4rjp.sclat.api.SclatUtil.sendMessage
 import be4rjp.sclat.data.DataMgr.getPlayerData
 import be4rjp.sclat.plugin
-import be4rjp.sclat.weapon.spweapon.AirStrike.AirStrikeRunnable
+import be4rjp.sclat.weapon.spweapon.AirStrike.airStrikeRunnable
 import be4rjp.sclat.weapon.spweapon.Amehurasi.amehurasiDropRunnable
-import be4rjp.sclat.weapon.spweapon.Barrier.BarrierRunnable
-import be4rjp.sclat.weapon.spweapon.BombRush.BombRushRunnable
+import be4rjp.sclat.weapon.spweapon.Barrier.barrierRunnable
+import be4rjp.sclat.weapon.spweapon.BombRush.bombRushRunnable
 import be4rjp.sclat.weapon.spweapon.JetPack.jetPackRunnable
 import be4rjp.sclat.weapon.spweapon.LitterFiveG.setLitterFiveG
 import be4rjp.sclat.weapon.spweapon.MegaLaser.megaLaserRunnable
 import be4rjp.sclat.weapon.spweapon.MultiMissile.mmLockRunnable
 import be4rjp.sclat.weapon.spweapon.QuadroArms.setQuadroArms
 import be4rjp.sclat.weapon.spweapon.SuperArmor.setArmor
-import be4rjp.sclat.weapon.spweapon.SuperSensor.SuperSensorRunnable
+import be4rjp.sclat.weapon.spweapon.SuperSensor.superSensorRunnable
 import be4rjp.sclat.weapon.spweapon.SuperShot.setSuperShot
 import be4rjp.sclat.weapon.spweapon.SuperTyakuti.superTyakutiRunnable
 import be4rjp.sclat.weapon.spweapon.SwordMord.setSwordMord
@@ -49,7 +49,7 @@ object SPWeaponMgr {
         return toGauge(data.sPGauge / 5, 20, "§a", "§7")
     }
 
-    fun SPWeaponHuriRunnable(player: Player) {
+    fun spWeaponHuriRunnable(player: Player) {
         val data = getPlayerData(player)
         val task: BukkitRunnable =
             object : BukkitRunnable() {
@@ -82,7 +82,7 @@ object SPWeaponMgr {
     }
 
     @JvmStatic
-    fun SPWeaponRunnable(player: Player) {
+    fun spWeaponRunnable(player: Player) {
         val task: BukkitRunnable =
             object : BukkitRunnable() {
                 val p: Player = player
@@ -154,7 +154,7 @@ object SPWeaponMgr {
         anime.runTaskTimer(plugin, 0, 2)
     }
 
-    fun ArmorRunnable(player: Player) {
+    fun armorRunnable(player: Player) {
         val bar =
             plugin.getServer().createBossBar(
                 getPlayerData(player)!!.team!!.teamColor!!.colorCode + "§lInk Armor",
@@ -339,7 +339,7 @@ object SPWeaponMgr {
         }
     }
 
-    fun UseSPWeapon(
+    fun useSPWeapon(
         player: Player,
         name: String,
     ) {
@@ -348,8 +348,8 @@ object SPWeaponMgr {
         if (data!!.isJumping && name != "スーパーチャクチ") return
 
         when (name) {
-            "カーソルを合わせて右クリックで発射" -> AirStrikeRunnable(player, false)
-            "カーソルを合わせて右クリックで発射!" -> AirStrikeRunnable(player, true)
+            "カーソルを合わせて右クリックで発射" -> airStrikeRunnable(player, false)
+            "カーソルを合わせて右クリックで発射!" -> airStrikeRunnable(player, true)
             "プレイヤーを狙って右クリックで発射" -> getPlayerData(player)!!.isUsingMM = (false)
             "狙って右クリックで発射" -> getPlayerData(player)!!.isUsingMM = (false)
         }
@@ -378,7 +378,7 @@ object SPWeaponMgr {
             }
 
             "バリア" -> {
-                BarrierRunnable(player)
+                barrierRunnable(player)
                 var inventnum = 0
                 while (inventnum < 9) {
                     if (player.getInventory().getItem(inventnum) != null) {
@@ -393,7 +393,7 @@ object SPWeaponMgr {
             }
 
             "ボムラッシュ" -> {
-                BombRushRunnable(player)
+                bombRushRunnable(player)
                 var inventnum = 0
                 while (inventnum < 9) {
                     if (player.getInventory().getItem(inventnum) != null) {
@@ -408,7 +408,7 @@ object SPWeaponMgr {
             }
 
             "スーパーセンサー" -> {
-                SuperSensorRunnable(player)
+                superSensorRunnable(player)
                 var inventnum = 0
                 while (inventnum < 9) {
                     if (player.getInventory().getItem(inventnum) != null) {

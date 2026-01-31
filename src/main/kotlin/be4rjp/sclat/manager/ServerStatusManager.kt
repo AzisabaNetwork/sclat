@@ -49,11 +49,11 @@ object ServerStatusManager {
                     .servers!!
                     .getInt("Servers." + server + ".Period")
 
-            val WorldName =
+            val worldName =
                 Sclat.Companion.conf!!
                     .servers!!
                     .getString("Servers." + server + ".Sign.WorldName")
-            val w = Bukkit.getWorld(WorldName!!)
+            val w = Bukkit.getWorld(worldName!!)
             val ix =
                 Sclat.Companion.conf!!
                     .servers!!

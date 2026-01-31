@@ -26,7 +26,7 @@ class SPWeapon : Listener {
         }
 
         if (action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK) {
-            SPWeaponMgr.UseSPWeapon(
+            SPWeaponMgr.useSPWeapon(
                 player,
                 player.inventory.itemInMainHand.itemMeta!!
                     .displayName,

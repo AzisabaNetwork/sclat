@@ -194,7 +194,7 @@ object PathMgr {
                                     getPlayerData(player)!!.team == team &&
                                     !getPlayerData(player)!!.isOnPath
                                 ) {
-                                    if (player.getLocation().distanceSquared(from) < 1 /* 1*1 */) {
+                                    if (player.getLocation().distanceSquared(from) < 1) { // 1*1
                                         PathMgr.setPath(
                                             player,
                                             from,

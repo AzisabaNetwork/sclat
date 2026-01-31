@@ -29,7 +29,7 @@ import java.util.Random
  */
 object Burst {
     @JvmStatic
-    fun BurstCooltime(player: Player) {
+    fun burstCooltime(player: Player) {
         val data = getPlayerData(player)
         val delay1: BukkitRunnable =
             object : BukkitRunnable() {
@@ -56,7 +56,7 @@ object Burst {
                 var p: Player? = player
 
                 override fun run() {
-                    Burstshoot(player)
+                    burstshoot(player)
                 }
             }
         if (data.canRollerShoot) {
@@ -72,7 +72,7 @@ object Burst {
         }
     }
 
-    fun Burstshoot(player: Player) {
+    fun burstshoot(player: Player) {
         val otoNumber = notDuplicateNumber.toString()
         val task: BukkitRunnable =
             object : BukkitRunnable() {
@@ -82,7 +82,7 @@ object Burst {
                 override fun run() {
                     c++
                     val q = getPlayerData(p)!!.weaponClass?.mainWeapon!!.rollerShootQuantity
-                    Shoot(
+                    shoot(
                         p,
                         q == 3 && getPlayerData(p)!!.weaponClass?.mainWeapon!!.shootTick == 2,
                         otoNumber,
@@ -101,7 +101,7 @@ object Burst {
         )
     }
 
-    fun Shoot(
+    fun shoot(
         player: Player,
         sound: Boolean,
         otoNumber: String?,

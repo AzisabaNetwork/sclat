@@ -16,27 +16,27 @@ import org.bukkit.inventory.ItemStack
  */
 object WeaponClassMgr {
     @Synchronized
-    fun WeaponClassSetup() {
+    fun weaponClassSetup() {
         for (classname in Sclat.Companion.conf!!
             .classConfig!!
             .getConfigurationSection("WeaponClass")!!
             .getKeys(false)) {
-            val WeaponName =
+            val weaponName =
                 Sclat.Companion.conf!!
                     .classConfig!!
                     .getString("WeaponClass." + classname + ".MainWeaponName")
-            val SubWeaponName =
+            val subWeaponName =
                 Sclat.Companion.conf!!
                     .classConfig!!
                     .getString("WeaponClass." + classname + ".SubWeaponName")
-            val SPWeaponName =
+            val spWeaponName =
                 Sclat.Companion.conf!!
                     .classConfig!!
                     .getString("WeaponClass." + classname + ".SPWeaponName")
             val wc = WeaponClass(classname)
-            wc.mainWeapon = (getWeapon(WeaponName))
-            wc.subWeaponName = SubWeaponName
-            wc.sPWeaponName = SPWeaponName
+            wc.mainWeapon = (getWeapon(weaponName))
+            wc.subWeaponName = subWeaponName
+            wc.sPWeaponName = spWeaponName
 
             setWeaponClass(classname, wc)
         }

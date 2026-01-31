@@ -346,7 +346,7 @@ object Tutorial {
                     }
                     player.playSound(player.location, Sound.ENTITY_MINECART_INSIDE, 0.7f, 1f)
                     if (i == 2) {
-                        BungeeCordMgr.PlayerSendServer(player, "sclat")
+                        BungeeCordMgr.playerSendServer(player, "sclat")
                         getPlayerData(player)!!.setServerName("Sclat")
                     }
                     i++

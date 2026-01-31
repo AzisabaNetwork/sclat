@@ -15,7 +15,7 @@ import org.bukkit.inventory.meta.LeatherArmorMeta
  */
 object ColorMgr {
     @Synchronized
-    fun SetupColor() {
+    fun setupColor() {
         val blue = Color("Blue")
         blue.wool = (Material.BLUE_WOOL)
         blue.concrete = (Material.BLUE_CONCRETE)

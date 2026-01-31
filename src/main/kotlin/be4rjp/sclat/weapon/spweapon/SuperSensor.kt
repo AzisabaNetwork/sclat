@@ -15,7 +15,7 @@ import org.bukkit.scheduler.BukkitRunnable
  */
 object SuperSensor {
     @JvmStatic
-    fun SuperSensorRunnable(player: Player) {
+    fun superSensorRunnable(player: Player) {
         getPlayerData(player)!!.isUsingSP = true
         SPWeaponMgr.setSPCoolTimeAnimation(player, 200)
         for (o_player in plugin.server.onlinePlayers) {

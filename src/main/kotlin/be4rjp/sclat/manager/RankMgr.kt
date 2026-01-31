@@ -43,7 +43,7 @@ object RankMgr {
     @JvmStatic
     fun toABCRank(ir: Int): String = if (ir >= 0) ranks[if (ir <= MAX_RATE) ir / 500 else ranks.size - 1] else "UnRanked"
 
-    fun IndicateRankPointmove(
+    fun indicateRankPointmove(
         p: Player,
         rankPoint: Int,
     ): Int {
@@ -51,24 +51,24 @@ object RankMgr {
 
         val rank = PlayerStatusMgr.getRank(p)
 
-        var rank_Rate = 1.0
+        var rankRate = 1.0
 
         if (rank < 500) {
-            rank_Rate = 3.0
+            rankRate = 3.0
         } else if (rank < 2000) {
-            rank_Rate = 2.0
+            rankRate = 2.0
         } else if (rank < 3500) {
-            rank_Rate = 1.5
+            rankRate = 1.5
         } else if (rank < 6500) {
-            rank_Rate = 1.0
+            rankRate = 1.0
         } else if (rank < 8000) {
-            rank_Rate = 0.75
+            rankRate = 0.75
         } else if (rank < 20000) {
-            rank_Rate = 0.5
+            rankRate = 0.5
         } else {
-            rank_Rate = 0.2
+            rankRate = 0.2
         }
-        val plus = (rankPoint.toDouble() * rank_Rate).toInt()
+        val plus = (rankPoint.toDouble() * rankRate).toInt()
         return plus
     }
 
@@ -81,22 +81,22 @@ object RankMgr {
         val rank = PlayerStatusMgr.getRank(uuid)
 
         // int MAX_RATE = ranks.length * 500;
-        var rank_Rate = 1.0
+        var rankRate = 1.0
 
         if (rank < 500) {
-            rank_Rate = 3.0
+            rankRate = 3.0
         } else if (rank < 2000) {
-            rank_Rate = 2.0
+            rankRate = 2.0
         } else if (rank < 3500) {
-            rank_Rate = 1.5
+            rankRate = 1.5
         } else if (rank < 6500) {
-            rank_Rate = 1.0
+            rankRate = 1.0
         } else if (rank < 8000) {
-            rank_Rate = 0.75
+            rankRate = 0.75
         } else if (rank < 20000) {
-            rank_Rate = 0.5
+            rankRate = 0.5
         } else {
-            rank_Rate = 0.2
+            rankRate = 0.2
         }
 
         // if(rank >= MAX_RATE) {
@@ -107,7 +107,7 @@ object RankMgr {
         // }
         // return;
         // }
-        val plus = (rankPoint.toDouble() * rank_Rate).toInt()
+        val plus = (rankPoint.toDouble() * rankRate).toInt()
         if (plus > 0) {
             // double plusRate = ((double)MAX_RATE - (double)rank) / (double)MAX_RATE;
             // int plus = (int)((double)rankPoint * plusRate);

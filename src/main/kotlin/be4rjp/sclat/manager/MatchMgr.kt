@@ -18,16 +18,16 @@ import be4rjp.sclat.api.team.Team
 import be4rjp.sclat.api.utils.ObjectiveUtil
 import be4rjp.sclat.data.BlockUpdater
 import be4rjp.sclat.data.DataMgr
-import be4rjp.sclat.data.DataMgr.ColorShuffle
-import be4rjp.sclat.data.DataMgr.MapDataShuffle
 import be4rjp.sclat.data.DataMgr.armorStandMap
 import be4rjp.sclat.data.DataMgr.beaconMap
 import be4rjp.sclat.data.DataMgr.blockDataMap
+import be4rjp.sclat.data.DataMgr.colorShuffle
 import be4rjp.sclat.data.DataMgr.getColorRandom
 import be4rjp.sclat.data.DataMgr.getMapRandom
 import be4rjp.sclat.data.DataMgr.getMatchFromId
 import be4rjp.sclat.data.DataMgr.getPlayerData
 import be4rjp.sclat.data.DataMgr.getPlayerIsQuit
+import be4rjp.sclat.data.DataMgr.mapDataShuffle
 import be4rjp.sclat.data.DataMgr.setMatch
 import be4rjp.sclat.data.DataMgr.setPlayerIsQuit
 import be4rjp.sclat.data.DataMgr.setTeam
@@ -40,9 +40,9 @@ import be4rjp.sclat.server.EquipmentServerManager.doCommands
 import be4rjp.sclat.server.StatusClient
 import be4rjp.sclat.weapon.Brush
 import be4rjp.sclat.weapon.Bucket.bucketHealRunnable
-import be4rjp.sclat.weapon.Buckler.BucklerRunnable
-import be4rjp.sclat.weapon.Charger.ChargerRunnable
-import be4rjp.sclat.weapon.Decoy.DecoyRunnable
+import be4rjp.sclat.weapon.Buckler.bucklerRunnable
+import be4rjp.sclat.weapon.Charger.chargerRunnable
+import be4rjp.sclat.weapon.Decoy.decoyRunnable
 import be4rjp.sclat.weapon.Funnel.funnelFloat
 import be4rjp.sclat.weapon.Gear
 import be4rjp.sclat.weapon.Gear.getGearInfluence
@@ -57,7 +57,7 @@ import be4rjp.sclat.weapon.Shooter
 import be4rjp.sclat.weapon.Shooter.maneuverShootRunnable
 import be4rjp.sclat.weapon.Shooter.shooterRunnable
 import be4rjp.sclat.weapon.Spinner.spinnerRunnable
-import be4rjp.sclat.weapon.Swapper.SwapperRunnable
+import be4rjp.sclat.weapon.Swapper.swapperRunnable
 import be4rjp.sclat.weapon.spweapon.SuperArmor.setArmor
 import com.xxmicloxx.NoteBlockAPI.songplayer.RadioSongPlayer
 import net.md_5.bungee.api.ChatMessageType
@@ -427,7 +427,7 @@ object MatchMgr {
         bur.start()
         match.blockUpdater = bur
 
-        ColorShuffle()
+        colorShuffle()
         val color0 = getColorRandom(0)
         val color1 = getColorRandom(1)
         team0.teamColor = color0
@@ -436,7 +436,7 @@ object MatchMgr {
         match.team0 = (team0)
         match.team1 = (team1)
 
-        if (id == 0) MapDataShuffle()
+        if (id == 0) mapDataShuffle()
 
         val map = getMapRandom(mapcount)
         match.mapData = map
@@ -458,7 +458,7 @@ object MatchMgr {
         setTeam(id2, lobbyT0)
         setTeam(id2 - 1, lobbyT1)
 
-        ColorShuffle()
+        colorShuffle()
         val lc0 = getColorRandom(0)
         val lc1 = getColorRandom(1)
         lobbyT0.teamColor = lc0
@@ -937,7 +937,7 @@ object MatchMgr {
                             WeaponClassMgr.setWeaponClass(p)
 
                             if (getPlayerData(p)!!.weaponClass!!.mainWeapon!!.getIsSwap()) {
-                                SwapperRunnable(p)
+                                swapperRunnable(p)
                                 if (getPlayerData(p)!!.weaponClass!!.mainWeapon!!.slidingShootTick > 1) {
                                     maneuverShootRunnable(p)
                                     getPlayerData(p)!!.isUsingManeuver = (true)
@@ -966,7 +966,7 @@ object MatchMgr {
                             }
                             if (getPlayerData(p)!!.weaponClass!!.mainWeapon!!.weaponType == "Buckler") {
                                 shooterRunnable(p)
-                                BucklerRunnable(p)
+                                bucklerRunnable(p)
                             }
                             if (getPlayerData(p)!!.weaponClass!!.mainWeapon!!.weaponType == "Bucket") {
                                 bucketHealRunnable(
@@ -981,8 +981,8 @@ object MatchMgr {
                                 )
                             }
                             if (getPlayerData(p)!!.weaponClass!!.mainWeapon!!.weaponType == "Charger") {
-                                ChargerRunnable(p)
-                                DecoyRunnable(p)
+                                chargerRunnable(p)
+                                decoyRunnable(p)
                             }
                             if (getPlayerData(p)!!.weaponClass!!.mainWeapon!!.weaponType == "Spinner") spinnerRunnable(p)
                             if (getPlayerData(p)!!.weaponClass!!.mainWeapon!!.weaponType == "Roller") {
@@ -1013,13 +1013,13 @@ object MatchMgr {
                                 funnelFloat(p)
                             }
 
-                            SquidMgr.SquidShowRunnable(p)
+                            SquidMgr.squidShowRunnable(p)
 
                             p.getEquipment()!!.setHelmet(getPlayerData(p)!!.team!!.teamColor!!.bougu)
 
                             setArmor(p, 31.0, 100, false)
-                            SPWeaponMgr.SPWeaponRunnable(p)
-                            SPWeaponMgr.ArmorRunnable(p)
+                            SPWeaponMgr.spWeaponRunnable(p)
+                            SPWeaponMgr.armorRunnable(p)
 
                             getPlayerData(p)!!.tick = 10
 
@@ -1048,7 +1048,7 @@ object MatchMgr {
                                 p.setMaxHealth(20.0)
                             }
 
-                            SPWeaponMgr.SPWeaponHuriRunnable(p)
+                            SPWeaponMgr.spWeaponHuriRunnable(p)
 
                             // p.setPlayerListName(DataMgr.getPlayerData(p).getTeam().getTeamColor().getColorCode()
                             // + p.displayName);
@@ -1876,7 +1876,7 @@ object MatchMgr {
                                     0
                             }
 
-                            val pMoveRank = RankMgr.IndicateRankPointmove(p, pRank)
+                            val pMoveRank = RankMgr.indicateRankPointmove(p, pRank)
                             PlayerStatusMgr.addRank(p, pRank)
 
                             PlayerStatusMgr.addLv(p, pLv)
@@ -2062,7 +2062,7 @@ object MatchMgr {
 
                             if (Sclat.type == ServerType.MATCH) {
                                 try {
-                                    BungeeCordMgr.PlayerSendServer(p, "sclat")
+                                    BungeeCordMgr.playerSendServer(p, "sclat")
                                     getPlayerData(p)!!.setServerName("Sclat")
                                 } catch (e: Exception) {
                                 }

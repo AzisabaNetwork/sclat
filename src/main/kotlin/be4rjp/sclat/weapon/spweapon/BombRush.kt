@@ -12,7 +12,7 @@ import org.bukkit.scheduler.BukkitRunnable
  */
 object BombRush {
     @JvmStatic
-    fun BombRushRunnable(player: Player?) {
+    fun bombRushRunnable(player: Player?) {
         val data = getPlayerData(player)
         data!!.isBombRush = true
         data.isUsingSP = true

@@ -241,7 +241,7 @@ class SclatCommandExecutor :
                             object : BukkitRunnable() {
                                 override fun run() {
                                     try {
-                                        BungeeCordMgr.PlayerSendServer(sender, ss.serverName)
+                                        BungeeCordMgr.playerSendServer(sender, ss.serverName)
                                         DataMgr.getPlayerData(sender)?.setServerName(ss.displayName)
                                     } catch (ignored: Exception) {
                                     }

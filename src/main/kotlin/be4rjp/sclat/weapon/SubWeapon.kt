@@ -31,7 +31,7 @@ class SubWeapon : Listener {
         }
 
         if (action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK) {
-            SubWeaponMgr.UseSubWeapon(
+            SubWeaponMgr.useSubWeapon(
                 player,
                 player.inventory.itemInMainHand.itemMeta!!
                     .displayName,
@@ -57,7 +57,7 @@ class SubWeapon : Listener {
 
         if (event.animationType == PlayerAnimationType.ARM_SWING) {
             if (getPlayerData(player)!!.isInMatch) {
-                SubWeaponMgr.UseSubWeapon(
+                SubWeaponMgr.useSubWeapon(
                     player,
                     getPlayerData(player)!!.weaponClass!!.subWeaponName!!,
                 )
@@ -76,7 +76,7 @@ class SubWeapon : Listener {
 
         if (!getPlayerData(player)!!.isInMatch) return
 
-        SubWeaponMgr.UseSubWeapon(
+        SubWeaponMgr.useSubWeapon(
             player,
             player.inventory.itemInMainHand.itemMeta!!
                 .displayName,
@@ -93,7 +93,7 @@ class SubWeapon : Listener {
         }
         if (!getPlayerData(player)!!.isInMatch) return
 
-        SubWeaponMgr.UseSubWeapon(
+        SubWeaponMgr.useSubWeapon(
             player,
             player.inventory.itemInMainHand.itemMeta!!
                 .displayName,

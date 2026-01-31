@@ -41,8 +41,8 @@ class RankingHolograms(
     init {
         armorStandList = ArrayList<EntityArmorStand?>()
 
-        val WorldName = Sclat.conf?.config!!.getString("RankingHolograms.WorldName")
-        val w = Bukkit.getWorld(WorldName!!)
+        val worldName = Sclat.conf?.config!!.getString("RankingHolograms.WorldName")
+        val w = Bukkit.getWorld(worldName!!)
         val ix = Sclat.conf?.config!!.getDouble("RankingHolograms.X")
         val iy = Sclat.conf?.config!!.getDouble("RankingHolograms.Y")
         val iz = Sclat.conf?.config!!.getDouble("RankingHolograms.Z")

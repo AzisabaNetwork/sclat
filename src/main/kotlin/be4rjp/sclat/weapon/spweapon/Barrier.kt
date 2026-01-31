@@ -17,7 +17,7 @@ import org.bukkit.scheduler.BukkitRunnable
  */
 object Barrier {
     @JvmStatic
-    fun BarrierRunnable(player: Player) {
+    fun barrierRunnable(player: Player) {
         getPlayerData(player)!!.isUsingSP = true
         val data = getPlayerData(player)
         // data.setArmor(Double.MAX_VALUE);
@@ -39,7 +39,7 @@ object Barrier {
                     if (c == 0) data.armor = Double.MAX_VALUE
                     val loc = p.location.add(0.0, 0.5, 0.0)
 
-                    val s_locs = getSphere(loc, 2.0, 23)
+                    val sLocs = getSphere(loc, 2.0, 23)
                     for (o_player in plugin.server.onlinePlayers) {
                         if (getPlayerData(o_player)!!.settings!!.showEffectSPWeapon() && o_player != player) {
                             val dustOptions =
@@ -52,7 +52,7 @@ object Barrier {
                                 .teamColor!!
                                 .wool!!
                                 .createBlockData()
-                            for (e_loc in s_locs) {
+                            for (e_loc in sLocs) {
                                 if (o_player.world === e_loc.world) {
                                     if (o_player
                                             .location

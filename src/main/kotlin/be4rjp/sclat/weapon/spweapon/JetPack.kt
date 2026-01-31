@@ -314,7 +314,7 @@ object JetPack {
                         p.inventory.clear()
                         if (p.world === ol.world && p.gameMode != GameMode.SPECTATOR) {
                             if (p.location.distanceSquared(ol) > 9) { // 3^2
-                                SuperJumpMgr.SuperJumpRunnable(p, ol)
+                                SuperJumpMgr.superJumpRunnable(p, ol)
                                 p.world.playSound(p.location, Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 2f, 1.3f)
                             } else {
                                 p.world.playSound(p.location, Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 2f, 1.3f)
@@ -365,9 +365,9 @@ object JetPack {
                             p.world.playSound(p.location, Sound.ENTITY_WITHER_SHOOT, 0.2f, 2f)
                             pVec = p.eyeLocation.direction
                             val bom = ItemStack(getPlayerData(p)!!.team!!.teamColor!!.wool!!).clone()
-                            val bom_m = bom.itemMeta
-                            bom_m!!.setLocalizedName(notDuplicateNumber.toString())
-                            bom.itemMeta = bom_m
+                            val bomM = bom.itemMeta
+                            bomM!!.setLocalizedName(notDuplicateNumber.toString())
+                            bom.itemMeta = bomM
                             val dl = p.eyeLocation.add(pVec!!.clone().multiply(1.5))
                             drop = p.world.dropItem(dl, bom)
                             drop!!.velocity = pVec!!.multiply(1.5)

@@ -105,7 +105,7 @@ object SclatUtil {
         sc.startClient()
 
         for (player in plugin.server.onlinePlayers) {
-            BungeeCordMgr.PlayerSendServer(player, "sclat")
+            BungeeCordMgr.playerSendServer(player, "sclat")
             DataMgr.getPlayerData(player)?.setServerName("Sclat")
         }
         val task: BukkitRunnable =
@@ -226,7 +226,7 @@ object SclatUtil {
             object : BukkitRunnable() {
                 override fun run() {
                     try {
-                        BungeeCordMgr.PlayerSendServer(player, "sclat")
+                        BungeeCordMgr.playerSendServer(player, "sclat")
                         DataMgr.getPlayerData(player)?.setServerName("Sclat")
                     } catch (e: Exception) {
                     }

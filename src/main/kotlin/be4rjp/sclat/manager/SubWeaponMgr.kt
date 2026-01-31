@@ -15,9 +15,9 @@ import be4rjp.sclat.weapon.subweapon.KBomb.kBomRunnable
 import be4rjp.sclat.weapon.subweapon.Poison.poisonRunnable
 import be4rjp.sclat.weapon.subweapon.QuickBomb.quickBomRunnable
 import be4rjp.sclat.weapon.subweapon.Sensor.sensorRunnable
-import be4rjp.sclat.weapon.subweapon.SplashBomb.SplashBomRunnable
+import be4rjp.sclat.weapon.subweapon.SplashBomb.splashBomRunnable
 import be4rjp.sclat.weapon.subweapon.SplashShield.splashShieldThrowRunnable
-import be4rjp.sclat.weapon.subweapon.Sprinkler.SprinklerRunnable
+import be4rjp.sclat.weapon.subweapon.Sprinkler.sprinklerRunnable
 import be4rjp.sclat.weapon.subweapon.Trap.useTrap
 import org.bukkit.GameMode
 import org.bukkit.Material
@@ -114,7 +114,7 @@ object SubWeaponMgr {
         return stack ?: ItemStack(Material.AIR)
     }
 
-    fun UseSubWeapon(
+    fun useSubWeapon(
         player: Player,
         name: String,
     ) {
@@ -173,7 +173,7 @@ object SubWeaponMgr {
 
         when (name) {
             "スプラッシュボム" -> {
-                SplashBomRunnable(player)
+                splashBomRunnable(player)
                 data.canUseSubWeapon = (false)
             }
 
@@ -208,7 +208,7 @@ object SubWeaponMgr {
             }
 
             "スプリンクラー" -> {
-                SprinklerRunnable(player)
+                sprinklerRunnable(player)
                 data.canUseSubWeapon = (false)
             }
 

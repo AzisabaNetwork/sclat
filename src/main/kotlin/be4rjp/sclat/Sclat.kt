@@ -144,15 +144,15 @@ class Sclat :
 
         // ------------------------Setup from config--------------------------
         logger.info("SetupColor...")
-        ColorMgr.SetupColor()
+        ColorMgr.setupColor()
         logger.info("SetupMainWeapon...")
         MainWeaponMgr.setupMainWeapon()
         logger.info("WeaponClassSetup...")
-        WeaponClassMgr.WeaponClassSetup()
+        WeaponClassMgr.weaponClassSetup()
         logger.info("Setup Map...")
         logger.info("")
         logger.info("-----------------MAP LIST-----------------")
-        MapDataMgr.SetupMap()
+        MapDataMgr.setupMap()
         logger.info("------------------------------------------")
         logger.info("")
         logger.info("MatchSetup...")
@@ -219,7 +219,7 @@ class Sclat :
         // -------------------------------------------------------------------
 
         // ------------------------Load NBS songs-----------------------------
-        if (Plugins.NOTEBLOCKAPI.isLoaded) NoteBlockAPIMgr.LoadSongFiles()
+        if (Plugins.NOTEBLOCKAPI.isLoaded) NoteBlockAPIMgr.loadSongFiles()
 
         // -------------------------------------------------------------------
 

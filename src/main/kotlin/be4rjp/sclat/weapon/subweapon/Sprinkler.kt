@@ -33,15 +33,15 @@ import org.bukkit.util.Vector
  */
 object Sprinkler {
     @JvmStatic
-    fun SprinklerRunnable(player: Player) {
+    fun sprinklerRunnable(player: Player) {
         val task: BukkitRunnable =
             object : BukkitRunnable() {
                 var p: Player = player
-                var p_vec: Vector? = null
+                var pVec: Vector? = null
                 var x: Double = 0.0
                 var z: Double = 0.0
                 var collision: Boolean = false
-                var block_check: Boolean = false
+                var blockCheck: Boolean = false
                 var cb: Boolean = false
                 var l: Location = p.location
                 var cc: Int = 0
@@ -57,10 +57,10 @@ object Sprinkler {
                                 p.exp = p.exp - (0.59 / Gear.getGearInfluence(player, Gear.Type.SUB_SPEC_UP)).toFloat()
                             }
                             val bom = ItemStack(Material.BIRCH_FENCE_GATE).clone()
-                            val bom_m = bom.itemMeta
+                            val bomM = bom.itemMeta
                             ndn = notDuplicateNumber
-                            bom_m!!.setLocalizedName(ndn.toString())
-                            bom.itemMeta = bom_m
+                            bomM!!.setLocalizedName(ndn.toString())
+                            bom.itemMeta = bomM
                             drop = p.world.dropItem(p.eyeLocation, bom)
                             drop!!.velocity = p.eyeLocation.direction
                             // 雪玉をスポーンさせた瞬間にプレイヤーに雪玉がデスポーンした偽のパケットを送信する
@@ -75,7 +75,7 @@ object Sprinkler {
                                 val connection = (o_player as CraftPlayer).handle.playerConnection
                                 connection.sendPacket(PacketPlayOutEntityDestroy(ball!!.entityId))
                             }
-                            p_vec = p.eyeLocation.direction
+                            pVec = p.eyeLocation.direction
                         }
 
                         ball = snowballNameMap.get(ndn.toString())
@@ -103,7 +103,7 @@ object Sprinkler {
                             `as`.setHelmet(ItemStack(Material.AIR))
                             `as`.teleport(drop!!.location.add(0.0, -0.4, 0.0))
                             `as`.customName = "21"
-                            SprinklerRunnable2(`as`, p)
+                            sprinklerRunnable2(`as`, p)
                             drop!!.remove()
                             cancel()
                             return
@@ -174,7 +174,7 @@ object Sprinkler {
         }
     }
 
-    fun SprinklerRunnable2(
+    fun sprinklerRunnable2(
         `as`: ArmorStand,
         player: Player?,
     ) {

@@ -13,7 +13,7 @@ class PlayerHolograms {
     fun add(player: Player) {
         val playerHolo = RankingHolograms(player)
         rankingHoloMap.put(player.uniqueId, playerHolo)
-        PlayerStatusMgr.HologramUpdateRunnable(player)
+        PlayerStatusMgr.hologramUpdateRunnable(player)
     }
 
     fun ifPresent(

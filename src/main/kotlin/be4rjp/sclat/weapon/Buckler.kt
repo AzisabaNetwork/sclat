@@ -11,13 +11,13 @@ import org.bukkit.scheduler.BukkitRunnable
 
 object Buckler {
     @JvmStatic
-    fun BucklerRunnable(player: Player) {
+    fun bucklerRunnable(player: Player) {
         val delay3: BukkitRunnable =
             object : BukkitRunnable() {
                 var p: Player = player
-                var Etime: Int = 80
-                var Ctime: Int = 120
-                var bk_recharge: Boolean = true
+                var eTime: Int = 80
+                var cTime: Int = 120
+                var bkRecharge: Boolean = true
 
                 override fun run() {
                     val data = getPlayerData(p)
@@ -26,7 +26,7 @@ object Buckler {
                         return
                     }
                     if (data.isSneaking &&
-                        bk_recharge &&
+                        bkRecharge &&
                         player.gameMode == GameMode.ADVENTURE &&
                         (
                             p.inventory.itemInMainHand.type
@@ -38,18 +38,18 @@ object Buckler {
                                     .type
                         )
                     ) {
-                        p.addPotionEffect(PotionEffect(PotionEffectType.FIRE_RESISTANCE, Etime, 0))
-                        p.addPotionEffect(PotionEffect(PotionEffectType.SLOW, Ctime, 0))
+                        p.addPotionEffect(PotionEffect(PotionEffectType.FIRE_RESISTANCE, eTime, 0))
+                        p.addPotionEffect(PotionEffect(PotionEffectType.SLOW, cTime, 0))
                         p.world.playSound(p.location, Sound.BLOCK_ANVIL_LAND, 0.8f, 0.8f)
-                        bk_recharge = false
+                        bkRecharge = false
                         val healtask: BukkitRunnable =
                             object : BukkitRunnable() {
                                 // クールタイムを管理しています
                                 override fun run() {
-                                    bk_recharge = true
+                                    bkRecharge = true
                                 }
                             }
-                        healtask.runTaskLater(plugin, Ctime.toLong())
+                        healtask.runTaskLater(plugin, cTime.toLong())
                     }
                 }
             }

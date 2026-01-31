@@ -12,8 +12,8 @@ import java.util.Random
  * @author Be4rJP
  */
 object NoteBlockAPIMgr {
-    private var nBgm_C = 0
-    private var fBgm_C = 0
+    private var nbgmC = 0
+    private var fbgmC = 0
 
     // private static byte volume = 22;
     private val nsList: MutableList<Song?> = ArrayList<Song?>()
@@ -21,7 +21,7 @@ object NoteBlockAPIMgr {
     private val fsList: MutableList<Song?> = ArrayList<Song?>()
     private val fsnList: MutableList<String?> = ArrayList<String?>()
 
-    fun LoadSongFiles() {
+    fun loadSongFiles() {
         for (songname in Sclat.Companion.conf!!
             .config!!
             .getConfigurationSection("nBGM")!!
@@ -37,7 +37,7 @@ object NoteBlockAPIMgr {
                 )
             nsList.add(song)
             nsnList.add(songname)
-            nBgm_C++
+            nbgmC++
         }
 
         for (songname in Sclat.Companion.conf!!
@@ -55,13 +55,13 @@ object NoteBlockAPIMgr {
                 )
             fsList.add(song)
             fsnList.add(songname)
-            fBgm_C++
+            fbgmC++
         }
     }
 
     val randomNormalSong: NoteBlockSong
         get() {
-            val random = Random().nextInt(nBgm_C)
+            val random = Random().nextInt(nbgmC)
             val songname = nsnList.get(random)
             val song = nsList.get(random)
             val nbs = NoteBlockSong(songname, song)
@@ -70,7 +70,7 @@ object NoteBlockAPIMgr {
 
     val randomFinalSong: NoteBlockSong
         get() {
-            val random = Random().nextInt(fBgm_C)
+            val random = Random().nextInt(fbgmC)
             val songname = fsnList.get(random)
             val song = fsList.get(random)
             val nbs = NoteBlockSong(songname, song)

@@ -32,7 +32,7 @@ import kotlin.math.sin
  */
 object SuperJumpMgr {
     @JvmStatic
-    fun SuperJumpCollTime(
+    fun superJumpCollTime(
         player: Player,
         loc: Location,
         nearspawnpoint: Boolean,
@@ -56,7 +56,7 @@ object SuperJumpMgr {
                     if (player.hasPotionEffect(PotionEffectType.SLOW)) player.removePotionEffect(PotionEffectType.SLOW)
                     if (p.getGameMode() != GameMode.SPECTATOR) {
                         p.getWorld().playSound(p.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 2f, 1.3f)
-                        SuperJumpRunnable(p, loc)
+                        superJumpRunnable(p, loc)
                     }
                 }
             }
@@ -76,7 +76,7 @@ object SuperJumpMgr {
         }
     }
 
-    fun SuperJumpRunnable(
+    fun superJumpRunnable(
         player: Player,
         toloc: Location,
     ) {

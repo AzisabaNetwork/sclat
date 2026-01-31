@@ -28,7 +28,7 @@ import org.bukkit.scheduler.BukkitRunnable
  */
 object SplashBomb {
     @JvmStatic
-    fun SplashBomRunnable(player: Player) {
+    fun splashBomRunnable(player: Player) {
         val task: BukkitRunnable =
             object : BukkitRunnable() {
                 var p: Player = player
@@ -41,9 +41,9 @@ object SplashBomb {
                         if (c == 0) {
                             if (!getPlayerData(player)!!.isBombRush) p.exp = p.exp - 0.59f
                             val bom = ItemStack(getPlayerData(p)!!.team!!.teamColor!!.glass!!).clone()
-                            val bom_m = bom.itemMeta
-                            bom_m!!.setLocalizedName(notDuplicateNumber.toString())
-                            bom.itemMeta = bom_m
+                            val bomM = bom.itemMeta
+                            bomM!!.setLocalizedName(notDuplicateNumber.toString())
+                            bom.itemMeta = bomM
                             drop = p.world.dropItem(p.eyeLocation, bom)
                             drop!!.velocity = p.eyeLocation.direction
                         }
@@ -71,8 +71,8 @@ object SplashBomb {
                             // 塗る
                             var i = 0
                             while (i <= maxDist) {
-                                val p_locs: MutableList<Location> = getSphere(drop!!.location, i.toDouble(), 14)
-                                for (loc in p_locs) {
+                                val pLocs: MutableList<Location> = getSphere(drop!!.location, i.toDouble(), 14)
+                                for (loc in pLocs) {
                                     PaintMgr.paint(loc, p, false)
                                 }
                                 i++

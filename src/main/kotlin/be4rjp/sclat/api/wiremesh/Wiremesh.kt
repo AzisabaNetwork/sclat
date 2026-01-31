@@ -75,7 +75,7 @@ class Wiremesh(
 
                 val entityPlayer = (player as CraftPlayer).handle
 
-                if (block.location.distanceSquared(player.location) <= 25 /* 5*5 */) {
+                if (block.location.distanceSquared(player.location) <= 25) { // 5*5
                     if (`is`) {
                         player.sendBlockChange(block.location, Material.AIR.createBlockData())
                     } else {

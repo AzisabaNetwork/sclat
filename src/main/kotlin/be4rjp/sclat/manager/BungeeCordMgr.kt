@@ -10,7 +10,7 @@ import org.bukkit.entity.Player
  */
 object BungeeCordMgr {
     @JvmStatic
-    fun PlayerSendServer(
+    fun playerSendServer(
         player: Player,
         servername: String,
     ) {

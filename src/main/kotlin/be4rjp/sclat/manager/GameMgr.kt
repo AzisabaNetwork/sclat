@@ -33,9 +33,9 @@ import be4rjp.sclat.tutorial.Tutorial
 import be4rjp.sclat.tutorial.Tutorial.setInkResetTimer
 import be4rjp.sclat.weapon.Brush
 import be4rjp.sclat.weapon.Bucket.bucketHealRunnable
-import be4rjp.sclat.weapon.Buckler.BucklerRunnable
-import be4rjp.sclat.weapon.Charger.ChargerRunnable
-import be4rjp.sclat.weapon.Decoy.DecoyRunnable
+import be4rjp.sclat.weapon.Buckler.bucklerRunnable
+import be4rjp.sclat.weapon.Charger.chargerRunnable
+import be4rjp.sclat.weapon.Decoy.decoyRunnable
 import be4rjp.sclat.weapon.Funnel.funnelFloat
 import be4rjp.sclat.weapon.Hound.houndEXRunnable
 import be4rjp.sclat.weapon.Hound.houndRunnable
@@ -48,7 +48,7 @@ import be4rjp.sclat.weapon.Shooter
 import be4rjp.sclat.weapon.Shooter.maneuverShootRunnable
 import be4rjp.sclat.weapon.Shooter.shooterRunnable
 import be4rjp.sclat.weapon.Spinner.spinnerRunnable
-import be4rjp.sclat.weapon.Swapper.SwapperRunnable
+import be4rjp.sclat.weapon.Swapper.swapperRunnable
 import net.md_5.bungee.api.chat.ClickEvent
 import net.md_5.bungee.api.chat.TextComponent
 import org.bukkit.Bukkit
@@ -280,8 +280,8 @@ class GameMgr : Listener {
             joinmeta!!.setDisplayName(ChatColor.GOLD.toString() + "右クリックでメインメニューを開く")
             join.setItemMeta(joinmeta)
             player.getInventory().clear()
-            SquidMgr.SquidRunnable(player)
-            SquidMgr.SquidShowRunnable(player)
+            SquidMgr.squidRunnable(player)
+            SquidMgr.squidShowRunnable(player)
             player.setExp(0.99f)
             player.getInventory().setItem(7, join)
 
@@ -303,9 +303,9 @@ class GameMgr : Listener {
                         join.setItemMeta(joinmeta)
                         if (!Sclat.tutorial) player.getInventory().setItem(7, join)
                         player.setExp(0f)
-                        SPWeaponMgr.SPWeaponRunnable(player)
-                        SPWeaponMgr.ArmorRunnable(p)
-                        SquidMgr.SquidShowRunnable(player)
+                        SPWeaponMgr.spWeaponRunnable(player)
+                        SPWeaponMgr.armorRunnable(p)
+                        SquidMgr.squidShowRunnable(player)
                         if (!Sclat.tutorial) {
                             doCommands()
                             OpenGUI.openWeaponSelect(p, "Main", "null", false)
@@ -349,7 +349,7 @@ class GameMgr : Listener {
                                             )
                                         }
                                         if (getPlayerData(p)!!.weaponClass!!.mainWeapon!!.getIsSwap()) {
-                                            SwapperRunnable(p)
+                                            swapperRunnable(p)
                                             if (getPlayerData(p)!!.weaponClass!!.mainWeapon!!.slidingShootTick > 1) {
                                                 maneuverShootRunnable(p)
                                                 getPlayerData(p)!!.isUsingManeuver = (true)
@@ -378,7 +378,7 @@ class GameMgr : Listener {
                                         }
                                         if (getPlayerData(p)!!.weaponClass!!.mainWeapon!!.weaponType == "Buckler") {
                                             shooterRunnable(p)
-                                            BucklerRunnable(p)
+                                            bucklerRunnable(p)
                                         }
                                         if (getPlayerData(p)!!.weaponClass!!.mainWeapon!!.weaponType == "Bucket") {
                                             bucketHealRunnable(
@@ -393,8 +393,8 @@ class GameMgr : Listener {
                                             )
                                         }
                                         if (getPlayerData(p)!!.weaponClass!!.mainWeapon!!.weaponType == "Charger") {
-                                            ChargerRunnable(p)
-                                            DecoyRunnable(p)
+                                            chargerRunnable(p)
+                                            decoyRunnable(p)
                                         }
                                         if (getPlayerData(p)!!.weaponClass!!.mainWeapon!!.weaponType == "Spinner") {
                                             spinnerRunnable(
@@ -431,8 +431,8 @@ class GameMgr : Listener {
                                         WeaponClassMgr.setWeaponClass(p)
                                         player.setExp(0.99f)
 
-                                        SPWeaponMgr.SPWeaponRunnable(player)
-                                        SquidMgr.SquidShowRunnable(player)
+                                        SPWeaponMgr.spWeaponRunnable(player)
+                                        SquidMgr.squidShowRunnable(player)
                                     }
                                 }
                             delay.runTaskLater(plugin, 15)
@@ -488,7 +488,7 @@ class GameMgr : Listener {
 
         setUUIDData(player.getUniqueId().toString(), data)
         player.setWalkSpeed(0.2f)
-        SquidMgr.SquidRunnable(player)
+        SquidMgr.squidRunnable(player)
 
         player.getInventory().clear()
         if (Sclat.type != ServerType.LOBBY) {
@@ -775,7 +775,7 @@ class GameMgr : Listener {
             val target = event.getEntity() as Player
             if (event.getCause() == EntityDamageEvent.DamageCause.POISON) {
                 getPlayerData(target)!!.isPoisonCoolTime = (true)
-                SquidMgr.PoisonCoolTime(target)
+                SquidMgr.poisonCoolTime(target)
             }
             // AntiDamageTime
             val task: BukkitRunnable =
@@ -856,7 +856,7 @@ class GameMgr : Listener {
         val player = event.getPlayer()
         val data = getPlayerData(player)
         if (data!!.isInMatch && data.sPGauge == 100) {
-            SPWeaponMgr.UseSPWeapon(
+            SPWeaponMgr.useSPWeapon(
                 player,
                 data.weaponClass!!.sPWeaponName!!,
             )
@@ -903,7 +903,7 @@ class GameMgr : Listener {
                                         playGameSound(player, SoundType.ERROR)
                                         return
                                     }
-                                    BungeeCordMgr.PlayerSendServer(player, ss.serverName!!)
+                                    BungeeCordMgr.playerSendServer(player, ss.serverName!!)
                                     getPlayerData(player)!!.setServerName(ss.displayName)
                                 } else {
                                     sendMessage(
@@ -981,22 +981,22 @@ class GameMgr : Listener {
                     }
 
                     "Click to Return" -> {
-                        BungeeCordMgr.PlayerSendServer(player, "lobby")
+                        BungeeCordMgr.playerSendServer(player, "lobby")
                         getPlayerData(player)!!.setServerName("Lobby")
                     }
 
                     "[ Training Mode ]" -> {
-                        BungeeCordMgr.PlayerSendServer(player, "sclattest")
+                        BungeeCordMgr.playerSendServer(player, "sclattest")
                         getPlayerData(player)!!.setServerName("sclattest")
                     }
 
                     "[ Return to jg ]" -> {
-                        BungeeCordMgr.PlayerSendServer(player, "jg")
+                        BungeeCordMgr.playerSendServer(player, "jg")
                         getPlayerData(player)!!.setServerName("JG")
                     }
 
                     "Return to sclat" -> {
-                        BungeeCordMgr.PlayerSendServer(player, "sclat")
+                        BungeeCordMgr.playerSendServer(player, "sclat")
                         getPlayerData(player)!!.setServerName("Sclat")
                     }
 
@@ -1009,7 +1009,7 @@ class GameMgr : Listener {
                     }
 
                     "[ Sclat ]" -> {
-                        BungeeCordMgr.PlayerSendServer(player, "sclat")
+                        BungeeCordMgr.playerSendServer(player, "sclat")
                         getPlayerData(player)!!.setServerName("Sclat")
                     }
 
@@ -1059,7 +1059,7 @@ class GameMgr : Listener {
 
                     "[ Tutorial ]" -> {
                         val list = Sclat.tutorialServers!!.getConfig()!!.getStringList("server-list")
-                        BungeeCordMgr.PlayerSendServer(player, list.get(Random().nextInt(list.size)))
+                        BungeeCordMgr.playerSendServer(player, list.get(Random().nextInt(list.size)))
                         getPlayerData(player)!!
                             .setServerName(
                                 Sclat.Companion.conf!!

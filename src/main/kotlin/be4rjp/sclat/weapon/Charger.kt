@@ -30,7 +30,7 @@ import org.bukkit.scheduler.BukkitRunnable
  */
 object Charger {
     @JvmStatic
-    fun ChargerRunnable(player: Player) {
+    fun chargerRunnable(player: Player) {
         val task: BukkitRunnable =
             object : BukkitRunnable() {
                 var p: Player = player
@@ -181,7 +181,7 @@ object Charger {
                                                 Gear.Type.MAIN_INK_EFFICIENCY_UP,
                                             ) * charge
                                     ).toFloat()
-                                Shoot(
+                                shoot(
                                     p,
                                     (
                                         charge.toDouble() * data.weaponClass?.mainWeapon!!.chargeRatio *
@@ -203,7 +203,7 @@ object Charger {
                                     // Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) /
                                     // Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)));
                                     p.exp = 0.0f
-                                    Shoot(
+                                    shoot(
                                         p,
                                         (
                                             reach.toDouble() * data.weaponClass?.mainWeapon!!.chargeRatio *
@@ -234,7 +234,7 @@ object Charger {
                                             Gear.Type.MAIN_INK_EFFICIENCY_UP,
                                         ) * charge
                                 ).toFloat()
-                            Shoot(
+                            shoot(
                                 p,
                                 (
                                     charge.toDouble() * data.weaponClass?.mainWeapon!!.chargeRatio *
@@ -256,7 +256,7 @@ object Charger {
                                 // Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) /
                                 // Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)));
                                 p.exp = 0.0f
-                                Shoot(
+                                shoot(
                                     p,
                                     (
                                         reach.toDouble() * data.weaponClass?.mainWeapon!!.chargeRatio *
@@ -285,7 +285,7 @@ object Charger {
         task.runTaskTimer(plugin, 0, 1)
     }
 
-    fun Shoot(
+    fun shoot(
         player: Player,
         reach: Int,
         damage: Double,
@@ -387,7 +387,7 @@ object Charger {
                         ) {
                             val death: Boolean
                             var hitDamage = damage
-                            if (Isbackstab(player, target)) {
+                            if (isbackstab(player, target)) {
                                 hitDamage = damage * decRate
                             }
                             death = giveDamage(player, target, hitDamage, "killed")
@@ -454,7 +454,7 @@ object Charger {
                                             }
                                         }
                                     }
-                                    if (IsbackstabStand(player, `as`)) {
+                                    if (isbackstabStand(player, `as`)) {
                                         ArmorStandMgr.giveDamageArmorStand(`as`, damage * decRate, player)
                                     } else {
                                         ArmorStandMgr.giveDamageArmorStand(`as`, damage, player)
@@ -462,7 +462,7 @@ object Charger {
                                     break@loop
                                 }
                             }
-                            if (IsbackstabStand(player, `as`)) {
+                            if (isbackstabStand(player, `as`)) {
                                 ArmorStandMgr.giveDamageArmorStand(`as`, damage * decRate, player)
                             } else {
                                 ArmorStandMgr.giveDamageArmorStand(`as`, damage, player)
@@ -476,7 +476,7 @@ object Charger {
         }
     }
 
-    fun Isbackstab(
+    fun isbackstab(
         p: Player,
         target: Player,
     ): Boolean {
@@ -499,7 +499,7 @@ object Charger {
         }
     }
 
-    fun IsbackstabStand(
+    fun isbackstabStand(
         p: Player,
         target: ArmorStand,
     ): Boolean {

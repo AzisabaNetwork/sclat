@@ -187,7 +187,7 @@ object PlayerStatusMgr {
         connection.sendPacket(PacketPlayOutSpawnEntityLiving(as2))
     }
 
-    fun HologramUpdateRunnable(player: Player) {
+    fun hologramUpdateRunnable(player: Player) {
         val task: BukkitRunnable =
             object : BukkitRunnable() {
                 override fun run() {

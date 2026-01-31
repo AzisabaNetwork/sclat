@@ -37,7 +37,7 @@ class MainWeapon : Listener {
         }
         if (action == Action.LEFT_CLICK_AIR || action == Action.LEFT_CLICK_BLOCK) {
             if (getPlayerData(player)!!.isInMatch) {
-                SubWeaponMgr.UseSubWeapon(
+                SubWeaponMgr.useSubWeapon(
                     player,
                     getPlayerData(player)!!.weaponClass!!.subWeaponName!!,
                 )
@@ -73,7 +73,7 @@ class MainWeapon : Listener {
         MainWeaponMgr.useMainWeapon(player)
 
         if (getPlayerData(player)!!.isInMatch) {
-            SPWeaponMgr.UseSPWeapon(
+            SPWeaponMgr.useSPWeapon(
                 player,
                 player.inventory.itemInMainHand.itemMeta!!
                     .displayName,
@@ -94,7 +94,7 @@ class MainWeapon : Listener {
         MainWeaponMgr.useMainWeapon(player)
 
         if (getPlayerData(player)!!.isInMatch) {
-            SPWeaponMgr.UseSPWeapon(
+            SPWeaponMgr.useSPWeapon(
                 player,
                 player.inventory.itemInMainHand.itemMeta!!
                     .displayName,
@@ -116,7 +116,7 @@ class MainWeapon : Listener {
         MainWeaponMgr.useMainWeapon(player)
 
         if (getPlayerData(player)!!.isInMatch) {
-            SPWeaponMgr.UseSPWeapon(
+            SPWeaponMgr.useSPWeapon(
                 player,
                 player.inventory.itemInMainHand.itemMeta!!
                     .displayName,

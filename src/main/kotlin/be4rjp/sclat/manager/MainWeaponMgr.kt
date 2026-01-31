@@ -8,7 +8,7 @@ import be4rjp.sclat.data.MainWeapon
 import be4rjp.sclat.weapon.Blaster.shootBlaster
 import be4rjp.sclat.weapon.Brush
 import be4rjp.sclat.weapon.Bucket.shootBucket
-import be4rjp.sclat.weapon.Burst.BurstCooltime
+import be4rjp.sclat.weapon.Burst.burstCooltime
 import be4rjp.sclat.weapon.Kasa.shootKasa
 import be4rjp.sclat.weapon.Roller
 import be4rjp.sclat.weapon.Slosher.shootSlosher
@@ -447,7 +447,7 @@ object MainWeaponMgr {
                     true
             }
             if (data.weaponClass!!.mainWeapon!!.weaponType == "Blaster") shootBlaster(player)
-            if (data.weaponClass!!.mainWeapon!!.weaponType == "Burst") BurstCooltime(player)
+            if (data.weaponClass!!.mainWeapon!!.weaponType == "Burst") burstCooltime(player)
             if (data.weaponClass!!.mainWeapon!!.weaponType == "Roller") {
                 if (data.weaponClass!!.mainWeapon!!.isHude) {
                     if (data.canShoot || clickType == ClickType.RENDA) {

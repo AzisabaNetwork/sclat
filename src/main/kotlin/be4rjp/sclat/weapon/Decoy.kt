@@ -41,11 +41,11 @@ import org.bukkit.util.Consumer
 
 object Decoy {
     @JvmStatic
-    fun DecoyRunnable(player: Player) {
+    fun decoyRunnable(player: Player) {
         val delay: BukkitRunnable =
             object : BukkitRunnable() {
                 var p: Player = player
-                var dc_recharge: Boolean = true
+                var dcRecharge: Boolean = true
 
                 override fun run() {
                     val data = getPlayerData(p)
@@ -55,15 +55,15 @@ object Decoy {
                         return
                     }
 
-                    if (data.isSneaking && dc_recharge && player.gameMode != GameMode.SPECTATOR) {
-                        dc_recharge = false
+                    if (data.isSneaking && dcRecharge && player.gameMode != GameMode.SPECTATOR) {
+                        dcRecharge = false
                         // createDecoy(p, p.getName(), p.getLocation());
-                        DecoyShot(p)
+                        decoyShot(p)
                         val task: BukkitRunnable =
                             object : BukkitRunnable() {
                                 // クールタイムを管理しています
                                 override fun run() {
-                                    dc_recharge = true
+                                    dcRecharge = true
                                 }
                             }
                         // Decoyset.runTaskLater(Main.getPlugin(), 5);
@@ -247,7 +247,7 @@ object Decoy {
         task.runTaskTimer(plugin, 0, 7)
     }
 
-    fun DecoyShot(player: Player) {
+    fun decoyShot(player: Player) {
         val task: BukkitRunnable =
             object : BukkitRunnable() {
                 var p: Player = player

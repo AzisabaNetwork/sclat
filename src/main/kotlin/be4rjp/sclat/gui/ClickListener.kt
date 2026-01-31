@@ -19,7 +19,7 @@ import be4rjp.sclat.data.PaintData
 import be4rjp.sclat.manager.ArmorStandMgr.beaconArmorStandSetup
 import be4rjp.sclat.manager.ArmorStandMgr.sprinklerArmorStandSetup
 import be4rjp.sclat.manager.BungeeCordMgr
-import be4rjp.sclat.manager.BungeeCordMgr.PlayerSendServer
+import be4rjp.sclat.manager.BungeeCordMgr.playerSendServer
 import be4rjp.sclat.manager.MatchMgr
 import be4rjp.sclat.manager.MatchMgr.playerJoinMatch
 import be4rjp.sclat.manager.MatchMgr.rollBack
@@ -29,20 +29,20 @@ import be4rjp.sclat.manager.PlayerStatusMgr.getMoney
 import be4rjp.sclat.manager.PlayerStatusMgr.sendHologramUpdate
 import be4rjp.sclat.manager.PlayerStatusMgr.setGear
 import be4rjp.sclat.manager.PlayerStatusMgr.subMoney
-import be4rjp.sclat.manager.SPWeaponMgr.SPWeaponRunnable
+import be4rjp.sclat.manager.SPWeaponMgr.spWeaponRunnable
 import be4rjp.sclat.manager.ServerStatusManager
 import be4rjp.sclat.manager.ServerStatusManager.openServerList
-import be4rjp.sclat.manager.SquidMgr.SquidShowRunnable
+import be4rjp.sclat.manager.SquidMgr.squidShowRunnable
 import be4rjp.sclat.manager.SuperJumpMgr
-import be4rjp.sclat.manager.SuperJumpMgr.SuperJumpCollTime
+import be4rjp.sclat.manager.SuperJumpMgr.superJumpCollTime
 import be4rjp.sclat.manager.WeaponClassMgr.setWeaponClass
 import be4rjp.sclat.plugin
 import be4rjp.sclat.tutorial.Tutorial
 import be4rjp.sclat.weapon.Brush
 import be4rjp.sclat.weapon.Bucket.bucketHealRunnable
-import be4rjp.sclat.weapon.Buckler.BucklerRunnable
-import be4rjp.sclat.weapon.Charger.ChargerRunnable
-import be4rjp.sclat.weapon.Decoy.DecoyRunnable
+import be4rjp.sclat.weapon.Buckler.bucklerRunnable
+import be4rjp.sclat.weapon.Charger.chargerRunnable
+import be4rjp.sclat.weapon.Decoy.decoyRunnable
 import be4rjp.sclat.weapon.Funnel.funnelFloat
 import be4rjp.sclat.weapon.Gear.getGearName
 import be4rjp.sclat.weapon.Gear.getGearPrice
@@ -57,7 +57,7 @@ import be4rjp.sclat.weapon.Shooter
 import be4rjp.sclat.weapon.Shooter.maneuverShootRunnable
 import be4rjp.sclat.weapon.Shooter.shooterRunnable
 import be4rjp.sclat.weapon.Spinner.spinnerRunnable
-import be4rjp.sclat.weapon.Swapper.SwapperRunnable
+import be4rjp.sclat.weapon.Swapper.swapperRunnable
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.GameMode
@@ -192,10 +192,10 @@ class ClickListener : Listener {
 
             "ロビーへ戻る / RETURN TO LOBBY" -> {
                 if (Sclat.type != ServerType.LOBBY) {
-                    PlayerSendServer(player, "sclat")
+                    playerSendServer(player, "sclat")
                     getPlayerData(player)!!.setServerName("Sclat")
                 } else {
-                    PlayerSendServer(player, "lobby")
+                    playerSendServer(player, "lobby")
                     getPlayerData(player)!!.setServerName("Lobby")
                 }
             }
@@ -205,12 +205,12 @@ class ClickListener : Listener {
             }
 
             "試し打ちサーバーへ接続 / TRAINING FIELD" -> {
-                PlayerSendServer(player, "sclattest")
+                playerSendServer(player, "sclattest")
                 getPlayerData(player)!!.setServerName("sclattest")
             }
 
             "チームデスマッチサーバーへ接続 / CONNECT TO TDM SERVER" -> {
-                PlayerSendServer(player, "tdm")
+                playerSendServer(player, "tdm")
                 getPlayerData(player)!!.setServerName("TDM")
             }
 
@@ -289,7 +289,7 @@ class ClickListener : Listener {
                                 playGameSound(player, SoundType.ERROR)
                                 return
                             }
-                            BungeeCordMgr.PlayerSendServer(player, ss.serverName!!)
+                            BungeeCordMgr.playerSendServer(player, ss.serverName!!)
                             getPlayerData(player)!!.setServerName(ss.displayName)
                         } else {
                             sendMessage("§c§nこのサーバーは満員のため参加できません", MessageType.PLAYER, player)
@@ -396,7 +396,7 @@ class ClickListener : Listener {
                                 )
                             }
                             if (getPlayerData(p)!!.weaponClass!!.mainWeapon!!.getIsSwap()) {
-                                SwapperRunnable(p)
+                                swapperRunnable(p)
                                 if (getPlayerData(p)!!.weaponClass!!.mainWeapon!!.slidingShootTick > 1) {
                                     maneuverShootRunnable(p)
                                     getPlayerData(p)!!.isUsingManeuver = true
@@ -424,8 +424,8 @@ class ClickListener : Listener {
                                 }
                             }
                             if (getPlayerData(p)!!.weaponClass!!.mainWeapon!!.weaponType == "Charger") {
-                                ChargerRunnable(p)
-                                DecoyRunnable(p)
+                                chargerRunnable(p)
+                                decoyRunnable(p)
                             }
                             if (getPlayerData(p)!!.weaponClass!!.mainWeapon!!.weaponType == "Spinner") spinnerRunnable(p)
                             if (getPlayerData(p)!!.weaponClass!!.mainWeapon!!.weaponType == "Roller") {
@@ -449,7 +449,7 @@ class ClickListener : Listener {
                             }
                             if (getPlayerData(p)!!.weaponClass!!.mainWeapon!!.weaponType == "Buckler") {
                                 shooterRunnable(p)
-                                BucklerRunnable(p)
+                                bucklerRunnable(p)
                             }
                             if (getPlayerData(p)!!.weaponClass!!.mainWeapon!!.weaponType == "Bucket") {
                                 bucketHealRunnable(p, 1)
@@ -470,8 +470,8 @@ class ClickListener : Listener {
 
                             // p.setScoreboard(DataMgr.getPlayerData(p).getMatch().getScoreboard());
                             // DataMgr.getPlayerData(p).getTeam().getTeam().addEntry(p.getName());
-                            SPWeaponRunnable(player)
-                            SquidShowRunnable(player)
+                            spWeaponRunnable(player)
+                            squidShowRunnable(player)
                         }
                     }
                 delay.runTaskLater(plugin, 15)
@@ -561,7 +561,7 @@ class ClickListener : Listener {
                     loc =
                         getPlayerData(player)!!.matchLocation
                 }
-                SuperJumpMgr.SuperJumpCollTime(player, loc!!, false)
+                SuperJumpMgr.superJumpCollTime(player, loc!!, false)
             }
             if (name == "§r§6ロビーへジャンプ") {
                 val worldName =
@@ -582,7 +582,7 @@ class ClickListener : Listener {
                         .config!!
                         .getInt("LobbyJump.Z")
                 val loc = Location(w, ix + 0.5, iy.toDouble(), iz + 0.5)
-                SuperJumpCollTime(player, loc, true)
+                superJumpCollTime(player, loc, true)
             }
             var nearspwan = true
             var spawnloc: Location? = Sclat.lobby!!.clone()
@@ -612,14 +612,14 @@ class ClickListener : Listener {
                             playGameSound(player, SoundType.ERROR)
                             break
                         }
-                        SuperJumpMgr.SuperJumpCollTime(
+                        SuperJumpMgr.superJumpCollTime(
                             player,
                             getPlayerData(p)!!.playerGroundLocation!!,
                             nearspwan,
                         )
                     }
                     if (event.getCurrentItem()!!.getType() == Material.IRON_TRAPDOOR) {
-                        SuperJumpCollTime(
+                        superJumpCollTime(
                             player,
                             getBeaconFromplayer(p)!!.getLocation(),
                             nearspwan,
@@ -710,7 +710,7 @@ class ClickListener : Listener {
                 }
 
                 "§c§n右クリックで退出" -> {
-                    PlayerSendServer(player, "sclat")
+                    playerSendServer(player, "sclat")
                     getPlayerData(player)!!.setServerName("Sclat")
                 }
 
