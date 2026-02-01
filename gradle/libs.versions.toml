@@ -13,12 +13,14 @@ lunachat = "3.0.16"
 spigot = "1.14.4-R0.1-SNAPSHOT"
 cloudPaper = "2.0.0-beta.10"
 jspecify = "1.0.0"
+yamlkt = "0.13.0"
 
 [plugins]
 runPaper = { id = "xyz.jpenilla.run-paper", version.ref = "runPaper" }
 spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
 shadow = { id = "com.gradleup.shadow", version.ref = "shadow" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }
 
 [libraries]
@@ -32,3 +34,4 @@ lunachat = { module = "com.github.ucchyocean:LunaChat", version.ref = "lunachat"
 spigot = { module = "org.spigotmc:spigot", version.ref = "spigot" }
 cloudPaper = { module = "org.incendo:cloud-paper", version.ref = "cloudPaper" }
 jspecify = { module = "org.jspecify:jspecify", version.ref = "jspecify" }
+yamlkt = { module = "net.mamoe.yamlkt:yamlkt", version.ref = "yamlkt" }

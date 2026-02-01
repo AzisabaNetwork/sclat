@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.ktlint)
     alias(libs.plugins.shadow)
     alias(libs.plugins.kotlin.jvm)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 group = "be4rjp"
@@ -36,6 +37,7 @@ dependencies {
     implementation(libs.cloudPaper)
     implementation(libs.jspecify)
     implementation(libs.kotlin.stdlib)
+    implementation(libs.yamlkt)
 }
 
 // Project Settings
