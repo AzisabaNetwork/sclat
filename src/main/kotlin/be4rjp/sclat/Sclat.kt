@@ -57,8 +57,6 @@ import org.bukkit.plugin.java.JavaPlugin
 import org.bukkit.plugin.messaging.PluginMessageListener
 import org.bukkit.scoreboard.NameTagVisibility
 import org.bukkit.scoreboard.Team
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import kotlin.math.pow
 
 /**
@@ -72,14 +70,14 @@ class Sclat :
         plugin = this
         glow = Glow()
 
-        pdspList = ArrayList<Player?>()
+        pdspList = ArrayList()
 
         // Setup async tick thread
         setup(1)
 
         // ----------------------------APICheck-------------------------------
-        if (!onInit(Companion.logger)) return
-        Companion.logger.info("API check was complted.")
+        if (!onInit()) return
+        sclatLogger.info("API check was completed.")
 
         protocolManager = ProtocolLibrary.getProtocolManager()
         init()
@@ -89,7 +87,7 @@ class Sclat :
         // -------------------------------------------------------------------
 
         // --------------------------Load config------------------------------
-        logger.info("Loading config files...")
+        sclatLogger.info("Loading config files...")
         conf = Config()
         conf!!.loadConfig()
         for (mapname in conf!!.mapConfig!!.getConfigurationSection("Maps")!!.getKeys(false)) {
@@ -120,7 +118,7 @@ class Sclat :
         // -------------------------------------------------------------------
 
         // ------------------------RegisteringEvents--------------------------
-        logger.info("Registering Events...")
+        sclatLogger.info("Registering Events...")
         val pm = server.pluginManager
         pm.registerEvents(GameMgr(), this)
         pm.registerEvents(SquidListener(), this)
@@ -136,28 +134,28 @@ class Sclat :
         // -------------------------------------------------------------------
 
         // ------------------------RegisteringCommands------------------------
-        logger.info("Registering Commands...")
+        sclatLogger.info("Registering Commands...")
         getCommand("sclat")!!.setExecutor(SclatCommandExecutor())
         getCommand("sclat")!!.tabCompleter = SclatCommandExecutor()
 
         // -------------------------------------------------------------------
 
         // ------------------------Setup from config--------------------------
-        logger.info("SetupColor...")
+        sclatLogger.info("SetupColor...")
         ColorMgr.setupColor()
-        logger.info("SetupMainWeapon...")
+        sclatLogger.info("SetupMainWeapon...")
         MainWeaponMgr.setupMainWeapon()
-        logger.info("WeaponClassSetup...")
+        sclatLogger.info("WeaponClassSetup...")
         WeaponClassMgr.weaponClassSetup()
-        logger.info("Setup Map...")
-        logger.info("")
-        logger.info("-----------------MAP LIST-----------------")
+        sclatLogger.info("Setup Map...")
+        sclatLogger.info("")
+        sclatLogger.info("-----------------MAP LIST-----------------")
         MapDataMgr.setupMap()
-        logger.info("------------------------------------------")
-        logger.info("")
-        logger.info("MatchSetup...")
+        sclatLogger.info("------------------------------------------")
+        sclatLogger.info("")
+        sclatLogger.info("MatchSetup...")
         MatchMgr.matchSetup()
-        logger.info("Setup is finished!")
+        sclatLogger.info("Setup is finished!")
 
         // -------------------------------------------------------------------
 
@@ -173,11 +171,11 @@ class Sclat :
         }
         buff.append("###")
 
-        logger.info("##############################################")
-        logger.info("###                                        ###")
-        logger.info(buff.toString())
-        logger.info("###                                        ###")
-        logger.info("##############################################")
+        sclatLogger.info("##############################################")
+        sclatLogger.info("###                                        ###")
+        sclatLogger.info(buff.toString())
+        sclatLogger.info("###                                        ###")
+        sclatLogger.info("##############################################")
 
         // -------------------------------------------------------------------
 
@@ -243,7 +241,7 @@ class Sclat :
         if (type == ServerType.LOBBY) {
             ss = StatusServer(conf!!.config!!.getInt("StatusShare.Port"))
             ss!!.start()
-            logger.info("StatusServer is ready!")
+            sclatLogger.info("StatusServer is ready!")
         }
 
         // -------------------------------------------------------------------
@@ -252,7 +250,7 @@ class Sclat :
         if (type == ServerType.MATCH || conf!!.config!!.getString("WorkMode") == "Trial") {
             es = EquipmentServer(conf!!.config!!.getInt("EquipShare.Port"))
             es!!.start()
-            logger.info("StatusServer is ready!")
+            sclatLogger.info("StatusServer is ready!")
         }
 
         // -------------------------------------------------------------------
@@ -305,7 +303,7 @@ class Sclat :
         // -------------------------------------------------------------------
 
         // ---------------------------BlockStudio-----------------------------
-        logger.info("Loading all object data...")
+        sclatLogger.info("Loading all object data...")
         val api = BlockStudio.getBlockStudioAPI()
         api.loadAllObjectData()
 
@@ -394,8 +392,6 @@ class Sclat :
     }
 
     companion object {
-        private val logger: Logger = LoggerFactory.getLogger(Sclat::class.java)
-
         @JvmField
         var conf: Config? = null
 

@@ -1,5 +1,6 @@
 package be4rjp.sclat.api.config
 
+import be4rjp.sclat.sclatLogger
 import org.bukkit.configuration.file.FileConfiguration
 import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.plugin.Plugin
@@ -7,7 +8,6 @@ import java.io.File
 import java.io.IOException
 import java.io.InputStreamReader
 import java.nio.charset.StandardCharsets
-import java.util.logging.Level
 
 class CustomConfig(
     private val plugin: Plugin,
@@ -38,7 +38,7 @@ class CustomConfig(
         try {
             getConfig()!!.save(configFile)
         } catch (ex: IOException) {
-            plugin.logger.log(Level.SEVERE, "Could not save config to " + configFile, ex)
+            sclatLogger.error("Could not save config to " + configFile, ex)
         }
     }
 

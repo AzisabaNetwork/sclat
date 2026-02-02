@@ -10,6 +10,7 @@ import be4rjp.sclat.manager.BungeeCordMgr
 import be4rjp.sclat.manager.DeathMgr
 import be4rjp.sclat.manager.MatchMgr
 import be4rjp.sclat.plugin
+import be4rjp.sclat.sclatLogger
 import be4rjp.sclat.server.StatusClient
 import org.bukkit.Bukkit
 import org.bukkit.GameMode
@@ -154,10 +155,7 @@ object SclatUtil {
             }
 
             MessageType.CONSOLE -> {
-                plugin
-                    .server
-                    .logger
-                    .info(buff.toString())
+                sclatLogger.info(buff.toString())
             }
 
             MessageType.BROADCAST -> {

@@ -8,6 +8,7 @@ import be4rjp.sclat.data.DataMgr.getSprinklerFromplayer
 import be4rjp.sclat.data.DataMgr.setSnowballIsHit
 import be4rjp.sclat.data.DataMgr.snowballNameMap
 import be4rjp.sclat.plugin
+import be4rjp.sclat.sclatLogger
 import be4rjp.sclat.weapon.Gear
 import net.minecraft.server.v1_14_R1.EnumItemSlot
 import net.minecraft.server.v1_14_R1.PacketPlayOutEntityDestroy
@@ -149,7 +150,7 @@ object Sprinkler {
                     } catch (e: Exception) {
                         cancel()
                         drop!!.remove()
-                        plugin.logger.warning(e.message)
+                        sclatLogger.warn(e.message)
                     }
                 }
             }

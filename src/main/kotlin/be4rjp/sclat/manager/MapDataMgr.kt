@@ -6,7 +6,7 @@ import be4rjp.sclat.data.Area
 import be4rjp.sclat.data.DataMgr.addMapList
 import be4rjp.sclat.data.MapData
 import be4rjp.sclat.data.Path
-import be4rjp.sclat.plugin
+import be4rjp.sclat.sclatLogger
 import org.bukkit.Bukkit
 import org.bukkit.Location
 
@@ -411,7 +411,7 @@ object MapDataMgr {
             map.setCanPaintBBlock(canpaintbblock)
 
             // Main.getPlugin().getServer().createWorld(new WorldCreator(WorldName));
-            plugin.logger.info(mapname)
+            sclatLogger.info(mapname)
 
             map.worldName = worldName
 

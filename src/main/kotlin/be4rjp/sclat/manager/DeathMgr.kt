@@ -5,6 +5,7 @@ import be4rjp.sclat.api.SclatUtil.createInkExplosionEffect
 import be4rjp.sclat.api.Sphere.getSphere
 import be4rjp.sclat.data.DataMgr.getPlayerData
 import be4rjp.sclat.plugin
+import be4rjp.sclat.sclatLogger
 import be4rjp.sclat.weapon.Gear
 import be4rjp.sclat.weapon.Gear.getGearInfluence
 import be4rjp.sclat.weapon.spweapon.SuperArmor.setArmor
@@ -579,7 +580,7 @@ object DeathMgr {
                         setArmor(t, Double.MAX_VALUE, 120, false)
                         if (getPlayerData(t)!!.sPGauge == 100) SPWeaponMgr.setSPWeapon(t)
                         cancel()
-                        plugin.logger.warning(e.message)
+                        sclatLogger.warn(e.message)
                     }
                 }
             }
