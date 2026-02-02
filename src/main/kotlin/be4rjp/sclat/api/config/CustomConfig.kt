@@ -14,16 +14,13 @@ class CustomConfig(
     private val file: String,
 ) {
     private var config: FileConfiguration? = null
-    private val configFile: File
-
-    init {
-        configFile = File(plugin.dataFolder, file)
-    }
+    private val configFile: File = File(plugin.dataFolder, file)
 
     fun saveDefaultConfig() {
-        if (!configFile.exists()) {
-            plugin.saveResource(file, false)
-        }
+        if (configFile.exists()) return
+
+        plugin.saveResource(file, false)
+        sclatLogger.info("デフォルトの設定ファイルを書き込みました。")
     }
 
     fun getConfig(): FileConfiguration? {
@@ -38,19 +35,16 @@ class CustomConfig(
         try {
             getConfig()!!.save(configFile)
         } catch (ex: IOException) {
-            sclatLogger.error("Could not save config to " + configFile, ex)
+            sclatLogger.error("Could not save config to $configFile", ex)
         }
     }
 
     fun reloadConfig() {
         config = YamlConfiguration.loadConfiguration(configFile)
 
-        val defConfigStream = plugin.getResource(file)
-        if (defConfigStream == null) {
-            return
-        }
+        val defConfigStream = plugin.getResource(file) ?: return
 
-        config!!.setDefaults(
+        config?.setDefaults(
             YamlConfiguration.loadConfiguration(InputStreamReader(defConfigStream, StandardCharsets.UTF_8)),
         )
     }
