@@ -5,6 +5,7 @@ import be4rjp.sclat.Sclat
 import be4rjp.sclat.data.DataMgr.getPlayerData
 import be4rjp.sclat.data.DataMgr.setMainWeapon
 import be4rjp.sclat.data.MainWeapon
+import be4rjp.sclat.sclatLogger
 import be4rjp.sclat.weapon.Blaster.shootBlaster
 import be4rjp.sclat.weapon.Brush
 import be4rjp.sclat.weapon.Bucket.shootBucket
@@ -23,191 +24,97 @@ import org.bukkit.inventory.ItemStack
 object MainWeaponMgr {
     @Synchronized
     fun setupMainWeapon() {
-        for (weaponname in Sclat.conf!!
-            .weaponConfig!!
-            .getConfigurationSection("MainWeapon")!!
-            .getKeys(false)) {
-            val weaponType =
-                Sclat.conf!!
-                    .weaponConfig!!
-                    .getString("MainWeapon." + weaponname + ".WeaponType")
+        val mainWeaponSection =
+            Sclat.conf?.weaponConfig?.getConfigurationSection("MainWeapon") ?: run {
+                sclatLogger.error("Failed to get MainWeapon section from mainweapon.yml")
+                return
+            }
+        for (weaponname in mainWeaponSection.getKeys(false)) {
+            val section =
+                mainWeaponSection.getConfigurationSection(weaponname) ?: run {
+                    sclatLogger.warn("Failed to get section for $weaponname")
+                    continue
+                }
+
+            val weaponType = section.getString("WeaponType")
             val weaponMaterial =
                 Material
                     .getMaterial(
-                        Sclat.conf!!
-                            .weaponConfig!!
-                            .getString("MainWeapon." + weaponname + ".WeaponMaterial")!!,
+                        section.getString("WeaponMaterial")!!,
                     )
-            val random =
-                Sclat.conf!!
-                    .weaponConfig!!
-                    .getDouble("MainWeapon." + weaponname + ".ShootRandom")
-            val distick =
-                Sclat.conf!!
-                    .weaponConfig!!
-                    .getInt("MainWeapon." + weaponname + ".ShootDistance")
-            val shootspeed =
-                Sclat.conf!!
-                    .weaponConfig!!
-                    .getDouble("MainWeapon." + weaponname + ".ShootSpeed")
-            val shoottick =
-                Sclat.conf!!
-                    .weaponConfig!!
-                    .getInt("MainWeapon." + weaponname + ".ShootTick")
-            val paintrandom =
-                Sclat.conf!!
-                    .weaponConfig!!
-                    .getInt("MainWeapon." + weaponname + ".PaintRandom")
+            val random = section.getDouble("ShootRandom")
+            val distick = section.getInt("ShootDistance")
+            val shootspeed = section.getDouble("ShootSpeed")
+            val shoottick = section.getInt("ShootTick")
+            val paintrandom = section.getInt("PaintRandom")
             val maxpaintdis =
-                Sclat.conf!!
-                    .weaponConfig!!
-                    .getInt("MainWeapon." + weaponname + ".MaxPaintDistance")
+                section
+                    .getInt("MaxPaintDistance")
                     .toDouble()
             val needink =
-                Sclat.conf!!
-                    .weaponConfig!!
-                    .getDouble("MainWeapon." + weaponname + ".NeedInk")
+                section
+                    .getDouble("NeedInk")
                     .toFloat()
-            val damage =
-                Sclat.conf!!
-                    .weaponConfig!!
-                    .getDouble("MainWeapon." + weaponname + ".Damage")
-            val maxcharge =
-                Sclat.conf!!
-                    .weaponConfig!!
-                    .getInt("MainWeapon." + weaponname + ".MaxCharge")
-            val rollershootQuantity =
-                Sclat.conf!!
-                    .weaponConfig!!
-                    .getInt("MainWeapon." + weaponname + ".RollerShootQuantity")
+            val damage = section.getDouble("Damage")
+            val maxcharge = section.getInt("MaxCharge")
+            val rollershootQuantity = section.getInt("RollerShootQuantity")
             val usinwalkspeed =
-                Sclat.conf!!
-                    .weaponConfig!!
-                    .getDouble("MainWeapon." + weaponname + ".UsingWalkSpeed")
+                section
+                    .getDouble("UsingWalkSpeed")
                     .toFloat()
-            val rollerWidth =
-                Sclat.conf!!
-                    .weaponConfig!!
-                    .getInt("MainWeapon." + weaponname + ".RollerWidth")
-            val tatehuri =
-                Sclat.conf!!
-                    .weaponConfig!!
-                    .getBoolean("MainWeapon." + weaponname + ".RollerTatehuri")
-            val rollerdamage =
-                Sclat.conf!!
-                    .weaponConfig!!
-                    .getDouble("MainWeapon." + weaponname + ".RollerDamage")
+            val rollerWidth = section.getInt("RollerWidth")
+            val tatehuri = section.getBoolean("RollerTatehuri")
+            val rollerdamage = section.getDouble("RollerDamage")
             val rollerneedink =
-                Sclat.conf!!
-                    .weaponConfig!!
-                    .getDouble("MainWeapon." + weaponname + ".RollerNeedInk")
+                section
+                    .getDouble("RollerNeedInk")
                     .toFloat()
             var exh = 0.0
-            if (Sclat.conf!!
-                    .weaponConfig!!
-                    .contains("MainWeapon." + weaponname + ".BlasterExHankei")
-            ) {
+            if (section.contains("BlasterExHankei")) {
                 exh =
-                    Sclat.conf!!
-                        .weaponConfig!!
-                        .getInt("MainWeapon." + weaponname + ".BlasterExHankei")
+                    section
+                        .getInt("BlasterExHankei")
                         .toDouble()
             }
-            val delay =
-                Sclat.conf!!
-                    .weaponConfig!!
-                    .getInt("MainWeapon." + weaponname + ".Delay")
-            val cooltime =
-                Sclat.conf!!
-                    .weaponConfig!!
-                    .getInt("MainWeapon." + weaponname + ".Cooltime")
-            val exd =
-                Sclat.conf!!
-                    .weaponConfig!!
-                    .getDouble("MainWeapon." + weaponname + ".BlasterExDamage")
-            val hude =
-                Sclat.conf!!
-                    .weaponConfig!!
-                    .getBoolean("MainWeapon." + weaponname + ".IsBrush")
-            val huder =
-                Sclat.conf!!
-                    .weaponConfig!!
-                    .getDouble("MainWeapon." + weaponname + ".BrushRandom")
+            val delay = section.getInt("Delay")
+            val cooltime = section.getInt("Cooltime")
+            val exd = section.getDouble("BlasterExDamage")
+            val hude = section.getBoolean("IsBrush")
+            val huder = section.getDouble("BrushRandom")
             var man = false
-            if (Sclat.conf!!
-                    .weaponConfig!!
-                    .contains("MainWeapon." + weaponname + ".IsManeuver")
-            ) {
-                man =
-                    Sclat.conf!!
-                        .weaponConfig!!
-                        .getBoolean("MainWeapon." + weaponname + ".IsManeuver")
+            if (section.contains("IsManeuver")) {
+                man = section.getBoolean("IsManeuver")
             }
             var slST = 1
-            if (Sclat.conf!!
-                    .weaponConfig!!
-                    .contains("MainWeapon." + weaponname + ".SlidingShootTick")
-            ) {
-                slST =
-                    Sclat.conf!!
-                        .weaponConfig!!
-                        .getInt("MainWeapon." + weaponname + ".SlidingShootTick")
+            if (section.contains("SlidingShootTick")) {
+                slST = section.getInt("SlidingShootTick")
             }
 
             var cr = 1.0
-            if (Sclat.conf!!
-                    .weaponConfig!!
-                    .contains("MainWeapon." + weaponname + ".ChargeRatio")
-            ) {
-                cr =
-                    Sclat.conf!!
-                        .weaponConfig!!
-                        .getDouble("MainWeapon." + weaponname + ".ChargeRatio")
+            if (section.contains("ChargeRatio")) {
+                cr = section.getDouble("ChargeRatio")
             }
 
             var ck = false
-            if (Sclat.conf!!
-                    .weaponConfig!!
-                    .contains("MainWeapon." + weaponname + ".CanChargeKeep")
-            ) {
-                ck =
-                    Sclat.conf!!
-                        .weaponConfig!!
-                        .getBoolean("MainWeapon." + weaponname + ".CanChargeKeep")
+            if (section.contains("CanChargeKeep")) {
+                ck = section.getBoolean("CanChargeKeep")
             }
 
             var ckt = 0
-            if (Sclat.conf!!
-                    .weaponConfig!!
-                    .contains("MainWeapon." + weaponname + ".ChargeKeepingTime")
-            ) {
-                ckt =
-                    Sclat.conf!!
-                        .weaponConfig!!
-                        .getInt("MainWeapon." + weaponname + ".ChargeKeepingTime")
+            if (section.contains("ChargeKeepingTime")) {
+                ckt = section.getInt("ChargeKeepingTime")
             }
 
             var hc = false
-            if (Sclat.conf!!
-                    .weaponConfig!!
-                    .contains("MainWeapon." + weaponname + ".HanbunChargeKeep")
-            ) {
-                hc =
-                    Sclat.conf!!
-                        .weaponConfig!!
-                        .getBoolean("MainWeapon." + weaponname + ".HanbunChargeKeep")
+            if (section.contains("HanbunChargeKeep")) {
+                hc = section.getBoolean("HanbunChargeKeep")
             }
 
             var sn = 0.2f
-            if (Sclat.conf!!
-                    .weaponConfig!!
-                    .contains("MainWeapon." + weaponname + ".SlideNeedInk")
-            ) {
+            if (section.contains("SlideNeedInk")) {
                 sn =
                     (
-                        Sclat.conf!!
-                            .weaponConfig!!
-                            .getDouble("MainWeapon." + weaponname + ".SlideNeedInk")
+                        section.getDouble("SlideNeedInk")
                     ).toFloat()
             }
 
@@ -247,108 +154,60 @@ object MainWeaponMgr {
             mw.hanbunCharge = hc
             mw.slideNeedINK = (sn)
 
-            if (Sclat.conf!!
-                    .weaponConfig!!
-                    .contains("MainWeapon." + weaponname + ".SPRate")
-            ) {
-                mw.sPRate =
-                    Sclat.conf!!
-                        .weaponConfig!!
-                        .getDouble("MainWeapon." + weaponname + ".SPRate")
+            if (section.contains("SPRate")) {
+                mw.sPRate = section.getDouble("SPRate")
             }
 
-            if (Sclat.conf!!
-                    .weaponConfig!!
-                    .contains("MainWeapon." + weaponname + ".MaxRandom")
-            ) {
+            if (section.contains("MaxRandom")) {
                 mw.maxRandom =
                     (
-                        Sclat.conf!!
-                            .weaponConfig!!
-                            .getDouble("MainWeapon." + weaponname + ".MaxRandom")
+                        section.getDouble("MaxRandom")
                     )
             }
 
-            if (Sclat.conf!!
-                    .weaponConfig!!
-                    .contains("MainWeapon." + weaponname + ".MaxRandomCount")
-            ) {
+            if (section.contains("MaxRandomCount")) {
                 mw.maxRandomCount =
                     (
-                        Sclat.conf!!
-                            .weaponConfig!!
-                            .getInt("MainWeapon." + weaponname + ".MaxRandomCount")
+                        section.getInt("MaxRandomCount")
                     )
             }
 
-            if (Sclat.conf!!
-                    .weaponConfig!!
-                    .contains("MainWeapon." + weaponname + ".Scope")
-            ) {
-                mw.scope =
-                    Sclat.conf!!
-                        .weaponConfig!!
-                        .getBoolean("MainWeapon." + weaponname + ".Scope")
+            if (section.contains("Scope")) {
+                mw.scope = section.getBoolean("Scope")
             }
 
-            if (Sclat.conf!!
-                    .weaponConfig!!
-                    .contains("MainWeapon." + weaponname + ".DecreaseRate")
-            ) {
+            if (section.contains("DecreaseRate")) {
                 // チャージャーの非適性ダメージ減少率
-                mw.decreaseRate =
-                    Sclat.conf!!
-                        .weaponConfig!!
-                        .getDouble("MainWeapon." + weaponname + ".DecreaseRate")
+                mw.decreaseRate = section.getDouble("DecreaseRate")
             }
 
-            if (Sclat.conf!!
-                    .weaponConfig!!
-                    .contains("MainWeapon." + weaponname + ".AppDistance")
-            ) {
+            if (section.contains("AppDistance")) {
                 // チャージャーの非適性距離
-                mw.appDistance =
-                    Sclat.conf!!
-                        .weaponConfig!!
-                        .getInt("MainWeapon." + weaponname + ".AppDistance")
+                mw.appDistance = section.getInt("AppDistance")
             }
 
-            if (Sclat.conf!!
-                    .weaponConfig!!
-                    .contains("MainWeapon." + weaponname + ".Money")
-            ) {
+            if (section.contains("Money")) {
                 mw.money =
                     (
-                        Sclat.conf!!
-                            .weaponConfig!!
-                            .getInt("MainWeapon." + weaponname + ".Money")
+                        section.getInt("Money")
                     )
             } else {
                 mw.money = (0)
             }
 
-            if (Sclat.conf!!
-                    .weaponConfig!!
-                    .contains("MainWeapon." + weaponname + ".Level")
-            ) {
+            if (section.contains("Level")) {
                 mw.level =
                     (
-                        Sclat.conf!!
-                            .weaponConfig!!
-                            .getInt("MainWeapon." + weaponname + ".Level")
+                        section.getInt("Level")
                     )
             } else {
                 mw.level = (0)
             }
 
-            if (Sclat.conf!!
-                    .weaponConfig!!
-                    .contains("MainWeapon." + weaponname + ".InHoldWalkSpeed")
-            ) {
+            if (section.contains("InHoldWalkSpeed")) {
                 mw.inHoldSpeed =
-                    Sclat.conf!!
-                        .weaponConfig!!
-                        .getDouble("MainWeapon." + weaponname + ".InHoldWalkSpeed")
+                    section
+                        .getDouble("InHoldWalkSpeed")
                         .toFloat()
             } else {
                 mw.inHoldSpeed =
@@ -358,45 +217,25 @@ object MainWeaponMgr {
                         .toFloat()
             }
 
-            if (Sclat.conf!!
-                    .weaponConfig!!
-                    .contains("MainWeapon." + weaponname + ".IsLootBox")
-            ) { // ガチャ武器用
+            if (section.contains("IsLootBox")) { // ガチャ武器用
                 mw.islootbox =
                     (
-                        Sclat.conf!!
-                            .weaponConfig!!
-                            .getBoolean("MainWeapon." + weaponname + ".IsLootBox")
+                        section.getBoolean("IsLootBox")
                     )
             }
-            if (Sclat.conf!!
-                    .weaponConfig!!
-                    .contains("MainWeapon." + weaponname + ".LootPro")
-            ) { // ガチャ武器用排出率
+            if (section.contains("LootPro")) { // ガチャ武器用排出率
                 mw.lootpro = (
-                    Sclat.conf!!
-                        .weaponConfig!!
-                        .getDouble("MainWeapon." + weaponname + ".LootPro")
+                    section.getDouble("LootPro")
                 )
             }
-            if (Sclat.conf!!
-                    .weaponConfig!!
-                    .contains("MainWeapon." + weaponname + ".IsSwapper")
-            ) { // スワッパ―判別
+            if (section.contains("IsSwapper")) { // スワッパ―判別
                 mw.setIsSwap(
-                    Sclat.conf!!
-                        .weaponConfig!!
-                        .getBoolean("MainWeapon." + weaponname + ".IsSwapper"),
+                    section.getBoolean("IsSwapper"),
                 )
             }
-            if (Sclat.conf!!
-                    .weaponConfig!!
-                    .contains("MainWeapon." + weaponname + ".SwapWeapon")
-            ) { // スワッパ―スワップ先
+            if (section.contains("SwapWeapon")) { // スワッパ―スワップ先
                 mw.swap = (
-                    Sclat.conf!!
-                        .weaponConfig!!
-                        .getString("MainWeapon." + weaponname + ".SwapWeapon")
+                    section.getString("SwapWeapon")
                 )
             }
             setMainWeapon(weaponname, mw)
@@ -427,7 +266,7 @@ object MainWeaponMgr {
                     .itemInMainHand
                     .itemMeta!!
                     .displayName
-            if (itemname.length >= wname.length) return wname == itemname.substring(0, wname.length)
+            if (itemname.length >= wname.length) return wname == itemname.take(wname.length)
             return false
         } catch (e: Exception) {
             return false
