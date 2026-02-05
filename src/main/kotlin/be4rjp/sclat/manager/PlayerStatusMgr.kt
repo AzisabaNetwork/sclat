@@ -29,9 +29,9 @@ import org.bukkit.scheduler.BukkitRunnable
  * @author Be4rJP
  */
 object PlayerStatusMgr {
-    var list: MutableMap<Player?, EntityArmorStand> = HashMap<Player?, EntityArmorStand>()
-    var list1: MutableMap<Player?, EntityArmorStand> = HashMap<Player?, EntityArmorStand>()
-    var list2: MutableMap<Player?, EntityArmorStand> = HashMap<Player?, EntityArmorStand>()
+    var list: MutableMap<Player, EntityArmorStand> = mutableMapOf()
+    var list1: MutableMap<Player, EntityArmorStand> = mutableMapOf()
+    var list2: MutableMap<Player, EntityArmorStand> = mutableMapOf()
 
     fun setupPlayerStatus(player: Player) {
         val playerUuid: String = player.uniqueId.toString()

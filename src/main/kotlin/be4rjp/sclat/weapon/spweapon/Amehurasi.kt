@@ -10,6 +10,7 @@ import be4rjp.sclat.manager.ArmorStandMgr
 import be4rjp.sclat.manager.SPWeaponMgr
 import be4rjp.sclat.manager.WeaponClassMgr
 import be4rjp.sclat.plugin
+import be4rjp.sclat.sclatLogger
 import org.bukkit.GameMode
 import org.bukkit.Location
 import org.bukkit.Material
@@ -113,7 +114,7 @@ object Amehurasi {
                     } catch (e: Exception) {
                         drop!!.remove()
                         cancel()
-                        plugin.logger.warning(e.message)
+                        sclatLogger.warn(e.message)
                     }
                 }
             }
@@ -245,7 +246,7 @@ object Amehurasi {
                         c++
                     } catch (e: Exception) {
                         cancel()
-                        plugin.logger.warning(e.message)
+                        sclatLogger.warn(e.message)
                     }
                 }
             }

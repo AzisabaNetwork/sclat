@@ -1,7 +1,7 @@
 package be4rjp.sclat.api
 
+import be4rjp.sclat.sclatLogger
 import org.bukkit.Bukkit
-import org.slf4j.Logger
 import java.util.function.Consumer
 
 enum class Plugins(
@@ -41,7 +41,7 @@ enum class Plugins(
          * @return is init-check succeeded
          */
         @JvmStatic
-        fun onInit(logger: Logger): Boolean {
+        fun onInit(): Boolean {
             val missingPlugins = ArrayList<String?>()
             for (plugin in entries) {
                 plugin.resetLoadedState()
@@ -52,10 +52,10 @@ enum class Plugins(
 
             // If some required plugins are missing
             if (!missingPlugins.isEmpty()) {
-                logger.error("Some plugins are missing. Please install or enable.")
-                logger.error("*** Missing required plugins ***")
-                missingPlugins.forEach(Consumer { p: String? -> logger.error("- {}", p) })
-                logger.error("********************************")
+                sclatLogger.error("Some plugins are missing. Please install or enable.")
+                sclatLogger.error("*** Missing required plugins ***")
+                missingPlugins.forEach(Consumer { p: String? -> sclatLogger.error("- {}", p) })
+                sclatLogger.error("********************************")
                 return false
             }
 

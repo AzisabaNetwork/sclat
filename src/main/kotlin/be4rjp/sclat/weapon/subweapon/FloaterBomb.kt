@@ -15,6 +15,7 @@ import be4rjp.sclat.data.DataMgr.setSnowballIsHit
 import be4rjp.sclat.manager.ArmorStandMgr
 import be4rjp.sclat.manager.PaintMgr
 import be4rjp.sclat.plugin
+import be4rjp.sclat.sclatLogger
 import be4rjp.sclat.weapon.Gear
 import org.bukkit.ChatColor
 import org.bukkit.GameMode
@@ -282,7 +283,7 @@ object FloaterBomb {
                     } catch (e: Exception) {
                         drop!!.remove()
                         cancel()
-                        plugin.logger.warning(e.message)
+                        sclatLogger.warn(e.message)
                     }
                 }
             }

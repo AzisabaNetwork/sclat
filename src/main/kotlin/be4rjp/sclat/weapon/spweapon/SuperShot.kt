@@ -7,6 +7,7 @@ import be4rjp.sclat.manager.PaintMgr
 import be4rjp.sclat.manager.SPWeaponMgr
 import be4rjp.sclat.manager.WeaponClassMgr
 import be4rjp.sclat.plugin
+import be4rjp.sclat.sclatLogger
 import net.minecraft.server.v1_14_R1.PacketPlayOutEntityDestroy
 import org.bukkit.Location
 import org.bukkit.Material
@@ -206,7 +207,7 @@ object SuperShot {
                     } catch (e: Exception) {
                         drop!!.remove()
                         cancel()
-                        plugin.logger.warning(e.message)
+                        sclatLogger.warn(e.message)
                     }
                 }
             }

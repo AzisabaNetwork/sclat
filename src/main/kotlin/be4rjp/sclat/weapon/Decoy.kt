@@ -5,6 +5,7 @@ import be4rjp.sclat.api.player.PlayerData
 import be4rjp.sclat.data.DataMgr.blockDataMap
 import be4rjp.sclat.data.DataMgr.getPlayerData
 import be4rjp.sclat.plugin
+import be4rjp.sclat.sclatLogger
 import com.mojang.authlib.GameProfile
 import net.minecraft.server.v1_14_R1.DataWatcherRegistry
 import net.minecraft.server.v1_14_R1.EntityPlayer
@@ -318,7 +319,7 @@ object Decoy {
                     } catch (e: Exception) {
                         as1!!.remove()
                         cancel()
-                        plugin.logger.warning(e.message)
+                        sclatLogger.warn(e.message)
                     }
                 }
             }
