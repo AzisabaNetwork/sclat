@@ -23,33 +23,17 @@ object SettingMgr {
                         .set("Settings.$uuid", it)
                 }
             }
-        if (settingString[1] == '0') {
-            settings.sShowEffectMainWeaponInk()
-        }
-        if (settingString[2] == '0') {
-            settings.sShowEffectChargerLine()
-        }
-        if (settingString[3] == '0') {
-            settings.sShowEffectSPWeapon()
-        }
-        if (settingString[4] == '0') {
-            settings.sShowEffectSPWeaponRegion()
-        }
-        if (settingString[5] == '0') {
-            settings.sShowSnowBall()
-        }
-        if (settingString[0] == '0') {
-            settings.sPlayBGM()
-        }
-        if (settingString[6] == '0') {
-            settings.sShowEffectBomb()
-        }
-        if (settingString[7] == '0') {
-            settings.sShowEffectBombEx()
-        }
-        if (settingString[8] == '0') {
-            settings.sDoChargeKeep()
-        }
+
+        if (settingString[1] == '0') settings.sShowEffectMainWeaponInk()
+        if (settingString[2] == '0') settings.sShowEffectChargerLine()
+        if (settingString[3] == '0') settings.sShowEffectSPWeapon()
+        if (settingString[4] == '0') settings.sShowEffectSPWeaponRegion()
+        if (settingString[5] == '0') settings.sShowSnowBall()
+        if (settingString[0] == '0') settings.sPlayBGM()
+        if (settingString[6] == '0') settings.sShowEffectBomb()
+        if (settingString[7] == '0') settings.sShowEffectBombEx()
+        if (settingString[8] == '0') settings.sDoChargeKeep()
+
         getPlayerData(player)!!.settings = settings
     }
 }
