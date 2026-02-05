@@ -5,6 +5,7 @@ import be4rjp.sclat.Sclat
 import be4rjp.sclat.data.DataMgr.getPlayerData
 import be4rjp.sclat.data.DataMgr.setMainWeapon
 import be4rjp.sclat.data.MainWeapon
+import be4rjp.sclat.extension.toMaterial
 import be4rjp.sclat.sclatLogger
 import be4rjp.sclat.weapon.Blaster.shootBlaster
 import be4rjp.sclat.weapon.Brush
@@ -37,86 +38,35 @@ object MainWeaponMgr {
                 }
 
             val weaponType = section.getString("WeaponType")
-            val weaponMaterial =
-                Material
-                    .getMaterial(
-                        section.getString("WeaponMaterial")!!,
-                    )
+            val weaponMaterial: Material? = section.getString("WeaponMaterial")?.toMaterial()
             val random = section.getDouble("ShootRandom")
             val distick = section.getInt("ShootDistance")
             val shootspeed = section.getDouble("ShootSpeed")
             val shoottick = section.getInt("ShootTick")
             val paintrandom = section.getInt("PaintRandom")
-            val maxpaintdis =
-                section
-                    .getInt("MaxPaintDistance")
-                    .toDouble()
-            val needink =
-                section
-                    .getDouble("NeedInk")
-                    .toFloat()
+            val maxpaintdis = section.getInt("MaxPaintDistance").toDouble()
+            val needink = section.getDouble("NeedInk").toFloat()
             val damage = section.getDouble("Damage")
             val maxcharge = section.getInt("MaxCharge")
             val rollershootQuantity = section.getInt("RollerShootQuantity")
-            val usinwalkspeed =
-                section
-                    .getDouble("UsingWalkSpeed")
-                    .toFloat()
+            val usinwalkspeed = section.getDouble("UsingWalkSpeed").toFloat()
             val rollerWidth = section.getInt("RollerWidth")
             val tatehuri = section.getBoolean("RollerTatehuri")
             val rollerdamage = section.getDouble("RollerDamage")
-            val rollerneedink =
-                section
-                    .getDouble("RollerNeedInk")
-                    .toFloat()
-            var exh = 0.0
-            if (section.contains("BlasterExHankei")) {
-                exh =
-                    section
-                        .getInt("BlasterExHankei")
-                        .toDouble()
-            }
+            val rollerneedink = section.getDouble("RollerNeedInk").toFloat()
+            val exh = section.getInt("BlasterExHankei", 0).toDouble()
             val delay = section.getInt("Delay")
             val cooltime = section.getInt("Cooltime")
             val exd = section.getDouble("BlasterExDamage")
             val hude = section.getBoolean("IsBrush")
             val huder = section.getDouble("BrushRandom")
-            var man = false
-            if (section.contains("IsManeuver")) {
-                man = section.getBoolean("IsManeuver")
-            }
-            var slST = 1
-            if (section.contains("SlidingShootTick")) {
-                slST = section.getInt("SlidingShootTick")
-            }
-
-            var cr = 1.0
-            if (section.contains("ChargeRatio")) {
-                cr = section.getDouble("ChargeRatio")
-            }
-
-            var ck = false
-            if (section.contains("CanChargeKeep")) {
-                ck = section.getBoolean("CanChargeKeep")
-            }
-
-            var ckt = 0
-            if (section.contains("ChargeKeepingTime")) {
-                ckt = section.getInt("ChargeKeepingTime")
-            }
-
-            var hc = false
-            if (section.contains("HanbunChargeKeep")) {
-                hc = section.getBoolean("HanbunChargeKeep")
-            }
-
-            var sn = 0.2f
-            if (section.contains("SlideNeedInk")) {
-                sn =
-                    (
-                        section.getDouble("SlideNeedInk")
-                    ).toFloat()
-            }
+            val man = section.getBoolean("IsManeuver", false)
+            val slST = section.getInt("SlidingShootTick", 1)
+            val cr = section.getDouble("ChargeRatio", 1.0)
+            val ck = section.getBoolean("CanChargeKeep", false)
+            val ckt = section.getInt("ChargeKeepingTime", 0)
+            val hc = section.getBoolean("HanbunChargeKeep", false)
+            val sn = section.getDouble("SlideNeedInk", 0.2).toFloat()
 
             val mw = MainWeapon(weaponname)
             mw.weaponType = (weaponType)
