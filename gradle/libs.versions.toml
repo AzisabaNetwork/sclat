@@ -1,7 +1,7 @@
 [versions]
 kotlin = "2.3.0"
 ktlint = "14.0.1"
-runPaper = "2.3.1" # 3.x.x can't run in Java8
+runPaper = "3.0.2" # 3.x.x can't run in Java8
 spotless = "6.25.0" # 6.14.0 can't run in Java8
 shadow = "8.3.9"
 protocolLib = "5.4.0" # 5.4.0 can't run in Java8
