@@ -80,18 +80,8 @@ import org.bukkit.scheduler.BukkitRunnable
 class ClickListener : Listener {
     @EventHandler
     fun onGUIClick(event: InventoryClickEvent) {
-        if (event.currentItem == null ||
-            event.currentItem!!.itemMeta == null ||
-            event
-                .currentItem
-                ?.itemMeta
-                ?.displayName == null
-        ) {
-            return
-        }
-
-        val name = event.currentItem!!.itemMeta!!.displayName
-        val player = event.whoClicked as Player
+        val name = event.currentItem?.itemMeta?.displayName ?: return
+        val player = event.whoClicked as? Player ?: return
 
         if (name == ".") {
             event.isCancelled = true
@@ -633,40 +623,37 @@ class ClickListener : Listener {
                 return
             }
 
+            val playerSettings = getPlayerData(player)?.settings!!
             when (name) {
-                "メインウエポンのインクエフェクト" -> getPlayerData(player)!!.settings!!.sShowEffectMainWeaponInk()
-                "チャージャーのレーザー" -> getPlayerData(player)!!.settings!!.sShowEffectChargerLine()
-                "スペシャルウエポンのエフェクト" -> getPlayerData(player)!!.settings!!.sShowEffectSPWeapon()
-                "スペシャルウエポンの範囲エフェクト" -> getPlayerData(player)!!.settings!!.sShowEffectSPWeaponRegion()
-                "弾の表示" -> getPlayerData(player)!!.settings!!.sShowSnowBall()
-                "BGM" -> getPlayerData(player)!!.settings!!.sPlayBGM()
-                "投擲武器の視認用エフェクト" -> getPlayerData(player)!!.settings!!.sShowEffectBomb()
-                "爆発エフェクト" -> getPlayerData(player)!!.settings!!.sShowEffectBombEx()
-                "チャージキープ" -> getPlayerData(player)!!.settings!!.sDoChargeKeep()
+                "メインウエポンのインクエフェクト" -> playerSettings.sShowEffectMainWeaponInk()
+                "チャージャーのレーザー" -> playerSettings.sShowEffectChargerLine()
+                "スペシャルウエポンのエフェクト" -> playerSettings.sShowEffectSPWeapon()
+                "スペシャルウエポンの範囲エフェクト" -> playerSettings.sShowEffectSPWeaponRegion()
+                "弾の表示" -> playerSettings.sShowSnowBall()
+                "BGM" -> playerSettings.sPlayBGM()
+                "投擲武器の視認用エフェクト" -> playerSettings.sShowEffectBomb()
+                "爆発エフェクト" -> playerSettings.sShowEffectBombEx()
+                "チャージキープ" -> playerSettings.sDoChargeKeep()
             }
 
             OpenGUI.openSettingsUI(player)
 
             player.playNote(player.location, Instrument.STICKS, Note.flat(1, Note.Tone.C))
 
-            val b = if (getPlayerData(player)!!.settings!!.playBGM()) "1" else "0"
-            val eS = if (getPlayerData(player)!!.settings!!.showEffectMainWeaponInk()) "1" else "0"
-            val eCL = if (getPlayerData(player)!!.settings!!.showEffectChargerLine()) "1" else "0"
-            val eCS = if (getPlayerData(player)!!.settings!!.showEffectSPWeapon()) "1" else "0"
-            val eRR = if (getPlayerData(player)!!.settings!!.showEffectSPWeaponRegion()) "1" else "0"
-            val eRS = if (getPlayerData(player)!!.settings!!.showSnowBall()) "1" else "0"
-            // String E_BGM = DataMgr.getPlayerData(player).getSettings().PlayBGM() ? "1" :
-            // "0";
-            val eB = if (getPlayerData(player)!!.settings!!.showEffectBomb()) "1" else "0"
-            val eBEx = if (getPlayerData(player)!!.settings!!.showEffectBombEx()) "1" else "0"
-            val ck = if (getPlayerData(player)!!.settings!!.doChargeKeep()) "1" else "0"
+            val b = if (playerSettings.playBGM()) "1" else "0"
+            val eS = if (playerSettings.showEffectMainWeaponInk()) "1" else "0"
+            val eCL = if (playerSettings.showEffectChargerLine()) "1" else "0"
+            val eCS = if (playerSettings.showEffectSPWeapon()) "1" else "0"
+            val eRR = if (playerSettings.showEffectSPWeaponRegion()) "1" else "0"
+            val eRS = if (playerSettings.showSnowBall()) "1" else "0"
+            val eB = if (playerSettings.showEffectBomb()) "1" else "0"
+            val eBEx = if (playerSettings.showEffectBombEx()) "1" else "0"
+            val ck = if (playerSettings.doChargeKeep()) "1" else "0"
 
             val sData = b + eS + eCL + eCS + eRR + eRS + eB + eBEx + ck
 
             val uuid: String = player.uniqueId.toString()
-            Sclat.conf!!
-                .playerSettings
-                .set("Settings." + uuid, sData)
+            Sclat.conf!!.playerSettings.set("Settings.$uuid", sData)
         }
 
         if (player.gameMode != GameMode.CREATIVE) event.isCancelled = true
