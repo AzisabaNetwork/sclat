@@ -23,8 +23,23 @@ jobs:
           distribution: "adopt"
           java-version: 11
 
+      - name: Cache .m2 directory
+        uses: actions/cache@8b402f58fbc84540c8b491a91e594a4576fec3d7 # v5.0.2
+        id: cache
+        with:
+          path: ~/.m2
+          key: m2-${{ matrix.java }}-${{ matrix.mc }}-cache
+          restore-keys: |
+            m2-${{ matrix.java }}-${{ matrix.mc }}
+
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@017a9effdb900e5b5b2fddfb590a105619dca3c3 # v4.4.2
+        uses: gradle/actions/setup-gradle@f29f5a9d7b09a7c6b29859002d29d24e1674c884 # v5.0.1
+
+      - name: Setup BuildTools
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: |
+          wget "https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar"
+          java -jar BuildTools.jar --rev ${{ matrix.mc }}
 
       - name: Build
         run: ./gradlew build
