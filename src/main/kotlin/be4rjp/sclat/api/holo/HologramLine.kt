@@ -34,6 +34,7 @@ class HologramLine(
 
     fun sendSpawn(player: Player) {
         // Spawn Packet (1.14.4 ArmorStand ID is 1)
+        @Suppress("DEPRECATION")
         val spawn = Packets.createPacket(PacketType.Play.Server.SPAWN_ENTITY_LIVING)
         spawn.integers.write(0, entityId)
         spawn.uuiDs.write(0, uuid)

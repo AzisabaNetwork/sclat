@@ -30,7 +30,7 @@ dependencies {
     compileOnly(libs.spigot)
     compileOnly(libs.noteblockapi)
     compileOnly(libs.lunachat)
-    compileOnly(files("libs/ProtocolLib.jar"))
+    compileOnly(libs.protocolLib)
     compileOnly(libs.dadadachecker)
     compileOnly(libs.blockstudio)
     compileOnly(libs.paperApi)
