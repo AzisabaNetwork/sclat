@@ -44,7 +44,7 @@ jobs:
           REPO_PASSWORD: ${{ secrets.REPO_PASSWORD }}
 
       - name: Create release
-        uses: softprops/action-gh-release@6cbd405e2c4e67a21c47fa9e383d020e4e28b836 # v2.3.3
+        uses: softprops/action-gh-release@a06a81a03ee405af7f2048a818ed3f03bbf83c7b # v2.5.0
         with:
           tag_name: ${{ github.event.inputs.version }}
           files: build/libs/*.jar
