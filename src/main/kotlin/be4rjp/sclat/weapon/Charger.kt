@@ -492,11 +492,7 @@ object Charger {
         } else {
             tyaw = target.eyeLocation.yaw.toDouble()
         }
-        if ((pyaw - tyaw < 130 && pyaw - tyaw > -130) || pyaw - tyaw > 230 || pyaw - tyaw < -230) {
-            return true
-        } else {
-            return false
-        }
+        return (pyaw - tyaw < 147 && pyaw - tyaw > -147) || pyaw - tyaw > 213 || pyaw - tyaw < -213
     }
 
     fun isbackstabStand(
@@ -515,6 +511,6 @@ object Charger {
         } else {
             tyaw = target.eyeLocation.yaw.toDouble()
         }
-        return (pyaw - tyaw < 130 && pyaw - tyaw > -130) || pyaw - tyaw > 230 || pyaw - tyaw < -230
+        return (pyaw - tyaw < 147 && pyaw - tyaw > -147) || pyaw - tyaw > 213 || pyaw - tyaw < -213
     }
 }
