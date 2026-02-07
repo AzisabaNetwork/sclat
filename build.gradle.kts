@@ -13,17 +13,25 @@ version = System.getenv("VERSION") ?: "1.0-SNAPSHOT"
 description = "Sclat"
 
 repositories {
-    mavenLocal()
     mavenCentral()
     maven("https://jitpack.io/")
-    maven("https://repo.codemc.io/repository/maven-public/")
-    maven("https://hub.spigotmc.org/nexus/content/groups/public/")
-    maven("https://raw.githubusercontent.com/Rayzr522/maven-repo/master/")
-    maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")
-    maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
     maven("https://repo.papermc.io/repository/maven-public/")
-    maven("https://repo.dmulloy2.net/nexus/repository/public/")
-    maven("https://repo.comphenix.net/content/groups/public/")
+    exclusiveContent {
+        forRepository {
+            mavenLocal()
+        }
+        filter {
+            includeGroup("org.spigotmc")
+        }
+    }
+    exclusiveContent {
+        forRepository {
+            maven("https://repo.codemc.io/repository/maven-public/")
+        }
+        filter {
+            includeGroup("org.bstats")
+        }
+    }
 }
 
 dependencies {

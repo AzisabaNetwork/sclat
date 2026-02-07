@@ -1,8 +1,10 @@
 name: Sclat
 version: 0.1
 description: Sclat
-author: Be4rJP
-api-version: 1.13
+authors:
+  - Be4rJP
+  - sysnote8main
+api-version: 1.14
 #--------------------------------------
 main: be4rjp.sclat.Sclat
 depend: [NoteBlockAPI, ProtocolLib, WorldChef, DADADAChecker, BlockStudio]
