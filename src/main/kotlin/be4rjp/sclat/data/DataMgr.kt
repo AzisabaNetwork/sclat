@@ -8,7 +8,6 @@ import org.bukkit.entity.ArmorStand
 import org.bukkit.entity.Player
 import org.bukkit.entity.Projectile
 import org.bukkit.entity.Snowball
-import java.util.Collections
 import java.util.concurrent.ConcurrentHashMap
 
 /**
@@ -17,159 +16,159 @@ import java.util.concurrent.ConcurrentHashMap
  */
 object DataMgr {
     @JvmStatic
-    val playerDataMap: MutableMap<Player?, PlayerData?> = ConcurrentHashMap<Player?, PlayerData?>()
+    val playerDataMap: MutableMap<Player, PlayerData> = ConcurrentHashMap()
 
     @JvmStatic
-    val uUIDDataMap: MutableMap<String?, PlayerData?> = HashMap<String?, PlayerData?>()
-    private val matchdata: MutableMap<Int?, Match?> = HashMap<Int?, Match?>()
-    private val teamdata: MutableMap<Int?, Team?> = HashMap<Int?, Team?>()
-    private val colordata: MutableMap<String?, Color?> = HashMap<String?, Color?>()
-    private val weaponclassdata: MutableMap<String?, WeaponClass?> = HashMap<String?, WeaponClass?>()
-    private val weapondata: MutableMap<String?, MainWeapon?> = HashMap<String?, MainWeapon?>()
-    private val mapdata: MutableMap<String?, MapData?> = HashMap<String?, MapData?>()
-    private val locdata: MutableMap<MapData?, TeamLoc?> = HashMap<MapData?, TeamLoc?>()
+    val uUIDDataMap: MutableMap<String?, PlayerData?> = HashMap()
+    private val matchdata: MutableMap<Int?, Match?> = HashMap()
+    private val teamdata: MutableMap<Int?, Team?> = HashMap()
+    private val colordata: MutableMap<String?, Color?> = HashMap()
+    private val weaponclassdata: MutableMap<String?, WeaponClass?> = HashMap()
+    private val weapondata: MutableMap<String?, MainWeapon?> = HashMap()
+    private val mapdata: MutableMap<String?, MapData?> = HashMap()
+    private val locdata: MutableMap<MapData?, TeamLoc?> = HashMap()
 
     // public static void setPaintDataFromMatch(Match match, PaintData
     // data){paintdata.put(match, data);}
     @JvmStatic
-    val blockDataMap: MutableMap<Block?, PaintData?> = HashMap<Block?, PaintData?>()
+    val blockDataMap: MutableMap<Block?, PaintData?> = HashMap()
 
     @JvmStatic
-    val playerIsQuitMap: MutableMap<String?, Boolean?> = HashMap<String?, Boolean?>()
+    val playerIsQuitMap: MutableMap<String?, Boolean?> = HashMap()
 
     @JvmStatic
-    val armorStandMap: MutableMap<ArmorStand?, Player?> = HashMap<ArmorStand?, Player?>()
+    val armorStandMap: MutableMap<ArmorStand?, Player?> = HashMap()
 
     @JvmStatic
-    val beaconMap: MutableMap<Player?, ArmorStand?> = HashMap<Player?, ArmorStand?>()
+    val beaconMap: MutableMap<Player?, ArmorStand?> = HashMap()
 
     @JvmStatic
-    val sprinklerMap: MutableMap<Player?, ArmorStand?> = HashMap<Player?, ArmorStand?>()
+    val sprinklerMap: MutableMap<Player?, ArmorStand?> = HashMap()
 
     @JvmStatic
-    val snowballIsHitMap: MutableMap<Projectile?, Boolean?> = HashMap<Projectile?, Boolean?>()
+    val snowballIsHitMap: MutableMap<Projectile?, Boolean?> = HashMap()
 
     @JvmStatic
-    val mainSnowballIsHitMap: MutableMap<Projectile?, Boolean?> = HashMap<Projectile?, Boolean?>()
+    val mainSnowballIsHitMap: MutableMap<Projectile?, Boolean?> = HashMap()
 
     @JvmStatic
-    val spongeMap: MutableMap<Block?, Sponge?> = HashMap<Block?, Sponge?>()
+    val spongeMap: MutableMap<Block?, Sponge?> = HashMap()
 
     @JvmStatic
-    val snowballNameMap: MutableMap<String?, Snowball?> = HashMap<String?, Snowball?>()
+    val snowballNameMap: MutableMap<String?, Snowball?> = HashMap()
 
     @JvmStatic
-    val mainSnowballNameMap: MutableMap<String?, Snowball?> = HashMap<String?, Snowball?>()
-    private val msbn: MutableMap<String?, Int?> = HashMap<String?, Int?>()
+    val mainSnowballNameMap: MutableMap<String?, Snowball?> = HashMap()
+    private val msbn: MutableMap<String?, Int?> = HashMap()
 
     @JvmStatic
-    val splashShieldDataMapWithPlayer: MutableMap<Player?, SplashShieldData?> = HashMap<Player?, SplashShieldData?>()
+    val splashShieldDataMapWithPlayer: MutableMap<Player?, SplashShieldData?> = HashMap()
 
     @JvmStatic
     val splashShieldDataMapWithArmorStand: MutableMap<ArmorStand?, SplashShieldData?> =
-        HashMap<ArmorStand?, SplashShieldData?>()
+        HashMap()
 
     @JvmStatic
-    val kasaDataMapWithPlayer: MutableMap<Player?, KasaData?> = HashMap<Player?, KasaData?>()
+    val kasaDataMapWithPlayer: MutableMap<Player?, KasaData?> = HashMap()
 
     @JvmStatic
-    val kAsaDataMapWithArmorStand: MutableMap<ArmorStand?, KasaData?> = HashMap<ArmorStand?, KasaData?>()
+    val kAsaDataMapWithArmorStand: MutableMap<ArmorStand?, KasaData?> = HashMap()
 
     // private static Map<Match, PaintData> paintdata = new HashMap<>();
-    private val list: MutableList<Color> = ArrayList<Color>()
+    private val list: MutableList<Color> = ArrayList()
 
     @JvmField
-    var oto: MutableMap<String?, Int?> = HashMap<String?, Int?>()
-    var rblist: MutableList<Block?> = ArrayList<Block?>()
+    var oto: MutableMap<String?, Int?> = HashMap()
+    var rblist: MutableList<Block?> = ArrayList()
 
     @JvmField
-    var al: MutableList<ArmorStand?> = ArrayList<ArmorStand?>()
+    var al: MutableList<ArmorStand?> = ArrayList()
 
     @JvmField
-    var ssa: MutableList<ArmorStand?> = ArrayList<ArmorStand?>()
+    var ssa: MutableList<ArmorStand?> = ArrayList()
 
     @JvmField
-    var mws: MutableList<String?> = ArrayList<String?>()
+    var mws: MutableList<String?> = ArrayList()
 
     @JvmField
-    var pul: MutableList<String?> = ArrayList<String?>()
+    var pul: MutableList<String?> = ArrayList()
 
     @JvmField
-    var tsl: MutableList<String?> = ArrayList<String?>()
+    var tsl: MutableList<String?> = ArrayList()
 
     @JvmField
-    var maplist: MutableList<MapData> = ArrayList<MapData>()
-    var uuids: MutableList<String?> = ArrayList<String?>()
+    var maplist: MutableList<MapData> = ArrayList()
+    var uuids: MutableList<String?> = ArrayList()
 
     @JvmField
-    var joinedList: MutableList<Player?> = ArrayList<Player?>()
+    var joinedList: MutableList<Player?> = ArrayList()
 
     @JvmStatic
-    fun getPlayerData(player: Player?): PlayerData? = playerDataMap.get(player)
+    fun getPlayerData(player: Player?): PlayerData? = playerDataMap[player]
 
-    fun getUUIDData(uuid: String?): PlayerData? = uUIDDataMap.get(uuid)
-
-    @JvmStatic
-    fun getMatchFromId(id: Int): Match? = matchdata.get(id)
-
-    fun getTeamFromId(id: Int): Team? = teamdata.get(id)
-
-    fun getColor(name: String?): Color? = colordata.get(name)
+    fun getUUIDData(uuid: String?): PlayerData? = uUIDDataMap[uuid]
 
     @JvmStatic
-    fun getWeaponClass(weaponclass: String?): WeaponClass? = weaponclassdata.get(weaponclass)
+    fun getMatchFromId(id: Int): Match? = matchdata[id]
+
+    fun getTeamFromId(id: Int): Team? = teamdata[id]
+
+    fun getColor(name: String?): Color? = colordata[name]
 
     @JvmStatic
-    fun getWeapon(name: String?): MainWeapon? = weapondata.get(name)
-
-    fun getMap(name: String?): MapData? = mapdata.get(name)
-
-    fun getTeamLoc(map: MapData?): TeamLoc? = locdata.get(map)
+    fun getWeaponClass(weaponclass: String?): WeaponClass? = weaponclassdata[weaponclass]
 
     @JvmStatic
-    fun getPaintDataFromBlock(block: Block?): PaintData? = blockDataMap.get(block)
+    fun getWeapon(name: String?): MainWeapon? = weapondata[name]
+
+    fun getMap(name: String?): MapData? = mapdata[name]
+
+    fun getTeamLoc(map: MapData?): TeamLoc? = locdata[map]
 
     @JvmStatic
-    fun getPlayerIsQuit(uuid: String?): Boolean = playerIsQuitMap.get(uuid)!!
+    fun getPaintDataFromBlock(block: Block?): PaintData? = blockDataMap[block]
 
     @JvmStatic
-    fun getArmorStandPlayer(`as`: ArmorStand?): Player? = armorStandMap.get(`as`)
+    fun getPlayerIsQuit(uuid: String?): Boolean = playerIsQuitMap[uuid]!!
 
     @JvmStatic
-    fun getSnowballIsHit(ball: Projectile?): Boolean = snowballIsHitMap.get(ball)!!
-
-    fun getMainSnowballIsHit(ball: Projectile?): Boolean = mainSnowballIsHitMap.get(ball)!!
+    fun getArmorStandPlayer(`as`: ArmorStand?): Player? = armorStandMap[`as`]
 
     @JvmStatic
-    fun getBeaconFromplayer(player: Player?): ArmorStand? = beaconMap.get(player)
+    fun getSnowballIsHit(ball: Projectile?): Boolean = snowballIsHitMap[ball]!!
+
+    fun getMainSnowballIsHit(ball: Projectile?): Boolean = mainSnowballIsHitMap[ball]!!
 
     @JvmStatic
-    fun getSprinklerFromplayer(player: Player?): ArmorStand? = sprinklerMap.get(player)
+    fun getBeaconFromplayer(player: Player?): ArmorStand? = beaconMap[player]
 
     @JvmStatic
-    fun getSpongeFromBlock(block: Block?): Sponge? = spongeMap.get(block)
-
-    fun getSplashShieldDataFromPlayer(player: Player?): SplashShieldData? = splashShieldDataMapWithPlayer.get(player)
+    fun getSprinklerFromplayer(player: Player?): ArmorStand? = sprinklerMap[player]
 
     @JvmStatic
-    fun getSplashShieldDataFromArmorStand(`as`: ArmorStand?): SplashShieldData? = splashShieldDataMapWithArmorStand.get(`as`)
+    fun getSpongeFromBlock(block: Block?): Sponge? = spongeMap[block]
 
-    fun getKasaDataFromPlayer(player: Player?): KasaData? = kasaDataMapWithPlayer.get(player)
-
-    @JvmStatic
-    fun getKasaDataFromArmorStand(`as`: ArmorStand?): KasaData? = kAsaDataMapWithArmorStand.get(`as`)
+    fun getSplashShieldDataFromPlayer(player: Player?): SplashShieldData? = splashShieldDataMapWithPlayer[player]
 
     @JvmStatic
-    fun getSnowballHitCount(name: String?): Int = msbn.get(name)!!
+    fun getSplashShieldDataFromArmorStand(`as`: ArmorStand?): SplashShieldData? = splashShieldDataMapWithArmorStand[`as`]
+
+    fun getKasaDataFromPlayer(player: Player?): KasaData? = kasaDataMapWithPlayer[player]
+
+    @JvmStatic
+    fun getKasaDataFromArmorStand(`as`: ArmorStand?): KasaData? = kAsaDataMapWithArmorStand[`as`]
+
+    @JvmStatic
+    fun getSnowballHitCount(name: String?): Int = msbn[name]!!
 
     // public static PaintData getPaintDataFromMatch(Match match){return
     // paintdata.get(match);}
     @JvmStatic
     fun setPlayerData(
-        player: Player?,
-        data: PlayerData?,
+        player: Player,
+        data: PlayerData,
     ) {
-        playerDataMap.put(player, data)
+        playerDataMap[player] = data
     }
 
     @JvmStatic
@@ -177,7 +176,7 @@ object DataMgr {
         uuid: String?,
         data: PlayerData?,
     ) {
-        uUIDDataMap.put(uuid, data)
+        uUIDDataMap[uuid] = data
     }
 
     @JvmStatic
@@ -185,7 +184,7 @@ object DataMgr {
         id: Int,
         match: Match?,
     ) {
-        matchdata.put(id, match)
+        matchdata[id] = match
     }
 
     @JvmStatic
@@ -193,7 +192,7 @@ object DataMgr {
         name: String?,
         color: Color?,
     ) {
-        colordata.put(name, color)
+        colordata[name] = color
     }
 
     @JvmStatic
@@ -201,7 +200,7 @@ object DataMgr {
         id: Int,
         team: Team?,
     ) {
-        teamdata.put(id, team)
+        teamdata[id] = team
     }
 
     @JvmStatic
@@ -209,7 +208,7 @@ object DataMgr {
         WCname: String?,
         weaponclass: WeaponClass?,
     ) {
-        weaponclassdata.put(WCname, weaponclass)
+        weaponclassdata[WCname] = weaponclass
     }
 
     @JvmStatic
@@ -217,21 +216,21 @@ object DataMgr {
         MWname: String?,
         mw: MainWeapon?,
     ) {
-        weapondata.put(MWname, mw)
+        weapondata[MWname] = mw
     }
 
     fun setMap(
         Mname: String?,
         map: MapData?,
     ) {
-        mapdata.put(Mname, map)
+        mapdata[Mname] = map
     }
 
     fun setTeamLoc(
         map: MapData?,
         loc: TeamLoc?,
     ) {
-        locdata.put(map, loc)
+        locdata[map] = loc
     }
 
     @JvmStatic
@@ -239,7 +238,7 @@ object DataMgr {
         block: Block?,
         data: PaintData?,
     ) {
-        blockDataMap.put(block, data)
+        blockDataMap[block] = data
     }
 
     @JvmStatic
@@ -247,7 +246,7 @@ object DataMgr {
         uuid: String?,
         `is`: Boolean,
     ) {
-        playerIsQuitMap.put(uuid, `is`)
+        playerIsQuitMap[uuid] = `is`
     }
 
     @JvmStatic
@@ -255,7 +254,7 @@ object DataMgr {
         `as`: ArmorStand?,
         player: Player?,
     ) {
-        armorStandMap.put(`as`, player)
+        armorStandMap[`as`] = player
     }
 
     @JvmStatic
@@ -263,14 +262,14 @@ object DataMgr {
         ball: Projectile?,
         `is`: Boolean,
     ) {
-        snowballIsHitMap.put(ball, `is`)
+        snowballIsHitMap[ball] = `is`
     }
 
     fun setMainSnowballIsHit(
         ball: Projectile?,
         `is`: Boolean,
     ) {
-        mainSnowballIsHitMap.put(ball, `is`)
+        mainSnowballIsHitMap[ball] = `is`
     }
 
     @JvmStatic
@@ -278,7 +277,7 @@ object DataMgr {
         player: Player?,
         `as`: ArmorStand?,
     ) {
-        beaconMap.put(player, `as`)
+        beaconMap[player] = `as`
     }
 
     @JvmStatic
@@ -286,7 +285,7 @@ object DataMgr {
         player: Player?,
         `as`: ArmorStand?,
     ) {
-        sprinklerMap.put(player, `as`)
+        sprinklerMap[player] = `as`
     }
 
     @JvmStatic
@@ -294,7 +293,7 @@ object DataMgr {
         block: Block?,
         sponge: Sponge?,
     ) {
-        spongeMap.put(block, sponge)
+        spongeMap[block] = sponge
     }
 
     @JvmStatic
@@ -302,7 +301,7 @@ object DataMgr {
         player: Player?,
         data: SplashShieldData?,
     ) {
-        splashShieldDataMapWithPlayer.put(player, data)
+        splashShieldDataMapWithPlayer[player] = data
     }
 
     @JvmStatic
@@ -310,7 +309,7 @@ object DataMgr {
         `as`: ArmorStand?,
         data: SplashShieldData?,
     ) {
-        splashShieldDataMapWithArmorStand.put(`as`, data)
+        splashShieldDataMapWithArmorStand[`as`] = data
     }
 
     @JvmStatic
@@ -318,7 +317,7 @@ object DataMgr {
         player: Player?,
         data: KasaData?,
     ) {
-        kasaDataMapWithPlayer.put(player, data)
+        kasaDataMapWithPlayer[player] = data
     }
 
     @JvmStatic
@@ -326,7 +325,7 @@ object DataMgr {
         `as`: ArmorStand?,
         data: KasaData?,
     ) {
-        kAsaDataMapWithArmorStand.put(`as`, data)
+        kAsaDataMapWithArmorStand[`as`] = data
     }
 
     @JvmStatic
@@ -354,30 +353,30 @@ object DataMgr {
 
     @JvmStatic
     fun addSnowballHitCount(name: String?) {
-        msbn.put(name, getSnowballHitCount(name) + 1)
+        msbn[name] = getSnowballHitCount(name) + 1
     }
 
     // public static Map<Match, PaintData> getPaintDataMap(){return paintdata;}
     @JvmStatic
     fun getColorRandom(number: Int): Color {
-        val color = list.get(number)
+        val color = list[number]
         color.isUsed = true
         return color // RandomColor
     }
 
     @JvmStatic
     fun colorShuffle() {
-        Collections.shuffle(list)
+        list.shuffle()
     }
 
     @JvmStatic
     fun mapDataShuffle() {
-        Collections.shuffle(maplist)
+        maplist.shuffle()
     }
 
     @JvmStatic
     fun getMapRandom(i: Int): MapData {
-        val map = maplist.get(i)
+        val map = maplist[i]
         return map // RandomMap
     }
 }

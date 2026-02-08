@@ -50,8 +50,8 @@ object MultiMissile {
     fun mmLockRunnable(player: Player) {
         val task: BukkitRunnable =
             object : BukkitRunnable() {
-                var ps: MutableMap<Player?, EntitySquid> = HashMap<Player?, EntitySquid>()
-                var asl: MutableMap<Entity?, EntityArmorStand> = HashMap<Entity?, EntityArmorStand>()
+                var ps: MutableMap<Player?, EntitySquid> = HashMap()
+                var asl: MutableMap<Entity?, EntityArmorStand> = HashMap()
                 var p: Player = player
                 var c: Int = 0
 
@@ -85,7 +85,7 @@ object MultiMissile {
                                     es.isInvisible = true
                                     es.isNoGravity = true
                                     es.isNoAI = true
-                                    ps.put(op, es)
+                                    ps[op] = es
                                     (p as CraftPlayer)
                                         .handle
                                         .playerConnection
@@ -115,7 +115,7 @@ object MultiMissile {
                                         eas.isSmall = `as`.isSmall
                                         eas.setBasePlate(`as`.hasBasePlate())
                                         eas.isNoGravity = true
-                                        asl.put(`as`, eas)
+                                        asl[`as`] = eas
                                         (p as CraftPlayer)
                                             .handle
                                             .playerConnection
@@ -133,7 +133,7 @@ object MultiMissile {
                                         p,
                                     )!!.team != getPlayerData(op)!!.team
                                 ) {
-                                    val es: EntitySquid = ps.get(op)!!
+                                    val es: EntitySquid = ps[op]!!
                                     val loc: Location = op.location
                                     es.setLocation(loc.x, loc.y, loc.z, loc.yaw, loc.pitch)
                                     setGlowing(es.bukkitEntity, p, mmCheckCanLock(p, op))
@@ -153,7 +153,7 @@ object MultiMissile {
                                         (`as`.customName != "SplashShield") &&
                                         (`as`.customName != "Kasa")
                                     ) {
-                                        val eas: EntityArmorStand = asl.get(`as`)!!
+                                        val eas: EntityArmorStand = asl[`as`]!!
                                         val loc = `as`.location
                                         eas.setLocation(loc.x, loc.y, loc.z, loc.yaw, loc.pitch)
                                         setGlowing(eas.bukkitEntity, p, mmCheckCanLock(p, `as`))
@@ -166,7 +166,7 @@ object MultiMissile {
                             }
                         }
                         if (!getPlayerData(p)!!.isUsingMM || c == 200) {
-                            val targetList: MutableList<Entity> = ArrayList<Entity>()
+                            val targetList: MutableList<Entity> = ArrayList()
                             var count = 0
                             for (op in plugin.server.onlinePlayers) {
                                 if (getPlayerData(op)!!.isInMatch &&
@@ -176,7 +176,7 @@ object MultiMissile {
                                         p,
                                     )!!.team != getPlayerData(op)!!.team
                                 ) {
-                                    val es: EntitySquid = ps.get(op)!!
+                                    val es: EntitySquid = ps[op]!!
                                     (p as CraftPlayer)
                                         .handle
                                         .playerConnection
@@ -200,7 +200,7 @@ object MultiMissile {
                                         (`as`.customName != "SplashShield") &&
                                         (`as`.customName != "Kasa")
                                     ) {
-                                        val eas: EntityArmorStand = asl.get(`as`)!!
+                                        val eas: EntityArmorStand = asl[`as`]!!
                                         (p as CraftPlayer).handle.playerConnection.sendPacket(
                                             PacketPlayOutEntityDestroy(eas.bukkitEntity.entityId),
                                         )
