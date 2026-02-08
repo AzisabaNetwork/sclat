@@ -79,10 +79,10 @@ object AirStrike {
             )
         val task: BukkitRunnable =
             object : BukkitRunnable() {
-                var c: Int = 0
+                var cn: Int = 0
 
                 override fun run() {
-                    if (c == 0) getPlayerData(player)!!.isUsingSP = true
+                    if (cn == 0) getPlayerData(player)!!.isUsingSP = true
                     var random = 18.0
                     // 集中砲火用
                     if (localized) {
@@ -97,11 +97,11 @@ object AirStrike {
                             ploc.blockZ + vec.blockZ + (Math.random() * random - random / 2),
                         )
                     strikeRunnable(player, localized, loc)
-                    if (c == 15 || !getPlayerData(player)!!.isInMatch) {
+                    if (cn == 15 || !getPlayerData(player)!!.isInMatch) {
                         // player.playSound(player.getLocation(), Sound.BLOCK_CHEST_CLOSE, 1, 2);
                         cancel()
                     }
-                    c++
+                    cn++
                 }
             }
         if (localized) {
@@ -112,7 +112,7 @@ object AirStrike {
 
         val effect: BukkitRunnable =
             object : BukkitRunnable() {
-                var c: Int = 0
+                var cnt: Int = 0
 
                 override fun run() {
                     val rayTrace = RayTrace(tloc.toVector(), Vector(0, 1, 0))
@@ -135,11 +135,11 @@ object AirStrike {
                             dustOptions,
                         )
                     }
-                    if (c == 100 || !getPlayerData(player)!!.isInMatch) {
+                    if (cnt == 100 || !getPlayerData(player)!!.isInMatch) {
                         getPlayerData(player)!!.isUsingSP = false
                         cancel()
                     }
-                    c++
+                    cnt++
                 }
             }
         effect.runTaskTimer(plugin, 0, 2)
