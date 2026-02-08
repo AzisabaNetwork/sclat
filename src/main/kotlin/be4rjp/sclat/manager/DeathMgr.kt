@@ -31,10 +31,10 @@ object DeathMgr {
         shooter: Player,
         type: String,
     ) {
-        getPlayerData(target)!!.isDead = (true)
+        getPlayerData(target)!!.isDead = true
         target.gameMode = GameMode.SPECTATOR
 
-        getPlayerData(target)!!.poison = (false)
+        getPlayerData(target)!!.poison = false
 
         val drop1 =
             target.world.dropItem(
@@ -60,13 +60,11 @@ object DeathMgr {
         val maxDist = 3.0
 
         // 塗る
-        var i = 0
-        while (i <= maxDist) {
+        for (i in 0..maxDist.toInt()) {
             val pLocs = getSphere(target.location, i.toDouble(), 20)
             for (loc in pLocs) {
                 PaintMgr.paint(loc, shooter, false)
             }
-            i++
         }
 
         val clear: BukkitRunnable =
@@ -96,7 +94,7 @@ object DeathMgr {
             object : BukkitRunnable() {
                 val t: Player = target
                 val s: Player = shooter
-                var loc: Location? = null
+                lateinit var loc: Location
                 var i: Int = 0
 
                 override fun run() {
@@ -105,6 +103,7 @@ object DeathMgr {
                             cancel()
                             return
                         }
+                        sclatLogger.debug("Handling player kill!!")
                         if (type == "killed") {
                             t.gameMode = GameMode.SPECTATOR
                             t.inventory.clear()
@@ -112,8 +111,8 @@ object DeathMgr {
                             if (s.gameMode == GameMode.ADVENTURE) {
                                 t.spectatorTarget = s
                             } else {
-                                loc = getPlayerData(t)!!.match!!.mapData!!.intro
-                                t.teleport(loc!!)
+                                loc = getPlayerData(t)?.match?.mapData?.intro!!
+                                t.teleport(loc)
                             }
 
                             val sdata = getPlayerData(s)
@@ -198,6 +197,7 @@ object DeathMgr {
                                 t.spectatorTarget = s
                             } else {
                                 loc = getPlayerData(t)!!.match!!.mapData!!.intro
+                                    ?: throw RuntimeException("mapdata intro is null on subWeapon")
                                 t.teleport(loc!!)
                             }
 
@@ -272,7 +272,9 @@ object DeathMgr {
                             if (s.gameMode == GameMode.ADVENTURE) {
                                 t.spectatorTarget = s
                             } else {
-                                loc = getPlayerData(t)!!.match!!.mapData!!.intro
+                                loc =
+                                    getPlayerData(t)!!.match!!.mapData!!.intro
+                                        ?: throw RuntimeException("intro mapdata is null on wpWeapon")
                                 t.teleport(loc!!)
                             }
 
@@ -342,23 +344,29 @@ object DeathMgr {
 
                         if (type == "water") {
                             t.gameMode = GameMode.SPECTATOR
-                            getPlayerData(t)!!.tick = 10
+                            val playerData =
+                                getPlayerData(t) ?: run {
+                                    sclatLogger.debug("Player Data is null on water death")
+                                    return
+                                }
+                            playerData.tick = 10
                             t.inventory.clear()
+                            sclatLogger.debug("Water tick if / current tick: {}", i)
                             if (i == 0) {
                                 loc = t.location
-                                if (getPlayerData(t)!!.lastAttack === t) {
+                                if (playerData.lastAttack === t) {
                                     for (player in plugin
                                         .server
                                         .onlinePlayers) {
                                         player.sendMessage(
                                             (
-                                                getPlayerData(t)!!.team!!.teamColor!!.colorCode +
+                                                playerData.team?.teamColor?.colorCode +
                                                     t.displayName + ChatColor.RESET + "は溺れてしまった！"
                                             ),
                                         )
                                     }
                                 } else {
-                                    val splayer = getPlayerData(t)!!.lastAttack
+                                    val splayer = playerData.lastAttack
                                     val sdata = getPlayerData(splayer)
                                     for (player in plugin
                                         .server
@@ -370,16 +378,16 @@ object DeathMgr {
                                         // ChatColor.RESET+ "に突き落とされてしまった！");
                                         player.sendMessage(
                                             (
-                                                sdata!!.team!!.teamColor!!.colorCode +
-                                                    splayer!!.displayName + ChatColor.RESET + "は" + ChatColor.RESET +
-                                                    getPlayerData(t)!!.team!!.teamColor!!.colorCode +
+                                                sdata?.team?.teamColor?.colorCode +
+                                                    splayer?.displayName + ChatColor.RESET + "は" + ChatColor.RESET +
+                                                    playerData.team?.teamColor?.colorCode +
                                                     t.displayName + ChatColor.RESET + "を水中に落とした！"
                                             ),
                                         )
                                     }
                                 }
                             }
-                            t.teleport(loc!!)
+                            t.teleport(loc)
 
                             if (i == 0) {
                                 t.sendTitle(
@@ -399,7 +407,7 @@ object DeathMgr {
                                     0,
                                 )
                             }
-                            getPlayerData(t)!!.lastAttack = t
+                            playerData.lastAttack = t
                             if (i == 40) {
                                 t.sendTitle(
                                     ChatColor.GREEN.toString() + "復活まであと: 3秒",
@@ -429,15 +437,15 @@ object DeathMgr {
                             }
                             if (i == 100) {
                                 getPlayerData(target)!!.isDead = (false)
-                                val loc1 = getPlayerData(t)!!.matchLocation
+                                val loc1 = playerData.matchLocation
                                 t.teleport(loc1!!)
                                 t.gameMode = GameMode.ADVENTURE
                                 t.inventory.setItem(
                                     0,
-                                    getPlayerData(t)!!.weaponClass!!.mainWeapon!!.weaponIteamStack,
+                                    playerData.weaponClass!!.mainWeapon!!.weaponIteamStack,
                                 )
                                 t.world.playSound(
-                                    getPlayerData(t)!!.matchLocation!!,
+                                    playerData.matchLocation!!,
                                     Sound.ENTITY_PLAYER_SWIM,
                                     1f,
                                     1f,
@@ -448,29 +456,35 @@ object DeathMgr {
                                 WeaponClassMgr.setWeaponClass(t)
                                 barrierEffectRunnable(t, 120)
                                 setArmor(t, Double.MAX_VALUE, 120, false)
-                                if (getPlayerData(t)!!.sPGauge == 100) SPWeaponMgr.setSPWeapon(t)
+                                if (playerData.sPGauge == 100) SPWeaponMgr.setSPWeapon(t)
                                 cancel()
                             }
                         }
                         if (type == "fall") {
                             t.gameMode = GameMode.SPECTATOR
-                            getPlayerData(t)!!.tick = 10
+                            val playerData = getPlayerData(t)
+                            if (playerData == null) {
+                                sclatLogger.debug("Player data is null on fall handling")
+                                return
+                            }
+                            playerData.tick = 10
                             t.inventory.clear()
+                            sclatLogger.debug("on fall handling")
                             if (i == 0) {
-                                loc = getPlayerData(t)!!.match!!.mapData!!.intro
-                                if (getPlayerData(t)!!.lastAttack === t) {
+                                loc = playerData.match!!.mapData!!.intro ?: throw RuntimeException("Intro map data is null!")
+                                if (playerData.lastAttack === t) {
                                     for (player in plugin
                                         .server
                                         .onlinePlayers) {
                                         player.sendMessage(
                                             (
-                                                getPlayerData(t)!!.team!!.teamColor!!.colorCode +
+                                                playerData.team!!.teamColor!!.colorCode +
                                                     t.displayName + ChatColor.RESET + "は奈落に落ちてしまった！"
                                             ),
                                         )
                                     }
                                 } else {
-                                    val splayer = getPlayerData(t)!!.lastAttack
+                                    val splayer = playerData.lastAttack
                                     val sdata = getPlayerData(splayer)
                                     for (player in plugin
                                         .server
@@ -483,7 +497,7 @@ object DeathMgr {
                                             (
                                                 sdata!!.team!!.teamColor!!.colorCode +
                                                     splayer!!.displayName + ChatColor.RESET + "は" + ChatColor.RESET +
-                                                    getPlayerData(t)!!.team!!.teamColor!!.colorCode +
+                                                    playerData.team!!.teamColor!!.colorCode +
                                                     t.displayName + ChatColor.RESET + "を奈落に落とした！"
                                             ),
                                         )
@@ -510,7 +524,7 @@ object DeathMgr {
                                     0,
                                 )
                             }
-                            getPlayerData(t)!!.lastAttack = t
+                            playerData.lastAttack = t
                             if (i == 40) {
                                 t.sendTitle(
                                     ChatColor.GREEN.toString() + "復活まであと: 3秒",
@@ -540,15 +554,15 @@ object DeathMgr {
                             }
                             if (i == 100) {
                                 getPlayerData(target)!!.isDead = (false)
-                                val loc1 = getPlayerData(t)!!.matchLocation
+                                val loc1 = playerData.matchLocation
                                 t.teleport(loc1!!)
                                 t.gameMode = GameMode.ADVENTURE
                                 t.inventory.setItem(
                                     0,
-                                    getPlayerData(t)!!.weaponClass!!.mainWeapon!!.weaponIteamStack,
+                                    playerData.weaponClass!!.mainWeapon!!.weaponIteamStack,
                                 )
                                 t.world.playSound(
-                                    getPlayerData(t)!!.matchLocation!!,
+                                    playerData.matchLocation!!,
                                     Sound.ENTITY_PLAYER_SWIM,
                                     1f,
                                     1f,
@@ -559,7 +573,7 @@ object DeathMgr {
                                 WeaponClassMgr.setWeaponClass(t)
                                 barrierEffectRunnable(t, 120)
                                 setArmor(t, Double.MAX_VALUE, 120, false)
-                                if (getPlayerData(t)!!.sPGauge == 100) SPWeaponMgr.setSPWeapon(t)
+                                if (playerData.sPGauge == 100) SPWeaponMgr.setSPWeapon(t)
                                 cancel()
                             }
                         }
@@ -580,7 +594,8 @@ object DeathMgr {
                         setArmor(t, Double.MAX_VALUE, 120, false)
                         if (getPlayerData(t)!!.sPGauge == 100) SPWeaponMgr.setSPWeapon(t)
                         cancel()
-                        sclatLogger.warn(e.message)
+                        sclatLogger.error("Failed to process death", e)
+                        e.printStackTrace()
                     }
                 }
             }
