@@ -857,11 +857,12 @@ class SnowballListener : Listener {
                 }
 
                 var damage = getPlayerData(shooter)!!.weaponClass!!.mainWeapon!!.damage
-                if (dmgDouble != 1.0) {
-                    damage = damage * dmgDouble
-                } else {
-                    damage = damage * Gear.getGearInfluence(shooter, Gear.Type.MAIN_SPEC_UP)
-                }
+                damage *=
+                    if (dmgDouble != 1.0) {
+                        dmgDouble
+                    } else {
+                        Gear.getGearInfluence(shooter, Gear.Type.MAIN_SPEC_UP)
+                    }
                 val type = getPlayerData(shooter)!!.weaponClass!!.mainWeapon!!.weaponType
 
                 if (type != "Burst" && type != "Blaster") {
