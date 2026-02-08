@@ -24,7 +24,6 @@ import be4rjp.sclat.data.DataMgr.sprinklerMap
 import be4rjp.sclat.data.PaintData
 import be4rjp.sclat.gui.LootBox
 import be4rjp.sclat.gui.OpenGUI
-import be4rjp.sclat.lobby.LobbyScoreboardRunnable
 import be4rjp.sclat.packet.PacketHandler
 import be4rjp.sclat.plugin
 import be4rjp.sclat.server.EquipmentClient
@@ -49,6 +48,7 @@ import be4rjp.sclat.weapon.Shooter.maneuverShootRunnable
 import be4rjp.sclat.weapon.Shooter.shooterRunnable
 import be4rjp.sclat.weapon.Spinner.spinnerRunnable
 import be4rjp.sclat.weapon.Swapper.swapperRunnable
+import fr.mrmicky.fastboard.FastBoard
 import net.md_5.bungee.api.chat.ClickEvent
 import net.md_5.bungee.api.chat.TextComponent
 import org.bukkit.Bukkit
@@ -83,6 +83,7 @@ import org.bukkit.inventory.meta.BookMeta
 import org.bukkit.inventory.meta.SkullMeta
 import org.bukkit.scheduler.BukkitRunnable
 import java.util.Random
+import java.util.UUID
 import java.util.concurrent.Callable
 
 /**
@@ -90,6 +91,8 @@ import java.util.concurrent.Callable
  * @author Be4rJP
  */
 class GameMgr : Listener {
+    private val boards: MutableMap<UUID, FastBoard> = mutableMapOf()
+
     @EventHandler
     fun onPlayerJoin(e: PlayerJoinEvent) {
         val player = e.getPlayer()
@@ -549,8 +552,12 @@ class GameMgr : Listener {
 
         if (Sclat.type == ServerType.LOBBY) {
             // Scoreboard
-            val runnable = LobbyScoreboardRunnable(player)
-            runnable.runTaskTimerAsynchronously(plugin, 0, 10)
+            plugin.boards[player.uniqueId] =
+                FastBoard(player).apply {
+                    updateTitle("§6§lSclat §r" + Sclat.VERSION)
+                }
+//            val runnable = LobbyScoreboardRunnable(player)
+//            runnable.runTaskTimerAsynchronously(plugin, 0, 10)
         }
 
         val match = getMatchFromId(Int.MAX_VALUE)
@@ -1135,6 +1142,8 @@ class GameMgr : Listener {
 
                 DataMgr.joinedList.remove(player)
             }
+        } else if (Sclat.type == ServerType.LOBBY) {
+            plugin.boards.remove(player.uniqueId)?.delete()
         }
 
         val server = getPlayerData(player)!!.servername

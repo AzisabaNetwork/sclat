@@ -13,6 +13,7 @@ import be4rjp.sclat.api.async.AsyncThreadManager.setup
 import be4rjp.sclat.api.async.AsyncThreadManager.shutdownAll
 import be4rjp.sclat.api.config.CustomConfig
 import be4rjp.sclat.api.holo.PlayerHolograms
+import be4rjp.sclat.api.utils.TextAnimation
 import be4rjp.sclat.commands.SclatCommandExecutor
 import be4rjp.sclat.config.Config
 import be4rjp.sclat.data.DataMgr
@@ -30,6 +31,7 @@ import be4rjp.sclat.manager.MapDataMgr
 import be4rjp.sclat.manager.MatchMgr
 import be4rjp.sclat.manager.NoteBlockAPIMgr
 import be4rjp.sclat.manager.PlayerReturnManager
+import be4rjp.sclat.manager.PlayerStatusMgr
 import be4rjp.sclat.manager.RankMgr
 import be4rjp.sclat.manager.ServerStatusManager
 import be4rjp.sclat.manager.WeaponClassMgr
@@ -49,14 +51,18 @@ import be4rjp.sclat.weapon.SubWeapon
 import com.comphenix.protocol.ProtocolLibrary
 import com.comphenix.protocol.ProtocolManager
 import com.google.common.io.ByteStreams
+import fr.mrmicky.fastboard.FastBoard
 import org.bukkit.Bukkit
+import org.bukkit.ChatColor
 import org.bukkit.Location
 import org.bukkit.WorldCreator
 import org.bukkit.entity.Player
 import org.bukkit.plugin.java.JavaPlugin
 import org.bukkit.plugin.messaging.PluginMessageListener
+import org.bukkit.scheduler.BukkitRunnable
 import org.bukkit.scoreboard.NameTagVisibility
 import org.bukkit.scoreboard.Team
+import java.util.UUID
 import kotlin.math.pow
 
 /**
@@ -66,6 +72,10 @@ import kotlin.math.pow
 class Sclat :
     JavaPlugin(),
     PluginMessageListener {
+    internal val boards: MutableMap<UUID, FastBoard> = mutableMapOf()
+    lateinit var text: String
+    lateinit var textAnimation: TextAnimation
+
     override fun onEnable() {
         plugin = this
         glow = Glow()
@@ -325,6 +335,17 @@ class Sclat :
         news!!.saveDefaultConfig()
         news!!.getConfig()
         // -------------------------------------------------------------------
+
+        // --- side scoreboard updater ---
+        object : BukkitRunnable() {
+            override fun run() {
+                boards.forEach { (_, b) -> updateBoard(b) }
+            }
+        }.runTaskTimer(this, 0, 20)
+
+        text = ChatColor.translateAlternateColorCodes('&', news?.getConfig()!!.getString("news-message")!!)
+
+        textAnimation = TextAnimation(text, Sclat.news?.getConfig()!!.getInt("scoreboard-length"))
     }
 
     override fun onPluginMessageReceived(
@@ -389,6 +410,46 @@ class Sclat :
         if (type == ServerType.LOBBY) {
             ServerStatusManager.stopTask()
         }
+    }
+
+    fun updateBoard(board: FastBoard) {
+        val player = board.player
+        board.updateLines(
+            "§7§m                                  ",
+            "",
+            "§6§lステータス »",
+            "§e COIN: §r" + PlayerStatusMgr.getMoney(player),
+            "§e TICKET: §r" + PlayerStatusMgr.getTicket(player),
+            "§b RANK: §r" + RankMgr.toABCRank(PlayerStatusMgr.getRank(player)) + " [" +
+                PlayerStatusMgr.getRank(player) + "]",
+            " ",
+            "§9§lサーバー »",
+            *ServerStatusManager.serverList
+                .filter { status -> !status.isMaintenance && status.isOnline }
+                .map { serverStatus ->
+                    " " + serverStatus.displayName + ": §r" +
+                        if (serverStatus.runningMatch) {
+                            val time = System.currentTimeMillis() / 1000 - serverStatus.matchStartTime
+                            val min = String.format("%02d", time % 60)
+                            serverStatus.playerCount.toString() + "§e人が試合中" +
+                                (if (time < 10000) " §r(" + time / 60 + ":" + min + ")" else "")
+                        } else {
+                            if (serverStatus.waitingEndTime != 0L) {
+                                (
+                                    serverStatus.playerCount.toString() + "§a人が待機中" + " §r(§b" +
+                                        ((serverStatus.waitingEndTime - (System.currentTimeMillis() / 1000)).toString() + "§r秒後に開始)")
+                                )
+                            } else {
+                                serverStatus.playerCount.toString() + "§a人が待機中"
+                            }
+                        }
+                }.toTypedArray(),
+            "  ",
+            "§a§lNews »",
+            textAnimation.next(),
+            "   ", // Prevent from same name
+            "§7§m                                  §r",
+        )
     }
 
     companion object {

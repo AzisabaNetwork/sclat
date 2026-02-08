@@ -46,6 +46,7 @@ dependencies {
     implementation(libs.jspecify)
     implementation(libs.kotlin.stdlib)
     implementation(libs.yamlkt)
+    implementation(libs.fastboard)
 }
 
 // Project Settings
