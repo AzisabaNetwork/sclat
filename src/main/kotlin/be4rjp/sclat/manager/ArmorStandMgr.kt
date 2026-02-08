@@ -137,10 +137,7 @@ object ArmorStandMgr {
             val il = Location(w, ix + 0.5, iy.toDouble(), iz + 0.5)
             il.yaw = iyaw.toFloat()
             val `as` = w!!.spawnEntity(il, EntityType.ARMOR_STAND) as ArmorStand
-            // as.setHelmet(new ItemStack(Material.LEATHER_HELMET));
-            // as.setChestplate(new ItemStack(Material.LEATHER_CHESTPLATE));
-            // as.setLeggings(new ItemStack(Material.LEATHER_LEGGINGS));
-            // as.setBoots(new ItemStack(Material.LEATHER_BOOTS));
+            // Equipments are wear with packet
             `as`.isInvulnerable = true
             `as`.customName = "20.0"
             `as`.isCustomNameVisible = true
@@ -151,15 +148,15 @@ object ArmorStandMgr {
 
     @JvmStatic
     fun beaconArmorStandSetup(player: Player) {
-        val al: Location?
-        if (Sclat.conf!!
-                .config!!
-                .getString("WorkMode") == "Trial"
-        ) {
-            al = Sclat.lobby
-        } else {
-            al = getPlayerData(player)!!.matchLocation
-        }
+        val al: Location? =
+            if (Sclat.conf!!
+                    .config!!
+                    .getString("WorkMode") == "Trial"
+            ) {
+                Sclat.lobby
+            } else {
+                getPlayerData(player)!!.matchLocation
+            }
         val `as` = player.world.spawnEntity(al!!, EntityType.ARMOR_STAND) as ArmorStand
         `as`.isVisible = false
         `as`.isSmall = true
