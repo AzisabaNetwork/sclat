@@ -73,7 +73,7 @@ object MultiMissile {
                             getPlayerData(p)!!.isUsingMM = true
                             val nmsWorld = (p.world as CraftWorld).handle
                             for (op in plugin.server.onlinePlayers) {
-                                sclatLogger.info("For player: ${op.name}")
+                                sclatLogger.debug("For player: ${op.name}")
                                 if (getPlayerData(op)!!.isInMatch &&
                                     op.world === p.world &&
                                     (op.name != p.name) &&
@@ -93,7 +93,7 @@ object MultiMissile {
                                         .playerConnection
                                         .sendPacket(PacketPlayOutSpawnEntityLiving(es))
                                 } else {
-                                    sclatLogger.info("Player ${op.name} ignored.")
+                                    sclatLogger.debug("Player ${op.name} ignored.")
                                 }
                             }
                             for (armorStand in p.world.entities) {
@@ -128,7 +128,7 @@ object MultiMissile {
                             }
                         }
                         if (c != 0) {
-                            sclatLogger.info("Non-0 ticking for MultiMissile")
+                            sclatLogger.debug("Non-0 ticking for MultiMissile")
                             for (op in plugin.server.onlinePlayers) {
                                 if (getPlayerData(op)!!.isInMatch &&
                                     op.world === p.world &&
@@ -142,7 +142,7 @@ object MultiMissile {
                                     es.setLocation(loc.x, loc.y, loc.z, loc.yaw, loc.pitch)
                                     val requireGlowing = mmCheckCanLock(p, op)
                                     setGlowing(es.bukkitEntity, p, requireGlowing)
-                                    sclatLogger.info("Set grow for ${op.name} to $requireGlowing")
+                                    sclatLogger.debug("Set grow for ${op.name} to $requireGlowing")
                                     (p as CraftPlayer)
                                         .handle
                                         .playerConnection
@@ -172,7 +172,7 @@ object MultiMissile {
                             }
                         }
                         if (!getPlayerData(p)!!.isUsingMM || c == 200) {
-                            sclatLogger.info("Shoot!!! by MultiMissile")
+                            sclatLogger.debug("Shoot!!! by MultiMissile")
                             val targetList: MutableList<Entity> = ArrayList()
                             var count = 0
                             for (op in plugin.server.onlinePlayers) {
@@ -195,7 +195,7 @@ object MultiMissile {
                                         targetList.add(op)
                                         count++
                                     } else {
-                                        sclatLogger.info("Ignored for ${op.name}")
+                                        sclatLogger.debug("Ignored for ${op.name}")
                                     }
                                 }
                             }
@@ -233,12 +233,12 @@ object MultiMissile {
                             fireworksRunnable(p)
                             SPWeaponMgr.setSPCoolTimeAnimation(p, 100)
 
-                            sclatLogger.info("Cancelled! after SPWeaponMgr")
+                            sclatLogger.debug("Cancelled! after SPWeaponMgr")
                             cancel()
                         }
                         if (!getPlayerData(p)!!.isInMatch || !p.isOnline || p.gameMode == GameMode.SPECTATOR) {
                             getPlayerData(p)!!.isUsingSP = false
-                            sclatLogger.info("Cancelled! after disable usingSP")
+                            sclatLogger.debug("Cancelled! after disable usingSP")
                             cancel()
                         }
                         c++
