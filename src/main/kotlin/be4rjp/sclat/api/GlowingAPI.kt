@@ -5,9 +5,13 @@ import com.comphenix.protocol.PacketType
 import com.comphenix.protocol.wrappers.WrappedDataWatcher
 import org.bukkit.entity.Entity
 import org.bukkit.entity.Player
+import java.lang.Byte
 import java.lang.reflect.InvocationTargetException
+import kotlin.Boolean
+import kotlin.Suppress
 
 object GlowingAPI {
+    @Suppress("PLATFORM_CLASS_MAPPED_TO_KOTLIN")
     @JvmStatic
     fun setGlowing(
         entity: Entity,

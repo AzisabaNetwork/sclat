@@ -13,6 +13,7 @@ import be4rjp.sclat.manager.PaintMgr
 import be4rjp.sclat.manager.SPWeaponMgr
 import be4rjp.sclat.manager.WeaponClassMgr
 import be4rjp.sclat.plugin
+import be4rjp.sclat.sclatLogger
 import net.minecraft.server.v1_14_R1.EntityArmorStand
 import net.minecraft.server.v1_14_R1.EntitySquid
 import net.minecraft.server.v1_14_R1.EntityTypes
@@ -72,6 +73,7 @@ object MultiMissile {
                             getPlayerData(p)!!.isUsingMM = true
                             val nmsWorld = (p.world as CraftWorld).handle
                             for (op in plugin.server.onlinePlayers) {
+                                sclatLogger.info("For player: ${op.name}")
                                 if (getPlayerData(op)!!.isInMatch &&
                                     op.world === p.world &&
                                     (op.name != p.name) &&
@@ -90,19 +92,20 @@ object MultiMissile {
                                         .handle
                                         .playerConnection
                                         .sendPacket(PacketPlayOutSpawnEntityLiving(es))
+                                } else {
+                                    sclatLogger.info("Player ${op.name} ignored.")
                                 }
                             }
-                            for (e in p.world.entities) {
-                                if (e is ArmorStand) {
-                                    val `as` = e
-                                    if (`as`.customName == null) continue
-                                    if ((`as`.customName != "Path") &&
-                                        (`as`.customName != "21") &&
-                                        (`as`.customName != "100") &&
-                                        (`as`.customName != "SplashShield") &&
-                                        (`as`.customName != "Kasa")
+                            for (armorStand in p.world.entities) {
+                                if (armorStand is ArmorStand) {
+                                    if (armorStand.customName == null) continue
+                                    if ((armorStand.customName != "Path") &&
+                                        (armorStand.customName != "21") &&
+                                        (armorStand.customName != "100") &&
+                                        (armorStand.customName != "SplashShield") &&
+                                        (armorStand.customName != "Kasa")
                                     ) {
-                                        val loc = `as`.location
+                                        val loc = armorStand.location
                                         val eas =
                                             EntityArmorStand(
                                                 nmsWorld,
@@ -112,10 +115,10 @@ object MultiMissile {
                                             )
                                         eas.setLocation(loc.x, loc.y, loc.z, loc.yaw, loc.pitch)
                                         eas.isInvisible = true
-                                        eas.isSmall = `as`.isSmall
-                                        eas.setBasePlate(`as`.hasBasePlate())
+                                        eas.isSmall = armorStand.isSmall
+                                        eas.setBasePlate(armorStand.hasBasePlate())
                                         eas.isNoGravity = true
-                                        asl[`as`] = eas
+                                        asl[armorStand] = eas
                                         (p as CraftPlayer)
                                             .handle
                                             .playerConnection
@@ -125,6 +128,7 @@ object MultiMissile {
                             }
                         }
                         if (c != 0) {
+                            sclatLogger.info("Non-0 ticking for MultiMissile")
                             for (op in plugin.server.onlinePlayers) {
                                 if (getPlayerData(op)!!.isInMatch &&
                                     op.world === p.world &&
@@ -136,7 +140,9 @@ object MultiMissile {
                                     val es: EntitySquid = ps[op]!!
                                     val loc: Location = op.location
                                     es.setLocation(loc.x, loc.y, loc.z, loc.yaw, loc.pitch)
-                                    setGlowing(es.bukkitEntity, p, mmCheckCanLock(p, op))
+                                    val requireGlowing = mmCheckCanLock(p, op)
+                                    setGlowing(es.bukkitEntity, p, requireGlowing)
+                                    sclatLogger.info("Set grow for ${op.name} to $requireGlowing")
                                     (p as CraftPlayer)
                                         .handle
                                         .playerConnection
@@ -166,6 +172,7 @@ object MultiMissile {
                             }
                         }
                         if (!getPlayerData(p)!!.isUsingMM || c == 200) {
+                            sclatLogger.info("Shoot!!! by MultiMissile")
                             val targetList: MutableList<Entity> = ArrayList()
                             var count = 0
                             for (op in plugin.server.onlinePlayers) {
@@ -187,28 +194,29 @@ object MultiMissile {
                                         op.addPotionEffect(PotionEffect(PotionEffectType.GLOWING, 30, 1))
                                         targetList.add(op)
                                         count++
+                                    } else {
+                                        sclatLogger.info("Ignored for ${op.name}")
                                     }
                                 }
                             }
-                            for (e in p.world.entities) {
-                                if (e is ArmorStand) {
-                                    val `as` = e
-                                    if (`as`.customName == null) continue
-                                    if ((`as`.customName != "Path") &&
-                                        (`as`.customName != "21") &&
-                                        (`as`.customName != "100") &&
-                                        (`as`.customName != "SplashShield") &&
-                                        (`as`.customName != "Kasa")
+                            for (armorStand in p.world.entities) {
+                                if (armorStand is ArmorStand) {
+                                    if (armorStand.customName == null) continue
+                                    if ((armorStand.customName != "Path") &&
+                                        (armorStand.customName != "21") &&
+                                        (armorStand.customName != "100") &&
+                                        (armorStand.customName != "SplashShield") &&
+                                        (armorStand.customName != "Kasa")
                                     ) {
-                                        val eas: EntityArmorStand = asl[`as`]!!
+                                        val eas: EntityArmorStand = asl[armorStand]!!
                                         (p as CraftPlayer).handle.playerConnection.sendPacket(
                                             PacketPlayOutEntityDestroy(eas.bukkitEntity.entityId),
                                         )
-                                        val loc = `as`.location
+                                        val loc = armorStand.location
                                         eas.setLocation(loc.x, loc.y, loc.z, loc.yaw, loc.pitch)
-                                        if (mmCheckCanLock(p, `as`)) {
-                                            targetList.add(`as`)
-                                            `as`.addPotionEffect(PotionEffect(PotionEffectType.GLOWING, 30, 1))
+                                        if (mmCheckCanLock(p, armorStand)) {
+                                            targetList.add(armorStand)
+                                            armorStand.addPotionEffect(PotionEffect(PotionEffectType.GLOWING, 30, 1))
                                             count++
                                         }
                                     }
@@ -224,14 +232,19 @@ object MultiMissile {
                             getPlayerData(p)!!.isUsingMM = false
                             fireworksRunnable(p)
                             SPWeaponMgr.setSPCoolTimeAnimation(p, 100)
+
+                            sclatLogger.info("Cancelled! after SPWeaponMgr")
                             cancel()
                         }
                         if (!getPlayerData(p)!!.isInMatch || !p.isOnline || p.gameMode == GameMode.SPECTATOR) {
                             getPlayerData(p)!!.isUsingSP = false
+                            sclatLogger.info("Cancelled! after disable usingSP")
                             cancel()
                         }
                         c++
                     } catch (e: Exception) {
+                        sclatLogger.error("Failed to process lock", e)
+                        e.printStackTrace()
                         cancel()
                     }
                 }

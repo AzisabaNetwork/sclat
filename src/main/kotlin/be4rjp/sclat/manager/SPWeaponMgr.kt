@@ -350,8 +350,8 @@ object SPWeaponMgr {
         when (name) {
             "カーソルを合わせて右クリックで発射" -> airStrikeRunnable(player, false)
             "カーソルを合わせて右クリックで発射!" -> airStrikeRunnable(player, true)
-            "プレイヤーを狙って右クリックで発射" -> getPlayerData(player)!!.isUsingMM = (false)
-            "狙って右クリックで発射" -> getPlayerData(player)!!.isUsingMM = (false)
+            "プレイヤーを狙って右クリックで発射" -> getPlayerData(player)?.isUsingMM = false
+            "狙って右クリックで発射" -> getPlayerData(player)?.isUsingMM = false
         }
 
         if (data.isUsingSP) return
