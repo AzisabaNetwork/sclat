@@ -44,12 +44,9 @@ class EquipmentServer( // private List<String> commands = new ArrayList<>();
 
 // 非同期スレッド
 internal class EquipEchoThread(
-    socket: Socket,
+    private val socket: Socket,
 ) : Thread() {
-    private val socket: Socket?
-
     init {
-        this.socket = socket
         println("Connected " + socket.getRemoteSocketAddress())
     }
 
@@ -57,64 +54,57 @@ internal class EquipEchoThread(
         try {
             println("Waiting for commands...")
             // クライアントからの受取用
-            val reader = BufferedReader(InputStreamReader(socket!!.getInputStream()))
+            val reader = BufferedReader(InputStreamReader(socket.getInputStream()))
 
             // サーバーからクライアントへの送信用
             PrintWriter(socket.getOutputStream(), true)
 
-            var cmd: String? = null
+            var cmd: String
             // 命令受け取り用ループ
             while (true) {
-                if ((reader.readLine().also { cmd = it }) != null) {
-                    if (cmd == "stop") {
-                        socket.close()
-                        println("Socket closed.")
-                        break
-                    }
-
-                    println(cmd)
-
-                    EquipmentServerManager.addEquipmentCommand(cmd)
-
-                    val args: Array<String?> = cmd!!.split(" ".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-                    when (args[0]) {
-                        "setting" -> {
-                            // setting [settingData] [uuid]
-                            if (args.size == 3) {
-                                if (args[1]!!.length == 9 && args[2]!!.length == 36) {
-                                    Sclat.conf?.playerSettings!!.set("Settings." + args[2], args[1])
-                                }
-                            }
-                        }
-
-                        "mod" -> {
-                            // mod [PlayerName]
-                            if (args.size == 2) {
-                                if (Sclat.modList.contains(args[1])) {
-                                    Sclat.modList.add(args[1])
-                                }
-                            }
-                        }
-
-                        "join" -> {
-                            if (args.size == 2) {
-                            }
-                        }
-                    }
-                } else {
+                cmd = reader.readLine()
+                if (cmd == "stop") {
+                    socket.close()
+                    println("Socket closed.")
                     break
+                }
+
+                EquipmentServerManager.addEquipmentCommand(cmd)
+
+                val args: Array<String?> = cmd.split(" ".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+                when (args[0]) {
+                    "setting" -> {
+                        // setting [settingData] [uuid]
+                        if (args.size == 3) {
+                            if (args[1]!!.length == 9 && args[2]!!.length == 36) {
+                                Sclat.conf?.playerSettings!!.set("Settings." + args[2], args[1])
+                            }
+                        }
+                    }
+
+                    "mod" -> {
+                        // mod [PlayerName]
+                        if (args.size == 2) {
+                            if (Sclat.modList.contains(args[1])) {
+                                Sclat.modList.add(args[1])
+                            }
+                        }
+                    }
+
+                    "join" -> {
+                        if (args.size == 2) {
+                        }
+                    }
                 }
             }
         } catch (e: IOException) {
             e.printStackTrace()
         } finally {
             try {
-                if (socket != null) {
-                    socket.close()
-                }
+                socket.close()
             } catch (e: IOException) {
             }
-            println("Disconnected " + socket!!.getRemoteSocketAddress())
+            println("Disconnected " + socket.getRemoteSocketAddress())
         }
     }
 }

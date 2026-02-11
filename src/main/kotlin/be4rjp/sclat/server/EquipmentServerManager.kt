@@ -5,12 +5,14 @@ import be4rjp.sclat.data.DataMgr.getPlayerData
 import be4rjp.sclat.data.DataMgr.getWeaponClass
 import be4rjp.sclat.manager.PlayerStatusMgr
 import be4rjp.sclat.plugin
+import be4rjp.sclat.sclatLogger
 
 object EquipmentServerManager {
     var commands: MutableList<String> = ArrayList<String>()
 
-    fun addEquipmentCommand(command: String?) {
-        commands.add(command!!)
+    fun addEquipmentCommand(command: String) {
+        sclatLogger.debug("Equip command: $command")
+        commands.add(command)
     }
 
     @JvmStatic
