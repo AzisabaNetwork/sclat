@@ -940,165 +940,157 @@ class GameMgr : Listener {
                 }
 
                 val line = sign.getLine(2)
-                when (line) {
-                    "[ Join ]" -> {
-                        if (Sclat.type == ServerType.LOBBY) {
-                            ServerStatusManager.openServerList(player)
-                        } else {
-                            MatchMgr.playerJoinMatch(player)
+                if (weaponTypes.contains(line)) {
+                    OpenGUI.openWeaponSelect(player, "Weapon", line.removePrefix("[ ").removeSuffix(" ]"), false)
+                } else {
+                    when (line) {
+                        "[ Join ]" -> {
+                            if (Sclat.type == ServerType.LOBBY) {
+                                ServerStatusManager.openServerList(player)
+                            } else {
+                                MatchMgr.playerJoinMatch(player)
+                            }
                         }
-                    }
 
-                    "[ Equipment ]" -> {
-                        OpenGUI.equipmentGUI(player, false)
-                    }
-
-                    "[ Equip shop ]" -> {
-                        OpenGUI.equipmentGUI(player, true)
-                    }
-
-                    "[ OpenMenu ]" -> {
-                        OpenGUI.openMenu(player)
-                    }
-
-                    "Click to Download" -> {
-                        // player.setResourcePack(conf.getConfig().getString("ResourcePackURL"));
-                        player.sendMessage("以下のURLからリソースパックをダウンロードしてください")
-                        player.sendMessage(
-                            Sclat.conf!!
-                                .config!!
-                                .getString("ResourcePackURL")!!,
-                        )
-                    }
-
-                    "Click to Vote" -> {
-                        // player.setResourcePack(conf.getConfig().getString("ResourcePackURL"));
-                        player.sendMessage("以下のURLから投票してね！")
-                        player.sendMessage("https://minecraft.jp/servers/azisaba.net")
-                    }
-
-                    "Click To Download" -> {
-                        player.setResourcePack(
-                            Sclat.conf!!
-                                .config!!
-                                .getString("ResourcePackURL")!!,
-                        )
-                    }
-
-                    "Click to Return" -> {
-                        BungeeCordMgr.playerSendServer(player, "lobby")
-                        getPlayerData(player)!!.setServerName("Lobby")
-                    }
-
-                    "[ Training Mode ]" -> {
-                        BungeeCordMgr.playerSendServer(player, "sclattest")
-                        getPlayerData(player)!!.setServerName("sclattest")
-                    }
-
-                    "[ Return to jg ]" -> {
-                        BungeeCordMgr.playerSendServer(player, "jg")
-                        getPlayerData(player)!!.setServerName("JG")
-                    }
-
-                    "Return to sclat" -> {
-                        BungeeCordMgr.playerSendServer(player, "sclat")
-                        getPlayerData(player)!!.setServerName("Sclat")
-                    }
-
-                    "[Charge special]" -> {
-                        if (getPlayerData(player)!!.isInMatch && !getPlayerData(player)!!.isUsingSP) {
-                            getPlayerData(
-                                player,
-                            )!!.sPGauge = (100)
+                        "[ Equipment ]" -> {
+                            OpenGUI.equipmentGUI(player, false)
                         }
-                    }
 
-                    "[ Sclat ]" -> {
-                        BungeeCordMgr.playerSendServer(player, "sclat")
-                        getPlayerData(player)!!.setServerName("Sclat")
-                    }
-
-                    "[ LootBox ]" -> {
-                        LootBox.turnLootBox(player)
-                    }
-
-                    "[ LootBoxInfo ]" -> {
-                        LootBox.lootBoxInfo(player)
-                    }
-
-                    "[ GiftForYou ]" -> {
-                        LootBox.giftWeapon(player, "お年玉[巳]")
-                    }
-
-                    "[ EasterEgg ]" -> {
-                        LootBox.giftbook(player)
-                    }
-
-                    "[ ChangeTeam ]" -> {
-                        LootBox.changeteam(player)
-                    }
-
-                    "[ give chest ]" -> {
-                        PlayerStatusMgr.setTutorialState(player.uniqueId.toString(), 2)
-                        val chest = ItemStack(Material.CHEST)
-                        val chestmeta = chest.itemMeta
-                        chestmeta!!.setDisplayName("右クリックでメインメニューを開く")
-                        chest.itemMeta = chestmeta
-                        player.inventory.setItem(0, chest)
-                    }
-
-                    "[ trade ticket ]" -> {
-                        if (PlayerStatusMgr.getMoney(player) > 1000) {
-                            PlayerStatusMgr.subMoney(player, 1000)
-                            PlayerStatusMgr.addTicket(player, 1)
-                            sendMessage("1000coinを1ticketに交換しました", MessageType.PLAYER, player)
-                        } else {
-                            sendMessage("coinが足りません", MessageType.PLAYER, player)
+                        "[ Equip shop ]" -> {
+                            OpenGUI.equipmentGUI(player, true)
                         }
-                    }
 
-                    "[ give ticket ]" -> {
-                        PlayerStatusMgr.addTicket(player, 10)
-                        sendMessage("10ticket付与しました", MessageType.PLAYER, player)
-                    }
+                        "[ OpenMenu ]" -> {
+                            OpenGUI.openMenu(player)
+                        }
 
-                    "[ Tutorial ]" -> {
-                        val list = Sclat.tutorialServers!!.getConfig()!!.getStringList("server-list")
-                        BungeeCordMgr.playerSendServer(player, list.get(Random().nextInt(list.size)))
-                        getPlayerData(player)!!
-                            .setServerName(
+                        "Click to Download" -> {
+                            // player.setResourcePack(conf.getConfig().getString("ResourcePackURL"));
+                            player.sendMessage("以下のURLからリソースパックをダウンロードしてください")
+                            player.sendMessage(
                                 Sclat.conf!!
-                                    .servers!!
-                                    .getString("Tutorial.DisplayName"),
+                                    .config!!
+                                    .getString("ResourcePackURL")!!,
                             )
-                    }
+                        }
 
-                    "[ Instructions ]" -> {
-                        player.performCommand("torisetu")
-                    }
+                        "Click to Vote" -> {
+                            // player.setResourcePack(conf.getConfig().getString("ResourcePackURL"));
+                            player.sendMessage("以下のURLから投票してね！")
+                            player.sendMessage("https://minecraft.jp/servers/azisaba.net")
+                        }
 
-                    "[ Shooter ]" -> {
-                        OpenGUI.openWeaponSelect(player, "Weapon", "Shooter", false)
-                    }
-
-                    "[ Roller ]" -> {
-                        OpenGUI.openWeaponSelect(player, "Weapon", "Roller", false)
-                    }
-
-                    "[ Charger ]" -> {
-                        OpenGUI.openWeaponSelect(player, "Weapon", "Charger", false)
-                    }
-
-                    "[ PatchNote ]" -> {
-                        val component = TextComponent()
-                        component.text = "[パッチノートを見るにはここをクリック]"
-                        component.color = net.md_5.bungee.api.ChatColor.AQUA
-                        component.clickEvent =
-                            ClickEvent(
-                                ClickEvent.Action.OPEN_URL,
-                                "https://be4rjp.github.io/Sclat-PatchNote/note/v102b/note.html",
+                        "Click To Download" -> {
+                            player.setResourcePack(
+                                Sclat.conf!!
+                                    .config!!
+                                    .getString("ResourcePackURL")!!,
                             )
-                        player.spigot().sendMessage(component)
+                        }
+
+                        "Click to Return" -> {
+                            BungeeCordMgr.playerSendServer(player, "lobby")
+                            getPlayerData(player)!!.setServerName("Lobby")
+                        }
+
+                        "[ Training Mode ]" -> {
+                            BungeeCordMgr.playerSendServer(player, "sclattest")
+                            getPlayerData(player)!!.setServerName("sclattest")
+                        }
+
+                        "[ Return to jg ]" -> {
+                            BungeeCordMgr.playerSendServer(player, "jg")
+                            getPlayerData(player)!!.setServerName("JG")
+                        }
+
+                        "Return to sclat" -> {
+                            BungeeCordMgr.playerSendServer(player, "sclat")
+                            getPlayerData(player)!!.setServerName("Sclat")
+                        }
+
+                        "[Charge special]" -> {
+                            if (getPlayerData(player)!!.isInMatch && !getPlayerData(player)!!.isUsingSP) {
+                                getPlayerData(
+                                    player,
+                                )!!.sPGauge = (100)
+                            }
+                        }
+
+                        "[ Sclat ]" -> {
+                            BungeeCordMgr.playerSendServer(player, "sclat")
+                            getPlayerData(player)!!.setServerName("Sclat")
+                        }
+
+                        "[ LootBox ]" -> {
+                            LootBox.turnLootBox(player)
+                        }
+
+                        "[ LootBoxInfo ]" -> {
+                            LootBox.lootBoxInfo(player)
+                        }
+
+                        "[ GiftForYou ]" -> {
+                            LootBox.giftWeapon(player, "お年玉[巳]")
+                        }
+
+                        "[ EasterEgg ]" -> {
+                            LootBox.giftbook(player)
+                        }
+
+                        "[ ChangeTeam ]" -> {
+                            LootBox.changeteam(player)
+                        }
+
+                        "[ give chest ]" -> {
+                            PlayerStatusMgr.setTutorialState(player.uniqueId.toString(), 2)
+                            val chest = ItemStack(Material.CHEST)
+                            val chestmeta = chest.itemMeta
+                            chestmeta!!.setDisplayName("右クリックでメインメニューを開く")
+                            chest.itemMeta = chestmeta
+                            player.inventory.setItem(0, chest)
+                        }
+
+                        "[ trade ticket ]" -> {
+                            if (PlayerStatusMgr.getMoney(player) > 1000) {
+                                PlayerStatusMgr.subMoney(player, 1000)
+                                PlayerStatusMgr.addTicket(player, 1)
+                                sendMessage("1000coinを1ticketに交換しました", MessageType.PLAYER, player)
+                            } else {
+                                sendMessage("coinが足りません", MessageType.PLAYER, player)
+                            }
+                        }
+
+                        "[ give ticket ]" -> {
+                            PlayerStatusMgr.addTicket(player, 10)
+                            sendMessage("10ticket付与しました", MessageType.PLAYER, player)
+                        }
+
+                        "[ Tutorial ]" -> {
+                            val list = Sclat.tutorialServers!!.getConfig()!!.getStringList("server-list")
+                            BungeeCordMgr.playerSendServer(player, list.get(Random().nextInt(list.size)))
+                            getPlayerData(player)!!
+                                .setServerName(
+                                    Sclat.conf!!
+                                        .servers!!
+                                        .getString("Tutorial.DisplayName"),
+                                )
+                        }
+
+                        "[ Instructions ]" -> {
+                            player.performCommand("torisetu")
+                        }
+
+                        "[ PatchNote ]" -> {
+                            val component = TextComponent()
+                            component.text = "[パッチノートを見るにはここをクリック]"
+                            component.color = net.md_5.bungee.api.ChatColor.AQUA
+                            component.clickEvent =
+                                ClickEvent(
+                                    ClickEvent.Action.OPEN_URL,
+                                    "https://be4rjp.github.io/Sclat-PatchNote/note/v102b/note.html",
+                                )
+                            player.spigot().sendMessage(component)
+                        }
                     }
                 }
             }
@@ -1228,5 +1220,27 @@ class GameMgr : Listener {
         }
 
         if (data.weaponClass != null) PlayerStatusMgr.setEquiptClass(player, data.weaponClass!!.className)
+    }
+
+    companion object {
+        // ignore: Bucket, Camping
+        val weaponTypes: Set<String> =
+            listOf(
+                "Shooter",
+                "Blaster",
+                "Burst",
+                "Roller",
+                "Slosher",
+                "Kasa",
+                "Hude",
+                "Spinner",
+                "Charger",
+                "Maneu",
+                "Hound",
+                "Swapper",
+                "Funnel",
+                "Reeler",
+                "Buckler",
+            ).map { s -> "[ $s ]" }.toSet()
     }
 }
