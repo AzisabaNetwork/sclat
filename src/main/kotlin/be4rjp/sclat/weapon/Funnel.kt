@@ -111,41 +111,41 @@ object Funnel {
                 }
             }
 
-            for (`as` in player.world.entities) {
-                if (`as` is ArmorStand) {
-                    if (`as`.location.distanceSquared(position) <= maxDistSquad) {
-                        if (rayTrace.intersects(BoundingBox(`as` as Entity), 4.0, 0.05)) {
-                            if (`as`.customName != null) {
-                                if (`as`.customName == "SplashShield") {
-                                    val ssdata = getSplashShieldDataFromArmorStand(`as`)
+            for (armorStand in player.world.entities) {
+                if (armorStand is ArmorStand) {
+                    if (armorStand.location.distanceSquared(position) <= maxDistSquad) {
+                        if (rayTrace.intersects(BoundingBox(armorStand as Entity), 4.0, 0.05)) {
+                            if (armorStand.customName != null) {
+                                if (armorStand.customName == "SplashShield") {
+                                    val ssdata = getSplashShieldDataFromArmorStand(armorStand)
                                     if (getPlayerData(ssdata!!.player)!!.team !=
                                         getPlayerData(player)!!
                                             .team
                                     ) {
-                                        ArmorStandMgr.giveDamageArmorStand(`as`, damage, player)
-                                        `as`
+                                        ArmorStandMgr.giveDamageArmorStand(armorStand, damage, player)
+                                        armorStand
                                             .world
-                                            .playSound(`as`.location, Sound.ENTITY_PLAYER_HURT, 0.8f, 1.2f)
+                                            .playSound(armorStand.location, Sound.ENTITY_PLAYER_HURT, 0.8f, 1.2f)
                                         break@loop
                                     }
-                                } else if (`as`.customName == "Kasa") {
-                                    val ssdata = getKasaDataFromArmorStand(`as`)
+                                } else if (armorStand.customName == "Kasa") {
+                                    val ssdata = getKasaDataFromArmorStand(armorStand)
                                     if (getPlayerData(ssdata!!.player)!!.team !=
                                         getPlayerData(player)!!
                                             .team
                                     ) {
-                                        ArmorStandMgr.giveDamageArmorStand(`as`, damage, player)
-                                        `as`
+                                        ArmorStandMgr.giveDamageArmorStand(armorStand, damage, player)
+                                        armorStand
                                             .world
-                                            .playSound(`as`.location, Sound.ENTITY_PLAYER_HURT, 0.8f, 1.2f)
+                                            .playSound(armorStand.location, Sound.ENTITY_PLAYER_HURT, 0.8f, 1.2f)
                                         break@loop
                                     }
                                 } else {
-                                    if (SclatUtil.isNumber(`as`.customName!!)) {
-                                        if (`as`.customName != "21" &&
-                                            `as`.customName != "100"
+                                    if (SclatUtil.isNumber(armorStand.customName!!)) {
+                                        if (armorStand.customName != "21" &&
+                                            armorStand.customName != "100"
                                         ) {
-                                            if (`as`.isVisible) {
+                                            if (armorStand.isVisible) {
                                                 player.playSound(
                                                     player.location,
                                                     Sound.ENTITY_ARROW_HIT_PLAYER,
@@ -155,11 +155,11 @@ object Funnel {
                                             }
                                         }
                                     }
-                                    ArmorStandMgr.giveDamageArmorStand(`as`, damage, player)
+                                    ArmorStandMgr.giveDamageArmorStand(armorStand, damage, player)
                                     break@loop
                                 }
                             }
-                            ArmorStandMgr.giveDamageArmorStand(`as`, damage, player)
+                            ArmorStandMgr.giveDamageArmorStand(armorStand, damage, player)
                         }
                     }
                 }
