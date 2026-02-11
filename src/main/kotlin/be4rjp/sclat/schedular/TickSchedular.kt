@@ -11,7 +11,7 @@ class TickSchedular {
             private var currentTick = 0
 
             override fun run() {
-                timingMap[0]?.accept(currentTick) { cancel() }
+                timingMap[0]?.accept(currentTick, ::cancel)
                 currentTick++
             }
         }
