@@ -24,6 +24,7 @@ import be4rjp.sclat.data.DataMgr.sprinklerMap
 import be4rjp.sclat.data.PaintData
 import be4rjp.sclat.gui.LootBox
 import be4rjp.sclat.gui.OpenGUI
+import be4rjp.sclat.loginbonus.LoginBonus
 import be4rjp.sclat.packet.PacketHandler
 import be4rjp.sclat.plugin
 import be4rjp.sclat.server.EquipmentClient
@@ -130,12 +131,17 @@ class GameMgr : Listener {
         Sclat.conf!!
             .uUIDCash
             .set(player.uniqueId.toString(), player.name)
+
+        // On lobby handling
         if (Sclat.type == ServerType.LOBBY) {
             // Add user-specific hologram
             // RankingHolograms rankingHolograms = new RankingHolograms(player);
             // DataMgr.setRankingHolograms(player, rankingHolograms);
             // PlayerStatusMgr.HologramUpdateRunnable(player);
             Sclat.playerHolograms.add(player)
+            if (LoginBonus.tryClaim(player)) {
+                player.sendMessage("ログインボーナス! お金 +${Sclat.conf!!.loginBonusConfig.money} & チケット +${Sclat.conf!!.loginBonusConfig.ticket}")
+            }
         }
 
         if (Sclat.type != ServerType.MATCH) {
