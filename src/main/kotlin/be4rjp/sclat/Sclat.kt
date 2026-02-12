@@ -16,6 +16,7 @@ import be4rjp.sclat.api.holo.PlayerHolograms
 import be4rjp.sclat.api.utils.TextAnimation
 import be4rjp.sclat.commands.SclatCommandExecutor
 import be4rjp.sclat.config.Config
+import be4rjp.sclat.config.NewConfig
 import be4rjp.sclat.data.DataMgr
 import be4rjp.sclat.data.DataMgr.armorStandMap
 import be4rjp.sclat.data.DataMgr.blockDataMap
@@ -99,7 +100,8 @@ class Sclat :
         // --------------------------Load config------------------------------
         sclatLogger.info("Loading config files...")
         conf = Config()
-        conf!!.loadConfig()
+        conf?.loadConfig()
+        NewConfig.load()
         for (mapname in conf!!.mapConfig!!.getConfigurationSection("Maps")!!.getKeys(false)) {
             val worldName: String? = conf!!.mapConfig!!.getString("Maps." + mapname + ".WorldName")
             Bukkit.createWorld(WorldCreator(worldName!!))
@@ -396,6 +398,7 @@ class Sclat :
          */
         for (`as` in armorStandMap.keys) `as`!!.remove()
         conf!!.saveConfig()
+        NewConfig.save()
 
         for (`as` in DataMgr.al) `as`!!.remove()
 

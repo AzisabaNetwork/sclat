@@ -1,10 +1,5 @@
 package be4rjp.sclat.config
 
-import com.akuleshov7.ktoml.Toml
-import com.akuleshov7.ktoml.TomlIndentation
-import com.akuleshov7.ktoml.TomlInputConfig
-import com.akuleshov7.ktoml.TomlOutputConfig
-import kotlinx.serialization.decodeFromString
 import org.bukkit.Bukkit
 import org.bukkit.configuration.file.FileConfiguration
 import org.bukkit.configuration.file.YamlConfiguration
@@ -37,8 +32,6 @@ class Config {
     var emblemUserdata: FileConfiguration? = null
         private set
 
-    lateinit var loginBonusConfig: LoginBonusConfig
-        private set
     private val parent = File("plugins/Sclat")
     private val psf = File(parent, "class.yml")
     private val weaponf = File(parent, "mainnweapon.yml")
@@ -52,9 +45,6 @@ class Config {
     var emblemsFile: File = File(parent, "emblems.yml")
     private val emblemItemsFile = File(parent, "emblem_items.yml")
     private val emblemUserDataFile = File(parent, "emblem_userdata.yml")
-
-    // Toml config area
-    private val loginBonusConfigFile = File(parent, "login_bonus.toml")
 
     @Synchronized
     fun loadConfig() {
@@ -71,7 +61,6 @@ class Config {
         tryCreateFile(emblemUserDataFile)
         loadEmblemUserData()
         loadEmblemLoreData()
-        loginBonusConfig = loadToml(loginBonusConfigFile)
     }
 
     @Synchronized
@@ -83,8 +72,6 @@ class Config {
     fun loadEmblemLoreData() {
         emblemItems = YamlConfiguration.loadConfiguration(emblemItemsFile)
     }
-
-    private inline fun <reified T> loadToml(file: File): T = toml.decodeFromString<T>(file.readText())
 
     private fun tryCreateFile(targetFile: File) {
         try {
@@ -122,21 +109,5 @@ class Config {
         get() = idCash!!
 
     companion object {
-        val toml =
-            Toml(
-                inputConfig =
-                    TomlInputConfig(
-                        ignoreUnknownNames = true,
-                        allowEmptyValues = true,
-                        allowNullValues = true,
-                        allowEscapedQuotesInLiteralStrings = true,
-                        allowEmptyToml = true,
-                        ignoreDefaultValues = false,
-                    ),
-                outputConfig =
-                    TomlOutputConfig(
-                        indentation = TomlIndentation.NONE,
-                    ),
-            )
     }
 }

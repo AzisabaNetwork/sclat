@@ -8,6 +8,7 @@ import be4rjp.sclat.api.ServerType
 import be4rjp.sclat.api.SoundType
 import be4rjp.sclat.api.player.PlayerData
 import be4rjp.sclat.api.player.PlayerSettings
+import be4rjp.sclat.config.NewConfig
 import be4rjp.sclat.data.DataMgr
 import be4rjp.sclat.data.DataMgr.beaconMap
 import be4rjp.sclat.data.DataMgr.getBeaconFromplayer
@@ -140,7 +141,9 @@ class GameMgr : Listener {
             // PlayerStatusMgr.HologramUpdateRunnable(player);
             Sclat.playerHolograms.add(player)
             if (LoginBonus.tryClaim(player)) {
-                player.sendMessage("ログインボーナス! お金 +${Sclat.conf!!.loginBonusConfig.money} & チケット +${Sclat.conf!!.loginBonusConfig.ticket}")
+                player.sendMessage(
+                    "ログインボーナス! お金 +${NewConfig.loginBonusReward.money} & チケット +${NewConfig.loginBonusReward.ticket}",
+                )
             }
         }
 

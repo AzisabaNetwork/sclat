@@ -1,7 +1,7 @@
 package be4rjp.sclat.loginbonus
 
-import be4rjp.sclat.Sclat
 import be4rjp.sclat.api.utils.DayRefreshSet
+import be4rjp.sclat.config.NewConfig
 import be4rjp.sclat.manager.PlayerStatusMgr
 import org.bukkit.entity.Player
 import java.util.UUID
@@ -23,8 +23,8 @@ object LoginBonus {
      */
     fun tryClaim(player: Player): Boolean {
         if (!isClaimable(player.uniqueId)) return false
-        PlayerStatusMgr.addMoney(player, Sclat.conf!!.loginBonusConfig.money)
-        PlayerStatusMgr.addTicket(player, Sclat.conf!!.loginBonusConfig.ticket)
+        PlayerStatusMgr.addMoney(player, NewConfig.loginBonusReward.money)
+        PlayerStatusMgr.addTicket(player, NewConfig.loginBonusReward.ticket)
         markClaimed(player.uniqueId)
         return true
     }
