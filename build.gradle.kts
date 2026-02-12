@@ -47,6 +47,7 @@ dependencies {
     implementation(libs.kotlin.stdlib)
     implementation(libs.yamlkt)
     implementation(libs.fastboard)
+    implementation(libs.bundles.ktoml)
 }
 
 // Project Settings
