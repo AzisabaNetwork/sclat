@@ -142,7 +142,7 @@ class GameMgr : Listener {
             Sclat.playerHolograms.add(player)
             if (LoginBonus.tryClaim(player)) {
                 player.sendMessage(
-                    "ログインボーナス! お金 +${NewConfig.loginBonusReward.money} & チケット +${NewConfig.loginBonusReward.ticket}",
+                    "${ChatColor.GOLD}ログインボーナス!${ChatColor.WHITE} お金 ${ChatColor.GREEN}+${NewConfig.loginBonusReward.money}${ChatColor.WHITE} & チケット ${ChatColor.GREEN}+${NewConfig.loginBonusReward.ticket}${ChatColor.WHITE}",
                 )
             }
         }

@@ -11,7 +11,7 @@ import java.time.temporal.ChronoUnit
 import java.util.UUID
 
 @Serializable
-data class DayRefreshSet(
+data class DailyRefreshSet(
     var nextResetEpoch: Long = 0L,
     var uuids: MutableSet<UUID> = mutableSetOf(),
 ) {

@@ -1,7 +1,9 @@
 package be4rjp.sclat.config
 
+import be4rjp.sclat.api.utils.DailyRefreshSet
 import be4rjp.sclat.extension.loadToml
 import be4rjp.sclat.extension.saveToml
+import be4rjp.sclat.loginbonus.LoginBonus
 import be4rjp.sclat.sclatLogger
 import java.io.File
 import java.util.function.Supplier
@@ -17,13 +19,24 @@ object NewConfig {
     fun load() {
         sclatLogger.info(">>> Loading config...")
         loginBonusReward = loadTomlConfig("login_bonus", ::LoginBonusRewardConfig)
+        LoginBonus.refreshSet = loadTomlConfig("login_bonus_claimed", ::DailyRefreshSet)
         sclatLogger.info("<<< All config loaded.")
     }
 
     fun save() {
         sclatLogger.info(">>> Saving config...")
-
+        saveTomlConfig("login_bonus_claimed", LoginBonus.refreshSet)
         sclatLogger.info("<<< All config saved.")
+    }
+
+    private inline fun <reified T> saveTomlConfig(
+        name: String,
+        value: T,
+    ) {
+        parent.resolve("$name.toml").let { file ->
+            saveToml(file, value)
+            sclatLogger.info("-> Config ${file.name} saved!")
+        }
     }
 
     private inline fun <reified T> loadTomlConfig(
