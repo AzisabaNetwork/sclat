@@ -48,6 +48,7 @@ dependencies {
     implementation(libs.yamlkt)
     implementation(libs.fastboard)
     implementation(libs.bundles.ktoml)
+    implementation(libs.bundles.adventure)
 }
 
 // Project Settings

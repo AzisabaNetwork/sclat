@@ -79,6 +79,7 @@ class Sclat :
 
     override fun onEnable() {
         plugin = this
+        adventure // init hook
         glow = Glow()
 
         pdspList = ArrayList()
@@ -413,6 +414,8 @@ class Sclat :
         if (type == ServerType.LOBBY) {
             ServerStatusManager.stopTask()
         }
+
+        adventure.close()
     }
 
     fun updateBoard(board: FastBoard) {
