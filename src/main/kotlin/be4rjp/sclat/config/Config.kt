@@ -31,6 +31,7 @@ class Config {
         private set
     var emblemUserdata: FileConfiguration? = null
         private set
+
     private val parent = File("plugins/Sclat")
     private val psf = File(parent, "class.yml")
     private val weaponf = File(parent, "mainnweapon.yml")
@@ -106,4 +107,7 @@ class Config {
 
     val uUIDCash: FileConfiguration
         get() = idCash!!
+
+    companion object {
+    }
 }

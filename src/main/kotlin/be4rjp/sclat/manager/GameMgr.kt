@@ -8,6 +8,7 @@ import be4rjp.sclat.api.ServerType
 import be4rjp.sclat.api.SoundType
 import be4rjp.sclat.api.player.PlayerData
 import be4rjp.sclat.api.player.PlayerSettings
+import be4rjp.sclat.config.NewConfig
 import be4rjp.sclat.data.DataMgr
 import be4rjp.sclat.data.DataMgr.beaconMap
 import be4rjp.sclat.data.DataMgr.getBeaconFromplayer
@@ -24,6 +25,7 @@ import be4rjp.sclat.data.DataMgr.sprinklerMap
 import be4rjp.sclat.data.PaintData
 import be4rjp.sclat.gui.LootBox
 import be4rjp.sclat.gui.OpenGUI
+import be4rjp.sclat.loginbonus.LoginBonus
 import be4rjp.sclat.packet.PacketHandler
 import be4rjp.sclat.plugin
 import be4rjp.sclat.server.EquipmentClient
@@ -130,12 +132,19 @@ class GameMgr : Listener {
         Sclat.conf!!
             .uUIDCash
             .set(player.uniqueId.toString(), player.name)
+
+        // On lobby handling
         if (Sclat.type == ServerType.LOBBY) {
             // Add user-specific hologram
             // RankingHolograms rankingHolograms = new RankingHolograms(player);
             // DataMgr.setRankingHolograms(player, rankingHolograms);
             // PlayerStatusMgr.HologramUpdateRunnable(player);
             Sclat.playerHolograms.add(player)
+            if (LoginBonus.tryClaim(player)) {
+                player.sendMessage(
+                    "${ChatColor.GOLD}ログインボーナス!${ChatColor.WHITE} お金 ${ChatColor.GREEN}+${NewConfig.loginBonusReward.money}${ChatColor.WHITE} & チケット ${ChatColor.GREEN}+${NewConfig.loginBonusReward.ticket}${ChatColor.WHITE}",
+                )
+            }
         }
 
         if (Sclat.type != ServerType.MATCH) {

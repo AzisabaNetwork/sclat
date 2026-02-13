@@ -13,6 +13,7 @@ cloudPaper = "2.0.0-SNAPSHOT"
 jspecify = "1.0.0"
 yamlkt = "0.13.0"
 fastboard = "2.1.5"
+ktoml = "0.7.1"
 
 [plugins]
 shadow = { id = "com.gradleup.shadow", version.ref = "shadow" }
@@ -33,3 +34,9 @@ cloudPaper = { module = "org.incendo:cloud-paper", version.ref = "cloudPaper" }
 jspecify = { module = "org.jspecify:jspecify", version.ref = "jspecify" }
 yamlkt = { module = "net.mamoe.yamlkt:yamlkt", version.ref = "yamlkt" }
 fastboard = { module = "fr.mrmicky:fastboard", version.ref = "fastboard" }
+ktoml-core = { module = "com.akuleshov7:ktoml-core", version.ref = "ktoml"}
+
+[bundles]
+ktoml = [
+    "ktoml-core"
+]
