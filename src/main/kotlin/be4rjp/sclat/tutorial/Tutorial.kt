@@ -47,7 +47,7 @@ object Tutorial {
         val time = Sclat.conf?.config!!.getInt("InkResetPeriod")
         bar =
             plugin.server.createBossBar(
-                "§a§lインクリセットまで残り §c§l" + time + " §a§l秒",
+                "§a§lインクリセットまで残り §c§l$time §a§l秒",
                 BarColor.WHITE,
                 BarStyle.SOLID,
                 BarFlag.CREATE_FOG,
