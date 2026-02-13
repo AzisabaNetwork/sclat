@@ -13,15 +13,10 @@ import org.bukkit.event.Listener
 class LunaChatListener : Listener {
     // @EventHandler
     fun onChat(event: LunaChatBukkitPreChatEvent) {
-        var sender: Player? = null
-        for (player in plugin.server.onlinePlayers) {
-            if (player.name == event.member.name) {
-                sender = player
-            }
-        }
-        if (sender != null) {
-            val data = getPlayerData(sender)
-            if (data!!.isJoined) event.message = data.team?.teamColor!!.colorCode + event.message
-        }
+        val sender: Player =
+            plugin.server.onlinePlayers
+                .firstOrNull { player -> player.name == event.member.name } ?: return
+        val data = getPlayerData(sender)
+        if (data!!.isJoined) event.message = data.team?.teamColor!!.colorCode + event.message
     }
 }
