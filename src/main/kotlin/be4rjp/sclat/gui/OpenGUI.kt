@@ -156,15 +156,13 @@ object OpenGUI {
 
         if (shop) {
             run {
-                var i = 0
-                while (i <= 9) {
+                for (i in 0..9) {
                     if (haveGear(player, i)) {
                         val n = ItemStack(Material.BLACK_STAINED_GLASS_PANE)
                         val nmeta = n.itemMeta
                         nmeta!!.setDisplayName(".")
                         n.itemMeta = nmeta
                         inv.setItem(i, n)
-                        i++
                         continue
                     }
 
@@ -177,17 +175,14 @@ object OpenGUI {
                     nmeta.lore = list
                     n.itemMeta = nmeta
                     inv.setItem(i, n)
-                    i++
                 }
             }
-            var i = 10
-            while (i <= 17) {
+            for (i in 10..17) {
                 val n = ItemStack(Material.BLACK_STAINED_GLASS_PANE)
                 val nmeta = n.itemMeta
                 nmeta!!.setDisplayName(".")
                 n.itemMeta = nmeta
                 inv.setItem(i, n)
-                i++
             }
         } else {
             run {
@@ -403,13 +398,13 @@ object OpenGUI {
                 "§r§6SubWeapon : " +
                     Sclat.conf!!
                         .classConfig!!
-                        .getString("WeaponClass." + ClassName + ".SubWeaponName"),
+                        .getString("WeaponClass.$ClassName.SubWeaponName"),
             )
             lores.add(
                 "§r§6SPWeapon  : " +
                     Sclat.conf!!
                         .classConfig!!
-                        .getString("WeaponClass." + ClassName + ".SPWeaponName"),
+                        .getString("WeaponClass.$ClassName.SPWeaponName"),
             )
             itemm.lore = lores
             item.itemMeta = itemm
