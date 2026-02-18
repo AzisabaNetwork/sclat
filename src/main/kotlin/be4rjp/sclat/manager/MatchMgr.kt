@@ -1559,17 +1559,13 @@ object MatchMgr {
                                     .getString("WorkMode") == "TDM"
                             ) {
                                 val match = getPlayerData(p)!!.match
-                                val team0c: Int
-                                val team1c: Int
-                                val team0code: String?
-                                val team1code: String?
                                 winteam = match!!.team0
                                 var hikiwake = false
 
-                                team0c = match.team0!!.killCount
-                                team1c = match.team1!!.killCount
-                                team0code = match.team0!!.teamColor!!.colorCode
-                                team1code = match.team1!!.teamColor!!.colorCode
+                                val team0c: Int = match.team0!!.killCount
+                                val team1c: Int = match.team1!!.killCount
+                                val team0code: String? = match.team0!!.teamColor!!.colorCode
+                                val team1code: String? = match.team1!!.teamColor!!.colorCode
 
                                 if (team0c < team1c) {
                                     winteam = match.team1

@@ -2,7 +2,10 @@ package be4rjp.sclat.api
 
 import be4rjp.sclat.api.team.Team
 import be4rjp.sclat.data.DataMgr
+import be4rjp.sclat.extension.component
+import be4rjp.sclat.extension.serializeString
 import be4rjp.sclat.plugin
+import net.kyori.adventure.text.format.NamedTextColor
 import org.bukkit.ChatColor
 import org.bukkit.Sound
 import org.bukkit.entity.Player
@@ -61,7 +64,7 @@ object Animation {
                         } else {
                             if (winteam === DataMgr.getPlayerData(player)?.team!!) {
                                 player.sendTitle(
-                                    ChatColor.GREEN.toString() + "You Win!",
+                                    component("You Win!", NamedTextColor.GREEN).serializeString(),
                                     (
                                         team0point.toString() + "% [" +
                                             GaugeAPI.toGauge(team0point, 100, team0color, team1color) + "] " +
@@ -73,7 +76,7 @@ object Animation {
                                 )
                             } else {
                                 player.sendTitle(
-                                    ChatColor.RED.toString() + "You Lose...",
+                                    component("You Lose...", NamedTextColor.RED).serializeString(),
                                     (
                                         team0point.toString() + "% [" +
                                             GaugeAPI.toGauge(team0point, 100, team0color, team1color) + "] " +
@@ -129,12 +132,12 @@ object Animation {
                             40,
                             0,
                         )
-                        g = g + 2
+                        g += 2
                     }
                     if (i == 35) {
                         if (winteam === DataMgr.getPlayerData(player)?.team!!) {
                             player.sendTitle(
-                                ChatColor.GREEN.toString() + "Knock Out !!",
+                                component("Knock Out !!", NamedTextColor.GREEN).serializeString(),
                                 (
                                     team0point.toString() + "% [" +
                                         GaugeAPI.toGauge(team0point, 100, team0color, team1color) + "] " +
@@ -146,7 +149,7 @@ object Animation {
                             )
                         } else {
                             player.sendTitle(
-                                ChatColor.RED.toString() + "You Lose...",
+                                component("You Lose...", NamedTextColor.RED).serializeString(),
                                 (
                                     team0point.toString() + "% [" +
                                         GaugeAPI.toGauge(team0point, 100, team0color, team1color) + "] " +
