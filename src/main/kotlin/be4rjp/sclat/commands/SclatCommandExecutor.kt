@@ -204,8 +204,9 @@ class SclatCommandExecutor :
             val dataMap = EmblemManager.dataMap
             for (_key in dataMap.keys) {
                 sender.sendMessage(_key)
-                val playerUuids = dataMap.getOrDefault(_key, HashMap<String?, Int?>())
-                playerUuids.forEach { (k: String?, v: Int?) -> sender.sendMessage("- $k: $v") }
+                dataMap
+                    .getOrDefault(_key, HashMap<String?, Int?>())
+                    .forEach { (k: String?, v: Int?) -> sender.sendMessage("- $k: $v") }
             }
         }
 
@@ -225,14 +226,14 @@ class SclatCommandExecutor :
                 val serverName: String = args[1]
                 for (ss in ServerStatusManager.serverList) {
                     if (ss.serverName == serverName) {
-                        val commands: MutableList<String?> = ArrayList<String?>()
-                        commands.add("mod " + sender.name)
+                        val commands: MutableList<String?> = ArrayList()
+                        commands.add("mod ${sender.name}")
                         commands.add("stop")
                         // Todo: use redis. fallbacks PluginMessaging
                         val sc =
                             EquipmentClient(
-                                Sclat.conf?.config!!.getString("EquipShare." + serverName + ".Host"),
-                                Sclat.conf?.config!!.getInt("EquipShare." + serverName + ".Port"),
+                                Sclat.conf?.config!!.getString("EquipShare.$serverName.Host"),
+                                Sclat.conf?.config!!.getInt("EquipShare.$serverName.Port"),
                                 commands,
                             )
                         sc.startClient()
@@ -247,7 +248,7 @@ class SclatCommandExecutor :
                                     try {
                                         BungeeCordMgr.playerSendServer(sender, ss.serverName)
                                         DataMgr.getPlayerData(sender)?.setServerName(ss.displayName)
-                                    } catch (ignored: Exception) {
+                                    } catch (_: Exception) {
                                     }
                                 }
                             }

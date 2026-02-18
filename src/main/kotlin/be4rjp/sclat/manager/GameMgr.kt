@@ -1159,13 +1159,13 @@ class GameMgr : Listener {
                     val name =
                         Sclat.conf!!
                             .servers!!
-                            .getString("Servers." + serverName + ".Server")
+                            .getString("Servers.$serverName.Server")
                     val displayName =
                         Sclat.conf!!
                             .servers!!
-                            .getString("Servers." + serverName + ".DisplayName")
+                            .getString("Servers.$serverName.DisplayName")
                     if (displayName == server) {
-                        val commands: MutableList<String?> = ArrayList<String?>()
+                        val commands: MutableList<String?> = ArrayList()
                         commands.add("set weapon " + data!!.weaponClass!!.className + " " + player.uniqueId)
                         commands.add("set gear " + data.gearNumber + " " + player.uniqueId)
                         commands.add("set rank " + PlayerStatusMgr.getRank(player) + " " + player.uniqueId)
