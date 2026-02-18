@@ -6,12 +6,14 @@ import be4rjp.sclat.api.packet.WorldPackets
 import be4rjp.sclat.api.packet.WorldPackets.broadcastBlockChange
 import be4rjp.sclat.api.team.Team
 import be4rjp.sclat.data.DataMgr
+import be4rjp.sclat.extension.component
 import be4rjp.sclat.manager.BungeeCordMgr
 import be4rjp.sclat.manager.DeathMgr
 import be4rjp.sclat.manager.MatchMgr
 import be4rjp.sclat.plugin
 import be4rjp.sclat.sclatLogger
 import be4rjp.sclat.server.StatusClient
+import net.kyori.adventure.text.format.NamedTextColor
 import org.bukkit.Bukkit
 import org.bukkit.GameMode
 import org.bukkit.Instrument
@@ -185,16 +187,19 @@ object SclatUtil {
         }
     }
 
+    val sclatPrefix =
+        component("[")
+            .append(component("Sclat", NamedTextColor.GOLD))
+            .append(component("]"))
+            .appendSpace()
+
     @JvmStatic
     fun sendMessage(
         message: String?,
         type: MessageType?,
         player: Player,
     ) {
-        val sclat = "[§6Sclat§r] "
-        val buff = StringBuilder()
-        buff.append(sclat)
-        buff.append(message)
+        val buff = sclatPrefix.append(component(message ?: ""))
         if (type == MessageType.PLAYER) player.sendMessage(buff.toString())
     }
 

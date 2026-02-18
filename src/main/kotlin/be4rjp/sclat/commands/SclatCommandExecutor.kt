@@ -9,10 +9,13 @@ import be4rjp.sclat.api.ServerType
 import be4rjp.sclat.api.SoundType
 import be4rjp.sclat.data.DataMgr
 import be4rjp.sclat.emblem.EmblemManager
+import be4rjp.sclat.extension.component
+import be4rjp.sclat.extension.sendMessage
 import be4rjp.sclat.manager.BungeeCordMgr
 import be4rjp.sclat.manager.ServerStatusManager
 import be4rjp.sclat.plugin
 import be4rjp.sclat.server.EquipmentClient
+import net.kyori.adventure.text.format.NamedTextColor
 import org.bukkit.ChatColor
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
@@ -55,7 +58,7 @@ class SclatCommandExecutor :
             if (args.size != 2) return false
 
             if (type == CommanderType.MEMBER) {
-                sender.sendMessage(ChatColor.RED.toString() + "You don't have permission.")
+                sender.sendMessage(component("You don't have permission.", NamedTextColor.RED))
                 playGameSound(sender as Player, SoundType.ERROR)
                 return true
             }
@@ -63,10 +66,10 @@ class SclatCommandExecutor :
             val num = args[1]
             if (isNumber(num)) {
                 Sclat.conf?.config!!.set("BlockUpdateRate", num.toInt())
-                sender.sendMessage("setConfig [BlockUpdateRate]  :  " + num)
+                sender.sendMessage(component("setConfig [BlockUpdateRate]", NamedTextColor.GREEN).append(component(" -> $num")))
                 return true
             } else {
-                sender.sendMessage("Please type with number")
+                sender.sendMessage(component("Please type with number", NamedTextColor.RED))
                 return false
             }
         }
@@ -118,6 +121,7 @@ class SclatCommandExecutor :
                     }
 
                     else -> {
+                        player.sendMessage(component("そのオプションは存在しません！", NamedTextColor.RED))
                         sendMessage("そのオプションは存在しません！", MessageType.PLAYER, player)
                         return true
                     }
@@ -133,13 +137,13 @@ class SclatCommandExecutor :
             if (args.size != 1) return false
 
             if (type == CommanderType.MEMBER) {
-                sender.sendMessage(ChatColor.RED.toString() + "You don't have permission.")
+                sender.sendMessage(component("You don't have permission.", NamedTextColor.RED))
                 playGameSound(sender as Player, SoundType.ERROR)
                 return true
             }
 
             if (!Sclat.conf?.emblemsFile!!.exists()) {
-                sender.sendMessage(ChatColor.RED.toString() + "Old emblem userdata file isn't exists.")
+                sender.sendMessage(component("Old emblem userdata file isn't exists.", NamedTextColor.RED))
                 return true
             }
 
@@ -148,16 +152,16 @@ class SclatCommandExecutor :
             for (_uuid in dataUuids) {
                 val userEmblems = oldData.getStringList(_uuid)
                 for (emblem in userEmblems) {
-                    Sclat.conf?.emblemUserdata!!.set(_uuid + "." + emblem, 1)
+                    Sclat.conf?.emblemUserdata!!.set("$_uuid.$emblem", 1)
                 }
             }
             sender.sendMessage(ChatColor.GREEN.toString() + "Migration was succeeded!")
 
             try {
                 Sclat.conf?.saveEmblemUserdata()
-                sender.sendMessage(ChatColor.GREEN.toString() + "Successfully to save emblem userdata")
+                sender.sendMessage(component("Successfully to save emblem userdata", NamedTextColor.GREEN))
             } catch (e: IOException) {
-                sender.sendMessage(ChatColor.RED.toString() + "Failed to save emblem userdata")
+                sender.sendMessage(component("Failed to save emblem userdata", NamedTextColor.RED))
                 e.printStackTrace()
             }
             return true
@@ -170,7 +174,7 @@ class SclatCommandExecutor :
             if (args.size != 1) return false
 
             if (type == CommanderType.MEMBER) {
-                sender.sendMessage(ChatColor.RED.toString() + "You don't have permission.")
+                sender.sendMessage(component("You don't have permission.", NamedTextColor.RED))
                 playGameSound(sender as Player, SoundType.ERROR)
                 return true
             }
