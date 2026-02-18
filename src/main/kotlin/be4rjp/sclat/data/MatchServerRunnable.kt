@@ -1,11 +1,13 @@
 package be4rjp.sclat.data
 
-import be4rjp.sclat.api.MessageType
 import be4rjp.sclat.api.SclatUtil.playGameSound
-import be4rjp.sclat.api.SclatUtil.sendMessage
 import be4rjp.sclat.api.SoundType
+import be4rjp.sclat.extension.broadcastMessage
+import be4rjp.sclat.extension.component
 import be4rjp.sclat.manager.BungeeCordMgr
 import be4rjp.sclat.plugin
+import be4rjp.sclat.server
+import net.kyori.adventure.text.format.NamedTextColor
 import org.bukkit.entity.Player
 import org.bukkit.scheduler.BukkitRunnable
 
@@ -15,15 +17,13 @@ class MatchServerRunnable(
     private val waitTime = 0
 
     init {
-        sendMessage(
-            serverStatus.displayName + "§rの試合待機カウントダウンが開始されました",
-            MessageType.ALL_PLAYER,
-        )
-        sendMessage("§a30秒後にマッチングを開始します", MessageType.ALL_PLAYER)
-        plugin
-            .server
+        server.broadcastMessage(serverStatus.displayName + "§rの試合待機カウントダウンが開始されました")
+        server.broadcastMessage(component("30秒後にマッチングを開始します", NamedTextColor.GREEN))
+        server
             .onlinePlayers
-            .forEach { player: Player -> playGameSound(player, SoundType.SUCCESS) }
+            .forEach { player: Player ->
+                playGameSound(player, SoundType.SUCCESS)
+            }
     }
 
     override fun run() {

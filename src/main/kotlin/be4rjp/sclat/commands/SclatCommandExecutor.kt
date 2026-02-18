@@ -122,11 +122,10 @@ class SclatCommandExecutor :
 
                     else -> {
                         player.sendMessage(component("そのオプションは存在しません！", NamedTextColor.RED))
-                        sendMessage("そのオプションは存在しません！", MessageType.PLAYER, player)
                         return true
                     }
                 }
-                sendMessage("再読み込み完了", MessageType.PLAYER, player)
+                player.sendMessage(component("再読み込み完了", NamedTextColor.GREEN))
             }
         }
 
@@ -238,8 +237,8 @@ class SclatCommandExecutor :
                             )
                         sc.startClient()
 
-                        sendMessage("Moderatorとして転送中...", MessageType.PLAYER, sender)
-                        sendMessage("2秒後に転送されます", MessageType.PLAYER, sender)
+                        sender.sendMessage("Moderatorとして転送中...")
+                        sender.sendMessage("2秒後に転送されます")
                         playGameSound(sender, SoundType.SUCCESS)
 
                         val task: BukkitRunnable =
