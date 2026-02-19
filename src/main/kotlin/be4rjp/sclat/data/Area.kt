@@ -58,8 +58,8 @@ class Area(
     fun setup(match: Match) {
         this.match = match
         this.team = null
-        this.blist = ArrayList<Block>()
-        this.shulkerBoxes = ArrayList<Shulker>()
+        this.blist = ArrayList()
+        this.shulkerBoxes = ArrayList()
 
         for (x in this.from.blockX..this.to.blockX) {
             for (z in this.from.blockZ..this.to.blockZ) {
