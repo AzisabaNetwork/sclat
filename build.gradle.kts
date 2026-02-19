@@ -2,6 +2,7 @@
 plugins {
     `java-library`
     `maven-publish`
+    alias(libs.plugins.kotest)
     alias(libs.plugins.ktlint)
     alias(libs.plugins.shadow)
     alias(libs.plugins.kotlin.jvm)
@@ -49,6 +50,7 @@ dependencies {
     implementation(libs.fastboard)
     implementation(libs.bundles.ktoml)
     implementation(libs.bundles.adventure)
+    testImplementation(libs.bundles.kotest)
 }
 
 // Project Settings
@@ -70,6 +72,10 @@ tasks {
         isEnableRelocation = true
         relocationPrefix = "libs.be4rjp.sclat"
         archiveFileName.set("Sclat.jar")
+    }
+
+    test {
+        useJUnitPlatform()
     }
 }
 
