@@ -1231,25 +1231,23 @@ object GameMgr : Listener {
         if (data.weaponClass != null) PlayerStatusMgr.setEquiptClass(player, data.weaponClass!!.className)
     }
 
-    companion object {
-        // ignore: Bucket, Camping
-        val weaponTypes: Set<String> =
-            listOf(
-                "Shooter",
-                "Blaster",
-                "Burst",
-                "Roller",
-                "Slosher",
-                "Kasa",
-                "Hude",
-                "Spinner",
-                "Charger",
-                "Maneu",
-                "Hound",
-                "Swapper",
-                "Funnel",
-                "Reeler",
-                "Buckler",
-            ).map { s -> "[ $s ]" }.toSet()
-    }
+    // ignore: Bucket, Camping
+    val weaponTypes: Set<String> =
+        listOf(
+            "Shooter",
+            "Blaster",
+            "Burst",
+            "Roller",
+            "Slosher",
+            "Kasa",
+            "Hude",
+            "Spinner",
+            "Charger",
+            "Maneu",
+            "Hound",
+            "Swapper",
+            "Funnel",
+            "Reeler",
+            "Buckler",
+        ).map { s -> "[ $s ]" }.toSet()
 }
