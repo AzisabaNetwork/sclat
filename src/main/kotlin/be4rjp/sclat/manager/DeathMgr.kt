@@ -198,7 +198,7 @@ object DeathMgr {
                             } else {
                                 loc = getPlayerData(t)!!.match!!.mapData!!.intro
                                     ?: throw RuntimeException("mapdata intro is null on subWeapon")
-                                t.teleport(loc!!)
+                                t.teleport(loc)
                             }
 
                             val sdata = getPlayerData(s)
@@ -275,7 +275,7 @@ object DeathMgr {
                                 loc =
                                     getPlayerData(t)!!.match!!.mapData!!.intro
                                         ?: throw RuntimeException("intro mapdata is null on wpWeapon")
-                                t.teleport(loc!!)
+                                t.teleport(loc)
                             }
 
                             val sdata = getPlayerData(s)
@@ -504,7 +504,7 @@ object DeathMgr {
                                     }
                                 }
                             }
-                            t.teleport(loc!!)
+                            t.teleport(loc)
 
                             if (i == 0) {
                                 t.sendTitle(
