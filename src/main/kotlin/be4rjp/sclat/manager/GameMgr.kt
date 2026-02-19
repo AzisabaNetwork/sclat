@@ -92,7 +92,7 @@ import java.util.concurrent.Callable
  *
  * @author Be4rJP
  */
-class GameMgr : Listener {
+object GameMgr : Listener {
     private val boards: MutableMap<UUID, FastBoard> = mutableMapOf()
 
     @EventHandler

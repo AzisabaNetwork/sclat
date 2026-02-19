@@ -11,7 +11,7 @@ import org.bukkit.event.player.PlayerInteractEvent
  *
  * @author Be4rJP
  */
-class SPWeapon : Listener {
+object SPWeapon : Listener {
     // スペシャルウエポンのリスナー部分
     @EventHandler
     fun onClickSPWeapon(event: PlayerInteractEvent) {

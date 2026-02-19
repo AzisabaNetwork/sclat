@@ -133,14 +133,14 @@ class Sclat :
         // ------------------------RegisteringEvents--------------------------
         sclatLogger.info("Registering Events...")
         val pm = server.pluginManager
-        pm.registerEvents(GameMgr(), this)
-        pm.registerEvents(SquidListener(), this)
-        pm.registerEvents(ClickListener(), this)
-        pm.registerEvents(MainWeapon(), this)
-        pm.registerEvents(SubWeapon(), this)
-        pm.registerEvents(SPWeapon(), this)
-        pm.registerEvents(SnowballListener(), this)
-        pm.registerEvents(AsyncPlayerListener(), this)
+        pm.registerEvents(GameMgr, this)
+        pm.registerEvents(SquidListener, this)
+        pm.registerEvents(ClickListener, this)
+        pm.registerEvents(MainWeapon, this)
+        pm.registerEvents(SubWeapon, this)
+        pm.registerEvents(SPWeapon, this)
+        pm.registerEvents(SnowballListener, this)
+        pm.registerEvents(AsyncPlayerListener, this)
 
         if (Plugins.LUNACHAT.isLoaded) pm.registerEvents(LunaChatListener(), this)
 
@@ -359,10 +359,10 @@ class Sclat :
         if (channel != "BungeeCord") {
             return
         }
-        val `in` = ByteStreams.newDataInput(message)
-        val subchannel = `in`.readUTF()
-        if (subchannel == "SomeSubChannel") {
-        }
+        val dataInput = ByteStreams.newDataInput(message)
+        val subchannel = dataInput.readUTF()
+//        if (subchannel == "SomeSubChannel") {
+//        }
     }
 
     override fun onDisable() {
@@ -382,8 +382,8 @@ class Sclat :
 
         // Wiremeshの停止
         try {
-            for (mData in DataMgr.maplist) if (mData.wiremeshListTask != null) mData.wiremeshListTask!!.stopTask()
-        } catch (e: Exception) {
+            for (mData in DataMgr.maplist) mData.wiremeshListTask?.stopTask()
+        } catch (_: Exception) {
         }
 
         // 塗りリセット
@@ -406,7 +406,7 @@ class Sclat :
         // Worldが保存される前にアンロードして塗られた状態で保存されるのを防ぐ
         if (type == ServerType.LOBBY) {
             for (mapname in conf!!.mapConfig!!.getConfigurationSection("Maps")!!.getKeys(false)) {
-                val worldName: String? = conf!!.mapConfig!!.getString("Maps." + mapname + ".WorldName")
+                val worldName: String? = conf?.mapConfig!!.getString("Maps.$mapname.WorldName")
                 Bukkit.unloadWorld(worldName!!, false)
             }
         }

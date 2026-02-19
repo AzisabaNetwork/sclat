@@ -23,7 +23,7 @@ import org.bukkit.scheduler.BukkitRunnable
  *
  * @author Be4rJP
  */
-class MainWeapon : Listener {
+object MainWeapon : Listener {
     @EventHandler
     fun onClickWeapon(e: PlayerInteractEvent) {
         val player = e.getPlayer()

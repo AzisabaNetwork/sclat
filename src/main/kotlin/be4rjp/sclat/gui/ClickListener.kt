@@ -77,7 +77,7 @@ import org.bukkit.scheduler.BukkitRunnable
  *
  * @author Be4rJP
  */
-class ClickListener : Listener {
+object ClickListener : Listener {
     @EventHandler
     fun onGUIClick(event: InventoryClickEvent) {
         val name = event.currentItem?.itemMeta?.displayName ?: return

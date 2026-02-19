@@ -11,7 +11,7 @@ import org.bukkit.event.player.PlayerMoveEvent
  *
  * @author Be4rJP
  */
-class SquidListener : Listener {
+object SquidListener : Listener {
     @EventHandler
     fun onPlayerMove(event: PlayerMoveEvent) {
         val player = event.getPlayer()

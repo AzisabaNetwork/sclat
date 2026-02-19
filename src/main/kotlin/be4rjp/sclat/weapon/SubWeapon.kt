@@ -16,7 +16,7 @@ import org.bukkit.event.player.PlayerInteractEvent
  *
  * @author Be4rJP
  */
-class SubWeapon : Listener {
+object SubWeapon : Listener {
     // サブウエポンのリスナー部分
     @EventHandler
     fun onClickSubWeapon(event: PlayerInteractEvent) {

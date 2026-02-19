@@ -5,7 +5,7 @@ import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerQuitEvent
 
-class AsyncPlayerListener : Listener {
+object AsyncPlayerListener : Listener {
     @EventHandler
     fun online(event: PlayerJoinEvent) {
         val player = event.getPlayer()

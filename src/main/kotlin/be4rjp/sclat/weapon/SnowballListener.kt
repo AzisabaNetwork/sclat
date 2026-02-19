@@ -44,7 +44,7 @@ import java.util.TimerTask
  *
  * @author Be4rJP
  */
-class SnowballListener : Listener {
+object SnowballListener : Listener {
     @EventHandler
     fun onBlockHit(event: ProjectileHitEvent) {
         if (Sclat.type == ServerType.LOBBY) return
