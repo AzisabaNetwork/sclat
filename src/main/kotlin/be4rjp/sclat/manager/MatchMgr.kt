@@ -1,6 +1,7 @@
 package be4rjp.sclat.manager
 
 import be4rjp.sclat.Sclat
+import be4rjp.sclat.animation.text.ReadyAnimation
 import be4rjp.sclat.api.Animation.areaResultAnimation
 import be4rjp.sclat.api.Animation.resultAnimation
 import be4rjp.sclat.api.Animation.tdmResultAnimation
@@ -35,6 +36,7 @@ import be4rjp.sclat.data.DataMgr.sprinklerMap
 import be4rjp.sclat.data.Match
 import be4rjp.sclat.gui.OpenGUI
 import be4rjp.sclat.plugin
+import be4rjp.sclat.schedular.everyTick
 import be4rjp.sclat.server.EquipmentServerManager.doCommands
 import be4rjp.sclat.server.StatusClient
 import be4rjp.sclat.weapon.Brush
@@ -544,31 +546,30 @@ object MatchMgr {
     }
 
     fun startCount(player: Player) {
-        val task: BukkitRunnable =
-            object : BukkitRunnable() {
-                val p: Player = player
-                var i: Int = 0
+        val readyAnimation = ReadyAnimation("READY?")
+        readyAnimation.next() // prevent from first tick animation
+        everyTick { tick, cancel ->
+            when (tick) {
+                in 10..20 step 2 -> {
+                    player.sendTitle(readyAnimation.next(), "", 0, 66 - (tick - 8) / 2 * 10, 0)
+                }
 
-                override fun run() {
-                    if (i == 10) p.sendTitle("R§7EADY?", "", 0, 56, 0)
-                    if (i == 12) p.sendTitle("RE§7ADY?", "", 0, 46, 0)
-                    if (i == 14) p.sendTitle("REA§7DY?", "", 0, 36, 0)
-                    if (i == 16) p.sendTitle("READ§7Y?", "", 0, 26, 0)
-                    if (i == 18) p.sendTitle("READY§7?", "", 0, 16, 0)
-                    if (i == 20) p.sendTitle("READY?", "", 0, 6, 2)
-                    if (i == 47) p.sendTitle(getPlayerData(p)!!.team!!.teamColor!!.colorCode + "GO!", "", 2, 6, 2)
-                    i++
+                47 -> {
+                    player.sendTitle(getPlayerData(player)!!.team!!.teamColor!!.colorCode + "GO!", "", 2, 6, 2)
+                }
+
+                48 -> {
+                    cancel.run()
                 }
             }
-        task.runTaskTimer(plugin, 230, 1)
+        }.runTaskTimer(plugin, 230, 1)
     }
 
     fun matchRunnable(
         player: Player,
         match: Match,
     ) {
-        val task: BukkitRunnable?
-        task =
+        val task =
             object : BukkitRunnable() {
                 var s: Int = 0
                 val p: Player = player
