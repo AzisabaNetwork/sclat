@@ -39,7 +39,7 @@ object DeathMgr {
         val drop1 =
             target.world.dropItem(
                 target.eyeLocation,
-                getPlayerData(target)!!.weaponClass!!.mainWeapon!!.weaponIteamStack!!,
+                getPlayerData(target)!!.weaponClass!!.mainWeapon!!.weaponItemStack!!,
             )
         val drop2 =
             target.world.dropItem(
@@ -121,7 +121,7 @@ object DeathMgr {
                                     "に" + ChatColor.BOLD +
                                     sdata.weaponClass!!
                                         .mainWeapon!!
-                                        .weaponIteamStack!!
+                                        .weaponItemStack!!
                                         .itemMeta!!
                                         .displayName +
                                     ChatColor.RESET + "でやられた！"
@@ -136,7 +136,7 @@ object DeathMgr {
                                                 t.displayName + ChatColor.RESET + "を" + ChatColor.BOLD +
                                                 sdata.weaponClass!!
                                                     .mainWeapon!!
-                                                    .weaponIteamStack!!
+                                                    .weaponItemStack!!
                                                     .itemMeta!!
                                                     .displayName +
                                                 ChatColor.RESET + "で倒した！"
@@ -170,7 +170,7 @@ object DeathMgr {
                                 t.gameMode = GameMode.ADVENTURE
                                 t.inventory.setItem(
                                     0,
-                                    getPlayerData(t)!!.weaponClass!!.mainWeapon!!.weaponIteamStack,
+                                    getPlayerData(t)!!.weaponClass!!.mainWeapon!!.weaponItemStack,
                                 )
                                 t.world.playSound(
                                     getPlayerData(t)!!.matchLocation!!,
@@ -246,7 +246,7 @@ object DeathMgr {
                                 t.gameMode = GameMode.ADVENTURE
                                 t.inventory.setItem(
                                     0,
-                                    getPlayerData(t)!!.weaponClass!!.mainWeapon!!.weaponIteamStack,
+                                    getPlayerData(t)!!.weaponClass!!.mainWeapon!!.weaponItemStack,
                                 )
                                 t.world.playSound(
                                     getPlayerData(t)!!.matchLocation!!,
@@ -323,7 +323,7 @@ object DeathMgr {
                                 t.gameMode = GameMode.ADVENTURE
                                 t.inventory.setItem(
                                     0,
-                                    getPlayerData(t)!!.weaponClass!!.mainWeapon!!.weaponIteamStack,
+                                    getPlayerData(t)!!.weaponClass!!.mainWeapon!!.weaponItemStack,
                                 )
                                 t.world.playSound(
                                     getPlayerData(t)!!.matchLocation!!,
@@ -442,7 +442,7 @@ object DeathMgr {
                                 t.gameMode = GameMode.ADVENTURE
                                 t.inventory.setItem(
                                     0,
-                                    playerData.weaponClass!!.mainWeapon!!.weaponIteamStack,
+                                    playerData.weaponClass!!.mainWeapon!!.weaponItemStack,
                                 )
                                 t.world.playSound(
                                     playerData.matchLocation!!,
@@ -559,7 +559,7 @@ object DeathMgr {
                                 t.gameMode = GameMode.ADVENTURE
                                 t.inventory.setItem(
                                     0,
-                                    playerData.weaponClass!!.mainWeapon!!.weaponIteamStack,
+                                    playerData.weaponClass!!.mainWeapon!!.weaponItemStack,
                                 )
                                 t.world.playSound(
                                     playerData.matchLocation!!,
@@ -586,7 +586,7 @@ object DeathMgr {
                         val loc1 = getPlayerData(t)!!.matchLocation
                         t.teleport(loc1!!)
                         t.gameMode = GameMode.ADVENTURE
-                        t.inventory.setItem(0, getPlayerData(t)!!.weaponClass!!.mainWeapon!!.weaponIteamStack)
+                        t.inventory.setItem(0, getPlayerData(t)!!.weaponClass!!.mainWeapon!!.weaponItemStack)
                         t.world.playSound(getPlayerData(t)!!.matchLocation!!, Sound.ENTITY_PLAYER_SWIM, 1f, 1f)
                         t.exp = 0.99f
                         t.health = 20.0

@@ -33,7 +33,7 @@ object Swapper {
                                     data
                                         .weaponClass
                                         ?.mainWeapon!!
-                                        .weaponIteamStack!!
+                                        .weaponItemStack!!
                                         .type
                             )
                         ) {

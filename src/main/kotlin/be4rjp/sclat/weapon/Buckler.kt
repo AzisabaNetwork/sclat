@@ -34,7 +34,7 @@ object Buckler {
                                 data
                                     .weaponClass
                                     ?.mainWeapon!!
-                                    .weaponIteamStack!!
+                                    .weaponItemStack!!
                                     .type
                         )
                     ) {

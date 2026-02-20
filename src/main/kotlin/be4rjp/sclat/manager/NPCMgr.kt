@@ -83,7 +83,7 @@ object NPCMgr {
                                     npc!!.bukkitEntity.entityId,
                                     EnumItemSlot.MAINHAND,
                                     CraftItemStack.asNMSCopy(
-                                        getPlayerData(player)!!.weaponClass!!.mainWeapon!!.weaponIteamStack,
+                                        getPlayerData(player)!!.weaponClass!!.mainWeapon!!.weaponItemStack,
                                     ),
                                 ),
                             )
@@ -96,7 +96,7 @@ object NPCMgr {
                                             getPlayerData(player)!!
                                                 .weaponClass!!
                                                 .mainWeapon!!
-                                                .weaponIteamStack,
+                                                .weaponItemStack,
                                         ),
                                     ),
                                 )
