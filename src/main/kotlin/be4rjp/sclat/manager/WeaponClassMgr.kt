@@ -17,26 +17,17 @@ import org.bukkit.inventory.ItemStack
 object WeaponClassMgr {
     @Synchronized
     fun weaponClassSetup() {
-        for (classname in Sclat.conf!!
-            .classConfig!!
-            .getConfigurationSection("WeaponClass")!!
-            .getKeys(false)) {
-            val weaponName =
-                Sclat.conf!!
-                    .classConfig!!
-                    .getString("WeaponClass." + classname + ".MainWeaponName")
-            val subWeaponName =
-                Sclat.conf!!
-                    .classConfig!!
-                    .getString("WeaponClass." + classname + ".SubWeaponName")
-            val spWeaponName =
-                Sclat.conf!!
-                    .classConfig!!
-                    .getString("WeaponClass." + classname + ".SPWeaponName")
-            val wc = WeaponClass(classname)
-            wc.mainWeapon = (getWeapon(weaponName))
-            wc.subWeaponName = subWeaponName
-            wc.sPWeaponName = spWeaponName
+        val weaponClassSection = Sclat.conf?.classConfig?.getConfigurationSection("WeaponClass") ?: return
+        for (classname in weaponClassSection.getKeys(false)) {
+            val weaponSection = weaponClassSection.getConfigurationSection(classname) ?: continue
+
+            // create weapon class instance
+            val wc =
+                WeaponClass(classname).apply {
+                    this.mainWeapon = getWeapon(weaponSection.getString("MainWeaponName"))
+                    this.subWeaponName = weaponSection.getString("SubWeaponName")
+                    this.sPWeaponName = weaponSection.getString("SPWeaponName")
+                }
 
             setWeaponClass(classname, wc)
         }
@@ -45,31 +36,36 @@ object WeaponClassMgr {
     @JvmStatic
     fun setWeaponClass(player: Player) {
         player.inventory.clear()
-        val data = getPlayerData(player)
+        val data = getPlayerData(player)!!
+        val mainWeapon =
+            data
+                .weaponClass
+                ?.mainWeapon!!
         val main =
-            data!!
-                .weaponClass!!
-                .mainWeapon!!
+            mainWeapon
                 .weaponIteamStack!!
                 .clone()
-        if (data.mainItemGlow) {
-            Sclat.glow!!.enchantGlow(main)
-            main.addEnchantment(Sclat.glow!!, 1)
-        }
+                .apply {
+                    // Todo: migrate to custom nbt
+                    if (data.mainItemGlow) {
+                        Sclat.glow!!.enchantGlow(this)
+                        this.addEnchantment(Sclat.glow!!, 1)
+                    }
+                }
+
         player.inventory.setItem(0, main)
-        if (data.weaponClass!!.mainWeapon!!.isManeuver) {
+        if (mainWeapon.isManeuver) {
             player
                 .inventory
                 .setItem(
                     40,
-                    data.weaponClass!!
-                        .mainWeapon!!
+                    mainWeapon
                         .weaponIteamStack!!
                         .clone(),
                 )
         }
-        val `is` = SubWeaponMgr.getSubWeapon(player)
-        player.inventory.setItem(2, `is`)
+        val stack = SubWeaponMgr.getSubWeapon(player)
+        player.inventory.setItem(2, stack)
         val co = ItemStack(Material.BOOK)
         val meta = co.itemMeta
         meta!!.setDisplayName("スーパージャンプ")
