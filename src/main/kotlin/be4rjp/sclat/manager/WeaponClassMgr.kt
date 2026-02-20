@@ -19,7 +19,7 @@ import org.bukkit.inventory.ItemStack
  */
 object WeaponClassMgr {
     @Synchronized
-    fun weaponClassSetup() {
+    fun weaponClassSetup() { // Todo: migrate to yaml serializer which throws syntax error
         val weaponClassSection = Sclat.conf?.classConfig?.getConfigurationSection("WeaponClass") ?: return
         for (classname in weaponClassSection.getKeys(false)) {
             val weaponSection = weaponClassSection.getConfigurationSection(classname) ?: continue
@@ -37,7 +37,7 @@ object WeaponClassMgr {
     }
 
     @JvmStatic
-    fun setWeaponClass(player: Player) {
+    fun setWeaponClass(player: Player) { // Todo: this method should not be use in many area. We should call from limited area.
         player.inventory.clear()
         val data = getPlayerData(player)!!
 

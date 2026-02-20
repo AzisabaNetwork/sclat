@@ -2,36 +2,24 @@ package be4rjp.sclat.data
 
 import be4rjp.sclat.api.MineStat
 import be4rjp.sclat.plugin
+import org.bukkit.ChatColor
 import org.bukkit.block.Block
 import org.bukkit.block.Sign
 import org.bukkit.scheduler.BukkitRunnable
 
 class ServerStatus(
     @JvmField val serverName: String?,
-    displayName: String,
-    host: String?,
-    port: Int,
-    maxPlayer: Int,
-    period: Int,
-    sign: Block,
-    info: String?,
+    @JvmField val displayName: String,
+    private val host: String?,
+    private val port: Int,
+    @JvmField val maxPlayer: Int,
+    private val period: Int,
+    @JvmField val sign: Block,
+    @JvmField val info: String?,
 ) {
-    @JvmField
-    val displayName: String?
-    private val host: String?
-    private val port: Int
-    private val period: Int
     private val task: BukkitRunnable
 
-    @JvmField
-    val maxPlayer: Int
     private val task2: BukkitRunnable
-
-    @JvmField
-    val sign: Block?
-
-    @JvmField
-    val info: String?
 
     var playerCount: Int = 0
         private set
@@ -43,7 +31,9 @@ class ServerStatus(
     @JvmField
     var mapName: String? = ""
     var isMaintenance: Boolean = false
-    val uUIDList: MutableList<String?>?
+
+    // Todo: remove this
+    val uUIDList: MutableList<String> = ArrayList()
 
     @JvmField
     var waitingEndTime: Long = 0
@@ -51,19 +41,9 @@ class ServerStatus(
     @JvmField
     var matchStartTime: Long = 0
 
-    private val matchServerRunnable: MatchServerRunnable?
+    private val matchServerRunnable: MatchServerRunnable = MatchServerRunnable(this)
 
     init {
-        this.displayName = displayName
-        this.host = host
-        this.port = port
-        this.period = period
-        this.maxPlayer = maxPlayer
-        this.sign = sign
-        this.info = info
-        this.uUIDList = ArrayList<String?>()
-
-        this.matchServerRunnable = MatchServerRunnable(this)
 
         this.task =
             object : BukkitRunnable() {
@@ -96,15 +76,15 @@ class ServerStatus(
                             val signState = sign.state as Sign
                             signState.setLine(0, displayName)
                             if (isOnline) {
-                                signState.setLine(1, "§a" + playerCount + " / " + maxPlayer)
+                                signState.setLine(1, ChatColor.GREEN.toString() + "$playerCount / $maxPlayer")
                                 if (runningMatch) {
                                     signState.setLine(2, "§cIN MATCH")
                                 } else {
                                     signState.setLine(2, "§aINACTIVE")
                                 }
-                                signState.setLine(3, "§b" + mapName)
+                                signState.setLine(3, ChatColor.AQUA.toString() + mapName)
                             } else {
-                                signState.setLine(1, if (isMaintenance) "§cMAINTENANCE" else "§cOFFLINE")
+                                signState.setLine(1, ChatColor.RED.toString() + if (isMaintenance) "MAINTENANCE" else "OFFLINE")
                                 signState.setLine(2, "")
                                 signState.setLine(3, "")
                             }
