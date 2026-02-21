@@ -141,12 +141,13 @@ try {
 - Access via `plugin` import alias from `Variables.kt`
 - Use Adventure API for text components: `net.kyori.adventure.text.Component`
 
-### Testing Conventions
+## Testing Conventions
 
 - Use Kotest with `StringSpec` style
+- Use Mockk for mocking
 - Test class names end with `Test`
 - Place tests in `src/test/kotlin/` mirroring source structure
-- Use descriptive test names in quotes (Japanese acceptable)
+- **Test case names must be in Japanese for visibility** - use descriptive Japanese names in quotes
 
 ```kotlin
 class ReadyAnimationTest : StringSpec({
@@ -162,6 +163,11 @@ class ReadyAnimationTest : StringSpec({
     }
 })
 ```
+
+### Test Dependencies
+
+- **Kotest**: `kotest-assertions-core`, `kotest-runner-junit5`, `kotest-property`
+- **Mockk**: `mockk` for mocking Kotlin classes
 
 ### Data Classes and POJOs
 
@@ -223,6 +229,7 @@ src/main/kotlin/be4rjp/sclat/
 - ProtocolLib (compileOnly)
 - Adventure API (implementation)
 - Kotest (testImplementation)
+- Mockk (testImplementation)
 - See `gradle/libs.versions.toml` for all dependencies
 
 ## After Making Changes
