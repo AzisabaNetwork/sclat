@@ -8,6 +8,7 @@ import be4rjp.sclat.data.DataMgr.getMatchFromId
 import be4rjp.sclat.data.DataMgr.getPlayerData
 import be4rjp.sclat.data.DataMgr.getWeaponClass
 import be4rjp.sclat.emblem.EmblemManager.handleInv
+import be4rjp.sclat.extension.editMeta
 import be4rjp.sclat.manager.MatchMgr
 import be4rjp.sclat.manager.PlayerStatusMgr.getKill
 import be4rjp.sclat.manager.PlayerStatusMgr.getLv
@@ -37,20 +38,18 @@ object OpenGUI {
     fun openMenu(player: Player) {
         val inv = Bukkit.createInventory(null, 45, "メインメニュー")
 
-        var i = 0
-        while (i <= 44) {
-            val `is` = ItemStack(Material.BLACK_STAINED_GLASS_PANE)
-            val ism = `is`.itemMeta
-            ism!!.setDisplayName(".")
-            `is`.itemMeta = ism
-            inv.setItem(i, `is`)
-            i++
+        for (i in 0..44) {
+            val blankPanel =
+                ItemStack(Material.BLACK_STAINED_GLASS_PANE).editMeta {
+                    it.setDisplayName(".")
+                }
+            inv.setItem(i, blankPanel)
         }
 
-        val join = ItemStack(Material.LIME_STAINED_GLASS_PANE)
-        val joinmeta = join.itemMeta
-        joinmeta!!.setDisplayName("試合に参加 / JOIN THE MATCH")
-        join.itemMeta = joinmeta
+        val join =
+            ItemStack(Material.LIME_STAINED_GLASS_PANE).editMeta {
+                it.setDisplayName("試合に参加 / JOIN THE MATCH")
+            }
         if (Sclat.conf!!
                 .config!!
                 .getString("WorkMode") != "Trial"
@@ -307,10 +306,10 @@ object OpenGUI {
     fun superJumpGUI(player: Player) {
         val inv = Bukkit.createInventory(null, 18, "Chose Target")
 
-        val `is` = ItemStack(getPlayerData(player)!!.team!!.teamColor!!.glass!!)
-        val ism = `is`.itemMeta
-        ism!!.setDisplayName(if (Sclat.tutorial) "§r§6ロビーへジャンプ" else "§r§6リスポーン地点へジャンプ")
-        `is`.itemMeta = ism
+        val jumpStack =
+            ItemStack(getPlayerData(player)!!.team!!.teamColor!!.glass!!).editMeta {
+                it.setDisplayName(if (Sclat.tutorial) "§r§6ロビーへジャンプ" else "§r§6リスポーン地点へジャンプ")
+            }
         var loc = Sclat.lobby!!.clone()
         if (Sclat.conf!!
                 .config!!
@@ -326,7 +325,7 @@ object OpenGUI {
                 !Tutorial.clearList.contains(player)
             ) {
                 if (!Sclat.tutorial) {
-                    inv.setItem(0, `is`)
+                    inv.setItem(0, jumpStack)
                 }
             }
         }
@@ -352,26 +351,23 @@ object OpenGUI {
                 }
             }
         }
-        for (`as` in beaconMap.values) {
-            if (`as`!!.customName == "21") {
-                val p = getArmorStandPlayer(`as`)
-                if (getPlayerData(player)!!.team == getPlayerData(p)!!.team) {
-                    if (`as`.world === player.world) {
-                        if (`as`.location.distance(player.location) > 10) {
-                            val item = ItemStack(Material.IRON_TRAPDOOR)
-                            val im = item.itemMeta
-                            im!!.setDisplayName(p!!.name)
-                            val lores: MutableList<String> = ArrayList()
-                            lores.add("§r§6プレイヤーのビーコンへジャンプ")
-                            im.lore = lores
-                            item.itemMeta = im
-                            if (slotnum <= 17) {
-                                inv.setItem(slotnum, item)
-                            }
-                            slotnum++
-                        }
-                    }
+        for (armorStand in beaconMap.values) {
+            if (armorStand!!.customName != "21") continue
+            val p = getArmorStandPlayer(armorStand) ?: continue
+            if (getPlayerData(player)?.team != getPlayerData(p)?.team) continue
+            if (armorStand.world !== player.world) continue
+            if (armorStand.location.distance(player.location) > 10) {
+                val item = ItemStack(Material.IRON_TRAPDOOR)
+                val im = item.itemMeta
+                im!!.setDisplayName(p.name)
+                val lores: MutableList<String> = ArrayList()
+                lores.add("§r§6プレイヤーのビーコンへジャンプ")
+                im.lore = lores
+                item.itemMeta = im
+                if (slotnum <= 17) {
+                    inv.setItem(slotnum, item)
                 }
+                slotnum++
             }
         }
         player.openInventory(inv)
@@ -383,6 +379,7 @@ object OpenGUI {
         player.openInventory(emblemInv)
     }
 
+    @Deprecated("Use #openWeaponSelect", level = DeprecationLevel.HIDDEN)
     fun openShop(player: Player) {
         var slotnum = 0
         val shooter = Bukkit.createInventory(null, 54, "武器選択")
@@ -408,12 +405,13 @@ object OpenGUI {
             )
             itemm.lore = lores
             item.itemMeta = itemm
+            val weaponType = getWeaponClass(ClassName)!!.mainWeapon!!.weaponType
             if (slotnum <= 44 &&
                 (
-                    getWeaponClass(ClassName)!!.mainWeapon!!.weaponType == "Shooter" ||
-                        getWeaponClass(ClassName)!!.mainWeapon!!.weaponType == "Burst" ||
-                        getWeaponClass(ClassName)!!.mainWeapon!!.weaponType == "Blaster" ||
-                        getWeaponClass(ClassName)!!.mainWeapon!!.weaponType == "Spinner"
+                    weaponType == "Shooter" ||
+                        weaponType == "Burst" ||
+                        weaponType == "Blaster" ||
+                        weaponType == "Spinner"
                 )
             ) {
                 if (getWeaponClass(ClassName)!!.mainWeapon!!.money == 0) {
@@ -436,35 +434,30 @@ object OpenGUI {
         when (type) {
             "Weapon" -> {
                 var slotnum = 0
-                val shooter =
-                    if (shop) {
-                        Bukkit.createInventory(null, 54, "Shop")
-                    } else {
-                        Bukkit.createInventory(null, 54, "武器選択")
-                    }
-                for (ClassName in Sclat.conf!!
+                val shooter = Bukkit.createInventory(null, 54, if (shop) "Shop" else "武器選択")
+                for (weaponClassName in Sclat.conf!!
                     .classConfig!!
                     .getConfigurationSection("WeaponClass")!!
                     .getKeys(false)) {
-                    val item = ItemStack(getWeaponClass(ClassName)!!.mainWeapon!!.weaponItemStack!!)
+                    val item = ItemStack(getWeaponClass(weaponClassName)!!.mainWeapon!!.weaponItemStack!!)
                     val itemm = item.itemMeta
-                    itemm!!.setDisplayName(ClassName)
+                    itemm!!.setDisplayName(weaponClassName)
                     val lores: MutableList<String> = ArrayList()
                     lores.add(
                         "§r§6SubWeapon : " +
                             Sclat.conf!!
                                 .classConfig!!
-                                .getString("WeaponClass." + ClassName + ".SubWeaponName"),
+                                .getString("WeaponClass." + weaponClassName + ".SubWeaponName"),
                     )
                     lores.add(
                         "§r§6SPWeapon  : " +
                             Sclat.conf!!
                                 .classConfig!!
-                                .getString("WeaponClass." + ClassName + ".SPWeaponName"),
+                                .getString("WeaponClass." + weaponClassName + ".SPWeaponName"),
                     )
                     if (shop) {
                         lores.add("")
-                        lores.add("§r§bMoney : " + getWeaponClass(ClassName)!!.mainWeapon!!.money)
+                        lores.add("§r§bMoney : " + getWeaponClass(weaponClassName)!!.mainWeapon!!.money)
                     }
                     itemm.lore = lores
                     item.itemMeta = itemm
@@ -478,39 +471,39 @@ object OpenGUI {
                     }
                     var equals = false
                     for (wtype in list) {
-                        if (wtype == getWeaponClass(ClassName)!!.mainWeapon!!.weaponType) equals = true
+                        if (wtype == getWeaponClass(weaponClassName)!!.mainWeapon!!.weaponType) equals = true
                     }
                     if (weaponType == "Hude" &&
-                        getWeaponClass(ClassName)!!.mainWeapon!!.weaponType == "Roller"
+                        getWeaponClass(weaponClassName)!!.mainWeapon!!.weaponType == "Roller"
                     ) {
-                        if (getWeaponClass(ClassName)!!.mainWeapon!!.isHude) equals = true
+                        if (getWeaponClass(weaponClassName)!!.mainWeapon!!.isHude) equals = true
                     }
                     if (weaponType == "Roller" &&
-                        getWeaponClass(ClassName)!!.mainWeapon!!.weaponType == "Roller"
+                        getWeaponClass(weaponClassName)!!.mainWeapon!!.weaponType == "Roller"
                     ) {
-                        if (getWeaponClass(ClassName)!!.mainWeapon!!.isHude) equals = false
+                        if (getWeaponClass(weaponClassName)!!.mainWeapon!!.isHude) equals = false
                     }
                     if (weaponType == "Burst" &&
-                        getWeaponClass(ClassName)!!.mainWeapon!!.weaponType == "Burst"
+                        getWeaponClass(weaponClassName)!!.mainWeapon!!.weaponType == "Burst"
                     ) {
-                        if (getWeaponClass(ClassName)!!.mainWeapon!!.getIsSwap()) equals = false
+                        if (getWeaponClass(weaponClassName)!!.mainWeapon!!.getIsSwap()) equals = false
                     }
 
                     if (weaponType == "Maneu" &&
-                        getWeaponClass(ClassName)!!.mainWeapon!!.weaponType == "Shooter"
+                        getWeaponClass(weaponClassName)!!.mainWeapon!!.weaponType == "Shooter"
                     ) {
-                        if (getWeaponClass(ClassName)!!.mainWeapon!!.isManeuver) equals = true
+                        if (getWeaponClass(weaponClassName)!!.mainWeapon!!.isManeuver) equals = true
                     }
                     if (weaponType == "Swapper" &&
-                        getWeaponClass(ClassName)!!.mainWeapon!!.weaponType == "Shooter"
+                        getWeaponClass(weaponClassName)!!.mainWeapon!!.weaponType == "Shooter"
                     ) {
-                        if (getWeaponClass(ClassName)!!.mainWeapon!!.getIsSwap()) equals = true
+                        if (getWeaponClass(weaponClassName)!!.mainWeapon!!.getIsSwap()) equals = true
                     }
                     if (weaponType == "Shooter" &&
-                        getWeaponClass(ClassName)!!.mainWeapon!!.weaponType == "Shooter"
+                        getWeaponClass(weaponClassName)!!.mainWeapon!!.weaponType == "Shooter"
                     ) {
-                        if (getWeaponClass(ClassName)!!.mainWeapon!!.isManeuver ||
-                            getWeaponClass(ClassName)!!.mainWeapon!!.getIsSwap()
+                        if (getWeaponClass(weaponClassName)!!.mainWeapon!!.isManeuver ||
+                            getWeaponClass(weaponClassName)!!.mainWeapon!!.getIsSwap()
                         ) {
                             equals = false
                         }
@@ -518,18 +511,18 @@ object OpenGUI {
 
                     if (slotnum <= 52 && equals) {
                         if (shop) {
-                            if (getWeaponClass(ClassName)!!.mainWeapon!!.money != 0 &&
-                                !haveWeapon(player, ClassName)
+                            if (getWeaponClass(weaponClassName)!!.mainWeapon!!.money != 0 &&
+                                !haveWeapon(player, weaponClassName)
                             ) {
-                                if (getWeaponClass(ClassName)!!.mainWeapon!!.level > getLv(player)) {
+                                if (getWeaponClass(weaponClassName)!!.mainWeapon!!.level > getLv(player)) {
                                     val glass = ItemStack(Material.BLACK_STAINED_GLASS_PANE)
                                     val gmeta = glass.itemMeta
                                     gmeta!!.setDisplayName(
-                                        "§6レベル§c" + getWeaponClass(ClassName)!!.mainWeapon!!.level + "§6で解禁",
+                                        "§6レベル§c" + getWeaponClass(weaponClassName)!!.mainWeapon!!.level + "§6で解禁",
                                     )
                                     glass.itemMeta = gmeta
                                     shooter.setItem(slotnum, glass)
-                                } else if (getWeaponClass(ClassName)!!.mainWeapon!!.islootbox) {
+                                } else if (getWeaponClass(weaponClassName)!!.mainWeapon!!.islootbox) {
                                     val glass = ItemStack(Material.BLACK_STAINED_GLASS_PANE)
                                     val gmeta = glass.itemMeta
                                     gmeta!!.setDisplayName("§6ガチャ武器です")
@@ -541,16 +534,16 @@ object OpenGUI {
                                 slotnum++
                             }
                         } else {
-                            if (getWeaponClass(ClassName)!!.mainWeapon!!.money == 0 ||
+                            if (getWeaponClass(weaponClassName)!!.mainWeapon!!.money == 0 ||
                                 Sclat.conf!!
                                     .config!!
                                     .getString("WorkMode") == "Trial"
                             ) {
-                                if (getWeaponClass(ClassName)!!.mainWeapon!!.level > getLv(player)) {
+                                if (getWeaponClass(weaponClassName)!!.mainWeapon!!.level > getLv(player)) {
                                     val glass = ItemStack(Material.BLACK_STAINED_GLASS_PANE)
                                     val gmeta = glass.itemMeta
                                     gmeta!!.setDisplayName(
-                                        "§6レベル§c" + getWeaponClass(ClassName)!!.mainWeapon!!.level + "§6で解禁",
+                                        "§6レベル§c" + getWeaponClass(weaponClassName)!!.mainWeapon!!.level + "§6で解禁",
                                     )
                                     glass.itemMeta = gmeta
                                     shooter.setItem(slotnum, glass)
@@ -558,7 +551,7 @@ object OpenGUI {
                                     shooter.setItem(slotnum, item)
                                 }
                                 slotnum++
-                            } else if (haveWeapon(player, ClassName) || !Sclat.shop) {
+                            } else if (haveWeapon(player, weaponClassName) || !Sclat.shop) {
                                 shooter.setItem(slotnum, item)
                                 slotnum++
                             }
