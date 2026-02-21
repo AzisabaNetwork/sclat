@@ -10,6 +10,7 @@ import java.io.IOException
  *
  * @author Be4rJP
  */
+@Deprecated("This class has many complex manual configurations.", level = DeprecationLevel.WARNING)
 class Config {
     var classConfig: FileConfiguration? = null
         private set
