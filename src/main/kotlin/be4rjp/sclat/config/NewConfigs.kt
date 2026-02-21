@@ -11,7 +11,7 @@ import java.util.function.Supplier
 /**
  * Migrating from Config.kt
  */
-object NewConfig {
+object NewConfigs {
     private val parent = File("plugins/Sclat")
     lateinit var loginBonusReward: LoginBonusRewardConfig
         private set

@@ -11,7 +11,7 @@ class MainWeapon(
 ) {
     @JvmField
     var weaponType: String? = null
-    var weaponIteamStack: ItemStack? = null
+    var weaponItemStack: ItemStack? = null
         private set
 
     @JvmField
@@ -99,7 +99,7 @@ class MainWeapon(
     fun getIsSwap(): Boolean = isswaper
 
     fun setWeaponItemStack(`is`: ItemStack?) {
-        this.weaponIteamStack = `is`
+        this.weaponItemStack = `is`
     }
 
     fun setIsSwap(Isswap: Boolean) {

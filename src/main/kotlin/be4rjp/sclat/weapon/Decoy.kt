@@ -180,7 +180,7 @@ object Decoy {
                                         getPlayerData(player)!!
                                             .weaponClass
                                             ?.mainWeapon!!
-                                            .weaponIteamStack,
+                                            .weaponItemStack,
                                     ),
                                 ),
                             )

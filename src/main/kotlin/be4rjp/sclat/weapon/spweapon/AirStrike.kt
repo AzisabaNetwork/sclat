@@ -6,6 +6,7 @@ import be4rjp.sclat.api.SclatUtil.giveDamage
 import be4rjp.sclat.api.Sphere.getSphere
 import be4rjp.sclat.api.raytrace.RayTrace
 import be4rjp.sclat.data.DataMgr.getPlayerData
+import be4rjp.sclat.extension.bukkitTask
 import be4rjp.sclat.manager.ArmorStandMgr
 import be4rjp.sclat.manager.MapKitMgr
 import be4rjp.sclat.manager.PaintMgr
@@ -217,15 +218,9 @@ object AirStrike {
                                     giveDamage(player, target, damage, "spWeapon")
 
                                     // AntiNoDamageTime
-                                    val task: BukkitRunnable =
-                                        object : BukkitRunnable() {
-                                            var p: Player = target
-
-                                            override fun run() {
-                                                target.noDamageTicks = 0
-                                            }
-                                        }
-                                    task.runTaskLater(plugin, 1)
+                                    bukkitTask {
+                                        target.noDamageTicks = 0
+                                    }.runTaskLater(plugin, 1)
                                 }
                             }
                         }

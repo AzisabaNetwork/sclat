@@ -66,7 +66,7 @@ object Charger {
                         val w =
                             data.weaponClass
                                 ?.mainWeapon!!
-                                .weaponIteamStack!!
+                                .weaponItemStack!!
                                 .clone()
                         val wm = w.itemMeta
 
@@ -274,7 +274,7 @@ object Charger {
                             }
                         }
                         charge = 0
-                        p.inventory.setItem(0, data.weaponClass?.mainWeapon!!.weaponIteamStack)
+                        p.inventory.setItem(0, data.weaponClass?.mainWeapon!!.weaponItemStack)
                         data.tick = 8
                         data.isHolding = false
                     }

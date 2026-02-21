@@ -93,21 +93,21 @@ object SquidMgr {
                             ==
                             data.weaponClass!!
                                 .mainWeapon!!
-                                .weaponIteamStack!!
+                                .weaponItemStack!!
                                 .type
                         ) {
                             if (p.inventory.itemInOffHand.type
                                 !=
                                 data.weaponClass!!
                                     .mainWeapon!!
-                                    .weaponIteamStack!!
+                                    .weaponItemStack!!
                                     .type
                             ) {
                                 p.inventory.setItem(
                                     40,
                                     data.weaponClass!!
                                         .mainWeapon!!
-                                        .weaponIteamStack!!
+                                        .weaponItemStack!!
                                         .clone(),
                                 )
                             }
@@ -246,7 +246,7 @@ object SquidMgr {
                             ==
                             data.weaponClass!!
                                 .mainWeapon!!
-                                .weaponIteamStack!!
+                                .weaponItemStack!!
                                 .type
                         ) {
                             speed = data.weaponClass!!
@@ -469,7 +469,7 @@ object SquidMgr {
                                     getPlayerData(p)!!
                                         .weaponClass!!
                                         .mainWeapon!!
-                                        .weaponIteamStack!!
+                                        .weaponItemStack!!
                                         .clone(),
                                 )
                             }

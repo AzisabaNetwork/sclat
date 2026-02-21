@@ -123,7 +123,7 @@ object Reeler {
                                 data
                                     .weaponClass!!
                                     .mainWeapon!!
-                                    .weaponIteamStack!!
+                                    .weaponItemStack!!
                                     .type
                         )
                     ) {

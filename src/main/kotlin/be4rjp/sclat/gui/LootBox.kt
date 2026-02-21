@@ -103,7 +103,7 @@ object LootBox {
             if (getWeaponClass(ClassName)!!.mainWeapon!!.islootbox) {
                 val lootpro = getWeaponClass(ClassName)!!.mainWeapon!!.lootpro
                 if (lootpro != 0.0) {
-                    val item = ItemStack(getWeaponClass(ClassName)!!.mainWeapon!!.weaponIteamStack!!)
+                    val item = ItemStack(getWeaponClass(ClassName)!!.mainWeapon!!.weaponItemStack!!)
                     val itemm = item.itemMeta
                     itemm!!.setDisplayName(ClassName)
                     val lores: MutableList<String?> = ArrayList<String?>()

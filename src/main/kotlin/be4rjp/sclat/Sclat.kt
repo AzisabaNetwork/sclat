@@ -4,6 +4,7 @@ package be4rjp.sclat
 
 import be4rjp.blockstudio.BlockStudio
 import be4rjp.dadadachecker.DADADACheckerAPI
+import be4rjp.sclat.animation.text.TextAnimation
 import be4rjp.sclat.api.Plugins
 import be4rjp.sclat.api.Plugins.Companion.onInit
 import be4rjp.sclat.api.SclatUtil.sendRestartedServerInfo
@@ -13,10 +14,9 @@ import be4rjp.sclat.api.async.AsyncThreadManager.setup
 import be4rjp.sclat.api.async.AsyncThreadManager.shutdownAll
 import be4rjp.sclat.api.config.CustomConfig
 import be4rjp.sclat.api.holo.PlayerHolograms
-import be4rjp.sclat.api.utils.TextAnimation
 import be4rjp.sclat.commands.SclatCommandExecutor
 import be4rjp.sclat.config.Config
-import be4rjp.sclat.config.NewConfig
+import be4rjp.sclat.config.NewConfigs
 import be4rjp.sclat.data.DataMgr
 import be4rjp.sclat.data.DataMgr.armorStandMap
 import be4rjp.sclat.data.DataMgr.blockDataMap
@@ -102,7 +102,7 @@ class Sclat :
         sclatLogger.info("Loading config files...")
         conf = Config()
         conf?.loadConfig()
-        NewConfig.load()
+        NewConfigs.load()
         for (mapname in conf!!.mapConfig!!.getConfigurationSection("Maps")!!.getKeys(false)) {
             val worldName: String? = conf!!.mapConfig!!.getString("Maps." + mapname + ".WorldName")
             Bukkit.createWorld(WorldCreator(worldName!!))
@@ -348,7 +348,7 @@ class Sclat :
 
         text = ChatColor.translateAlternateColorCodes('&', news?.getConfig()!!.getString("news-message")!!)
 
-        textAnimation = TextAnimation(text, Sclat.news?.getConfig()!!.getInt("scoreboard-length"))
+        textAnimation = TextAnimation(text, news?.getConfig()!!.getInt("scoreboard-length"))
     }
 
     override fun onPluginMessageReceived(
@@ -399,7 +399,7 @@ class Sclat :
          */
         for (`as` in armorStandMap.keys) `as`!!.remove()
         conf!!.saveConfig()
-        NewConfig.save()
+        NewConfigs.save()
 
         for (`as` in DataMgr.al) `as`!!.remove()
 

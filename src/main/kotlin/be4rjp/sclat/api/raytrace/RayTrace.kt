@@ -6,7 +6,7 @@ class RayTrace(
     var origin: Vector,
     var direction: Vector,
 ) {
-    fun getPostion(blocksAway: Double): Vector = origin.clone().add(direction.clone().multiply(blocksAway))
+    fun getPosition(blocksAway: Double): Vector = origin.clone().add(direction.clone().multiply(blocksAway))
 
     fun isOnLine(position: Vector): Boolean {
         val t = (position.getX() - origin.getX()) / direction.getX()
@@ -21,7 +21,7 @@ class RayTrace(
         val positions = ArrayList<Vector>()
         var d = 0.0
         while (d <= blocksAway) {
-            positions.add(getPostion(d))
+            positions.add(getPosition(d))
             d += accuracy
         }
         return positions

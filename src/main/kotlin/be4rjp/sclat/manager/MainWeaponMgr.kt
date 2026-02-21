@@ -199,7 +199,7 @@ object MainWeaponMgr {
                 data!!
                     .weaponClass!!
                     .mainWeapon!!
-                    .weaponIteamStack!!
+                    .weaponItemStack!!
                     .itemMeta!!
                     .displayName
             if (player

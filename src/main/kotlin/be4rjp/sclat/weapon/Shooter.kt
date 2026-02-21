@@ -187,7 +187,7 @@ object Shooter {
                                     data
                                         .weaponClass!!
                                         .mainWeapon!!
-                                        .weaponIteamStack!!
+                                        .weaponItemStack!!
                                         .type
                             )
                         ) { // slをsl_recharge_2に変更することで優先順位が低い方のスライドが残っている時のみ使えるようにしました

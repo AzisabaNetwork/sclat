@@ -253,7 +253,7 @@ object OpenGUI {
             getPlayerData(player)!!
                 .weaponClass!!
                 .mainWeapon!!
-                .weaponIteamStack!!
+                .weaponItemStack!!
                 .clone()
         val tmeta = t.itemMeta
         tmeta!!.setDisplayName(if (shop) "§6武器購入 / WEAPON" else "§6武器変更 / WEAPON")
@@ -390,7 +390,7 @@ object OpenGUI {
             .classConfig!!
             .getConfigurationSection("WeaponClass")!!
             .getKeys(false)) {
-            val item = ItemStack(getWeaponClass(ClassName)!!.mainWeapon!!.weaponIteamStack!!)
+            val item = ItemStack(getWeaponClass(ClassName)!!.mainWeapon!!.weaponItemStack!!)
             val itemm = item.itemMeta
             itemm!!.setDisplayName(ClassName)
             val lores: MutableList<String> = ArrayList()
@@ -446,7 +446,7 @@ object OpenGUI {
                     .classConfig!!
                     .getConfigurationSection("WeaponClass")!!
                     .getKeys(false)) {
-                    val item = ItemStack(getWeaponClass(ClassName)!!.mainWeapon!!.weaponIteamStack!!)
+                    val item = ItemStack(getWeaponClass(ClassName)!!.mainWeapon!!.weaponItemStack!!)
                     val itemm = item.itemMeta
                     itemm!!.setDisplayName(ClassName)
                     val lores: MutableList<String> = ArrayList()

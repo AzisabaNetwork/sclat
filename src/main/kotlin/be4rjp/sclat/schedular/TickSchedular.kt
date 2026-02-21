@@ -5,13 +5,14 @@ import org.bukkit.scheduler.BukkitRunnable
 import java.util.function.BiConsumer
 
 class TickSchedular {
+    private var defaultFunc: BiConsumer<Int, Runnable>? = null
     private val timingMap: MutableMap<Int, BiConsumer<Int, Runnable>> = mutableMapOf()
     private val ticker =
         object : BukkitRunnable() {
             private var currentTick = 0
 
             override fun run() {
-                timingMap[0]?.accept(currentTick, ::cancel)
+                timingMap[0]?.accept(currentTick, ::cancel) ?: defaultFunc?.accept(currentTick, ::cancel)
                 currentTick++
             }
         }
@@ -27,6 +28,11 @@ class TickSchedular {
         action: BiConsumer<Int, Runnable>,
     ): TickSchedular {
         timingMap[tick] = action
+        return this
+    }
+
+    fun setDefault(action: BiConsumer<Int, Runnable>): TickSchedular {
+        defaultFunc = action
         return this
     }
 

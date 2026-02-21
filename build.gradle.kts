@@ -51,6 +51,7 @@ dependencies {
     implementation(libs.bundles.ktoml)
     implementation(libs.bundles.adventure)
     testImplementation(libs.bundles.kotest)
+    testImplementation(libs.spigot)
 }
 
 // Project Settings

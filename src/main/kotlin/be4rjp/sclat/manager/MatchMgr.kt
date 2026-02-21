@@ -400,7 +400,7 @@ object MatchMgr {
         ) {
             if (Sclat.conf!!
                     .config!!
-                    .getInt("RestartMatchCount") ==
+                    .getInt("RestartMatchCount") <=
                 matchcount
             ) {
                 restartServer()

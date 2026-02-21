@@ -1,4 +1,4 @@
-package be4rjp.sclat.api.utils
+package be4rjp.sclat.animation.text
 
 class TextAnimation(
     text: String,
