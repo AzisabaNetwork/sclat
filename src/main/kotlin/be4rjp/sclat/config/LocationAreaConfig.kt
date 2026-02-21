@@ -4,6 +4,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class LocationAreaConfig(
-    val from: LocationConfig,
-    val to: LocationConfig,
+    val from: LocationConfig = LocationConfig(),
+    val to: LocationConfig = LocationConfig(),
 )

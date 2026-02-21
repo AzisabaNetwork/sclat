@@ -4,9 +4,9 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class WiremeshConfig(
-    val trapDoor: Boolean,
-    val ironBars: Boolean,
-    val fence: Boolean,
-    val from: LocationConfig,
-    val to: LocationConfig,
+    val trapDoor: Boolean = false,
+    val ironBars: Boolean = false,
+    val fence: Boolean = false,
+    val from: LocationConfig = LocationConfig(),
+    val to: LocationConfig = LocationConfig(),
 )
