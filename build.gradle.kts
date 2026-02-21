@@ -33,6 +33,14 @@ repositories {
             includeGroup("org.bstats")
         }
     }
+    exclusiveContent {
+        forRepository {
+            maven("https://repo.onarandombox.com/content/groups/public/")
+        }
+        filter {
+            includeGroup("com.onarandombox.multiversecore")
+        }
+    }
 }
 
 dependencies {
@@ -43,6 +51,7 @@ dependencies {
     compileOnly(libs.dadadachecker)
     compileOnly(libs.blockstudio)
     compileOnly(libs.paperApi)
+    compileOnly(libs.multiverse.core)
     implementation(libs.cloudPaper)
     implementation(libs.jspecify)
     implementation(libs.kotlin.stdlib)

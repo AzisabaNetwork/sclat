@@ -7,6 +7,7 @@ paperApi = "1.14.4-R0.1-SNAPSHOT"
 blockstudio = "-SNAPSHOT"
 dadadachecker = "1.0.0"
 noteblockapi = "1.6.3"
+multiverse-core = "4.3.16"
 lunachat = "3.0.16"
 spigot = "1.14.4-R0.1-SNAPSHOT"
 cloudPaper = "2.0.0-SNAPSHOT"
@@ -32,6 +33,7 @@ paperApi = { module = "com.destroystokyo.paper:paper-api", version.ref = "paperA
 blockstudio = { module = "com.github.Be4rJP:BlockStudio", version.ref = "blockstudio" }
 dadadachecker = { module = "com.github.Be4rJP:DADADAChecker", version.ref = "dadadachecker" }
 noteblockapi = { module = "com.github.koca2000:NoteBlockAPI", version.ref = "noteblockapi" }
+multiverse-core = { module = "com.onarandombox.multiversecore:multiverse-core", version.ref = "multiverse-core" }
 lunachat = { module = "com.github.ucchyocean:LunaChat", version.ref = "lunachat" }
 spigot = { module = "org.spigotmc:spigot", version.ref = "spigot" }
 cloudPaper = { module = "org.incendo:cloud-paper", version.ref = "cloudPaper" }
