@@ -91,7 +91,9 @@ class Sclat :
         if (!onInit()) return
         sclatLogger.info("API check was completed.")
 
+        // ProtocolLib init
         protocolManager = ProtocolLibrary.getProtocolManager()
+
         init()
 
         dadadaCheckerAPI = DADADACheckerAPI(this)
@@ -104,7 +106,7 @@ class Sclat :
         conf?.loadConfig()
         NewConfigs.load()
         for (mapname in conf!!.mapConfig!!.getConfigurationSection("Maps")!!.getKeys(false)) {
-            val worldName: String? = conf!!.mapConfig!!.getString("Maps." + mapname + ".WorldName")
+            val worldName: String? = conf!!.mapConfig!!.getString("Maps.$mapname.WorldName")
             Bukkit.createWorld(WorldCreator(worldName!!))
             val world = Bukkit.getWorld(worldName)
             world!!.isAutoSave = false
