@@ -1,37 +1,26 @@
 package be4rjp.sclat.manager
 
 import be4rjp.sclat.api.player.PlayerReturn
+import be4rjp.sclat.extension.bukkitTask
 import be4rjp.sclat.plugin
-import org.bukkit.scheduler.BukkitRunnable
+import be4rjp.sclat.sclatLogger
 
 object PlayerReturnManager {
-    var list: MutableList<PlayerReturn> = ArrayList<PlayerReturn>()
+    var list: MutableList<PlayerReturn> = ArrayList()
 
-    fun isReturned(uuid: String?): Boolean {
-        for (pr in list) {
-            if (pr.uUID == uuid) {
-                list.remove(pr)
-                return true
-            }
-        }
-        return false
-    }
+    fun isReturned(uuid: String?): Boolean = list.removeIf { pr -> pr.uUID == uuid }
 
     fun runRemoveTask() {
-        val task: BukkitRunnable =
-            object : BukkitRunnable() {
-                override fun run() {
-                    try {
-                        list.removeIf { pr: PlayerReturn? -> !pr!!.flag }
-                    } catch (e: Exception) {
-                    }
-                }
+        bukkitTask {
+            try {
+                list.removeIf { pr: PlayerReturn? -> !pr!!.flag }
+            } catch (e: Exception) {
+                sclatLogger.error("An error occurred in removing player return", e)
             }
-        task.runTaskTimer(plugin, 0, 200)
+        }.runTaskTimer(plugin, 0, 200)
     }
 
     fun addPlayerReturn(uuid: String?) {
-        val pr = PlayerReturn(uuid)
-        list.add(pr)
+        list.add(PlayerReturn(uuid))
     }
 }
