@@ -1,4 +1,4 @@
-package be4rjp.sclat.world
+package be4rjp.sclat.api.multiverse
 
 import com.onarandombox.MultiverseCore.MultiverseCore
 import org.bukkit.plugin.java.JavaPlugin
