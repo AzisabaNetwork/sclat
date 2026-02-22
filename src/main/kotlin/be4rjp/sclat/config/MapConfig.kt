@@ -15,6 +15,6 @@ data class MapConfig(
     val noBlockLoc: LocationConfig = LocationConfig(),
     val path: Map<String, LocationAreaConfig> = mapOf("pathA" to LocationAreaConfig()),
     val area: Map<String, LocationAreaConfig> = mapOf("areaA" to LocationAreaConfig()),
-    val wiremesh: WiremeshConfig? = null,
-    val canPaintBarrierBlock: Boolean? = null,
+    val wiremesh: WiremeshConfig? = WiremeshConfig(),
+    val canPaintBarrierBlock: Boolean? = false,
 )
