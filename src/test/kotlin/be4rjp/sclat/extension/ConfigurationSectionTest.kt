@@ -1,9 +1,5 @@
-package be4rjp.sclat.manager
+package be4rjp.sclat.extension
 
-import be4rjp.sclat.extension.getLocation
-import be4rjp.sclat.extension.getLocationWithPitch
-import be4rjp.sclat.extension.getLocationWithYaw
-import be4rjp.sclat.extension.getSection
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 import io.mockk.every
