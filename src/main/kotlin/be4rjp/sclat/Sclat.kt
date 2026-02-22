@@ -14,6 +14,7 @@ import be4rjp.sclat.api.async.AsyncThreadManager.setup
 import be4rjp.sclat.api.async.AsyncThreadManager.shutdownAll
 import be4rjp.sclat.api.config.CustomConfig
 import be4rjp.sclat.api.holo.PlayerHolograms
+import be4rjp.sclat.api.multiverse.MultiverseApi
 import be4rjp.sclat.commands.SclatCommandExecutor
 import be4rjp.sclat.config.Config
 import be4rjp.sclat.config.NewConfigs
@@ -49,6 +50,7 @@ import be4rjp.sclat.weapon.MainWeapon
 import be4rjp.sclat.weapon.SPWeapon
 import be4rjp.sclat.weapon.SnowballListener
 import be4rjp.sclat.weapon.SubWeapon
+import be4rjp.sclat.world.MatchWorldSelector
 import com.comphenix.protocol.ProtocolLibrary
 import com.comphenix.protocol.ProtocolManager
 import com.google.common.io.ByteStreams
@@ -76,6 +78,7 @@ class Sclat :
     internal val boards: MutableMap<UUID, FastBoard> = mutableMapOf()
     lateinit var text: String
     lateinit var textAnimation: TextAnimation
+    val mapSelector = MatchWorldSelector()
 
     override fun onEnable() {
         plugin = this
@@ -106,10 +109,16 @@ class Sclat :
         conf?.loadConfig()
         NewConfigs.load()
         for (mapname in conf!!.mapConfig!!.getConfigurationSection("Maps")!!.getKeys(false)) {
-            val worldName: String? = conf!!.mapConfig!!.getString("Maps.$mapname.WorldName")
-            Bukkit.createWorld(WorldCreator(worldName!!))
-            val world = Bukkit.getWorld(worldName)
-            world!!.isAutoSave = false
+            val worldName: String = conf!!.mapConfig!!.getString("Maps.$mapname.WorldName") ?: continue
+            if (!MultiverseApi.existWorld(worldName)) {
+                sclatLogger.warn("World {} が見つからなかっため、スキップされました。", worldName)
+                continue
+            }
+//            Bukkit.createWorld(WorldCreator(worldName))
+//            val world = Bukkit.getWorld(worldName)
+//            world!!.isAutoSave = false
+//            mapSelector.addMap()
+            sclatLogger.info("World {} が追加されました。", worldName)
         }
         if (conf!!.config!!.contains("Tutorial")) tutorial = conf!!.config!!.getBoolean("Tutorial")
         if (conf!!.config!!.contains("Colors")) colors = conf!!.config!!.getStringList("Colors")

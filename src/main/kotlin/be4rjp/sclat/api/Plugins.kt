@@ -15,6 +15,7 @@ enum class Plugins(
     ),
     NOTEBLOCKAPI("NoteBlockAPI"),
     PROTOCOLLIB("ProtocolLib"),
+    MULTIVERSE_CORE("Multiverse-Core"),
     ;
 
     private var _isLoaded: Boolean? = null

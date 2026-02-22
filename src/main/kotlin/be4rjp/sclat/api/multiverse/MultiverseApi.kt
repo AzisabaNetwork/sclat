@@ -7,4 +7,6 @@ object MultiverseApi {
         worldName: String,
         save: Boolean = false,
     ): Boolean = multiverseCore.mvWorldManager.unloadWorld(worldName, save)
+
+    fun existWorld(worldName: String): Boolean = multiverseCore.mvWorldManager.mvWorlds.any { w -> w.name == worldName }
 }
