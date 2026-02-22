@@ -16,10 +16,14 @@ object NewConfigs {
     lateinit var loginBonusReward: LoginBonusRewardConfig
         private set
 
+    lateinit var maps: MapsConfig
+        private set
+
     fun load() {
         sclatLogger.info(">>> Loading config...")
         loginBonusReward = loadTomlConfig("login_bonus", ::LoginBonusRewardConfig)
         LoginBonus.refreshSet = loadTomlConfig("login_bonus_claimed", ::DailyRefreshSet)
+        maps = loadTomlConfig("maps", ::MapsConfig)
         sclatLogger.info("<<< All config loaded.")
     }
 
