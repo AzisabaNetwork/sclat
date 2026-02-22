@@ -6,41 +6,15 @@ import be4rjp.sclat.data.Area
 import be4rjp.sclat.data.DataMgr.addMapList
 import be4rjp.sclat.data.MapData
 import be4rjp.sclat.data.Path
+import be4rjp.sclat.extension.getLocation
+import be4rjp.sclat.extension.getLocationWithPitch
+import be4rjp.sclat.extension.getLocationWithYaw
+import be4rjp.sclat.extension.getSection
 import be4rjp.sclat.sclatLogger
 import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.World
 import org.bukkit.configuration.ConfigurationSection
-
-private fun ConfigurationSection.getLocation(
-    path: String,
-    world: World,
-): Location {
-    val x = getDouble("$path.X") + 0.5
-    val y = getDouble("$path.Y").toDouble()
-    val z = getDouble("$path.Z") + 0.5
-    return Location(world, x, y, z)
-}
-
-private fun ConfigurationSection.getLocationWithYaw(
-    path: String,
-    world: World,
-): Location {
-    val loc = getLocation(path, world)
-    loc.yaw = getInt("$path.Yaw").toFloat()
-    return loc
-}
-
-private fun ConfigurationSection.getLocationWithPitch(
-    path: String,
-    world: World,
-): Location {
-    val loc = getLocationWithYaw(path, world)
-    loc.pitch = getInt("$path.Pitch", 0).toFloat()
-    return loc
-}
-
-private fun ConfigurationSection.getSection(path: String): ConfigurationSection? = getConfigurationSection(path)
 
 object MapDataMgr {
     var allmapcount: Int = 0
