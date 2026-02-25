@@ -18,43 +18,35 @@ class Glow : EnchantmentWrapper("sclatg") {
 
     override fun getStartLevel(): Int = 1
 
-    fun enchantGlow(`is`: ItemStack): ItemStack {
-        enableGlow()
-        `is`.addEnchantment(glow!!, 1)
-        return `is`
-    }
-
-    fun removeGlow(`is`: ItemStack): ItemStack {
-        enableGlow()
-        `is`.removeEnchantment(glow!!)
-        return `is`
-    }
-
-    fun isGlowing(`is`: ItemStack): Boolean {
-        enableGlow()
-        return `is`.enchantments.containsKey(glow)
-    }
-
-    fun enableGlow() {
-        try {
-            if (glow == null) {
-                glow = Glow()
-                val f = Enchantment::class.java.getDeclaredField("acceptingNew")
-                f.setAccessible(true)
-                f.set(null, true)
-                val hmapf = Enchantment::class.java.getDeclaredField("byName")
-                hmapf.setAccessible(true)
-                val hmap = hmapf.get(hmapf) as MutableMap<*, *>
-                if (!hmap.containsKey("sclatg")) {
-                    registerEnchantment(glow!!)
-                }
-            }
-        } catch (ex: Exception) {
-            ex.printStackTrace()
+    fun enchantGlow(stack: ItemStack): ItemStack =
+        stack.apply {
+            addEnchantment(glow, 1)
         }
-    }
+
+    fun removeGlow(stack: ItemStack): ItemStack =
+        stack.apply {
+            removeEnchantment(glow)
+        }
+
+    fun isGlowing(stack: ItemStack): Boolean = stack.enchantments.containsKey(glow)
 
     companion object {
-        private var glow: Glow? = null
+        private var glow: Glow =
+            Glow().also {
+                Enchantment::class.java.getDeclaredField("acceptingNew").apply {
+                    isAccessible = true
+                    set(null, true)
+                }
+                val registered =
+                    Enchantment::class.java
+                        .getDeclaredField("byName")
+                        .apply {
+                            isAccessible = true
+                        }.let { it.get(it) as MutableMap<*, *> }
+                        .containsKey("sclatg")
+                if (!registered) {
+                    registerEnchantment(it)
+                }
+            }
     }
 }
