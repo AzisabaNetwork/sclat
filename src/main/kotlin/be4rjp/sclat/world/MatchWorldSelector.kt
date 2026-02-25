@@ -1,20 +1,20 @@
 package be4rjp.sclat.world
 
-import net.minecraft.server.v1_14_R1.WorldData
+import be4rjp.sclat.data.MapData
 
 /**
  * This class won't persist automatically. Do it yourself.
  */
 class MatchWorldSelector(
-    private val worlds: MutableMap<String, WorldData> = mutableMapOf(),
+    private val worlds: MutableMap<String, MapData> = mutableMapOf(),
 ) {
     /**
      * Add new match map to selector
      *
-     * @param worldData
+     * @param MapData
      */
-    fun addMap(worldData: WorldData) {
-        worlds[worldData.name] = worldData
+    fun addMap(mapData: MapData) {
+        worlds[mapData.worldName!!] = mapData
     }
 
     /**
@@ -29,7 +29,7 @@ class MatchWorldSelector(
      *
      * @return selected world data
      */
-    fun randomMap(): WorldData = worlds.entries.random().value
+    fun randomMap(): MapData = worlds.entries.random().value
 
     /**
      * Get all match map names

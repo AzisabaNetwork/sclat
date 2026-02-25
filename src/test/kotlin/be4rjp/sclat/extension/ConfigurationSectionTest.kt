@@ -8,7 +8,7 @@ import org.bukkit.Location
 import org.bukkit.World
 import org.bukkit.configuration.ConfigurationSection
 
-class MapDataMgrExtensionTest :
+class ConfigurationSectionTest :
     StringSpec({
         val mockWorld = mockk<World>(relaxed = true)
         val mockSection = mockk<ConfigurationSection>(relaxed = true)

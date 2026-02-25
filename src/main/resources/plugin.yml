@@ -7,7 +7,7 @@ authors:
 api-version: 1.14
 #--------------------------------------
 main: be4rjp.sclat.Sclat
-depend: [NoteBlockAPI, ProtocolLib, WorldChef, DADADAChecker, BlockStudio, Multiverse-Core]
+depend: [NoteBlockAPI, ProtocolLib, WorldChef, DADADAChecker, BlockStudio]
 #--------------------------------------
 commands:
   sclat:

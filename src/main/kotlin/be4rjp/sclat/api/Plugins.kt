@@ -15,7 +15,7 @@ enum class Plugins(
     ),
     NOTEBLOCKAPI("NoteBlockAPI"),
     PROTOCOLLIB("ProtocolLib"),
-    MULTIVERSE_CORE("Multiverse-Core"),
+    MULTIVERSE_CORE("Multiverse-Core", false),
     ;
 
     private var _isLoaded: Boolean? = null
@@ -43,7 +43,7 @@ enum class Plugins(
          */
         @JvmStatic
         fun onInit(): Boolean {
-            val missingPlugins = ArrayList<String?>()
+            val missingPlugins = ArrayList<String>()
             for (plugin in entries) {
                 plugin.resetLoadedState()
                 if (!plugin.isLoaded && plugin.isRequired) {
@@ -55,7 +55,7 @@ enum class Plugins(
             if (!missingPlugins.isEmpty()) {
                 sclatLogger.error("Some plugins are missing. Please install or enable.")
                 sclatLogger.error("*** Missing required plugins ***")
-                missingPlugins.forEach(Consumer { p: String? -> sclatLogger.error("- {}", p) })
+                missingPlugins.forEach(Consumer { p: String -> sclatLogger.error("- {}", p) })
                 sclatLogger.error("********************************")
                 return false
             }

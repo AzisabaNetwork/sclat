@@ -51,7 +51,7 @@ dependencies {
     compileOnly(libs.dadadachecker)
     compileOnly(libs.blockstudio)
     compileOnly(libs.paperApi)
-    compileOnly(libs.multiverse.core)
+//    compileOnly(libs.multiverse.core)
     implementation(libs.cloudPaper)
     implementation(libs.jspecify)
     implementation(libs.kotlin.stdlib)

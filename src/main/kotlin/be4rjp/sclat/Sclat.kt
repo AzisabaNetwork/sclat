@@ -14,7 +14,6 @@ import be4rjp.sclat.api.async.AsyncThreadManager.setup
 import be4rjp.sclat.api.async.AsyncThreadManager.shutdownAll
 import be4rjp.sclat.api.config.CustomConfig
 import be4rjp.sclat.api.holo.PlayerHolograms
-import be4rjp.sclat.api.multiverse.MultiverseApi
 import be4rjp.sclat.commands.SclatCommandExecutor
 import be4rjp.sclat.config.Config
 import be4rjp.sclat.config.NewConfigs
@@ -50,7 +49,7 @@ import be4rjp.sclat.weapon.MainWeapon
 import be4rjp.sclat.weapon.SPWeapon
 import be4rjp.sclat.weapon.SnowballListener
 import be4rjp.sclat.weapon.SubWeapon
-import be4rjp.sclat.world.MatchWorldSelector
+import be4rjp.sclat.world.WorldApi
 import com.comphenix.protocol.ProtocolLibrary
 import com.comphenix.protocol.ProtocolManager
 import com.google.common.io.ByteStreams
@@ -78,7 +77,6 @@ class Sclat :
     internal val boards: MutableMap<UUID, FastBoard> = mutableMapOf()
     lateinit var text: String
     lateinit var textAnimation: TextAnimation
-    val mapSelector = MatchWorldSelector()
 
     override fun onEnable() {
         plugin = this
@@ -108,17 +106,13 @@ class Sclat :
         conf = Config()
         conf?.loadConfig()
         NewConfigs.load()
-        for (mapname in conf!!.mapConfig!!.getConfigurationSection("Maps")!!.getKeys(false)) {
-            val worldName: String = conf!!.mapConfig!!.getString("Maps.$mapname.WorldName") ?: continue
-            if (!MultiverseApi.existWorld(worldName)) {
-                sclatLogger.warn("World {} が見つからなかっため、スキップされました。", worldName)
-                continue
+        NewConfigs.mapConfig.maps.forEach { (mapDisplayName, data) ->
+            if (!WorldApi.existWorldFolder(data.worldName)) {
+                sclatLogger.warn("ワールド {} が見つからなかっため、スキップされました。", data.worldName)
+                return@forEach
             }
-//            Bukkit.createWorld(WorldCreator(worldName))
-//            val world = Bukkit.getWorld(worldName)
-//            world!!.isAutoSave = false
-//            mapSelector.addMap()
-            sclatLogger.info("World {} が追加されました。", worldName)
+            matchMaps[mapDisplayName] = data.worldName
+            sclatLogger.info("World {} が追加されました。", data.worldName)
         }
         if (conf!!.config!!.contains("Tutorial")) tutorial = conf!!.config!!.getBoolean("Tutorial")
         if (conf!!.config!!.contains("Colors")) colors = conf!!.config!!.getStringList("Colors")
@@ -522,6 +516,9 @@ class Sclat :
 
         @JvmField
         var modList: MutableList<String?> = ArrayList<String?>()
+
+        @JvmField
+        val matchMaps: MutableMap<String, String> = mutableMapOf()
 
         @JvmField
         var particleRenderDistance: Double = 0.0
