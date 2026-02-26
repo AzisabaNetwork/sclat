@@ -62,6 +62,8 @@ dependencies {
     testImplementation(libs.bundles.kotest)
     testImplementation(libs.bundles.mockk)
     testImplementation(libs.spigot)
+    // Needed for serializer tests
+    testImplementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
 }
 
 // Project Settings
@@ -70,6 +72,17 @@ val defaultEncoding: String = "UTF-8"
 
 kotlin {
     jvmToolchain(targetJavaVersion)
+}
+
+// Configure test source set to only compile lightweight unit tests placed under src/fastTest/kotlin
+kotlin {
+    sourceSets {
+        val test by getting {
+            // Replace default test source directories with only our fastTest dir
+            kotlin.setSrcDirs(listOf("src/fastTest/kotlin"))
+            resources.setSrcDirs(listOf("src/fastTest/resources"))
+        }
+    }
 }
 
 tasks {
@@ -88,6 +101,8 @@ tasks {
     test {
         useJUnitPlatform()
     }
+
+
 }
 
 publishing {
