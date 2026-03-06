@@ -36,6 +36,7 @@ import be4rjp.sclat.manager.PlayerStatusMgr
 import be4rjp.sclat.manager.RankMgr
 import be4rjp.sclat.manager.ServerStatusManager
 import be4rjp.sclat.manager.WeaponClassMgr
+import be4rjp.sclat.map.MapEventListener
 import be4rjp.sclat.protocollib.SclatPacketListener.init
 import be4rjp.sclat.server.EquipmentServer
 import be4rjp.sclat.server.StatusServer
@@ -146,6 +147,7 @@ class Sclat :
         pm.registerEvents(SPWeapon, this)
         pm.registerEvents(SnowballListener, this)
         pm.registerEvents(AsyncPlayerListener, this)
+        pm.registerEvents(MapEventListener, this)
 
         if (Plugins.LUNACHAT.isLoaded) pm.registerEvents(LunaChatListener(), this)
 
