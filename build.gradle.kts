@@ -101,8 +101,6 @@ tasks {
     test {
         useJUnitPlatform()
     }
-
-
 }
 
 publishing {
