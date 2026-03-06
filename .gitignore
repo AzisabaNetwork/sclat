@@ -72,3 +72,5 @@ gradle-app.setting
 # End of https://www.toptal.com/developers/gitignore/api/gradle
 .opencode/
 .kotlin/
+
+.vscode/
