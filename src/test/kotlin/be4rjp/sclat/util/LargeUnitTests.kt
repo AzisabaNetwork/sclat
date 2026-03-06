@@ -61,4 +61,39 @@ class LargeUnitTests :
             (2 + 2) shouldBe 4
             (10 * 5) shouldBe 50
         }
+
+        // Additional tests for SclatUtil
+        "isNumber edge case: large integer" {
+            val largeInt = Int.MAX_VALUE.toString()
+            SclatUtil.isNumber(largeInt) shouldBe true
+        }
+
+        "isNumber edge case: negative large integer" {
+            val largeNegativeInt = Int.MIN_VALUE.toString()
+            SclatUtil.isNumber(largeNegativeInt) shouldBe true
+        }
+
+        "isNumber edge case: empty string" {
+            SclatUtil.isNumber("") shouldBe false
+        }
+
+        // Additional string manipulation tests
+        "string repeat with empty string" {
+            val s = "".repeat(5)
+            s shouldBe ""
+        }
+
+        "string repeat with special characters" {
+            val s = "@".repeat(3)
+            s shouldBe "@@@"
+        }
+
+        // Additional math sanity checks
+        "math division by non-zero" {
+            (10 / 2) shouldBe 5
+        }
+
+        "math modulo operation" {
+            (10 % 3) shouldBe 1
+        }
     })
