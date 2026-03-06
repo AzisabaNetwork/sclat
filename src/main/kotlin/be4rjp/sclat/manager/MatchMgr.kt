@@ -35,6 +35,8 @@ import be4rjp.sclat.data.DataMgr.spongeMap
 import be4rjp.sclat.data.DataMgr.sprinklerMap
 import be4rjp.sclat.data.Match
 import be4rjp.sclat.gui.OpenGUI
+import be4rjp.sclat.match.MatchEndEvent
+import be4rjp.sclat.match.MatchStartEvent
 import be4rjp.sclat.plugin
 import be4rjp.sclat.schedular.everyTick
 import be4rjp.sclat.server.EquipmentServerManager.doCommands
@@ -1142,6 +1144,8 @@ object MatchMgr {
     }
 
     fun startMatch(match: Match) {
+        Bukkit.getPluginManager().callEvent(MatchStartEvent(match))
+
         for (player in plugin.server.onlinePlayers) {
             val data = getPlayerData(player)
             if (data!!.match == match) {
@@ -1576,6 +1580,8 @@ object MatchMgr {
                                 match.winTeam = winteam
                                 match.isHikiwake = hikiwake
 
+                                Bukkit.getPluginManager().callEvent(MatchEndEvent(match))
+
                                 for (oplayer in plugin.server.onlinePlayers) {
                                     if (getPlayerData(oplayer)!!.isJoined) {
                                         tdmResultAnimation(
@@ -1617,7 +1623,9 @@ object MatchMgr {
                                 }
 
                                 match.winTeam = winteam
-                                match.isHikiwake = (hikiwake)
+                                match.isHikiwake = hikiwake
+
+                                Bukkit.getPluginManager().callEvent(MatchEndEvent(match))
 
                                 if (per > 100) per = 100
                                 if (per < 0) per = 0
@@ -1694,7 +1702,9 @@ object MatchMgr {
                                 }
 
                                 match.winTeam = winteam
-                                match.isHikiwake = (hikiwake)
+                                match.isHikiwake = hikiwake
+
+                                Bukkit.getPluginManager().callEvent(MatchEndEvent(match))
 
                                 if (per > 100) per = 100
                                 if (per < 0) per = 0
