@@ -63,7 +63,7 @@ dependencies {
     testImplementation(libs.bundles.mockk)
     testImplementation(libs.spigot)
     // Needed for serializer tests
-    testImplementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.10.0")
 }
 
 // Project Settings
