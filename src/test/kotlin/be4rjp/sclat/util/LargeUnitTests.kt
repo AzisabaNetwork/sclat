@@ -1,4 +1,4 @@
-package be4rjp.sclat.unit
+package be4rjp.sclat.util
 
 import be4rjp.sclat.api.SclatUtil
 import io.kotest.core.spec.style.StringSpec

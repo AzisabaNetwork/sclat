@@ -1,4 +1,4 @@
-package be4rjp.sclat.unit
+package be4rjp.sclat.util
 
 import be4rjp.sclat.api.serializer.UUIDSerializer
 import kotlinx.serialization.Serializable
