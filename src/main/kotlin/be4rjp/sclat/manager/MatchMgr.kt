@@ -1467,12 +1467,13 @@ object MatchMgr {
 
                 override fun run() {
                     try {
+                        val match = getPlayerData(p)!!.match
                         if (i == 0) {
                             p.setDisplayName(p.name)
 
-                            getPlayerData(p)!!.match!!.isFinished = true
+                            match!!.isFinished = true
                             if (getPlayerData(p)!!.playerNumber == 1) {
-                                for (path in getPlayerData(p)!!.match!!.mapData!!.pathList) {
+                                for (path in match.mapData!!.pathList) {
                                     path!!.stop()
                                     path.reset()
                                 }
@@ -1480,7 +1481,7 @@ object MatchMgr {
                                         .config!!
                                         .getString("WorkMode") == "Area"
                                 ) {
-                                    for (area in getPlayerData(p)!!.match!!.mapData!!.areaList) {
+                                    for (area in match.mapData!!.areaList) {
                                         area!!.stop()
                                     }
                                 }
@@ -1493,15 +1494,14 @@ object MatchMgr {
                                     setPlayerIsQuit(uuid, false)
                                 }
 
-                                getPlayerData(p)!!.match!!.blockUpdater!!.stop()
+                                match.blockUpdater!!.stop()
 
                                 for (target in plugin.server.onlinePlayers) {
                                     sendWorldBorderWarningClearPacket(target)
                                 }
 
                                 try {
-                                    for (wiremesh in getPlayerData(p)!!
-                                        .match!!
+                                    for (wiremesh in match
                                         .mapData!!
                                         .wiremeshListTask!!
                                         .wiremeshsList) {
@@ -1544,7 +1544,7 @@ object MatchMgr {
                             )
                         }
 
-                        if (i >= 1 && i <= 45) {
+                        if (i in 1..45) {
                             p.teleport(loc!!)
                             p.inventory.clear()
                             if (p.hasPotionEffect(PotionEffectType.POISON)) p.removePotionEffect(PotionEffectType.POISON)
@@ -1559,7 +1559,6 @@ object MatchMgr {
                                     .config!!
                                     .getString("WorkMode") == "TDM"
                             ) {
-                                val match = getPlayerData(p)!!.match
                                 winteam = match!!.team0
                                 var hikiwake = false
 
@@ -1575,7 +1574,7 @@ object MatchMgr {
                                 }
 
                                 match.winTeam = winteam
-                                match.isHikiwake = (hikiwake)
+                                match.isHikiwake = hikiwake
 
                                 for (oplayer in plugin.server.onlinePlayers) {
                                     if (getPlayerData(oplayer)!!.isJoined) {
@@ -1594,20 +1593,15 @@ object MatchMgr {
                                     .config!!
                                     .getString("WorkMode") == "Area"
                             ) {
-                                val match = getPlayerData(p)!!.match
-                                val team0: Int
-                                val team1: Int
                                 val dper: Double
                                 var per: Int
-                                val team0code: String?
-                                val team1code: String?
                                 winteam = match!!.team0
                                 var hikiwake = false
 
-                                team0 = match.team0!!.gatiCount
-                                team1 = match.team1!!.gatiCount
-                                team0code = match.team0!!.teamColor!!.colorCode
-                                team1code = match.team1!!.teamColor!!.colorCode
+                                val team0: Int = match.team0!!.gatiCount
+                                val team1: Int = match.team1!!.gatiCount
+                                val team0code: String? = match.team0!!.teamColor!!.colorCode
+                                val team1code: String? = match.team1!!.teamColor!!.colorCode
                                 dper = team0.toDouble() / (team0 + team1).toDouble() * 100
                                 per = dper.toInt()
 
@@ -1671,7 +1665,7 @@ object MatchMgr {
                                     }
                                 }
                             } else {
-                                val match = getPlayerData(p)!!.match
+                                val match = match
                                 val team0: Int
                                 val team1: Int
                                 val dper: Double
@@ -1723,8 +1717,8 @@ object MatchMgr {
 
                         if (i == 46 && p.isOnline) p.gameMode = GameMode.ADVENTURE
 
-                        if (i >= 46 && i <= 156) {
-                            p.teleport(getPlayerData(p)!!.match!!.mapData!!.resultLoc!!)
+                        if (i in 46..156) {
+                            p.teleport(match!!.mapData!!.resultLoc!!)
                         }
 
                         if (i == 80) {
@@ -1852,10 +1846,10 @@ object MatchMgr {
                             var pRank = data.killCount * 3
                             if (data.team == data.match!!.winTeam) pRank = pRank + 25
                             if (data.killCount == bestkills) {
-                                pRank = pRank + 20
+                                pRank += 20
                             }
                             if (data.paintCount == bestpaint) {
-                                pRank = pRank + 10
+                                pRank += 10
                             }
                             // int pRank = -60 + (int)((double)data.killCount * 2.7D +
                             // (double)data.paintCount / 700D);

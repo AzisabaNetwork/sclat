@@ -4,7 +4,10 @@ import org.bukkit.Bukkit
 import org.bukkit.World
 import org.bukkit.WorldCreator
 
-object WorldApi {
+/**
+ * Bukkit world API wrapper.
+ */
+object BukkitWorldAPI {
     /**
      * Check exists world folder
      *

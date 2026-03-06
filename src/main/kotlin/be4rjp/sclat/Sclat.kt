@@ -49,7 +49,7 @@ import be4rjp.sclat.weapon.MainWeapon
 import be4rjp.sclat.weapon.SPWeapon
 import be4rjp.sclat.weapon.SnowballListener
 import be4rjp.sclat.weapon.SubWeapon
-import be4rjp.sclat.world.WorldApi
+import be4rjp.sclat.world.BukkitWorldAPI
 import com.comphenix.protocol.ProtocolLibrary
 import com.comphenix.protocol.ProtocolManager
 import com.google.common.io.ByteStreams
@@ -107,7 +107,7 @@ class Sclat :
         conf?.loadConfig()
         NewConfigs.load()
         NewConfigs.mapConfig.maps.forEach { (mapDisplayName, data) ->
-            if (!WorldApi.existWorldFolder(data.worldName)) {
+            if (!BukkitWorldAPI.existWorldFolder(data.worldName)) {
                 sclatLogger.warn("ワールド {} が見つからなかっため、スキップされました。", data.worldName)
                 return@forEach
             }
