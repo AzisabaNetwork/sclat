@@ -128,6 +128,7 @@ object MegaLaser {
 
         val playerData = getPlayerData(player)
 
+        // Todo: rewrite with mccoroutines
         val task: AsyncTask =
             object : AsyncTask() {
                 var p: Player = player
@@ -185,15 +186,14 @@ object MegaLaser {
                         if (i == 3) r = 3
                         if (i >= 4) r = 5
 
-                        val position = positions.get(i).toLocation(objectLoc.world!!)
+                        val position = positions[i].toLocation(objectLoc.world!!)
 
                         for (plus in plusList) {
                             val eloc = position.clone().add(plus.clone().multiply(r))
                             for (target in AsyncThreadManager.onlinePlayers) {
                                 if (p.world !== target!!.world) continue
                                 if (eloc.distanceSquared(target.location) < Sclat.particleRenderDistanceSquared) {
-                                    val targetData = getPlayerData(target)
-                                    if (targetData == null) continue
+                                    val targetData = getPlayerData(target) ?: continue
                                     if (targetData.settings!!.showEffectSPWeaponRegion()) {
                                         val dustOptions =
                                             Particle.DustOptions(
@@ -229,8 +229,7 @@ object MegaLaser {
                         // List<Player> list = new ArrayList<>();
                         if (i > 5) {
                             for (target in AsyncThreadManager.onlinePlayers) {
-                                val targetData = getPlayerData(target)
-                                if (targetData == null) continue
+                                val targetData = getPlayerData(target) ?: continue
                                 if (!targetData.isInMatch) continue
                                 if (target!!.world !== p.world) continue
                                 if (targetData.team == playerData.team) continue
@@ -256,8 +255,7 @@ object MegaLaser {
                         // 攻撃判定
                         if (i > 5 && c > 3) {
                             for (target in AsyncThreadManager.onlinePlayers) {
-                                val targetData = getPlayerData(target)
-                                if (targetData == null) continue
+                                val targetData = getPlayerData(target) ?: continue
                                 if (!targetData.isInMatch) continue
                                 if (target!!.world !== p.world) continue
                                 if (target
@@ -294,13 +292,10 @@ object MegaLaser {
                             }
 
                             sync {
-                                for (`as` in player.world.entities) {
-                                    if (`as` is ArmorStand &&
-                                        `as`
-                                            .location
-                                            .distanceSquared(position.clone().add(0.0, -1.0, 0.0)) <= maxDistSquared
-                                    ) {
-                                        ArmorStandMgr.giveDamageArmorStand(`as`, damage, player)
+                                for (entity in player.world.entities) {
+                                    if (entity !is ArmorStand) continue
+                                    if (entity.location.distanceSquared(position.clone().add(0.0, -1.0, 0.0)) <= maxDistSquared) {
+                                        ArmorStandMgr.giveDamageArmorStand(entity, damage, player)
                                     }
                                 }
                             }

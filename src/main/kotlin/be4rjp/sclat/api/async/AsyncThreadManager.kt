@@ -3,7 +3,6 @@ package be4rjp.sclat.api.async
 import be4rjp.sclat.plugin
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
-import java.util.Random
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.CopyOnWriteArrayList
 
@@ -11,13 +10,12 @@ object AsyncThreadManager {
     private val tickThreads: MutableList<AsyncTickThread> = CopyOnWriteArrayList<AsyncTickThread>()
 
     val randomTickThread: AsyncTickThread
-        get() = tickThreads.get(Random().nextInt(tickThreads.size))
+        get() = tickThreads.random()
 
     @JvmStatic
     fun setup(numberOfThread: Int) {
-        for (i in 0..<numberOfThread) {
-            val thread = AsyncTickThread()
-            tickThreads.add(thread)
+        repeat(numberOfThread) {
+            tickThreads.add(AsyncTickThread())
         }
     }
 
@@ -29,12 +27,14 @@ object AsyncThreadManager {
     }
 
     @JvmField
-    var onlinePlayers: MutableSet<Player?> = ConcurrentHashMap.newKeySet<Player?>()
+    var onlinePlayers: MutableSet<Player?> = ConcurrentHashMap.newKeySet()
 
+    @Deprecated("this method isn't used anymore, and will be removed in the future.")
     fun toOnline(player: Player?) {
         onlinePlayers.add(player)
     }
 
+    @Deprecated("this method isn't used anymore, and will be removed in the future.")
     fun toOffline(player: Player?) {
         onlinePlayers.add(player)
     }
