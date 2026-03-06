@@ -1,17 +1,10 @@
 package be4rjp.sclat.unit
 
 import be4rjp.sclat.api.SclatUtil
-import be4rjp.sclat.api.serializer.UUIDSerializer
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
-import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import java.util.UUID
-
-@Serializable
-private data class WithUUIDLarge(
-    @Serializable(with = UUIDSerializer::class) val id: UUID,
-)
 
 class LargeUnitTests :
     StringSpec({
@@ -39,17 +32,17 @@ class LargeUnitTests :
         // UUID serializer checks
         "UUIDSerializer roundtrip 1" {
             val id = UUID.fromString("00000000-0000-0000-0000-000000000001")
-            val obj = WithUUIDLarge(id)
-            val json = Json.encodeToString(WithUUIDLarge.serializer(), obj)
-            val parsed = Json.decodeFromString(WithUUIDLarge.serializer(), json)
+            val obj = WithUUID(id)
+            val json = Json.encodeToString(WithUUID.serializer(), obj)
+            val parsed: WithUUID = Json.decodeFromString(WithUUID.serializer(), json)
             parsed.id shouldBe id
         }
 
         "UUIDSerializer roundtrip random" {
             val id = UUID.randomUUID()
-            val obj = WithUUIDLarge(id)
-            val json = Json.encodeToString(WithUUIDLarge.serializer(), obj)
-            val parsed = Json.decodeFromString(WithUUIDLarge.serializer(), json)
+            val obj = WithUUID(id)
+            val json = Json.encodeToString(WithUUID.serializer(), obj)
+            val parsed: WithUUID = Json.decodeFromString(WithUUID.serializer(), json)
             parsed.id shouldBe id
         }
 
