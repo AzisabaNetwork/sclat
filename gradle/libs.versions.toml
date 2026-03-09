@@ -19,6 +19,7 @@ adventure-api = "4.26.1"
 adventure-bukkit = "4.4.1"
 kotest = "6.1.4"
 mockk = "1.14.9"
+jmh = "1.37"
 
 [plugins]
 shadow = { id = "com.gradleup.shadow", version.ref = "shadow" }
@@ -26,6 +27,7 @@ kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }
 kotest = { id = "io.kotest", version.ref = "kotest" }
+jmh = { id = "me.champeau.jmh", version = "0.7.3" }
 
 [libraries]
 kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8" }
@@ -48,6 +50,8 @@ kotest-assertions = { module = "io.kotest:kotest-assertions-core", version.ref =
 kotest-junit = { module = "io.kotest:kotest-runner-junit5", version.ref = "kotest"}
 kotest-property = { module = "io.kotest:kotest-property", version.ref = "kotest" }
 mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
+jmh-core = { module = "org.openjdk.jmh:jmh-core", version.ref = "jmh" }
+jmh-generator-annprocess = { module = "org.openjdk.jmh:jmh-generator-annprocess", version.ref = "jmh" }
 
 [bundles]
 ktoml = [
