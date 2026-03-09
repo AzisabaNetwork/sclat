@@ -7,7 +7,7 @@ plugins {
     alias(libs.plugins.shadow)
     alias(libs.plugins.kotlin.jvm)
     alias(libs.plugins.kotlin.serialization)
-    alias(libs.plugins.jmh)
+//    alias(libs.plugins.jmh)
 }
 
 group = "be4rjp"
@@ -66,10 +66,10 @@ dependencies {
     // Needed for serializer tests
     testImplementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.10.0")
 
-    jmhImplementation(libs.kotlin.stdlib)
-    jmhImplementation(libs.bundles.adventure)
-    jmhImplementation(libs.jmh.core)
-    jmhAnnotationProcessor(libs.jmh.generator.annprocess)
+//    jmhImplementation(libs.kotlin.stdlib)
+//    jmhImplementation(libs.bundles.adventure)
+//    jmhImplementation(libs.jmh.core)
+//    jmhAnnotationProcessor(libs.jmh.generator.annprocess)
 }
 
 // Project Settings
