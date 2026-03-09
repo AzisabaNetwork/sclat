@@ -59,7 +59,7 @@ object Funnel {
                         rate += 1.5
                     }
                 }
-            } catch (e: Exception) {
+            } catch (_: Exception) {
                 rate -= 0.7
             }
         }
@@ -105,7 +105,7 @@ object Funnel {
                 if (ArmorStandManager.hashPlayer[getPlayerData(player)!!.getArmorlist(ai)] == target) {
                     rate += 1.5
                 }
-            } catch (e: Exception) {
+            } catch (_: Exception) {
                 rate -= 0.7
             }
         }
@@ -157,7 +157,7 @@ object Funnel {
                 if (ArmorStandManager.hashArmorstand.containsKey(armorList)) {
                     rate -= 1
                 }
-            } catch (e: Exception) {
+            } catch (_: Exception) {
                 rate -= 1
             }
         }
@@ -184,7 +184,7 @@ object Funnel {
     ) {
         val dustOptions = Particle.DustOptions(data.team!!.teamColor!!.bukkitColor!!, 1f)
         if (player.world === position.world &&
-            player.location.distanceSquared(position) < be4rjp.sclat.Sclat.particleRenderDistanceSquared
+            player.location.distanceSquared(position) < Sclat.particleRenderDistanceSquared
         ) {
             player.spawnParticle<Particle.DustOptions?>(
                 Particle.REDSTONE,
