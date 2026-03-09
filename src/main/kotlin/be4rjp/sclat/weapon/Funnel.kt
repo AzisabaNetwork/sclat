@@ -54,10 +54,8 @@ object Funnel {
         var rate = 0.0
         for (ai in 0..2) {
             try {
-                if (ArmorStandManager.hashArmorstand.containsKey(getPlayerData(player)!!.getArmorlist(ai))) {
-                    if (ArmorStandManager.hashArmorstand[getPlayerData(player)!!.getArmorlist(ai)] == target) {
-                        rate += 1.5
-                    }
+                if (ArmorStandManager.hashArmorstand[getPlayerData(player)!!.getArmorlist(ai)] == target) {
+                    rate += 1.5
                 }
             } catch (_: Exception) {
                 rate -= 0.7
