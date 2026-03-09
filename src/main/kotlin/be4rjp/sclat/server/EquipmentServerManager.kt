@@ -8,7 +8,7 @@ import be4rjp.sclat.plugin
 import be4rjp.sclat.sclatLogger
 
 object EquipmentServerManager {
-    var commands: MutableList<String> = ArrayList<String>()
+    var commands: MutableList<String> = ArrayList()
 
     fun addEquipmentCommand(command: String) {
         sclatLogger.debug("Equip command: $command")
@@ -18,40 +18,32 @@ object EquipmentServerManager {
     @JvmStatic
     fun doCommands() {
         for (cmd in commands) {
-            val args: Array<String?> = cmd.split(" ".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+            val args: Array<String> = cmd.split(" ".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
 
             when (args[0]) {
                 "set" -> {
                     // add [statusName] [number or name] [uuid]
-                    if (args.size == 4) {
-                        if (args[3]!!.length == 36) {
-                            when (args[1]) {
-                                "weapon" -> for (player in plugin
-                                    .server
-                                    .onlinePlayers) {
-                                    if (player
-                                            .uniqueId
-                                            .toString() == args[3]
-                                    ) {
-                                        getPlayerData(player)!!.weaponClass = getWeaponClass(args[2])
-                                    }
-                                }
+                    if (args.size != 4) continue
+                    if (args[3].length != 36) continue
 
-                                "gear" -> for (player in plugin
-                                    .server
-                                    .onlinePlayers) {
-                                    if (player.uniqueId.toString() == args[3] &&
-                                        SclatUtil.isNumber(args[2]!!)
-                                    ) {
-                                        getPlayerData(player)!!.gearNumber = args[2]!!.toInt()
-                                    }
-                                }
-
-                                "rank" -> PlayerStatusMgr.setRank(args[3], args[2]!!.toInt())
-
-                                "lv" -> PlayerStatusMgr.setLv(args[3], args[2]!!.toInt())
+                    when (args[1]) {
+                        "weapon" -> for (player in plugin.server.onlinePlayers) {
+                            if (player.uniqueId.toString() == args[3]) {
+                                getPlayerData(player)!!.weaponClass = getWeaponClass(args[2])
                             }
                         }
+
+                        "gear" -> for (player in plugin.server.onlinePlayers) {
+                            if (player.uniqueId.toString() == args[3] &&
+                                SclatUtil.isNumber(args[2])
+                            ) {
+                                getPlayerData(player)!!.gearNumber = args[2].toInt()
+                            }
+                        }
+
+                        "rank" -> PlayerStatusMgr.setRank(args[3], args[2].toInt())
+
+                        "lv" -> PlayerStatusMgr.setLv(args[3], args[2].toInt())
                     }
                 }
             }
