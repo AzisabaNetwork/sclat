@@ -2,7 +2,7 @@
 kotlin = "2.3.10"
 ktlint = "14.1.0"
 shadow = "8.3.10"
-protocolLib = "5.1.0"
+protocolLib = "5.4.0"
 paperApi = "1.14.4-R0.1-SNAPSHOT"
 blockstudio = "-SNAPSHOT"
 dadadachecker = "1.0.0"
