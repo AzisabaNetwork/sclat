@@ -1,5 +1,5 @@
 [versions]
-kotlin = "2.3.0"
+kotlin = "2.3.10"
 ktlint = "14.0.1"
 shadow = "8.3.9"
 protocolLib = "5.1.0"
