@@ -3,6 +3,7 @@ package be4rjp.sclat.data
 import be4rjp.sclat.api.player.PlayerData
 import be4rjp.sclat.api.team.Team
 import be4rjp.sclat.api.team.TeamLoc
+import org.bukkit.World
 import org.bukkit.block.Block
 import org.bukkit.entity.ArmorStand
 import org.bukkit.entity.Player
@@ -378,5 +379,70 @@ object DataMgr {
     fun getMapRandom(i: Int): MapData {
         val map = maplist[i]
         return map // RandomMap
+    }
+
+    @JvmStatic
+    fun clearWorldData(world: World) {
+        try {
+            val toRemove = ArrayList(blockDataMap.keys.filter { it?.world == world })
+            for (b in toRemove) blockDataMap.remove(b)
+        } catch (_: Exception) {
+        }
+        try {
+            val toRemove = ArrayList(spongeMap.keys.filter { it?.world == world })
+            for (b in toRemove) spongeMap.remove(b)
+        } catch (_: Exception) {
+        }
+        try {
+            val armorToRemove = ArrayList(armorStandMap.keys.filter { it?.world == world })
+            for (ast in armorToRemove) {
+                try {
+                    ast?.remove()
+                } catch (_: Exception) {
+                }
+                armorStandMap.remove(ast)
+            }
+        } catch (_: Exception) {
+        }
+        try {
+            val beaconKeys = ArrayList(beaconMap.keys.filter { beaconMap[it]?.world == world })
+            for (k in beaconKeys) {
+                try {
+                    beaconMap[k]?.remove()
+                } catch (_: Exception) {
+                }
+                beaconMap.remove(k)
+            }
+        } catch (_: Exception) {
+        }
+        try {
+            val sprinklerKeys = ArrayList(sprinklerMap.keys.filter { sprinklerMap[it]?.world == world })
+            for (k in sprinklerKeys) {
+                try {
+                    sprinklerMap[k]?.remove()
+                } catch (_: Exception) {
+                }
+                sprinklerMap.remove(k)
+            }
+        } catch (_: Exception) {
+        }
+        try {
+            val keys = ArrayList(splashShieldDataMapWithArmorStand.keys.filter { it?.world == world })
+            for (k in keys) splashShieldDataMapWithArmorStand.remove(k)
+        } catch (_: Exception) {
+        }
+        try {
+            val keys = ArrayList(kAsaDataMapWithArmorStand.keys.filter { it?.world == world })
+            for (k in keys) kAsaDataMapWithArmorStand.remove(k)
+        } catch (_: Exception) {
+        }
+        try {
+            al.removeIf { it?.world == world }
+        } catch (_: Exception) {
+        }
+        try {
+            ssa.removeIf { it?.world == world }
+        } catch (_: Exception) {
+        }
     }
 }

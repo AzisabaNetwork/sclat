@@ -131,7 +131,19 @@ object MatchMgr {
                         MessageType.ALL_PLAYER,
                     )
 
-                    player.teleport(match.mapData!!.taikibayso!!)
+                    // Teleport player to waiting spot; be defensive against
+                    // missing map runtime data (may not be loaded yet).
+                    val taiki = match.mapData?.taikibayso ?: match.mapData?.team0Loc ?: match.mapData?.intro
+                    if (taiki != null) {
+                        player.teleport(taiki)
+                    } else {
+                        // Fallback: teleport to plugin lobby or player's world spawn
+                        try {
+                            val fallback = Sclat.lobby ?: player.world.spawnLocation
+                            if (fallback != null) player.teleport(fallback)
+                        } catch (_: Exception) {
+                        }
+                    }
                     if (Sclat.conf!!
                             .config!!
                             .getBoolean("CanVoting") &&
@@ -439,6 +451,8 @@ object MatchMgr {
 
         val map = getMapRandom(mapcount)
         match.mapData = map
+        // Load map runtime data when a match is assigned
+        MapLoader.incrementUsage(map)
 
         mapcount++
 
@@ -468,6 +482,8 @@ object MatchMgr {
 
         val map1 = getMapRandom(0)
         lobbyM.mapData = map1
+        // Preload lobby map assignment so waiting players have map data ready
+        MapLoader.incrementUsage(map1)
 
         setMatch(id2, lobbyM)
 
@@ -2000,7 +2016,16 @@ object MatchMgr {
                             PlayerStatusMgr.sendHologram(p)
 
                             if (getPlayerData(p)!!.playerNumber == 1) {
+                                // Capture the finished match map and rollback before setting up next match.
+                                val finishedMap = getPlayerData(p)!!.match!!.mapData
                                 rollBack()
+                                // Release usage for the finished map; MapLoader is usage-counted and will
+                                // actually unload only when no matches are using it. Only call when non-null.
+                                try {
+                                    if (finishedMap != null) MapLoader.releaseMap(finishedMap)
+                                } catch (e: Exception) {
+                                    // Best-effort: avoid crashing the finish flow if unload fails.
+                                }
                                 matchcount++
                                 matchSetup()
 

@@ -29,6 +29,7 @@ import be4rjp.sclat.manager.ColorMgr
 import be4rjp.sclat.manager.GameMgr
 import be4rjp.sclat.manager.MainWeaponMgr
 import be4rjp.sclat.manager.MapDataMgr
+import be4rjp.sclat.manager.MapLoader
 import be4rjp.sclat.manager.MatchMgr
 import be4rjp.sclat.manager.NoteBlockAPIMgr
 import be4rjp.sclat.manager.PlayerReturnManager
@@ -102,11 +103,18 @@ class Sclat :
         conf = Config()
         conf?.loadConfig()
         NewConfig.load()
-        for (mapname in conf!!.mapConfig!!.getConfigurationSection("Maps")!!.getKeys(false)) {
-            val worldName: String? = conf!!.mapConfig!!.getString("Maps." + mapname + ".WorldName")
-            Bukkit.createWorld(WorldCreator(worldName!!))
-            val world = Bukkit.getWorld(worldName)
-            world!!.isAutoSave = false
+        // Map world creation is deferred by default. Use the config toggle
+        // `deferredMapLoading` (default true) to control the behavior.
+        val deferred = conf!!.config!!.getBoolean("deferredMapLoading", true)
+        if (!deferred) {
+            for (mapname in conf!!.mapConfig!!.getConfigurationSection("Maps")!!.getKeys(false)) {
+                val worldName: String? = conf!!.mapConfig!!.getString("Maps." + mapname + ".WorldName")
+                Bukkit.createWorld(WorldCreator(worldName!!))
+                val world = Bukkit.getWorld(worldName)
+                world!!.isAutoSave = false
+            }
+        } else {
+            sclatLogger.info("Deferred map loading is enabled; maps will be loaded when assigned to matches.")
         }
         if (conf!!.config!!.contains("Tutorial")) tutorial = conf!!.config!!.getBoolean("Tutorial")
         if (conf!!.config!!.contains("Colors")) colors = conf!!.config!!.getStringList("Colors")
@@ -323,9 +331,21 @@ class Sclat :
 
         // ------------------------Tutorial wire mesh-------------------------
         if (tutorial) {
+            val eagerTutorial = conf!!.config!!.getBoolean("eagerLoadTutorialMaps", true)
+            if (eagerTutorial) {
+                // Preload tutorial maps so their runtime objects and wiremesh tasks exist.
+                for (mData in DataMgr.maplist) {
+                    try {
+                        MapLoader.incrementUsage(mData)
+                    } catch (e: Exception) {
+                    }
+                }
+            }
+
             for (mData in DataMgr.maplist) {
-                for (wiremesh in mData.wiremeshListTask!!.wiremeshsList) {
-                    wiremesh!!.startTask()
+                try {
+                    mData.wiremeshListTask?.wiremeshsList?.forEach { it?.startTask() }
+                } catch (e: Exception) {
                 }
             }
         }
@@ -402,12 +422,11 @@ class Sclat :
 
         for (`as` in DataMgr.al) `as`!!.remove()
 
-        // Worldが保存される前にアンロードして塗られた状態で保存されるのを防ぐ
-        if (type == ServerType.LOBBY) {
-            for (mapname in conf!!.mapConfig!!.getConfigurationSection("Maps")!!.getKeys(false)) {
-                val worldName: String? = conf!!.mapConfig!!.getString("Maps." + mapname + ".WorldName")
-                Bukkit.unloadWorld(worldName!!, false)
-            }
+        // Unload all loaded maps using MapLoader so it can perform proper cleanup.
+        // This replaces the previous eager world-unload loop.
+        try {
+            MapLoader.unloadAllLoadedMaps()
+        } catch (e: Exception) {
         }
 
         if (type == ServerType.LOBBY) {

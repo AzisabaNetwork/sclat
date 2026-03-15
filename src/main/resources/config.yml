@@ -1,0 +1,11 @@
+# Sclat plugin default configuration
+# Controls whether map worlds are created eagerly at startup or deferred until used
+deferredMapLoading: true
+
+# When true, tutorial maps are eagerly preloaded at plugin startup to preserve
+# tutorial UX that expects worlds to exist. It only applies when
+# deferredMapLoading is true.
+eagerLoadTutorialMaps: true
+
+# Block update rate and other existing keys are unchanged — this file only
+# documents new defaults used by the MapLoader changes.

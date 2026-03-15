@@ -10,6 +10,7 @@ import be4rjp.sclat.api.SoundType
 import be4rjp.sclat.data.DataMgr
 import be4rjp.sclat.emblem.EmblemManager
 import be4rjp.sclat.manager.BungeeCordMgr
+import be4rjp.sclat.manager.MapLoader
 import be4rjp.sclat.manager.ServerStatusManager
 import be4rjp.sclat.plugin
 import be4rjp.sclat.server.EquipmentClient
@@ -315,6 +316,115 @@ class SclatCommandExecutor :
             } else if (args[1] == "reload") {
                 Sclat.tutorialServers!!.reloadConfig()
                 return true
+            }
+        }
+
+        // ------------------------/sclat map <cmd> <map>-------------------------
+        if (args[0].equals("map", ignoreCase = true)) {
+            if (type == CommanderType.MEMBER) {
+                sender.sendMessage(ChatColor.RED.toString() + "You don't have permission.")
+                if (sender is Player) playGameSound(sender, SoundType.ERROR)
+                return true
+            }
+
+            if (args.size < 2) return false
+            val sub = args[1].lowercase(Locale.getDefault())
+            when (sub) {
+                "preload" -> {
+                    if (args.size < 3) return false
+                    val target = args[2]
+                    if (target == "all") {
+                        for (m in DataMgr.maplist) {
+                            try {
+                                MapLoader.incrementUsage(m)
+                            } catch (e: Exception) {
+                            }
+                        }
+                        sender.sendMessage("Preloaded all maps (requested)")
+                        return true
+                    }
+                    val map = DataMgr.maplist.find { it.mapName == target }
+                    if (map == null) {
+                        sender.sendMessage("Map not found: $target")
+                        return true
+                    }
+                    try {
+                        MapLoader.incrementUsage(map)
+                        sender.sendMessage("Preloaded map: $target")
+                    } catch (e: Exception) {
+                        sender.sendMessage("Failed to preload map: $target")
+                    }
+                    return true
+                }
+
+                "unload" -> {
+                    if (args.size < 3) return false
+                    val target = args[2]
+                    if (target == "all") {
+                        try {
+                            MapLoader.unloadAllLoadedMaps()
+                            sender.sendMessage("Unload requested for all maps")
+                        } catch (e: Exception) {
+                            sender.sendMessage("Failed to request unload for all maps")
+                        }
+                        return true
+                    }
+                    val map = DataMgr.maplist.find { it.mapName == target }
+                    if (map == null) {
+                        sender.sendMessage("Map not found: $target")
+                        return true
+                    }
+                    try {
+                        MapLoader.attemptUnload(map, true)
+                        sender.sendMessage("Unload requested for map: $target")
+                    } catch (e: Exception) {
+                        sender.sendMessage("Failed to request unload for map: $target")
+                    }
+                    return true
+                }
+
+                "status", "list" -> {
+                    if (args.size >= 3) {
+                        val target = args[2]
+                        val map = DataMgr.maplist.find { it.mapName == target }
+                        if (map == null) {
+                            sender.sendMessage("Map not found: $target")
+                            return true
+                        }
+                        val loaded = if (map.team0Loc != null || map.wiremeshListTask != null) "LOADED" else "UNLOADED"
+                        sender.sendMessage("$target : $loaded")
+                        return true
+                    }
+                    sender.sendMessage("Maps:")
+                    for (m in DataMgr.maplist) {
+                        val loaded = if (m.team0Loc != null || m.wiremeshListTask != null) "LOADED" else "UNLOADED"
+                        sender.sendMessage(" - ${m.mapName} : $loaded")
+                    }
+                    return true
+                }
+
+                "metrics" -> {
+                    if (args.size < 3) return false
+                    val target = args[2]
+                    if (target == "all") {
+                        for (m in DataMgr.maplist) {
+                            val metrics = MapLoader.getMetricsString(m.mapName)
+                            sender.sendMessage("${m.mapName} : ${metrics ?: "no metrics"}")
+                        }
+                        return true
+                    }
+
+                    val map = DataMgr.maplist.find { it.mapName == target }
+                    if (map == null) {
+                        sender.sendMessage("Map not found: $target")
+                        return true
+                    }
+                    val metrics = MapLoader.getMetricsString(map.mapName)
+                    sender.sendMessage("${map.mapName} : ${metrics ?: "no metrics"}")
+                    return true
+                }
+
+                else -> return false
             }
         }
         // -------------------------------------------------------------------------
