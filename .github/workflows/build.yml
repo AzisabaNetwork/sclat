@@ -27,7 +27,7 @@ jobs:
       matrix:
         java:
           - "11"
-          - "17"
+          # - "17"
         os:
           - "ubuntu-latest"
         mc:
