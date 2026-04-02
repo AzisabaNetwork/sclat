@@ -748,7 +748,7 @@ object OpenGUI {
 
         val charger = ItemStack(Material.WOODEN_SWORD)
         val chargerM = charger.itemMeta
-        chargerM!!.setDisplayName("チャージャーのレーザー")
+        chargerM!!.setDisplayName("リッター5Gの自動チャージ")
         val chargerR = ArrayList<String?>()
         if (getPlayerData(player)!!.settings!!.showEffectChargerLine()) {
             chargerR.add("§a§l[Enable]")
@@ -772,7 +772,7 @@ object OpenGUI {
             chargerP = ItemStack(Material.GUNPOWDER)
         }
         val chargerPM = chargerP.itemMeta
-        chargerPM!!.setDisplayName("チャージャーのレーザー")
+        chargerPM!!.setDisplayName("リッター5Gの自動チャージ")
         val chargerPR = ArrayList<String?>()
         if (getPlayerData(player)!!.settings!!.showEffectChargerLine()) {
             chargerPR.add("§a§l[Enable]")
@@ -999,9 +999,10 @@ object OpenGUI {
         bombexP.itemMeta = bombexPM
         inv.setItem(24, bombexP)
 
+        // description
         val ck = ItemStack(Material.GOLDEN_SWORD)
         val ckM = ck.itemMeta
-        ckM!!.setDisplayName("チャージキープ")
+        ckM!!.setDisplayName("チャージキープ/ブリンクの旧挙動")
         val ckR = ArrayList<String?>()
         if (getPlayerData(player)!!.settings!!.doChargeKeep()) {
             ckR.add("§a§l[Enable]")
@@ -1010,12 +1011,13 @@ object OpenGUI {
         }
         ckR.add("")
         ckR.add("§b[INFO]§r")
-        ckR.add("チャージャー等のチャージキープ機能を発動できるようになります。")
-        ckR.add("(チャージキープは十分チャージした後にイカ状態に切り替えると発動します。)")
+        ckR.add("マニューバ系統のブリンクの処理を古いものに切り替えることができます。")
+        ckR.add("(無効だと、新しい挙動のブリンクの処理になります。)")
         ckM.lore = ckR
         ck.itemMeta = ckM
         inv.setItem(16, ck)
 
+        // button
         val ckP: ItemStack?
         if (getPlayerData(player)!!.settings!!.doChargeKeep()) {
             ckP = ItemStack(Material.LIME_DYE)
@@ -1023,7 +1025,7 @@ object OpenGUI {
             ckP = ItemStack(Material.GUNPOWDER)
         }
         val ckPM = ckP.itemMeta
-        ckPM!!.setDisplayName("チャージキープ")
+        ckPM!!.setDisplayName("チャージキープ/ブリンクの旧挙動")
         val ckPR = ArrayList<String?>()
         if (getPlayerData(player)!!.settings!!.doChargeKeep()) {
             ckPR.add("§a§l[Enable]")

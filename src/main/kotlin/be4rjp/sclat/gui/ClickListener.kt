@@ -56,13 +56,7 @@ import be4rjp.sclat.weapon.Shooter.maneuverShootRunnable
 import be4rjp.sclat.weapon.Shooter.shooterRunnable
 import be4rjp.sclat.weapon.Spinner.spinnerRunnable
 import be4rjp.sclat.weapon.Swapper.swapperRunnable
-import org.bukkit.Bukkit
-import org.bukkit.ChatColor
-import org.bukkit.GameMode
-import org.bukkit.Instrument
-import org.bukkit.Location
-import org.bukkit.Material
-import org.bukkit.Note
+import org.bukkit.*
 import org.bukkit.block.Block
 import org.bukkit.block.BlockFace
 import org.bukkit.entity.Player
@@ -626,14 +620,14 @@ class ClickListener : Listener {
             val playerSettings = getPlayerData(player)?.settings!!
             when (name) {
                 "メインウエポンのインクエフェクト" -> playerSettings.sShowEffectMainWeaponInk()
-                "チャージャーのレーザー" -> playerSettings.sShowEffectChargerLine()
+                "リッター5Gの自動チャージ" -> playerSettings.sShowEffectChargerLine()
                 "スペシャルウエポンのエフェクト" -> playerSettings.sShowEffectSPWeapon()
                 "スペシャルウエポンの範囲エフェクト" -> playerSettings.sShowEffectSPWeaponRegion()
                 "弾の表示" -> playerSettings.sShowSnowBall()
                 "BGM" -> playerSettings.sPlayBGM()
                 "投擲武器の視認用エフェクト" -> playerSettings.sShowEffectBomb()
                 "爆発エフェクト" -> playerSettings.sShowEffectBombEx()
-                "チャージキープ" -> playerSettings.sDoChargeKeep()
+                "チャージキープ/ブリンクの旧挙動" -> playerSettings.sDoChargeKeep()
             }
 
             OpenGUI.openSettingsUI(player)
