@@ -276,9 +276,9 @@ object Manuber {
                                         }
                                     }
                                 if (slRecharge2) {
-                                    task4.runTaskLater(plugin, 64)
+                                    task4.runTaskLater(plugin, 90) // CT
                                 } else {
-                                    task5.runTaskLater(plugin, 64)
+                                    task5.runTaskLater(plugin, 90)
                                 }
                                 check = false
                             }
