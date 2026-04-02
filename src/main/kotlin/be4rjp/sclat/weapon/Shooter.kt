@@ -11,7 +11,11 @@ import be4rjp.sclat.data.DataMgr.mainSnowballNameMap
 import be4rjp.sclat.data.DataMgr.setSnowballHitCount
 import be4rjp.sclat.manager.PaintMgr
 import be4rjp.sclat.plugin
-import org.bukkit.*
+import org.bukkit.ChatColor
+import org.bukkit.GameMode
+import org.bukkit.Location
+import org.bukkit.Particle
+import org.bukkit.Sound
 import org.bukkit.block.data.BlockData
 import org.bukkit.craftbukkit.v1_14_R1.entity.CraftSnowball
 import org.bukkit.craftbukkit.v1_14_R1.inventory.CraftItemStack
@@ -21,7 +25,7 @@ import org.bukkit.entity.Snowball
 import org.bukkit.inventory.ItemStack
 import org.bukkit.scheduler.BukkitRunnable
 import org.bukkit.util.Vector
-import java.util.*
+import java.util.Random
 
 /**
  *
