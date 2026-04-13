@@ -47,7 +47,7 @@ object Tutorial {
         val time = Sclat.conf?.config!!.getInt("InkResetPeriod")
         bar =
             plugin.server.createBossBar(
-                "§a§lインクリセットまで残り §c§l" + time + " §a§l秒",
+                "§a§lインクリセットまで残り §c§l$time §a§l秒",
                 BarColor.WHITE,
                 BarStyle.SOLID,
                 BarFlag.CREATE_FOG,
@@ -109,15 +109,14 @@ object Tutorial {
                         vec = Vector(ix1 - ix, iy1 - iy, iz1 - iz).normalize()
 
                         `as` =
-                            w!!.spawn<ArmorStand>(
+                            w!!.spawn(
                                 from!!,
                                 ArmorStand::class.java,
-                                Consumer { armorStand: ArmorStand ->
-                                    armorStand.isVisible = false
-                                    armorStand.setBasePlate(false)
-                                    armorStand.setHelmet(ItemStack(Material.SEA_LANTERN))
-                                },
-                            )
+                            ) { armorStand: ArmorStand ->
+                                armorStand.isVisible = false
+                                armorStand.setBasePlate(false)
+                                armorStand.setHelmet(ItemStack(Material.SEA_LANTERN))
+                            }
                     }
 
                     `as`!!.velocity = vec!!
