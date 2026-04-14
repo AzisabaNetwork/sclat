@@ -111,16 +111,16 @@ object LootBox {
                         "§r§6SubWeapon : " +
                             Sclat.conf!!
                                 .classConfig!!
-                                .getString("WeaponClass." + ClassName + ".SubWeaponName"),
+                                .getString("WeaponClass.$ClassName.SubWeaponName"),
                     )
                     lores.add(
                         "§r§6SPWeapon  : " +
                             Sclat.conf!!
                                 .classConfig!!
-                                .getString("WeaponClass." + ClassName + ".SPWeaponName"),
+                                .getString("WeaponClass.$ClassName.SPWeaponName"),
                     )
                     lores.add("")
-                    lores.add("§r§b : " + lootpro + "％")
+                    lores.add("§r§b : $lootpro％")
                     itemm.lore = lores
                     item.itemMeta = itemm
                     shooter.setItem(slotnum, item)

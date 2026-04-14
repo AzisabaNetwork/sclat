@@ -195,15 +195,16 @@ object Decoy {
                     }
                     if (s != 0 || s != 15) {
                         block = location.block.getRelative(BlockFace.DOWN)
-                        if (blockDataMap.containsKey(block)) {
-                            if (block!!.type.toString().contains("WOOL")) {
-                                ika = block!!.type != data!!.team?.teamColor!!.wool
+                        ika =
+                            if (blockDataMap.containsKey(block)) {
+                                if (block!!.type.toString().contains("WOOL")) {
+                                    block!!.type != data!!.team?.teamColor!!.wool
+                                } else {
+                                    false
+                                }
                             } else {
-                                ika = false
+                                false
                             }
-                        } else {
-                            ika = false
-                        }
                         if (ika) {
                             es!!.setLocation(location.x, location.y, location.z, yaw, 0f)
                             npc!!.setLocation(location.x, location.y - 20, location.z, yaw, 0f)

@@ -120,7 +120,7 @@ object Burst {
             player.playSound(player.location, Sound.UI_BUTTON_CLICK, 1f, 1.63f)
             return
         }
-        player.exp = player.exp -
+        player.exp -=
             (
                 data.weaponClass?.mainWeapon!!.needInk
                     * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) /
@@ -130,7 +130,7 @@ object Burst {
         PaintMgr.paintHightestBlock(player.location, player, true, true)
 
         val ball = player.launchProjectile(Snowball::class.java)
-        (ball as CraftSnowball).handle.setItem(CraftItemStack.asNMSCopy(ItemStack(getPlayerData(player)!!.team?.teamColor!!.wool!!)))
+        (ball as CraftSnowball).handle.item = CraftItemStack.asNMSCopy(ItemStack(getPlayerData(player)!!.team?.teamColor!!.wool!!))
         player.world.playSound(player.location, Sound.ENTITY_PIG_STEP, 0.3f, 1f)
         val vec =
             player
@@ -142,11 +142,11 @@ object Burst {
         vec.add(Vector(Math.random() * random - random / 2, 0.0, Math.random() * random - random / 2))
         ball.velocity = vec
         ball.shooter = player
-        val name = notDuplicateNumber.toString() + ":Burst:" + otoNumber
+        val name = "$notDuplicateNumber:Burst:$otoNumber"
         DataMgr.mws.add(name)
         if (sound) DataMgr.tsl.add(name)
         ball.customName = name
-        mainSnowballNameMap.put(name, ball)
+        mainSnowballNameMap[name] = ball
         setSnowballHitCount(name, 0)
         val task: BukkitRunnable =
             object : BukkitRunnable() {
@@ -166,7 +166,7 @@ object Burst {
                     ).multiply(getPlayerData(p)!!.weaponClass?.mainWeapon!!.shootSpeed / 17)
 
                 override fun run() {
-                    inkball = mainSnowballNameMap.get(name)
+                    inkball = mainSnowballNameMap[name]
 
                     if (inkball != ball) {
                         i += getSnowballHitCount(name) - 1

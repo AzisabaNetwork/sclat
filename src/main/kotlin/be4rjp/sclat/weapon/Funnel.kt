@@ -654,7 +654,7 @@ object Funnel {
                                 val kasaStand = kdata.armorStandList[0]
                                 data!!.subArmorlist(kasaStand)
                                 if (hashPlayer.containsKey(kasaStand)) {
-                                    if (hashPlayer.get(kasaStand)!!.gameMode != GameMode.SPECTATOR) {
+                                    if (hashPlayer[kasaStand]!!.gameMode != GameMode.SPECTATOR) {
                                         kdataReset += 60
                                     }
                                     hashPlayer.remove(kasaStand)
@@ -678,7 +678,7 @@ object Funnel {
                                 val kasaStand1 = kdata1.armorStandList[0]
                                 data!!.subArmorlist(kasaStand1)
                                 if (hashPlayer.containsKey(kasaStand1)) {
-                                    if (hashPlayer.get(kasaStand1)!!.gameMode != GameMode.SPECTATOR) {
+                                    if (hashPlayer[kasaStand1]!!.gameMode != GameMode.SPECTATOR) {
                                         kdataReset1 += 60
                                     }
                                     hashPlayer.remove(kasaStand1)
@@ -702,7 +702,7 @@ object Funnel {
                                 val kasaStand2 = kdata2.armorStandList[0]
                                 data!!.subArmorlist(kasaStand2)
                                 if (hashPlayer.containsKey(kasaStand2)) {
-                                    if (hashPlayer.get(kasaStand2)!!.gameMode != GameMode.SPECTATOR) {
+                                    if (hashPlayer[kasaStand2]!!.gameMode != GameMode.SPECTATOR) {
                                         kdataReset2 += 60
                                     }
                                     hashPlayer.remove(kasaStand2)
@@ -749,8 +749,7 @@ object Funnel {
                                         .normalize()
                                         .getZ(),
                                 )
-                            var io = 0
-                            for (aslist in list5) {
+                            for ((io, aslist) in list5.withIndex()) {
                                 val aslistget0: ArmorStand = aslist[0]
                                 if (io == 0) {
                                     if (!hashPlayer.containsKey(aslistget0) &&
@@ -760,8 +759,7 @@ object Funnel {
                                     } else if (hashPlayer.containsKey(aslistget0)) {
                                         val las = aslistget0.location
                                         val lpl =
-                                            hashPlayer
-                                                .get(aslistget0)!!
+                                            hashPlayer[aslistget0]!!
                                                 .location
                                                 .add(pv.clone().multiply(2).add(Vector(0.0, 1.4, 0.0)))
                                         pv =
@@ -771,11 +769,11 @@ object Funnel {
                                                 lpl.z - las.z,
                                             )
                                         if (i % 48 == 0) {
-                                            if (!getPlayerData(hashPlayer.get(aslistget0))!!.isUsingSP) {
+                                            if (!getPlayerData(hashPlayer[aslistget0])!!.isUsingSP) {
                                                 funnelShot(
                                                     p,
                                                     aslistget0,
-                                                    hashPlayer.get(aslistget0)!!.eyeLocation,
+                                                    hashPlayer[aslistget0]!!.eyeLocation,
                                                 )
                                             }
                                         }
@@ -791,13 +789,12 @@ object Funnel {
                                             aslistget0.teleport(lpl)
                                         }
                                         if ((
-                                                hashPlayer
-                                                    .get(aslistget0)!!
+                                                hashPlayer[aslistget0]!!
                                                     .gameMode == GameMode.SPECTATOR ||
                                                     !getPlayerData(
-                                                        hashPlayer.get(aslistget0),
+                                                        hashPlayer[aslistget0],
                                                     )!!.isInMatch ||
-                                                    !hashPlayer.get(aslistget0)!!.isOnline
+                                                    !hashPlayer[aslistget0]!!.isOnline
                                             ) &&
                                             kdata.damage < funnelMaxHP
                                         ) {
@@ -807,8 +804,7 @@ object Funnel {
                                     } else if (hashArmorstand.containsKey(aslistget0)) {
                                         val las = aslistget0.location
                                         val lpl =
-                                            hashArmorstand
-                                                .get(aslistget0)!!
+                                            hashArmorstand[aslistget0]!!
                                                 .location
                                                 .add(pv.clone().multiply(2).add(Vector(0.0, 1.4, 0.0)))
                                         pv =
@@ -821,7 +817,7 @@ object Funnel {
                                             funnelShot(
                                                 p,
                                                 aslistget0,
-                                                hashArmorstand.get(aslistget0)!!.eyeLocation,
+                                                hashArmorstand[aslistget0]!!.eyeLocation,
                                             )
                                         }
                                         if (pv.length() > 1) {
@@ -835,7 +831,7 @@ object Funnel {
                                             }
                                             aslistget0.teleport(lpl)
                                         }
-                                        if (!hashArmorstand.get(aslistget0)!!.isVisible) {
+                                        if (!hashArmorstand[aslistget0]!!.isVisible) {
                                             kdataReset = i + 3
                                             kdata.damage = (funnelMaxHP + 1).toDouble()
                                         }
@@ -891,8 +887,7 @@ object Funnel {
                                     } else if (hashPlayer.containsKey(aslistget0)) {
                                         val las = aslistget0.location
                                         val lpl =
-                                            hashPlayer
-                                                .get(aslistget0)!!
+                                            hashPlayer[aslistget0]!!
                                                 .location
                                                 .add(l1.clone().multiply(2).add(Vector(0.0, 1.4, 0.0)))
                                         pv =
@@ -902,11 +897,11 @@ object Funnel {
                                                 lpl.z - las.z,
                                             )
                                         if (i % 48 == 16) {
-                                            if (!getPlayerData(hashPlayer.get(aslistget0))!!.isUsingSP) {
+                                            if (!getPlayerData(hashPlayer[aslistget0])!!.isUsingSP) {
                                                 funnelShot(
                                                     p,
                                                     aslistget0,
-                                                    hashPlayer.get(aslistget0)!!.eyeLocation,
+                                                    hashPlayer[aslistget0]!!.eyeLocation,
                                                 )
                                             }
                                         }
@@ -922,13 +917,12 @@ object Funnel {
                                             aslistget0.teleport(lpl)
                                         }
                                         if ((
-                                                hashPlayer
-                                                    .get(aslistget0)!!
+                                                hashPlayer[aslistget0]!!
                                                     .gameMode == GameMode.SPECTATOR ||
                                                     !getPlayerData(
-                                                        hashPlayer.get(aslistget0),
+                                                        hashPlayer[aslistget0],
                                                     )!!.isInMatch ||
-                                                    !hashPlayer.get(aslistget0)!!.isOnline
+                                                    !hashPlayer[aslistget0]!!.isOnline
                                             ) &&
                                             kdata1.damage < funnelMaxHP
                                         ) {
@@ -938,8 +932,7 @@ object Funnel {
                                     } else if (hashArmorstand.containsKey(aslistget0)) {
                                         val las = aslistget0.location
                                         val lpl =
-                                            hashArmorstand
-                                                .get(aslistget0)!!
+                                            hashArmorstand[aslistget0]!!
                                                 .location
                                                 .add(l1.clone().multiply(2).add(Vector(0.0, 1.4, 0.0)))
                                         pv =
@@ -952,7 +945,7 @@ object Funnel {
                                             funnelShot(
                                                 p,
                                                 aslistget0,
-                                                hashArmorstand.get(aslist[0])!!.eyeLocation,
+                                                hashArmorstand[aslist[0]]!!.eyeLocation,
                                             )
                                         }
                                         if (pv.length() > 1) {
@@ -966,7 +959,7 @@ object Funnel {
                                             }
                                             aslistget0.teleport(lpl)
                                         }
-                                        if (!hashArmorstand.get(aslistget0)!!.isVisible) {
+                                        if (!hashArmorstand[aslistget0]!!.isVisible) {
                                             kdataReset1 = i + 3
                                             kdata1.damage = (funnelMaxHP + 1).toDouble()
                                         }
@@ -1022,8 +1015,7 @@ object Funnel {
                                     } else if (hashPlayer.containsKey(aslistget0)) {
                                         val las = aslistget0.location
                                         val lpl =
-                                            hashPlayer
-                                                .get(aslistget0)!!
+                                            hashPlayer[aslistget0]!!
                                                 .location
                                                 .add(r1.clone().multiply(2).add(Vector(0.0, 1.4, 0.0)))
                                         pv =
@@ -1033,11 +1025,11 @@ object Funnel {
                                                 lpl.z - las.z,
                                             )
                                         if (i % 48 == 32) {
-                                            if (!getPlayerData(hashPlayer.get(aslistget0))!!.isUsingSP) {
+                                            if (!getPlayerData(hashPlayer[aslistget0])!!.isUsingSP) {
                                                 funnelShot(
                                                     p,
                                                     aslistget0,
-                                                    hashPlayer.get(aslistget0)!!.eyeLocation,
+                                                    hashPlayer[aslistget0]!!.eyeLocation,
                                                 )
                                             }
                                         }
@@ -1053,13 +1045,12 @@ object Funnel {
                                             aslistget0.teleport(lpl)
                                         }
                                         if ((
-                                                hashPlayer
-                                                    .get(aslistget0)!!
+                                                hashPlayer[aslistget0]!!
                                                     .gameMode == GameMode.SPECTATOR ||
                                                     !getPlayerData(
-                                                        hashPlayer.get(aslistget0),
+                                                        hashPlayer[aslistget0],
                                                     )!!.isInMatch ||
-                                                    !hashPlayer.get(aslistget0)!!.isOnline
+                                                    !hashPlayer[aslistget0]!!.isOnline
                                             ) &&
                                             kdata2.damage < funnelMaxHP
                                         ) {
@@ -1069,8 +1060,7 @@ object Funnel {
                                     } else if (hashArmorstand.containsKey(aslistget0)) {
                                         val las = aslistget0.location
                                         val lpl =
-                                            hashArmorstand
-                                                .get(aslistget0)!!
+                                            hashArmorstand[aslistget0]!!
                                                 .location
                                                 .add(r1.clone().multiply(2).add(Vector(0.0, 1.4, 0.0)))
                                         pv =
@@ -1083,7 +1073,7 @@ object Funnel {
                                             funnelShot(
                                                 p,
                                                 aslistget0,
-                                                hashArmorstand.get(aslistget0)!!.eyeLocation,
+                                                hashArmorstand[aslistget0]!!.eyeLocation,
                                             )
                                         }
                                         if (pv.length() > 1) {
@@ -1097,7 +1087,7 @@ object Funnel {
                                             }
                                             aslistget0.teleport(lpl)
                                         }
-                                        if (!hashArmorstand.get(aslistget0)!!.isVisible) {
+                                        if (!hashArmorstand[aslistget0]!!.isVisible) {
                                             kdataReset2 = i + 3
                                             kdata2.damage = (funnelMaxHP + 1).toDouble()
                                         }
@@ -1156,7 +1146,6 @@ object Funnel {
                                         }
                                     }
                                 }
-                                io++
                             }
                             for (aslist in list5) {
                                 pv =
@@ -1436,7 +1425,7 @@ object Funnel {
         for (ai in 0..2) {
             try {
                 if (hashArmorstand.containsKey(getPlayerData(player)!!.getArmorlist(ai))) {
-                    if (hashArmorstand.get(getPlayerData(player)!!.getArmorlist(ai)) == target) {
+                    if (hashArmorstand[getPlayerData(player)!!.getArmorlist(ai)] == target) {
                         rate += 1.5
                     }
                 }
@@ -1539,7 +1528,7 @@ object Funnel {
         for (ai in 0..2) {
             try {
                 if (hashPlayer.containsKey(getPlayerData(player)!!.getArmorlist(ai))) {
-                    if (hashPlayer.get(getPlayerData(player)!!.getArmorlist(ai)) == target) {
+                    if (hashPlayer[getPlayerData(player)!!.getArmorlist(ai)] == target) {
                         rate += 1.5
                     }
                 }

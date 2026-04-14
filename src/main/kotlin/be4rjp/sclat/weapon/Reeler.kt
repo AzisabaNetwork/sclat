@@ -395,7 +395,7 @@ object Reeler {
         val positions = rayTrace.traverse(20.0, 0.2)
 
         loop@ for (it in positions.indices) {
-            val position = positions.get(it).toLocation(player.location.world!!)
+            val position = positions[it].toLocation(player.location.world!!)
             val block = player.location.world!!.getBlockAt(position)
 
             if (block.type != Material.AIR) {
@@ -442,7 +442,7 @@ object Reeler {
         val rayTrace = RayTrace(player.eyeLocation.toVector(), player.eyeLocation.direction)
         val positions = rayTrace.traverse(20.0, 0.2)
         loop2@ for (it in positions.indices) {
-            val position = positions.get(it).toLocation(player.location.world!!)
+            val position = positions[it].toLocation(player.location.world!!)
             val block = player.location.world!!.getBlockAt(position)
 
             if (block.type != Material.AIR) {
@@ -533,7 +533,7 @@ object Reeler {
             player.playSound(player.location, Sound.UI_BUTTON_CLICK, 1f, 1.63f)
             return
         }
-        player.exp = player.exp -
+        player.exp -=
             (
                 data.weaponClass?.mainWeapon!!.needInk
                     * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) /
@@ -575,7 +575,7 @@ object Reeler {
         PaintMgr.paintHightestBlock(player.location, player, true, true)
 
         val ball = player.launchProjectile(Snowball::class.java)
-        (ball as CraftSnowball).handle.setItem(CraftItemStack.asNMSCopy(ItemStack(getPlayerData(player)!!.team!!.teamColor!!.wool!!)))
+        (ball as CraftSnowball).handle.item = CraftItemStack.asNMSCopy(ItemStack(getPlayerData(player)!!.team!!.teamColor!!.wool!!))
         player.world.playSound(player.location, Sound.ENTITY_PIG_STEP, 0.3f, 1f)
         val vec =
             player
@@ -589,12 +589,12 @@ object Reeler {
         ball.shooter = player
         // スライド時かどうかをSnowballListenerに渡すためのnameの改変
         val originName = notDuplicateNumber.toString()
-        val name = originName + "#slided"
+        val name = "$originName#slided"
         // String name = String.valueOf(Main.getNotDuplicateNumber());//ここで改変終わり
         DataMgr.mws.add(name)
         DataMgr.tsl.add(name)
         ball.customName = name
-        mainSnowballNameMap.put(name, ball)
+        mainSnowballNameMap[name] = ball
         setSnowballHitCount(name, 0)
         val task: BukkitRunnable =
             object : BukkitRunnable() {
@@ -618,7 +618,7 @@ object Reeler {
                     ).multiply(0.01)
 
                 override fun run() {
-                    inkball = mainSnowballNameMap.get(name)
+                    inkball = mainSnowballNameMap[name]
 
                     if (inkball != ball) {
                         i += getSnowballHitCount(name) - 1

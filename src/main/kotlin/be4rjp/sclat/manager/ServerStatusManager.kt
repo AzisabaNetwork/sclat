@@ -27,56 +27,56 @@ object ServerStatusManager {
             val serverName =
                 Sclat.conf!!
                     .servers!!
-                    .getString("Servers." + server + ".Server")
+                    .getString("Servers.$server.Server")
             val displayName =
                 Sclat.conf!!
                     .servers!!
-                    .getString("Servers." + server + ".DisplayName")
+                    .getString("Servers.$server.DisplayName")
             val maxPlayer =
                 Sclat.conf!!
                     .servers!!
-                    .getInt("Servers." + server + ".MaxPlayer")
+                    .getInt("Servers.$server.MaxPlayer")
             val host =
                 Sclat.conf!!
                     .servers!!
-                    .getString("Servers." + server + ".Host")
+                    .getString("Servers.$server.Host")
             val port =
                 Sclat.conf!!
                     .servers!!
-                    .getInt("Servers." + server + ".Port")
+                    .getInt("Servers.$server.Port")
             val period =
                 Sclat.conf!!
                     .servers!!
-                    .getInt("Servers." + server + ".Period")
+                    .getInt("Servers.$server.Period")
 
             val worldName =
                 Sclat.conf!!
                     .servers!!
-                    .getString("Servers." + server + ".Sign.WorldName")
+                    .getString("Servers.$server.Sign.WorldName")
             val w = Bukkit.getWorld(worldName!!)
             val ix =
                 Sclat.conf!!
                     .servers!!
-                    .getInt("Servers." + server + ".Sign.X")
+                    .getInt("Servers.$server.Sign.X")
             val iy =
                 Sclat.conf!!
                     .servers!!
-                    .getInt("Servers." + server + ".Sign.Y")
+                    .getInt("Servers.$server.Sign.Y")
             val iz =
                 Sclat.conf!!
                     .servers!!
-                    .getInt("Servers." + server + ".Sign.Z")
+                    .getInt("Servers.$server.Sign.Z")
             val loc = Location(w, ix.toDouble(), iy.toDouble(), iz.toDouble())
 
             var info: String? = ""
             if (Sclat.conf!!
                     .servers!!
-                    .contains("Servers." + server + ".Info")
+                    .contains("Servers.$server.Info")
             ) {
                 info =
                     Sclat.conf!!
                         .servers!!
-                        .getString("Servers." + server + ".Info")
+                        .getString("Servers.$server.Info")
             }
 
             val ss =
@@ -93,12 +93,12 @@ object ServerStatusManager {
 
             if (Sclat.conf!!
                     .servers!!
-                    .contains("Servers." + server + ".maintenance")
+                    .contains("Servers.$server.maintenance")
             ) {
                 ss.isMaintenance =
                     Sclat.conf!!
                         .servers!!
-                        .getBoolean("Servers." + server + ".maintenance")
+                        .getBoolean("Servers.$server.maintenance")
             }
 
             serverList.add(ss)
@@ -127,8 +127,7 @@ object ServerStatusManager {
                     ism.itemMeta = ismm
                     inv.setItem(17, ism)
 
-                    var i = 0
-                    for (ss in serverList) {
+                    for ((i, ss) in serverList.withIndex()) {
                         var mt = Material.LIME_STAINED_GLASS
                         if (ss.runningMatch) mt = Material.YELLOW_STAINED_GLASS
                         if (ss.playerCount >= ss.maxPlayer) mt = Material.RED_STAINED_GLASS
@@ -144,7 +143,7 @@ object ServerStatusManager {
                         } else {
                             if (ss.isOnline) {
                                 var amount = 1
-                                if (0 < ss.playerCount && ss.playerCount <= 64) amount = ss.playerCount
+                                if (ss.playerCount in 1..64) amount = ss.playerCount
                                 `is`.amount = amount
                                 role.add("")
                                 role.add("§r§7[Player]  §r§a" + ss.playerCount + "§r§7 / " + ss.maxPlayer)
@@ -169,7 +168,6 @@ object ServerStatusManager {
                         `is`.itemMeta = itemMeta
 
                         inv.setItem(i, `is`)
-                        i++
                     }
                 }
             }

@@ -118,7 +118,7 @@ class Area(
                     var t1c = 0
                     for (block in blist) {
                         if (DataMgr.blockDataMap.containsKey(block)) {
-                            if (match.team0!! == DataMgr.blockDataMap.get(block)!!.team!!) {
+                            if (match.team0!! == DataMgr.blockDataMap[block]!!.team!!) {
                                 t0c++
                             } else {
                                 t1c++

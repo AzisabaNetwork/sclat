@@ -52,21 +52,22 @@ object RankMgr {
 
         var rankRate = 1.0
 
-        if (rank < 500) {
-            rankRate = 3.0
-        } else if (rank < 2000) {
-            rankRate = 2.0
-        } else if (rank < 3500) {
-            rankRate = 1.5
-        } else if (rank < 6500) {
-            rankRate = 1.0
-        } else if (rank < 8000) {
-            rankRate = 0.75
-        } else if (rank < 20000) {
-            rankRate = 0.5
-        } else {
-            rankRate = 0.2
-        }
+        rankRate =
+            if (rank < 500) {
+                3.0
+            } else if (rank < 2000) {
+                2.0
+            } else if (rank < 3500) {
+                1.5
+            } else if (rank < 6500) {
+                1.0
+            } else if (rank < 8000) {
+                0.75
+            } else if (rank < 20000) {
+                0.5
+            } else {
+                0.2
+            }
         val plus = (rankPoint.toDouble() * rankRate).toInt()
         return plus
     }
@@ -82,21 +83,22 @@ object RankMgr {
         // int MAX_RATE = ranks.length * 500;
         var rankRate = 1.0
 
-        if (rank < 500) {
-            rankRate = 3.0
-        } else if (rank < 2000) {
-            rankRate = 2.0
-        } else if (rank < 3500) {
-            rankRate = 1.5
-        } else if (rank < 6500) {
-            rankRate = 1.0
-        } else if (rank < 8000) {
-            rankRate = 0.75
-        } else if (rank < 20000) {
-            rankRate = 0.5
-        } else {
-            rankRate = 0.2
-        }
+        rankRate =
+            if (rank < 500) {
+                3.0
+            } else if (rank < 2000) {
+                2.0
+            } else if (rank < 3500) {
+                1.5
+            } else if (rank < 6500) {
+                1.0
+            } else if (rank < 8000) {
+                0.75
+            } else if (rank < 20000) {
+                0.5
+            } else {
+                0.2
+            }
 
         // if(rank >= MAX_RATE) {
         // if(rankPoint < 0){
@@ -134,19 +136,19 @@ object RankMgr {
                             var rate =
                                 Sclat.conf!!
                                     .playerStatus
-                                    .getInt("Status." + uuid + ".Rank")
+                                    .getInt("Status.$uuid.Rank")
                             if (rate == 0) continue
 
                             while (playerMap.containsKey(rate)) {
                                 rate++
                             }
-                            playerMap.put(rate, uuid)
+                            playerMap[rate] = uuid
                         }
 
                         val treeMap: MutableMap<Int, String> = TreeMap(Comparator.reverseOrder())
                         treeMap.putAll(playerMap)
                         ranking = ArrayList()
-                        for (key in treeMap.keys) ranking.add(treeMap.get(key))
+                        for (key in treeMap.keys) ranking.add(treeMap[key])
                     } catch (e: Exception) {
                     }
                 }
@@ -168,19 +170,19 @@ object RankMgr {
                             var rate =
                                 Sclat.conf!!
                                     .playerStatus
-                                    .getInt("Status." + uuid + ".Kill")
+                                    .getInt("Status.$uuid.Kill")
                             if (rate == 0) continue
 
                             while (playerMap.containsKey(rate)) {
                                 rate++
                             }
-                            playerMap.put(rate, uuid)
+                            playerMap[rate] = uuid
                         }
 
                         val treeMap: MutableMap<Int, String> = TreeMap(Comparator.reverseOrder())
                         treeMap.putAll(playerMap)
                         killRanking = ArrayList()
-                        for (key in treeMap.keys) killRanking.add(treeMap.get(key))
+                        for (key in treeMap.keys) killRanking.add(treeMap[key])
                     } catch (e: Exception) {
                         e.printStackTrace()
                     }
@@ -203,19 +205,19 @@ object RankMgr {
                             var rate =
                                 Sclat.conf!!
                                     .playerStatus
-                                    .getInt("Status." + uuid + ".Paint")
+                                    .getInt("Status.$uuid.Paint")
                             if (rate == 0) continue
 
                             while (playerMap.containsKey(rate)) {
                                 rate++
                             }
-                            playerMap.put(rate, uuid)
+                            playerMap[rate] = uuid
                         }
 
                         val treeMap: MutableMap<Int, String> = TreeMap(Comparator.reverseOrder())
                         treeMap.putAll(playerMap)
                         paintRanking = ArrayList()
-                        for (key in treeMap.keys) paintRanking.add(treeMap.get(key))
+                        for (key in treeMap.keys) paintRanking.add(treeMap[key])
                     } catch (e: Exception) {
                     }
                 }

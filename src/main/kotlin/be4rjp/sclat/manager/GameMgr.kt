@@ -1075,7 +1075,7 @@ class GameMgr : Listener {
 
                         "[ Tutorial ]" -> {
                             val list = Sclat.tutorialServers!!.getConfig()!!.getStringList("server-list")
-                            BungeeCordMgr.playerSendServer(player, list.get(Random().nextInt(list.size)))
+                            BungeeCordMgr.playerSendServer(player, list[Random().nextInt(list.size)])
                             getPlayerData(player)!!
                                 .setServerName(
                                     Sclat.conf!!
@@ -1156,11 +1156,11 @@ class GameMgr : Listener {
                     val name =
                         Sclat.conf!!
                             .servers!!
-                            .getString("Servers." + serverName + ".Server")
+                            .getString("Servers.$serverName.Server")
                     val displayName =
                         Sclat.conf!!
                             .servers!!
-                            .getString("Servers." + serverName + ".DisplayName")
+                            .getString("Servers.$serverName.DisplayName")
                     if (displayName == server) {
                         val commands: MutableList<String?> = ArrayList()
                         commands.add("set weapon " + data!!.weaponClass!!.className + " " + player.uniqueId)
@@ -1180,10 +1180,10 @@ class GameMgr : Listener {
                             EquipmentClient(
                                 Sclat.conf!!
                                     .config!!
-                                    .getString("EquipShare." + name + ".Host"),
+                                    .getString("EquipShare.$name.Host"),
                                 Sclat.conf!!
                                     .config!!
-                                    .getInt("EquipShare." + name + ".Port"),
+                                    .getInt("EquipShare.$name.Port"),
                                 commands,
                             )
                         sc.startClient()

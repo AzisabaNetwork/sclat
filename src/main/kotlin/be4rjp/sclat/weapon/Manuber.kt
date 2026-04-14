@@ -109,7 +109,7 @@ object Manuber {
                             while (distcheck > 0 &&
                                 !isSafeLocation(p, location.clone().add(jvec.clone().multiply(distcheck)))
                             ) {
-                                distcheck = distcheck - 0.2
+                                distcheck -= 0.2
                                 // p.sendMessage("テレポート位置に障害物があります");
                                 if (distcheck <= 0) {
                                     // p.sendMessage("テレポート距離が０になりました");
@@ -301,16 +301,16 @@ object Manuber {
         val world = p.world
         val rayresult = world.rayTraceBlocks(entityLocation, direction, distance)
         // if (result != null && result.getHitBlock() != null) {
-        if (rayresult != null && rayresult.hitBlock != null) {
+        return if (rayresult != null && rayresult.hitBlock != null) {
             val hitlocation = rayresult.hitPosition.toLocation(world)
             val raydistance = entityLocation.distance(hitlocation)
             if (raydistance - 0.4 > 0) {
-                return raydistance - 0.4
+                raydistance - 0.4
             } else {
-                return 0.0
+                0.0
             }
         } else {
-            return 4.9
+            4.9
         }
     }
 
@@ -340,7 +340,7 @@ object Manuber {
                         val hitLocation = result.hitPosition.toLocation(world)
                         distance2 = entityLocation.distance(hitLocation)
                         if (dist - distance2 > 0.7) {
-                            distance2 = distance2 + 0.4
+                            distance2 += 0.4
                         }
                         return distance2
                     }

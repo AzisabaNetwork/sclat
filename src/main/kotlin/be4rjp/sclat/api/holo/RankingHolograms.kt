@@ -184,13 +184,12 @@ class RankingHolograms(
                     list.add(clickHit3)
                     list.add(clickHit4)
 
-                    var i = 0
-                    for (armorStand in rankArmorStands) {
+                    for ((i, armorStand) in rankArmorStands.withIndex()) {
                         try {
                             list.add(armorStand)
 
                             if (rankingType == RankingType.TOTAL) {
-                                val uuid = RankMgr.ranking.get(i)
+                                val uuid = RankMgr.ranking[i]
                                 val mcid = Sclat.conf?.uUIDCash!!.getString(uuid!!)
 
                                 val rank = PlayerStatusMgr.getRank(uuid)
@@ -209,7 +208,7 @@ class RankingHolograms(
                             }
 
                             if (rankingType == RankingType.KILL) {
-                                val uuid = RankMgr.killRanking.get(i)
+                                val uuid = RankMgr.killRanking[i]
                                 val mcid = Sclat.conf?.uUIDCash!!.getString(uuid!!)
 
                                 val kill = PlayerStatusMgr.getKill(uuid)
@@ -225,7 +224,7 @@ class RankingHolograms(
                             }
 
                             if (rankingType == RankingType.PAINT) {
-                                val uuid = RankMgr.paintRanking.get(i)
+                                val uuid = RankMgr.paintRanking[i]
                                 val mcid = Sclat.conf?.uUIDCash!!.getString(uuid!!)
 
                                 val paint = PlayerStatusMgr.getPaint(uuid)
@@ -241,7 +240,6 @@ class RankingHolograms(
                             }
                         } catch (e: Exception) {
                         }
-                        i++
                     }
 
                     try {

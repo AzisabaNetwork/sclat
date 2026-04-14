@@ -32,7 +32,7 @@ object NoteBlockAPIMgr {
                         "plugins/Sclat/BGM",
                         Sclat.conf!!
                             .config!!
-                            .getString("nBGM." + songname),
+                            .getString("nBGM.$songname"),
                     ),
                 )
             nsList.add(song)
@@ -50,7 +50,7 @@ object NoteBlockAPIMgr {
                         "plugins/Sclat/BGM",
                         Sclat.conf!!
                             .config!!
-                            .getString("fBGM." + songname),
+                            .getString("fBGM.$songname"),
                     ),
                 )
             fsList.add(song)
@@ -62,8 +62,8 @@ object NoteBlockAPIMgr {
     val randomNormalSong: NoteBlockSong
         get() {
             val random = Random().nextInt(nbgmC)
-            val songname = nsnList.get(random)
-            val song = nsList.get(random)
+            val songname = nsnList[random]
+            val song = nsList[random]
             val nbs = NoteBlockSong(songname, song)
             return nbs
         }
@@ -71,8 +71,8 @@ object NoteBlockAPIMgr {
     val randomFinalSong: NoteBlockSong
         get() {
             val random = Random().nextInt(fbgmC)
-            val songname = fsnList.get(random)
-            val song = fsList.get(random)
+            val songname = fsnList[random]
+            val song = fsList[random]
             val nbs = NoteBlockSong(songname, song)
             return nbs
         }

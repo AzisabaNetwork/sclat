@@ -23,7 +23,7 @@ object Trap {
             ) {
                 TrapData(player.location.add(0.0, -1.0, 0.0), player, data.team, data.trapCount)
                 data.addTrapCount()
-                player.exp = player.exp - (0.39 / Gear.getGearInfluence(player, Gear.Type.SUB_SPEC_UP)).toFloat()
+                player.exp -= (0.39 / Gear.getGearInfluence(player, Gear.Type.SUB_SPEC_UP)).toFloat()
                 player.playSound(player.location, Sound.BLOCK_WOODEN_PRESSURE_PLATE_CLICK_ON, 1f, 1.2f)
             } else if (player.exp < (0.4 / Gear.getGearInfluence(player, Gear.Type.SUB_SPEC_UP)).toFloat()) {
                 player.sendTitle("", ChatColor.RED.toString() + "インクが足りません", 0, 5, 2)

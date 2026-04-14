@@ -81,7 +81,6 @@ import org.bukkit.scheduler.BukkitRunnable
 import org.bukkit.scoreboard.DisplaySlot
 import org.bukkit.scoreboard.Objective
 import org.bukkit.scoreboard.Scoreboard
-import java.util.Collections
 import java.util.TreeMap
 import java.util.function.Consumer
 
@@ -254,7 +253,7 @@ object MatchMgr {
                                             while (playerMap.containsKey(rate)) {
                                                 rate++
                                             }
-                                            playerMap.put(rate, jp)
+                                            playerMap[rate] = jp
                                         }
 
                                         // ソート
@@ -270,28 +269,23 @@ object MatchMgr {
                                          * sortedMember.add(list.get(0)); sortedMember.add(list.get(2));
                                          * sortedMember.add(list.get(1)); }else{
                                          */
-                                            var index = 0
-                                            for (key in treeMap.keys) {
-                                                sortedMember.add(treeMap.get(key))
-
-                                                index++
+                                            for ((index, key) in treeMap.keys.withIndex()) {
+                                                sortedMember.add(treeMap[key])
                                             }
-                                            Collections.shuffle(sortedMember)
+                                            sortedMember.shuffle()
                                             // }
                                         } else {
                                             sortedMember = DataMgr.joinedList
-                                            Collections.shuffle(sortedMember)
+                                            sortedMember.shuffle()
                                         }
 
-                                        var i = 0
-                                        for (jp in sortedMember) {
+                                        for ((i, jp) in sortedMember.withIndex()) {
                                             val data = getPlayerData(jp)
                                             if (i % 2 == 0) {
                                                 data!!.team = match.team0
                                             } else {
                                                 data!!.team = match.team1
                                             }
-                                            i++
                                         }
 
                                         var playerNumber = 1
@@ -648,46 +642,56 @@ object MatchMgr {
                                 val l = getPlayerData(p)!!.match!!.mapData!!.team0Loc
                                 val i = (getPlayerData(p)!!.playerNumber + 1) / 2
                                 var sl: Location? = null
-                                if (i == 1) {
-                                    sl =
-                                        Location(
-                                            l!!.world,
-                                            l.blockX + 1.5,
-                                            l.blockY.toDouble(),
-                                            l.blockZ + 1.5,
-                                        )
-                                } else if (i == 2) {
-                                    sl =
-                                        Location(
-                                            l!!.world,
-                                            l.blockX - 0.5,
-                                            l.blockY.toDouble(),
-                                            l.blockZ + 1.5,
-                                        )
-                                } else if (i == 3) {
-                                    sl =
-                                        Location(
-                                            l!!.world,
-                                            l.blockX + 1.5,
-                                            l.blockY.toDouble(),
-                                            l.blockZ - 0.5,
-                                        )
-                                } else if (i == 4) {
-                                    sl =
-                                        Location(
-                                            l!!.world,
-                                            l.blockX - 0.5,
-                                            l.blockY.toDouble(),
-                                            l.blockZ - 0.5,
-                                        )
-                                } else {
-                                    sl =
-                                        Location(
-                                            l!!.world,
-                                            l.blockX + 0.5,
-                                            l.blockY.toDouble(),
-                                            l.blockZ + 0.5,
-                                        )
+                                when (i) {
+                                    1 -> {
+                                        sl =
+                                            Location(
+                                                l!!.world,
+                                                l.blockX + 1.5,
+                                                l.blockY.toDouble(),
+                                                l.blockZ + 1.5,
+                                            )
+                                    }
+
+                                    2 -> {
+                                        sl =
+                                            Location(
+                                                l!!.world,
+                                                l.blockX - 0.5,
+                                                l.blockY.toDouble(),
+                                                l.blockZ + 1.5,
+                                            )
+                                    }
+
+                                    3 -> {
+                                        sl =
+                                            Location(
+                                                l!!.world,
+                                                l.blockX + 1.5,
+                                                l.blockY.toDouble(),
+                                                l.blockZ - 0.5,
+                                            )
+                                    }
+
+                                    4 -> {
+                                        sl =
+                                            Location(
+                                                l!!.world,
+                                                l.blockX - 0.5,
+                                                l.blockY.toDouble(),
+                                                l.blockZ - 0.5,
+                                            )
+                                    }
+
+                                    else -> {
+                                        sl =
+                                            Location(
+                                                l!!.world,
+                                                l.blockX + 0.5,
+                                                l.blockY.toDouble(),
+                                                l.blockZ + 0.5,
+                                            )
+                                    }
                                 }
                                 sl.yaw = l.yaw
                                 getPlayerData(p)!!.matchLocation = (sl)
@@ -696,46 +700,56 @@ object MatchMgr {
                                 val l = getPlayerData(p)!!.match!!.mapData!!.team1Loc
                                 val i = getPlayerData(p)!!.playerNumber / 2
                                 var sl: Location? = null
-                                if (i == 1) {
-                                    sl =
-                                        Location(
-                                            l!!.world,
-                                            l.blockX + 1.5,
-                                            l.blockY.toDouble(),
-                                            l.blockZ + 1.5,
-                                        )
-                                } else if (i == 2) {
-                                    sl =
-                                        Location(
-                                            l!!.world,
-                                            l.blockX - 0.5,
-                                            l.blockY.toDouble(),
-                                            l.blockZ + 1.5,
-                                        )
-                                } else if (i == 3) {
-                                    sl =
-                                        Location(
-                                            l!!.world,
-                                            l.blockX + 1.5,
-                                            l.blockY.toDouble(),
-                                            l.blockZ - 0.5,
-                                        )
-                                } else if (i == 4) {
-                                    sl =
-                                        Location(
-                                            l!!.world,
-                                            l.blockX - 0.5,
-                                            l.blockY.toDouble(),
-                                            l.blockZ - 0.5,
-                                        )
-                                } else {
-                                    sl =
-                                        Location(
-                                            l!!.world,
-                                            l.blockX + 0.5,
-                                            l.blockY.toDouble(),
-                                            l.blockZ + 0.5,
-                                        )
+                                when (i) {
+                                    1 -> {
+                                        sl =
+                                            Location(
+                                                l!!.world,
+                                                l.blockX + 1.5,
+                                                l.blockY.toDouble(),
+                                                l.blockZ + 1.5,
+                                            )
+                                    }
+
+                                    2 -> {
+                                        sl =
+                                            Location(
+                                                l!!.world,
+                                                l.blockX - 0.5,
+                                                l.blockY.toDouble(),
+                                                l.blockZ + 1.5,
+                                            )
+                                    }
+
+                                    3 -> {
+                                        sl =
+                                            Location(
+                                                l!!.world,
+                                                l.blockX + 1.5,
+                                                l.blockY.toDouble(),
+                                                l.blockZ - 0.5,
+                                            )
+                                    }
+
+                                    4 -> {
+                                        sl =
+                                            Location(
+                                                l!!.world,
+                                                l.blockX - 0.5,
+                                                l.blockY.toDouble(),
+                                                l.blockZ - 0.5,
+                                            )
+                                    }
+
+                                    else -> {
+                                        sl =
+                                            Location(
+                                                l!!.world,
+                                                l.blockX + 0.5,
+                                                l.blockY.toDouble(),
+                                                l.blockZ + 0.5,
+                                            )
+                                    }
                                 }
                                 sl.yaw = l.yaw
                                 getPlayerData(p)!!.matchLocation = (sl)
@@ -829,14 +843,14 @@ object MatchMgr {
                                 p.hidePlayer(plugin, player)
                             }
                         }
-                        if (s >= 1 && s <= 100) {
+                        if (s in 1..100) {
                             if (s == 1) intromove = match.mapData!!.intro!!.clone()
                             val map = getPlayerData(p)!!.match!!.mapData
                             intromove!!.add(map!!.introMoveX, map.introMoveY, map.introMoveZ)
                             p.teleport(intromove!!)
                         }
 
-                        if (s >= 100 && s <= 160) {
+                        if (s in 100..160) {
                             val introl =
                                 match.mapData!!
                                     .team0Intro!!
@@ -844,7 +858,7 @@ object MatchMgr {
                                     .add(0.5, 0.0, 0.5)
                             p.teleport(introl)
                             if (getPlayerData(p)!!.team == match.team0) {
-                                if (s >= 101 && s <= 120) {
+                                if (s in 101..120) {
                                     val bd =
                                         getPlayerData(p)!!
                                             .team!!
@@ -878,7 +892,7 @@ object MatchMgr {
                                 }
                             }
                         }
-                        if (s >= 160 && s <= 220) {
+                        if (s in 160..220) {
                             val introl =
                                 match.mapData!!
                                     .team1Intro!!
@@ -886,7 +900,7 @@ object MatchMgr {
                                     .add(0.5, 0.0, 0.5)
                             p.teleport(introl)
                             if (getPlayerData(p)!!.team == match.team1) {
-                                if (s >= 161 && s <= 180) {
+                                if (s in 161..180) {
                                     val bd =
                                         getPlayerData(p)!!
                                             .team!!
@@ -927,7 +941,7 @@ object MatchMgr {
                             }
                         }
 
-                        if (s >= 221 && s <= 280) {
+                        if (s in 221..280) {
                             p.inventory.setItem(0, ItemStack(Material.AIR))
                             p.gameMode = GameMode.ADVENTURE
                             p.exp = 0.99f
@@ -1271,9 +1285,8 @@ object MatchMgr {
                             }
 
                             var `is` = true
-                            var i = 0
                             var t: Team? = null
-                            for (team in list) {
+                            for ((i, team) in list.withIndex()) {
                                 if (i == 0) {
                                     if (team != null) {
                                         t = team
@@ -1292,11 +1305,10 @@ object MatchMgr {
                                         break
                                     }
                                 }
-                                i++
                             }
 
                             if (list.size == 1) {
-                                if (list.get(0) != null) {
+                                if (list[0] != null) {
                                     `is` = true
                                 }
                             }
@@ -1304,11 +1316,12 @@ object MatchMgr {
                             if (`is`) {
                                 val wteam = t // エリアを確保しているチーム
                                 var lteam = t // エリアを確保できていないチーム
-                                if (match.team0 == t) {
-                                    lteam = match.team1
-                                } else {
-                                    lteam = match.team0
-                                }
+                                lteam =
+                                    if (match.team0 == t) {
+                                        match.team1
+                                    } else {
+                                        match.team0
+                                    }
 
                                 if (wteam!!.gatiCount == lteam!!.gatiCount) {
                                     if (wteam.gatiCount + 1 > lteam.gatiCount) {
@@ -1331,9 +1344,9 @@ object MatchMgr {
                                     }
                                 }
 
-                                list.get(0)!!.addGatiCount()
+                                list[0]!!.addGatiCount()
                                 isgc = `is`
-                                gcteam = list.get(0)
+                                gcteam = list[0]
                             }
 
                             lines.add("   ")
@@ -1445,7 +1458,7 @@ object MatchMgr {
                             cancel()
                         }
 
-                        if (s <= 5 && s > 0) {
+                        if (s in 1..5) {
                             for (oplayer in plugin.server.onlinePlayers) {
                                 if (getPlayerData(oplayer)!!.isInMatch) {
                                     oplayer.sendTitle(
@@ -1559,7 +1572,7 @@ object MatchMgr {
                             )
                         }
 
-                        if (i >= 1 && i <= 45) {
+                        if (i in 1..45) {
                             p.teleport(loc!!)
                             p.inventory.clear()
                             if (p.hasPotionEffect(PotionEffectType.POISON)) p.removePotionEffect(PotionEffectType.POISON)
@@ -1742,7 +1755,7 @@ object MatchMgr {
 
                         if (i == 46 && p.isOnline) p.gameMode = GameMode.ADVENTURE
 
-                        if (i >= 46 && i <= 156) {
+                        if (i in 46..156) {
                             p.teleport(getPlayerData(p)!!.match!!.mapData!!.resultLoc!!)
                         }
 
@@ -1869,12 +1882,12 @@ object MatchMgr {
                                 pTicket += 5
                             }
                             var pRank = data.killCount * 3
-                            if (data.team == data.match!!.winTeam) pRank = pRank + 25
+                            if (data.team == data.match!!.winTeam) pRank += 25
                             if (data.killCount == bestkills) {
-                                pRank = pRank + 20
+                                pRank += 20
                             }
                             if (data.paintCount == bestpaint) {
-                                pRank = pRank + 10
+                                pRank += 10
                             }
                             // int pRank = -60 + (int)((double)data.killCount * 2.7D +
                             // (double)data.paintCount / 700D);
