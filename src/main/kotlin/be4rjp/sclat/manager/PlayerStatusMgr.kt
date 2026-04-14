@@ -153,7 +153,7 @@ object PlayerStatusMgr {
         `as`.isNoGravity = true
         `as`.customName = CraftChatMessage.fromStringOrNull("§aMoney : §r" + getMoney(player) + "  §aLv : §r" + getLv(player))
 
-        list.put(player, `as`)
+        list[player] = `as`
 
         val as1 = EntityArmorStand(nmsWorld, location.x, location.y + 1.2, location.z)
         as1.setLocation(location.x, location.y + 1.2, location.z, location.yaw, 0f)
@@ -165,7 +165,7 @@ object PlayerStatusMgr {
                 "§6Rank : §r" + getRank(player) + "  [ §b" + RankMgr.toABCRank(getRank(player)) + " §r]",
             )
 
-        list1.put(player, as1)
+        list1[player] = as1
 
         val as2 = EntityArmorStand(nmsWorld, location.x, location.y + 0.4, location.z)
         as2.setLocation(location.x, location.y + 0.4, location.z, location.yaw, 0f)
@@ -176,7 +176,7 @@ object PlayerStatusMgr {
             CraftChatMessage
                 .fromStringOrNull("§aPaints : §r" + getPaint(player) + "  §aKills : §r" + getKill(player))
 
-        list2.put(player, as2)
+        list2[player] = as2
 
         connection.sendPacket(PacketPlayOutSpawnEntityLiving(`as`))
         connection.sendPacket(PacketPlayOutSpawnEntityLiving(as1))

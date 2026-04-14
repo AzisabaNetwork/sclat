@@ -301,16 +301,16 @@ object Manuber {
         val world = p.world
         val rayresult = world.rayTraceBlocks(entityLocation, direction, distance)
         // if (result != null && result.getHitBlock() != null) {
-        if (rayresult != null && rayresult.hitBlock != null) {
+        return if (rayresult != null && rayresult.hitBlock != null) {
             val hitlocation = rayresult.hitPosition.toLocation(world)
             val raydistance = entityLocation.distance(hitlocation)
             if (raydistance - 0.4 > 0) {
-                return raydistance - 0.4
+                raydistance - 0.4
             } else {
-                return 0.0
+                0.0
             }
         } else {
-            return 4.9
+            4.9
         }
     }
 

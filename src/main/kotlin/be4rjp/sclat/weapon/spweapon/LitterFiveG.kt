@@ -44,8 +44,8 @@ object LitterFiveG {
             Hash_charge.replace(player, 0)
             Hash_cps.replace(player, 1)
         } else {
-            Hash_charge.put(player, 0)
-            Hash_cps.put(player, 1)
+            Hash_charge[player] = 0
+            Hash_cps[player] = 1
         }
         val it: BukkitRunnable =
             object : BukkitRunnable() {

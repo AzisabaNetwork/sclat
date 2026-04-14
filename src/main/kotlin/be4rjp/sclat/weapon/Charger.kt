@@ -482,16 +482,18 @@ object Charger {
     ): Boolean {
         var pyaw = 0.0
         var tyaw = 0.0
-        if (p.eyeLocation.yaw < 0) {
-            pyaw = (p.eyeLocation.yaw + 360).toDouble()
-        } else {
-            pyaw = p.eyeLocation.yaw.toDouble()
-        }
-        if (target.eyeLocation.yaw < 0) {
-            tyaw = (target.eyeLocation.yaw + 360).toDouble()
-        } else {
-            tyaw = target.eyeLocation.yaw.toDouble()
-        }
+        pyaw =
+            if (p.eyeLocation.yaw < 0) {
+                (p.eyeLocation.yaw + 360).toDouble()
+            } else {
+                p.eyeLocation.yaw.toDouble()
+            }
+        tyaw =
+            if (target.eyeLocation.yaw < 0) {
+                (target.eyeLocation.yaw + 360).toDouble()
+            } else {
+                target.eyeLocation.yaw.toDouble()
+            }
         return (pyaw - tyaw < 147 && pyaw - tyaw > -147) || pyaw - tyaw > 213 || pyaw - tyaw < -213
     }
 
@@ -501,16 +503,18 @@ object Charger {
     ): Boolean {
         var pyaw = 0.0
         var tyaw = 0.0
-        if (p.eyeLocation.yaw < 0) {
-            pyaw = (p.eyeLocation.yaw + 360).toDouble()
-        } else {
-            pyaw = p.eyeLocation.yaw.toDouble()
-        }
-        if (target.eyeLocation.yaw < 0) {
-            tyaw = (target.eyeLocation.yaw + 360).toDouble()
-        } else {
-            tyaw = target.eyeLocation.yaw.toDouble()
-        }
+        pyaw =
+            if (p.eyeLocation.yaw < 0) {
+                (p.eyeLocation.yaw + 360).toDouble()
+            } else {
+                p.eyeLocation.yaw.toDouble()
+            }
+        tyaw =
+            if (target.eyeLocation.yaw < 0) {
+                (target.eyeLocation.yaw + 360).toDouble()
+            } else {
+                target.eyeLocation.yaw.toDouble()
+            }
         return (pyaw - tyaw < 147 && pyaw - tyaw > -147) || pyaw - tyaw > 213 || pyaw - tyaw < -213
     }
 }

@@ -69,7 +69,7 @@ object KBomb {
                             ball!!.velocity = Vector(0, 0, 0)
                             ball!!.customName = ndn.toString()
                             setSnowballIsHit(ball, false)
-                            snowballNameMap.put(ndn.toString(), ball)
+                            snowballNameMap[ndn.toString()] = ball
 
                             for (o_player in plugin.server.onlinePlayers) {
                                 val connection = (o_player as CraftPlayer).handle.playerConnection

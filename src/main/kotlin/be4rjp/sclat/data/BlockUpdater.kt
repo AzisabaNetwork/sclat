@@ -117,7 +117,7 @@ class BlockUpdater {
         }
 
         if (!this.blocks.contains(block)) {
-            this.blocklist.put(block, material)
+            this.blocklist[block] = material
             this.blocks.add(block)
 
             if (block.location.chunk.isLoaded) {

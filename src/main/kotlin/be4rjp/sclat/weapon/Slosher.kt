@@ -124,7 +124,7 @@ object Slosher {
         val name = notDuplicateNumber.toString()
         DataMgr.mws.add(name)
         ball.customName = name
-        mainSnowballNameMap.put(name, ball)
+        mainSnowballNameMap[name] = ball
         setSnowballHitCount(name, 0)
         val task: BukkitRunnable =
             object : BukkitRunnable() {

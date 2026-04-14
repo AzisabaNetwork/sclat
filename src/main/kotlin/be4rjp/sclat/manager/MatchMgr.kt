@@ -254,7 +254,7 @@ object MatchMgr {
                                             while (playerMap.containsKey(rate)) {
                                                 rate++
                                             }
-                                            playerMap.put(rate, jp)
+                                            playerMap[rate] = jp
                                         }
 
                                         // ソート
@@ -1324,11 +1324,12 @@ object MatchMgr {
                             if (`is`) {
                                 val wteam = t // エリアを確保しているチーム
                                 var lteam = t // エリアを確保できていないチーム
-                                if (match.team0 == t) {
-                                    lteam = match.team1
-                                } else {
-                                    lteam = match.team0
-                                }
+                                lteam =
+                                    if (match.team0 == t) {
+                                        match.team1
+                                    } else {
+                                        match.team0
+                                    }
 
                                 if (wteam!!.gatiCount == lteam!!.gatiCount) {
                                     if (wteam.gatiCount + 1 > lteam.gatiCount) {

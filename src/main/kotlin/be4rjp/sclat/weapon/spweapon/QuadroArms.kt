@@ -59,7 +59,7 @@ object QuadroArms {
         if (Hash_Quadro_overheat.containsKey(player)) {
             Hash_Quadro_overheat.replace(player, 0)
         } else {
-            Hash_Quadro_overheat.put(player, 0)
+            Hash_Quadro_overheat[player] = 0
         }
         val it: BukkitRunnable =
             object : BukkitRunnable() {
@@ -342,7 +342,7 @@ object QuadroArms {
         val name = originName + "#QuadroArmsSpinner"
         DataMgr.mws.add(name) //
         ball.customName = name
-        mainSnowballNameMap.put(name, ball)
+        mainSnowballNameMap[name] = ball
         setSnowballHitCount(name, 0)
         val spinnerTask: BukkitRunnable =
             object : BukkitRunnable() {
@@ -440,7 +440,7 @@ object QuadroArms {
         val name = originName + "#QuadroArmsShotgun"
         DataMgr.mws.add(name)
         ball.customName = name
-        mainSnowballNameMap.put(name, ball)
+        mainSnowballNameMap[name] = ball
         setSnowballHitCount(name, 0)
         val task: BukkitRunnable =
             object : BukkitRunnable() {
@@ -529,7 +529,7 @@ object QuadroArms {
         val name = originName + "#QuadroArmsSpinner"
         ball.customName = name
         DataMgr.mws.add(name)
-        mainSnowballNameMap.put(name, ball)
+        mainSnowballNameMap[name] = ball
         setSnowballHitCount(name, 0)
         val task: BukkitRunnable =
             object : BukkitRunnable() {

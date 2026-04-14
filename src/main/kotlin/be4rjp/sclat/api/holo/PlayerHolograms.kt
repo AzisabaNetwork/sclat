@@ -8,11 +8,11 @@ import java.util.function.Consumer
 
 @NullMarked
 class PlayerHolograms {
-    protected val rankingHoloMap: HashMap<UUID, RankingHolograms> = HashMap()
+    private val rankingHoloMap: HashMap<UUID, RankingHolograms> = HashMap()
 
     fun add(player: Player) {
         val playerHolo = RankingHolograms(player)
-        rankingHoloMap.put(player.uniqueId, playerHolo)
+        rankingHoloMap[player.uniqueId] = playerHolo
         PlayerStatusMgr.hologramUpdateRunnable(player)
     }
 

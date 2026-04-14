@@ -179,9 +179,9 @@ class SnowballListener : Listener {
                                         when (args[1]) {
                                             "Burst" -> {
                                                 if (DataMgr.oto.containsKey(args[2])) {
-                                                    DataMgr.oto.put(args[2], DataMgr.oto[args[2]]!! + 1)
+                                                    DataMgr.oto[args[2]] = DataMgr.oto.get(args[2])!! + 1
                                                 } else {
-                                                    DataMgr.oto.put(args[2], 1)
+                                                    DataMgr.oto[args[2]] = 1
                                                 }
                                             }
                                         }
@@ -219,11 +219,12 @@ class SnowballListener : Listener {
                                             .decreaseRate
                                 }
                                 var damage = getPlayerData(shooter)!!.weaponClass!!.mainWeapon!!.damage
-                                if (dmgDouble != 1.0) {
-                                    damage *= dmgDouble
-                                } else {
-                                    damage *= Gear.getGearInfluence(shooter, Gear.Type.MAIN_SPEC_UP)
-                                }
+                                damage *=
+                                    if (dmgDouble != 1.0) {
+                                        dmgDouble
+                                    } else {
+                                        Gear.getGearInfluence(shooter, Gear.Type.MAIN_SPEC_UP)
+                                    }
                                 val type =
                                     getPlayerData(shooter)!!
                                         .weaponClass!!
@@ -313,9 +314,9 @@ class SnowballListener : Listener {
                                                 when (args[1]) {
                                                     "Burst" -> {
                                                         if (DataMgr.oto.containsKey(args[2])) {
-                                                            DataMgr.oto.put(args[2], DataMgr.oto[args[2]]!! + 1)
+                                                            DataMgr.oto[args[2]] = DataMgr.oto.get(args[2])!! + 1
                                                         } else {
-                                                            DataMgr.oto.put(args[2], 1)
+                                                            DataMgr.oto[args[2]] = 1
                                                         }
                                                     }
                                                 }
@@ -390,11 +391,12 @@ class SnowballListener : Listener {
                         }
                     }
                     var damage = getPlayerData(shooter)!!.weaponClass!!.mainWeapon!!.damage
-                    if (dmgDouble != 1.0) {
-                        damage *= dmgDouble
-                    } else {
-                        damage *= Gear.getGearInfluence(shooter, Gear.Type.MAIN_SPEC_UP)
-                    }
+                    damage *=
+                        if (dmgDouble != 1.0) {
+                            dmgDouble
+                        } else {
+                            Gear.getGearInfluence(shooter, Gear.Type.MAIN_SPEC_UP)
+                        }
                     val type = getPlayerData(shooter)!!.weaponClass!!.mainWeapon!!.weaponType
 
                     if (type != "Blaster") {
@@ -485,7 +487,7 @@ class SnowballListener : Listener {
                             ) as Snowball
                         ball2.velocity = vec
                         ball2.customName = ball.customName
-                        snowballNameMap.put(ball.customName, ball2)
+                        snowballNameMap[ball.customName] = ball2
                         setSnowballIsHit(ball2, false)
                         for (o_player in plugin.server.onlinePlayers) {
                             val connection = (o_player as CraftPlayer).handle.playerConnection
@@ -539,7 +541,7 @@ class SnowballListener : Listener {
                                     ball2.customName = ball.customName
                                     // if(!DataMgr.getPlayerData(shooter).getWeaponClass().getMainWeapon().getWeaponType().equals("Blaster"))
                                     addSnowballHitCount(ball.customName)
-                                    mainSnowballNameMap.put(ball.customName, ball2)
+                                    mainSnowballNameMap[ball.customName] = ball2
                                 }
                                 if (event.hitEntity!!.customName == "Kasa") {
                                     val ssdata = getKasaDataFromArmorStand(event.hitEntity as ArmorStand?)
@@ -577,7 +579,7 @@ class SnowballListener : Listener {
                                     ball2.customName = ball.customName
                                     // if(!DataMgr.getPlayerData(shooter).getWeaponClass().getMainWeapon().getWeaponType().equals("Blaster"))
                                     addSnowballHitCount(ball.customName)
-                                    mainSnowballNameMap.put(ball.customName, ball2)
+                                    mainSnowballNameMap[ball.customName] = ball2
                                 }
                             }
                         }
@@ -779,9 +781,9 @@ class SnowballListener : Listener {
                                             when (args[1]) {
                                                 "Burst" -> {
                                                     if (DataMgr.oto.containsKey(args[2])) {
-                                                        DataMgr.oto.put(args[2], DataMgr.oto[args[2]]!! + 1)
+                                                        DataMgr.oto[args[2]] = DataMgr.oto.get(args[2])!! + 1
                                                     } else {
-                                                        DataMgr.oto.put(args[2], 1)
+                                                        DataMgr.oto[args[2]] = 1
                                                     }
                                                 }
                                             }

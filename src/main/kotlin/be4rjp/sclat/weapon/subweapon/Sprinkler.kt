@@ -69,7 +69,7 @@ object Sprinkler {
                             ball!!.velocity = Vector(0, 0, 0)
                             setSnowballIsHit(ball, false)
                             ball!!.customName = ndn.toString()
-                            snowballNameMap.put(ndn.toString(), ball)
+                            snowballNameMap[ndn.toString()] = ball
                             setSnowballIsHit(ball, false)
 
                             for (o_player in plugin.server.onlinePlayers) {

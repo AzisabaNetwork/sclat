@@ -23,7 +23,7 @@ import org.incendo.cloud.parser.standard.StringParser
 import java.io.IOException
 
 object SclatCommands {
-    val PERMISSION_ADMIN = "sclat.admin"
+    const val PERMISSION_ADMIN = "sclat.admin"
 
     fun init(plugin: JavaPlugin) {
         val commandManager =

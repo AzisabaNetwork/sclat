@@ -179,8 +179,8 @@ object PaintMgr {
         team: Team,
         match: Match,
     ) {
-        var team = team
-        var match = match
+        val team = team
+        val match = match
         if (block.type == team.teamColor!!.wool) return
 
         if (!(
@@ -408,7 +408,7 @@ object PaintMgr {
 
     fun paintGlass(match: Match) {
         // team0
-        var match = match
+        val match = match
         val blocks: MutableList<Block> = ArrayList()
         val b0 =
             match.mapData!!

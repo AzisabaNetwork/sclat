@@ -227,15 +227,15 @@ object Blaster {
                             if (!getPlayerData(target)!!.isInMatch) continue
                             if (target.location.distance(inkball!!.location) <= maxDist + 1) {
                                 var damage = 10.0
-                                if (mainWeapon.isManeuver) {
-                                    damage =
+                                damage =
+                                    if (mainWeapon.isManeuver) {
                                         mainWeapon.blasterExDamage
-                                } else {
-                                    damage = (
-                                        (maxDist + 1 - target.location.distance(inkball!!.location)) *
-                                            mainWeapon.blasterExDamage
-                                    )
-                                }
+                                    } else {
+                                        (
+                                            (maxDist + 1 - target.location.distance(inkball!!.location)) *
+                                                mainWeapon.blasterExDamage
+                                        )
+                                    }
                                 if (damage > mainWeapon.damage) {
                                     damage = mainWeapon.damage
                                 }
@@ -341,15 +341,15 @@ object Blaster {
             if (!getPlayerData(target)!!.isInMatch) continue
             if (target.location.distance(blastcenter) <= maxDist + 1) {
                 var damage = 10.0
-                if (mainWeapon.isManeuver) {
-                    damage =
+                damage =
+                    if (mainWeapon.isManeuver) {
                         mainWeapon.blasterExDamage
-                } else {
-                    damage = (
-                        (maxDist - target.location.distance(blastcenter)) *
-                            mainWeapon.blasterExDamage * 0.4
-                    )
-                }
+                    } else {
+                        (
+                            (maxDist - target.location.distance(blastcenter)) *
+                                mainWeapon.blasterExDamage * 0.4
+                        )
+                    }
                 if (damage > mainWeapon.damage) {
                     damage = mainWeapon.damage
                 }

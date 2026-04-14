@@ -276,14 +276,15 @@ object ArmorStandMgr {
     @JvmStatic
     fun sprinklerArmorStandSetup(player: Player) {
         val al: Location?
-        if (Sclat.conf!!
-                .config!!
-                .getString("WorkMode") == "Trial"
-        ) {
-            al = Sclat.lobby
-        } else {
-            al = getPlayerData(player)!!.matchLocation
-        }
+        al =
+            if (Sclat.conf!!
+                    .config!!
+                    .getString("WorkMode") == "Trial"
+            ) {
+                Sclat.lobby
+            } else {
+                getPlayerData(player)!!.matchLocation
+            }
         val `as` = player.world.spawnEntity(al!!, EntityType.ARMOR_STAND) as ArmorStand
         `as`.isVisible = false
         `as`.isSmall = true

@@ -52,21 +52,22 @@ object RankMgr {
 
         var rankRate = 1.0
 
-        if (rank < 500) {
-            rankRate = 3.0
-        } else if (rank < 2000) {
-            rankRate = 2.0
-        } else if (rank < 3500) {
-            rankRate = 1.5
-        } else if (rank < 6500) {
-            rankRate = 1.0
-        } else if (rank < 8000) {
-            rankRate = 0.75
-        } else if (rank < 20000) {
-            rankRate = 0.5
-        } else {
-            rankRate = 0.2
-        }
+        rankRate =
+            if (rank < 500) {
+                3.0
+            } else if (rank < 2000) {
+                2.0
+            } else if (rank < 3500) {
+                1.5
+            } else if (rank < 6500) {
+                1.0
+            } else if (rank < 8000) {
+                0.75
+            } else if (rank < 20000) {
+                0.5
+            } else {
+                0.2
+            }
         val plus = (rankPoint.toDouble() * rankRate).toInt()
         return plus
     }
@@ -82,21 +83,22 @@ object RankMgr {
         // int MAX_RATE = ranks.length * 500;
         var rankRate = 1.0
 
-        if (rank < 500) {
-            rankRate = 3.0
-        } else if (rank < 2000) {
-            rankRate = 2.0
-        } else if (rank < 3500) {
-            rankRate = 1.5
-        } else if (rank < 6500) {
-            rankRate = 1.0
-        } else if (rank < 8000) {
-            rankRate = 0.75
-        } else if (rank < 20000) {
-            rankRate = 0.5
-        } else {
-            rankRate = 0.2
-        }
+        rankRate =
+            if (rank < 500) {
+                3.0
+            } else if (rank < 2000) {
+                2.0
+            } else if (rank < 3500) {
+                1.5
+            } else if (rank < 6500) {
+                1.0
+            } else if (rank < 8000) {
+                0.75
+            } else if (rank < 20000) {
+                0.5
+            } else {
+                0.2
+            }
 
         // if(rank >= MAX_RATE) {
         // if(rankPoint < 0){
@@ -140,7 +142,7 @@ object RankMgr {
                             while (playerMap.containsKey(rate)) {
                                 rate++
                             }
-                            playerMap.put(rate, uuid)
+                            playerMap[rate] = uuid
                         }
 
                         val treeMap: MutableMap<Int, String> = TreeMap(Comparator.reverseOrder())
@@ -174,7 +176,7 @@ object RankMgr {
                             while (playerMap.containsKey(rate)) {
                                 rate++
                             }
-                            playerMap.put(rate, uuid)
+                            playerMap[rate] = uuid
                         }
 
                         val treeMap: MutableMap<Int, String> = TreeMap(Comparator.reverseOrder())
@@ -209,7 +211,7 @@ object RankMgr {
                             while (playerMap.containsKey(rate)) {
                                 rate++
                             }
-                            playerMap.put(rate, uuid)
+                            playerMap[rate] = uuid
                         }
 
                         val treeMap: MutableMap<Int, String> = TreeMap(Comparator.reverseOrder())

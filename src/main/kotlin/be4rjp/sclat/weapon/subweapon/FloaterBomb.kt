@@ -56,11 +56,12 @@ object FloaterBomb {
                             turn = false
                             onground = player.isOnGround
                             pVec = p.eyeLocation.direction
-                            if (!onground) {
-                                pVec = pVec!!.normalize().multiply(1.1)
-                            } else {
-                                pVec = pVec!!.normalize().multiply(0.95)
-                            }
+                            pVec =
+                                if (!onground) {
+                                    pVec!!.normalize().multiply(1.1)
+                                } else {
+                                    pVec!!.normalize().multiply(0.95)
+                                }
                             if (!getPlayerData(player)!!.isBombRush) p.exp -= 0.47f
                             val bom = ItemStack(getPlayerData(p)!!.team!!.teamColor!!.wool!!).clone()
                             val bomM = bom.itemMeta

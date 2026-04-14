@@ -544,11 +544,12 @@ object Roller {
                     var sound = false
                     for (i in 0..<data!!.weaponClass!!.mainWeapon!!.rollerShootQuantity) {
                         val `is`: Boolean
-                        if (data!!.weaponClass!!.mainWeapon!!.isHude) {
-                            `is` = shoot(p, vec)
-                        } else {
-                            `is` = shoot(p, null)
-                        }
+                        `is` =
+                            if (data!!.weaponClass!!.mainWeapon!!.isHude) {
+                                shoot(p, vec)
+                            } else {
+                                shoot(p, null)
+                            }
                         if (`is`) sound = true
                     }
                     if (sound) {
@@ -667,7 +668,7 @@ object Roller {
         val name = notDuplicateNumber.toString()
         DataMgr.mws.add(name)
         ball.customName = name
-        mainSnowballNameMap.put(name, ball)
+        mainSnowballNameMap[name] = ball
         setSnowballHitCount(name, 0)
         val task: BukkitRunnable =
             object : BukkitRunnable() {

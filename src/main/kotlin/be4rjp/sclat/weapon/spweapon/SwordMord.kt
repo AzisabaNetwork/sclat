@@ -120,7 +120,7 @@ object SwordMord {
                     }
                 }
                 val maxDist = 3
-                for (i in 0..maxDist - 1) {
+                for (i in 0..<maxDist) {
                     val pLocs = getSphere(vec, i.toDouble(), 20)
                     for (loc in pLocs) {
                         PaintMgr.paint(loc, player, false)
@@ -366,7 +366,7 @@ object SwordMord {
         val name = originName + "#QuadroArmsShotgunCounterShot"
         DataMgr.mws.add(name) //
         ball.customName = name
-        mainSnowballNameMap.put(name, ball)
+        mainSnowballNameMap[name] = ball
         setSnowballHitCount(name, 0)
         val spinnerTask: BukkitRunnable =
             object : BukkitRunnable() {
