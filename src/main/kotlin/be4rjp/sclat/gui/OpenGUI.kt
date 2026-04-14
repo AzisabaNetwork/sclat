@@ -403,13 +403,13 @@ object OpenGUI {
                 "§r§6SubWeapon : " +
                     Sclat.conf!!
                         .classConfig!!
-                        .getString("WeaponClass.$ClassName.SubWeaponName"),
+                        .getString("WeaponClass." + ClassName + ".SubWeaponName"),
             )
             lores.add(
                 "§r§6SPWeapon  : " +
                     Sclat.conf!!
                         .classConfig!!
-                        .getString("WeaponClass.$ClassName.SPWeaponName"),
+                        .getString("WeaponClass." + ClassName + ".SPWeaponName"),
             )
             itemm.lore = lores
             item.itemMeta = itemm
@@ -459,13 +459,13 @@ object OpenGUI {
                         "§r§6SubWeapon : " +
                             Sclat.conf!!
                                 .classConfig!!
-                                .getString("WeaponClass.$ClassName.SubWeaponName"),
+                                .getString("WeaponClass." + ClassName + ".SubWeaponName"),
                     )
                     lores.add(
                         "§r§6SPWeapon  : " +
                             Sclat.conf!!
                                 .classConfig!!
-                                .getString("WeaponClass.$ClassName.SPWeaponName"),
+                                .getString("WeaponClass." + ClassName + ".SPWeaponName"),
                     )
                     if (shop) {
                         lores.add("")
@@ -729,12 +729,11 @@ object OpenGUI {
         inv.setItem(9, shooter)
 
         val shooterP: ItemStack?
-        shooterP =
-            if (getPlayerData(player)!!.settings!!.showEffectMainWeaponInk()) {
-                ItemStack(Material.LIME_DYE)
-            } else {
-                ItemStack(Material.GUNPOWDER)
-            }
+        if (getPlayerData(player)!!.settings!!.showEffectMainWeaponInk()) {
+            shooterP = ItemStack(Material.LIME_DYE)
+        } else {
+            shooterP = ItemStack(Material.GUNPOWDER)
+        }
         val shooterPM = shooterP.itemMeta
         shooterPM!!.setDisplayName("メインウエポンのインクエフェクト")
         val shooterPR = ArrayList<String?>()
@@ -767,12 +766,11 @@ object OpenGUI {
         inv.setItem(10, charger)
 
         val chargerP: ItemStack?
-        chargerP =
-            if (getPlayerData(player)!!.settings!!.showEffectChargerLine()) {
-                ItemStack(Material.LIME_DYE)
-            } else {
-                ItemStack(Material.GUNPOWDER)
-            }
+        if (getPlayerData(player)!!.settings!!.showEffectChargerLine()) {
+            chargerP = ItemStack(Material.LIME_DYE)
+        } else {
+            chargerP = ItemStack(Material.GUNPOWDER)
+        }
         val chargerPM = chargerP.itemMeta
         chargerPM!!.setDisplayName("リッター5Gの自動チャージ")
         val chargerPR = ArrayList<String?>()
@@ -805,12 +803,11 @@ object OpenGUI {
         inv.setItem(11, chargerS)
 
         val chargersP: ItemStack?
-        chargersP =
-            if (getPlayerData(player)!!.settings!!.showEffectSPWeapon()) {
-                ItemStack(Material.LIME_DYE)
-            } else {
-                ItemStack(Material.GUNPOWDER)
-            }
+        if (getPlayerData(player)!!.settings!!.showEffectSPWeapon()) {
+            chargersP = ItemStack(Material.LIME_DYE)
+        } else {
+            chargersP = ItemStack(Material.GUNPOWDER)
+        }
         val chargersPM = chargersP.itemMeta
         chargersPM!!.setDisplayName("スペシャルウエポンのエフェクト")
         val chargersPR = ArrayList<String?>()
@@ -844,12 +841,11 @@ object OpenGUI {
         inv.setItem(12, rollaerL)
 
         val rollaerlP: ItemStack?
-        rollaerlP =
-            if (getPlayerData(player)!!.settings!!.showEffectSPWeaponRegion()) {
-                ItemStack(Material.LIME_DYE)
-            } else {
-                ItemStack(Material.GUNPOWDER)
-            }
+        if (getPlayerData(player)!!.settings!!.showEffectSPWeaponRegion()) {
+            rollaerlP = ItemStack(Material.LIME_DYE)
+        } else {
+            rollaerlP = ItemStack(Material.GUNPOWDER)
+        }
         val rollaerlPM = rollaerlP.itemMeta
         rollaerlPM!!.setDisplayName("スペシャルウエポンの範囲エフェクト")
         val rollaerlPR = ArrayList<String?>()
@@ -881,12 +877,11 @@ object OpenGUI {
         inv.setItem(13, rollerS)
 
         val rollersP: ItemStack?
-        rollersP =
-            if (getPlayerData(player)!!.settings!!.showSnowBall()) {
-                ItemStack(Material.LIME_DYE)
-            } else {
-                ItemStack(Material.GUNPOWDER)
-            }
+        if (getPlayerData(player)!!.settings!!.showSnowBall()) {
+            rollersP = ItemStack(Material.LIME_DYE)
+        } else {
+            rollersP = ItemStack(Material.GUNPOWDER)
+        }
         val rollersPM = rollersP.itemMeta
         rollersPM!!.setDisplayName("弾の表示")
         val rollersPR = ArrayList<String?>()
@@ -900,12 +895,11 @@ object OpenGUI {
         inv.setItem(22, rollersP)
 
         val bgmP: ItemStack?
-        bgmP =
-            if (getPlayerData(player)!!.settings!!.playBGM()) {
-                ItemStack(Material.LIME_DYE)
-            } else {
-                ItemStack(Material.GUNPOWDER)
-            }
+        if (getPlayerData(player)!!.settings!!.playBGM()) {
+            bgmP = ItemStack(Material.LIME_DYE)
+        } else {
+            bgmP = ItemStack(Material.GUNPOWDER)
+        }
         val bgmPM = bgmP.itemMeta
         bgmPM!!.setDisplayName("BGM")
         val bgmPR = ArrayList<String?>()
@@ -952,12 +946,11 @@ object OpenGUI {
         inv.setItem(14, bomb)
 
         val bombP: ItemStack?
-        bombP =
-            if (getPlayerData(player)!!.settings!!.showEffectBomb()) {
-                ItemStack(Material.LIME_DYE)
-            } else {
-                ItemStack(Material.GUNPOWDER)
-            }
+        if (getPlayerData(player)!!.settings!!.showEffectBomb()) {
+            bombP = ItemStack(Material.LIME_DYE)
+        } else {
+            bombP = ItemStack(Material.GUNPOWDER)
+        }
         val bombPM = bombP.itemMeta
         bombPM!!.setDisplayName("投擲武器の視認用エフェクト")
         val bombPR = ArrayList<String?>()
@@ -989,12 +982,11 @@ object OpenGUI {
         inv.setItem(15, bombEx)
 
         val bombexP: ItemStack?
-        bombexP =
-            if (getPlayerData(player)!!.settings!!.showEffectBombEx()) {
-                ItemStack(Material.LIME_DYE)
-            } else {
-                ItemStack(Material.GUNPOWDER)
-            }
+        if (getPlayerData(player)!!.settings!!.showEffectBombEx()) {
+            bombexP = ItemStack(Material.LIME_DYE)
+        } else {
+            bombexP = ItemStack(Material.GUNPOWDER)
+        }
         val bombexPM = bombexP.itemMeta
         bombexPM!!.setDisplayName("爆発エフェクト")
         val bombexPR = ArrayList<String?>()
@@ -1027,12 +1019,11 @@ object OpenGUI {
 
         // button
         val ckP: ItemStack?
-        ckP =
-            if (getPlayerData(player)!!.settings!!.doChargeKeep()) {
-                ItemStack(Material.LIME_DYE)
-            } else {
-                ItemStack(Material.GUNPOWDER)
-            }
+        if (getPlayerData(player)!!.settings!!.doChargeKeep()) {
+            ckP = ItemStack(Material.LIME_DYE)
+        } else {
+            ckP = ItemStack(Material.GUNPOWDER)
+        }
         val ckPM = ckP.itemMeta
         ckPM!!.setDisplayName("チャージキープ/ブリンクの旧挙動")
         val ckPR = ArrayList<String?>()

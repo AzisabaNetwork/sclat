@@ -90,13 +90,14 @@ class RayTrace(
             position: Vector,
             min: Vector,
             max: Vector,
-        ): Boolean =
+        ): Boolean {
             if (position.getX() < min.getX() || position.getX() > max.getX()) {
-                false
+                return false
             } else if (position.getY() < min.getY() || position.getY() > max.getY()) {
-                false
+                return false
             } else {
-                !(position.getZ() < min.getZ()) && !(position.getZ() > max.getZ())
+                return !(position.getZ() < min.getZ()) && !(position.getZ() > max.getZ())
             }
+        }
     }
 }

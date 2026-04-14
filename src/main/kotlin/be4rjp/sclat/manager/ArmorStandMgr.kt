@@ -35,7 +35,6 @@ import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 import org.bukkit.scheduler.BukkitRunnable
 import org.bukkit.util.Vector
-import kotlin.math.round
 
 /**
  *
@@ -117,24 +116,24 @@ object ArmorStandMgr {
                     .getWorld(
                         Sclat.conf!!
                             .armorStandSettings!!
-                            .getString("ArmorStand.$name.WorldName")!!,
+                            .getString("ArmorStand." + name + ".WorldName")!!,
                     )
             val ix =
                 Sclat.conf!!
                     .armorStandSettings!!
-                    .getInt("ArmorStand.$name.X")
+                    .getInt("ArmorStand." + name + ".X")
             val iy =
                 Sclat.conf!!
                     .armorStandSettings!!
-                    .getInt("ArmorStand.$name.Y")
+                    .getInt("ArmorStand." + name + ".Y")
             val iz =
                 Sclat.conf!!
                     .armorStandSettings!!
-                    .getInt("ArmorStand.$name.Z")
+                    .getInt("ArmorStand." + name + ".Z")
             val iyaw =
                 Sclat.conf!!
                     .armorStandSettings!!
-                    .getInt("ArmorStand.$name.Yaw")
+                    .getInt("ArmorStand." + name + ".Yaw")
             val il = Location(w, ix + 0.5, iy.toDouble(), iz + 0.5)
             il.yaw = iyaw.toFloat()
             val `as` = w!!.spawnEntity(il, EntityType.ARMOR_STAND) as ArmorStand
@@ -277,15 +276,14 @@ object ArmorStandMgr {
     @JvmStatic
     fun sprinklerArmorStandSetup(player: Player) {
         val al: Location?
-        al =
-            if (Sclat.conf!!
-                    .config!!
-                    .getString("WorkMode") == "Trial"
-            ) {
-                Sclat.lobby
-            } else {
-                getPlayerData(player)!!.matchLocation
-            }
+        if (Sclat.conf!!
+                .config!!
+                .getString("WorkMode") == "Trial"
+        ) {
+            al = Sclat.lobby
+        } else {
+            al = getPlayerData(player)!!.matchLocation
+        }
         val `as` = player.world.spawnEntity(al!!, EntityType.ARMOR_STAND) as ArmorStand
         `as`.isVisible = false
         `as`.isSmall = true
@@ -451,7 +449,7 @@ object ArmorStandMgr {
             if (`as`.isVisible) {
                 if (health > damage) {
                     val h = health - damage
-                    val rh = (round(h * 10)) / 10
+                    val rh = (Math.round(h * 10).toDouble()) / 10
                     `as`.customName = rh.toString()
                     `as`.location.world!!.playSound(`as`.location, Sound.ENTITY_PLAYER_HURT, 1f, 1f)
                 } else {

@@ -174,7 +174,7 @@ class PlayerData(
     var lastAttack: Player? = player
     var stoprun: Boolean = false
 
-    fun getArmorlist(n: Int): ArmorStand? = this.armorlist[n]
+    fun getArmorlist(n: Int): ArmorStand? = this.armorlist.get(n)
 
     fun setServerName(server: String?) {
         this.servername = server

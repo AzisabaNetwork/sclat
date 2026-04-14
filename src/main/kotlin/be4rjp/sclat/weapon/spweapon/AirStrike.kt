@@ -206,12 +206,11 @@ object AirStrike {
                             if (!getPlayerData(target)!!.isInMatch) continue
                             if (target.location.distanceSquared(drop!!.location) <= maxDistSquared) {
                                 val damage: Double
-                                damage =
-                                    if (localized) {
-                                        (maxDist - target.location.distance(drop!!.location)) * 5
-                                    } else {
-                                        (maxDist - target.location.distance(drop!!.location)) * 7
-                                    }
+                                if (localized) {
+                                    damage = (maxDist - target.location.distance(drop!!.location)) * 5
+                                } else {
+                                    damage = (maxDist - target.location.distance(drop!!.location)) * 7
+                                }
                                 if (getPlayerData(player)!!.team != getPlayerData(target)!!.team &&
                                     target.gameMode == GameMode.ADVENTURE
                                 ) {

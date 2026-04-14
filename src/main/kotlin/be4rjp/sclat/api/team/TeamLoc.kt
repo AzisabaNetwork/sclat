@@ -2,6 +2,7 @@ package be4rjp.sclat.api.team
 
 import be4rjp.sclat.data.MapData
 import org.bukkit.Location
+import java.util.Collections
 
 /**
  *
@@ -30,7 +31,7 @@ class TeamLoc(
         // list0.add(l2);
         // list0.add(l3);
         list0!!.add(l)
-        list0.shuffle()
+        Collections.shuffle(list0)
     }
 
     fun setupTeam1Loc() {
@@ -45,10 +46,10 @@ class TeamLoc(
         list1.add(l2)
         list1.add(l3)
         list1.add(l4)
-        list1.shuffle()
+        Collections.shuffle(list1)
     }
 
-    fun getTeam0Loc(i: Int): Location? = list0!![i]
+    fun getTeam0Loc(i: Int): Location? = list0!!.get(i)
 
-    fun getTeam1Loc(i: Int): Location? = list1!![i]
+    fun getTeam1Loc(i: Int): Location? = list1!!.get(i)
 }

@@ -221,7 +221,9 @@ internal class EchoThread(
             e.printStackTrace()
         } finally {
             try {
-                socket?.close()
+                if (socket != null) {
+                    socket.close()
+                }
             } catch (e: IOException) {
             }
             println("Disconnected " + socket!!.getRemoteSocketAddress())

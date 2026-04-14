@@ -120,7 +120,7 @@ object SwordMord {
                     }
                 }
                 val maxDist = 3
-                for (i in 0..<maxDist) {
+                for (i in 0..maxDist - 1) {
                     val pLocs = getSphere(vec, i.toDouble(), 20)
                     for (loc in pLocs) {
                         PaintMgr.paint(loc, player, false)
@@ -355,7 +355,7 @@ object SwordMord {
         PaintMgr.paintHightestBlock(player.location, player, true, true)
 
         val ball = player.launchProjectile(Snowball::class.java)
-        (ball as CraftSnowball).handle.item = CraftItemStack.asNMSCopy(ItemStack(getPlayerData(player)!!.team!!.teamColor!!.wool!!))
+        (ball as CraftSnowball).handle.setItem(CraftItemStack.asNMSCopy(ItemStack(getPlayerData(player)!!.team!!.teamColor!!.wool!!)))
         player.world.playSound(player.location, Sound.ENTITY_PIG_STEP, 0.3f, 1f)
         val vec = player.location.direction.multiply(quadroShootSpeed)
         val random = 0.1
@@ -363,10 +363,10 @@ object SwordMord {
         ball.velocity = vec
         ball.shooter = player
         val originName = notDuplicateNumber.toString()
-        val name = "$originName#QuadroArmsShotgunCounterShot"
+        val name = originName + "#QuadroArmsShotgunCounterShot"
         DataMgr.mws.add(name) //
         ball.customName = name
-        mainSnowballNameMap[name] = ball
+        mainSnowballNameMap.put(name, ball)
         setSnowballHitCount(name, 0)
         val spinnerTask: BukkitRunnable =
             object : BukkitRunnable() {
@@ -391,7 +391,7 @@ object SwordMord {
                     ).multiply(quadroShootSpeed / 35)
 
                 override fun run() {
-                    inkball = mainSnowballNameMap[name]
+                    inkball = mainSnowballNameMap.get(name)
 
                     if (inkball != ball) {
                         i += getSnowballHitCount(name) - 1

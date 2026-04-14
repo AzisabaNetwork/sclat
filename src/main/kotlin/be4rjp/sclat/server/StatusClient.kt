@@ -44,7 +44,7 @@ class StatusClient(
                                     var cmd: String? = null
                                     while (true) {
                                         if (!commands.isEmpty()) {
-                                            cmd = commands[0]
+                                            cmd = commands.get(0)
 
                                             // 送信用の文字を送信
                                             writer.println(cmd)

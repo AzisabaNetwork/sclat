@@ -19,7 +19,8 @@ class EntityClickListener(
             val entityID = packet.integers.readSafely(0)
 
             try {
-                val rankingHolograms = Sclat.playerHolograms.get(player) ?: return
+                val rankingHolograms = Sclat.playerHolograms.get(player)
+                if (rankingHolograms == null) return
                 for (armorStand in rankingHolograms.armorStandList) {
                     if (armorStand!!.bukkitEntity.entityId == entityID) {
                         player.playSound(player.location, Sound.BLOCK_WOODEN_PRESSURE_PLATE_CLICK_ON, 1f, 1.2f)

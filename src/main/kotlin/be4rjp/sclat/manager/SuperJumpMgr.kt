@@ -118,7 +118,7 @@ object SuperJumpMgr {
                 override fun run() {
                     if (getPlayerData(p)!!.isDead) cancel()
 
-                    val position = positions[i].toLocation(p.location.world!!)
+                    val position = positions.get(i).toLocation(p.location.world!!)
                     val py = (
                         (abs((positions.size / 2) - i).toDouble().pow(2.0) * -1 * coef) +
                             ((positions.size / 2).toDouble().pow(2.0) * coef)

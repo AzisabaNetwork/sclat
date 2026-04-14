@@ -348,7 +348,7 @@ object SclatUtil {
         val targetData = DataMgr.getPlayerData(target)!!
         DataMgr.getPlayerData(player)
         if (target.hasPotionEffect(PotionEffectType.FIRE_RESISTANCE)) {
-            damage *= 0.6
+            damage = damage * 0.6
         }
         val armorHealth = targetData.armor
         // if((target.getHealth()*2 + armorHealth*2 + target.getAbsorptionAmount() >

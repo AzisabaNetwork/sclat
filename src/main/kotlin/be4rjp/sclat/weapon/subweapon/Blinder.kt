@@ -54,7 +54,7 @@ object Blinder {
         val rayTrace = RayTrace(player.eyeLocation.toVector(), player.eyeLocation.direction)
         val positions: ArrayList<Vector> = rayTrace.traverse(reach.toDouble(), 0.15)
         loop@ for (i in positions.indices) {
-            val position = positions[i].toLocation(player.location.world!!)
+            val position = positions.get(i).toLocation(player.location.world!!)
             val block = player.location.world!!.getBlockAt(position)
 
             if (block.type != Material.AIR) {

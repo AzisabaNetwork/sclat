@@ -356,7 +356,7 @@ object Tutorial {
         period: Int,
         match: Match,
     ) {
-        val match = match
+        var match = match
         val task: BukkitRunnable =
             object : BukkitRunnable() {
                 var time: Int = 0

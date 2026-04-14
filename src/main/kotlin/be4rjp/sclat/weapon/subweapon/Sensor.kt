@@ -49,7 +49,7 @@ object Sensor {
                     try {
                         if (c == 0) {
                             pVec = p.eyeLocation.direction
-                            if (!getPlayerData(player)!!.isBombRush) p.exp -= 0.39f
+                            if (!getPlayerData(player)!!.isBombRush) p.exp = p.exp - 0.39f
                             val bom = ItemStack(Material.DISPENSER).clone()
                             val bomM = bom.itemMeta
                             bomM!!.setLocalizedName(notDuplicateNumber.toString())

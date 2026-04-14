@@ -191,7 +191,7 @@ object Amehurasi {
                                 )
                             val positions4: ArrayList<Vector> = rayTrace4.traverse(300.0, 1.0)
                             for (i in 1..<positions4.size) {
-                                val position = positions4[i].toLocation(p.location.world!!)
+                                val position = positions4.get(i).toLocation(p.location.world!!)
 
                                 if (position.block.type != Material.AIR) break
 
@@ -258,7 +258,7 @@ object Amehurasi {
         loc: Location,
     ) {
         val ball = player.world.spawnEntity(loc, EntityType.SNOWBALL) as Snowball
-        (ball as CraftSnowball).handle.item = CraftItemStack.asNMSCopy(ItemStack(getPlayerData(player)!!.team!!.teamColor!!.wool!!))
+        (ball as CraftSnowball).handle.setItem(CraftItemStack.asNMSCopy(ItemStack(getPlayerData(player)!!.team!!.teamColor!!.wool!!)))
         ball.shooter = player
         ball.customName = "Amehurasi"
         val task: BukkitRunnable =

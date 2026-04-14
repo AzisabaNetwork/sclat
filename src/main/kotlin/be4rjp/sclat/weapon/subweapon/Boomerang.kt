@@ -53,7 +53,7 @@ object Boomerang {
                     try {
                         if (i == 0) {
                             cumbackBoomeran = false
-                            if (!getPlayerData(player)!!.isBombRush) player.exp -= 0.59f
+                            if (!getPlayerData(player)!!.isBombRush) player.exp = player.exp - 0.59f
 
                             as1 =
                                 player.world.spawn(

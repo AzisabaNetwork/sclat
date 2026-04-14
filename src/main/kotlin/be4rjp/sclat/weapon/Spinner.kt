@@ -190,14 +190,14 @@ object Spinner {
             player.playSound(player.location, Sound.UI_BUTTON_CLICK, 1f, 1.63f)
             return
         }
-        player.exp -=
+        player.exp = player.exp -
             (
                 data.weaponClass?.mainWeapon!!.needInk
                     * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) /
                     Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)
             ).toFloat()
         val ball = player.launchProjectile(Snowball::class.java)
-        (ball as CraftSnowball).handle.item = CraftItemStack.asNMSCopy(ItemStack(getPlayerData(player)!!.team!!.teamColor!!.wool!!))
+        (ball as CraftSnowball).handle.setItem(CraftItemStack.asNMSCopy(ItemStack(getPlayerData(player)!!.team!!.teamColor!!.wool!!)))
         player.world.playSound(player.location, Sound.ENTITY_PIG_STEP, 0.3f, 1.1f)
         val vec =
             player
@@ -218,7 +218,7 @@ object Spinner {
         val name = notDuplicateNumber.toString()
         DataMgr.mws.add(name)
         ball.customName = name
-        mainSnowballNameMap[name] = ball
+        mainSnowballNameMap.put(name, ball)
         setSnowballHitCount(name, 0)
         val task: BukkitRunnable =
             object : BukkitRunnable() {
@@ -238,7 +238,7 @@ object Spinner {
                     ).multiply(getPlayerData(p)!!.weaponClass!!.mainWeapon!!.shootSpeed / 17)
 
                 override fun run() {
-                    inkball = mainSnowballNameMap[name]
+                    inkball = mainSnowballNameMap.get(name)
 
                     if (inkball != ball) {
                         i += getSnowballHitCount(name) - 1

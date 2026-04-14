@@ -53,7 +53,7 @@ object CurlingBomb {
                 override fun run() {
                     try {
                         if (i == 0) {
-                            if (!getPlayerData(player)!!.isBombRush) player.exp -= 0.59f
+                            if (!getPlayerData(player)!!.isBombRush) player.exp = player.exp - 0.59f
 
                             as1 =
                                 player.world.spawn(
@@ -149,7 +149,7 @@ object CurlingBomb {
                             }
                         }
 
-                        if (i in 70..80) {
+                        if (i >= 70 && i <= 80) {
                             if (i % 2 == 0) player.world.playSound(as1l, Sound.BLOCK_NOTE_BLOCK_PLING, 1f, 1.6f)
                         }
 

@@ -8,11 +8,11 @@ import java.util.function.Consumer
 
 @NullMarked
 class PlayerHolograms {
-    private val rankingHoloMap: HashMap<UUID, RankingHolograms> = HashMap()
+    protected val rankingHoloMap: HashMap<UUID, RankingHolograms> = HashMap()
 
     fun add(player: Player) {
         val playerHolo = RankingHolograms(player)
-        rankingHoloMap[player.uniqueId] = playerHolo
+        rankingHoloMap.put(player.uniqueId, playerHolo)
         PlayerStatusMgr.hologramUpdateRunnable(player)
     }
 
@@ -28,7 +28,7 @@ class PlayerHolograms {
 
     fun get(player: Player): RankingHolograms? = get(player.uniqueId)
 
-    fun get(playerUuid: UUID): RankingHolograms? = rankingHoloMap[playerUuid]
+    fun get(playerUuid: UUID): RankingHolograms? = rankingHoloMap.get(playerUuid)
 
     fun remove(player: Player) {
         rankingHoloMap.remove(player.uniqueId)

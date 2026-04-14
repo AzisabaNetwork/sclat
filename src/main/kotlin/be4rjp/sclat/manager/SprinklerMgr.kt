@@ -27,7 +27,7 @@ object SprinklerMgr {
     ) {
         getPlayerData(player)
         val ball = player.world.spawnEntity(`as`.location.add(0.0, 0.5, 0.0), EntityType.SNOWBALL) as Snowball
-        (ball as CraftSnowball).handle.item = CraftItemStack.asNMSCopy(ItemStack(getPlayerData(player)!!.team!!.teamColor!!.wool!!))
+        (ball as CraftSnowball).handle.setItem(CraftItemStack.asNMSCopy(ItemStack(getPlayerData(player)!!.team!!.teamColor!!.wool!!)))
         player.world.playSound(`as`.location, Sound.ENTITY_PIG_STEP, 0.1f, 1f)
         val random = 1.2
         vec.add(

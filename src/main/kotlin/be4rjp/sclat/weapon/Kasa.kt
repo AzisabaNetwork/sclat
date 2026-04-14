@@ -116,14 +116,14 @@ object Kasa {
             player.sendTitle("", ChatColor.RED.toString() + "インクが足りません", 0, 13, 2)
             return true
         }
-        player.exp -=
+        player.exp = player.exp -
             (
                 data.weaponClass?.mainWeapon!!.needInk
                     * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) /
                     Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)
             ).toFloat()
         val ball = player.launchProjectile(Snowball::class.java)
-        (ball as CraftSnowball).handle.item = CraftItemStack.asNMSCopy(ItemStack(getPlayerData(player)!!.team!!.teamColor!!.wool!!))
+        (ball as CraftSnowball).handle.setItem(CraftItemStack.asNMSCopy(ItemStack(getPlayerData(player)!!.team!!.teamColor!!.wool!!)))
         var vec: Vector? =
             player
                 .location
@@ -144,7 +144,7 @@ object Kasa {
         val name = notDuplicateNumber.toString()
         DataMgr.mws.add(name)
         ball.customName = name
-        mainSnowballNameMap[name] = ball
+        mainSnowballNameMap.put(name, ball)
         setSnowballHitCount(name, 0)
         val task: BukkitRunnable =
             object : BukkitRunnable() {
@@ -161,7 +161,7 @@ object Kasa {
                     ).multiply(getPlayerData(p)!!.weaponClass!!.mainWeapon!!.shootSpeed / 17)
 
                 override fun run() {
-                    inkball = mainSnowballNameMap[name]
+                    inkball = mainSnowballNameMap.get(name)
 
                     if (inkball != ball) {
                         i += getSnowballHitCount(name) - 1
@@ -243,12 +243,11 @@ object Kasa {
                     try {
                         val data = getPlayerData(p)
 
-                        weapon =
-                            try {
-                                MainWeaponMgr.equalWeapon(p)
-                            } catch (e: Exception) {
-                                false
-                            }
+                        try {
+                            weapon = MainWeaponMgr.equalWeapon(p)
+                        } catch (e: Exception) {
+                            weapon = false
+                        }
 
                         if (data!!.isSneaking && kdata.damage <= 200) {
                             if (!sound) {

@@ -77,7 +77,7 @@ class Config {
         try {
             if (!targetFile.exists()) targetFile.createNewFile()
         } catch (e: IOException) {
-            Bukkit.getLogger().warning("Failed to create file: $e")
+            Bukkit.getLogger().warning("Failed to create file: " + e)
         }
     }
 

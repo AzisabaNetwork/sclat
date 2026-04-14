@@ -179,14 +179,14 @@ class SnowballListener : Listener {
                                         when (args[1]) {
                                             "Burst" -> {
                                                 if (DataMgr.oto.containsKey(args[2])) {
-                                                    DataMgr.oto[args[2]] = DataMgr.oto.get(args[2])!! + 1
+                                                    DataMgr.oto.put(args[2], DataMgr.oto.get(args[2])!! + 1)
                                                 } else {
-                                                    DataMgr.oto[args[2]] = 1
+                                                    DataMgr.oto.put(args[2], 1)
                                                 }
                                             }
                                         }
 
-                                        if (DataMgr.oto[args[2]] ==
+                                        if (DataMgr.oto.get(args[2]) ==
                                             getPlayerData(shooter)!!
                                                 .weaponClass!!
                                                 .mainWeapon!!
@@ -219,12 +219,11 @@ class SnowballListener : Listener {
                                             .decreaseRate
                                 }
                                 var damage = getPlayerData(shooter)!!.weaponClass!!.mainWeapon!!.damage
-                                damage *=
-                                    if (dmgDouble != 1.0) {
-                                        dmgDouble
-                                    } else {
-                                        Gear.getGearInfluence(shooter, Gear.Type.MAIN_SPEC_UP)
-                                    }
+                                if (dmgDouble != 1.0) {
+                                    damage = damage * dmgDouble
+                                } else {
+                                    damage = damage * Gear.getGearInfluence(shooter, Gear.Type.MAIN_SPEC_UP)
+                                }
                                 val type =
                                     getPlayerData(shooter)!!
                                         .weaponClass!!
@@ -237,7 +236,7 @@ class SnowballListener : Listener {
                                     damage -= damage * (ticksLived / 100)
                                 }
                                 if (type == "Funnel") {
-                                    damage += Funnel.funnelPursuitPlayer(shooter, target)
+                                    damage = damage + Funnel.funnelPursuitPlayer(shooter, target)
                                     if (damage < 0.1) {
                                         damage = 0.1
                                     }
@@ -314,14 +313,14 @@ class SnowballListener : Listener {
                                                 when (args[1]) {
                                                     "Burst" -> {
                                                         if (DataMgr.oto.containsKey(args[2])) {
-                                                            DataMgr.oto[args[2]] = DataMgr.oto.get(args[2])!! + 1
+                                                            DataMgr.oto.put(args[2], DataMgr.oto.get(args[2])!! + 1)
                                                         } else {
-                                                            DataMgr.oto[args[2]] = 1
+                                                            DataMgr.oto.put(args[2], 1)
                                                         }
                                                     }
                                                 }
 
-                                                if (DataMgr.oto[args[2]] ==
+                                                if (DataMgr.oto.get(args[2]) ==
                                                     getPlayerData(shooter)!!
                                                         .weaponClass!!
                                                         .mainWeapon!!
@@ -391,12 +390,11 @@ class SnowballListener : Listener {
                         }
                     }
                     var damage = getPlayerData(shooter)!!.weaponClass!!.mainWeapon!!.damage
-                    damage *=
-                        if (dmgDouble != 1.0) {
-                            dmgDouble
-                        } else {
-                            Gear.getGearInfluence(shooter, Gear.Type.MAIN_SPEC_UP)
-                        }
+                    if (dmgDouble != 1.0) {
+                        damage *= dmgDouble
+                    } else {
+                        damage *= Gear.getGearInfluence(shooter, Gear.Type.MAIN_SPEC_UP)
+                    }
                     val type = getPlayerData(shooter)!!.weaponClass!!.mainWeapon!!.weaponType
 
                     if (type != "Blaster") {
@@ -436,7 +434,7 @@ class SnowballListener : Listener {
                             (armorStand.customName != "SplashShield") &&
                             (armorStand.customName != "Kasa")
                         ) {
-                            damage += Funnel.funnelPursuit(shooter, armorStand)
+                            damage = damage + Funnel.funnelPursuit(shooter, armorStand)
                             if (damage < 0.1) {
                                 damage = 0.1
                             }
@@ -487,7 +485,7 @@ class SnowballListener : Listener {
                             ) as Snowball
                         ball2.velocity = vec
                         ball2.customName = ball.customName
-                        snowballNameMap[ball.customName] = ball2
+                        snowballNameMap.put(ball.customName, ball2)
                         setSnowballIsHit(ball2, false)
                         for (o_player in plugin.server.onlinePlayers) {
                             val connection = (o_player as CraftPlayer).handle.playerConnection
@@ -531,16 +529,17 @@ class SnowballListener : Listener {
                                             ),
                                             EntityType.SNOWBALL,
                                         ) as Snowball
-                                    (ball2 as CraftSnowball).handle.item =
+                                    (ball2 as CraftSnowball).handle.setItem(
                                         CraftItemStack.asNMSCopy(
                                             ItemStack(getPlayerData(shooter)!!.team!!.teamColor!!.wool!!),
-                                        )
+                                        ),
+                                    )
                                     ball2.shooter = shooter
                                     ball2.velocity = vec
                                     ball2.customName = ball.customName
                                     // if(!DataMgr.getPlayerData(shooter).getWeaponClass().getMainWeapon().getWeaponType().equals("Blaster"))
                                     addSnowballHitCount(ball.customName)
-                                    mainSnowballNameMap[ball.customName] = ball2
+                                    mainSnowballNameMap.put(ball.customName, ball2)
                                 }
                                 if (event.hitEntity!!.customName == "Kasa") {
                                     val ssdata = getKasaDataFromArmorStand(event.hitEntity as ArmorStand?)
@@ -568,16 +567,17 @@ class SnowballListener : Listener {
                                             ),
                                             EntityType.SNOWBALL,
                                         ) as Snowball
-                                    (ball2 as CraftSnowball).handle.item =
+                                    (ball2 as CraftSnowball).handle.setItem(
                                         CraftItemStack.asNMSCopy(
                                             ItemStack(getPlayerData(shooter)!!.team!!.teamColor!!.wool!!),
-                                        )
+                                        ),
+                                    )
                                     ball2.shooter = shooter
                                     ball2.velocity = vec
                                     ball2.customName = ball.customName
                                     // if(!DataMgr.getPlayerData(shooter).getWeaponClass().getMainWeapon().getWeaponType().equals("Blaster"))
                                     addSnowballHitCount(ball.customName)
-                                    mainSnowballNameMap[ball.customName] = ball2
+                                    mainSnowballNameMap.put(ball.customName, ball2)
                                 }
                             }
                         }
@@ -779,14 +779,14 @@ class SnowballListener : Listener {
                                             when (args[1]) {
                                                 "Burst" -> {
                                                     if (DataMgr.oto.containsKey(args[2])) {
-                                                        DataMgr.oto[args[2]] = DataMgr.oto.get(args[2])!! + 1
+                                                        DataMgr.oto.put(args[2], DataMgr.oto.get(args[2])!! + 1)
                                                     } else {
-                                                        DataMgr.oto[args[2]] = 1
+                                                        DataMgr.oto.put(args[2], 1)
                                                     }
                                                 }
                                             }
 
-                                            if (DataMgr.oto[args[2]] ==
+                                            if (DataMgr.oto.get(args[2]) ==
                                                 getPlayerData(shooter)!!
                                                     .weaponClass!!
                                                     .mainWeapon!!
@@ -878,7 +878,7 @@ class SnowballListener : Listener {
                         (`as`.customName != "SplashShield") &&
                         (`as`.customName != "Kasa")
                     ) {
-                        damage += Funnel.funnelPursuit(shooter, `as`)
+                        damage = damage + Funnel.funnelPursuit(shooter, `as`)
                         if (damage < 0.1) {
                             damage = 0.1
                         }
