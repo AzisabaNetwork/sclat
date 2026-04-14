@@ -339,7 +339,7 @@ object QuadroArms {
         ball.velocity = vec
         ball.shooter = player
         val originName = notDuplicateNumber.toString()
-        val name = originName + "#QuadroArmsSpinner"
+        val name = "$originName#QuadroArmsSpinner"
         DataMgr.mws.add(name) //
         ball.customName = name
         mainSnowballNameMap[name] = ball
@@ -437,7 +437,7 @@ object QuadroArms {
         ball.velocity = vec
         ball.shooter = player
         val originName = notDuplicateNumber.toString()
-        val name = originName + "#QuadroArmsShotgun"
+        val name = "$originName#QuadroArmsShotgun"
         DataMgr.mws.add(name)
         ball.customName = name
         mainSnowballNameMap[name] = ball
@@ -526,7 +526,7 @@ object QuadroArms {
         ball.velocity = vec
         ball.shooter = player
         val originName = notDuplicateNumber.toString()
-        val name = originName + "#QuadroArmsSpinner"
+        val name = "$originName#QuadroArmsSpinner"
         ball.customName = name
         DataMgr.mws.add(name)
         mainSnowballNameMap[name] = ball

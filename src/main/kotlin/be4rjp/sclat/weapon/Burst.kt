@@ -142,7 +142,7 @@ object Burst {
         vec.add(Vector(Math.random() * random - random / 2, 0.0, Math.random() * random - random / 2))
         ball.velocity = vec
         ball.shooter = player
-        val name = notDuplicateNumber.toString() + ":Burst:" + otoNumber
+        val name = "$notDuplicateNumber:Burst:$otoNumber"
         DataMgr.mws.add(name)
         if (sound) DataMgr.tsl.add(name)
         ball.customName = name

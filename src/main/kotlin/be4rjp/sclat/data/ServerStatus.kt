@@ -96,13 +96,13 @@ class ServerStatus(
                             val signState = sign.state as Sign
                             signState.setLine(0, displayName)
                             if (isOnline) {
-                                signState.setLine(1, "§a" + playerCount + " / " + maxPlayer)
+                                signState.setLine(1, "§a$playerCount / $maxPlayer")
                                 if (runningMatch) {
                                     signState.setLine(2, "§cIN MATCH")
                                 } else {
                                     signState.setLine(2, "§aINACTIVE")
                                 }
-                                signState.setLine(3, "§b" + mapName)
+                                signState.setLine(3, "§b$mapName")
                             } else {
                                 signState.setLine(1, if (isMaintenance) "§cMAINTENANCE" else "§cOFFLINE")
                                 signState.setLine(2, "")

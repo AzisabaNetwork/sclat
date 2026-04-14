@@ -38,12 +38,12 @@ object PlayerStatusMgr {
 
         if (!Sclat.conf!!
                 .playerStatus
-                .contains("Status." + playerUuid)
+                .contains("Status.$playerUuid")
         ) {
             setDefaultStatus(player)
         } else if (!Sclat.conf!!
                 .playerStatus
-                .contains("Status." + playerUuid + ".Money")
+                .contains("Status.$playerUuid.Money")
         ) {
             setDefaultStatus(player)
         }
@@ -265,7 +265,7 @@ object PlayerStatusMgr {
         val uuid: String = player.uniqueId.toString()
         Sclat.conf!!
             .playerStatus
-            .set("Status." + uuid + ".Rank", rank)
+            .set("Status.$uuid.Rank", rank)
     }
 
     fun setRank(
@@ -274,7 +274,7 @@ object PlayerStatusMgr {
     ) {
         Sclat.conf!!
             .playerStatus
-            .set("Status." + uuid + ".Rank", rank)
+            .set("Status.$uuid.Rank", rank)
     }
 
     fun setLv(
@@ -283,7 +283,7 @@ object PlayerStatusMgr {
     ) {
         Sclat.conf!!
             .playerStatus
-            .set("Status." + uuid + ".Lv", lv)
+            .set("Status.$uuid.Lv", lv)
     }
 
     @JvmStatic
@@ -294,7 +294,7 @@ object PlayerStatusMgr {
         val uuid: String = player.uniqueId.toString()
         Sclat.conf!!
             .playerStatus
-            .set("Status." + uuid + ".Gear", g)
+            .set("Status.$uuid.Gear", g)
     }
 
     fun setEquiptClass(
@@ -304,7 +304,7 @@ object PlayerStatusMgr {
         val uuid: String = player.uniqueId.toString()
         Sclat.conf!!
             .playerStatus
-            .set("Status." + uuid + ".EquiptClass", name)
+            .set("Status.$uuid.EquiptClass", name)
     }
 
     fun setTutorialState(
@@ -313,7 +313,7 @@ object PlayerStatusMgr {
     ) {
         Sclat.conf!!
             .playerStatus
-            .set("Status." + uuid + ".Tutorial", g)
+            .set("Status.$uuid.Tutorial", g)
     }
 
     @JvmStatic
@@ -353,10 +353,10 @@ object PlayerStatusMgr {
     ) {
         val uuid: String = player.uniqueId.toString()
         Sclat.conf!!.playerStatus.set(
-            "Status." + uuid + ".Money",
+            "Status.$uuid.Money",
             Sclat.conf!!
                 .playerStatus
-                .getInt("Status." + uuid + ".Money") + m,
+                .getInt("Status.$uuid.Money") + m,
         )
     }
 
@@ -365,10 +365,10 @@ object PlayerStatusMgr {
         m: Int,
     ) {
         Sclat.conf!!.playerStatus.set(
-            "Status." + uuid + ".Money",
+            "Status.$uuid.Money",
             Sclat.conf!!
                 .playerStatus
-                .getInt("Status." + uuid + ".Money") + m,
+                .getInt("Status.$uuid.Money") + m,
         )
     }
 
@@ -379,10 +379,10 @@ object PlayerStatusMgr {
     ) {
         val uuid: String = player.uniqueId.toString()
         Sclat.conf!!.playerStatus.set(
-            "Status." + uuid + ".Money",
+            "Status.$uuid.Money",
             Sclat.conf!!
                 .playerStatus
-                .getInt("Status." + uuid + ".Money") - m,
+                .getInt("Status.$uuid.Money") - m,
         )
     }
 
@@ -392,10 +392,10 @@ object PlayerStatusMgr {
     ) {
         val uuid: String = player.uniqueId.toString()
         Sclat.conf!!.playerStatus.set(
-            "Status." + uuid + ".Lv",
+            "Status.$uuid.Lv",
             Sclat.conf!!
                 .playerStatus
-                .getInt("Status." + uuid + ".Lv") + m,
+                .getInt("Status.$uuid.Lv") + m,
         )
     }
 
@@ -406,15 +406,15 @@ object PlayerStatusMgr {
         val uuid: String = player.uniqueId.toString()
         if (getRank(player) + m > 0) {
             Sclat.conf!!.playerStatus.set(
-                "Status." + uuid + ".Rank",
+                "Status.$uuid.Rank",
                 Sclat.conf!!
                     .playerStatus
-                    .getInt("Status." + uuid + ".Rank") + m,
+                    .getInt("Status.$uuid.Rank") + m,
             )
         } else {
             Sclat.conf!!
                 .playerStatus
-                .set("Status." + uuid + ".Rank", 0)
+                .set("Status.$uuid.Rank", 0)
         }
     }
 
@@ -424,10 +424,10 @@ object PlayerStatusMgr {
     ) {
         val uuid: String = player.uniqueId.toString()
         Sclat.conf!!.playerStatus.set(
-            "Status." + uuid + ".Kill",
+            "Status.$uuid.Kill",
             Sclat.conf!!
                 .playerStatus
-                .getInt("Status." + uuid + ".Kill") + m,
+                .getInt("Status.$uuid.Kill") + m,
         )
     }
 
@@ -437,10 +437,10 @@ object PlayerStatusMgr {
     ) {
         val uuid: String = player.uniqueId.toString()
         Sclat.conf!!.playerStatus.set(
-            "Status." + uuid + ".Paint",
+            "Status.$uuid.Paint",
             Sclat.conf!!
                 .playerStatus
-                .getInt("Status." + uuid + ".Paint") + m,
+                .getInt("Status.$uuid.Paint") + m,
         )
     }
 
@@ -449,10 +449,10 @@ object PlayerStatusMgr {
         m: Int,
     ) {
         Sclat.conf!!.playerStatus.set(
-            "Status." + uuid + ".Lv",
+            "Status.$uuid.Lv",
             Sclat.conf!!
                 .playerStatus
-                .getInt("Status." + uuid + ".Lv") + m,
+                .getInt("Status.$uuid.Lv") + m,
         )
     }
 
@@ -462,15 +462,15 @@ object PlayerStatusMgr {
     ) {
         if (getRank(uuid) + m > 0) {
             Sclat.conf!!.playerStatus.set(
-                "Status." + uuid + ".Rank",
+                "Status.$uuid.Rank",
                 Sclat.conf!!
                     .playerStatus
-                    .getInt("Status." + uuid + ".Rank") + m,
+                    .getInt("Status.$uuid.Rank") + m,
             )
         } else {
             Sclat.conf!!
                 .playerStatus
-                .set("Status." + uuid + ".Rank", 0)
+                .set("Status.$uuid.Rank", 0)
         }
     }
 
@@ -479,10 +479,10 @@ object PlayerStatusMgr {
         m: Int,
     ) {
         Sclat.conf!!.playerStatus.set(
-            "Status." + uuid + ".Kill",
+            "Status.$uuid.Kill",
             Sclat.conf!!
                 .playerStatus
-                .getInt("Status." + uuid + ".Kill") + m,
+                .getInt("Status.$uuid.Kill") + m,
         )
     }
 
@@ -491,10 +491,10 @@ object PlayerStatusMgr {
         m: Int,
     ) {
         Sclat.conf!!.playerStatus.set(
-            "Status." + uuid + ".Paint",
+            "Status.$uuid.Paint",
             Sclat.conf!!
                 .playerStatus
-                .getInt("Status." + uuid + ".Paint") + m,
+                .getInt("Status.$uuid.Paint") + m,
         )
     }
 
@@ -503,7 +503,7 @@ object PlayerStatusMgr {
         val uuid: String = player.uniqueId.toString()
         return Sclat.conf!!
             .playerStatus
-            .getInt("Status." + uuid + ".Money")
+            .getInt("Status.$uuid.Money")
     }
 
     @JvmStatic
@@ -511,32 +511,32 @@ object PlayerStatusMgr {
         val uuid: String = player.uniqueId.toString()
         return Sclat.conf!!
             .playerStatus
-            .getInt("Status." + uuid + ".Lv")
+            .getInt("Status.$uuid.Lv")
     }
 
     fun getLv(uuid: String?): Int =
         Sclat.conf!!
             .playerStatus
-            .getInt("Status." + uuid + ".Lv")
+            .getInt("Status.$uuid.Lv")
 
     @JvmStatic
     fun getRank(player: Player): Int {
         val uuid: String = player.uniqueId.toString()
         return Sclat.conf!!
             .playerStatus
-            .getInt("Status." + uuid + ".Rank")
+            .getInt("Status.$uuid.Rank")
     }
 
     fun getRank(uuid: String?): Int =
         Sclat.conf!!
             .playerStatus
-            .getInt("Status." + uuid + ".Rank")
+            .getInt("Status.$uuid.Rank")
 
     fun getGear(player: Player): Int {
         val uuid: String = player.uniqueId.toString()
         return Sclat.conf!!
             .playerStatus
-            .getInt("Status." + uuid + ".Gear")
+            .getInt("Status.$uuid.Gear")
     }
 
     @JvmStatic
@@ -544,38 +544,38 @@ object PlayerStatusMgr {
         val uuid: String = player.uniqueId.toString()
         return Sclat.conf!!
             .playerStatus
-            .getInt("Status." + uuid + ".Kill")
+            .getInt("Status.$uuid.Kill")
     }
 
     fun getKill(uuid: String?): Int =
         Sclat.conf!!
             .playerStatus
-            .getInt("Status." + uuid + ".Kill")
+            .getInt("Status.$uuid.Kill")
 
     @JvmStatic
     fun getPaint(player: Player): Int {
         val uuid: String = player.uniqueId.toString()
         return Sclat.conf!!
             .playerStatus
-            .getInt("Status." + uuid + ".Paint")
+            .getInt("Status.$uuid.Paint")
     }
 
     fun getPaint(uuid: String?): Int =
         Sclat.conf!!
             .playerStatus
-            .getInt("Status." + uuid + ".Paint")
+            .getInt("Status.$uuid.Paint")
 
     fun getEquiptClass(player: Player): String? {
         val uuid: String = player.uniqueId.toString()
         return Sclat.conf!!
             .playerStatus
-            .getString("Status." + uuid + ".EquiptClass")
+            .getString("Status.$uuid.EquiptClass")
     }
 
     fun getTutorialState(uuid: String?): Int =
         Sclat.conf!!
             .playerStatus
-            .getInt("Status." + uuid + ".Tutorial")
+            .getInt("Status.$uuid.Tutorial")
 
     fun addTicket(
         player: Player,
@@ -584,17 +584,17 @@ object PlayerStatusMgr {
         val uuid: String = player.uniqueId.toString()
         if (!Sclat.conf!!
                 .playerStatus
-                .contains("Status." + uuid + ".Ticket")
+                .contains("Status.$uuid.Ticket")
         ) {
             Sclat.conf!!
                 .playerStatus
-                .set("Status." + uuid + ".Ticket", 0)
+                .set("Status.$uuid.Ticket", 0)
         }
         Sclat.conf!!.playerStatus.set(
-            "Status." + uuid + ".Ticket",
+            "Status.$uuid.Ticket",
             Sclat.conf!!
                 .playerStatus
-                .getInt("Status." + uuid + ".Ticket") + m,
+                .getInt("Status.$uuid.Ticket") + m,
         )
     }
 
@@ -604,17 +604,17 @@ object PlayerStatusMgr {
     ) {
         if (!Sclat.conf!!
                 .playerStatus
-                .contains("Status." + uuid + ".Ticket")
+                .contains("Status.$uuid.Ticket")
         ) {
             Sclat.conf!!
                 .playerStatus
-                .set("Status." + uuid + ".Ticket", 0)
+                .set("Status.$uuid.Ticket", 0)
         }
         Sclat.conf!!.playerStatus.set(
-            "Status." + uuid + ".Ticket",
+            "Status.$uuid.Ticket",
             Sclat.conf!!
                 .playerStatus
-                .getInt("Status." + uuid + ".Ticket") + m,
+                .getInt("Status.$uuid.Ticket") + m,
         )
     }
 
@@ -633,10 +633,10 @@ object PlayerStatusMgr {
         }
         val uuid: String = player.uniqueId.toString()
         Sclat.conf!!.playerStatus.set(
-            "Status." + uuid + ".Ticket",
+            "Status.$uuid.Ticket",
             Sclat.conf!!
                 .playerStatus
-                .getInt("Status." + uuid + ".Ticket") - m,
+                .getInt("Status.$uuid.Ticket") - m,
         )
     }
 
@@ -653,6 +653,6 @@ object PlayerStatusMgr {
         val uuid: String = player.uniqueId.toString()
         return Sclat.conf!!
             .playerStatus
-            .getInt("Status." + uuid + ".Ticket")
+            .getInt("Status.$uuid.Ticket")
     }
 }

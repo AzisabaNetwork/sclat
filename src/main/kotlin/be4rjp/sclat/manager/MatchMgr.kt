@@ -849,14 +849,14 @@ object MatchMgr {
                                 p.hidePlayer(plugin, player)
                             }
                         }
-                        if (s >= 1 && s <= 100) {
+                        if (s in 1..100) {
                             if (s == 1) intromove = match.mapData!!.intro!!.clone()
                             val map = getPlayerData(p)!!.match!!.mapData
                             intromove!!.add(map!!.introMoveX, map.introMoveY, map.introMoveZ)
                             p.teleport(intromove!!)
                         }
 
-                        if (s >= 100 && s <= 160) {
+                        if (s in 100..160) {
                             val introl =
                                 match.mapData!!
                                     .team0Intro!!
@@ -864,7 +864,7 @@ object MatchMgr {
                                     .add(0.5, 0.0, 0.5)
                             p.teleport(introl)
                             if (getPlayerData(p)!!.team == match.team0) {
-                                if (s >= 101 && s <= 120) {
+                                if (s in 101..120) {
                                     val bd =
                                         getPlayerData(p)!!
                                             .team!!
@@ -898,7 +898,7 @@ object MatchMgr {
                                 }
                             }
                         }
-                        if (s >= 160 && s <= 220) {
+                        if (s in 160..220) {
                             val introl =
                                 match.mapData!!
                                     .team1Intro!!
@@ -906,7 +906,7 @@ object MatchMgr {
                                     .add(0.5, 0.0, 0.5)
                             p.teleport(introl)
                             if (getPlayerData(p)!!.team == match.team1) {
-                                if (s >= 161 && s <= 180) {
+                                if (s in 161..180) {
                                     val bd =
                                         getPlayerData(p)!!
                                             .team!!
@@ -947,7 +947,7 @@ object MatchMgr {
                             }
                         }
 
-                        if (s >= 221 && s <= 280) {
+                        if (s in 221..280) {
                             p.inventory.setItem(0, ItemStack(Material.AIR))
                             p.gameMode = GameMode.ADVENTURE
                             p.exp = 0.99f
@@ -1466,7 +1466,7 @@ object MatchMgr {
                             cancel()
                         }
 
-                        if (s <= 5 && s > 0) {
+                        if (s in 1..5) {
                             for (oplayer in plugin.server.onlinePlayers) {
                                 if (getPlayerData(oplayer)!!.isInMatch) {
                                     oplayer.sendTitle(
@@ -1580,7 +1580,7 @@ object MatchMgr {
                             )
                         }
 
-                        if (i >= 1 && i <= 45) {
+                        if (i in 1..45) {
                             p.teleport(loc!!)
                             p.inventory.clear()
                             if (p.hasPotionEffect(PotionEffectType.POISON)) p.removePotionEffect(PotionEffectType.POISON)
@@ -1763,7 +1763,7 @@ object MatchMgr {
 
                         if (i == 46 && p.isOnline) p.gameMode = GameMode.ADVENTURE
 
-                        if (i >= 46 && i <= 156) {
+                        if (i in 46..156) {
                             p.teleport(getPlayerData(p)!!.match!!.mapData!!.resultLoc!!)
                         }
 

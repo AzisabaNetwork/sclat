@@ -399,7 +399,7 @@ object SplashShield {
                                             ),
                                         )
                                     }
-                                    if (i > 11 && i < 14) {
+                                    if (i in 12..<14) {
                                         (target as CraftPlayer)
                                             .handle
                                             .playerConnection
@@ -424,7 +424,7 @@ object SplashShield {
                             var i = 1
                             for (a in list) {
                                 for (target in plugin.server.onlinePlayers) {
-                                    if (i > 5 && i <= 11) {
+                                    if (i in 6..11) {
                                         (target as CraftPlayer).handle.playerConnection.sendPacket(
                                             PacketPlayOutEntityEquipment(
                                                 a.entityId,

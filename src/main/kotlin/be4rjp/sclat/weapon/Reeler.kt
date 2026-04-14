@@ -589,7 +589,7 @@ object Reeler {
         ball.shooter = player
         // スライド時かどうかをSnowballListenerに渡すためのnameの改変
         val originName = notDuplicateNumber.toString()
-        val name = originName + "#slided"
+        val name = "$originName#slided"
         // String name = String.valueOf(Main.getNotDuplicateNumber());//ここで改変終わり
         DataMgr.mws.add(name)
         DataMgr.tsl.add(name)

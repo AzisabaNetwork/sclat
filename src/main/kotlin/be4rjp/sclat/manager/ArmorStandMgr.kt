@@ -116,24 +116,24 @@ object ArmorStandMgr {
                     .getWorld(
                         Sclat.conf!!
                             .armorStandSettings!!
-                            .getString("ArmorStand." + name + ".WorldName")!!,
+                            .getString("ArmorStand.$name.WorldName")!!,
                     )
             val ix =
                 Sclat.conf!!
                     .armorStandSettings!!
-                    .getInt("ArmorStand." + name + ".X")
+                    .getInt("ArmorStand.$name.X")
             val iy =
                 Sclat.conf!!
                     .armorStandSettings!!
-                    .getInt("ArmorStand." + name + ".Y")
+                    .getInt("ArmorStand.$name.Y")
             val iz =
                 Sclat.conf!!
                     .armorStandSettings!!
-                    .getInt("ArmorStand." + name + ".Z")
+                    .getInt("ArmorStand.$name.Z")
             val iyaw =
                 Sclat.conf!!
                     .armorStandSettings!!
-                    .getInt("ArmorStand." + name + ".Yaw")
+                    .getInt("ArmorStand.$name.Yaw")
             val il = Location(w, ix + 0.5, iy.toDouble(), iz + 0.5)
             il.yaw = iyaw.toFloat()
             val `as` = w!!.spawnEntity(il, EntityType.ARMOR_STAND) as ArmorStand

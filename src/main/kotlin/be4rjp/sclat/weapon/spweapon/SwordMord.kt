@@ -363,7 +363,7 @@ object SwordMord {
         ball.velocity = vec
         ball.shooter = player
         val originName = notDuplicateNumber.toString()
-        val name = originName + "#QuadroArmsShotgunCounterShot"
+        val name = "$originName#QuadroArmsShotgunCounterShot"
         DataMgr.mws.add(name) //
         ball.customName = name
         mainSnowballNameMap[name] = ball

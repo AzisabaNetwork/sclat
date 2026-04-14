@@ -149,7 +149,7 @@ object CurlingBomb {
                             }
                         }
 
-                        if (i >= 70 && i <= 80) {
+                        if (i in 70..80) {
                             if (i % 2 == 0) player.world.playSound(as1l, Sound.BLOCK_NOTE_BLOCK_PLING, 1f, 1.6f)
                         }
 

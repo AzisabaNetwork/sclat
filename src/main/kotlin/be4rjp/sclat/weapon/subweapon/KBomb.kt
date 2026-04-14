@@ -107,7 +107,7 @@ object KBomb {
                             cc++
                         }
 
-                        if (cc >= 40 && cc < 50) {
+                        if (cc in 40..<50) {
                             if (cc % 2 == 0) {
                                 player
                                     .world

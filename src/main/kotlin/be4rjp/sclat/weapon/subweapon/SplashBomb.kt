@@ -49,7 +49,7 @@ object SplashBomb {
                             drop!!.velocity = p.eyeLocation.direction
                         }
 
-                        if (gc >= 10 && gc < 20) {
+                        if (gc in 10..<20) {
                             if (gc % 2 == 0) {
                                 player
                                     .world

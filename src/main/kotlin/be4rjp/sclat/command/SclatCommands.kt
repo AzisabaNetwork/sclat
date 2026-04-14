@@ -87,7 +87,7 @@ object SclatCommands {
                 for (_uuid in dataUuids) {
                     val userEmblems = oldData.getStringList(_uuid)
                     for (emblem in userEmblems) {
-                        Sclat.conf?.emblemUserdata!!.set(_uuid + "." + emblem, 1)
+                        Sclat.conf?.emblemUserdata!!.set("$_uuid.$emblem", 1)
                     }
                 }
                 context.sender().sendMessage(ChatColor.GREEN.toString() + "Migration was succeeded!")

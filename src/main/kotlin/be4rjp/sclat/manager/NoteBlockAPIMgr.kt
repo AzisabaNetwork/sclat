@@ -32,7 +32,7 @@ object NoteBlockAPIMgr {
                         "plugins/Sclat/BGM",
                         Sclat.conf!!
                             .config!!
-                            .getString("nBGM." + songname),
+                            .getString("nBGM.$songname"),
                     ),
                 )
             nsList.add(song)
@@ -50,7 +50,7 @@ object NoteBlockAPIMgr {
                         "plugins/Sclat/BGM",
                         Sclat.conf!!
                             .config!!
-                            .getString("fBGM." + songname),
+                            .getString("fBGM.$songname"),
                     ),
                 )
             fsList.add(song)

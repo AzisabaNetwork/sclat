@@ -136,7 +136,7 @@ object RankMgr {
                             var rate =
                                 Sclat.conf!!
                                     .playerStatus
-                                    .getInt("Status." + uuid + ".Rank")
+                                    .getInt("Status.$uuid.Rank")
                             if (rate == 0) continue
 
                             while (playerMap.containsKey(rate)) {
@@ -170,7 +170,7 @@ object RankMgr {
                             var rate =
                                 Sclat.conf!!
                                     .playerStatus
-                                    .getInt("Status." + uuid + ".Kill")
+                                    .getInt("Status.$uuid.Kill")
                             if (rate == 0) continue
 
                             while (playerMap.containsKey(rate)) {
@@ -205,7 +205,7 @@ object RankMgr {
                             var rate =
                                 Sclat.conf!!
                                     .playerStatus
-                                    .getInt("Status." + uuid + ".Paint")
+                                    .getInt("Status.$uuid.Paint")
                             if (rate == 0) continue
 
                             while (playerMap.containsKey(rate)) {
