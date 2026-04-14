@@ -25,7 +25,7 @@ object SquidListenerMgr {
         val b4 = player.location.block.getRelative(BlockFace.SOUTH)
         val b5 = player.location.block.getRelative(BlockFace.WEST)
 
-        val list: MutableList<Block> = ArrayList<Block>()
+        val list: MutableList<Block> = ArrayList()
         list.add(b1)
         list.add(b2)
         list.add(b3)

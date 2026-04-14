@@ -59,7 +59,7 @@ object PlayerStatusMgr {
         Sclat.conf!!
             .playerStatus
             .set("Status." + player.uniqueId + ".Rank", 0)
-        val wlist: MutableList<String?> = ArrayList<String?>()
+        val wlist: MutableList<String?> = ArrayList()
         wlist.add(
             Sclat.conf!!
                 .config!!
@@ -68,7 +68,7 @@ object PlayerStatusMgr {
         Sclat.conf!!
             .playerStatus
             .set("Status." + player.uniqueId + ".WeaponClass", wlist)
-        val glist: MutableList<Int?> = ArrayList<Int?>()
+        val glist: MutableList<Int?> = ArrayList()
         glist.add(0)
         Sclat.conf!!
             .playerStatus
@@ -131,7 +131,7 @@ object PlayerStatusMgr {
 
         val npc = EntityPlayer(nmsServer, nmsWorld, gameProfile, PlayerInteractManager(nmsWorld))
         npc.setLocation(location.x, location.y, location.z, location.yaw, 0f)
-        npc.dataWatcher.set<Byte?>(DataWatcherRegistry.a.a(15), 127.toByte())
+        npc.dataWatcher.set(DataWatcherRegistry.a.a(15), 127.toByte())
 
         val connection = (player as CraftPlayer).handle.playerConnection
         connection

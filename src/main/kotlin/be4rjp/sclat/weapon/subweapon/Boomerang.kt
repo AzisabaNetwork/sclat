@@ -29,7 +29,6 @@ import org.bukkit.entity.FallingBlock
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.bukkit.scheduler.BukkitRunnable
-import org.bukkit.util.Consumer
 import org.bukkit.util.Vector
 
 object Boomerang {
@@ -57,39 +56,36 @@ object Boomerang {
                             if (!getPlayerData(player)!!.isBombRush) player.exp = player.exp - 0.59f
 
                             as1 =
-                                player.world.spawn<ArmorStand>(
+                                player.world.spawn(
                                     player.location.add(0.0, 1.6, 0.0),
                                     ArmorStand::class.java,
-                                    Consumer { armorStand: ArmorStand ->
-                                        armorStand.isVisible = false
-                                        armorStand.isSmall = true
-                                    },
-                                )
+                                ) { armorStand: ArmorStand ->
+                                    armorStand.isVisible = false
+                                    armorStand.isSmall = true
+                                }
                             as2 =
-                                player.world.spawn<ArmorStand>(
+                                player.world.spawn(
                                     player.location.add(0.0, 1.6, 0.0),
                                     ArmorStand::class.java,
-                                    Consumer { armorStand: ArmorStand ->
-                                        armorStand.isVisible = false
-                                        armorStand.setGravity(false)
-                                        armorStand.isMarker = true
-                                        armorStand.isSmall = true
-                                    },
-                                )
+                                ) { armorStand: ArmorStand ->
+                                    armorStand.isVisible = false
+                                    armorStand.setGravity(false)
+                                    armorStand.isMarker = true
+                                    armorStand.isSmall = true
+                                }
                             val loc = player.location.add(0.0, 0.8, 0.0)
                             loc.yaw = 90f
                             as3 =
                                 player
                                     .world
-                                    .spawn<ArmorStand>(
+                                    .spawn(
                                         loc,
                                         ArmorStand::class.java,
-                                        Consumer { armorStand: ArmorStand ->
-                                            armorStand.isVisible = false
-                                            armorStand.setGravity(false)
-                                            armorStand.isSmall = true
-                                        },
-                                    )
+                                    ) { armorStand: ArmorStand ->
+                                        armorStand.isVisible = false
+                                        armorStand.setGravity(false)
+                                        armorStand.isSmall = true
+                                    }
 
                             fb =
                                 player.world.spawnFallingBlock(

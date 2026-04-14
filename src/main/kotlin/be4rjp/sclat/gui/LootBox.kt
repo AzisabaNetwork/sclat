@@ -106,7 +106,7 @@ object LootBox {
                     val item = ItemStack(getWeaponClass(ClassName)!!.mainWeapon!!.weaponIteamStack!!)
                     val itemm = item.itemMeta
                     itemm!!.setDisplayName(ClassName)
-                    val lores: MutableList<String?> = ArrayList<String?>()
+                    val lores: MutableList<String?> = ArrayList()
                     lores.add(
                         "§r§6SubWeapon : " +
                             Sclat.conf!!
@@ -133,7 +133,7 @@ object LootBox {
         while (i <= 5) {
             val paper = ItemStack(Material.PAPER)
             val pmeta = paper.itemMeta
-            val paperlores: MutableList<String?> = ArrayList<String?>()
+            val paperlores: MutableList<String?> = ArrayList()
             when (i) {
                 1 -> {
                     pmeta!!.setDisplayName("1等 " + FIRST_PRIZE + "coin")

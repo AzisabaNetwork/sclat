@@ -98,7 +98,7 @@ object MatchMgr {
     @JvmField
     var canRollback: Boolean = true
 
-    var matchedPlayerList: MutableList<String?> = ArrayList<String?>()
+    var matchedPlayerList: MutableList<String?> = ArrayList()
 
     @JvmStatic
     fun playerJoinMatch(player: Player) {
@@ -187,7 +187,7 @@ object MatchMgr {
                                         match.isStarted = (false)
                                         // Send match status
                                         if (Sclat.type == ServerType.MATCH) {
-                                            val commands: MutableList<String?> = ArrayList<String?>()
+                                            val commands: MutableList<String?> = ArrayList()
                                             commands.add(
                                                 "cdc " +
                                                     Sclat.conf!!
@@ -212,7 +212,7 @@ object MatchMgr {
                                     if (s == 0) {
                                         // Send match status
                                         if (Sclat.type == ServerType.MATCH) {
-                                            val commands: MutableList<String?> = ArrayList<String?>()
+                                            val commands: MutableList<String?> = ArrayList()
                                             commands.add(
                                                 (
                                                     "cd " +
@@ -248,7 +248,7 @@ object MatchMgr {
                                         match.setCanJoin(false)
 
                                         // かぶらないようにマッピング
-                                        val playerMap: MutableMap<Int?, Player?> = HashMap<Int?, Player?>()
+                                        val playerMap: MutableMap<Int?, Player?> = HashMap()
                                         for (jp in DataMgr.joinedList) {
                                             var rate = PlayerStatusMgr.getRank(jp!!)
                                             while (playerMap.containsKey(rate)) {
@@ -258,7 +258,7 @@ object MatchMgr {
                                         }
 
                                         // ソート
-                                        var sortedMember: MutableList<Player?> = ArrayList<Player?>()
+                                        var sortedMember: MutableList<Player?> = ArrayList()
                                         if (Sclat.conf!!
                                                 .config!!
                                                 .getBoolean("RateMatch")
@@ -356,7 +356,7 @@ object MatchMgr {
 
                                         // Send match status
                                         if (Sclat.type == ServerType.MATCH) {
-                                            val commands: MutableList<String?> = ArrayList<String?>()
+                                            val commands: MutableList<String?> = ArrayList()
                                             commands.add(
                                                 (
                                                     "started " +
@@ -1265,7 +1265,7 @@ object MatchMgr {
                                 .config!!
                                 .getString("WorkMode") == "Area"
                         ) {
-                            val list: MutableList<Team?> = ArrayList<Team?>()
+                            val list: MutableList<Team?> = ArrayList()
                             for (area in match.mapData!!.areaList) {
                                 list.add(area!!.team)
                             }
@@ -1748,7 +1748,7 @@ object MatchMgr {
 
                         if (i == 80) {
                             getPlayerData(p)
-                            val commands: MutableList<String?> = ArrayList<String?>()
+                            val commands: MutableList<String?> = ArrayList()
                             commands.add("return " + p.uniqueId)
                             commands.add("stop")
                             val sc =
@@ -1902,7 +1902,7 @@ object MatchMgr {
                             PlayerStatusMgr.addKill(p, data.killCount)
 
                             if (Sclat.type == ServerType.MATCH) {
-                                val commands: MutableList<String?> = ArrayList<String?>()
+                                val commands: MutableList<String?> = ArrayList()
                                 commands.add("add money " + pMoney + " " + p.uniqueId)
                                 commands.add("add level " + pLv + " " + p.uniqueId)
                                 commands.add("add ticket " + pTicket + " " + p.uniqueId)
@@ -2031,7 +2031,7 @@ object MatchMgr {
 
                                 // Send match status
                                 if (Sclat.type == ServerType.MATCH) {
-                                    val commands: MutableList<String?> = ArrayList<String?>()
+                                    val commands: MutableList<String?> = ArrayList()
                                     commands.add(
                                         "stopped " +
                                             Sclat.conf!!

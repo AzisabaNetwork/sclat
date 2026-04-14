@@ -13,7 +13,7 @@ class EquipmentClient(
     private val port: Int,
     commands: MutableList<String?>,
 ) {
-    private var commands: MutableList<String?> = ArrayList<String?>()
+    private var commands: MutableList<String?> = ArrayList()
 
     private val task: BukkitRunnable
 

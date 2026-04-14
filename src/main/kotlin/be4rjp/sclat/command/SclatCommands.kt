@@ -135,7 +135,7 @@ object SclatCommands {
                     if (sender !is Player) return@handler
                     for (ss in ServerStatusManager.serverList) {
                         if (ss.serverName == serverName) {
-                            val commands: MutableList<String?> = ArrayList<String?>()
+                            val commands: MutableList<String?> = ArrayList()
                             commands.add("mod " + context.sender().name)
                             commands.add("stop")
                             // Todo: use redis. fallbacks PluginMessaging

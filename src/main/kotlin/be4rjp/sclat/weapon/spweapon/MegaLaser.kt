@@ -157,7 +157,7 @@ object MegaLaser {
                     val x = Vector(1, 0, 0)
                     x.rotateAroundY(xzAngle.toDouble())
 
-                    val plusList: MutableList<Vector> = ArrayList<Vector>()
+                    val plusList: MutableList<Vector> = ArrayList()
                     var angle = 0
                     while (angle <= 360) {
                         plusList.add(x.clone().rotateAroundAxis(direction, angle.toDouble()).normalize())
@@ -165,7 +165,7 @@ object MegaLaser {
                     }
 
                     // 動作処理
-                    val damageTargets: MutableSet<Player> = HashSet<Player>()
+                    val damageTargets: MutableSet<Player> = HashSet()
                     val damage = 9.5
                     for (i in 1..<positions.size) {
                         if (c % 2 == 0) {

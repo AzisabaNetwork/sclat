@@ -54,7 +54,7 @@ class HologramLine(
         watcher.setObject(
             2,
             WrappedDataWatcher.Registry.getChatComponentSerializer(true),
-            Optional.of<Any?>(WrappedChatComponent.fromText(text).getHandle()),
+            Optional.of(WrappedChatComponent.fromText(text).getHandle()),
         )
         watcher.setObject(3, WrappedDataWatcher.Registry.get(Boolean::class.java), visible as Any)
         watcher.setObject(14, WrappedDataWatcher.Registry.get(Byte::class.java), 0x01.toByte()) // Small

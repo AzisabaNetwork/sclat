@@ -260,7 +260,7 @@ object MultiMissile {
 
                 override fun run() {
                     try {
-                        p.world.spawn<Firework?>(p.location, Firework::class.java)
+                        p.world.spawn(p.location, Firework::class.java)
                         i++
                         if (i == 5) cancel()
                     } catch (e: Exception) {

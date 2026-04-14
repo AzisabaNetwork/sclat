@@ -57,7 +57,7 @@ object Sensor {
                             drop = p.world.dropItem(p.eyeLocation, bom)
                             drop!!.velocity = pVec!!
                             // 雪玉をスポーンさせた瞬間にプレイヤーに雪玉がデスポーンした偽のパケットを送信する
-                            ball = player.launchProjectile<Snowball>(Snowball::class.java)
+                            ball = player.launchProjectile(Snowball::class.java)
                             ball!!.velocity = Vector(0, 0, 0)
                             setSnowballIsHit(ball, false)
 

@@ -122,7 +122,7 @@ object Kasa {
                     * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) /
                     Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)
             ).toFloat()
-        val ball = player.launchProjectile<Snowball>(Snowball::class.java)
+        val ball = player.launchProjectile(Snowball::class.java)
         (ball as CraftSnowball).handle.setItem(CraftItemStack.asNMSCopy(ItemStack(getPlayerData(player)!!.team!!.teamColor!!.wool!!)))
         var vec: Vector? =
             player
@@ -227,7 +227,7 @@ object Kasa {
             object : BukkitRunnable() {
                 var p: Player = player
                 var i: Int = 0
-                var list: MutableList<ArmorStand> = ArrayList<ArmorStand>()
+                var list: MutableList<ArmorStand> = ArrayList()
                 var weapon: Boolean = false
                 var sound: Boolean = true
 
@@ -461,9 +461,9 @@ object Kasa {
 
                 var dir: Vector = Vector(1, 0, 0)
 
-                var list: MutableList<ArmorStand> = ArrayList<ArmorStand>()
-                var ul: MutableList<ArmorStand> = ArrayList<ArmorStand>()
-                var dl: MutableList<ArmorStand> = ArrayList<ArmorStand>()
+                var list: MutableList<ArmorStand> = ArrayList()
+                var ul: MutableList<ArmorStand> = ArrayList()
+                var dl: MutableList<ArmorStand> = ArrayList()
 
                 var as1: ArmorStand? = null
                 var as2: ArmorStand? = null
@@ -642,7 +642,7 @@ object Kasa {
                             dl.add(as17!!)
                             ul.add(as20!!)
 
-                            val aslist: MutableList<ArmorStand> = ArrayList<ArmorStand>(list)
+                            val aslist: MutableList<ArmorStand> = ArrayList(list)
                             kdata.armorStandList = aslist
                             kdata.damage = (getPlayerData(p)!!.weaponClass!!.mainWeapon!!.slideNeedINK).toDouble()
 

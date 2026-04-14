@@ -15,7 +15,7 @@ object ServerStatusManager {
     var inv: Inventory = Bukkit.createInventory(null, 18, "Server List")
 
     @JvmField
-    var serverList: MutableList<ServerStatus> = ArrayList<ServerStatus>()
+    var serverList: MutableList<ServerStatus> = ArrayList()
 
     var task: BukkitRunnable? = null
 
@@ -137,7 +137,7 @@ object ServerStatusManager {
                         val `is` = ItemStack(mt)
                         val itemMeta = `is`.itemMeta
                         itemMeta!!.setDisplayName(ss.displayName)
-                        val role: MutableList<String?> = ArrayList<String?>()
+                        val role: MutableList<String?> = ArrayList()
                         if (ss.restartingServer) {
                             role.add("")
                             role.add("§r§7[Status]  §eRESTARTING...")

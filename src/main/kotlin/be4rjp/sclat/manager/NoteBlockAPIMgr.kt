@@ -16,10 +16,10 @@ object NoteBlockAPIMgr {
     private var fbgmC = 0
 
     // private static byte volume = 22;
-    private val nsList: MutableList<Song?> = ArrayList<Song?>()
-    private val nsnList: MutableList<String?> = ArrayList<String?>()
-    private val fsList: MutableList<Song?> = ArrayList<Song?>()
-    private val fsnList: MutableList<String?> = ArrayList<String?>()
+    private val nsList: MutableList<Song?> = ArrayList()
+    private val nsnList: MutableList<String?> = ArrayList()
+    private val fsList: MutableList<Song?> = ArrayList()
+    private val fsnList: MutableList<String?> = ArrayList()
 
     fun loadSongFiles() {
         for (songname in Sclat.conf!!

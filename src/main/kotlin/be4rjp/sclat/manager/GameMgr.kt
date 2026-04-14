@@ -86,7 +86,6 @@ import org.bukkit.inventory.meta.SkullMeta
 import org.bukkit.scheduler.BukkitRunnable
 import java.util.Random
 import java.util.UUID
-import java.util.concurrent.Callable
 
 /**
  *
@@ -1126,12 +1125,10 @@ class GameMgr : Listener {
             (player as CraftPlayer)
                 .handle
                 .playerConnection.networkManager.channel
-        channel.eventLoop().submit<Any?>(
-            Callable {
-                channel.pipeline().remove(player.name)
-                null
-            },
-        )
+        channel.eventLoop().submit<Any?> {
+            channel.pipeline().remove(player.name)
+            null
+        }
 
         if (Sclat.type == ServerType.MATCH) {
             if (DataMgr.joinedList.contains(player)) {
@@ -1165,7 +1162,7 @@ class GameMgr : Listener {
                             .servers!!
                             .getString("Servers." + serverName + ".DisplayName")
                     if (displayName == server) {
-                        val commands: MutableList<String?> = ArrayList<String?>()
+                        val commands: MutableList<String?> = ArrayList()
                         commands.add("set weapon " + data!!.weaponClass!!.className + " " + player.uniqueId)
                         commands.add("set gear " + data.gearNumber + " " + player.uniqueId)
                         commands.add("set rank " + PlayerStatusMgr.getRank(player) + " " + player.uniqueId)
@@ -1193,7 +1190,7 @@ class GameMgr : Listener {
                     }
                 }
                 if (server == "sclattest") {
-                    val commands: MutableList<String?> = ArrayList<String?>()
+                    val commands: MutableList<String?> = ArrayList()
                     commands.add("set rank " + PlayerStatusMgr.getRank(player) + " " + player.uniqueId)
                     commands.add("set lv " + PlayerStatusMgr.getLv(player) + " " + player.uniqueId)
                     commands.add(

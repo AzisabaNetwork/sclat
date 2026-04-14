@@ -61,7 +61,7 @@ class ServerStatus(
         this.maxPlayer = maxPlayer
         this.sign = sign
         this.info = info
-        this.uUIDList = ArrayList<String?>()
+        this.uUIDList = ArrayList()
 
         this.matchServerRunnable = MatchServerRunnable(this)
 

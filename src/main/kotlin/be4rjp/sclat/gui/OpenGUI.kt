@@ -171,7 +171,7 @@ object OpenGUI {
                     val n = ItemStack(getGearMaterial(i))
                     val nmeta = n.itemMeta
                     nmeta!!.setDisplayName(getGearName(i))
-                    val list: MutableList<String?> = ArrayList<String?>()
+                    val list: MutableList<String?> = ArrayList()
                     list.add("")
                     list.add("§r§bMoney : " + getGearPrice(i))
                     nmeta.lore = list
@@ -474,7 +474,7 @@ object OpenGUI {
                     itemm.lore = lores
                     item.itemMeta = itemm
 
-                    val list: MutableList<String> = ArrayList<String>()
+                    val list: MutableList<String> = ArrayList()
                     list.add(weaponType)
 
                     when (weaponType) {

@@ -73,8 +73,8 @@ class MapData(
         private set
     var noBlockLocation: Location? = null
     var canAreaBattle: Boolean = false
-    val pathList: MutableList<Path?> = ArrayList<Path?>()
-    val areaList: MutableList<Area?> = ArrayList<Area?>()
+    val pathList: MutableList<Path?> = ArrayList()
+    val areaList: MutableList<Area?> = ArrayList()
     var wiremeshListTask: WiremeshListTask? = null
     var voidY: Int = 0
 

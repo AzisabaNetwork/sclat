@@ -6,7 +6,6 @@ import be4rjp.sclat.plugin
 import org.bukkit.entity.Player
 import org.bukkit.scheduler.BukkitRunnable
 import java.util.TreeMap
-import java.util.function.Consumer
 
 /**
  *
@@ -14,7 +13,7 @@ import java.util.function.Consumer
  */
 object RankMgr {
     private val ranks =
-        arrayOf<String>(
+        arrayOf(
             "E",
             "D-",
             "D",
@@ -35,9 +34,9 @@ object RankMgr {
         )
     private val MAX_RATE = (ranks.size - 1) * 500
 
-    var ranking: MutableList<String?> = ArrayList<String?>()
-    var killRanking: MutableList<String?> = ArrayList<String?>()
-    var paintRanking: MutableList<String?> = ArrayList<String?>()
+    var ranking: MutableList<String?> = ArrayList()
+    var killRanking: MutableList<String?> = ArrayList()
+    var paintRanking: MutableList<String?> = ArrayList()
 
     // レートを500単位で区切ってランク付けする
     @JvmStatic
@@ -144,9 +143,9 @@ object RankMgr {
                             playerMap.put(rate, uuid)
                         }
 
-                        val treeMap: MutableMap<Int, String> = TreeMap(Comparator.reverseOrder<Int>())
+                        val treeMap: MutableMap<Int, String> = TreeMap(Comparator.reverseOrder())
                         treeMap.putAll(playerMap)
-                        ranking = ArrayList<String?>()
+                        ranking = ArrayList()
                         for (key in treeMap.keys) ranking.add(treeMap.get(key))
                     } catch (e: Exception) {
                     }
@@ -178,7 +177,7 @@ object RankMgr {
                             playerMap.put(rate, uuid)
                         }
 
-                        val treeMap: MutableMap<Int, String> = TreeMap(Comparator.reverseOrder<Int>())
+                        val treeMap: MutableMap<Int, String> = TreeMap(Comparator.reverseOrder())
                         treeMap.putAll(playerMap)
                         killRanking = ArrayList()
                         for (key in treeMap.keys) killRanking.add(treeMap.get(key))
@@ -213,9 +212,9 @@ object RankMgr {
                             playerMap.put(rate, uuid)
                         }
 
-                        val treeMap: MutableMap<Int, String> = TreeMap(Comparator.reverseOrder<Int>())
+                        val treeMap: MutableMap<Int, String> = TreeMap(Comparator.reverseOrder())
                         treeMap.putAll(playerMap)
-                        paintRanking = ArrayList<String?>()
+                        paintRanking = ArrayList()
                         for (key in treeMap.keys) paintRanking.add(treeMap.get(key))
                     } catch (e: Exception) {
                     }
@@ -235,8 +234,7 @@ object RankMgr {
                         try {
                             Sclat.playerHolograms.ifPresent(
                                 player,
-                                Consumer { obj: RankingHolograms? -> obj!!.refreshRankingAsync() },
-                            )
+                            ) { obj: RankingHolograms? -> obj!!.refreshRankingAsync() }
                         } catch (e: Exception) {
                         }
                     }

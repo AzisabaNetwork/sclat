@@ -170,7 +170,7 @@ object SplashShield {
                             val positions2: ArrayList<Vector> = rayTrace2.traverse(3.0, 0.2)
 
                             val as1 =
-                                player.world.spawn<ArmorStand>(
+                                player.world.spawn(
                                     loc.clone().add(0.0, -0.6, 0.0),
                                     ArmorStand::class.java,
                                 ) { armorStand: ArmorStand ->
@@ -182,7 +182,7 @@ object SplashShield {
                                 }
                             list.add(as1)
                             val as2 =
-                                player.world.spawn<ArmorStand>(
+                                player.world.spawn(
                                     loc.clone().add(0.0, 0.0, 0.0),
                                     ArmorStand::class.java,
                                 ) { armorStand: ArmorStand ->
@@ -194,7 +194,7 @@ object SplashShield {
                                 }
                             list.add(as2)
                             val as3 =
-                                player.world.spawn<ArmorStand>(
+                                player.world.spawn(
                                     loc.clone().add(0.0, 0.6, 0.0),
                                     ArmorStand::class.java,
                                 ) { armorStand: ArmorStand ->
@@ -206,7 +206,7 @@ object SplashShield {
                                 }
                             list.add(as3)
                             val as4 =
-                                player.world.spawn<ArmorStand>(
+                                player.world.spawn(
                                     loc.clone().add(0.0, 1.05, 0.0),
                                     ArmorStand::class.java,
                                 ) { armorStand: ArmorStand ->
@@ -218,7 +218,7 @@ object SplashShield {
                                 }
                             list.add(as4)
                             val as5 =
-                                player.world.spawn<ArmorStand>(
+                                player.world.spawn(
                                     loc.clone().add(0.0, -0.6, 0.0),
                                     ArmorStand::class.java,
                                 ) { armorStand: ArmorStand ->
@@ -234,7 +234,7 @@ object SplashShield {
                             val as6 =
                                 player
                                     .world
-                                    .spawn<ArmorStand>(
+                                    .spawn(
                                         l6,
                                         ArmorStand::class.java,
                                     ) { armorStand: ArmorStand ->
@@ -250,7 +250,7 @@ object SplashShield {
                             val as7 =
                                 player
                                     .world
-                                    .spawn<ArmorStand>(
+                                    .spawn(
                                         l7,
                                         ArmorStand::class.java,
                                     ) { armorStand: ArmorStand ->
@@ -266,7 +266,7 @@ object SplashShield {
                             val as8 =
                                 player
                                     .world
-                                    .spawn<ArmorStand>(
+                                    .spawn(
                                         l8,
                                         ArmorStand::class.java,
                                     ) { armorStand: ArmorStand ->
@@ -282,7 +282,7 @@ object SplashShield {
                             val as9 =
                                 player
                                     .world
-                                    .spawn<ArmorStand>(
+                                    .spawn(
                                         l9,
                                         ArmorStand::class.java,
                                     ) { armorStand: ArmorStand ->
@@ -298,7 +298,7 @@ object SplashShield {
                             val as10 =
                                 player
                                     .world
-                                    .spawn<ArmorStand>(
+                                    .spawn(
                                         l10,
                                         ArmorStand::class.java,
                                     ) { armorStand: ArmorStand ->
@@ -314,7 +314,7 @@ object SplashShield {
                             val as11 =
                                 player
                                     .world
-                                    .spawn<ArmorStand>(
+                                    .spawn(
                                         l11,
                                         ArmorStand::class.java,
                                     ) { armorStand: ArmorStand ->
@@ -332,7 +332,7 @@ object SplashShield {
                                 )
                             l12.yaw = yaw
                             val as12 =
-                                player.world.spawn<ArmorStand>(
+                                player.world.spawn(
                                     l12.add(vec1.clone().normalize().multiply(0.05)),
                                     ArmorStand::class.java,
                                 ) { armorStand: ArmorStand ->
@@ -352,7 +352,7 @@ object SplashShield {
                                 )
                             l13.yaw = yaw
                             val as13 =
-                                player.world.spawn<ArmorStand>(
+                                player.world.spawn(
                                     l13.add(vec1.clone().normalize().multiply(0.05)),
                                     ArmorStand::class.java,
                                 ) { armorStand: ArmorStand ->
@@ -369,7 +369,7 @@ object SplashShield {
                             val as14 =
                                 player
                                     .world
-                                    .spawn<ArmorStand>(
+                                    .spawn(
                                         l14,
                                         ArmorStand::class.java,
                                     ) { armorStand: ArmorStand ->

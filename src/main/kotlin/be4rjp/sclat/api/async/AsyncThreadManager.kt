@@ -8,7 +8,7 @@ import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.CopyOnWriteArrayList
 
 object AsyncThreadManager {
-    private val tickThreads: MutableList<AsyncTickThread> = CopyOnWriteArrayList<AsyncTickThread>()
+    private val tickThreads: MutableList<AsyncTickThread> = CopyOnWriteArrayList()
 
     val randomTickThread: AsyncTickThread
         get() = tickThreads.get(Random().nextInt(tickThreads.size))

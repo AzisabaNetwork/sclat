@@ -36,7 +36,7 @@ object AirStrike {
         player: Player,
         localized: Boolean,
     ) {
-        player.world.spawn<Firework?>(player.location, Firework::class.java)
+        player.world.spawn(player.location, Firework::class.java)
         player.inventory.clear()
         SPWeaponMgr.setSPCoolTimeAnimation(player, 200)
 

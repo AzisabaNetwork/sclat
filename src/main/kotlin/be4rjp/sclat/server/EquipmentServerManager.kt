@@ -8,7 +8,7 @@ import be4rjp.sclat.plugin
 import be4rjp.sclat.sclatLogger
 
 object EquipmentServerManager {
-    var commands: MutableList<String> = ArrayList<String>()
+    var commands: MutableList<String> = ArrayList()
 
     fun addEquipmentCommand(command: String) {
         sclatLogger.debug("Equip command: $command")

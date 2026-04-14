@@ -327,7 +327,7 @@ object QuadroArms {
         }
         PaintMgr.paintHightestBlock(player.location, player, true, true)
 
-        val ball = player.launchProjectile<Snowball>(Snowball::class.java)
+        val ball = player.launchProjectile(Snowball::class.java)
         (ball as CraftSnowball).handle.setItem(
             CraftItemStack.asNMSCopy(ItemStack(getPlayerData(player)!!.team?.let { it.teamColor!! }!!.wool!!)),
         )
@@ -422,7 +422,7 @@ object QuadroArms {
         if (player.gameMode == GameMode.SPECTATOR) return false
         val shootSpeed = 4.5
         getPlayerData(player)
-        val ball = player.launchProjectile<Snowball>(Snowball::class.java)
+        val ball = player.launchProjectile(Snowball::class.java)
         (ball as CraftSnowball).handle.setItem(CraftItemStack.asNMSCopy(ItemStack(getPlayerData(player)!!.team!!.teamColor!!.wool!!)))
         val vec = player.location.direction.multiply(shootSpeed)
         val random = 1.2
@@ -519,7 +519,7 @@ object QuadroArms {
         }
         val shootSpeed = 3.9
         getPlayerData(player)
-        val ball = player.launchProjectile<Snowball>(Snowball::class.java)
+        val ball = player.launchProjectile(Snowball::class.java)
         (ball as CraftSnowball).handle.setItem(CraftItemStack.asNMSCopy(ItemStack(getPlayerData(player)!!.team!!.teamColor!!.wool!!)))
         val vec = player.location.direction.multiply(shootSpeed)
         val distick = 2
@@ -693,7 +693,7 @@ object QuadroArms {
                             drop = p.world.dropItem(p.eyeLocation, bom)
                             drop!!.velocity = pVec!!
                             // 雪玉をスポーンさせた瞬間にプレイヤーに雪玉がデスポーンした偽のパケットを送信する
-                            ball = player.launchProjectile<Snowball>(Snowball::class.java)
+                            ball = player.launchProjectile(Snowball::class.java)
                             ball!!.velocity = Vector(0, 0, 0)
                             setSnowballIsHit(ball, false)
 

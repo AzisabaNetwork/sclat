@@ -377,7 +377,7 @@ object Manuber {
         // プレイヤーの足元と頭の位置のブロックを取得
         // Block blockAtFeet = location.getBlock();
         // Block blockAtHead = location.clone().add(0, 1, 0).getBlock();
-        val blocks: MutableList<Block> = ArrayList<Block>()
+        val blocks: MutableList<Block> = ArrayList()
 
         // for (int x = (int)(LX-0.4); x <= (int)(LX+0.4); x++) {
         // for (int y = (int)LY; y <= (int)LY+1.8; y++) {

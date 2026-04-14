@@ -39,7 +39,7 @@ class BlockUpdater {
                                 try {
                                     // Sclat.setBlockByNMSChunk(block, blocklist.get(block), true);
 
-                                    val list: MutableList<Block> = ArrayList<Block>()
+                                    val list: MutableList<Block> = ArrayList()
                                     val up = block.getRelative(BlockFace.UP)
                                     val west = block.getRelative(BlockFace.WEST)
                                     val east = block.getRelative(BlockFace.EAST)

@@ -94,7 +94,7 @@ object SclatUtil {
      */
     @JvmStatic
     fun restartServer() {
-        val commands: MutableList<String?> = ArrayList<String?>()
+        val commands: MutableList<String?> = ArrayList()
         commands.add("restart " + Sclat.conf?.servers!!.getString("ServerName"))
         commands.add("stop")
         val sc =
@@ -120,7 +120,7 @@ object SclatUtil {
 
     @JvmStatic
     fun sendRestartedServerInfo() {
-        val commands: MutableList<String?> = ArrayList<String?>()
+        val commands: MutableList<String?> = ArrayList()
         commands.add("restarted " + Sclat.conf?.servers!!.getString("ServerName"))
         commands.add(
             (

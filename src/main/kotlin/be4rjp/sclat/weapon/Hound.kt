@@ -23,7 +23,6 @@ import org.bukkit.block.data.BlockData
 import org.bukkit.entity.ArmorStand
 import org.bukkit.entity.Player
 import org.bukkit.scheduler.BukkitRunnable
-import org.bukkit.util.Consumer
 import org.bukkit.util.Vector
 
 object Hound {
@@ -147,14 +146,13 @@ object Hound {
                                 ).toFloat()
 
                             as1 =
-                                player.world.spawn<ArmorStand>(
+                                player.world.spawn(
                                     player.location,
                                     ArmorStand::class.java,
-                                    Consumer { armorStand: ArmorStand ->
-                                        armorStand.isVisible = false
-                                        armorStand.isSmall = true
-                                    },
-                                )
+                                ) { armorStand: ArmorStand ->
+                                    armorStand.isVisible = false
+                                    armorStand.isSmall = true
+                                }
                             GlowingAPI.setGlowing(as1!!, player, true)
                             data.setArmorlist(as1)
                         }

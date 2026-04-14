@@ -108,6 +108,5 @@ class Config {
     val uUIDCash: FileConfiguration
         get() = idCash!!
 
-    companion object {
-    }
+    companion object
 }
