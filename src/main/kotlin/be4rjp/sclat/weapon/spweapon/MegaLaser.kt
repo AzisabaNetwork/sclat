@@ -192,8 +192,7 @@ object MegaLaser {
                             for (target in AsyncThreadManager.onlinePlayers) {
                                 if (p.world !== target!!.world) continue
                                 if (eloc.distanceSquared(target.location) < Sclat.particleRenderDistanceSquared) {
-                                    val targetData = getPlayerData(target)
-                                    if (targetData == null) continue
+                                    val targetData = getPlayerData(target) ?: continue
                                     if (targetData.settings!!.showEffectSPWeaponRegion()) {
                                         val dustOptions =
                                             Particle.DustOptions(
@@ -229,8 +228,7 @@ object MegaLaser {
                         // List<Player> list = new ArrayList<>();
                         if (i > 5) {
                             for (target in AsyncThreadManager.onlinePlayers) {
-                                val targetData = getPlayerData(target)
-                                if (targetData == null) continue
+                                val targetData = getPlayerData(target) ?: continue
                                 if (!targetData.isInMatch) continue
                                 if (target!!.world !== p.world) continue
                                 if (targetData.team == playerData.team) continue
@@ -256,8 +254,7 @@ object MegaLaser {
                         // 攻撃判定
                         if (i > 5 && c > 3) {
                             for (target in AsyncThreadManager.onlinePlayers) {
-                                val targetData = getPlayerData(target)
-                                if (targetData == null) continue
+                                val targetData = getPlayerData(target) ?: continue
                                 if (!targetData.isInMatch) continue
                                 if (target!!.world !== p.world) continue
                                 if (target
