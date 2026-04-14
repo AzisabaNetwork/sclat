@@ -61,7 +61,7 @@ object FloaterBomb {
                             } else {
                                 pVec = pVec!!.normalize().multiply(0.95)
                             }
-                            if (!getPlayerData(player)!!.isBombRush) p.exp = p.exp - 0.47f
+                            if (!getPlayerData(player)!!.isBombRush) p.exp -= 0.47f
                             val bom = ItemStack(getPlayerData(p)!!.team!!.teamColor!!.wool!!).clone()
                             val bomM = bom.itemMeta
                             bomM!!.setLocalizedName(notDuplicateNumber.toString())
@@ -196,7 +196,7 @@ object FloaterBomb {
                                             exDamage * Gear.getGearInfluence(player, Gear.Type.SUB_SPEC_UP)
                                     )
                                     if (!turn) {
-                                        damage = damage * 0.9
+                                        damage *= 0.9
                                     }
                                     if (getPlayerData(player)!!.team != getPlayerData(target)!!.team &&
                                         target.gameMode == GameMode.ADVENTURE
@@ -225,7 +225,7 @@ object FloaterBomb {
                                                 exDamage * Gear.getGearInfluence(p, Gear.Type.SUB_SPEC_UP)
                                         )
                                         if (!turn) {
-                                            damage = damage * 0.9
+                                            damage *= 0.9
                                         }
                                         ArmorStandMgr.giveDamageArmorStand(`as`, damage, p)
                                         if (`as`.customName != null) {

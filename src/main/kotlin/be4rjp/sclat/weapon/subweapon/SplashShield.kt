@@ -50,7 +50,7 @@ object SplashShield {
                 override fun run() {
                     try {
                         if (i == 0) {
-                            p.exp = p.exp - 0.59f
+                            p.exp -= 0.59f
                             drop = p.world.dropItem(p.eyeLocation, ItemStack(Material.ACACIA_FENCE))
                             drop!!.velocity = p.eyeLocation.direction.multiply(0.7)
                             yaw = p.eyeLocation.yaw

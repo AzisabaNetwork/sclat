@@ -138,7 +138,7 @@ object Hound {
                     try {
                         if (i == 0) {
                             saveY = player.location.y
-                            player.exp = player.exp -
+                            player.exp -=
                                 (
                                     data.weaponClass?.mainWeapon!!.needInk
                                         * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) /

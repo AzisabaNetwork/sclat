@@ -55,7 +55,7 @@ object Sprinkler {
                     try {
                         if (c == 0) {
                             if (!getPlayerData(player)!!.isBombRush) {
-                                p.exp = p.exp - (0.59 / Gear.getGearInfluence(player, Gear.Type.SUB_SPEC_UP)).toFloat()
+                                p.exp -= (0.59 / Gear.getGearInfluence(player, Gear.Type.SUB_SPEC_UP)).toFloat()
                             }
                             val bom = ItemStack(Material.BIRCH_FENCE_GATE).clone()
                             val bomM = bom.itemMeta

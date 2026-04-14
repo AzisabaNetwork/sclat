@@ -1869,12 +1869,12 @@ object MatchMgr {
                                 pTicket += 5
                             }
                             var pRank = data.killCount * 3
-                            if (data.team == data.match!!.winTeam) pRank = pRank + 25
+                            if (data.team == data.match!!.winTeam) pRank += 25
                             if (data.killCount == bestkills) {
-                                pRank = pRank + 20
+                                pRank += 20
                             }
                             if (data.paintCount == bestpaint) {
-                                pRank = pRank + 10
+                                pRank += 10
                             }
                             // int pRank = -60 + (int)((double)data.killCount * 2.7D +
                             // (double)data.paintCount / 700D);

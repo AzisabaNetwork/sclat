@@ -177,7 +177,7 @@ object SquidMgr {
                             )
                         ) {
                             if (data.canUseSubWeapon) {
-                                p.exp = p.exp +
+                                p.exp +=
                                     (
                                         Sclat.conf!!
                                             .config!!
@@ -276,7 +276,7 @@ object SquidMgr {
                                         .toFloat()
                             )
                         ) {
-                            p.exp = p.exp +
+                            p.exp +=
                                 Sclat.conf!!
                                     .config!!
                                     .getDouble("NormalRecovery")

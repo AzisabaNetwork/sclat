@@ -172,7 +172,7 @@ object Charger {
                                         * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) * charge
                                 ) / 2
                             ) {
-                                p.exp = p.exp -
+                                p.exp -=
                                     (
                                         (data.weaponClass?.mainWeapon!!.needInk / 2) *
                                             Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) /
@@ -225,7 +225,7 @@ object Charger {
                                     * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP)
                             )
                         ) {
-                            p.exp = p.exp -
+                            p.exp -=
                                 (
                                     data.weaponClass?.mainWeapon!!.needInk
                                         * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) /

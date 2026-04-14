@@ -220,9 +220,9 @@ class SnowballListener : Listener {
                                 }
                                 var damage = getPlayerData(shooter)!!.weaponClass!!.mainWeapon!!.damage
                                 if (dmgDouble != 1.0) {
-                                    damage = damage * dmgDouble
+                                    damage *= dmgDouble
                                 } else {
-                                    damage = damage * Gear.getGearInfluence(shooter, Gear.Type.MAIN_SPEC_UP)
+                                    damage *= Gear.getGearInfluence(shooter, Gear.Type.MAIN_SPEC_UP)
                                 }
                                 val type =
                                     getPlayerData(shooter)!!
@@ -236,7 +236,7 @@ class SnowballListener : Listener {
                                     damage -= damage * (ticksLived / 100)
                                 }
                                 if (type == "Funnel") {
-                                    damage = damage + Funnel.funnelPursuitPlayer(shooter, target)
+                                    damage += Funnel.funnelPursuitPlayer(shooter, target)
                                     if (damage < 0.1) {
                                         damage = 0.1
                                     }
@@ -434,7 +434,7 @@ class SnowballListener : Listener {
                             (armorStand.customName != "SplashShield") &&
                             (armorStand.customName != "Kasa")
                         ) {
-                            damage = damage + Funnel.funnelPursuit(shooter, armorStand)
+                            damage += Funnel.funnelPursuit(shooter, armorStand)
                             if (damage < 0.1) {
                                 damage = 0.1
                             }
@@ -878,7 +878,7 @@ class SnowballListener : Listener {
                         (`as`.customName != "SplashShield") &&
                         (`as`.customName != "Kasa")
                     ) {
-                        damage = damage + Funnel.funnelPursuit(shooter, `as`)
+                        damage += Funnel.funnelPursuit(shooter, `as`)
                         if (damage < 0.1) {
                             damage = 0.1
                         }

@@ -116,7 +116,7 @@ object Kasa {
             player.sendTitle("", ChatColor.RED.toString() + "インクが足りません", 0, 13, 2)
             return true
         }
-        player.exp = player.exp -
+        player.exp -=
             (
                 data.weaponClass?.mainWeapon!!.needInk
                     * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) /

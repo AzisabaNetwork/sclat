@@ -90,7 +90,7 @@ object Brush {
                                 player.playSound(player.location, Sound.UI_BUTTON_CLICK, 1f, 1.63f)
                                 return
                             }
-                            p.exp = p.exp -
+                            p.exp -=
                                 (
                                     data.weaponClass?.mainWeapon!!.rollerNeedInk
                                         * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) /
@@ -339,7 +339,7 @@ object Brush {
             player.playSound(player.location, Sound.UI_BUTTON_CLICK, 1f, 1.63f)
             return
         }
-        player.exp = player.exp -
+        player.exp -=
             (
                 data.weaponClass?.mainWeapon!!.needInk
                     * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) /

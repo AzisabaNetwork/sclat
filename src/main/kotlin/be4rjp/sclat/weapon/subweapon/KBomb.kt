@@ -56,7 +56,7 @@ object KBomb {
                 override fun run() {
                     try {
                         if (c == 0) {
-                            if (!getPlayerData(player)!!.isBombRush) p.exp = p.exp - 0.59f
+                            if (!getPlayerData(player)!!.isBombRush) p.exp -= 0.59f
                             val bom = ItemStack(getPlayerData(p)!!.team!!.teamColor!!.concrete!!).clone()
                             val bomM = bom.itemMeta
                             ndn = notDuplicateNumber

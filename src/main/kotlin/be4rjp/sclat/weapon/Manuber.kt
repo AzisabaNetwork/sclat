@@ -109,7 +109,7 @@ object Manuber {
                             while (distcheck > 0 &&
                                 !isSafeLocation(p, location.clone().add(jvec.clone().multiply(distcheck)))
                             ) {
-                                distcheck = distcheck - 0.2
+                                distcheck -= 0.2
                                 // p.sendMessage("テレポート位置に障害物があります");
                                 if (distcheck <= 0) {
                                     // p.sendMessage("テレポート距離が０になりました");
@@ -340,7 +340,7 @@ object Manuber {
                         val hitLocation = result.hitPosition.toLocation(world)
                         distance2 = entityLocation.distance(hitLocation)
                         if (dist - distance2 > 0.7) {
-                            distance2 = distance2 + 0.4
+                            distance2 += 0.4
                         }
                         return distance2
                     }

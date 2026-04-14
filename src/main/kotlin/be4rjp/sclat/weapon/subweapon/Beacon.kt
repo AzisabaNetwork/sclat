@@ -40,7 +40,7 @@ object Beacon {
             }
             `as`.teleport(player.location.add(0.0, -0.45, 0.0))
             `as`.customName = "21"
-            player.exp = player.exp - (0.39 / Gear.getGearInfluence(player, Gear.Type.SUB_SPEC_UP)).toFloat()
+            player.exp -= (0.39 / Gear.getGearInfluence(player, Gear.Type.SUB_SPEC_UP)).toFloat()
             val delay: BukkitRunnable =
                 object : BukkitRunnable() {
                     override fun run() {
