@@ -204,12 +204,11 @@ object LootBox {
         player: Player,
         Weapon: String?,
     ) {
-        val className = Weapon
-        if (!haveWeapon(player, className)) {
-            addWeapon(player, className)
-            sendMessage(ChatColor.GREEN.toString() + className + "が手に入ったよ", MessageType.PLAYER, player)
+        if (!haveWeapon(player, Weapon)) {
+            addWeapon(player, Weapon)
+            sendMessage(ChatColor.GREEN.toString() + Weapon + "が手に入ったよ", MessageType.PLAYER, player)
         } else {
-            sendMessage(ChatColor.GREEN.toString() + className + "はすでに持っているよ", MessageType.PLAYER, player)
+            sendMessage(ChatColor.GREEN.toString() + Weapon + "はすでに持っているよ", MessageType.PLAYER, player)
         }
     }
 

@@ -86,14 +86,13 @@ object SuperJumpMgr {
         }
 
         val from = player.location.clone()
-        val to = toloc
-        val vec = Vector(to.x - from.x, to.y - from.y, to.z - from.z).normalize()
+        val vec = Vector(toloc.x - from.x, toloc.y - from.y, toloc.z - from.z).normalize()
         player.gameMode = GameMode.SPECTATOR
         getPlayerData(player)!!.isJumping = (true)
         val rayTrace1 = RayTrace(from.toVector(), vec)
-        val positions: ArrayList<Vector> = rayTrace1.traverse(from.distance(to), 1.0)
+        val positions: ArrayList<Vector> = rayTrace1.traverse(from.distance(toloc), 1.0)
 
-        val coef = 0.16 / (from.distance(to) / 40).pow(2.0)
+        val coef = 0.16 / (from.distance(toloc) / 40).pow(2.0)
 
         /*
          * ray : for(int i = 1; i < positions.size();i++){ Location position =
@@ -192,9 +191,9 @@ object SuperJumpMgr {
                     }
                     // エフェクト
                     val r = 0.5
-                    val x = to.x + r * cos(c.toDouble())
-                    val y = to.y + 0.4
-                    val z = to.z + r * sin(c.toDouble())
+                    val x = toloc.x + r * cos(c.toDouble())
+                    val y = toloc.y + 0.4
+                    val z = toloc.z + r * sin(c.toDouble())
                     val tl = Location(p.world, x, y, z)
                     val dustOptions =
                         Particle.DustOptions(

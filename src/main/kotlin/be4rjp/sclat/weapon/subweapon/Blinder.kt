@@ -25,7 +25,6 @@ import org.bukkit.util.Vector
 
 object Blinder {
     fun blinderRunnable(player: Player) {
-        val p = player
         val reach = 35
 
         val cooltime: BukkitRunnable =
@@ -35,14 +34,14 @@ object Blinder {
                 }
             }
         cooltime.runTaskLater(plugin, 8)
-        if (p.exp > 0.36f || getPlayerData(player)!!.isBombRush) {
+        if (player.exp > 0.36f || getPlayerData(player)!!.isBombRush) {
             if (!getPlayerData(player)!!.isBombRush) {
-                p.exp = player.exp - 0.35f
+                player.exp = player.exp - 0.35f
             }
-            shootblind(p, reach)
+            shootblind(player, reach)
         } else {
-            p.sendTitle("", ChatColor.RED.toString() + "インクが足りません", 0, 5, 2)
-            p.playSound(player.location, Sound.UI_BUTTON_CLICK, 1f, 1.63f)
+            player.sendTitle("", ChatColor.RED.toString() + "インクが足りません", 0, 5, 2)
+            player.playSound(player.location, Sound.UI_BUTTON_CLICK, 1f, 1.63f)
         }
     }
 
