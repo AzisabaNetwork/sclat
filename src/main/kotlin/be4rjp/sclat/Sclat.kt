@@ -155,8 +155,6 @@ class Sclat :
 
         // ------------------------RegisteringCommands------------------------
         sclatLogger.info("Registering Commands...")
-//        getCommand("sclat")!!.setExecutor(SclatCommandExecutor())
-//        getCommand("sclat")!!.tabCompleter = SclatCommandExecutor()
         SclatCommands.init(this)
 
         // -------------------------------------------------------------------
