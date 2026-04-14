@@ -205,7 +205,8 @@ object AirStrike {
                         for (target in plugin.server.onlinePlayers) {
                             if (!getPlayerData(target)!!.isInMatch) continue
                             if (target.location.distanceSquared(drop!!.location) <= maxDistSquared) {
-                                val damage: Double =
+                                val damage: Double
+                                damage =
                                     if (localized) {
                                         (maxDist - target.location.distance(drop!!.location)) * 5
                                     } else {

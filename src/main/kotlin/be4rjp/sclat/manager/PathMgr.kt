@@ -148,7 +148,8 @@ object PathMgr {
                             val position = vector.toLocation(from.world!!)
                             for (target in plugin.server.onlinePlayers) {
                                 if (!getPlayerData(target)!!.settings!!.showEffectChargerLine()) continue
-                                val dustOptions =
+                                val dustOptions: Particle.DustOptions?
+                                dustOptions =
                                     if (team == null) {
                                         Particle.DustOptions(Color.WHITE, 1f)
                                     } else {

@@ -267,7 +267,8 @@ object LitterFiveG {
                 ) {
                     if (target.location.distanceSquared(position) <= maxDistSquad) {
                         if (rayTrace.intersects(BoundingBox(target as Entity), (reach).toDouble(), 0.05)) {
-                            val death: Boolean = giveDamage(player, target, damage, "spWeapon")
+                            val death: Boolean
+                            death = giveDamage(player, target, damage, "spWeapon")
                             if (death) {
                                 player.playSound(player.location, Sound.ENTITY_ARROW_HIT_PLAYER, 1.2f, 1.3f)
                                 player.world.playSound(target.location, Sound.ENTITY_GENERIC_EXPLODE, 1f, 1f)

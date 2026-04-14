@@ -276,7 +276,8 @@ object ArmorStandMgr {
 
     @JvmStatic
     fun sprinklerArmorStandSetup(player: Player) {
-        val al: Location? =
+        val al: Location?
+        al =
             if (Sclat.conf!!
                     .config!!
                     .getString("WorkMode") == "Trial"

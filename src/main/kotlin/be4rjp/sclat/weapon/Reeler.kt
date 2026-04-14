@@ -205,7 +205,8 @@ object Reeler {
                                 task.runTaskTimer(plugin, 0, 1)
                             }
                         } else {
-                            val destarm = graptest(player)
+                            var destarm: ArmorStand?
+                            destarm = graptest(player)
                             if (destarm != null) {
                                 grappletest(player, destarm)
                                 grRecharge = 0

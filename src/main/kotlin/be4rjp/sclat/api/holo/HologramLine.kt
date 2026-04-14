@@ -15,9 +15,14 @@ class HologramLine(
     private val location: Location,
     private var text: String,
 ) {
-    val entityId: Int = ThreadLocalRandom.current().nextInt(100000, 999999)
-    private val uuid: UUID = UUID.randomUUID()
+    val entityId: Int
+    private val uuid: UUID
     private var visible = true
+
+    init {
+        this.entityId = ThreadLocalRandom.current().nextInt(100000, 999999)
+        this.uuid = UUID.randomUUID()
+    }
 
     fun setText(text: String) {
         this.text = text

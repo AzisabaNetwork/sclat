@@ -54,9 +54,12 @@ class StatusServer( // private List<String> commands = new ArrayList<>();
 
 // 非同期スレッド
 internal class EchoThread(
-    private val socket: Socket,
+    socket: Socket,
 ) : Thread() {
+    private val socket: Socket?
+
     init {
+        this.socket = socket
         println("Connected " + socket.getRemoteSocketAddress())
     }
 

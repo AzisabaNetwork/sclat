@@ -727,7 +727,9 @@ object OpenGUI {
         shooterM.lore = shooterR
         shooter.itemMeta = shooterM
         inv.setItem(9, shooter)
-        val shooterP =
+
+        val shooterP: ItemStack?
+        shooterP =
             if (getPlayerData(player)!!.settings!!.showEffectMainWeaponInk()) {
                 ItemStack(Material.LIME_DYE)
             } else {
@@ -763,7 +765,9 @@ object OpenGUI {
         chargerM.lore = chargerR
         charger.itemMeta = chargerM
         inv.setItem(10, charger)
-        val chargerP =
+
+        val chargerP: ItemStack?
+        chargerP =
             if (getPlayerData(player)!!.settings!!.showEffectChargerLine()) {
                 ItemStack(Material.LIME_DYE)
             } else {
@@ -799,7 +803,9 @@ object OpenGUI {
         chargersM.lore = chargersR
         chargerS.itemMeta = chargersM
         inv.setItem(11, chargerS)
-        val chargersP =
+
+        val chargersP: ItemStack?
+        chargersP =
             if (getPlayerData(player)!!.settings!!.showEffectSPWeapon()) {
                 ItemStack(Material.LIME_DYE)
             } else {
@@ -836,7 +842,9 @@ object OpenGUI {
         rollaerlM.lore = rollaerlR
         rollaerL.itemMeta = rollaerlM
         inv.setItem(12, rollaerL)
-        val rollaerlP =
+
+        val rollaerlP: ItemStack?
+        rollaerlP =
             if (getPlayerData(player)!!.settings!!.showEffectSPWeaponRegion()) {
                 ItemStack(Material.LIME_DYE)
             } else {
@@ -871,7 +879,9 @@ object OpenGUI {
         rollersM.lore = rollersR
         rollerS.itemMeta = rollersM
         inv.setItem(13, rollerS)
-        val rollersP =
+
+        val rollersP: ItemStack?
+        rollersP =
             if (getPlayerData(player)!!.settings!!.showSnowBall()) {
                 ItemStack(Material.LIME_DYE)
             } else {
@@ -888,7 +898,9 @@ object OpenGUI {
         rollersPM.lore = rollersPR
         rollersP.itemMeta = rollersPM
         inv.setItem(22, rollersP)
-        val bgmP =
+
+        val bgmP: ItemStack?
+        bgmP =
             if (getPlayerData(player)!!.settings!!.playBGM()) {
                 ItemStack(Material.LIME_DYE)
             } else {
@@ -938,7 +950,9 @@ object OpenGUI {
         bombM.lore = bombR
         bomb.itemMeta = bombM
         inv.setItem(14, bomb)
-        val bombP =
+
+        val bombP: ItemStack?
+        bombP =
             if (getPlayerData(player)!!.settings!!.showEffectBomb()) {
                 ItemStack(Material.LIME_DYE)
             } else {
@@ -973,7 +987,9 @@ object OpenGUI {
         bombexM.lore = bombexR
         bombEx.itemMeta = bombexM
         inv.setItem(15, bombEx)
-        val bombexP =
+
+        val bombexP: ItemStack?
+        bombexP =
             if (getPlayerData(player)!!.settings!!.showEffectBombEx()) {
                 ItemStack(Material.LIME_DYE)
             } else {
@@ -1010,7 +1026,8 @@ object OpenGUI {
         inv.setItem(16, ck)
 
         // button
-        val ckP =
+        val ckP: ItemStack?
+        ckP =
             if (getPlayerData(player)!!.settings!!.doChargeKeep()) {
                 ItemStack(Material.LIME_DYE)
             } else {

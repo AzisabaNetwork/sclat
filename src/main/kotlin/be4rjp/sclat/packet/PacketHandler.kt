@@ -14,8 +14,13 @@ import org.bukkit.entity.Player
 class PacketHandler(
     private val player: Player?,
 ) : ChannelDuplexHandler() {
-    private val playerData: PlayerData? = getPlayerData(player)
-    private val playerSettings: PlayerSettings = playerData?.settings!!
+    private val playerData: PlayerData?
+    private val playerSettings: PlayerSettings
+
+    init {
+        this.playerData = getPlayerData(player)
+        this.playerSettings = playerData?.settings!!
+    }
 
     @Throws(Exception::class)
     override fun channelRead(

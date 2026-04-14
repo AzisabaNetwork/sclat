@@ -32,13 +32,14 @@ class RankingHolograms(
     private val rankArmorStands: MutableList<EntityArmorStand>
 
     @JvmField
-    val armorStandList = ArrayList()
+    val armorStandList: MutableList<EntityArmorStand?>
 
     private val location: Location
 
     var rankingType: RankingType = RankingType.TOTAL
 
     init {
+        armorStandList = ArrayList()
 
         val worldName = Sclat.conf?.config!!.getString("RankingHolograms.WorldName")
         val w = Bukkit.getWorld(worldName!!)

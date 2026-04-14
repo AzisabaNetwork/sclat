@@ -30,7 +30,7 @@ class Wiremesh(
 ) : BukkitRunnable() {
     private val fb: EntityFallingBlock
     private val `as`: EntityArmorStand
-    private val ibd: IBlockData? = (blockData as CraftBlockData).state
+    private val ibd: IBlockData?
 
     private val playerList: MutableList<Player?> = ArrayList()
 
@@ -38,6 +38,7 @@ class Wiremesh(
     private val spawn = false
 
     init {
+        this.ibd = (blockData as CraftBlockData).state
 
         block.type = Material.AIR
 

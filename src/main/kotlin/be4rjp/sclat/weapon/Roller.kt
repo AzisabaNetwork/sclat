@@ -543,7 +543,8 @@ object Roller {
 
                     var sound = false
                     for (i in 0..<data!!.weaponClass!!.mainWeapon!!.rollerShootQuantity) {
-                        val `is`: Boolean =
+                        val `is`: Boolean
+                        `is` =
                             if (data!!.weaponClass!!.mainWeapon!!.isHude) {
                                 shoot(p, vec)
                             } else {
