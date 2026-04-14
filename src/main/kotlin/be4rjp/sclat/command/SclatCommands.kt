@@ -23,7 +23,7 @@ import org.incendo.cloud.parser.standard.StringParser
 import java.io.IOException
 
 object SclatCommands {
-    val PERMISSION_ADMIN = "sclat.admin"
+    const val PERMISSION_ADMIN = "sclat.admin"
 
     fun init(plugin: JavaPlugin) {
         val commandManager =
@@ -87,7 +87,7 @@ object SclatCommands {
                 for (_uuid in dataUuids) {
                     val userEmblems = oldData.getStringList(_uuid)
                     for (emblem in userEmblems) {
-                        Sclat.conf?.emblemUserdata!!.set(_uuid + "." + emblem, 1)
+                        Sclat.conf?.emblemUserdata!!.set("$_uuid.$emblem", 1)
                     }
                 }
                 context.sender().sendMessage(ChatColor.GREEN.toString() + "Migration was succeeded!")
@@ -135,7 +135,7 @@ object SclatCommands {
                     if (sender !is Player) return@handler
                     for (ss in ServerStatusManager.serverList) {
                         if (ss.serverName == serverName) {
-                            val commands: MutableList<String?> = ArrayList<String?>()
+                            val commands: MutableList<String?> = ArrayList()
                             commands.add("mod " + context.sender().name)
                             commands.add("stop")
                             // Todo: use redis. fallbacks PluginMessaging

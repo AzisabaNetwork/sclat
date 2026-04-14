@@ -36,7 +36,7 @@ object AirStrike {
         player: Player,
         localized: Boolean,
     ) {
-        player.world.spawn<Firework?>(player.location, Firework::class.java)
+        player.world.spawn(player.location, Firework::class.java)
         player.inventory.clear()
         SPWeaponMgr.setSPCoolTimeAnimation(player, 200)
 
@@ -206,11 +206,12 @@ object AirStrike {
                             if (!getPlayerData(target)!!.isInMatch) continue
                             if (target.location.distanceSquared(drop!!.location) <= maxDistSquared) {
                                 val damage: Double
-                                if (localized) {
-                                    damage = (maxDist - target.location.distance(drop!!.location)) * 5
-                                } else {
-                                    damage = (maxDist - target.location.distance(drop!!.location)) * 7
-                                }
+                                damage =
+                                    if (localized) {
+                                        (maxDist - target.location.distance(drop!!.location)) * 5
+                                    } else {
+                                        (maxDist - target.location.distance(drop!!.location)) * 7
+                                    }
                                 if (getPlayerData(player)!!.team != getPlayerData(target)!!.team &&
                                     target.gameMode == GameMode.ADVENTURE
                                 ) {

@@ -56,12 +56,13 @@ object FloaterBomb {
                             turn = false
                             onground = player.isOnGround
                             pVec = p.eyeLocation.direction
-                            if (!onground) {
-                                pVec = pVec!!.normalize().multiply(1.1)
-                            } else {
-                                pVec = pVec!!.normalize().multiply(0.95)
-                            }
-                            if (!getPlayerData(player)!!.isBombRush) p.exp = p.exp - 0.47f
+                            pVec =
+                                if (!onground) {
+                                    pVec!!.normalize().multiply(1.1)
+                                } else {
+                                    pVec!!.normalize().multiply(0.95)
+                                }
+                            if (!getPlayerData(player)!!.isBombRush) p.exp -= 0.47f
                             val bom = ItemStack(getPlayerData(p)!!.team!!.teamColor!!.wool!!).clone()
                             val bomM = bom.itemMeta
                             bomM!!.setLocalizedName(notDuplicateNumber.toString())
@@ -69,7 +70,7 @@ object FloaterBomb {
                             drop = p.world.dropItem(p.eyeLocation, bom)
                             drop!!.velocity = pVec!!.clone()
                             // 雪玉をスポーンさせた瞬間にプレイヤーに雪玉がデスポーンした偽のパケットを送信する
-                            ball = player.launchProjectile<Snowball>(Snowball::class.java)
+                            ball = player.launchProjectile(Snowball::class.java)
                             ball!!.velocity = Vector(0, 0, 0)
                             setSnowballIsHit(ball, false)
 
@@ -196,7 +197,7 @@ object FloaterBomb {
                                             exDamage * Gear.getGearInfluence(player, Gear.Type.SUB_SPEC_UP)
                                     )
                                     if (!turn) {
-                                        damage = damage * 0.9
+                                        damage *= 0.9
                                     }
                                     if (getPlayerData(player)!!.team != getPlayerData(target)!!.team &&
                                         target.gameMode == GameMode.ADVENTURE
@@ -225,7 +226,7 @@ object FloaterBomb {
                                                 exDamage * Gear.getGearInfluence(p, Gear.Type.SUB_SPEC_UP)
                                         )
                                         if (!turn) {
-                                            damage = damage * 0.9
+                                            damage *= 0.9
                                         }
                                         ArmorStandMgr.giveDamageArmorStand(`as`, damage, p)
                                         if (`as`.customName != null) {

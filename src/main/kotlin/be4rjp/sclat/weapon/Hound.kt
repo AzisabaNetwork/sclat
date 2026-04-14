@@ -23,7 +23,6 @@ import org.bukkit.block.data.BlockData
 import org.bukkit.entity.ArmorStand
 import org.bukkit.entity.Player
 import org.bukkit.scheduler.BukkitRunnable
-import org.bukkit.util.Consumer
 import org.bukkit.util.Vector
 
 object Hound {
@@ -139,7 +138,7 @@ object Hound {
                     try {
                         if (i == 0) {
                             saveY = player.location.y
-                            player.exp = player.exp -
+                            player.exp -=
                                 (
                                     data.weaponClass?.mainWeapon!!.needInk
                                         * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) /
@@ -147,14 +146,13 @@ object Hound {
                                 ).toFloat()
 
                             as1 =
-                                player.world.spawn<ArmorStand>(
+                                player.world.spawn(
                                     player.location,
                                     ArmorStand::class.java,
-                                    Consumer { armorStand: ArmorStand ->
-                                        armorStand.isVisible = false
-                                        armorStand.isSmall = true
-                                    },
-                                )
+                                ) { armorStand: ArmorStand ->
+                                    armorStand.isVisible = false
+                                    armorStand.isSmall = true
+                                }
                             GlowingAPI.setGlowing(as1!!, player, true)
                             data.setArmorlist(as1)
                         }
@@ -165,11 +163,12 @@ object Hound {
 
                         if (i >= 5) {
                             if ((bloc!!.x == as1l.x || bloc!!.z == as1l.z)) {
-                                if (entityWallHit(as1!!, pVector)) {
-                                    aVec = Vector(pVector.getX() * 0.03, climbSpeed.toDouble(), pVector.getZ() * 0.03)
-                                } else {
-                                    aVec = Vector(vec.getX(), -0.4, vec.getZ())
-                                }
+                                aVec =
+                                    if (entityWallHit(as1!!, pVector)) {
+                                        Vector(pVector.getX() * 0.03, climbSpeed.toDouble(), pVector.getZ() * 0.03)
+                                    } else {
+                                        Vector(vec.getX(), -0.4, vec.getZ())
+                                    }
                                 // 壁を塗る
                                 for (i in 0..1) {
                                     val pLocs: MutableList<Location> = getSphere(as1l, i.toDouble(), 30)

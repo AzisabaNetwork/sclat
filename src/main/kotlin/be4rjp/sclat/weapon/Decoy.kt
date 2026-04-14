@@ -38,7 +38,6 @@ import org.bukkit.entity.ArmorStand
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.scheduler.BukkitRunnable
-import org.bukkit.util.Consumer
 
 object Decoy {
     @JvmStatic
@@ -109,7 +108,7 @@ object Decoy {
                         // 見えないところにスポーンさせて、クライアントにスキンを先に読み込ませる
                         yaw = player1.eyeLocation.yaw
                         npc!!.setLocation(location.x, location.y - 20, location.z, yaw, 0f)
-                        npc!!.dataWatcher.set<Byte?>(DataWatcherRegistry.a.a(15), 127.toByte())
+                        npc!!.dataWatcher.set(DataWatcherRegistry.a.a(15), 127.toByte())
 
                         for (p in plugin.server.onlinePlayers) {
                             val connection = (p as CraftPlayer).handle.playerConnection
@@ -196,15 +195,16 @@ object Decoy {
                     }
                     if (s != 0 || s != 15) {
                         block = location.block.getRelative(BlockFace.DOWN)
-                        if (blockDataMap.containsKey(block)) {
-                            if (block!!.type.toString().contains("WOOL")) {
-                                ika = block!!.type != data!!.team?.teamColor!!.wool
+                        ika =
+                            if (blockDataMap.containsKey(block)) {
+                                if (block!!.type.toString().contains("WOOL")) {
+                                    block!!.type != data!!.team?.teamColor!!.wool
+                                } else {
+                                    false
+                                }
                             } else {
-                                ika = false
+                                false
                             }
-                        } else {
-                            ika = false
-                        }
                         if (ika) {
                             es!!.setLocation(location.x, location.y, location.z, yaw, 0f)
                             npc!!.setLocation(location.x, location.y - 20, location.z, yaw, 0f)
@@ -260,14 +260,13 @@ object Decoy {
                     try {
                         if (c == 0) {
                             as1 =
-                                player.world.spawn<ArmorStand>(
+                                player.world.spawn(
                                     player.location.add(0.0, 1.6, 0.0),
                                     ArmorStand::class.java,
-                                    Consumer { armorStand: ArmorStand ->
-                                        armorStand.isVisible = false
-                                        armorStand.isSmall = true
-                                    },
-                                )
+                                ) { armorStand: ArmorStand ->
+                                    armorStand.isVisible = false
+                                    armorStand.isSmall = true
+                                }
                             as1!!.velocity =
                                 p
                                     .eyeLocation

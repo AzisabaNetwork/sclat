@@ -53,7 +53,7 @@ object QuickBomb {
                     try {
                         if (c == 0) {
                             pVec = p.eyeLocation.direction
-                            if (!getPlayerData(player)!!.isBombRush) p.exp = p.exp - 0.39f
+                            if (!getPlayerData(player)!!.isBombRush) p.exp -= 0.39f
                             val bom = ItemStack(getPlayerData(p)!!.team!!.teamColor!!.wool!!).clone()
                             val bomM = bom.itemMeta
                             bomM!!.setLocalizedName(notDuplicateNumber.toString())
@@ -61,7 +61,7 @@ object QuickBomb {
                             drop = p.world.dropItem(p.eyeLocation, bom)
                             drop!!.velocity = pVec!!.clone()
                             // 雪玉をスポーンさせた瞬間にプレイヤーに雪玉がデスポーンした偽のパケットを送信する
-                            ball = player.launchProjectile<Snowball>(Snowball::class.java)
+                            ball = player.launchProjectile(Snowball::class.java)
                             ball!!.velocity = Vector(0, 0, 0)
                             setSnowballIsHit(ball, false)
 

@@ -37,7 +37,7 @@ object PaintMgr {
         if (Sclat.type == ServerType.LOBBY) return
 
         val mw = getPlayerData(player)!!.weaponClass!!.mainWeapon
-        var blocks: MutableList<Block> = ArrayList<Block>()
+        var blocks: MutableList<Block> = ArrayList()
         blocks.add(location.block)
         if (sphere) blocks = generateSphere(location, mw!!.maxPaintDis, 1.0, false, true, 0.0, mw.paintRandom)
 
@@ -179,8 +179,8 @@ object PaintMgr {
         team: Team,
         match: Match,
     ) {
-        var team = team
-        var match = match
+        val team = team
+        val match = match
         if (block.type == team.teamColor!!.wool) return
 
         if (!(
@@ -270,7 +270,7 @@ object PaintMgr {
         val b5 = loc.add(0.0, 1.0, 0.0).block
         val b6 = loc.add(0.0, -1.0, 0.0).block
 
-        val tempList: MutableList<Block?> = ArrayList<Block?>()
+        val tempList: MutableList<Block?> = ArrayList()
 
         if (loopc == 0) tempList.add(b0)
         tempList.add(b1)
@@ -305,7 +305,7 @@ object PaintMgr {
         plus_y: Double,
         random: Int,
     ): MutableList<Block> {
-        val circleblocks: MutableList<Block> = ArrayList<Block>()
+        val circleblocks: MutableList<Block> = ArrayList()
         val cx = loc.x
         val cy = loc.y
         val cz = loc.z
@@ -408,8 +408,8 @@ object PaintMgr {
 
     fun paintGlass(match: Match) {
         // team0
-        var match = match
-        val blocks: MutableList<Block> = ArrayList<Block>()
+        val match = match
+        val blocks: MutableList<Block> = ArrayList()
         val b0 =
             match.mapData!!
                 .team0Loc!!
@@ -438,7 +438,7 @@ object PaintMgr {
         }
 
         // team1
-        val blocks1: MutableList<Block> = ArrayList<Block>()
+        val blocks1: MutableList<Block> = ArrayList()
         val b1 =
             match.mapData!!
                 .team1Loc!!

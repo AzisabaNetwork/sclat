@@ -112,13 +112,13 @@ object Bucket {
             player.sendTitle("", ChatColor.RED.toString() + "インクが足りません", 0, 13, 2)
             return true
         }
-        player.exp = player.exp -
+        player.exp -=
             (
                 data.weaponClass?.mainWeapon!!.needInk
                     * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) /
                     Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)
             ).toFloat()
-        val ball = player.launchProjectile<Snowball>(Snowball::class.java)
+        val ball = player.launchProjectile(Snowball::class.java)
         (ball as CraftSnowball).handle.setItem(CraftItemStack.asNMSCopy(ItemStack(getPlayerData(player)!!.team?.teamColor!!.wool!!)))
         var vec: Vector? =
             player
@@ -140,7 +140,7 @@ object Bucket {
         val name = notDuplicateNumber.toString()
         DataMgr.mws.add(name)
         ball.customName = name
-        mainSnowballNameMap.put(name, ball)
+        mainSnowballNameMap[name] = ball
         setSnowballHitCount(name, 0)
         val task: BukkitRunnable =
             object : BukkitRunnable() {
@@ -157,7 +157,7 @@ object Bucket {
                     ).multiply(getPlayerData(p)!!.weaponClass?.mainWeapon!!.shootSpeed / 17)
 
                 override fun run() {
-                    inkball = mainSnowballNameMap.get(name)
+                    inkball = mainSnowballNameMap[name]
 
                     if (inkball != ball) {
                         i += getSnowballHitCount(name) - 1

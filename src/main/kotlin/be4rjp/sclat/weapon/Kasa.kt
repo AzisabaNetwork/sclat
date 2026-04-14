@@ -116,13 +116,13 @@ object Kasa {
             player.sendTitle("", ChatColor.RED.toString() + "インクが足りません", 0, 13, 2)
             return true
         }
-        player.exp = player.exp -
+        player.exp -=
             (
                 data.weaponClass?.mainWeapon!!.needInk
                     * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) /
                     Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)
             ).toFloat()
-        val ball = player.launchProjectile<Snowball>(Snowball::class.java)
+        val ball = player.launchProjectile(Snowball::class.java)
         (ball as CraftSnowball).handle.setItem(CraftItemStack.asNMSCopy(ItemStack(getPlayerData(player)!!.team!!.teamColor!!.wool!!)))
         var vec: Vector? =
             player
@@ -144,7 +144,7 @@ object Kasa {
         val name = notDuplicateNumber.toString()
         DataMgr.mws.add(name)
         ball.customName = name
-        mainSnowballNameMap.put(name, ball)
+        mainSnowballNameMap[name] = ball
         setSnowballHitCount(name, 0)
         val task: BukkitRunnable =
             object : BukkitRunnable() {
@@ -161,7 +161,7 @@ object Kasa {
                     ).multiply(getPlayerData(p)!!.weaponClass!!.mainWeapon!!.shootSpeed / 17)
 
                 override fun run() {
-                    inkball = mainSnowballNameMap.get(name)
+                    inkball = mainSnowballNameMap[name]
 
                     if (inkball != ball) {
                         i += getSnowballHitCount(name) - 1
@@ -227,7 +227,7 @@ object Kasa {
             object : BukkitRunnable() {
                 var p: Player = player
                 var i: Int = 0
-                var list: MutableList<ArmorStand> = ArrayList<ArmorStand>()
+                var list: MutableList<ArmorStand> = ArrayList()
                 var weapon: Boolean = false
                 var sound: Boolean = true
 
@@ -243,11 +243,12 @@ object Kasa {
                     try {
                         val data = getPlayerData(p)
 
-                        try {
-                            weapon = MainWeaponMgr.equalWeapon(p)
-                        } catch (e: Exception) {
-                            weapon = false
-                        }
+                        weapon =
+                            try {
+                                MainWeaponMgr.equalWeapon(p)
+                            } catch (e: Exception) {
+                                false
+                            }
 
                         if (data!!.isSneaking && kdata.damage <= 200) {
                             if (!sound) {
@@ -461,9 +462,9 @@ object Kasa {
 
                 var dir: Vector = Vector(1, 0, 0)
 
-                var list: MutableList<ArmorStand> = ArrayList<ArmorStand>()
-                var ul: MutableList<ArmorStand> = ArrayList<ArmorStand>()
-                var dl: MutableList<ArmorStand> = ArrayList<ArmorStand>()
+                var list: MutableList<ArmorStand> = ArrayList()
+                var ul: MutableList<ArmorStand> = ArrayList()
+                var dl: MutableList<ArmorStand> = ArrayList()
 
                 var as1: ArmorStand? = null
                 var as2: ArmorStand? = null
@@ -642,7 +643,7 @@ object Kasa {
                             dl.add(as17!!)
                             ul.add(as20!!)
 
-                            val aslist: MutableList<ArmorStand> = ArrayList<ArmorStand>(list)
+                            val aslist: MutableList<ArmorStand> = ArrayList(list)
                             kdata.armorStandList = aslist
                             kdata.damage = (getPlayerData(p)!!.weaponClass!!.mainWeapon!!.slideNeedINK).toDouble()
 

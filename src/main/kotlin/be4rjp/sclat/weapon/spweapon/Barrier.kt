@@ -27,7 +27,7 @@ object Barrier {
         val task: BukkitRunnable =
             object : BukkitRunnable() {
                 var p: Player = player
-                var list: MutableList<EntityArmorStand?> = ArrayList<EntityArmorStand?>()
+                var list: MutableList<EntityArmorStand?> = ArrayList()
                 var c: Int = 0
 
                 override fun run() {

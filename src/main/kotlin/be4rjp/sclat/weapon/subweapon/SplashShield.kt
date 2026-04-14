@@ -50,7 +50,7 @@ object SplashShield {
                 override fun run() {
                     try {
                         if (i == 0) {
-                            p.exp = p.exp - 0.59f
+                            p.exp -= 0.59f
                             drop = p.world.dropItem(p.eyeLocation, ItemStack(Material.ACACIA_FENCE))
                             drop!!.velocity = p.eyeLocation.direction.multiply(0.7)
                             yaw = p.eyeLocation.yaw
@@ -170,7 +170,7 @@ object SplashShield {
                             val positions2: ArrayList<Vector> = rayTrace2.traverse(3.0, 0.2)
 
                             val as1 =
-                                player.world.spawn<ArmorStand>(
+                                player.world.spawn(
                                     loc.clone().add(0.0, -0.6, 0.0),
                                     ArmorStand::class.java,
                                 ) { armorStand: ArmorStand ->
@@ -182,7 +182,7 @@ object SplashShield {
                                 }
                             list.add(as1)
                             val as2 =
-                                player.world.spawn<ArmorStand>(
+                                player.world.spawn(
                                     loc.clone().add(0.0, 0.0, 0.0),
                                     ArmorStand::class.java,
                                 ) { armorStand: ArmorStand ->
@@ -194,7 +194,7 @@ object SplashShield {
                                 }
                             list.add(as2)
                             val as3 =
-                                player.world.spawn<ArmorStand>(
+                                player.world.spawn(
                                     loc.clone().add(0.0, 0.6, 0.0),
                                     ArmorStand::class.java,
                                 ) { armorStand: ArmorStand ->
@@ -206,7 +206,7 @@ object SplashShield {
                                 }
                             list.add(as3)
                             val as4 =
-                                player.world.spawn<ArmorStand>(
+                                player.world.spawn(
                                     loc.clone().add(0.0, 1.05, 0.0),
                                     ArmorStand::class.java,
                                 ) { armorStand: ArmorStand ->
@@ -218,7 +218,7 @@ object SplashShield {
                                 }
                             list.add(as4)
                             val as5 =
-                                player.world.spawn<ArmorStand>(
+                                player.world.spawn(
                                     loc.clone().add(0.0, -0.6, 0.0),
                                     ArmorStand::class.java,
                                 ) { armorStand: ArmorStand ->
@@ -229,12 +229,12 @@ object SplashShield {
                                     armorStand.headPose = EulerAngle(0.0, 0.0, Math.toRadians(135.0))
                                 }
                             list.add(as5)
-                            val l6 = positions2.get(5).toLocation(loc.world!!).add(0.0, 0.25, 0.0)
+                            val l6 = positions2[5].toLocation(loc.world!!).add(0.0, 0.25, 0.0)
                             l6.yaw = yaw
                             val as6 =
                                 player
                                     .world
-                                    .spawn<ArmorStand>(
+                                    .spawn(
                                         l6,
                                         ArmorStand::class.java,
                                     ) { armorStand: ArmorStand ->
@@ -245,12 +245,12 @@ object SplashShield {
                                         armorStand.headPose = EulerAngle(0.0, 0.0, Math.toRadians(270.0))
                                     }
                             list.add(as6)
-                            val l7 = positions1.get(4).toLocation(loc.world!!)
+                            val l7 = positions1[4].toLocation(loc.world!!)
                             l7.yaw = yaw
                             val as7 =
                                 player
                                     .world
-                                    .spawn<ArmorStand>(
+                                    .spawn(
                                         l7,
                                         ArmorStand::class.java,
                                     ) { armorStand: ArmorStand ->
@@ -261,12 +261,12 @@ object SplashShield {
                                         armorStand.headPose = EulerAngle(0.0, 0.0, Math.toRadians(45.0))
                                     }
                             list.add(as7)
-                            val l8 = positions1.get(7).toLocation(loc.world!!)
+                            val l8 = positions1[7].toLocation(loc.world!!)
                             l8.yaw = yaw
                             val as8 =
                                 player
                                     .world
-                                    .spawn<ArmorStand>(
+                                    .spawn(
                                         l8,
                                         ArmorStand::class.java,
                                     ) { armorStand: ArmorStand ->
@@ -277,12 +277,12 @@ object SplashShield {
                                         armorStand.headPose = EulerAngle(0.0, 0.0, Math.toRadians(45.0))
                                     }
                             list.add(as8)
-                            val l9 = positions2.get(4).toLocation(loc.world!!)
+                            val l9 = positions2[4].toLocation(loc.world!!)
                             l9.yaw = yaw
                             val as9 =
                                 player
                                     .world
-                                    .spawn<ArmorStand>(
+                                    .spawn(
                                         l9,
                                         ArmorStand::class.java,
                                     ) { armorStand: ArmorStand ->
@@ -293,12 +293,12 @@ object SplashShield {
                                         armorStand.headPose = EulerAngle(0.0, 0.0, Math.toRadians(45.0))
                                     }
                             list.add(as9)
-                            val l10 = positions2.get(7).toLocation(loc.world!!)
+                            val l10 = positions2[7].toLocation(loc.world!!)
                             l10.yaw = yaw
                             val as10 =
                                 player
                                     .world
-                                    .spawn<ArmorStand>(
+                                    .spawn(
                                         l10,
                                         ArmorStand::class.java,
                                     ) { armorStand: ArmorStand ->
@@ -309,12 +309,12 @@ object SplashShield {
                                         armorStand.headPose = EulerAngle(0.0, 0.0, Math.toRadians(45.0))
                                     }
                             list.add(as10)
-                            val l11 = positions2.get(4).toLocation(loc.world!!).add(0.0, -0.45, 0.0)
+                            val l11 = positions2[4].toLocation(loc.world!!).add(0.0, -0.45, 0.0)
                             l11.yaw = yaw
                             val as11 =
                                 player
                                     .world
-                                    .spawn<ArmorStand>(
+                                    .spawn(
                                         l11,
                                         ArmorStand::class.java,
                                     ) { armorStand: ArmorStand ->
@@ -325,14 +325,14 @@ object SplashShield {
                                     }
                             list.add(as11)
                             val l12 =
-                                positions2.get(3).toLocation(loc.world!!).clone().add(
+                                positions2[3].toLocation(loc.world!!).clone().add(
                                     pv2.getX(),
                                     -0.1,
                                     pv2.getZ(),
                                 )
                             l12.yaw = yaw
                             val as12 =
-                                player.world.spawn<ArmorStand>(
+                                player.world.spawn(
                                     l12.add(vec1.clone().normalize().multiply(0.05)),
                                     ArmorStand::class.java,
                                 ) { armorStand: ArmorStand ->
@@ -345,14 +345,14 @@ object SplashShield {
                             as12.isSmall = true
                             list.add(as12)
                             val l13 =
-                                positions2.get(3).toLocation(loc.world!!).clone().add(
+                                positions2[3].toLocation(loc.world!!).clone().add(
                                     pv2.getX(),
                                     -0.5,
                                     pv2.getZ(),
                                 )
                             l13.yaw = yaw
                             val as13 =
-                                player.world.spawn<ArmorStand>(
+                                player.world.spawn(
                                     l13.add(vec1.clone().normalize().multiply(0.05)),
                                     ArmorStand::class.java,
                                 ) { armorStand: ArmorStand ->
@@ -364,12 +364,12 @@ object SplashShield {
                                 }
                             as13.isSmall = true
                             list.add(as13)
-                            val l14 = positions2.get(10).toLocation(loc.world!!)
+                            val l14 = positions2[10].toLocation(loc.world!!)
                             l14.yaw = yaw
                             val as14 =
                                 player
                                     .world
-                                    .spawn<ArmorStand>(
+                                    .spawn(
                                         l14,
                                         ArmorStand::class.java,
                                     ) { armorStand: ArmorStand ->
@@ -399,7 +399,7 @@ object SplashShield {
                                             ),
                                         )
                                     }
-                                    if (i > 11 && i < 14) {
+                                    if (i in 12..<14) {
                                         (target as CraftPlayer)
                                             .handle
                                             .playerConnection
@@ -424,7 +424,7 @@ object SplashShield {
                             var i = 1
                             for (a in list) {
                                 for (target in plugin.server.onlinePlayers) {
-                                    if (i > 5 && i <= 11) {
+                                    if (i in 6..11) {
                                         (target as CraftPlayer).handle.playerConnection.sendPacket(
                                             PacketPlayOutEntityEquipment(
                                                 a.entityId,
@@ -465,7 +465,7 @@ object SplashShield {
                                     .wool!!
                                     .createBlockData()
                             ray@ for (i in 0..<positions1.size - 4) {
-                                val position = positions1.get(i).toLocation(p.location.world!!)
+                                val position = positions1[i].toLocation(p.location.world!!)
                                 PaintMgr.paintHightestBlock(position, p, false, false)
                                 val damage = 10.0
                                 val rayTrace4 =
@@ -510,7 +510,7 @@ object SplashShield {
                             }
 
                             ray@ for (i in 0..<positions2.size - 1) {
-                                val position = positions2.get(i).toLocation(p.location.world!!)
+                                val position = positions2[i].toLocation(p.location.world!!)
                                 PaintMgr.paintHightestBlock(position, p, false, false)
                                 val damage = 10.0
                                 val rayTrace4 =
@@ -591,8 +591,8 @@ object SplashShield {
 
                         if (c > 200 || !getPlayerData(p)!!.isInMatch || ssdata.damage > 80) {
                             for (a in list) a.remove()
-                            list.get(0).world.playSound(
-                                list.get(0).location,
+                            list[0].world.playSound(
+                                list[0].location,
                                 Sound.ENTITY_ITEM_BREAK,
                                 0.8f,
                                 0.8f,

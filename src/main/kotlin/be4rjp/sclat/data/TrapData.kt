@@ -140,7 +140,7 @@ class TrapData(
                 var i: Int = 0
 
                 override fun run() {
-                    if (i >= 0 && i <= 4) {
+                    if (i in 0..4) {
                         if (i % 2 == 0) player.world.playSound(location, Sound.BLOCK_NOTE_BLOCK_PLING, 1.1f, 1.8f)
                     }
 

@@ -108,7 +108,7 @@ class Sclat :
         val deferred = conf!!.config!!.getBoolean("deferredMapLoading", true)
         if (!deferred) {
             for (mapname in conf!!.mapConfig!!.getConfigurationSection("Maps")!!.getKeys(false)) {
-                val worldName: String? = conf!!.mapConfig!!.getString("Maps." + mapname + ".WorldName")
+                val worldName: String? = conf!!.mapConfig!!.getString("Maps.$mapname.WorldName")
                 Bukkit.createWorld(WorldCreator(worldName!!))
                 val world = Bukkit.getWorld(worldName)
                 world!!.isAutoSave = false
@@ -366,7 +366,7 @@ class Sclat :
 
         text = ChatColor.translateAlternateColorCodes('&', news?.getConfig()!!.getString("news-message")!!)
 
-        textAnimation = TextAnimation(text, Sclat.news?.getConfig()!!.getInt("scoreboard-length"))
+        textAnimation = TextAnimation(text, news?.getConfig()!!.getInt("scoreboard-length"))
     }
 
     override fun onPluginMessageReceived(
@@ -486,7 +486,7 @@ class Sclat :
         var pdspList: MutableList<Player?>? = null
 
         @JvmField
-        var colors: MutableList<String?> = ArrayList<String?>()
+        var colors: MutableList<String?> = ArrayList()
 
         @JvmField
         var tutorial: Boolean = false
@@ -522,10 +522,10 @@ class Sclat :
         var dadadaCheckerAPI: DADADACheckerAPI? = null
 
         @JvmField
-        var flyList: MutableList<String?> = ArrayList<String?>()
+        var flyList: MutableList<String?> = ArrayList()
 
         @JvmField
-        var modList: MutableList<String?> = ArrayList<String?>()
+        var modList: MutableList<String?> = ArrayList()
 
         @JvmField
         var particleRenderDistance: Double = 0.0

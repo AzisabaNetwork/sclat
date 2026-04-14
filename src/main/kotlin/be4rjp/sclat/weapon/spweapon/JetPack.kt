@@ -38,7 +38,6 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 import org.bukkit.scheduler.BukkitRunnable
-import org.bukkit.util.Consumer
 import org.bukkit.util.Vector
 
 /**
@@ -70,30 +69,28 @@ object JetPack {
                 var `as`: ArmorStand =
                     player
                         .world
-                        .spawn<ArmorStand>(
+                        .spawn(
                             player.location,
                             ArmorStand::class.java,
-                            Consumer { armorStand: ArmorStand ->
-                                armorStand.isSmall = true
-                                armorStand.setGravity(false)
-                                armorStand.isVisible = false
-                                armorStand.setBasePlate(false)
-                                armorStand.isMarker = true
-                            },
-                        )
+                        ) { armorStand: ArmorStand ->
+                            armorStand.isSmall = true
+                            armorStand.setGravity(false)
+                            armorStand.isVisible = false
+                            armorStand.setBasePlate(false)
+                            armorStand.isMarker = true
+                        }
                 var leader: ArmorStand =
                     player
                         .world
-                        .spawn<ArmorStand>(
+                        .spawn(
                             player.location,
                             ArmorStand::class.java,
-                            Consumer { armorStand: ArmorStand ->
-                                armorStand.isSmall = true
-                                armorStand.isVisible = false
-                                armorStand.setBasePlate(false)
-                            },
-                        )
-                var list: MutableList<ArmorStand?> = ArrayList<ArmorStand?>()
+                        ) { armorStand: ArmorStand ->
+                            armorStand.isSmall = true
+                            armorStand.isVisible = false
+                            armorStand.setBasePlate(false)
+                        }
+                var list: MutableList<ArmorStand?> = ArrayList()
 
                 var vehicleVector: Vector = Vector(0, 0, 0)
 

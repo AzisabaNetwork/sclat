@@ -32,14 +32,13 @@ import org.bukkit.entity.ArmorStand
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.bukkit.scheduler.BukkitRunnable
-import org.bukkit.util.Consumer
 import org.bukkit.util.Vector
 
 object Tutorial {
     var bar: BossBar? = null
 
     @JvmField
-    var clearList: MutableList<Player?> = ArrayList<Player?>()
+    var clearList: MutableList<Player?> = ArrayList()
     var clearPlayerCount: Int = 0
 
     @JvmStatic
@@ -164,15 +163,14 @@ object Tutorial {
                         vec = Vector(ix1 - ix, iy1 - iy, iz1 - iz).normalize()
 
                         `as` =
-                            w!!.spawn<ArmorStand>(
+                            w!!.spawn(
                                 from!!,
                                 ArmorStand::class.java,
-                                Consumer { armorStand: ArmorStand ->
-                                    armorStand.isVisible = false
-                                    armorStand.setBasePlate(false)
-                                    armorStand.setHelmet(ItemStack(Material.SEA_LANTERN))
-                                },
-                            )
+                            ) { armorStand: ArmorStand ->
+                                armorStand.isVisible = false
+                                armorStand.setBasePlate(false)
+                                armorStand.setHelmet(ItemStack(Material.SEA_LANTERN))
+                            }
                     }
 
                     `as`!!.velocity = vec!!
@@ -260,7 +258,7 @@ object Tutorial {
 
         val task: BukkitRunnable =
             object : BukkitRunnable() {
-                var list: MutableList<Player?> = ArrayList<Player?>()
+                var list: MutableList<Player?> = ArrayList()
 
                 override fun run() {
                     for (player in plugin.server.onlinePlayers) {
@@ -321,7 +319,7 @@ object Tutorial {
     fun sendPlayerRunnable(player: Player) {
         clearPlayerCount++
 
-        val commands: MutableList<String?> = ArrayList<String?>()
+        val commands: MutableList<String?> = ArrayList()
         commands.add("tutorial " + player.uniqueId.toString())
         commands.add("stop")
         val sc =
@@ -358,7 +356,7 @@ object Tutorial {
         period: Int,
         match: Match,
     ) {
-        var match = match
+        val match = match
         val task: BukkitRunnable =
             object : BukkitRunnable() {
                 var time: Int = 0
@@ -394,7 +392,7 @@ object Tutorial {
                         }
                         bur.start()
                         match.blockUpdater = bur
-                        val blocks: MutableList<Block> = ArrayList<Block>()
+                        val blocks: MutableList<Block> = ArrayList()
                         val b0 = Sclat.lobby!!.block.getRelative(BlockFace.DOWN)
                         blocks.add(b0)
                         blocks.add(b0.getRelative(BlockFace.EAST))

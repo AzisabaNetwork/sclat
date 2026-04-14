@@ -29,7 +29,6 @@ import org.bukkit.entity.FallingBlock
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.bukkit.scheduler.BukkitRunnable
-import org.bukkit.util.Consumer
 import org.bukkit.util.Vector
 
 /**
@@ -54,41 +53,38 @@ object CurlingBomb {
                 override fun run() {
                     try {
                         if (i == 0) {
-                            if (!getPlayerData(player)!!.isBombRush) player.exp = player.exp - 0.59f
+                            if (!getPlayerData(player)!!.isBombRush) player.exp -= 0.59f
 
                             as1 =
-                                player.world.spawn<ArmorStand>(
+                                player.world.spawn(
                                     player.location,
                                     ArmorStand::class.java,
-                                    Consumer { armorStand: ArmorStand ->
-                                        armorStand.isVisible = false
-                                        armorStand.isSmall = true
-                                    },
-                                )
+                                ) { armorStand: ArmorStand ->
+                                    armorStand.isVisible = false
+                                    armorStand.isSmall = true
+                                }
                             as2 =
-                                player.world.spawn<ArmorStand>(
+                                player.world.spawn(
                                     player.location.add(0.0, 0.0, 0.0),
                                     ArmorStand::class.java,
-                                    Consumer { armorStand: ArmorStand ->
-                                        armorStand.isVisible = false
-                                        armorStand.setGravity(false)
-                                        armorStand.isMarker = true
-                                    },
-                                )
+                                ) { armorStand: ArmorStand ->
+                                    armorStand.isVisible = false
+                                    armorStand.setGravity(false)
+                                    armorStand.isMarker = true
+                                }
                             val loc = player.location.add(0.0, -0.4, 0.0)
                             loc.yaw = 90f
                             as3 =
                                 player
                                     .world
-                                    .spawn<ArmorStand>(
+                                    .spawn(
                                         loc,
                                         ArmorStand::class.java,
-                                        Consumer { armorStand: ArmorStand ->
-                                            armorStand.isVisible = false
-                                            armorStand.setGravity(false)
-                                            armorStand.isSmall = true
-                                        },
-                                    )
+                                    ) { armorStand: ArmorStand ->
+                                        armorStand.isVisible = false
+                                        armorStand.setGravity(false)
+                                        armorStand.isSmall = true
+                                    }
 
                             fb =
                                 player.world.spawnFallingBlock(
@@ -153,7 +149,7 @@ object CurlingBomb {
                             }
                         }
 
-                        if (i >= 70 && i <= 80) {
+                        if (i in 70..80) {
                             if (i % 2 == 0) player.world.playSound(as1l, Sound.BLOCK_NOTE_BLOCK_PLING, 1f, 1.6f)
                         }
 

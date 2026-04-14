@@ -32,7 +32,7 @@ class Wiremesh(
     private val `as`: EntityArmorStand
     private val ibd: IBlockData?
 
-    private val playerList: MutableList<Player?> = ArrayList<Player?>()
+    private val playerList: MutableList<Player?> = ArrayList()
 
     private val despawn = true
     private val spawn = false

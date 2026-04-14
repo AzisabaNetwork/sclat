@@ -149,11 +149,12 @@ object PathMgr {
                             for (target in plugin.server.onlinePlayers) {
                                 if (!getPlayerData(target)!!.settings!!.showEffectChargerLine()) continue
                                 val dustOptions: Particle.DustOptions?
-                                if (team == null) {
-                                    dustOptions = Particle.DustOptions(Color.WHITE, 1f)
-                                } else {
-                                    dustOptions = Particle.DustOptions(team.teamColor!!.bukkitColor!!, 1f)
-                                }
+                                dustOptions =
+                                    if (team == null) {
+                                        Particle.DustOptions(Color.WHITE, 1f)
+                                    } else {
+                                        Particle.DustOptions(team.teamColor!!.bukkitColor!!, 1f)
+                                    }
                                 target.spawnParticle<Particle.DustOptions?>(
                                     Particle.REDSTONE,
                                     position,
