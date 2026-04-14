@@ -31,7 +31,7 @@ class TeamLoc(
         // list0.add(l2);
         // list0.add(l3);
         list0!!.add(l)
-        Collections.shuffle(list0)
+        list0.shuffle()
     }
 
     fun setupTeam1Loc() {
@@ -46,7 +46,7 @@ class TeamLoc(
         list1.add(l2)
         list1.add(l3)
         list1.add(l4)
-        Collections.shuffle(list1)
+        list1.shuffle()
     }
 
     fun getTeam0Loc(i: Int): Location? = list0!![i]

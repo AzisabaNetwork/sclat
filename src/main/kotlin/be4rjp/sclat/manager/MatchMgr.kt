@@ -276,11 +276,11 @@ object MatchMgr {
 
                                                 index++
                                             }
-                                            Collections.shuffle(sortedMember)
+                                            sortedMember.shuffle()
                                             // }
                                         } else {
                                             sortedMember = DataMgr.joinedList
-                                            Collections.shuffle(sortedMember)
+                                            sortedMember.shuffle()
                                         }
 
                                         var i = 0

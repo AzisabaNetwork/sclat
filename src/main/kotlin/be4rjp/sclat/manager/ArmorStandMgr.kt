@@ -35,6 +35,7 @@ import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 import org.bukkit.scheduler.BukkitRunnable
 import org.bukkit.util.Vector
+import kotlin.math.round
 
 /**
  *
@@ -450,7 +451,7 @@ object ArmorStandMgr {
             if (`as`.isVisible) {
                 if (health > damage) {
                     val h = health - damage
-                    val rh = (Math.round(h * 10).toDouble()) / 10
+                    val rh = (round(h * 10)) / 10
                     `as`.customName = rh.toString()
                     `as`.location.world!!.playSound(`as`.location, Sound.ENTITY_PLAYER_HURT, 1f, 1f)
                 } else {
