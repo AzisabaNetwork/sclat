@@ -32,6 +32,14 @@ object SclatCommands {
                 ExecutionCoordinator.simpleCoordinator(),
             )
 
+        if (commandManager.hasCapability(CloudBukkitCapabilities.NATIVE_BRIGADIER)) {
+            commandManager.registerBrigadier()
+        } else if (commandManager.hasCapability(CloudBukkitCapabilities.ASYNCHRONOUS_COMPLETION)) {
+            commandManager.registerAsynchronousCompletions()
+        } else {
+            sclatLogger.warn("Are you using old spigot? We can't handle command over this cloud framework.")
+        }
+
         val sclat = commandManager.commandBuilder("sclat").permission(PERMISSION_ADMIN)
         commandManager.command(
             sclat
@@ -317,13 +325,5 @@ object SclatCommands {
                     sender.sendMessage("${map.mapName} : ${metrics ?: "no metrics"}")
                 },
         )
-
-        if (commandManager.hasCapability(CloudBukkitCapabilities.NATIVE_BRIGADIER)) {
-            commandManager.registerBrigadier()
-        } else if (commandManager.hasCapability(CloudBukkitCapabilities.ASYNCHRONOUS_COMPLETION)) {
-            commandManager.registerAsynchronousCompletions()
-        } else {
-            sclatLogger.warn("Are you using old spigot? We can't handle command over this cloud framework.")
-        }
     }
 }
