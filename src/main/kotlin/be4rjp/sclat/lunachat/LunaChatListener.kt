@@ -3,7 +3,6 @@ package be4rjp.sclat.lunachat
 import be4rjp.sclat.data.DataMgr.getPlayerData
 import be4rjp.sclat.plugin
 import com.github.ucchyocean.lc3.bukkit.event.LunaChatBukkitPreChatEvent
-import org.bukkit.entity.Player
 import org.bukkit.event.Listener
 
 /**

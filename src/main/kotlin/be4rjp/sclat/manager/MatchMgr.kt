@@ -140,7 +140,7 @@ object MatchMgr {
                         // Fallback: teleport to plugin lobby or player's world spawn
                         try {
                             val fallback = Sclat.lobby ?: player.world.spawnLocation
-                            if (fallback != null) player.teleport(fallback)
+                            player.teleport(fallback)
                         } catch (_: Exception) {
                         }
                     }

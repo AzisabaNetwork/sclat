@@ -14,7 +14,7 @@ import be4rjp.sclat.api.async.AsyncThreadManager.shutdownAll
 import be4rjp.sclat.api.config.CustomConfig
 import be4rjp.sclat.api.holo.PlayerHolograms
 import be4rjp.sclat.api.utils.TextAnimation
-import be4rjp.sclat.commands.SclatCommandExecutor
+import be4rjp.sclat.command.SclatCommands
 import be4rjp.sclat.config.Config
 import be4rjp.sclat.config.NewConfig
 import be4rjp.sclat.data.DataMgr
@@ -155,8 +155,9 @@ class Sclat :
 
         // ------------------------RegisteringCommands------------------------
         sclatLogger.info("Registering Commands...")
-        getCommand("sclat")!!.setExecutor(SclatCommandExecutor())
-        getCommand("sclat")!!.tabCompleter = SclatCommandExecutor()
+//        getCommand("sclat")!!.setExecutor(SclatCommandExecutor())
+//        getCommand("sclat")!!.tabCompleter = SclatCommandExecutor()
+        SclatCommands.init(this)
 
         // -------------------------------------------------------------------
 
