@@ -37,7 +37,7 @@ class TextAnimation(
 
     companion object {
         private val SMALLS: MutableSet<Char?> =
-            HashSet<Char?>(
+            HashSet(
                 mutableListOf<Char?>('.', '|', 'i', '!', '！', '/', '1', ' ', 'l'),
             )
     }

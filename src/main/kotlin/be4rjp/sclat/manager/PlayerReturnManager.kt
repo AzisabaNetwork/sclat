@@ -5,7 +5,7 @@ import be4rjp.sclat.plugin
 import org.bukkit.scheduler.BukkitRunnable
 
 object PlayerReturnManager {
-    var list: MutableList<PlayerReturn> = ArrayList<PlayerReturn>()
+    var list: MutableList<PlayerReturn> = ArrayList()
 
     fun isReturned(uuid: String?): Boolean {
         for (pr in list) {

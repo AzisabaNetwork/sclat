@@ -79,7 +79,7 @@ object SuperTyakuti {
                         }
                         if (i <= 27) player.velocity = vec
 
-                        if (i >= 5 && i <= 23) {
+                        if (i in 5..23) {
                             for (o_player in plugin.server.onlinePlayers) {
                                 if (getPlayerData(o_player)!!.settings!!.showEffectSPWeapon() &&
                                     o_player != player

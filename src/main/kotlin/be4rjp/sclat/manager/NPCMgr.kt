@@ -53,7 +53,7 @@ object NPCMgr {
 
                         // 見えないところにスポーンさせて、クライアントにスキンを先に読み込ませる
                         npc!!.setLocation(location.x, location.y - 20, location.z, location.yaw, 0f)
-                        npc!!.dataWatcher.set<Byte?>(DataWatcherRegistry.a.a(15), 127.toByte())
+                        npc!!.dataWatcher.set(DataWatcherRegistry.a.a(15), 127.toByte())
 
                         for (p in plugin.server.onlinePlayers) {
                             val connection = (p as CraftPlayer).handle.playerConnection

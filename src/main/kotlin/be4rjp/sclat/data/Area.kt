@@ -31,9 +31,9 @@ class Area(
     private var colorTeam0: org.bukkit.scoreboard.Team? = null
     private var colorTeam1: org.bukkit.scoreboard.Team? = null
     private var task: BukkitRunnable? = null
-    var shulkerBoxes: MutableList<Shulker> = ArrayList<Shulker>()
+    var shulkerBoxes: MutableList<Shulker> = ArrayList()
         private set
-    private var blist: MutableList<Block> = ArrayList<Block>()
+    private var blist: MutableList<Block> = ArrayList()
 
     fun setupAreaTeam() {
         colorTeam0 =
@@ -58,8 +58,8 @@ class Area(
     fun setup(match: Match) {
         this.match = match
         this.team = null
-        this.blist = ArrayList<Block>()
-        this.shulkerBoxes = ArrayList<Shulker>()
+        this.blist = ArrayList()
+        this.shulkerBoxes = ArrayList()
 
         for (x in this.from.blockX..this.to.blockX) {
             for (z in this.from.blockZ..this.to.blockZ) {
@@ -118,7 +118,7 @@ class Area(
                     var t1c = 0
                     for (block in blist) {
                         if (DataMgr.blockDataMap.containsKey(block)) {
-                            if (match.team0!! == DataMgr.blockDataMap.get(block)!!.team!!) {
+                            if (match.team0!! == DataMgr.blockDataMap[block]!!.team!!) {
                                 t0c++
                             } else {
                                 t1c++

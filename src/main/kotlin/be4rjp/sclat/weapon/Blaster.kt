@@ -85,7 +85,7 @@ object Blaster {
                     * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) /
                     Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)
             ).toFloat()
-        val ball = player.launchProjectile<Snowball>(Snowball::class.java)
+        val ball = player.launchProjectile(Snowball::class.java)
         (ball as CraftSnowball).handle.setItem(CraftItemStack.asNMSCopy(ItemStack(getPlayerData(player)!!.team?.teamColor!!.wool!!)))
         player.world.playSound(player.location, Sound.ENTITY_PIG_STEP, 0.3f, 1f)
         val vec =
@@ -130,7 +130,7 @@ object Blaster {
                     ).multiply(getPlayerData(p)!!.weaponClass?.mainWeapon!!.shootSpeed / 17)
 
                 override fun run() {
-                    inkball = mainSnowballNameMap.get(name)
+                    inkball = mainSnowballNameMap[name]
 
                     if (inkball != ball) {
                         i += getSnowballHitCount(name) - 1
@@ -227,15 +227,15 @@ object Blaster {
                             if (!getPlayerData(target)!!.isInMatch) continue
                             if (target.location.distance(inkball!!.location) <= maxDist + 1) {
                                 var damage = 10.0
-                                if (mainWeapon.isManeuver) {
-                                    damage =
+                                damage =
+                                    if (mainWeapon.isManeuver) {
                                         mainWeapon.blasterExDamage
-                                } else {
-                                    damage = (
-                                        (maxDist + 1 - target.location.distance(inkball!!.location)) *
-                                            mainWeapon.blasterExDamage
-                                    )
-                                }
+                                    } else {
+                                        (
+                                            (maxDist + 1 - target.location.distance(inkball!!.location)) *
+                                                mainWeapon.blasterExDamage
+                                        )
+                                    }
                                 if (damage > mainWeapon.damage) {
                                     damage = mainWeapon.damage
                                 }
@@ -341,15 +341,15 @@ object Blaster {
             if (!getPlayerData(target)!!.isInMatch) continue
             if (target.location.distance(blastcenter) <= maxDist + 1) {
                 var damage = 10.0
-                if (mainWeapon.isManeuver) {
-                    damage =
+                damage =
+                    if (mainWeapon.isManeuver) {
                         mainWeapon.blasterExDamage
-                } else {
-                    damage = (
-                        (maxDist - target.location.distance(blastcenter)) *
-                            mainWeapon.blasterExDamage * 0.4
-                    )
-                }
+                    } else {
+                        (
+                            (maxDist - target.location.distance(blastcenter)) *
+                                mainWeapon.blasterExDamage * 0.4
+                        )
+                    }
                 if (damage > mainWeapon.damage) {
                     damage = mainWeapon.damage
                 }

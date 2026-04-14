@@ -35,7 +35,6 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 import org.bukkit.scheduler.BukkitRunnable
-import org.bukkit.util.Consumer
 import org.bukkit.util.Vector
 import java.util.Random
 
@@ -121,7 +120,7 @@ object SwordMord {
                     }
                 }
                 val maxDist = 3
-                for (i in 0..maxDist - 1) {
+                for (i in 0..<maxDist) {
                     val pLocs = getSphere(vec, i.toDouble(), 20)
                     for (loc in pLocs) {
                         PaintMgr.paint(loc, player, false)
@@ -252,43 +251,39 @@ object SwordMord {
                                 if (!gurd) {
                                     kdata = KasaData(player)
                                     setKasaDataWithPlayer(player, kdata)
-                                    val list: MutableList<ArmorStand> = ArrayList<ArmorStand>()
+                                    val list: MutableList<ArmorStand> = ArrayList()
                                     as1 =
-                                        player.world.spawn<ArmorStand>(
+                                        player.world.spawn(
                                             m1.clone().add(0.0, -1.8, 0.0),
                                             ArmorStand::class.java,
-                                            Consumer { armorStand: ArmorStand ->
-                                                armorStand.setGravity(false)
-                                                armorStand.isVisible = false
-                                            },
-                                        )
+                                        ) { armorStand: ArmorStand ->
+                                            armorStand.setGravity(false)
+                                            armorStand.isVisible = false
+                                        }
                                     as2 =
-                                        player.world.spawn<ArmorStand>(
+                                        player.world.spawn(
                                             m1.clone().add(0.0, -0.8, 0.0),
                                             ArmorStand::class.java,
-                                            Consumer { armorStand: ArmorStand ->
-                                                armorStand.setGravity(false)
-                                                armorStand.isVisible = false
-                                            },
-                                        )
+                                        ) { armorStand: ArmorStand ->
+                                            armorStand.setGravity(false)
+                                            armorStand.isVisible = false
+                                        }
                                     as3 =
-                                        player.world.spawn<ArmorStand>(
+                                        player.world.spawn(
                                             r1.clone().add(0.0, -1.2, 0.0),
                                             ArmorStand::class.java,
-                                            Consumer { armorStand: ArmorStand ->
-                                                armorStand.setGravity(false)
-                                                armorStand.isVisible = false
-                                            },
-                                        )
+                                        ) { armorStand: ArmorStand ->
+                                            armorStand.setGravity(false)
+                                            armorStand.isVisible = false
+                                        }
                                     as4 =
-                                        player.world.spawn<ArmorStand>(
+                                        player.world.spawn(
                                             l1.clone().add(0.0, -1.2, 0.0),
                                             ArmorStand::class.java,
-                                            Consumer { armorStand: ArmorStand ->
-                                                armorStand.setGravity(false)
-                                                armorStand.isVisible = false
-                                            },
-                                        )
+                                        ) { armorStand: ArmorStand ->
+                                            armorStand.setGravity(false)
+                                            armorStand.isVisible = false
+                                        }
                                     gurd = true
                                     list.add(as1!!)
                                     list.add(as2!!)
@@ -359,7 +354,7 @@ object SwordMord {
         if (player.gameMode == GameMode.SPECTATOR) return
         PaintMgr.paintHightestBlock(player.location, player, true, true)
 
-        val ball = player.launchProjectile<Snowball>(Snowball::class.java)
+        val ball = player.launchProjectile(Snowball::class.java)
         (ball as CraftSnowball).handle.setItem(CraftItemStack.asNMSCopy(ItemStack(getPlayerData(player)!!.team!!.teamColor!!.wool!!)))
         player.world.playSound(player.location, Sound.ENTITY_PIG_STEP, 0.3f, 1f)
         val vec = player.location.direction.multiply(quadroShootSpeed)
@@ -368,10 +363,10 @@ object SwordMord {
         ball.velocity = vec
         ball.shooter = player
         val originName = notDuplicateNumber.toString()
-        val name = originName + "#QuadroArmsShotgunCounterShot"
+        val name = "$originName#QuadroArmsShotgunCounterShot"
         DataMgr.mws.add(name) //
         ball.customName = name
-        mainSnowballNameMap.put(name, ball)
+        mainSnowballNameMap[name] = ball
         setSnowballHitCount(name, 0)
         val spinnerTask: BukkitRunnable =
             object : BukkitRunnable() {
@@ -396,7 +391,7 @@ object SwordMord {
                     ).multiply(quadroShootSpeed / 35)
 
                 override fun run() {
-                    inkball = mainSnowballNameMap.get(name)
+                    inkball = mainSnowballNameMap[name]
 
                     if (inkball != ball) {
                         i += getSnowballHitCount(name) - 1

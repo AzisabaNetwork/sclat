@@ -24,15 +24,15 @@ object WeaponClassMgr {
             val weaponName =
                 Sclat.conf!!
                     .classConfig!!
-                    .getString("WeaponClass." + classname + ".MainWeaponName")
+                    .getString("WeaponClass.$classname.MainWeaponName")
             val subWeaponName =
                 Sclat.conf!!
                     .classConfig!!
-                    .getString("WeaponClass." + classname + ".SubWeaponName")
+                    .getString("WeaponClass.$classname.SubWeaponName")
             val spWeaponName =
                 Sclat.conf!!
                     .classConfig!!
-                    .getString("WeaponClass." + classname + ".SPWeaponName")
+                    .getString("WeaponClass.$classname.SPWeaponName")
             val wc = WeaponClass(classname)
             wc.mainWeapon = (getWeapon(weaponName))
             wc.subWeaponName = subWeaponName

@@ -151,18 +151,17 @@ object MultiMissile {
                             }
                             for (e in p.world.entities) {
                                 if (e is ArmorStand) {
-                                    val `as` = e
-                                    if (`as`.customName == null) continue
-                                    if ((`as`.customName != "Path") &&
-                                        (`as`.customName != "21") &&
-                                        (`as`.customName != "100") &&
-                                        (`as`.customName != "SplashShield") &&
-                                        (`as`.customName != "Kasa")
+                                    if (e.customName == null) continue
+                                    if ((e.customName != "Path") &&
+                                        (e.customName != "21") &&
+                                        (e.customName != "100") &&
+                                        (e.customName != "SplashShield") &&
+                                        (e.customName != "Kasa")
                                     ) {
-                                        val eas: EntityArmorStand = asl[`as`]!!
-                                        val loc = `as`.location
+                                        val eas: EntityArmorStand = asl[e]!!
+                                        val loc = e.location
                                         eas.setLocation(loc.x, loc.y, loc.z, loc.yaw, loc.pitch)
-                                        setGlowing(eas.bukkitEntity, p, mmCheckCanLock(p, `as`))
+                                        setGlowing(eas.bukkitEntity, p, mmCheckCanLock(p, e))
                                         (p as CraftPlayer)
                                             .handle
                                             .playerConnection
@@ -260,7 +259,7 @@ object MultiMissile {
 
                 override fun run() {
                     try {
-                        p.world.spawn<Firework?>(p.location, Firework::class.java)
+                        p.world.spawn(p.location, Firework::class.java)
                         i++
                         if (i == 5) cancel()
                     } catch (e: Exception) {
@@ -283,8 +282,7 @@ object MultiMissile {
 
                 override fun run() {
                     if (target is Player) {
-                        val t = target
-                        if (c == i || t.gameMode == GameMode.SPECTATOR || !getPlayerData(s)!!.isInMatch) cancel()
+                        if (c == i || target.gameMode == GameMode.SPECTATOR || !getPlayerData(s)!!.isInMatch) cancel()
                     } else {
                         if (c == i || !getPlayerData(s)!!.isInMatch) cancel()
                     }

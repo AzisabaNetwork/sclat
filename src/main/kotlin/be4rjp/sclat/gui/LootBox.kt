@@ -106,21 +106,21 @@ object LootBox {
                     val item = ItemStack(getWeaponClass(ClassName)!!.mainWeapon!!.weaponIteamStack!!)
                     val itemm = item.itemMeta
                     itemm!!.setDisplayName(ClassName)
-                    val lores: MutableList<String?> = ArrayList<String?>()
+                    val lores: MutableList<String?> = ArrayList()
                     lores.add(
                         "§r§6SubWeapon : " +
                             Sclat.conf!!
                                 .classConfig!!
-                                .getString("WeaponClass." + ClassName + ".SubWeaponName"),
+                                .getString("WeaponClass.$ClassName.SubWeaponName"),
                     )
                     lores.add(
                         "§r§6SPWeapon  : " +
                             Sclat.conf!!
                                 .classConfig!!
-                                .getString("WeaponClass." + ClassName + ".SPWeaponName"),
+                                .getString("WeaponClass.$ClassName.SPWeaponName"),
                     )
                     lores.add("")
-                    lores.add("§r§b : " + lootpro + "％")
+                    lores.add("§r§b : $lootpro％")
                     itemm.lore = lores
                     item.itemMeta = itemm
                     shooter.setItem(slotnum, item)
@@ -133,7 +133,7 @@ object LootBox {
         while (i <= 5) {
             val paper = ItemStack(Material.PAPER)
             val pmeta = paper.itemMeta
-            val paperlores: MutableList<String?> = ArrayList<String?>()
+            val paperlores: MutableList<String?> = ArrayList()
             when (i) {
                 1 -> {
                     pmeta!!.setDisplayName("1等 " + FIRST_PRIZE + "coin")
@@ -204,12 +204,11 @@ object LootBox {
         player: Player,
         Weapon: String?,
     ) {
-        val className = Weapon
-        if (!haveWeapon(player, className)) {
-            addWeapon(player, className)
-            sendMessage(ChatColor.GREEN.toString() + className + "が手に入ったよ", MessageType.PLAYER, player)
+        if (!haveWeapon(player, Weapon)) {
+            addWeapon(player, Weapon)
+            sendMessage(ChatColor.GREEN.toString() + Weapon + "が手に入ったよ", MessageType.PLAYER, player)
         } else {
-            sendMessage(ChatColor.GREEN.toString() + className + "はすでに持っているよ", MessageType.PLAYER, player)
+            sendMessage(ChatColor.GREEN.toString() + Weapon + "はすでに持っているよ", MessageType.PLAYER, player)
         }
     }
 

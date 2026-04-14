@@ -55,7 +55,7 @@ object Sprinkler {
                     try {
                         if (c == 0) {
                             if (!getPlayerData(player)!!.isBombRush) {
-                                p.exp = p.exp - (0.59 / Gear.getGearInfluence(player, Gear.Type.SUB_SPEC_UP)).toFloat()
+                                p.exp -= (0.59 / Gear.getGearInfluence(player, Gear.Type.SUB_SPEC_UP)).toFloat()
                             }
                             val bom = ItemStack(Material.BIRCH_FENCE_GATE).clone()
                             val bomM = bom.itemMeta
@@ -65,11 +65,11 @@ object Sprinkler {
                             drop = p.world.dropItem(p.eyeLocation, bom)
                             drop!!.velocity = p.eyeLocation.direction
                             // 雪玉をスポーンさせた瞬間にプレイヤーに雪玉がデスポーンした偽のパケットを送信する
-                            ball = player.launchProjectile<Snowball?>(Snowball::class.java)
+                            ball = player.launchProjectile(Snowball::class.java)
                             ball!!.velocity = Vector(0, 0, 0)
                             setSnowballIsHit(ball, false)
                             ball!!.customName = ndn.toString()
-                            snowballNameMap.put(ndn.toString(), ball)
+                            snowballNameMap[ndn.toString()] = ball
                             setSnowballIsHit(ball, false)
 
                             for (o_player in plugin.server.onlinePlayers) {
@@ -79,7 +79,7 @@ object Sprinkler {
                             pVec = p.eyeLocation.direction
                         }
 
-                        ball = snowballNameMap.get(ndn.toString())
+                        ball = snowballNameMap[ndn.toString()]
 
                         if (!drop!!.isOnGround &&
                             !(

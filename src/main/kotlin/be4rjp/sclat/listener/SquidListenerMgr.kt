@@ -25,7 +25,7 @@ object SquidListenerMgr {
         val b4 = player.location.block.getRelative(BlockFace.SOUTH)
         val b5 = player.location.block.getRelative(BlockFace.WEST)
 
-        val list: MutableList<Block> = ArrayList<Block>()
+        val list: MutableList<Block> = ArrayList()
         list.add(b1)
         list.add(b2)
         list.add(b3)
@@ -66,7 +66,7 @@ object SquidListenerMgr {
         for (block in list) {
             if (block != b1) {
                 if (blockDataMap.containsKey(block)) {
-                    if (blockDataMap.get(block)!!.team == data.team) {
+                    if (blockDataMap[block]!!.team == data.team) {
                         if (!data.isSquid || block.type == Material.AIR) continue
                         data.isOnInk = true
                         player.allowFlight = true
@@ -76,7 +76,7 @@ object SquidListenerMgr {
                 }
             } else {
                 if (blockDataMap.containsKey(block)) {
-                    if (blockDataMap.get(block)!!.team == data.team) {
+                    if (blockDataMap[block]!!.team == data.team) {
                         if (!data.isSquid || block.type == Material.AIR) continue
                         data.isOnInk = true
                         if (!data.isUsingJetPack) {

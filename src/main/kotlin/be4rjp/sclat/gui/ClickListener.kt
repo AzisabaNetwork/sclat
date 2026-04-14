@@ -155,7 +155,7 @@ class ClickListener : Listener {
                 }
                 bur.start()
                 match.blockUpdater = bur
-                val blocks: MutableList<Block> = ArrayList<Block>()
+                val blocks: MutableList<Block> = ArrayList()
                 val b0 = Sclat.lobby!!.block.getRelative(BlockFace.DOWN)
                 blocks.add(b0)
                 blocks.add(b0.getRelative(BlockFace.EAST))

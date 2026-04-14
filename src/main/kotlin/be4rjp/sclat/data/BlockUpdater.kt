@@ -39,7 +39,7 @@ class BlockUpdater {
                                 try {
                                     // Sclat.setBlockByNMSChunk(block, blocklist.get(block), true);
 
-                                    val list: MutableList<Block> = ArrayList<Block>()
+                                    val list: MutableList<Block> = ArrayList()
                                     val up = block.getRelative(BlockFace.UP)
                                     val west = block.getRelative(BlockFace.WEST)
                                     val east = block.getRelative(BlockFace.EAST)
@@ -81,11 +81,9 @@ class BlockUpdater {
                             val blocks: MutableList<Block> = entry.value
 
                             val positionArray = ShortArray(blocks.size)
-                            var i = 0
-                            for (block in blocks) {
+                            for ((i, block) in blocks.withIndex()) {
                                 positionArray[i] =
                                     ((block.x and 0xF) shl 12 or ((block.z and 0xF) shl 8) or block.y).toShort()
-                                i++
                             }
                             val packet =
                                 PacketPlayOutMultiBlockChange(
@@ -111,41 +109,41 @@ class BlockUpdater {
         material: Material,
     ) {
         if (this.blocks.contains(block)) {
-            if (this.blocklist.get(block) == material) {
+            if (this.blocklist[block] == material) {
                 return
             }
         }
 
         if (!this.blocks.contains(block)) {
-            this.blocklist.put(block, material)
+            this.blocklist[block] = material
             this.blocks.add(block)
 
             if (block.location.chunk.isLoaded) {
                 try {
-                    SclatUtil.setBlockByNMSChunk(block, blocklist.get(block)!!, true)
+                    SclatUtil.setBlockByNMSChunk(block, blocklist[block]!!, true)
                 } catch (e: Exception) {
                 }
             } else {
                 try {
-                    SclatUtil.setBlockByNMS(block, blocklist.get(block)!!, true)
+                    SclatUtil.setBlockByNMS(block, blocklist[block]!!, true)
                     // Main.getPlugin().getServer().broadcastMessage("ChangeBlockByNMS!!");
                 } catch (e: Exception) {
                 }
             }
         } else {
-            if (this.blocklist.get(block) != material) {
+            if (this.blocklist[block] != material) {
                 // this.blocklist.put(block, material);
                 this.blocklist.replace(block, material)
                 this.blocks.add(block)
 
                 if (block.location.chunk.isLoaded) {
                     try {
-                        SclatUtil.setBlockByNMSChunk(block, blocklist.get(block)!!, true)
+                        SclatUtil.setBlockByNMSChunk(block, blocklist[block]!!, true)
                     } catch (e: Exception) {
                     }
                 } else {
                     try {
-                        SclatUtil.setBlockByNMS(block, blocklist.get(block)!!, true)
+                        SclatUtil.setBlockByNMS(block, blocklist[block]!!, true)
                         // Main.getPlugin().getServer().broadcastMessage("ChangeBlockByNMS!!");
                     } catch (e: Exception) {
                     }

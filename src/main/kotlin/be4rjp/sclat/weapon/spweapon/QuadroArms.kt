@@ -59,7 +59,7 @@ object QuadroArms {
         if (Hash_Quadro_overheat.containsKey(player)) {
             Hash_Quadro_overheat.replace(player, 0)
         } else {
-            Hash_Quadro_overheat.put(player, 0)
+            Hash_Quadro_overheat[player] = 0
         }
         val it: BukkitRunnable =
             object : BukkitRunnable() {
@@ -131,8 +131,8 @@ object QuadroArms {
 
                 override fun run() {
                     getPlayerData(p)
-                    if (Hash_Quadro_overheat.get(p)!! < 47) {
-                        bar.progress = Hash_Quadro_overheat.get(p)!!.toDouble() / 47
+                    if (Hash_Quadro_overheat[p]!! < 47) {
+                        bar.progress = Hash_Quadro_overheat[p]!!.toDouble() / 47
                         if (!bar.players.contains(p)) bar.addPlayer(p)
                     } else {
                         bar.progress = 1.0
@@ -181,7 +181,7 @@ object QuadroArms {
                 override fun run() {
                     val sound = false
                     burstshoot(player, true)
-                    val overheatgage: Int = Hash_Quadro_overheat.get(p)!!
+                    val overheatgage: Int = Hash_Quadro_overheat[p]!!
                     if (overheatgage > 47) {
                         Hash_Quadro_overheat.replace(p, overheatgage - 13)
                     } else if (overheatgage > 10) {
@@ -202,7 +202,7 @@ object QuadroArms {
 
                 override fun run() {
                     shootQuadroSlosher(player)
-                    val overheatgage: Int = Hash_Quadro_overheat.get(p)!!
+                    val overheatgage: Int = Hash_Quadro_overheat[p]!!
                     if (overheatgage <= 13) {
                         Hash_Quadro_overheat.replace(p, 0)
                     } else {
@@ -216,7 +216,7 @@ object QuadroArms {
 
                 override fun run() {
                     shootSensor(player)
-                    val overheatgage: Int = Hash_Quadro_overheat.get(p)!!
+                    val overheatgage: Int = Hash_Quadro_overheat[p]!!
                     if (overheatgage <= 10) {
                         Hash_Quadro_overheat.replace(p, 0)
                     } else {
@@ -259,7 +259,7 @@ object QuadroArms {
                 override fun run() {
                     c++
                     val q = 7
-                    val overheatgage: Int = Hash_Quadro_overheat.get(p)!!
+                    val overheatgage: Int = Hash_Quadro_overheat[p]!!
                     if (overheatgage > 47) {
                         player.sendTitle("", ChatColor.RED.toString() + "オーバーヒート!!!", 0, 5, 2)
                         cancel()
@@ -327,7 +327,7 @@ object QuadroArms {
         }
         PaintMgr.paintHightestBlock(player.location, player, true, true)
 
-        val ball = player.launchProjectile<Snowball>(Snowball::class.java)
+        val ball = player.launchProjectile(Snowball::class.java)
         (ball as CraftSnowball).handle.setItem(
             CraftItemStack.asNMSCopy(ItemStack(getPlayerData(player)!!.team?.let { it.teamColor!! }!!.wool!!)),
         )
@@ -339,10 +339,10 @@ object QuadroArms {
         ball.velocity = vec
         ball.shooter = player
         val originName = notDuplicateNumber.toString()
-        val name = originName + "#QuadroArmsSpinner"
+        val name = "$originName#QuadroArmsSpinner"
         DataMgr.mws.add(name) //
         ball.customName = name
-        mainSnowballNameMap.put(name, ball)
+        mainSnowballNameMap[name] = ball
         setSnowballHitCount(name, 0)
         val spinnerTask: BukkitRunnable =
             object : BukkitRunnable() {
@@ -362,7 +362,7 @@ object QuadroArms {
                     ).multiply(quadroShootSpeed / 14)
 
                 override fun run() {
-                    inkball = mainSnowballNameMap.get(name)
+                    inkball = mainSnowballNameMap[name]
 
                     if (inkball != ball) {
                         i += getSnowballHitCount(name) - 1
@@ -422,7 +422,7 @@ object QuadroArms {
         if (player.gameMode == GameMode.SPECTATOR) return false
         val shootSpeed = 4.5
         getPlayerData(player)
-        val ball = player.launchProjectile<Snowball>(Snowball::class.java)
+        val ball = player.launchProjectile(Snowball::class.java)
         (ball as CraftSnowball).handle.setItem(CraftItemStack.asNMSCopy(ItemStack(getPlayerData(player)!!.team!!.teamColor!!.wool!!)))
         val vec = player.location.direction.multiply(shootSpeed)
         val random = 1.2
@@ -437,10 +437,10 @@ object QuadroArms {
         ball.velocity = vec
         ball.shooter = player
         val originName = notDuplicateNumber.toString()
-        val name = originName + "#QuadroArmsShotgun"
+        val name = "$originName#QuadroArmsShotgun"
         DataMgr.mws.add(name)
         ball.customName = name
-        mainSnowballNameMap.put(name, ball)
+        mainSnowballNameMap[name] = ball
         setSnowballHitCount(name, 0)
         val task: BukkitRunnable =
             object : BukkitRunnable() {
@@ -457,7 +457,7 @@ object QuadroArms {
                     ).multiply(shootSpeed / 150)
 
                 override fun run() {
-                    inkball = mainSnowballNameMap.get(name)
+                    inkball = mainSnowballNameMap[name]
 
                     if (inkball != ball) {
                         i += getSnowballHitCount(name) - 1
@@ -519,17 +519,17 @@ object QuadroArms {
         }
         val shootSpeed = 3.9
         getPlayerData(player)
-        val ball = player.launchProjectile<Snowball>(Snowball::class.java)
+        val ball = player.launchProjectile(Snowball::class.java)
         (ball as CraftSnowball).handle.setItem(CraftItemStack.asNMSCopy(ItemStack(getPlayerData(player)!!.team!!.teamColor!!.wool!!)))
         val vec = player.location.direction.multiply(shootSpeed)
         val distick = 2
         ball.velocity = vec
         ball.shooter = player
         val originName = notDuplicateNumber.toString()
-        val name = originName + "#QuadroArmsSpinner"
+        val name = "$originName#QuadroArmsSpinner"
         ball.customName = name
         DataMgr.mws.add(name)
-        mainSnowballNameMap.put(name, ball)
+        mainSnowballNameMap[name] = ball
         setSnowballHitCount(name, 0)
         val task: BukkitRunnable =
             object : BukkitRunnable() {
@@ -549,7 +549,7 @@ object QuadroArms {
 
                 override fun run() {
                     try {
-                        inkball = mainSnowballNameMap.get(name)
+                        inkball = mainSnowballNameMap[name]
 
                         if (inkball != ball) {
                             i += getSnowballHitCount(name) - 1
@@ -693,7 +693,7 @@ object QuadroArms {
                             drop = p.world.dropItem(p.eyeLocation, bom)
                             drop!!.velocity = pVec!!
                             // 雪玉をスポーンさせた瞬間にプレイヤーに雪玉がデスポーンした偽のパケットを送信する
-                            ball = player.launchProjectile<Snowball>(Snowball::class.java)
+                            ball = player.launchProjectile(Snowball::class.java)
                             ball!!.velocity = Vector(0, 0, 0)
                             setSnowballIsHit(ball, false)
 

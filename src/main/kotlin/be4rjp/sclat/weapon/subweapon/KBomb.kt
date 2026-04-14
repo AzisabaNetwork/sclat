@@ -56,7 +56,7 @@ object KBomb {
                 override fun run() {
                     try {
                         if (c == 0) {
-                            if (!getPlayerData(player)!!.isBombRush) p.exp = p.exp - 0.59f
+                            if (!getPlayerData(player)!!.isBombRush) p.exp -= 0.59f
                             val bom = ItemStack(getPlayerData(p)!!.team!!.teamColor!!.concrete!!).clone()
                             val bomM = bom.itemMeta
                             ndn = notDuplicateNumber
@@ -65,11 +65,11 @@ object KBomb {
                             drop = p.world.dropItem(p.eyeLocation, bom)
                             drop!!.velocity = p.eyeLocation.direction
                             // 雪玉をスポーンさせた瞬間にプレイヤーに雪玉がデスポーンした偽のパケットを送信する
-                            ball = player.launchProjectile<Snowball?>(Snowball::class.java)
+                            ball = player.launchProjectile(Snowball::class.java)
                             ball!!.velocity = Vector(0, 0, 0)
                             ball!!.customName = ndn.toString()
                             setSnowballIsHit(ball, false)
-                            snowballNameMap.put(ndn.toString(), ball)
+                            snowballNameMap[ndn.toString()] = ball
 
                             for (o_player in plugin.server.onlinePlayers) {
                                 val connection = (o_player as CraftPlayer).handle.playerConnection
@@ -78,7 +78,7 @@ object KBomb {
                             pVec = p.eyeLocation.direction
                         }
 
-                        ball = snowballNameMap.get(ndn.toString())
+                        ball = snowballNameMap[ndn.toString()]
 
                         if (!drop!!.isOnGround &&
                             !(
@@ -107,7 +107,7 @@ object KBomb {
                             cc++
                         }
 
-                        if (cc >= 40 && cc < 50) {
+                        if (cc in 40..<50) {
                             if (cc % 2 == 0) {
                                 player
                                     .world

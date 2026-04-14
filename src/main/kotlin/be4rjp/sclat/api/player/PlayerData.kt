@@ -168,13 +168,13 @@ class PlayerData(
     @JvmField
     var speed: Double = 0.0
     var fov: Float = 0.1f
-    var armorlist: ArrayList<ArmorStand?> = ArrayList<ArmorStand?>()
+    var armorlist: ArrayList<ArmorStand?> = ArrayList()
 
     @JvmField
     var lastAttack: Player? = player
     var stoprun: Boolean = false
 
-    fun getArmorlist(n: Int): ArmorStand? = this.armorlist.get(n)
+    fun getArmorlist(n: Int): ArmorStand? = this.armorlist[n]
 
     fun setServerName(server: String?) {
         this.servername = server
@@ -248,7 +248,7 @@ class PlayerData(
         this.canFly = false
         this.speed = 0.0
         this.fov = 0.1f
-        this.armorlist = ArrayList<ArmorStand?>()
+        this.armorlist = ArrayList()
         this.stoprun = false
     }
 }

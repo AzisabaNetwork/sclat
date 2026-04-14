@@ -42,7 +42,7 @@ object Animation {
                             40,
                             0,
                         )
-                        g = g + 2
+                        g += 2
                     }
                 /*
                  * if(i >= 6 && i <= 10){ player.sendTitle("", String.valueOf(g) + "% [" +
@@ -129,7 +129,7 @@ object Animation {
                             40,
                             0,
                         )
-                        g = g + 2
+                        g += 2
                     }
                     if (i == 35) {
                         if (winteam === DataMgr.getPlayerData(player)?.team!!) {

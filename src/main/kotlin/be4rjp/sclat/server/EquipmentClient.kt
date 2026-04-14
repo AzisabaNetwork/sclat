@@ -13,7 +13,7 @@ class EquipmentClient(
     private val port: Int,
     commands: MutableList<String?>,
 ) {
-    private var commands: MutableList<String?> = ArrayList<String?>()
+    private var commands: MutableList<String?> = ArrayList()
 
     private val task: BukkitRunnable
 
@@ -44,7 +44,7 @@ class EquipmentClient(
                                     var cmd: String? = null
                                     while (true) {
                                         if (!commands.isEmpty()) {
-                                            cmd = commands.get(0)
+                                            cmd = commands[0]
 
                                             // 送信用の文字を送信
                                             writer.println(cmd)

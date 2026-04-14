@@ -94,7 +94,7 @@ object SclatUtil {
      */
     @JvmStatic
     fun restartServer() {
-        val commands: MutableList<String?> = ArrayList<String?>()
+        val commands: MutableList<String?> = ArrayList()
         commands.add("restart " + Sclat.conf?.servers!!.getString("ServerName"))
         commands.add("stop")
         val sc =
@@ -120,7 +120,7 @@ object SclatUtil {
 
     @JvmStatic
     fun sendRestartedServerInfo() {
-        val commands: MutableList<String?> = ArrayList<String?>()
+        val commands: MutableList<String?> = ArrayList()
         commands.add("restarted " + Sclat.conf?.servers!!.getString("ServerName"))
         commands.add(
             (
@@ -348,7 +348,7 @@ object SclatUtil {
         val targetData = DataMgr.getPlayerData(target)!!
         DataMgr.getPlayerData(player)
         if (target.hasPotionEffect(PotionEffectType.FIRE_RESISTANCE)) {
-            damage = damage * 0.6
+            damage *= 0.6
         }
         val armorHealth = targetData.armor
         // if((target.getHealth()*2 + armorHealth*2 + target.getAbsorptionAmount() >

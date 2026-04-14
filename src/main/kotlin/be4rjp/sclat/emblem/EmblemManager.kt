@@ -91,7 +91,7 @@ object EmblemManager {
                     if (!dataMap.containsKey(emblemName)) {
                         dataMap[emblemName] = HashMap()
                     }
-                    dataMap.get(emblemName)!![uuid] = targetSection.getInt(emblemName, 1)
+                    dataMap[emblemName]!![uuid] = targetSection.getInt(emblemName, 1)
                 }
             }
             return dataMap

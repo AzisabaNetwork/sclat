@@ -118,7 +118,7 @@ object SquidMgr {
 
                     val down = p.location.block.getRelative(BlockFace.DOWN)
                     if (blockDataMap.containsKey(down) && p.gameMode == GameMode.ADVENTURE) {
-                        if (blockDataMap.get(down)!!.team != data.team) {
+                        if (blockDataMap[down]!!.team != data.team) {
                             if (data.armor <= 0 && !data.isPoisonCoolTime) {
                                 p.addPotionEffect(PotionEffect(PotionEffectType.POISON, 200, 3))
                             }
@@ -177,7 +177,7 @@ object SquidMgr {
                             )
                         ) {
                             if (data.canUseSubWeapon) {
-                                p.exp = p.exp +
+                                p.exp +=
                                     (
                                         Sclat.conf!!
                                             .config!!
@@ -276,7 +276,7 @@ object SquidMgr {
                                         .toFloat()
                             )
                         ) {
-                            p.exp = p.exp +
+                            p.exp +=
                                 Sclat.conf!!
                                     .config!!
                                     .getDouble("NormalRecovery")

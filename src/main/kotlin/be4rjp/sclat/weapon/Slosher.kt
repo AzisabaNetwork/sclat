@@ -96,13 +96,13 @@ object Slosher {
             player.playSound(player.location, Sound.UI_BUTTON_CLICK, 1f, 1.63f)
             return
         }
-        player.exp = player.exp -
+        player.exp -=
             (
                 data.weaponClass?.mainWeapon!!.needInk
                     * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) /
                     Gear.getGearInfluence(player, Gear.Type.MAIN_INK_EFFICIENCY_UP)
             ).toFloat()
-        val ball = player.launchProjectile<Snowball>(Snowball::class.java)
+        val ball = player.launchProjectile(Snowball::class.java)
         (ball as CraftSnowball).handle.setItem(CraftItemStack.asNMSCopy(ItemStack(getPlayerData(player)!!.team!!.teamColor!!.wool!!)))
         var vec: Vector? =
             player
@@ -124,7 +124,7 @@ object Slosher {
         val name = notDuplicateNumber.toString()
         DataMgr.mws.add(name)
         ball.customName = name
-        mainSnowballNameMap.put(name, ball)
+        mainSnowballNameMap[name] = ball
         setSnowballHitCount(name, 0)
         val task: BukkitRunnable =
             object : BukkitRunnable() {
@@ -142,7 +142,7 @@ object Slosher {
 
                 override fun run() {
                     try {
-                        inkball = mainSnowballNameMap.get(name)
+                        inkball = mainSnowballNameMap[name]
 
                         if (inkball != ball) {
                             i += getSnowballHitCount(name) - 1

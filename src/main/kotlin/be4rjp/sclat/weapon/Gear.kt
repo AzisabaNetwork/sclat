@@ -10,52 +10,49 @@ import org.bukkit.entity.Player
  */
 object Gear {
     @JvmStatic
-    fun getGearMaterial(gearN: Int): Material {
+    fun getGearMaterial(gearN: Int): Material =
         when (gearN) {
-            1 -> return Material.INK_SAC
-            2 -> return Material.GOLDEN_BOOTS
-            3 -> return Material.IRON_HOE
-            4 -> return Material.WHITE_STAINED_GLASS
-            5 -> return Material.WATER_BUCKET
-            6 -> return Material.LAVA_BUCKET
-            7 -> return Material.PRISMARINE_SHARD
-            8 -> return Material.GOLDEN_APPLE
-            9 -> return Material.APPLE
-            else -> return Material.IRON_BARS
+            1 -> Material.INK_SAC
+            2 -> Material.GOLDEN_BOOTS
+            3 -> Material.IRON_HOE
+            4 -> Material.WHITE_STAINED_GLASS
+            5 -> Material.WATER_BUCKET
+            6 -> Material.LAVA_BUCKET
+            7 -> Material.PRISMARINE_SHARD
+            8 -> Material.GOLDEN_APPLE
+            9 -> Material.APPLE
+            else -> Material.IRON_BARS
         }
-    }
 
     @JvmStatic
-    fun getGearName(gearN: Int): String {
+    fun getGearName(gearN: Int): String =
         when (gearN) {
-            1 -> return "イカダッシュ速度アップ"
-            2 -> return "ヒト移動速度アップ"
-            3 -> return "メイン性能アップ"
-            4 -> return "サブ性能アップ"
-            5 -> return "インク回復量アップ"
-            6 -> return "メインインク効率アップ"
-            7 -> return "スペシャル増加量アップ"
-            8 -> return "最大体力アップ"
-            9 -> return "ペナルティ軽減"
-            else -> return "ギアなし"
+            1 -> "イカダッシュ速度アップ"
+            2 -> "ヒト移動速度アップ"
+            3 -> "メイン性能アップ"
+            4 -> "サブ性能アップ"
+            5 -> "インク回復量アップ"
+            6 -> "メインインク効率アップ"
+            7 -> "スペシャル増加量アップ"
+            8 -> "最大体力アップ"
+            9 -> "ペナルティ軽減"
+            else -> "ギアなし"
         }
-    }
 
     @JvmStatic
-    fun getGearPrice(gearN: Int): Int {
+    fun getGearPrice(gearN: Int): Int =
         when (gearN) {
-            1 -> return 65000
-            2 -> return 60000
-            3 -> return 120000
-            4 -> return 55000
-            5 -> return 50000
-            6 -> return 100000
-            7 -> return 200000
-            8 -> return 110000
-            9 -> return 10
-            else -> return 0
+            1 -> 65000
+            2 -> 60000
+            3 -> 120000
+            4 -> 55000
+            5 -> 50000
+            6 -> 100000
+            7 -> 200000
+            8 -> 110000
+            9 -> 10
+            else -> 0
         }
-    }
 
     @JvmStatic
     fun getGearInfluence(
@@ -63,17 +60,17 @@ object Gear {
         gearN: Int,
     ): Double {
         if (getPlayerData(player)!!.gearNumber == gearN) {
-            when (getPlayerData(player)!!.gearNumber) {
-                1 -> return 1.1
-                2 -> return 1.3
-                3 -> return 1.1
-                4 -> return 1.2
-                5 -> return 1.15
-                6 -> return 1.1
-                7 -> return 1.3
-                8 -> return 1.2
-                9 -> return 1.2
-                else -> return 1.0
+            return when (getPlayerData(player)!!.gearNumber) {
+                1 -> 1.1
+                2 -> 1.3
+                3 -> 1.1
+                4 -> 1.2
+                5 -> 1.15
+                6 -> 1.1
+                7 -> 1.3
+                8 -> 1.2
+                9 -> 1.2
+                else -> 1.0
             }
         } else {
             return 1.0

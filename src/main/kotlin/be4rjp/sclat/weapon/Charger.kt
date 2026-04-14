@@ -172,7 +172,7 @@ object Charger {
                                         * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) * charge
                                 ) / 2
                             ) {
-                                p.exp = p.exp -
+                                p.exp -=
                                     (
                                         (data.weaponClass?.mainWeapon!!.needInk / 2) *
                                             Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) /
@@ -225,7 +225,7 @@ object Charger {
                                     * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP)
                             )
                         ) {
-                            p.exp = p.exp -
+                            p.exp -=
                                 (
                                     data.weaponClass?.mainWeapon!!.needInk
                                         * Gear.getGearInfluence(player, Gear.Type.MAIN_SPEC_UP) /
@@ -317,7 +317,7 @@ object Charger {
         var loopsize = positions.size.toFloat()
         var i = 0
         loop@ while (i < loopsize) {
-            val position = positions.get(i).toLocation(player.location.world!!)
+            val position = positions[i].toLocation(player.location.world!!)
             val block = player.location.world!!.getBlockAt(position)
 
             if (block.type != Material.AIR) {
@@ -482,16 +482,18 @@ object Charger {
     ): Boolean {
         var pyaw = 0.0
         var tyaw = 0.0
-        if (p.eyeLocation.yaw < 0) {
-            pyaw = (p.eyeLocation.yaw + 360).toDouble()
-        } else {
-            pyaw = p.eyeLocation.yaw.toDouble()
-        }
-        if (target.eyeLocation.yaw < 0) {
-            tyaw = (target.eyeLocation.yaw + 360).toDouble()
-        } else {
-            tyaw = target.eyeLocation.yaw.toDouble()
-        }
+        pyaw =
+            if (p.eyeLocation.yaw < 0) {
+                (p.eyeLocation.yaw + 360).toDouble()
+            } else {
+                p.eyeLocation.yaw.toDouble()
+            }
+        tyaw =
+            if (target.eyeLocation.yaw < 0) {
+                (target.eyeLocation.yaw + 360).toDouble()
+            } else {
+                target.eyeLocation.yaw.toDouble()
+            }
         return (pyaw - tyaw < 147 && pyaw - tyaw > -147) || pyaw - tyaw > 213 || pyaw - tyaw < -213
     }
 
@@ -501,16 +503,18 @@ object Charger {
     ): Boolean {
         var pyaw = 0.0
         var tyaw = 0.0
-        if (p.eyeLocation.yaw < 0) {
-            pyaw = (p.eyeLocation.yaw + 360).toDouble()
-        } else {
-            pyaw = p.eyeLocation.yaw.toDouble()
-        }
-        if (target.eyeLocation.yaw < 0) {
-            tyaw = (target.eyeLocation.yaw + 360).toDouble()
-        } else {
-            tyaw = target.eyeLocation.yaw.toDouble()
-        }
+        pyaw =
+            if (p.eyeLocation.yaw < 0) {
+                (p.eyeLocation.yaw + 360).toDouble()
+            } else {
+                p.eyeLocation.yaw.toDouble()
+            }
+        tyaw =
+            if (target.eyeLocation.yaw < 0) {
+                (target.eyeLocation.yaw + 360).toDouble()
+            } else {
+                target.eyeLocation.yaw.toDouble()
+            }
         return (pyaw - tyaw < 147 && pyaw - tyaw > -147) || pyaw - tyaw > 213 || pyaw - tyaw < -213
     }
 }
