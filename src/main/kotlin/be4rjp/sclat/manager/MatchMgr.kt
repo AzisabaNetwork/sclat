@@ -648,46 +648,56 @@ object MatchMgr {
                                 val l = getPlayerData(p)!!.match!!.mapData!!.team0Loc
                                 val i = (getPlayerData(p)!!.playerNumber + 1) / 2
                                 var sl: Location? = null
-                                if (i == 1) {
-                                    sl =
-                                        Location(
-                                            l!!.world,
-                                            l.blockX + 1.5,
-                                            l.blockY.toDouble(),
-                                            l.blockZ + 1.5,
-                                        )
-                                } else if (i == 2) {
-                                    sl =
-                                        Location(
-                                            l!!.world,
-                                            l.blockX - 0.5,
-                                            l.blockY.toDouble(),
-                                            l.blockZ + 1.5,
-                                        )
-                                } else if (i == 3) {
-                                    sl =
-                                        Location(
-                                            l!!.world,
-                                            l.blockX + 1.5,
-                                            l.blockY.toDouble(),
-                                            l.blockZ - 0.5,
-                                        )
-                                } else if (i == 4) {
-                                    sl =
-                                        Location(
-                                            l!!.world,
-                                            l.blockX - 0.5,
-                                            l.blockY.toDouble(),
-                                            l.blockZ - 0.5,
-                                        )
-                                } else {
-                                    sl =
-                                        Location(
-                                            l!!.world,
-                                            l.blockX + 0.5,
-                                            l.blockY.toDouble(),
-                                            l.blockZ + 0.5,
-                                        )
+                                when (i) {
+                                    1 -> {
+                                        sl =
+                                            Location(
+                                                l!!.world,
+                                                l.blockX + 1.5,
+                                                l.blockY.toDouble(),
+                                                l.blockZ + 1.5,
+                                            )
+                                    }
+
+                                    2 -> {
+                                        sl =
+                                            Location(
+                                                l!!.world,
+                                                l.blockX - 0.5,
+                                                l.blockY.toDouble(),
+                                                l.blockZ + 1.5,
+                                            )
+                                    }
+
+                                    3 -> {
+                                        sl =
+                                            Location(
+                                                l!!.world,
+                                                l.blockX + 1.5,
+                                                l.blockY.toDouble(),
+                                                l.blockZ - 0.5,
+                                            )
+                                    }
+
+                                    4 -> {
+                                        sl =
+                                            Location(
+                                                l!!.world,
+                                                l.blockX - 0.5,
+                                                l.blockY.toDouble(),
+                                                l.blockZ - 0.5,
+                                            )
+                                    }
+
+                                    else -> {
+                                        sl =
+                                            Location(
+                                                l!!.world,
+                                                l.blockX + 0.5,
+                                                l.blockY.toDouble(),
+                                                l.blockZ + 0.5,
+                                            )
+                                    }
                                 }
                                 sl.yaw = l.yaw
                                 getPlayerData(p)!!.matchLocation = (sl)
@@ -696,46 +706,56 @@ object MatchMgr {
                                 val l = getPlayerData(p)!!.match!!.mapData!!.team1Loc
                                 val i = getPlayerData(p)!!.playerNumber / 2
                                 var sl: Location? = null
-                                if (i == 1) {
-                                    sl =
-                                        Location(
-                                            l!!.world,
-                                            l.blockX + 1.5,
-                                            l.blockY.toDouble(),
-                                            l.blockZ + 1.5,
-                                        )
-                                } else if (i == 2) {
-                                    sl =
-                                        Location(
-                                            l!!.world,
-                                            l.blockX - 0.5,
-                                            l.blockY.toDouble(),
-                                            l.blockZ + 1.5,
-                                        )
-                                } else if (i == 3) {
-                                    sl =
-                                        Location(
-                                            l!!.world,
-                                            l.blockX + 1.5,
-                                            l.blockY.toDouble(),
-                                            l.blockZ - 0.5,
-                                        )
-                                } else if (i == 4) {
-                                    sl =
-                                        Location(
-                                            l!!.world,
-                                            l.blockX - 0.5,
-                                            l.blockY.toDouble(),
-                                            l.blockZ - 0.5,
-                                        )
-                                } else {
-                                    sl =
-                                        Location(
-                                            l!!.world,
-                                            l.blockX + 0.5,
-                                            l.blockY.toDouble(),
-                                            l.blockZ + 0.5,
-                                        )
+                                when (i) {
+                                    1 -> {
+                                        sl =
+                                            Location(
+                                                l!!.world,
+                                                l.blockX + 1.5,
+                                                l.blockY.toDouble(),
+                                                l.blockZ + 1.5,
+                                            )
+                                    }
+
+                                    2 -> {
+                                        sl =
+                                            Location(
+                                                l!!.world,
+                                                l.blockX - 0.5,
+                                                l.blockY.toDouble(),
+                                                l.blockZ + 1.5,
+                                            )
+                                    }
+
+                                    3 -> {
+                                        sl =
+                                            Location(
+                                                l!!.world,
+                                                l.blockX + 1.5,
+                                                l.blockY.toDouble(),
+                                                l.blockZ - 0.5,
+                                            )
+                                    }
+
+                                    4 -> {
+                                        sl =
+                                            Location(
+                                                l!!.world,
+                                                l.blockX - 0.5,
+                                                l.blockY.toDouble(),
+                                                l.blockZ - 0.5,
+                                            )
+                                    }
+
+                                    else -> {
+                                        sl =
+                                            Location(
+                                                l!!.world,
+                                                l.blockX + 0.5,
+                                                l.blockY.toDouble(),
+                                                l.blockZ + 0.5,
+                                            )
+                                    }
                                 }
                                 sl.yaw = l.yaw
                                 getPlayerData(p)!!.matchLocation = (sl)
