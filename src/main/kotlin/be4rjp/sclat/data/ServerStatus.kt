@@ -8,17 +8,14 @@ import org.bukkit.scheduler.BukkitRunnable
 
 class ServerStatus(
     @JvmField val serverName: String?,
-    displayName: String,
-    host: String?,
+    @JvmField val displayName: String,
+    private val host: String?,
     port: Int,
     maxPlayer: Int,
     period: Int,
     sign: Block,
     info: String?,
 ) {
-    @JvmField
-    val displayName: String?
-    private val host: String?
     private val port: Int
     private val period: Int
     private val task: BukkitRunnable
@@ -54,8 +51,6 @@ class ServerStatus(
     private val matchServerRunnable: MatchServerRunnable?
 
     init {
-        this.displayName = displayName
-        this.host = host
         this.port = port
         this.period = period
         this.maxPlayer = maxPlayer

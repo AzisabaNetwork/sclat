@@ -36,7 +36,7 @@ object Blinder {
         cooltime.runTaskLater(plugin, 8)
         if (player.exp > 0.36f || getPlayerData(player)!!.isBombRush) {
             if (!getPlayerData(player)!!.isBombRush) {
-                player.exp = player.exp - 0.35f
+                player.exp -= 0.35f
             }
             shootblind(player, reach)
         } else {

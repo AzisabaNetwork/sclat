@@ -4,11 +4,7 @@ import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
 class AsyncTickThread {
-    private val executor: ExecutorService
-
-    init {
-        this.executor = Executors.newSingleThreadExecutor()
-    }
+    private val executor: ExecutorService = Executors.newSingleThreadExecutor()
 
     fun shutdown() {
         executor.shutdown()

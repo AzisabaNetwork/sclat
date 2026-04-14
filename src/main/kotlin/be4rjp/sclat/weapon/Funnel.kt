@@ -1096,8 +1096,7 @@ object Funnel {
                                     if (i % 20 == 0) {
                                         if (p.gameMode != GameMode.SPECTATOR) {
                                             val funnelamo = funnelamount(player)
-                                            val nuget: ItemStack?
-                                            nuget =
+                                            val nuget =
                                                 if (funnelamo > 0) {
                                                     ItemStack(Material.GOLD_NUGGET, funnelamo)
                                                 } else {

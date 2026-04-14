@@ -577,8 +577,7 @@ object MatchMgr {
         player: Player,
         match: Match,
     ) {
-        val task: BukkitRunnable?
-        task =
+        val task =
             object : BukkitRunnable() {
                 var s: Int = 0
                 val p: Player = player
@@ -1588,17 +1587,14 @@ object MatchMgr {
                                     .getString("WorkMode") == "TDM"
                             ) {
                                 val match = getPlayerData(p)!!.match
-                                val team0c: Int
-                                val team1c: Int
                                 val team0code: String?
-                                val team1code: String?
                                 winteam = match!!.team0
                                 var hikiwake = false
 
-                                team0c = match.team0!!.killCount
+                                val team0c: Int = match.team0!!.killCount
                                 team1c = match.team1!!.killCount
-                                team0code = match.team0!!.teamColor!!.colorCode
-                                team1code = match.team1!!.teamColor!!.colorCode
+                                val team1c: Int = match.team0!!.teamColor!!.colorCode
+                                val team1code: String? = match.team1!!.teamColor!!.colorCode
 
                                 if (team0c < team1c) {
                                     winteam = match.team1
@@ -1627,20 +1623,16 @@ object MatchMgr {
                                     .getString("WorkMode") == "Area"
                             ) {
                                 val match = getPlayerData(p)!!.match
-                                val team0: Int
-                                val team1: Int
                                 val dper: Double
                                 var per: Int
-                                val team0code: String?
-                                val team1code: String?
                                 winteam = match!!.team0
                                 var hikiwake = false
 
                                 team0 = match.team0!!.gatiCount
-                                team1 = match.team1!!.gatiCount
-                                team0code = match.team0!!.teamColor!!.colorCode
-                                team1code = match.team1!!.teamColor!!.colorCode
-                                dper = team0.toDouble() / (team0 + team1).toDouble() * 100
+                                val team1: Int = match.team1!!.gatiCount
+                                val team0: Int = match.team0!!.teamColor!!.colorCode
+                                val team1code: String? = match.team1!!.teamColor!!.colorCode
+                                val team0code: String? = team0.toDouble() / (team0 + team1).toDouble() * 100
                                 per = dper.toInt()
 
                                 if (match.team0!!.gatiCount > match.team1!!.gatiCount) {
@@ -1704,20 +1696,16 @@ object MatchMgr {
                                 }
                             } else {
                                 val match = getPlayerData(p)!!.match
-                                val team0: Int
-                                val team1: Int
                                 val dper: Double
                                 var per: Int
-                                val team0code: String?
-                                val team1code: String?
                                 winteam = match!!.team0
                                 var hikiwake = false
 
                                 team0 = match.team0!!.point
-                                team1 = match.team1!!.point
-                                team0code = match.team0!!.teamColor!!.colorCode
-                                team1code = match.team1!!.teamColor!!.colorCode
-                                dper = team0.toDouble() / (team0 + team1).toDouble() * 100
+                                val team1: Int = match.team1!!.point
+                                val team0: Int = match.team0!!.teamColor!!.colorCode
+                                val team1code: String? = match.team1!!.teamColor!!.colorCode
+                                val team0code: String? = team0.toDouble() / (team0 + team1).toDouble() * 100
                                 per = dper.toInt()
 
                                 if (match.team0!!.point > match.team1!!.point) {
