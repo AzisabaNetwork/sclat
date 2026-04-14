@@ -6,12 +6,14 @@ import be4rjp.sclat.emblem.EmblemManager
 import be4rjp.sclat.manager.BungeeCordMgr
 import be4rjp.sclat.manager.MapLoader
 import be4rjp.sclat.manager.ServerStatusManager
+import be4rjp.sclat.sclatLogger
 import be4rjp.sclat.server.EquipmentClient
 import org.bukkit.ChatColor
 import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.entity.Player
 import org.bukkit.plugin.java.JavaPlugin
 import org.bukkit.scheduler.BukkitRunnable
+import org.incendo.cloud.bukkit.CloudBukkitCapabilities
 import org.incendo.cloud.bukkit.parser.PlayerParser
 import org.incendo.cloud.execution.ExecutionCoordinator
 import org.incendo.cloud.paper.LegacyPaperCommandManager
@@ -315,5 +317,13 @@ object SclatCommands {
                     sender.sendMessage("${map.mapName} : ${metrics ?: "no metrics"}")
                 },
         )
+
+        if (commandManager.hasCapability(CloudBukkitCapabilities.NATIVE_BRIGADIER)) {
+            commandManager.registerBrigadier()
+        } else if (commandManager.hasCapability(CloudBukkitCapabilities.ASYNCHRONOUS_COMPLETION)) {
+            commandManager.registerAsynchronousCompletions()
+        } else {
+            sclatLogger.warn("Are you using old spigot? We can't handle command over this cloud framework.")
+        }
     }
 }
