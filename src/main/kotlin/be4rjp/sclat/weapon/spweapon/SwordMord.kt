@@ -391,7 +391,7 @@ object SwordMord {
                     ).multiply(quadroShootSpeed / 35)
 
                 override fun run() {
-                    inkball = mainSnowballNameMap.get(name)
+                    inkball = mainSnowballNameMap[name]
 
                     if (inkball != ball) {
                         i += getSnowballHitCount(name) - 1

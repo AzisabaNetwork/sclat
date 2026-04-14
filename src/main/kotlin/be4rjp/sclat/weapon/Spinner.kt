@@ -238,7 +238,7 @@ object Spinner {
                     ).multiply(getPlayerData(p)!!.weaponClass!!.mainWeapon!!.shootSpeed / 17)
 
                 override fun run() {
-                    inkball = mainSnowballNameMap.get(name)
+                    inkball = mainSnowballNameMap[name]
 
                     if (inkball != ball) {
                         i += getSnowballHitCount(name) - 1

@@ -79,7 +79,7 @@ object Sprinkler {
                             pVec = p.eyeLocation.direction
                         }
 
-                        ball = snowballNameMap.get(ndn.toString())
+                        ball = snowballNameMap[ndn.toString()]
 
                         if (!drop!!.isOnGround &&
                             !(

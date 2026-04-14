@@ -28,7 +28,7 @@ class PlayerHolograms {
 
     fun get(player: Player): RankingHolograms? = get(player.uniqueId)
 
-    fun get(playerUuid: UUID): RankingHolograms? = rankingHoloMap.get(playerUuid)
+    fun get(playerUuid: UUID): RankingHolograms? = rankingHoloMap[playerUuid]
 
     fun remove(player: Player) {
         rankingHoloMap.remove(player.uniqueId)

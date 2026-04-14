@@ -272,7 +272,7 @@ object MatchMgr {
                                          */
                                             var index = 0
                                             for (key in treeMap.keys) {
-                                                sortedMember.add(treeMap.get(key))
+                                                sortedMember.add(treeMap[key])
 
                                                 index++
                                             }
@@ -1316,7 +1316,7 @@ object MatchMgr {
                             }
 
                             if (list.size == 1) {
-                                if (list.get(0) != null) {
+                                if (list[0] != null) {
                                     `is` = true
                                 }
                             }
@@ -1351,9 +1351,9 @@ object MatchMgr {
                                     }
                                 }
 
-                                list.get(0)!!.addGatiCount()
+                                list[0]!!.addGatiCount()
                                 isgc = `is`
-                                gcteam = list.get(0)
+                                gcteam = list[0]
                             }
 
                             lines.add("   ")

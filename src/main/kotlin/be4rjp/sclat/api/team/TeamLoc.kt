@@ -49,7 +49,7 @@ class TeamLoc(
         Collections.shuffle(list1)
     }
 
-    fun getTeam0Loc(i: Int): Location? = list0!!.get(i)
+    fun getTeam0Loc(i: Int): Location? = list0!![i]
 
-    fun getTeam1Loc(i: Int): Location? = list1!!.get(i)
+    fun getTeam1Loc(i: Int): Location? = list1!![i]
 }

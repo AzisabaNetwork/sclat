@@ -189,7 +189,7 @@ object PlayerStatusMgr {
                 override fun run() {
                     if (!player.isOnline) cancel()
                     try {
-                        val `as`: EntityArmorStand = list.get(player)!!
+                        val `as`: EntityArmorStand = list[player]!!
                         val connection = (player as CraftPlayer).handle.playerConnection
                         connection.sendPacket(PacketPlayOutEntityDestroy(`as`.bukkitEntity.entityId))
                         `as`.customName =
@@ -197,7 +197,7 @@ object PlayerStatusMgr {
                                 .fromStringOrNull("§aMoney : §r" + getMoney(player) + "  §aLv : §r" + getLv(player))
                         connection.sendPacket(PacketPlayOutSpawnEntityLiving(`as`))
 
-                        val as1: EntityArmorStand = list1.get(player)!!
+                        val as1: EntityArmorStand = list1[player]!!
                         connection.sendPacket(PacketPlayOutEntityDestroy(as1.bukkitEntity.entityId))
                         as1.customName =
                             CraftChatMessage.fromStringOrNull(
@@ -205,7 +205,7 @@ object PlayerStatusMgr {
                             )
                         connection.sendPacket(PacketPlayOutSpawnEntityLiving(as1))
 
-                        val as2: EntityArmorStand = list2.get(player)!!
+                        val as2: EntityArmorStand = list2[player]!!
                         connection.sendPacket(PacketPlayOutEntityDestroy(as2.bukkitEntity.entityId))
                         as2.customName =
                             CraftChatMessage
@@ -227,7 +227,7 @@ object PlayerStatusMgr {
 
     @JvmStatic
     fun sendHologramUpdate(player: Player) {
-        val `as`: EntityArmorStand = list.get(player)!!
+        val `as`: EntityArmorStand = list[player]!!
         val connection = (player as CraftPlayer).handle.playerConnection
         connection.sendPacket(PacketPlayOutEntityDestroy(`as`.bukkitEntity.entityId))
         `as`.customName = CraftChatMessage.fromStringOrNull("§aMoney : §r" + getMoney(player) + "  §aLv : §r" + getLv(player))

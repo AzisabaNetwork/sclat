@@ -395,7 +395,7 @@ object Reeler {
         val positions = rayTrace.traverse(20.0, 0.2)
 
         loop@ for (it in positions.indices) {
-            val position = positions.get(it).toLocation(player.location.world!!)
+            val position = positions[it].toLocation(player.location.world!!)
             val block = player.location.world!!.getBlockAt(position)
 
             if (block.type != Material.AIR) {
@@ -442,7 +442,7 @@ object Reeler {
         val rayTrace = RayTrace(player.eyeLocation.toVector(), player.eyeLocation.direction)
         val positions = rayTrace.traverse(20.0, 0.2)
         loop2@ for (it in positions.indices) {
-            val position = positions.get(it).toLocation(player.location.world!!)
+            val position = positions[it].toLocation(player.location.world!!)
             val block = player.location.world!!.getBlockAt(position)
 
             if (block.type != Material.AIR) {
@@ -618,7 +618,7 @@ object Reeler {
                     ).multiply(0.01)
 
                 override fun run() {
-                    inkball = mainSnowballNameMap.get(name)
+                    inkball = mainSnowballNameMap[name]
 
                     if (inkball != ball) {
                         i += getSnowballHitCount(name) - 1

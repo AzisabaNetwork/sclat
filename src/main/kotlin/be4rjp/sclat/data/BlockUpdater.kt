@@ -111,7 +111,7 @@ class BlockUpdater {
         material: Material,
     ) {
         if (this.blocks.contains(block)) {
-            if (this.blocklist.get(block) == material) {
+            if (this.blocklist[block] == material) {
                 return
             }
         }
@@ -122,30 +122,30 @@ class BlockUpdater {
 
             if (block.location.chunk.isLoaded) {
                 try {
-                    SclatUtil.setBlockByNMSChunk(block, blocklist.get(block)!!, true)
+                    SclatUtil.setBlockByNMSChunk(block, blocklist[block]!!, true)
                 } catch (e: Exception) {
                 }
             } else {
                 try {
-                    SclatUtil.setBlockByNMS(block, blocklist.get(block)!!, true)
+                    SclatUtil.setBlockByNMS(block, blocklist[block]!!, true)
                     // Main.getPlugin().getServer().broadcastMessage("ChangeBlockByNMS!!");
                 } catch (e: Exception) {
                 }
             }
         } else {
-            if (this.blocklist.get(block) != material) {
+            if (this.blocklist[block] != material) {
                 // this.blocklist.put(block, material);
                 this.blocklist.replace(block, material)
                 this.blocks.add(block)
 
                 if (block.location.chunk.isLoaded) {
                     try {
-                        SclatUtil.setBlockByNMSChunk(block, blocklist.get(block)!!, true)
+                        SclatUtil.setBlockByNMSChunk(block, blocklist[block]!!, true)
                     } catch (e: Exception) {
                     }
                 } else {
                     try {
-                        SclatUtil.setBlockByNMS(block, blocklist.get(block)!!, true)
+                        SclatUtil.setBlockByNMS(block, blocklist[block]!!, true)
                         // Main.getPlugin().getServer().broadcastMessage("ChangeBlockByNMS!!");
                     } catch (e: Exception) {
                     }

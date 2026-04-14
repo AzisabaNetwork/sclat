@@ -142,7 +142,7 @@ object Slosher {
 
                 override fun run() {
                     try {
-                        inkball = mainSnowballNameMap.get(name)
+                        inkball = mainSnowballNameMap[name]
 
                         if (inkball != ball) {
                             i += getSnowballHitCount(name) - 1

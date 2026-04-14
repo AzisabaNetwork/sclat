@@ -131,8 +131,8 @@ object QuadroArms {
 
                 override fun run() {
                     getPlayerData(p)
-                    if (Hash_Quadro_overheat.get(p)!! < 47) {
-                        bar.progress = Hash_Quadro_overheat.get(p)!!.toDouble() / 47
+                    if (Hash_Quadro_overheat[p]!! < 47) {
+                        bar.progress = Hash_Quadro_overheat[p]!!.toDouble() / 47
                         if (!bar.players.contains(p)) bar.addPlayer(p)
                     } else {
                         bar.progress = 1.0
@@ -181,7 +181,7 @@ object QuadroArms {
                 override fun run() {
                     val sound = false
                     burstshoot(player, true)
-                    val overheatgage: Int = Hash_Quadro_overheat.get(p)!!
+                    val overheatgage: Int = Hash_Quadro_overheat[p]!!
                     if (overheatgage > 47) {
                         Hash_Quadro_overheat.replace(p, overheatgage - 13)
                     } else if (overheatgage > 10) {
@@ -202,7 +202,7 @@ object QuadroArms {
 
                 override fun run() {
                     shootQuadroSlosher(player)
-                    val overheatgage: Int = Hash_Quadro_overheat.get(p)!!
+                    val overheatgage: Int = Hash_Quadro_overheat[p]!!
                     if (overheatgage <= 13) {
                         Hash_Quadro_overheat.replace(p, 0)
                     } else {
@@ -216,7 +216,7 @@ object QuadroArms {
 
                 override fun run() {
                     shootSensor(player)
-                    val overheatgage: Int = Hash_Quadro_overheat.get(p)!!
+                    val overheatgage: Int = Hash_Quadro_overheat[p]!!
                     if (overheatgage <= 10) {
                         Hash_Quadro_overheat.replace(p, 0)
                     } else {
@@ -259,7 +259,7 @@ object QuadroArms {
                 override fun run() {
                     c++
                     val q = 7
-                    val overheatgage: Int = Hash_Quadro_overheat.get(p)!!
+                    val overheatgage: Int = Hash_Quadro_overheat[p]!!
                     if (overheatgage > 47) {
                         player.sendTitle("", ChatColor.RED.toString() + "オーバーヒート!!!", 0, 5, 2)
                         cancel()
@@ -362,7 +362,7 @@ object QuadroArms {
                     ).multiply(quadroShootSpeed / 14)
 
                 override fun run() {
-                    inkball = mainSnowballNameMap.get(name)
+                    inkball = mainSnowballNameMap[name]
 
                     if (inkball != ball) {
                         i += getSnowballHitCount(name) - 1
@@ -457,7 +457,7 @@ object QuadroArms {
                     ).multiply(shootSpeed / 150)
 
                 override fun run() {
-                    inkball = mainSnowballNameMap.get(name)
+                    inkball = mainSnowballNameMap[name]
 
                     if (inkball != ball) {
                         i += getSnowballHitCount(name) - 1
@@ -549,7 +549,7 @@ object QuadroArms {
 
                 override fun run() {
                     try {
-                        inkball = mainSnowballNameMap.get(name)
+                        inkball = mainSnowballNameMap[name]
 
                         if (inkball != ball) {
                             i += getSnowballHitCount(name) - 1

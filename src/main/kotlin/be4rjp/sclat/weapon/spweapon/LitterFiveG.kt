@@ -106,8 +106,8 @@ object LitterFiveG {
                         visible = false
                     }
                     if (Hash_charge.containsKey(p)) {
-                        if (Hash_charge.get(p)!! < MAX_CHARGE) {
-                            bar.progress = Hash_charge.get(p)!!.toDouble() / MAX_CHARGE
+                        if (Hash_charge[p]!! < MAX_CHARGE) {
+                            bar.progress = Hash_charge[p]!!.toDouble() / MAX_CHARGE
                             if (!bar.players.contains(p)) {
                                 bar.addPlayer(p)
                             }
@@ -133,14 +133,14 @@ object LitterFiveG {
                             cancel()
                         }
                         if (data.settings!!.showEffectChargerLine()) {
-                            if (Hash_charge.get(p)!! < MAX_CHARGE) {
-                                Hash_charge.replace(p, Hash_charge.get(p)!! + Hash_cps.get(p)!!)
+                            if (Hash_charge[p]!! < MAX_CHARGE) {
+                                Hash_charge.replace(p, Hash_charge[p]!! + Hash_cps[p]!!)
                             }
                         } else {
-                            if (Hash_charge.get(p)!! < MAX_CHARGE && data.isUsingSS) {
-                                Hash_charge.replace(p, Hash_charge.get(p)!! + Hash_cps.get(p)!!)
+                            if (Hash_charge[p]!! < MAX_CHARGE && data.isUsingSS) {
+                                Hash_charge.replace(p, Hash_charge[p]!! + Hash_cps[p]!!)
                             }
-                            if (Hash_charge.get(p) != 0 && !data.isUsingSS) {
+                            if (Hash_charge[p] != 0 && !data.isUsingSS) {
                                 shootLitterFiveG(p)
                             }
                         }
@@ -149,14 +149,14 @@ object LitterFiveG {
                             Hash_cps.replace(p, 1)
                         }
                         val rayTrace = RayTrace(p.eyeLocation.toVector(), p.eyeLocation.direction)
-                        var range = Hash_charge.get(p)!!.toDouble()
+                        var range = Hash_charge[p]!!.toDouble()
                         if (range > MAX_CHARGE) {
                             range = MAX_CHARGE.toDouble()
                         }
                         val positions = rayTrace.traverse((range * 1.8).toInt().toDouble(), 0.7)
                         if (visible) {
                             check@ for (i in positions.indices) {
-                                val position = positions.get(i).toLocation(p.location.world!!)
+                                val position = positions[i].toLocation(p.location.world!!)
                                 if (position.block.type != Material.AIR) {
                                     break
                                 }
@@ -198,15 +198,15 @@ object LitterFiveG {
     @JvmStatic
     fun shootLitterFiveG(player: Player) {
         if (player.gameMode == GameMode.SPECTATOR || !getPlayerData(player)!!.isUsingSP) return
-        var range: Int = Hash_charge.get(player)!!
-        var damage = (Hash_charge.get(player)!! / 5).toDouble()
+        var range: Int = Hash_charge[player]!!
+        var damage = (Hash_charge[player]!! / 5).toDouble()
         // 半径
         var maxDist = 2.0
         if (range >= MAX_CHARGE) {
             range = MAX_CHARGE
             damage = 22.1
             maxDist = 4.0
-            Hash_cps.replace(player, Hash_cps.get(player)!! + 1)
+            Hash_cps.replace(player, Hash_cps[player]!! + 1)
         } else {
             Hash_cps.replace(player, 1)
         }

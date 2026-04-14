@@ -11,7 +11,7 @@ object AsyncThreadManager {
     private val tickThreads: MutableList<AsyncTickThread> = CopyOnWriteArrayList()
 
     val randomTickThread: AsyncTickThread
-        get() = tickThreads.get(Random().nextInt(tickThreads.size))
+        get() = tickThreads[Random().nextInt(tickThreads.size)]
 
     @JvmStatic
     fun setup(numberOfThread: Int) {

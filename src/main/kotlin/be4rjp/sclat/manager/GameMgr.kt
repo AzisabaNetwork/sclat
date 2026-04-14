@@ -1075,7 +1075,7 @@ class GameMgr : Listener {
 
                         "[ Tutorial ]" -> {
                             val list = Sclat.tutorialServers!!.getConfig()!!.getStringList("server-list")
-                            BungeeCordMgr.playerSendServer(player, list.get(Random().nextInt(list.size)))
+                            BungeeCordMgr.playerSendServer(player, list[Random().nextInt(list.size)])
                             getPlayerData(player)!!
                                 .setServerName(
                                     Sclat.conf!!

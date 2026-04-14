@@ -146,7 +146,7 @@ object RankMgr {
                         val treeMap: MutableMap<Int, String> = TreeMap(Comparator.reverseOrder())
                         treeMap.putAll(playerMap)
                         ranking = ArrayList()
-                        for (key in treeMap.keys) ranking.add(treeMap.get(key))
+                        for (key in treeMap.keys) ranking.add(treeMap[key])
                     } catch (e: Exception) {
                     }
                 }
@@ -180,7 +180,7 @@ object RankMgr {
                         val treeMap: MutableMap<Int, String> = TreeMap(Comparator.reverseOrder())
                         treeMap.putAll(playerMap)
                         killRanking = ArrayList()
-                        for (key in treeMap.keys) killRanking.add(treeMap.get(key))
+                        for (key in treeMap.keys) killRanking.add(treeMap[key])
                     } catch (e: Exception) {
                         e.printStackTrace()
                     }
@@ -215,7 +215,7 @@ object RankMgr {
                         val treeMap: MutableMap<Int, String> = TreeMap(Comparator.reverseOrder())
                         treeMap.putAll(playerMap)
                         paintRanking = ArrayList()
-                        for (key in treeMap.keys) paintRanking.add(treeMap.get(key))
+                        for (key in treeMap.keys) paintRanking.add(treeMap[key])
                     } catch (e: Exception) {
                     }
                 }

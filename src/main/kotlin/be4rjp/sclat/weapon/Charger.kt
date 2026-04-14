@@ -317,7 +317,7 @@ object Charger {
         var loopsize = positions.size.toFloat()
         var i = 0
         loop@ while (i < loopsize) {
-            val position = positions.get(i).toLocation(player.location.world!!)
+            val position = positions[i].toLocation(player.location.world!!)
             val block = player.location.world!!.getBlockAt(position)
 
             if (block.type != Material.AIR) {
