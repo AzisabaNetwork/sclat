@@ -749,8 +749,7 @@ object Funnel {
                                         .normalize()
                                         .getZ(),
                                 )
-                            var io = 0
-                            for (aslist in list5) {
+                            for ((io, aslist) in list5.withIndex()) {
                                 val aslistget0: ArmorStand = aslist[0]
                                 if (io == 0) {
                                     if (!hashPlayer.containsKey(aslistget0) &&
@@ -1147,7 +1146,6 @@ object Funnel {
                                         }
                                     }
                                 }
-                                io++
                             }
                             for (aslist in list5) {
                                 pv =

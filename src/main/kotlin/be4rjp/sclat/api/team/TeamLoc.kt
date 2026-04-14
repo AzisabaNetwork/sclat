@@ -2,7 +2,6 @@ package be4rjp.sclat.api.team
 
 import be4rjp.sclat.data.MapData
 import org.bukkit.Location
-import java.util.Collections
 
 /**
  *

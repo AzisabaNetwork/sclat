@@ -179,7 +179,7 @@ class SnowballListener : Listener {
                                         when (args[1]) {
                                             "Burst" -> {
                                                 if (DataMgr.oto.containsKey(args[2])) {
-                                                    DataMgr.oto[args[2]] = DataMgr.oto.get(args[2])!! + 1
+                                                    DataMgr.oto[args[2]] = DataMgr.oto[args[2]]!! + 1
                                                 } else {
                                                     DataMgr.oto[args[2]] = 1
                                                 }
@@ -314,7 +314,7 @@ class SnowballListener : Listener {
                                                 when (args[1]) {
                                                     "Burst" -> {
                                                         if (DataMgr.oto.containsKey(args[2])) {
-                                                            DataMgr.oto[args[2]] = DataMgr.oto.get(args[2])!! + 1
+                                                            DataMgr.oto[args[2]] = DataMgr.oto[args[2]]!! + 1
                                                         } else {
                                                             DataMgr.oto[args[2]] = 1
                                                         }
@@ -781,7 +781,7 @@ class SnowballListener : Listener {
                                             when (args[1]) {
                                                 "Burst" -> {
                                                     if (DataMgr.oto.containsKey(args[2])) {
-                                                        DataMgr.oto[args[2]] = DataMgr.oto.get(args[2])!! + 1
+                                                        DataMgr.oto[args[2]] = DataMgr.oto[args[2]]!! + 1
                                                     } else {
                                                         DataMgr.oto[args[2]] = 1
                                                     }

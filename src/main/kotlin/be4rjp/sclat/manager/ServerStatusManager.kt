@@ -127,8 +127,7 @@ object ServerStatusManager {
                     ism.itemMeta = ismm
                     inv.setItem(17, ism)
 
-                    var i = 0
-                    for (ss in serverList) {
+                    for ((i, ss) in serverList.withIndex()) {
                         var mt = Material.LIME_STAINED_GLASS
                         if (ss.runningMatch) mt = Material.YELLOW_STAINED_GLASS
                         if (ss.playerCount >= ss.maxPlayer) mt = Material.RED_STAINED_GLASS
@@ -169,7 +168,6 @@ object ServerStatusManager {
                         `is`.itemMeta = itemMeta
 
                         inv.setItem(i, `is`)
-                        i++
                     }
                 }
             }

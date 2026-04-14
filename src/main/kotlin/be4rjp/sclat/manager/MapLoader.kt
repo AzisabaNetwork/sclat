@@ -140,7 +140,7 @@ object MapLoader {
             }
         }
 
-        // Wiremesh (may be expensive)
+        // Wiremesh (maybe expensive)
         map.wiremeshMeta?.let { wm ->
             val from = toLocation(wm.from)
             val to = toLocation(wm.to)

@@ -81,11 +81,9 @@ class BlockUpdater {
                             val blocks: MutableList<Block> = entry.value
 
                             val positionArray = ShortArray(blocks.size)
-                            var i = 0
-                            for (block in blocks) {
+                            for ((i, block) in blocks.withIndex()) {
                                 positionArray[i] =
                                     ((block.x and 0xF) shl 12 or ((block.z and 0xF) shl 8) or block.y).toShort()
-                                i++
                             }
                             val packet =
                                 PacketPlayOutMultiBlockChange(

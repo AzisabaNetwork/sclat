@@ -81,7 +81,6 @@ import org.bukkit.scheduler.BukkitRunnable
 import org.bukkit.scoreboard.DisplaySlot
 import org.bukkit.scoreboard.Objective
 import org.bukkit.scoreboard.Scoreboard
-import java.util.Collections
 import java.util.TreeMap
 import java.util.function.Consumer
 
@@ -270,11 +269,8 @@ object MatchMgr {
                                          * sortedMember.add(list.get(0)); sortedMember.add(list.get(2));
                                          * sortedMember.add(list.get(1)); }else{
                                          */
-                                            var index = 0
-                                            for (key in treeMap.keys) {
+                                            for ((index, key) in treeMap.keys.withIndex()) {
                                                 sortedMember.add(treeMap[key])
-
-                                                index++
                                             }
                                             sortedMember.shuffle()
                                             // }
@@ -283,15 +279,13 @@ object MatchMgr {
                                             sortedMember.shuffle()
                                         }
 
-                                        var i = 0
-                                        for (jp in sortedMember) {
+                                        for ((i, jp) in sortedMember.withIndex()) {
                                             val data = getPlayerData(jp)
                                             if (i % 2 == 0) {
                                                 data!!.team = match.team0
                                             } else {
                                                 data!!.team = match.team1
                                             }
-                                            i++
                                         }
 
                                         var playerNumber = 1
@@ -1291,9 +1285,8 @@ object MatchMgr {
                             }
 
                             var `is` = true
-                            var i = 0
                             var t: Team? = null
-                            for (team in list) {
+                            for ((i, team) in list.withIndex()) {
                                 if (i == 0) {
                                     if (team != null) {
                                         t = team
@@ -1312,7 +1305,6 @@ object MatchMgr {
                                         break
                                     }
                                 }
-                                i++
                             }
 
                             if (list.size == 1) {

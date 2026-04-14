@@ -184,8 +184,7 @@ class RankingHolograms(
                     list.add(clickHit3)
                     list.add(clickHit4)
 
-                    var i = 0
-                    for (armorStand in rankArmorStands) {
+                    for ((i, armorStand) in rankArmorStands.withIndex()) {
                         try {
                             list.add(armorStand)
 
@@ -241,7 +240,6 @@ class RankingHolograms(
                             }
                         } catch (e: Exception) {
                         }
-                        i++
                     }
 
                     try {
