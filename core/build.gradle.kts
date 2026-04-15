@@ -1,5 +1,6 @@
 plugins {
-    id("org.jetbrains.kotlin.jvm")
+    alias(libs.plugins.kotlin.jvm)
+    alias(libs.plugins.kotest)
 }
 
 group = "net.azisaba.sclat"
@@ -31,10 +32,13 @@ dependencies {
     compileOnly(libs.spigot)
     compileOnly(libs.paperApi)
     testImplementation("org.jetbrains.kotlin:kotlin-test")
+    testImplementation(libs.bundles.kotest)
+    testImplementation(libs.spigot)
+    testImplementation(libs.paperApi)
 }
 
 kotlin {
-    jvmToolchain(21)
+    jvmToolchain(11)
 }
 
 tasks {

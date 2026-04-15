@@ -3,6 +3,7 @@ plugins {
     `java-library`
     `maven-publish`
     alias(libs.plugins.ktlint)
+    alias(libs.plugins.kotest)
     alias(libs.plugins.shadow)
     alias(libs.plugins.kotlin.jvm)
     alias(libs.plugins.kotlin.serialization)
