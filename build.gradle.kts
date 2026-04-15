@@ -49,6 +49,7 @@ dependencies {
     implementation(libs.yamlkt)
     implementation(libs.fastboard)
     implementation(libs.bundles.ktoml)
+    implementation(project("core"))
 }
 
 // Project Settings

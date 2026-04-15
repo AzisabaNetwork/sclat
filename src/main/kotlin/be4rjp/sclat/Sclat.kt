@@ -54,6 +54,8 @@ import com.comphenix.protocol.ProtocolLibrary
 import com.comphenix.protocol.ProtocolManager
 import com.google.common.io.ByteStreams
 import fr.mrmicky.fastboard.FastBoard
+import net.azisaba.sclat.core.status.ServerStatus
+import net.azisaba.sclat.core.status.StatusLine
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.Location
@@ -447,23 +449,18 @@ class Sclat :
             "§9§lサーバー »",
             *ServerStatusManager.serverList
                 .filter { status -> !status.isMaintenance && status.isOnline }
-                .map { serverStatus ->
-                    " " + serverStatus.displayName + ": §r" +
-                        if (serverStatus.runningMatch) {
-                            val time = System.currentTimeMillis() / 1000 - serverStatus.matchStartTime
-                            val min = String.format("%02d", time % 60)
-                            serverStatus.playerCount.toString() + "§e人が試合中" +
-                                (if (time < 10000) " §r(" + time / 60 + ":" + min + ")" else "")
-                        } else {
-                            if (serverStatus.waitingEndTime != 0L) {
-                                (
-                                    serverStatus.playerCount.toString() + "§a人が待機中" + " §r(§b" +
-                                        ((serverStatus.waitingEndTime - (System.currentTimeMillis() / 1000)).toString() + "§r秒後に開始)")
-                                )
-                            } else {
-                                serverStatus.playerCount.toString() + "§a人が待機中"
-                            }
-                        }
+                .mapNotNull { serverStatus ->
+                    StatusLine.getLine(
+                        ServerStatus(
+                            serverStatus.isOnline,
+                            serverStatus.isMaintenance,
+                            serverStatus.displayName,
+                            serverStatus.matchStartTime,
+                            serverStatus.playerCount,
+                            serverStatus.waitingEndTime,
+                            serverStatus.runningMatch,
+                        ),
+                    )
                 }.toTypedArray(),
             "  ",
             "§a§lNews »",
