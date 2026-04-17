@@ -1,6 +1,7 @@
 plugins {
-    alias(libs.plugins.kotlin.jvm)
     alias(libs.plugins.kotest)
+    alias(libs.plugins.kotlin.jvm)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 group = "net.azisaba.sclat"
@@ -31,6 +32,7 @@ repositories {
 dependencies {
     compileOnly(libs.spigot)
     compileOnly(libs.paperApi)
+    implementation(libs.yamlkt)
     testImplementation("org.jetbrains.kotlin:kotlin-test")
     testImplementation(libs.bundles.kotest)
     testImplementation(libs.spigot)
