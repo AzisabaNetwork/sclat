@@ -1,10 +1,12 @@
-package be4rjp.sclat.schedular
+package net.azisaba.sclat.core.schedular
 
-import be4rjp.sclat.plugin
+import org.bukkit.plugin.java.JavaPlugin
 import org.bukkit.scheduler.BukkitRunnable
 import java.util.function.BiConsumer
 
-class TickSchedular {
+class TickSchedular(
+    private val plugin: JavaPlugin,
+) {
     private val timingMap: MutableMap<Int, BiConsumer<Int, Runnable>> = mutableMapOf()
     private val ticker =
         object : BukkitRunnable() {
