@@ -1,4 +1,4 @@
-package be4rjp.sclat.api
+package net.azisaba.sclat.core.gauge
 
 import org.bukkit.ChatColor
 

@@ -1,6 +1,5 @@
 package be4rjp.sclat.manager
 
-import be4rjp.sclat.api.GaugeAPI.toGauge
 import be4rjp.sclat.api.MessageType
 import be4rjp.sclat.api.SclatUtil.sendMessage
 import be4rjp.sclat.data.DataMgr.getPlayerData
@@ -19,6 +18,7 @@ import be4rjp.sclat.weapon.spweapon.SuperSensor.superSensorRunnable
 import be4rjp.sclat.weapon.spweapon.SuperShot.setSuperShot
 import be4rjp.sclat.weapon.spweapon.SuperTyakuti.superTyakutiRunnable
 import be4rjp.sclat.weapon.spweapon.SwordMord.setSwordMord
+import net.azisaba.sclat.core.gauge.GaugeAPI.toGauge
 import org.bukkit.Material
 import org.bukkit.Sound
 import org.bukkit.boss.BarColor
