@@ -116,13 +116,13 @@ class GameMgr : Listener {
         val uuid: String = player.uniqueId.toString()
         val settings = PlayerSettings(player)
         data.settings = settings
-        data.weaponClass = (
+        data.weaponClass =
             getWeaponClass(
                 Sclat.conf!!
                     .config!!
                     .getString("DefaultClass"),
             )
-        )
+
         setPlayerData(player, data)
 
         // ((LivingEntity)player).setCollidable(false);
