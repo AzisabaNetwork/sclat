@@ -1,3 +1,5 @@
+@file:Suppress("PLATFORM_CLASS_MAPPED_TO_KOTLIN")
+
 package be4rjp.sclat.api
 
 import be4rjp.sclat.Sclat
@@ -11,7 +13,6 @@ import kotlin.Boolean
 import kotlin.Suppress
 
 object GlowingAPI {
-    @Suppress("PLATFORM_CLASS_MAPPED_TO_KOTLIN")
     @JvmStatic
     fun setGlowing(
         entity: Entity,
