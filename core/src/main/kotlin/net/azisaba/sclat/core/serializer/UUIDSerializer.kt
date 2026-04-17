@@ -1,4 +1,4 @@
-package be4rjp.sclat.api.serializer
+package net.azisaba.sclat.core.serializer
 
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.descriptors.PrimitiveKind
