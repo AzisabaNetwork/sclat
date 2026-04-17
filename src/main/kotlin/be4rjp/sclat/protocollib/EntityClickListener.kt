@@ -13,23 +13,21 @@ class EntityClickListener(
 ) : PacketAdapter(plugin, *types) {
     override fun onPacketReceiving(event: PacketEvent) { // プレイヤーがエンティティをクリックしたときのパケットの監視
         val player = event.player
-        if (event.packetType === PacketType.Play.Client.USE_ENTITY) {
-            val packet = event.packet
+        if (event.packetType !== PacketType.Play.Client.USE_ENTITY) return
+        val packet = event.packet
 
-            val entityID = packet.integers.readSafely(0)
+        val entityID = packet.integers.readSafely(0)
 
-            try {
-                val rankingHolograms = Sclat.playerHolograms.get(player) ?: return
-                for (armorStand in rankingHolograms.armorStandList) {
-                    if (armorStand!!.bukkitEntity.entityId == entityID) {
-                        player.playSound(player.location, Sound.BLOCK_WOODEN_PRESSURE_PLATE_CLICK_ON, 1f, 1.2f)
-                        rankingHolograms.switchNextRankingType()
-                        rankingHolograms.refreshRankingAsync()
-                        break
-                    }
+        try {
+            val rankingHolograms = Sclat.playerHolograms.get(player) ?: return
+            rankingHolograms.armorStandList
+                .first { armorStand -> armorStand?.bukkitEntity?.entityId!! == entityID }
+                .let { armorStand ->
+                    player.playSound(player.location, Sound.BLOCK_WOODEN_PRESSURE_PLATE_CLICK_ON, 1f, 1.2f)
+                    rankingHolograms.switchNextRankingType()
+                    rankingHolograms.refreshRankingAsync()
                 }
-            } catch (e: Exception) {
-            }
+        } catch (e: Exception) {
         }
     }
 }
