@@ -13,7 +13,6 @@ import be4rjp.sclat.api.async.AsyncThreadManager.setup
 import be4rjp.sclat.api.async.AsyncThreadManager.shutdownAll
 import be4rjp.sclat.api.config.CustomConfig
 import be4rjp.sclat.api.holo.PlayerHolograms
-import be4rjp.sclat.api.utils.TextAnimation
 import be4rjp.sclat.command.SclatCommands
 import be4rjp.sclat.config.Config
 import be4rjp.sclat.config.NewConfig
@@ -56,6 +55,7 @@ import com.google.common.io.ByteStreams
 import fr.mrmicky.fastboard.FastBoard
 import net.azisaba.sclat.core.status.ServerStatus
 import net.azisaba.sclat.core.status.StatusLine
+import net.azisaba.sclat.core.utils.TextAnimation
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.Location

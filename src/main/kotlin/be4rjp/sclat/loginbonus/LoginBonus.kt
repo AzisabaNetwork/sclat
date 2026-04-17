@@ -1,8 +1,8 @@
 package be4rjp.sclat.loginbonus
 
-import be4rjp.sclat.api.utils.DailyRefreshSet
 import be4rjp.sclat.config.NewConfig
 import be4rjp.sclat.manager.PlayerStatusMgr
+import net.azisaba.sclat.core.utils.DailyRefreshSet
 import org.bukkit.entity.Player
 import java.util.UUID
 

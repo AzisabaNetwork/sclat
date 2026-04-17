@@ -1,16 +1,12 @@
-package be4rjp.sclat.api.utils
+package net.azisaba.sclat.core.utils
 
 class TextAnimation(
     text: String,
     private val length: Int,
 ) {
-    private val text: String
+    private val text: String = text.repeat(4)
 
     private var index = 0
-
-    init {
-        this.text = text + text + text + text
-    }
 
     fun next(): String {
         var line = text.substring(index, index + length)

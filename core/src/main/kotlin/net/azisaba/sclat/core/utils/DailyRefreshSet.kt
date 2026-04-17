@@ -1,11 +1,11 @@
 @file:UseSerializers(UUIDSerializer::class)
 
-package be4rjp.sclat.api.utils
+package net.azisaba.sclat.core.utils
 
-import be4rjp.sclat.extension.ZONE_TOKYO
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
 import net.azisaba.sclat.core.serializer.UUIDSerializer
+import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit
 import java.util.UUID
@@ -41,4 +41,8 @@ data class DailyRefreshSet(
     }
 
     operator fun contains(uuid: UUID) = uuids.contains(uuid)
+
+    companion object {
+        val ZONE_TOKYO: ZoneId = ZoneId.of("Asia/Tokyo")
+    }
 }

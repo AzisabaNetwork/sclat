@@ -1,4 +1,4 @@
-package be4rjp.sclat.api.utils
+package net.azisaba.sclat.core.utils
 
 import org.bukkit.scoreboard.Objective
 

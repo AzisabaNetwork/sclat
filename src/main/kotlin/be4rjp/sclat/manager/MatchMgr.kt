@@ -14,7 +14,6 @@ import be4rjp.sclat.api.ServerType
 import be4rjp.sclat.api.SoundType
 import be4rjp.sclat.api.player.PlayerSettings
 import be4rjp.sclat.api.team.Team
-import be4rjp.sclat.api.utils.ObjectiveUtil
 import be4rjp.sclat.data.BlockUpdater
 import be4rjp.sclat.data.DataMgr
 import be4rjp.sclat.data.DataMgr.armorStandMap
@@ -59,6 +58,7 @@ import be4rjp.sclat.weapon.Spinner.spinnerRunnable
 import be4rjp.sclat.weapon.Swapper.swapperRunnable
 import be4rjp.sclat.weapon.spweapon.SuperArmor.setArmor
 import com.xxmicloxx.NoteBlockAPI.songplayer.RadioSongPlayer
+import net.azisaba.sclat.core.utils.ObjectiveUtil
 import net.md_5.bungee.api.ChatMessageType
 import net.md_5.bungee.api.chat.TextComponent
 import org.bukkit.Bukkit
