@@ -77,26 +77,13 @@ object SclatUtil {
         WorldPackets.setPlayerFOV(player, fov)
     }
 
-    /*
-     * public static void setBlockByNMS(org.bukkit.block.Block b,
-     * org.bukkit.Material material, boolean applyPhysics) { Location loc =
-     * b.getLocation(); Block block = ((CraftBlockData)
-     * Bukkit.createBlockData(material)).getState().getBlock(); int x =
-     * loc.getBlockX(); int y = loc.getBlockY(); int z = loc.getBlockZ();
-     * net.minecraft.server.v1_14_R1.World nmsWorld = ((CraftWorld)
-     * loc.getWorld()).getHandle(); net.minecraft.server.v1_14_R1.Chunk nmsChunk =
-     * nmsWorld.getChunkAt(x >> 4, z >> 4); ChunkSection cs =
-     * nmsChunk.getSections()[y >> 4]; IBlockData ibd = block.getBlockData(); if (cs
-     * == nmsChunk.a()) { cs = new ChunkSection(y >> 4 << 4, false);
-     * nmsChunk.getSections()[y >> 4] = cs; }
-     *
-     * cs.getBlocks().setBlock(x & 15, y & 15, z & 15, ibd); }
-     */
     @JvmStatic
     fun restartServer() {
-        val commands: MutableList<String?> = ArrayList()
-        commands.add("restart " + Sclat.conf?.servers!!.getString("ServerName"))
-        commands.add("stop")
+        val commands: MutableList<String> =
+            mutableListOf(
+                "restart " + Sclat.conf?.servers!!.getString("ServerName"),
+                "stop",
+            )
         val sc =
             StatusClient(
                 Sclat.conf?.config!!.getString("StatusShare.Host"),
@@ -120,15 +107,13 @@ object SclatUtil {
 
     @JvmStatic
     fun sendRestartedServerInfo() {
-        val commands: MutableList<String?> = ArrayList()
-        commands.add("restarted " + Sclat.conf?.servers!!.getString("ServerName"))
-        commands.add(
-            (
+        val commands: MutableList<String> =
+            mutableListOf(
+                "restarted " + Sclat.conf?.servers!!.getString("ServerName"),
                 "map " + Sclat.conf?.servers!!.getString("ServerName") + " " +
-                    DataMgr.getMapRandom(if (MatchMgr.mapcount == 0) 0 else MatchMgr.mapcount - 1).mapName!!
-            ),
-        )
-        commands.add("stop")
+                    DataMgr.getMapRandom(if (MatchMgr.mapcount == 0) 0 else MatchMgr.mapcount - 1).mapName!!,
+                "stop",
+            )
         val sc =
             StatusClient(
                 Sclat.conf?.config!!.getString("StatusShare.Host"),
@@ -301,42 +286,6 @@ object SclatUtil {
         }
     }
 
-    /*
-     * public static void createInkExplosion(Location center, double radius, int
-     * effectAccuracy, double damageRate, SclatDamageType type, Player player){
-     * //爆発音 player.getWorld().playSound(center, Sound.ENTITY_FIREWORK_ROCKET_BLAST,
-     * 1, 1);
-     *
-     * //爆発エフェクト Sclat.createInkExplosionEffect(center, radius, effectAccuracy,
-     * player);
-     *
-     * //塗る for(int i = 0; i <= radius; i++){ List<Location> p_locs =
-     * Sphere.getSphere(center, i, 14); for(Location loc : p_locs){
-     * PaintMgr.Paint(loc, player, false); } }
-     *
-     * //攻撃判定の処理 for (Player target :
-     * Main.getPlugin().getServer().getOnlinePlayers()) {
-     * if(!DataMgr.getPlayerData(target)?.isInMatch!! || target.getWorld() !=
-     * player.getWorld()) continue; if (target.getLocation().distance(center) <=
-     * radius) { double gear = SclatDamageType.SUB_WEAPON == type ?
-     * Gear.getGearInfluence(player, Gear.Type.SUB_SPEC_UP) : 1.0; double damage =
-     * (radius - target.getLocation().distance(center)) * damageRate * gear;
-     * if(DataMgr.getPlayerData(player)?.team!! !=
-     * DataMgr.getPlayerData(target)?.team!! &&
-     * target.getGameMode().equals(GameMode.ADVENTURE)){ Sclat.giveDamage(player,
-     * target, damage, type.getName());
-     *
-     * //AntiNoDamageTime BukkitRunnable task = new BukkitRunnable(){ Player p =
-     * target;
-     *
-     * @Override public void run(){ target.setNoDamageTicks(0); } };
-     * task.runTaskLater(Main.getPlugin(), 1); } } }
-     *
-     * for(Entity as : player.getWorld().getEntities()){ if
-     * (as.getLocation().distance(center) <= radius){ if(as instanceof ArmorStand){
-     * double damage = (radius - as.getLocation().distance(center)) * damageRate;
-     * ArmorStandMgr.giveDamageArmorStand((ArmorStand)as, damage, player); } } } }
-     */
     @JvmStatic
     fun giveDamage(
         player: Player?,

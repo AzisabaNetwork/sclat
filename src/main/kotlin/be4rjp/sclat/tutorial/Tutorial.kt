@@ -319,9 +319,11 @@ object Tutorial {
     fun sendPlayerRunnable(player: Player) {
         clearPlayerCount++
 
-        val commands: MutableList<String?> = ArrayList()
-        commands.add("tutorial " + player.uniqueId.toString())
-        commands.add("stop")
+        val commands: MutableList<String> =
+            mutableListOf(
+                "tutorial " + player.uniqueId.toString(),
+                "stop",
+            )
         val sc =
             StatusClient(
                 Sclat.conf?.config!!.getString("StatusShare.Host"),

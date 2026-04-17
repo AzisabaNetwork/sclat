@@ -24,7 +24,7 @@ enum class Plugins(
             if (_isLoaded == null) {
                 _isLoaded = Bukkit.getPluginManager().isPluginEnabled(pluginName)
             }
-            return _isLoaded!!
+            return _isLoaded ?: false
         }
 
     /**
@@ -42,7 +42,7 @@ enum class Plugins(
          */
         @JvmStatic
         fun onInit(): Boolean {
-            val missingPlugins = ArrayList<String?>()
+            val missingPlugins = ArrayList<String>()
             for (plugin in entries) {
                 plugin.resetLoadedState()
                 if (!plugin.isLoaded && plugin.isRequired) {

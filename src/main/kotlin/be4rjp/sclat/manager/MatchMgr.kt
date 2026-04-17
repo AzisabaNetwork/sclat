@@ -186,14 +186,14 @@ object MatchMgr {
                                         match.isStarted = (false)
                                         // Send match status
                                         if (Sclat.type == ServerType.MATCH) {
-                                            val commands: MutableList<String?> = ArrayList()
-                                            commands.add(
-                                                "cdc " +
-                                                    Sclat.conf!!
-                                                        .servers!!
-                                                        .getString("ServerName"),
-                                            )
-                                            commands.add("stop")
+                                            val commands: MutableList<String> =
+                                                mutableListOf(
+                                                    "cdc " +
+                                                        Sclat.conf!!
+                                                            .servers!!
+                                                            .getString("ServerName"),
+                                                    "stop",
+                                                )
                                             val sc =
                                                 StatusClient(
                                                     Sclat.conf!!
@@ -211,17 +211,15 @@ object MatchMgr {
                                     if (s == 0) {
                                         // Send match status
                                         if (Sclat.type == ServerType.MATCH) {
-                                            val commands: MutableList<String?> = ArrayList()
-                                            commands.add(
-                                                (
+                                            val commands: MutableList<String> =
+                                                mutableListOf(
                                                     "cd " +
                                                         Sclat.conf!!
                                                             .servers!!
                                                             .getString("ServerName") + " " +
-                                                        (System.currentTimeMillis() / 1000 + 30)
-                                                ),
-                                            )
-                                            commands.add("stop")
+                                                        (System.currentTimeMillis() / 1000 + 30),
+                                                    "stop",
+                                                )
                                             val sc =
                                                 StatusClient(
                                                     Sclat.conf!!
@@ -350,17 +348,15 @@ object MatchMgr {
 
                                         // Send match status
                                         if (Sclat.type == ServerType.MATCH) {
-                                            val commands: MutableList<String?> = ArrayList()
-                                            commands.add(
-                                                (
+                                            val commands: MutableList<String> =
+                                                mutableListOf(
                                                     "started " +
                                                         Sclat.conf!!
                                                             .servers!!
                                                             .getString("ServerName") + " " +
-                                                        System.currentTimeMillis() / 1000
-                                                ),
-                                            )
-                                            commands.add("stop")
+                                                        System.currentTimeMillis() / 1000,
+                                                    "stop",
+                                                )
                                             val sc =
                                                 StatusClient(
                                                     Sclat.conf!!
@@ -1761,9 +1757,11 @@ object MatchMgr {
 
                         if (i == 80) {
                             getPlayerData(p)
-                            val commands: MutableList<String?> = ArrayList()
-                            commands.add("return " + p.uniqueId)
-                            commands.add("stop")
+                            val commands: MutableList<String> =
+                                mutableListOf(
+                                    "return ${p.uniqueId}",
+                                    "stop",
+                                )
                             val sc =
                                 StatusClient(
                                     Sclat.conf!!
@@ -1915,14 +1913,16 @@ object MatchMgr {
                             PlayerStatusMgr.addKill(p, data.killCount)
 
                             if (Sclat.type == ServerType.MATCH) {
-                                val commands: MutableList<String?> = ArrayList()
-                                commands.add("add money " + pMoney + " " + p.uniqueId)
-                                commands.add("add level " + pLv + " " + p.uniqueId)
-                                commands.add("add ticket " + pTicket + " " + p.uniqueId)
-                                commands.add("add rank " + pRank + " " + p.uniqueId)
-                                commands.add("add kill " + data.killCount + " " + p.uniqueId)
-                                commands.add("add paint " + data.paintCount + " " + p.uniqueId)
-                                commands.add("stop")
+                                val commands: MutableList<String> =
+                                    mutableListOf(
+                                        "add money " + pMoney + " " + p.uniqueId,
+                                        "add level " + pLv + " " + p.uniqueId,
+                                        "add ticket " + pTicket + " " + p.uniqueId,
+                                        "add rank " + pRank + " " + p.uniqueId,
+                                        "add kill " + data.killCount + " " + p.uniqueId,
+                                        "add paint " + data.paintCount + " " + p.uniqueId,
+                                        "stop",
+                                    )
                                 val sc =
                                     StatusClient(
                                         Sclat.conf!!
@@ -2044,23 +2044,21 @@ object MatchMgr {
 
                                 // Send match status
                                 if (Sclat.type == ServerType.MATCH) {
-                                    val commands: MutableList<String?> = ArrayList()
-                                    commands.add(
-                                        "stopped " +
-                                            Sclat.conf!!
-                                                .servers!!
-                                                .getString("ServerName"),
-                                    )
-                                    commands.add(
-                                        "map " +
-                                            Sclat.conf!!
-                                                .servers!!
-                                                .getString("ServerName") + " " +
-                                            getMapRandom(
-                                                if (mapcount == 0) 0 else mapcount - 1,
-                                            ).mapName,
-                                    )
-                                    commands.add("stop")
+                                    val commands: MutableList<String> =
+                                        mutableListOf(
+                                            "stopped " +
+                                                Sclat.conf!!
+                                                    .servers!!
+                                                    .getString("ServerName"),
+                                            "map " +
+                                                Sclat.conf!!
+                                                    .servers!!
+                                                    .getString("ServerName") + " " +
+                                                getMapRandom(
+                                                    if (mapcount == 0) 0 else mapcount - 1,
+                                                ).mapName,
+                                            "stop",
+                                        )
                                     val sc =
                                         StatusClient(
                                             Sclat.conf!!

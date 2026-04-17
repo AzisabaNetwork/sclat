@@ -11,75 +11,68 @@ import java.net.Socket
 class StatusClient(
     private val host: String?,
     private val port: Int,
-    commands: MutableList<String?>,
+    private val commands: MutableList<String>,
 ) {
-    private var commands: MutableList<String?> = ArrayList()
+    private val task: BukkitRunnable =
+        object : BukkitRunnable() {
+            override fun run() {
+                var reader: BufferedReader? = null
 
-    private val task: BukkitRunnable
+                try {
+                    Socket(
+                        host,
+                        port,
+                    ).use { cSocket ->
+                        PrintWriter(cSocket.getOutputStream(), true).use { writer ->
+                            try {
+                                // System.out.println("test");
+                                // IPアドレスとポート番号を指定してクライアント側のソケットを作成
 
-    init {
-        this.commands = commands
-        this.task =
-            object : BukkitRunnable() {
-                override fun run() {
-                    var reader: BufferedReader? = null
+                                // クライアント側からサーバへの送信用
 
-                    try {
-                        Socket(
-                            host,
-                            port,
-                        ).use { cSocket ->
-                            PrintWriter(cSocket.getOutputStream(), true).use { writer ->
-                                try {
-                                    // System.out.println("test");
-                                    // IPアドレスとポート番号を指定してクライアント側のソケットを作成
+                                // サーバ側からの受取用
 
-                                    // クライアント側からサーバへの送信用
+                                reader = BufferedReader(InputStreamReader(cSocket.getInputStream()))
 
-                                    // サーバ側からの受取用
+                                // 命令送信ループ
+                                var cmd: String? = null
+                                while (true) {
+                                    if (!commands.isEmpty()) {
+                                        cmd = commands[0]
 
-                                    reader = BufferedReader(InputStreamReader(cSocket.getInputStream()))
+                                        // 送信用の文字を送信
+                                        writer.println(cmd)
 
-                                    // 命令送信ループ
-                                    var cmd: String? = null
-                                    while (true) {
-                                        if (!commands.isEmpty()) {
-                                            cmd = commands[0]
-
-                                            // 送信用の文字を送信
-                                            writer.println(cmd)
-
-                                            // stopの入力でループを抜ける
-                                            if (cmd == "stop") {
-                                                break
-                                            }
-
-                                            // サーバ側からの受取の結果を表示
-                                            // System.out.println("result：" + reader.readLine());
-                                            commands.removeAt(0)
-                                        } else {
+                                        // stopの入力でループを抜ける
+                                        if (cmd == "stop") {
                                             break
                                         }
+
+                                        // サーバ側からの受取の結果を表示
+                                        // System.out.println("result：" + reader.readLine());
+                                        commands.removeAt(0)
+                                    } else {
+                                        break
                                     }
-                                } catch (e: Exception) {
-                                    e.printStackTrace()
                                 }
+                            } catch (e: Exception) {
+                                e.printStackTrace()
                             }
                         }
-                    } catch (e: IOException) {
-                        e.printStackTrace()
-                    } finally {
-                        println("Client is stopped!")
                     }
+                } catch (e: IOException) {
+                    e.printStackTrace()
+                } finally {
+                    println("Client is stopped!")
                 }
             }
-    }
+        }
 
     fun startClient() {
         this.task.runTaskAsynchronously(plugin)
     }
 
-    fun addCommand(command: String?) {
+    fun addCommand(command: String) {
         commands.add(command)
     }
 }
