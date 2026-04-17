@@ -10,9 +10,8 @@ import org.bukkit.util.Vector
 
 class VehiclePacketListener(
     plugin: Plugin,
-    listenerPriority: ListenerPriority,
     vararg types: PacketType,
-) : PacketAdapter(plugin, listenerPriority, *types) {
+) : PacketAdapter(plugin, *types) {
     override fun onPacketReceiving(event: PacketEvent) { // プレイヤーがエンティティに乗っているときのパケットを監視
         val player = event.player
         if (event.packetType === PacketType.Play.Client.STEER_VEHICLE && player.vehicle != null) {
