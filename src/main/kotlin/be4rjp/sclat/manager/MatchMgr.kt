@@ -121,7 +121,7 @@ object MatchMgr {
                     match.addJoinedPlayerCount()
 
                     data!!.match = match
-                    data.isJoined = (true)
+                    data.isJoined = true
 
                     DataMgr.joinedList.add(player)
 
@@ -165,8 +165,8 @@ object MatchMgr {
                     }
 
                     if (match.joinedPlayerCount == startPlayerCount && !match.isStarted && !match.isStartedCount) {
-                        match.isStarted = (true)
-                        match.isStartedCount = (true)
+                        match.isStarted = true
+                        match.isStartedCount = true
                         val task: BukkitRunnable =
                             object : BukkitRunnable() {
                                 var s: Int = 0
@@ -182,8 +182,8 @@ object MatchMgr {
                                             "§aあと§c" + (startPlayerCount - match.joinedPlayerCount) + "§a人必要です",
                                             MessageType.ALL_PLAYER,
                                         )
-                                        match.isStartedCount = (false)
-                                        match.isStarted = (false)
+                                        match.isStartedCount = false
+                                        match.isStarted = false
                                         // Send match status
                                         if (Sclat.type == ServerType.MATCH) {
                                             val commands: MutableList<String> =
@@ -590,7 +590,7 @@ object MatchMgr {
                         if (s == 0) {
                             p.setDisplayName(getPlayerData(p)!!.team!!.teamColor!!.colorCode + p.name)
 
-                            getPlayerData(p)!!.canFly = (true)
+                            getPlayerData(p)!!.canFly = true
 
                             if (getPlayerData(p)!!.playerNumber == 1) {
                                 PaintMgr.paintGlass(match)
@@ -946,7 +946,7 @@ object MatchMgr {
                         }
 
                         if (s == 281) {
-                            getPlayerData(p)!!.canFly = (false)
+                            getPlayerData(p)!!.canFly = false
 
                             // playerclass
                             if (getPlayerData(p)!!.weaponClass!!.subWeaponName == "ビーコン") {
@@ -965,7 +965,7 @@ object MatchMgr {
                                 swapperRunnable(p)
                                 if (getPlayerData(p)!!.weaponClass!!.mainWeapon!!.slidingShootTick > 1) {
                                     maneuverShootRunnable(p)
-                                    getPlayerData(p)!!.isUsingManeuver = (true)
+                                    getPlayerData(p)!!.isUsingManeuver = true
                                 }
                             }
                             if (getPlayerData(p)!!.weaponClass!!.mainWeapon!!.weaponType == "Shooter") {
@@ -1026,7 +1026,7 @@ object MatchMgr {
 
                             if (getPlayerData(p)!!.weaponClass!!.mainWeapon!!.weaponType == "Camping") {
                                 kasaRunnable(p, true)
-                                getPlayerData(p)!!.mainItemGlow = (true)
+                                getPlayerData(p)!!.mainItemGlow = true
                                 WeaponClassMgr.setWeaponClass(p)
                             }
                             if (getPlayerData(p)!!.weaponClass!!.mainWeapon!!.weaponType == "Hound") {
@@ -1051,7 +1051,7 @@ object MatchMgr {
                             // Shooter.ShooterRunnable(p);
 
                             // SquidMgr.SquidRunnable(p);
-                            getPlayerData(p)!!.isInMatch = (true)
+                            getPlayerData(p)!!.isInMatch = true
                             p.exp = 0.99f
                             if (getPlayerData(p)!!.playerNumber == 1) {
                                 inMatchCounter(p)
@@ -1539,7 +1539,7 @@ object MatchMgr {
                             beaconMap.clear()
                             sprinklerMap.clear()
                             armorStandMap.clear()
-                            getPlayerData(p)!!.isInMatch = (false)
+                            getPlayerData(p)!!.isInMatch = false
                             if (p.hasPotionEffect(PotionEffectType.SLOW)) p.removePotionEffect(PotionEffectType.SLOW)
                             p.playSound(p.location, Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 3f, 1.3f)
                             loc = p.location
@@ -1557,7 +1557,7 @@ object MatchMgr {
                             p.scoreboard = scoreboard
                         }
                         if (i == 2) {
-                            getPlayerData(p)!!.canFly = (true)
+                            getPlayerData(p)!!.canFly = true
                             p.resetTitle()
                             p.sendTitle(
                                 ChatColor.YELLOW.toString() + "=========================== Finish! ===========================",
@@ -1780,7 +1780,7 @@ object MatchMgr {
 
                             // int kill = data.killCount;
                             // int paint = data.paintCount;
-                            data!!.canFly = (false)
+                            data!!.canFly = false
 
                             sendMessage("§a----------<< Match result >>----------", MessageType.PLAYER, p)
                             sendMessage("", MessageType.PLAYER, p)
