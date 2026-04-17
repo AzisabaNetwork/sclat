@@ -8,7 +8,6 @@ plugins {
 }
 
 group = "be4rjp"
-version = System.getenv("VERSION") ?: "1.0-SNAPSHOT"
 description = "Sclat"
 
 allprojects {
@@ -17,6 +16,8 @@ allprojects {
         plugin("org.jetbrains.kotlin.jvm")
         plugin("org.jetbrains.kotlin.plugin.serialization")
     }
+
+    version = System.getenv("VERSION") ?: "1.0-SNAPSHOT"
 
     repositories {
         mavenCentral()
