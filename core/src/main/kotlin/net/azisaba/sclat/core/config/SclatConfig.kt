@@ -5,8 +5,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class HostAndPortConfig(
-    @SerialName("HOST") val host: String,
-    @SerialName("PORT") val port: Int,
+    @SerialName("Host") val host: String,
+    @SerialName("Port") val port: Int,
 )
 
 @Serializable
@@ -31,7 +31,7 @@ data class TrainConfig(
 @Serializable
 data class SclatConfig(
     val deferredMapLoading: Boolean = true,
-    @SerialName("Tutorial") val tutorial: Boolean = false,
+    @SerialName("Tutorial") val tutorial: LocationConfig? = null,
     @SerialName("Colors") val colors: List<String> = listOf(),
     @SerialName("ParticlesRenderDistance") val particlesRenderDistance: Double = 0.0,
     @SerialName("WorkMode") val workMode: String,
@@ -41,9 +41,9 @@ data class SclatConfig(
     @SerialName("ResourcePackURL") val resourcePackUrl: String,
     @SerialName("DefaultClass") val defaultClass: String,
     @SerialName("EquipShare") val equipShare: Map<String, HostAndPortConfig> = mapOf(),
-    @SerialName("StatusShare") val statusShare: HostAndPortConfig,
-    @SerialName("RateMatch") val rateMatch: Boolean,
-    @SerialName("RestartMatchCount") val restartMatchCount: Int,
+    @SerialName("StatusShare") val statusShare: HostAndPortConfig? = null,
+    @SerialName("RateMatch") val rateMatch: Boolean? = null,
+    @SerialName("RestartMatchCount") val restartMatchCount: Int? = null,
     @SerialName("MaxPlayerCount") val maxPlayerCount: Int,
     @SerialName("CanVoting") val canVoting: Boolean,
     @SerialName("StartPlayerCount") val startPlayerCount: Int,
@@ -52,7 +52,7 @@ data class SclatConfig(
     @SerialName("LobbyJump") val lobbyJump: LocationConfig? = null,
     @SerialName("TutorialClear") val tutorialClear: LocationConfig? = null,
     @SerialName("InkResetPeriod") val inkResetPeriod: Int = 20,
-    @SerialName("Train") val train: TrainConfig,
+    @SerialName("Train") val train: TrainConfig? = null,
     @SerialName("WeaponRemove") val weaponRemove: LocationConfig? = null,
     // Hologram configs
     @SerialName("Hologram") val hologram: LocationConfig,
