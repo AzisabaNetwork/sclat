@@ -52,6 +52,7 @@ allprojects {
         testImplementation("io.kotest:kotest-property:6.1.11")
         testImplementation("org.spigotmc:spigot:1.14.4-R0.1-SNAPSHOT")
         testImplementation("com.destroystokyo.paper:paper-api:1.14.4-R0.1-SNAPSHOT")
+        testImplementation("ch.qos.logback:logback-classic:1.4.11")
     }
 
     val targetJavaVersion: Int = 11
