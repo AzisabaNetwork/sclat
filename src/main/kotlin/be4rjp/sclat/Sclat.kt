@@ -4,8 +4,6 @@ package be4rjp.sclat
 
 import be4rjp.blockstudio.BlockStudio
 import be4rjp.dadadachecker.DADADACheckerAPI
-import be4rjp.sclat.api.Plugins
-import be4rjp.sclat.api.Plugins.Companion.onInit
 import be4rjp.sclat.api.SclatUtil.sendRestartedServerInfo
 import be4rjp.sclat.api.ServerType
 import be4rjp.sclat.api.async.AsyncPlayerListener
@@ -53,6 +51,8 @@ import com.comphenix.protocol.ProtocolLibrary
 import com.comphenix.protocol.ProtocolManager
 import com.google.common.io.ByteStreams
 import fr.mrmicky.fastboard.FastBoard
+import net.azisaba.sclat.core.Plugins
+import net.azisaba.sclat.core.Plugins.Companion.onInit
 import net.azisaba.sclat.core.status.ServerStatus
 import net.azisaba.sclat.core.status.StatusLine
 import net.azisaba.sclat.core.utils.TextAnimation
@@ -90,7 +90,7 @@ class Sclat :
         setup(1)
 
         // ----------------------------APICheck-------------------------------
-        if (!onInit()) return
+        if (!onInit(server.pluginManager)) return
         sclatLogger.info("API check was completed.")
 
         protocolManager = ProtocolLibrary.getProtocolManager()

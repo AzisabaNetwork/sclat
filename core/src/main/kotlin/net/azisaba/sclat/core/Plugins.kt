@@ -1,7 +1,6 @@
-package be4rjp.sclat.api
+package net.azisaba.sclat.core
 
-import be4rjp.sclat.sclatLogger
-import org.bukkit.Bukkit
+import org.bukkit.plugin.PluginManager
 import java.util.function.Consumer
 
 enum class Plugins(
@@ -17,34 +16,22 @@ enum class Plugins(
     PROTOCOLLIB("ProtocolLib"),
     ;
 
-    private var _isLoaded: Boolean? = null
-
-    val isLoaded: Boolean
-        get() {
-            if (_isLoaded == null) {
-                _isLoaded = Bukkit.getPluginManager().isPluginEnabled(pluginName)
-            }
-            return _isLoaded ?: false
-        }
-
-    /**
-     * To support plugman load.
-     */
-    private fun resetLoadedState() {
-        _isLoaded = null
-    }
+    var isLoaded: Boolean = false
+        private set
 
     companion object {
+        private val logger by DelegatedLogger()
+
         /**
          * Initialize check
          *
          * @return is init-check succeeded
          */
         @JvmStatic
-        fun onInit(): Boolean {
+        fun onInit(pluginManager: PluginManager): Boolean {
             val missingPlugins = ArrayList<String>()
             for (plugin in entries) {
-                plugin.resetLoadedState()
+                plugin.isLoaded = pluginManager.isPluginEnabled(plugin.pluginName)
                 if (!plugin.isLoaded && plugin.isRequired) {
                     missingPlugins.add(plugin.pluginName)
                 }
@@ -52,10 +39,10 @@ enum class Plugins(
 
             // If some required plugins are missing
             if (!missingPlugins.isEmpty()) {
-                sclatLogger.error("Some plugins are missing. Please install or enable.")
-                sclatLogger.error("*** Missing required plugins ***")
-                missingPlugins.forEach(Consumer { p: String? -> sclatLogger.error("- {}", p) })
-                sclatLogger.error("********************************")
+                logger.error("Some plugins are missing. Please install or enable.")
+                logger.error("*** Missing required plugins ***")
+                missingPlugins.forEach(Consumer { p: String? -> logger.error("- {}", p) })
+                logger.error("********************************")
                 return false
             }
 
