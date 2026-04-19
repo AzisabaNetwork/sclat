@@ -4,7 +4,6 @@ import be4rjp.sclat.Sclat
 import be4rjp.sclat.api.SclatUtil
 import be4rjp.sclat.api.SclatUtil.createInkExplosionEffect
 import be4rjp.sclat.api.SclatUtil.giveDamage
-import be4rjp.sclat.api.Sphere.getSphere
 import be4rjp.sclat.api.raytrace.BoundingBox
 import be4rjp.sclat.api.raytrace.RayTrace
 import be4rjp.sclat.data.DataMgr.getKasaDataFromArmorStand
@@ -16,6 +15,7 @@ import be4rjp.sclat.manager.SPWeaponMgr
 import be4rjp.sclat.manager.WeaponClassMgr
 import be4rjp.sclat.plugin
 import be4rjp.sclat.weapon.Gear
+import net.azisaba.sclat.core.shape.Sphere.getSphere
 import org.bukkit.GameMode
 import org.bukkit.Material
 import org.bukkit.Particle

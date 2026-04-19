@@ -1,10 +1,10 @@
 package be4rjp.sclat.weapon.spweapon
 
 import be4rjp.sclat.Sclat
-import be4rjp.sclat.api.Sphere.getSphere
 import be4rjp.sclat.data.DataMgr.getPlayerData
 import be4rjp.sclat.manager.SPWeaponMgr
 import be4rjp.sclat.plugin
+import net.azisaba.sclat.core.shape.Sphere.getSphere
 import net.minecraft.server.v1_14_R1.EntityArmorStand
 import org.bukkit.GameMode
 import org.bukkit.Particle

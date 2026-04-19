@@ -2,13 +2,13 @@ package be4rjp.sclat.manager
 
 import be4rjp.sclat.Sclat
 import be4rjp.sclat.api.SclatUtil.createInkExplosionEffect
-import be4rjp.sclat.api.Sphere.getSphere
 import be4rjp.sclat.data.DataMgr.getPlayerData
 import be4rjp.sclat.plugin
 import be4rjp.sclat.sclatLogger
 import be4rjp.sclat.weapon.Gear
 import be4rjp.sclat.weapon.Gear.getGearInfluence
 import be4rjp.sclat.weapon.spweapon.SuperArmor.setArmor
+import net.azisaba.sclat.core.shape.Sphere.getSphere
 import net.md_5.bungee.api.ChatColor
 import net.md_5.bungee.api.ChatMessageType
 import net.md_5.bungee.api.chat.TextComponent

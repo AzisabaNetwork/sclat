@@ -5,7 +5,6 @@ import be4rjp.sclat.Sclat
 import be4rjp.sclat.Sclat.Companion.notDuplicateNumber
 import be4rjp.sclat.api.SclatUtil.createInkExplosionEffect
 import be4rjp.sclat.api.SclatUtil.giveDamage
-import be4rjp.sclat.api.Sphere.getSphere
 import be4rjp.sclat.data.DataMgr.getPlayerData
 import be4rjp.sclat.data.DataMgr.getSnowballIsHit
 import be4rjp.sclat.data.DataMgr.setSnowballIsHit
@@ -16,6 +15,7 @@ import be4rjp.sclat.manager.SuperJumpMgr
 import be4rjp.sclat.manager.WeaponClassMgr
 import be4rjp.sclat.plugin
 import be4rjp.sclat.sclatLogger
+import net.azisaba.sclat.core.shape.Sphere.getSphere
 import net.minecraft.server.v1_14_R1.EntityArmorStand
 import net.minecraft.server.v1_14_R1.PacketPlayOutEntityDestroy
 import net.minecraft.server.v1_14_R1.PacketPlayOutSpawnEntityLiving

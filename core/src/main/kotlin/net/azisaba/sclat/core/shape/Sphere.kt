@@ -1,4 +1,4 @@
-package be4rjp.sclat.api
+package net.azisaba.sclat.core.shape
 
 import org.bukkit.Location
 import kotlin.math.cos
@@ -46,7 +46,7 @@ object Sphere {
     fun getXZCircle(
         baseLoc: Location,
         r: Double,
-        r_accuracy: Double,
+        rAccuracy: Double,
         accuracy: Int,
     ): MutableList<Location> {
         val tempList: MutableList<Location> = mutableListOf()
@@ -60,7 +60,7 @@ object Sphere {
                 tempList.add(loc)
                 t += accuracy / tr
             }
-            tr = (tr + r_accuracy).toInt()
+            tr = (tr + rAccuracy).toInt()
         }
         return tempList
     }

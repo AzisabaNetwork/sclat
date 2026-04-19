@@ -6,7 +6,6 @@ import be4rjp.sclat.api.GlowingAPI
 import be4rjp.sclat.api.SclatUtil.createInkExplosionEffect
 import be4rjp.sclat.api.SclatUtil.giveDamage
 import be4rjp.sclat.api.SclatUtil.repelBarrier
-import be4rjp.sclat.api.Sphere.getSphere
 import be4rjp.sclat.api.player.PlayerData
 import be4rjp.sclat.data.DataMgr.getKasaDataFromArmorStand
 import be4rjp.sclat.data.DataMgr.getPlayerData
@@ -14,6 +13,7 @@ import be4rjp.sclat.data.DataMgr.getSplashShieldDataFromArmorStand
 import be4rjp.sclat.manager.ArmorStandMgr
 import be4rjp.sclat.manager.PaintMgr
 import be4rjp.sclat.plugin
+import net.azisaba.sclat.core.shape.Sphere.getSphere
 import org.bukkit.ChatColor
 import org.bukkit.GameMode
 import org.bukkit.Location

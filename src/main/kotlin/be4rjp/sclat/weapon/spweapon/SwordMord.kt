@@ -3,7 +3,6 @@ package be4rjp.sclat.weapon.spweapon
 import be4rjp.sclat.Sclat
 import be4rjp.sclat.Sclat.Companion.notDuplicateNumber
 import be4rjp.sclat.api.SclatUtil.giveDamage
-import be4rjp.sclat.api.Sphere.getSphere
 import be4rjp.sclat.api.raytrace.BoundingBox
 import be4rjp.sclat.api.raytrace.RayTrace
 import be4rjp.sclat.data.DataMgr
@@ -19,6 +18,7 @@ import be4rjp.sclat.manager.PaintMgr
 import be4rjp.sclat.manager.SPWeaponMgr
 import be4rjp.sclat.manager.WeaponClassMgr
 import be4rjp.sclat.plugin
+import net.azisaba.sclat.core.shape.Sphere.getSphere
 import org.bukkit.GameMode
 import org.bukkit.Location
 import org.bukkit.Material

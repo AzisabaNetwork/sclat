@@ -2,7 +2,6 @@ package be4rjp.sclat.manager
 
 import be4rjp.sclat.Sclat
 import be4rjp.sclat.api.SclatUtil.createInkExplosionEffect
-import be4rjp.sclat.api.Sphere.getSphere
 import be4rjp.sclat.data.DataMgr.getArmorStandPlayer
 import be4rjp.sclat.data.DataMgr.getKasaDataFromArmorStand
 import be4rjp.sclat.data.DataMgr.getPlayerData
@@ -11,6 +10,7 @@ import be4rjp.sclat.data.DataMgr.setArmorStandPlayer
 import be4rjp.sclat.data.DataMgr.setBeaconFromPlayer
 import be4rjp.sclat.data.DataMgr.setSprinklerFromPlayer
 import be4rjp.sclat.plugin
+import net.azisaba.sclat.core.shape.Sphere.getSphere
 import net.minecraft.server.v1_14_R1.EnumItemSlot
 import net.minecraft.server.v1_14_R1.PacketPlayOutEntityDestroy
 import net.minecraft.server.v1_14_R1.PacketPlayOutEntityEquipment
