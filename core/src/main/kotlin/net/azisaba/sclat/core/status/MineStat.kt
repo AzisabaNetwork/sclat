@@ -1,4 +1,4 @@
-package be4rjp.sclat.api
+package net.azisaba.sclat.core.status
 
 import java.io.BufferedReader
 import java.io.DataOutputStream

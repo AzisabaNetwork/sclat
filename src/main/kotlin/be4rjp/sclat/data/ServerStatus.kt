@@ -1,7 +1,7 @@
 package be4rjp.sclat.data
 
-import be4rjp.sclat.api.MineStat
 import be4rjp.sclat.plugin
+import net.azisaba.sclat.core.status.MineStat
 import org.bukkit.block.Block
 import org.bukkit.block.Sign
 import org.bukkit.scheduler.BukkitRunnable
