@@ -1,4 +1,4 @@
-package be4rjp.sclat.config
+package net.azisaba.sclat.core.config
 
 import org.bukkit.Bukkit
 import org.bukkit.configuration.file.FileConfiguration
