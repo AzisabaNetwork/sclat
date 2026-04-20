@@ -12,10 +12,10 @@ import be4rjp.sclat.data.DataMgr.getSnowballHitCount
 import be4rjp.sclat.data.DataMgr.getSplashShieldDataFromArmorStand
 import be4rjp.sclat.data.DataMgr.mainSnowballNameMap
 import be4rjp.sclat.data.DataMgr.setSnowballHitCount
-import be4rjp.sclat.extension.armorstands
 import be4rjp.sclat.manager.ArmorStandMgr
 import be4rjp.sclat.manager.PaintMgr
 import be4rjp.sclat.plugin
+import net.azisaba.sclat.core.extension.armorstands
 import net.azisaba.sclat.core.shape.Sphere.getSphere
 import org.bukkit.ChatColor
 import org.bukkit.GameMode

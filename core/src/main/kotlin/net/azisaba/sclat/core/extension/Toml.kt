@@ -1,4 +1,4 @@
-package be4rjp.sclat.extension
+package net.azisaba.sclat.core.extension
 
 import com.akuleshov7.ktoml.Toml
 import com.akuleshov7.ktoml.TomlIndentation

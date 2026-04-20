@@ -1,4 +1,4 @@
-package be4rjp.sclat.extension
+package net.azisaba.sclat.core.extension
 
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter

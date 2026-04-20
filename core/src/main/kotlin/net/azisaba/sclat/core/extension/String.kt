@@ -1,4 +1,4 @@
-package be4rjp.sclat.extension
+package net.azisaba.sclat.core.extension
 
 import org.bukkit.Material
 

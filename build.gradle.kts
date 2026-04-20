@@ -44,7 +44,21 @@ allprojects {
     dependencies {
         compileOnly("org.spigotmc:spigot:1.14.4-R0.1-SNAPSHOT")
         compileOnly("com.destroystokyo.paper:paper-api:1.14.4-R0.1-SNAPSHOT")
+        compileOnly("com.github.koca2000:NoteBlockAPI:1.6.3")
+        compileOnly("com.github.ucchyocean:LunaChat:3.0.16")
+        compileOnly("net.dmulloy2:ProtocolLib:5.1.0")
+        compileOnly("com.github.Be4rJP:DADADAChecker:1.0.0")
+        compileOnly("com.github.Be4rJP:BlockStudio:-SNAPSHOT")
+
         implementation("net.mamoe.yamlkt:yamlkt:0.13.0")
+        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.11.0-rc01")
+        implementation("com.github.shynixn.mccoroutine:mccoroutine-bukkit-api:2.22.0")
+        implementation("com.github.shynixn.mccoroutine:mccoroutine-bukkit-core:2.22.0")
+        implementation("org.incendo:cloud-paper:2.0.0-SNAPSHOT") // found newer 2.0.0-beta.10
+        implementation("org.jspecify:jspecify:1.0.0")
+        implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+        implementation("fr.mrmicky:fastboard:2.1.5")
+        implementation("com.akuleshov7:ktoml-core:0.7.1")
 
         testImplementation("org.jetbrains.kotlin:kotlin-test")
         testImplementation("io.kotest:kotest-runner-junit5:6.1.11")
@@ -70,16 +84,6 @@ allprojects {
 }
 
 dependencies {
-    compileOnly("com.github.koca2000:NoteBlockAPI:1.6.3")
-    compileOnly("com.github.ucchyocean:LunaChat:3.0.16")
-    compileOnly("net.dmulloy2:ProtocolLib:5.1.0")
-    compileOnly("com.github.Be4rJP:DADADAChecker:1.0.0")
-    compileOnly("com.github.Be4rJP:BlockStudio:-SNAPSHOT")
-    implementation("org.incendo:cloud-paper:2.0.0-SNAPSHOT") // found newer 2.0.0-beta.10
-    implementation("org.jspecify:jspecify:1.0.0")
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-    implementation("fr.mrmicky:fastboard:2.1.5")
-    implementation("com.akuleshov7:ktoml-core:0.7.1")
     implementation(project("core"))
 }
 
