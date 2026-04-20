@@ -1,6 +1,5 @@
 package be4rjp.sclat.config
 
-import be4rjp.sclat.loginbonus.LoginBonus
 import be4rjp.sclat.sclatLogger
 import net.azisaba.sclat.core.config.LoginBonusRewardConfig
 import net.azisaba.sclat.core.extension.loadToml
@@ -17,16 +16,19 @@ object NewConfig {
     lateinit var loginBonusReward: LoginBonusRewardConfig
         private set
 
+    lateinit var loginBonusRefreshSet: DailyRefreshSet
+        private set
+
     fun load() {
         sclatLogger.info(">>> Loading config...")
         loginBonusReward = loadTomlConfig("login_bonus", ::LoginBonusRewardConfig)
-        LoginBonus.refreshSet = loadTomlConfig("login_bonus_claimed", ::DailyRefreshSet)
+        loginBonusRefreshSet = loadTomlConfig("login_bonus_claimed", ::DailyRefreshSet)
         sclatLogger.info("<<< All config loaded.")
     }
 
     fun save() {
         sclatLogger.info(">>> Saving config...")
-        saveTomlConfig("login_bonus_claimed", LoginBonus.refreshSet)
+        saveTomlConfig("login_bonus_claimed", loginBonusRefreshSet)
         sclatLogger.info("<<< All config saved.")
     }
 

@@ -25,7 +25,6 @@ import be4rjp.sclat.data.DataMgr.sprinklerMap
 import be4rjp.sclat.data.PaintData
 import be4rjp.sclat.gui.LootBox
 import be4rjp.sclat.gui.OpenGUI
-import be4rjp.sclat.loginbonus.LoginBonus
 import be4rjp.sclat.packet.PacketHandler
 import be4rjp.sclat.plugin
 import be4rjp.sclat.server.EquipmentClient
@@ -84,8 +83,7 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.BookMeta
 import org.bukkit.inventory.meta.SkullMeta
 import org.bukkit.scheduler.BukkitRunnable
-import java.util.Random
-import java.util.UUID
+import java.util.*
 
 /**
  *
@@ -139,8 +137,12 @@ class GameMgr : Listener {
             // DataMgr.setRankingHolograms(player, rankingHolograms);
             // PlayerStatusMgr.HologramUpdateRunnable(player);
             Sclat.playerHolograms.add(player)
-            if (LoginBonus.tryClaim(player)) {
-                player.sendMessage(
+            player.apply {
+                if (uniqueId in NewConfig.loginBonusRefreshSet) return@apply
+                PlayerStatusMgr.addMoney(player, NewConfig.loginBonusReward.money)
+                PlayerStatusMgr.addTicket(player, NewConfig.loginBonusReward.ticket)
+                NewConfig.loginBonusRefreshSet.plus(uniqueId)
+                sendMessage(
                     "${ChatColor.GOLD}ログインボーナス!${ChatColor.WHITE} お金 ${ChatColor.GREEN}+${NewConfig.loginBonusReward.money}${ChatColor.WHITE} & チケット ${ChatColor.GREEN}+${NewConfig.loginBonusReward.ticket}${ChatColor.WHITE}",
                 )
             }
