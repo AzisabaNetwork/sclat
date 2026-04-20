@@ -1,11 +1,8 @@
 package be4rjp.sclat.gui
 
 import be4rjp.sclat.Sclat
-import be4rjp.sclat.api.MessageType
 import be4rjp.sclat.api.SclatUtil.playGameSound
 import be4rjp.sclat.api.SclatUtil.sendMessage
-import be4rjp.sclat.api.ServerType
-import be4rjp.sclat.api.SoundType
 import be4rjp.sclat.data.BlockUpdater
 import be4rjp.sclat.data.DataMgr.beaconMap
 import be4rjp.sclat.data.DataMgr.getBeaconFromplayer
@@ -56,6 +53,9 @@ import be4rjp.sclat.weapon.Shooter.maneuverShootRunnable
 import be4rjp.sclat.weapon.Shooter.shooterRunnable
 import be4rjp.sclat.weapon.Spinner.spinnerRunnable
 import be4rjp.sclat.weapon.Swapper.swapperRunnable
+import net.azisaba.sclat.core.enums.MessageType
+import net.azisaba.sclat.core.enums.ServerType
+import net.azisaba.sclat.core.enums.SoundType
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.GameMode

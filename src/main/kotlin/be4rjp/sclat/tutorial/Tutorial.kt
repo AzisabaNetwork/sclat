@@ -1,10 +1,8 @@
 package be4rjp.sclat.tutorial
 
 import be4rjp.sclat.Sclat
-import be4rjp.sclat.api.MessageType
 import be4rjp.sclat.api.SclatUtil.playGameSound
 import be4rjp.sclat.api.SclatUtil.sendMessage
-import be4rjp.sclat.api.SoundType
 import be4rjp.sclat.data.BlockUpdater
 import be4rjp.sclat.data.DataMgr.blockDataMap
 import be4rjp.sclat.data.DataMgr.getPlayerData
@@ -17,6 +15,8 @@ import be4rjp.sclat.manager.PathMgr
 import be4rjp.sclat.manager.PlayerStatusMgr
 import be4rjp.sclat.plugin
 import be4rjp.sclat.server.StatusClient
+import net.azisaba.sclat.core.enums.MessageType
+import net.azisaba.sclat.core.enums.SoundType
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.Location

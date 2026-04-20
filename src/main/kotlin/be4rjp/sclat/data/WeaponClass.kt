@@ -1,5 +1,7 @@
 package be4rjp.sclat.data
 
+import net.azisaba.sclat.core.data.MainWeapon
+
 /**
  *
  * @author Be4rJP

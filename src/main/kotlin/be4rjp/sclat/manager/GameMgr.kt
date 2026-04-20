@@ -1,13 +1,9 @@
 package be4rjp.sclat.manager
 
 import be4rjp.sclat.Sclat
-import be4rjp.sclat.api.MessageType
 import be4rjp.sclat.api.SclatUtil.playGameSound
 import be4rjp.sclat.api.SclatUtil.sendMessage
-import be4rjp.sclat.api.ServerType
-import be4rjp.sclat.api.SoundType
 import be4rjp.sclat.api.player.PlayerData
-import be4rjp.sclat.api.player.PlayerSettings
 import be4rjp.sclat.data.DataMgr
 import be4rjp.sclat.data.DataMgr.beaconMap
 import be4rjp.sclat.data.DataMgr.getBeaconFromplayer
@@ -50,6 +46,10 @@ import be4rjp.sclat.weapon.Spinner.spinnerRunnable
 import be4rjp.sclat.weapon.Swapper.swapperRunnable
 import fr.mrmicky.fastboard.FastBoard
 import net.azisaba.sclat.core.config.NewConfig
+import net.azisaba.sclat.core.enums.MessageType
+import net.azisaba.sclat.core.enums.ServerType
+import net.azisaba.sclat.core.enums.SoundType
+import net.azisaba.sclat.core.player.PlayerSettings
 import net.md_5.bungee.api.chat.ClickEvent
 import net.md_5.bungee.api.chat.TextComponent
 import org.bukkit.Bukkit

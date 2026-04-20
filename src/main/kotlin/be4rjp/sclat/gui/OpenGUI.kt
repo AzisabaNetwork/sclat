@@ -1,7 +1,6 @@
 package be4rjp.sclat.gui
 
 import be4rjp.sclat.Sclat
-import be4rjp.sclat.api.ServerType
 import be4rjp.sclat.data.DataMgr.beaconMap
 import be4rjp.sclat.data.DataMgr.getArmorStandPlayer
 import be4rjp.sclat.data.DataMgr.getMatchFromId
@@ -22,6 +21,7 @@ import be4rjp.sclat.tutorial.Tutorial
 import be4rjp.sclat.weapon.Gear.getGearMaterial
 import be4rjp.sclat.weapon.Gear.getGearName
 import be4rjp.sclat.weapon.Gear.getGearPrice
+import net.azisaba.sclat.core.enums.ServerType
 import org.bukkit.Bukkit
 import org.bukkit.GameMode
 import org.bukkit.Material

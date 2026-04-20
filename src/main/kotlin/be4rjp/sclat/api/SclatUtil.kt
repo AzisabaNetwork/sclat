@@ -3,7 +3,6 @@ package be4rjp.sclat.api
 import be4rjp.sclat.Sclat
 import be4rjp.sclat.api.packet.WorldPackets
 import be4rjp.sclat.api.packet.WorldPackets.broadcastBlockChange
-import be4rjp.sclat.api.team.Team
 import be4rjp.sclat.data.DataMgr
 import be4rjp.sclat.manager.BungeeCordMgr
 import be4rjp.sclat.manager.DeathMgr
@@ -11,7 +10,10 @@ import be4rjp.sclat.manager.MatchMgr
 import be4rjp.sclat.plugin
 import be4rjp.sclat.server.StatusClient
 import net.azisaba.sclat.core.DelegatedLogger
+import net.azisaba.sclat.core.enums.MessageType
+import net.azisaba.sclat.core.enums.SoundType
 import net.azisaba.sclat.core.shape.Sphere.getSphere
+import net.azisaba.sclat.core.team.Team
 import org.bukkit.Bukkit
 import org.bukkit.GameMode
 import org.bukkit.Instrument

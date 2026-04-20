@@ -1,9 +1,10 @@
 package be4rjp.sclat.api.player
 
-import be4rjp.sclat.api.team.Team
-import be4rjp.sclat.data.MainWeapon
 import be4rjp.sclat.data.Match
 import be4rjp.sclat.data.WeaponClass
+import net.azisaba.sclat.core.data.MainWeapon
+import net.azisaba.sclat.core.player.PlayerSettings
+import net.azisaba.sclat.core.team.Team
 import net.minecraft.server.v1_14_R1.ItemStack
 import org.bukkit.Location
 import org.bukkit.entity.ArmorStand

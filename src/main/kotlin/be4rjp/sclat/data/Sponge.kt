@@ -1,9 +1,9 @@
 package be4rjp.sclat.data
 
 import be4rjp.sclat.api.SclatUtil.setBlockByNMS
-import be4rjp.sclat.api.team.Team
 import be4rjp.sclat.manager.PaintMgr
 import be4rjp.sclat.plugin
+import net.azisaba.sclat.core.team.Team
 import org.bukkit.Material
 import org.bukkit.Sound
 import org.bukkit.block.Block

@@ -1,6 +1,6 @@
 package be4rjp.sclat.data
 
-import be4rjp.sclat.api.team.Team
+import net.azisaba.sclat.core.team.Team
 import org.bukkit.Material
 import org.bukkit.block.Block
 import org.bukkit.block.BlockState

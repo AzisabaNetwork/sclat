@@ -1,8 +1,11 @@
 package be4rjp.sclat.data
 
 import be4rjp.sclat.api.player.PlayerData
-import be4rjp.sclat.api.team.Team
 import be4rjp.sclat.api.team.TeamLoc
+import net.azisaba.sclat.core.data.Color
+import net.azisaba.sclat.core.data.KasaData
+import net.azisaba.sclat.core.data.MainWeapon
+import net.azisaba.sclat.core.team.Team
 import org.bukkit.World
 import org.bukkit.block.Block
 import org.bukkit.entity.ArmorStand

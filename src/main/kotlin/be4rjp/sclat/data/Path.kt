@@ -1,7 +1,7 @@
 package be4rjp.sclat.data
 
-import be4rjp.sclat.api.team.Team
 import be4rjp.sclat.plugin
+import net.azisaba.sclat.core.team.Team
 import net.minecraft.server.v1_14_R1.EnumItemSlot
 import net.minecraft.server.v1_14_R1.PacketPlayOutEntityEquipment
 import org.bukkit.Location

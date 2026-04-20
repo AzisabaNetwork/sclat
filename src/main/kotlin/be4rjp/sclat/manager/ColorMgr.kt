@@ -1,9 +1,9 @@
 package be4rjp.sclat.manager
 
 import be4rjp.sclat.Sclat
-import be4rjp.sclat.data.Color
 import be4rjp.sclat.data.DataMgr.addColorList
 import be4rjp.sclat.data.DataMgr.setColor
+import net.azisaba.sclat.core.data.Color
 import org.bukkit.ChatColor
 import org.bukkit.Material
 import org.bukkit.inventory.ItemStack

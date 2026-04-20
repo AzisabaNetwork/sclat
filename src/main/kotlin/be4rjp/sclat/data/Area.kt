@@ -1,11 +1,11 @@
 package be4rjp.sclat.data
 
 import be4rjp.sclat.Sclat
-import be4rjp.sclat.api.MessageType
 import be4rjp.sclat.api.SclatUtil.sendMessage
-import be4rjp.sclat.api.team.Team
 import be4rjp.sclat.manager.PaintMgr
 import be4rjp.sclat.plugin
+import net.azisaba.sclat.core.enums.MessageType
+import net.azisaba.sclat.core.team.Team
 import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.Sound

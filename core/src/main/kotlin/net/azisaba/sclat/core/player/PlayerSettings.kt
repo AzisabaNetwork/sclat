@@ -1,4 +1,4 @@
-package be4rjp.sclat.api.player
+package net.azisaba.sclat.core.player
 
 import org.bukkit.entity.Player
 

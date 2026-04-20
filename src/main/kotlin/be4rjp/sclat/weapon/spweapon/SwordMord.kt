@@ -12,12 +12,12 @@ import be4rjp.sclat.data.DataMgr.mainSnowballNameMap
 import be4rjp.sclat.data.DataMgr.setKasaDataWithARmorStand
 import be4rjp.sclat.data.DataMgr.setKasaDataWithPlayer
 import be4rjp.sclat.data.DataMgr.setSnowballHitCount
-import be4rjp.sclat.data.KasaData
 import be4rjp.sclat.manager.ArmorStandMgr
 import be4rjp.sclat.manager.PaintMgr
 import be4rjp.sclat.manager.SPWeaponMgr
 import be4rjp.sclat.manager.WeaponClassMgr
 import be4rjp.sclat.plugin
+import net.azisaba.sclat.core.data.KasaData
 import net.azisaba.sclat.core.shape.Sphere.getSphere
 import org.bukkit.GameMode
 import org.bukkit.Location

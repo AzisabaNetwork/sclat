@@ -5,7 +5,6 @@ package be4rjp.sclat
 import be4rjp.blockstudio.BlockStudio
 import be4rjp.dadadachecker.DADADACheckerAPI
 import be4rjp.sclat.api.SclatUtil.sendRestartedServerInfo
-import be4rjp.sclat.api.ServerType
 import be4rjp.sclat.api.async.AsyncPlayerListener
 import be4rjp.sclat.api.async.AsyncThreadManager.setup
 import be4rjp.sclat.api.async.AsyncThreadManager.shutdownAll
@@ -54,6 +53,7 @@ import net.azisaba.sclat.core.Plugins.Companion.onInit
 import net.azisaba.sclat.core.config.Config
 import net.azisaba.sclat.core.config.CustomConfig
 import net.azisaba.sclat.core.config.NewConfig
+import net.azisaba.sclat.core.enums.ServerType
 import net.azisaba.sclat.core.status.ServerStatus
 import net.azisaba.sclat.core.status.StatusLine
 import net.azisaba.sclat.core.utils.TextAnimation

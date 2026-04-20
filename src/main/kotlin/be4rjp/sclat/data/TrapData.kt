@@ -4,13 +4,13 @@ import be4rjp.sclat.Sclat
 import be4rjp.sclat.api.SclatUtil.createInkExplosionEffect
 import be4rjp.sclat.api.SclatUtil.giveDamage
 import be4rjp.sclat.api.SclatUtil.repelBarrier
-import be4rjp.sclat.api.team.Team
 import be4rjp.sclat.manager.ArmorStandMgr
 import be4rjp.sclat.manager.PaintMgr
 import be4rjp.sclat.plugin
 import be4rjp.sclat.weapon.Gear
 import net.azisaba.sclat.core.shape.Sphere.getSphere
 import net.azisaba.sclat.core.shape.Sphere.getXZCircle
+import net.azisaba.sclat.core.team.Team
 import org.bukkit.Color
 import org.bukkit.GameMode
 import org.bukkit.Location

@@ -1,6 +1,6 @@
-package be4rjp.sclat.api.team
+package net.azisaba.sclat.core.team
 
-import be4rjp.sclat.data.Color
+import net.azisaba.sclat.core.data.Color
 import org.bukkit.scoreboard.Team
 
 /**

@@ -1,4 +1,4 @@
-package be4rjp.sclat.data
+package net.azisaba.sclat.core.data
 
 import org.bukkit.entity.ArmorStand
 import org.bukkit.entity.Player
