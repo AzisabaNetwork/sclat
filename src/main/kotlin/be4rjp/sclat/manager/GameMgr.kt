@@ -8,7 +8,6 @@ import be4rjp.sclat.api.ServerType
 import be4rjp.sclat.api.SoundType
 import be4rjp.sclat.api.player.PlayerData
 import be4rjp.sclat.api.player.PlayerSettings
-import be4rjp.sclat.config.NewConfig
 import be4rjp.sclat.data.DataMgr
 import be4rjp.sclat.data.DataMgr.beaconMap
 import be4rjp.sclat.data.DataMgr.getBeaconFromplayer
@@ -50,6 +49,7 @@ import be4rjp.sclat.weapon.Shooter.shooterRunnable
 import be4rjp.sclat.weapon.Spinner.spinnerRunnable
 import be4rjp.sclat.weapon.Swapper.swapperRunnable
 import fr.mrmicky.fastboard.FastBoard
+import net.azisaba.sclat.core.config.NewConfig
 import net.md_5.bungee.api.chat.ClickEvent
 import net.md_5.bungee.api.chat.TextComponent
 import org.bukkit.Bukkit

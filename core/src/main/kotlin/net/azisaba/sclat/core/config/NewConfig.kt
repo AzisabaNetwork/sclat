@@ -1,7 +1,6 @@
-package be4rjp.sclat.config
+package net.azisaba.sclat.core.config
 
-import be4rjp.sclat.sclatLogger
-import net.azisaba.sclat.core.config.LoginBonusRewardConfig
+import net.azisaba.sclat.core.DelegatedLogger
 import net.azisaba.sclat.core.extension.loadToml
 import net.azisaba.sclat.core.extension.saveToml
 import net.azisaba.sclat.core.utils.DailyRefreshSet
@@ -12,6 +11,7 @@ import java.util.function.Supplier
  * Migrating from Config.kt
  */
 object NewConfig {
+    private val logger by DelegatedLogger()
     private val parent = File("plugins/Sclat")
     lateinit var loginBonusReward: LoginBonusRewardConfig
         private set
@@ -20,16 +20,16 @@ object NewConfig {
         private set
 
     fun load() {
-        sclatLogger.info(">>> Loading config...")
+        logger.info(">>> Loading config...")
         loginBonusReward = loadTomlConfig("login_bonus", ::LoginBonusRewardConfig)
         loginBonusRefreshSet = loadTomlConfig("login_bonus_claimed", ::DailyRefreshSet)
-        sclatLogger.info("<<< All config loaded.")
+        logger.info("<<< All config loaded.")
     }
 
     fun save() {
-        sclatLogger.info(">>> Saving config...")
+        logger.info(">>> Saving config...")
         saveTomlConfig("login_bonus_claimed", loginBonusRefreshSet)
-        sclatLogger.info("<<< All config saved.")
+        logger.info("<<< All config saved.")
     }
 
     private inline fun <reified T> saveTomlConfig(
@@ -38,7 +38,7 @@ object NewConfig {
     ) {
         parent.resolve("$name.toml").let { file ->
             saveToml(file, value)
-            sclatLogger.info("-> Config ${file.name} saved!")
+            logger.info("-> Config ${file.name} saved!")
         }
     }
 
@@ -49,11 +49,11 @@ object NewConfig {
         parent.resolve("$name.toml").let { file ->
             if (!file.exists()) {
                 saveToml(file, default.get()).also {
-                    sclatLogger.warn("${file.name} was missing. Wrote default config.")
+                    logger.warn("${file.name} was missing. Wrote default config.")
                 }
             }
             loadToml<T>(file).also {
-                sclatLogger.info("-> Config ${file.name} loaded!")
+                logger.info("-> Config ${file.name} loaded!")
             }
         }
 }
