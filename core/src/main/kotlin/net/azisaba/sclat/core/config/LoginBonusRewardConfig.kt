@@ -1,4 +1,4 @@
-package be4rjp.sclat.config
+package net.azisaba.sclat.core.config
 
 import kotlinx.serialization.Serializable
 

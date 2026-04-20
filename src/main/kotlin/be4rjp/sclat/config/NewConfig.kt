@@ -2,6 +2,7 @@ package be4rjp.sclat.config
 
 import be4rjp.sclat.loginbonus.LoginBonus
 import be4rjp.sclat.sclatLogger
+import net.azisaba.sclat.core.config.LoginBonusRewardConfig
 import net.azisaba.sclat.core.extension.loadToml
 import net.azisaba.sclat.core.extension.saveToml
 import net.azisaba.sclat.core.utils.DailyRefreshSet
