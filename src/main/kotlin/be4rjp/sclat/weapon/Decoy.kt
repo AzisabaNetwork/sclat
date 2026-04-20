@@ -5,8 +5,8 @@ import be4rjp.sclat.api.player.PlayerData
 import be4rjp.sclat.data.DataMgr.blockDataMap
 import be4rjp.sclat.data.DataMgr.getPlayerData
 import be4rjp.sclat.plugin
-import be4rjp.sclat.sclatLogger
 import com.mojang.authlib.GameProfile
+import net.azisaba.sclat.core.DelegatedLogger
 import net.minecraft.server.v1_14_R1.DataWatcherRegistry
 import net.minecraft.server.v1_14_R1.EntityPlayer
 import net.minecraft.server.v1_14_R1.EntitySquid
@@ -40,6 +40,8 @@ import org.bukkit.entity.Player
 import org.bukkit.scheduler.BukkitRunnable
 
 object Decoy {
+    private val logger by DelegatedLogger()
+
     @JvmStatic
     fun decoyRunnable(player: Player) {
         val delay: BukkitRunnable =
@@ -318,7 +320,7 @@ object Decoy {
                     } catch (e: Exception) {
                         as1!!.remove()
                         cancel()
-                        sclatLogger.warn(e.message)
+                        logger.warn(e.message)
                     }
                 }
             }

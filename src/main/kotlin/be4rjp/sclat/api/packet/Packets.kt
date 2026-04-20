@@ -1,16 +1,18 @@
 package be4rjp.sclat.api.packet
 
 import be4rjp.sclat.Sclat
-import be4rjp.sclat.sclatLogger
 import com.comphenix.protocol.PacketType
 import com.comphenix.protocol.ProtocolManager
 import com.comphenix.protocol.events.PacketContainer
+import net.azisaba.sclat.core.DelegatedLogger
 import org.bukkit.entity.Player
 import org.jspecify.annotations.NullMarked
 import java.lang.reflect.InvocationTargetException
 
 @NullMarked
 object Packets {
+    private val logger by DelegatedLogger()
+
     fun manager(): ProtocolManager = Sclat.protocolManager
 
     fun createPacket(packetType: PacketType): PacketContainer = manager().createPacket(packetType)
@@ -28,7 +30,7 @@ object Packets {
             manager().sendServerPacket(player, packet)
             return true
         } catch (e: InvocationTargetException) {
-            sclatLogger.error("Failed to send packet", e)
+            logger.error("Failed to send packet", e)
             return false
         }
     }
@@ -38,7 +40,7 @@ object Packets {
             manager().broadcastServerPacket(packet)
             return true
         } catch (e: Exception) {
-            sclatLogger.error("Failed to broadcast packet", e)
+            logger.error("Failed to broadcast packet", e)
             return false
         }
     }

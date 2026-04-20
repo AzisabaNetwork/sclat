@@ -7,7 +7,7 @@ import be4rjp.sclat.manager.PaintMgr
 import be4rjp.sclat.manager.SPWeaponMgr
 import be4rjp.sclat.manager.WeaponClassMgr
 import be4rjp.sclat.plugin
-import be4rjp.sclat.sclatLogger
+import net.azisaba.sclat.core.DelegatedLogger
 import net.minecraft.server.v1_14_R1.PacketPlayOutEntityDestroy
 import org.bukkit.Location
 import org.bukkit.Material
@@ -31,6 +31,8 @@ import java.util.Random
  * @author Be4rJP
  */
 object SuperShot {
+    private val logger by DelegatedLogger()
+
     @JvmStatic
     fun setSuperShot(player: Player) {
         getPlayerData(player)!!.isUsingSP = true
@@ -207,7 +209,7 @@ object SuperShot {
                     } catch (e: Exception) {
                         drop!!.remove()
                         cancel()
-                        sclatLogger.warn(e.message)
+                        logger.warn(e.message)
                     }
                 }
             }

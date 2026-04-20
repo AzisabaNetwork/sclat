@@ -4,10 +4,10 @@ import be4rjp.sclat.Sclat
 import be4rjp.sclat.api.SclatUtil.createInkExplosionEffect
 import be4rjp.sclat.data.DataMgr.getPlayerData
 import be4rjp.sclat.plugin
-import be4rjp.sclat.sclatLogger
 import be4rjp.sclat.weapon.Gear
 import be4rjp.sclat.weapon.Gear.getGearInfluence
 import be4rjp.sclat.weapon.spweapon.SuperArmor.setArmor
+import net.azisaba.sclat.core.DelegatedLogger
 import net.azisaba.sclat.core.shape.Sphere.getSphere
 import net.md_5.bungee.api.ChatColor
 import net.md_5.bungee.api.ChatMessageType
@@ -26,6 +26,8 @@ import org.bukkit.util.Vector
  * @author Be4rJP
  */
 object DeathMgr {
+    private val logger by DelegatedLogger()
+
     fun playerDeathRunnable(
         target: Player,
         shooter: Player,
@@ -103,7 +105,7 @@ object DeathMgr {
                             cancel()
                             return
                         }
-                        sclatLogger.debug("Handling player kill!!")
+                        logger.debug("Handling player kill!!")
                         if (type == "killed") {
                             t.gameMode = GameMode.SPECTATOR
                             t.inventory.clear()
@@ -346,12 +348,12 @@ object DeathMgr {
                             t.gameMode = GameMode.SPECTATOR
                             val playerData =
                                 getPlayerData(t) ?: run {
-                                    sclatLogger.debug("Player Data is null on water death")
+                                    logger.debug("Player Data is null on water death")
                                     return
                                 }
                             playerData.tick = 10
                             t.inventory.clear()
-                            sclatLogger.debug("Water tick if / current tick: {}", i)
+                            logger.debug("Water tick if / current tick: {}", i)
                             if (i == 0) {
                                 loc = t.location
                                 if (playerData.lastAttack === t) {
@@ -464,12 +466,12 @@ object DeathMgr {
                             t.gameMode = GameMode.SPECTATOR
                             val playerData = getPlayerData(t)
                             if (playerData == null) {
-                                sclatLogger.debug("Player data is null on fall handling")
+                                logger.debug("Player data is null on fall handling")
                                 return
                             }
                             playerData.tick = 10
                             t.inventory.clear()
-                            sclatLogger.debug("on fall handling")
+                            logger.debug("on fall handling")
                             if (i == 0) {
                                 loc = playerData.match!!.mapData!!.intro ?: throw RuntimeException("Intro map data is null!")
                                 if (playerData.lastAttack === t) {
@@ -594,7 +596,7 @@ object DeathMgr {
                         setArmor(t, Double.MAX_VALUE, 120, false)
                         if (getPlayerData(t)!!.sPGauge == 100) SPWeaponMgr.setSPWeapon(t)
                         cancel()
-                        sclatLogger.error("Failed to process death", e)
+                        logger.error("Failed to process death", e)
                         e.printStackTrace()
                     }
                 }

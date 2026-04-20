@@ -5,13 +5,15 @@ import be4rjp.sclat.data.DataMgr.getPlayerData
 import be4rjp.sclat.data.DataMgr.getWeaponClass
 import be4rjp.sclat.manager.PlayerStatusMgr
 import be4rjp.sclat.plugin
-import be4rjp.sclat.sclatLogger
+import net.azisaba.sclat.core.DelegatedLogger
 
 object EquipmentServerManager {
+    private val logger by DelegatedLogger()
+
     var commands: MutableList<String> = ArrayList()
 
     fun addEquipmentCommand(command: String) {
-        sclatLogger.debug("Equip command: $command")
+        logger.debug("Equip command: $command")
         commands.add(command)
     }
 

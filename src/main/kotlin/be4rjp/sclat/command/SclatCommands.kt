@@ -6,8 +6,8 @@ import be4rjp.sclat.emblem.EmblemManager
 import be4rjp.sclat.manager.BungeeCordMgr
 import be4rjp.sclat.manager.MapLoader
 import be4rjp.sclat.manager.ServerStatusManager
-import be4rjp.sclat.sclatLogger
 import be4rjp.sclat.server.EquipmentClient
+import net.azisaba.sclat.core.DelegatedLogger
 import org.bukkit.ChatColor
 import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.entity.Player
@@ -23,6 +23,7 @@ import org.incendo.cloud.parser.standard.StringParser
 import java.io.IOException
 
 object SclatCommands {
+    private val logger by DelegatedLogger()
     const val PERMISSION_ADMIN = "sclat.admin"
 
     fun init(plugin: JavaPlugin) {
@@ -37,7 +38,7 @@ object SclatCommands {
         } else if (commandManager.hasCapability(CloudBukkitCapabilities.ASYNCHRONOUS_COMPLETION)) {
             commandManager.registerAsynchronousCompletions()
         } else {
-            sclatLogger.warn("Are you using old spigot? We can't handle command over this cloud framework.")
+            logger.warn("Are you using old spigot? We can't handle command over this cloud framework.")
         }
 
         val sclat = commandManager.commandBuilder("sclat").permission(PERMISSION_ADMIN)

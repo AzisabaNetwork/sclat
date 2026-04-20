@@ -14,7 +14,7 @@ import be4rjp.sclat.manager.SPWeaponMgr
 import be4rjp.sclat.manager.SuperJumpMgr
 import be4rjp.sclat.manager.WeaponClassMgr
 import be4rjp.sclat.plugin
-import be4rjp.sclat.sclatLogger
+import net.azisaba.sclat.core.DelegatedLogger
 import net.azisaba.sclat.core.shape.Sphere.getSphere
 import net.minecraft.server.v1_14_R1.EntityArmorStand
 import net.minecraft.server.v1_14_R1.PacketPlayOutEntityDestroy
@@ -45,6 +45,8 @@ import org.bukkit.util.Vector
  * @author Be4rJP
  */
 object JetPack {
+    private val logger by DelegatedLogger()
+
     @JvmStatic
     fun jetPackRunnable(player: Player) {
         val api = BlockStudio.getBlockStudioAPI()
@@ -539,7 +541,7 @@ object JetPack {
                     } catch (e: Exception) {
                         drop!!.remove()
                         cancel()
-                        sclatLogger.warn(e.message)
+                        logger.warn(e.message)
                     }
                 }
             }

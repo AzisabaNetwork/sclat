@@ -9,8 +9,8 @@ import be4rjp.sclat.manager.BungeeCordMgr
 import be4rjp.sclat.manager.DeathMgr
 import be4rjp.sclat.manager.MatchMgr
 import be4rjp.sclat.plugin
-import be4rjp.sclat.sclatLogger
 import be4rjp.sclat.server.StatusClient
+import net.azisaba.sclat.core.DelegatedLogger
 import net.azisaba.sclat.core.shape.Sphere.getSphere
 import org.bukkit.Bukkit
 import org.bukkit.GameMode
@@ -34,6 +34,8 @@ import org.bukkit.util.Vector
  * 全体的に使いそうなメソッドをここに置いておく
  */
 object SclatUtil {
+    private val logger by DelegatedLogger()
+
     @JvmStatic
     fun setBlockByNMS(
         b: Block,
@@ -140,7 +142,7 @@ object SclatUtil {
             }
 
             MessageType.CONSOLE -> {
-                sclatLogger.info(buff.toString())
+                logger.info(buff.toString())
             }
 
             MessageType.BROADCAST -> {

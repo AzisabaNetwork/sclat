@@ -7,7 +7,7 @@ import be4rjp.sclat.data.LocMeta
 import be4rjp.sclat.data.MapData
 import be4rjp.sclat.data.Path
 import be4rjp.sclat.plugin
-import be4rjp.sclat.sclatLogger
+import net.azisaba.sclat.core.DelegatedLogger
 import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.WorldCreator
@@ -21,6 +21,7 @@ import kotlin.math.roundToLong
  * until the load completes.
  */
 object MapLoader {
+    private val logger by DelegatedLogger()
     private val usage: MutableMap<String, Int> = ConcurrentHashMap()
     private val unloadRetries: MutableMap<String, Int> = ConcurrentHashMap()
 
@@ -34,7 +35,7 @@ object MapLoader {
     fun incrementUsage(map: MapData) {
         val name = map.mapName ?: return
         val newCount = usage.merge(name, 1) { old, one -> old + one } ?: 1
-        sclatLogger.info("MapLoader: incrementUsage($name) -> $newCount")
+        logger.info("MapLoader: incrementUsage($name) -> $newCount")
 
         if (newCount == 1) {
             // first user — load synchronously on main thread
@@ -56,7 +57,7 @@ object MapLoader {
                     latch.await()
                 } catch (e: InterruptedException) {
                     Thread.currentThread().interrupt()
-                    sclatLogger.warn("MapLoader: interrupted while waiting for map load: $name")
+                    logger.warn("MapLoader: interrupted while waiting for map load: $name")
                 }
             }
         }
@@ -66,7 +67,7 @@ object MapLoader {
         val name = map.mapName ?: return
         usage.computeIfPresent(name) { _, old -> (old - 1).coerceAtLeast(0) }
         val current = usage[name] ?: 0
-        sclatLogger.info("MapLoader: releaseMap($name) -> $current")
+        logger.info("MapLoader: releaseMap($name) -> $current")
         if (current <= 0) {
             attemptUnload(map)
         }
@@ -91,7 +92,7 @@ object MapLoader {
 
         // idempotent
         if (map.team0Loc != null || map.pathList.isNotEmpty() || map.wiremeshListTask != null) {
-            sclatLogger.info("MapLoader: map $name already loaded; skipping")
+            logger.info("MapLoader: map $name already loaded; skipping")
             return
         }
 
@@ -102,7 +103,7 @@ object MapLoader {
         if (worldName != null) {
             var w = Bukkit.getWorld(worldName)
             if (w == null) {
-                sclatLogger.info("MapLoader: creating world $worldName for map $name")
+                logger.info("MapLoader: creating world $worldName for map $name")
                 w = Bukkit.createWorld(WorldCreator(worldName))
             }
             map.worldName = w?.name
@@ -153,7 +154,7 @@ object MapLoader {
                 // record candidate count for metrics
                 wiremeshCandidates[name] = wmTask.totalBlocks
                 val tend = System.currentTimeMillis()
-                sclatLogger.info("MapLoader: wiremesh builder started for $name in ${tend - tstart}ms (candidates=${wmTask.totalBlocks})")
+                logger.info("MapLoader: wiremesh builder started for $name in ${tend - tstart}ms (candidates=${wmTask.totalBlocks})")
             }
         }
 
@@ -163,7 +164,7 @@ object MapLoader {
             loadTimes.computeIfAbsent(name) { ArrayList() }.add(ms)
         } catch (_: Exception) {
         }
-        sclatLogger.info("MapLoader: loaded map $name in ${ms}ms")
+        logger.info("MapLoader: loaded map $name in ${ms}ms")
     }
 
     fun getMetricsString(mapName: String?): String? {
@@ -198,11 +199,11 @@ object MapLoader {
             if (world != null && world.players.isNotEmpty()) {
                 val tries = unloadRetries.getOrDefault(name, 0)
                 if (tries >= MAX_RETRIES) {
-                    sclatLogger.warn("MapLoader: max unload retries reached for $name; leaving loaded")
+                    logger.warn("MapLoader: max unload retries reached for $name; leaving loaded")
                     return
                 }
                 unloadRetries[name] = tries + 1
-                sclatLogger.info("MapLoader: deferred unload for $name - players present (attempt ${tries + 1})")
+                logger.info("MapLoader: deferred unload for $name - players present (attempt ${tries + 1})")
                 Bukkit.getScheduler().runTaskLater(
                     plugin,
                     Runnable { attemptUnload(map, false) },
@@ -237,11 +238,11 @@ object MapLoader {
                     waitedTicks++
                 }
                 if (wmTask.isWorking()) {
-                    sclatLogger.warn("MapLoader: wiremesh builder did not finish promptly for $name; proceeding with unload")
+                    logger.warn("MapLoader: wiremesh builder did not finish promptly for $name; proceeding with unload")
                 }
             }
         } catch (e: Exception) {
-            sclatLogger.warn("MapLoader: error stopping wiremesh for $name: ${e.message}")
+            logger.warn("MapLoader: error stopping wiremesh for $name: ${e.message}")
         }
 
         // Stop paths and areas
@@ -250,14 +251,14 @@ object MapLoader {
                 p?.stop()
             }
         } catch (e: Exception) {
-            sclatLogger.warn("MapLoader: error stopping paths for $name: ${e.message}")
+            logger.warn("MapLoader: error stopping paths for $name: ${e.message}")
         }
         try {
             for (a in map.areaList) {
                 a?.stop()
             }
         } catch (e: Exception) {
-            sclatLogger.warn("MapLoader: error stopping areas for $name: ${e.message}")
+            logger.warn("MapLoader: error stopping areas for $name: ${e.message}")
         }
 
         // Remove armor stands and clear DataMgr entries that belong to this world's world
@@ -265,7 +266,7 @@ object MapLoader {
             try {
                 DataMgr.clearWorldData(world)
             } catch (e: Exception) {
-                sclatLogger.warn("MapLoader: error clearing DataMgr for $name: ${e.message}")
+                logger.warn("MapLoader: error clearing DataMgr for $name: ${e.message}")
             }
         }
 
@@ -275,7 +276,7 @@ object MapLoader {
                 Bukkit.unloadWorld(world, false)
             }
         } catch (e: Exception) {
-            sclatLogger.warn("MapLoader: error unloading world for $name: ${e.message}")
+            logger.warn("MapLoader: error unloading world for $name: ${e.message}")
         }
 
         // Clear runtime fields
@@ -292,7 +293,7 @@ object MapLoader {
 
         usage.remove(name)
         unloadRetries.remove(name)
-        sclatLogger.info("MapLoader: unloaded map $name")
+        logger.info("MapLoader: unloaded map $name")
     }
 
     fun unloadAllLoadedMaps() {

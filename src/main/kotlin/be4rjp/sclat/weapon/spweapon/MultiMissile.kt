@@ -12,7 +12,7 @@ import be4rjp.sclat.manager.PaintMgr
 import be4rjp.sclat.manager.SPWeaponMgr
 import be4rjp.sclat.manager.WeaponClassMgr
 import be4rjp.sclat.plugin
-import be4rjp.sclat.sclatLogger
+import net.azisaba.sclat.core.DelegatedLogger
 import net.azisaba.sclat.core.shape.Sphere.getSphere
 import net.minecraft.server.v1_14_R1.EntityArmorStand
 import net.minecraft.server.v1_14_R1.EntitySquid
@@ -47,6 +47,8 @@ import org.bukkit.util.Vector
  * @author Be4rJP
  */
 object MultiMissile {
+    private val logger by DelegatedLogger()
+
     @JvmStatic
     fun mmLockRunnable(player: Player) {
         val task: BukkitRunnable =
@@ -73,7 +75,7 @@ object MultiMissile {
                             getPlayerData(p)!!.isUsingMM = true
                             val nmsWorld = (p.world as CraftWorld).handle
                             for (op in plugin.server.onlinePlayers) {
-                                sclatLogger.debug("For player: ${op.name}")
+                                logger.debug("For player: ${op.name}")
                                 if (getPlayerData(op)!!.isInMatch &&
                                     op.world === p.world &&
                                     (op.name != p.name) &&
@@ -93,7 +95,7 @@ object MultiMissile {
                                         .playerConnection
                                         .sendPacket(PacketPlayOutSpawnEntityLiving(es))
                                 } else {
-                                    sclatLogger.debug("Player ${op.name} ignored.")
+                                    logger.debug("Player ${op.name} ignored.")
                                 }
                             }
                             for (armorStand in p.world.entities) {
@@ -128,7 +130,7 @@ object MultiMissile {
                             }
                         }
                         if (c != 0) {
-                            sclatLogger.debug("Non-0 ticking for MultiMissile")
+                            logger.debug("Non-0 ticking for MultiMissile")
                             for (op in plugin.server.onlinePlayers) {
                                 if (getPlayerData(op)!!.isInMatch &&
                                     op.world === p.world &&
@@ -142,7 +144,7 @@ object MultiMissile {
                                     es.setLocation(loc.x, loc.y, loc.z, loc.yaw, loc.pitch)
                                     val requireGlowing = mmCheckCanLock(p, op)
                                     setGlowing(es.bukkitEntity, p, requireGlowing)
-                                    sclatLogger.debug("Set grow for ${op.name} to $requireGlowing")
+                                    logger.debug("Set grow for ${op.name} to $requireGlowing")
                                     (p as CraftPlayer)
                                         .handle
                                         .playerConnection
@@ -171,7 +173,7 @@ object MultiMissile {
                             }
                         }
                         if (!getPlayerData(p)!!.isUsingMM || c == 200) {
-                            sclatLogger.debug("Shoot!!! by MultiMissile")
+                            logger.debug("Shoot!!! by MultiMissile")
                             val targetList: MutableList<Entity> = ArrayList()
                             var count = 0
                             for (op in plugin.server.onlinePlayers) {
@@ -194,7 +196,7 @@ object MultiMissile {
                                         targetList.add(op)
                                         count++
                                     } else {
-                                        sclatLogger.debug("Ignored for ${op.name}")
+                                        logger.debug("Ignored for ${op.name}")
                                     }
                                 }
                             }
@@ -232,17 +234,17 @@ object MultiMissile {
                             fireworksRunnable(p)
                             SPWeaponMgr.setSPCoolTimeAnimation(p, 100)
 
-                            sclatLogger.debug("Cancelled! after SPWeaponMgr")
+                            logger.debug("Cancelled! after SPWeaponMgr")
                             cancel()
                         }
                         if (!getPlayerData(p)!!.isInMatch || !p.isOnline || p.gameMode == GameMode.SPECTATOR) {
                             getPlayerData(p)!!.isUsingSP = false
-                            sclatLogger.debug("Cancelled! after disable usingSP")
+                            logger.debug("Cancelled! after disable usingSP")
                             cancel()
                         }
                         c++
                     } catch (e: Exception) {
-                        sclatLogger.error("Failed to process lock", e)
+                        logger.error("Failed to process lock", e)
                         e.printStackTrace()
                         cancel()
                     }

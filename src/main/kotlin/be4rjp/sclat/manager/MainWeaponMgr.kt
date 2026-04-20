@@ -5,7 +5,6 @@ import be4rjp.sclat.Sclat
 import be4rjp.sclat.data.DataMgr.getPlayerData
 import be4rjp.sclat.data.DataMgr.setMainWeapon
 import be4rjp.sclat.data.MainWeapon
-import be4rjp.sclat.sclatLogger
 import be4rjp.sclat.weapon.Blaster.shootBlaster
 import be4rjp.sclat.weapon.Brush
 import be4rjp.sclat.weapon.Bucket.shootBucket
@@ -13,6 +12,7 @@ import be4rjp.sclat.weapon.Burst.burstCooltime
 import be4rjp.sclat.weapon.Kasa.shootKasa
 import be4rjp.sclat.weapon.Roller
 import be4rjp.sclat.weapon.Slosher.shootSlosher
+import net.azisaba.sclat.core.DelegatedLogger
 import net.azisaba.sclat.core.extension.toMaterial
 import org.bukkit.Material
 import org.bukkit.entity.Player
@@ -23,17 +23,19 @@ import org.bukkit.inventory.ItemStack
  * @author Be4rJP
  */
 object MainWeaponMgr {
+    private val logger by DelegatedLogger()
+
     @Synchronized
     fun setupMainWeapon() {
         val mainWeaponSection =
             Sclat.conf?.weaponConfig?.getConfigurationSection("MainWeapon") ?: run {
-                sclatLogger.error("Failed to get MainWeapon section from mainweapon.yml")
+                logger.error("Failed to get MainWeapon section from mainweapon.yml")
                 return
             }
         for (weaponname in mainWeaponSection.getKeys(false)) {
             val section =
                 mainWeaponSection.getConfigurationSection(weaponname) ?: run {
-                    sclatLogger.warn("Failed to get section for $weaponname")
+                    logger.warn("Failed to get section for $weaponname")
                     continue
                 }
 
