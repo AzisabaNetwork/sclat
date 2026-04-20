@@ -1,7 +1,7 @@
-package be4rjp.sclat.api.config
+package net.azisaba.sclat.core.config
 
-import be4rjp.sclat.api.data.WeaponData
 import kotlinx.serialization.Serializable
+import net.azisaba.sclat.core.data.WeaponData
 
 @Serializable
 data class WeaponConfig(

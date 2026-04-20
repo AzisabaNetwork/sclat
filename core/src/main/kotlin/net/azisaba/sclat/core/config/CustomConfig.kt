@@ -1,6 +1,6 @@
-package be4rjp.sclat.api.config
+package net.azisaba.sclat.core.config
 
-import be4rjp.sclat.sclatLogger
+import net.azisaba.sclat.core.DelegatedLogger
 import org.bukkit.configuration.file.FileConfiguration
 import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.plugin.Plugin
@@ -20,7 +20,7 @@ class CustomConfig(
         if (configFile.exists()) return
 
         plugin.saveResource(file, false)
-        sclatLogger.info("デフォルトの設定ファイルを書き込みました。")
+        logger.info("デフォルトの設定ファイルを書き込みました。")
     }
 
     fun getConfig(): FileConfiguration? {
@@ -35,7 +35,7 @@ class CustomConfig(
         try {
             getConfig()!!.save(configFile)
         } catch (ex: IOException) {
-            sclatLogger.error("Could not save config to $configFile", ex)
+            logger.error("Could not save config to $configFile", ex)
         }
     }
 
@@ -47,5 +47,9 @@ class CustomConfig(
         config?.setDefaults(
             YamlConfiguration.loadConfiguration(InputStreamReader(defConfigStream, StandardCharsets.UTF_8)),
         )
+    }
+
+    companion object {
+        private val logger by DelegatedLogger()
     }
 }

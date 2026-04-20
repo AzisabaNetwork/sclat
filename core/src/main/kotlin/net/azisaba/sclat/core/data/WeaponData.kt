@@ -1,4 +1,4 @@
-package be4rjp.sclat.api.data
+package net.azisaba.sclat.core.data
 
 import kotlinx.serialization.Serializable
 

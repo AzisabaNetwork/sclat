@@ -9,7 +9,6 @@ import be4rjp.sclat.api.ServerType
 import be4rjp.sclat.api.async.AsyncPlayerListener
 import be4rjp.sclat.api.async.AsyncThreadManager.setup
 import be4rjp.sclat.api.async.AsyncThreadManager.shutdownAll
-import be4rjp.sclat.api.config.CustomConfig
 import be4rjp.sclat.api.holo.PlayerHolograms
 import be4rjp.sclat.command.SclatCommands
 import be4rjp.sclat.data.DataMgr
@@ -52,6 +51,7 @@ import fr.mrmicky.fastboard.FastBoard
 import net.azisaba.sclat.core.Plugins
 import net.azisaba.sclat.core.Plugins.Companion.onInit
 import net.azisaba.sclat.core.config.Config
+import net.azisaba.sclat.core.config.CustomConfig
 import net.azisaba.sclat.core.config.NewConfig
 import net.azisaba.sclat.core.status.ServerStatus
 import net.azisaba.sclat.core.status.StatusLine
