@@ -31,14 +31,6 @@ object AsyncThreadManager {
     @JvmField
     var onlinePlayers: MutableSet<Player?> = ConcurrentHashMap.newKeySet<Player?>()
 
-    fun toOnline(player: Player?) {
-        onlinePlayers.add(player)
-    }
-
-    fun toOffline(player: Player?) {
-        onlinePlayers.add(player)
-    }
-
     @JvmStatic
     fun sync(runnable: Runnable) {
         Bukkit.getScheduler().runTask(plugin, runnable)
