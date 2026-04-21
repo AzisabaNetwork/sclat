@@ -64,31 +64,25 @@ object SquidListenerMgr {
                 .toString() + "_POWDER",
         )
 
-        for (block in list) {
-            if (blockDataMap.containsKey(block)) {
-                if (blockDataMap[block]!!.team == data.team) {
-                    if (!data.isSquid || block.type == Material.AIR) continue
-                    if (block != b1) {
-                        data.isOnInk = true
-                        player.allowFlight = true
-                        player.isFlying = true
-                        return
-                    } else {
-                        data.isOnInk = true
+        if (data.isSquid) {
+            list
+                .firstOrNull { b ->
+                    blockDataMap.containsKey(b) &&
+                        blockDataMap[b]?.team == data.team &&
+                        b.type != Material.AIR
+                }.let { b ->
+                    data.isOnInk = b != null
+                    if (b == b1 || b == null) {
                         if (!data.isUsingJetPack) {
                             player.allowFlight = false
                             player.isFlying = false
                         }
+                    } else {
+                        player.allowFlight = true
+                        player.isFlying = true
                         return
                     }
                 }
-            }
-        }
-
-        data.isOnInk = false
-        if (!data.isUsingJetPack) {
-            player.allowFlight = false
-            player.isFlying = false
         }
     }
 }
