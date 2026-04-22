@@ -1,6 +1,5 @@
 // Gradle 9.0.0 can't run in Java8
 plugins {
-    id("org.jlleitschuh.gradle.ktlint") version "14.2.0"
     id("io.kotest") version "6.1.11"
     id("com.gradleup.shadow") version "8.3.10"
     id("org.jetbrains.kotlin.jvm") version "2.3.20"
