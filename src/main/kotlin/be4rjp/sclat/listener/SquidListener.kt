@@ -14,20 +14,17 @@ import org.bukkit.event.player.PlayerMoveEvent
 class SquidListener : Listener {
     @EventHandler
     fun onPlayerMove(event: PlayerMoveEvent) {
-        val player = event.getPlayer()
-        SquidListenerMgr.checkOnInk(player)
+        SquidListenerMgr.checkOnInk(event.player)
     }
 
     @EventHandler
     fun onPlayerSwitchSlot(event: PlayerItemHeldEvent) {
-        val player = event.getPlayer()
+        val player = event.player
         val data = getPlayerData(player)
         SquidListenerMgr.checkOnInk(player)
-        if (player.inventory.getItem(event.newSlot) == null) {
-            data!!.isSquid = true
-            return
-        }
-        data!!.isSquid = false
+
+        // enable squid mode if player held no item
+        data?.isSquid = player.inventory.getItem(event.newSlot) == null
     }
 
     @EventHandler
