@@ -5,9 +5,9 @@ import be4rjp.sclat.data.Area
 import be4rjp.sclat.data.DataMgr
 import be4rjp.sclat.data.LocMeta
 import be4rjp.sclat.data.MapData
-import be4rjp.sclat.data.Path
 import be4rjp.sclat.plugin
 import net.azisaba.sclat.core.DelegatedLogger
+import net.azisaba.sclat.core.data.Path
 import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.WorldCreator
@@ -127,7 +127,7 @@ object MapLoader {
         for (pm in map.pathMetaList) {
             val from = toLocation(pm.from)
             val to = toLocation(pm.to)
-            val path = Path(from, to)
+            val path = Path(plugin, from, to)
             map.addPath(path)
         }
 

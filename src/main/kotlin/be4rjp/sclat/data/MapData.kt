@@ -1,6 +1,7 @@
 package be4rjp.sclat.data
 
 import be4rjp.sclat.api.wiremesh.WiremeshListTask
+import net.azisaba.sclat.core.data.Path
 import org.bukkit.Location
 
 /**

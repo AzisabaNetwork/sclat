@@ -5,8 +5,8 @@ import be4rjp.sclat.api.raytrace.RayTrace
 import be4rjp.sclat.data.DataMgr.addPathArmorStandList
 import be4rjp.sclat.data.DataMgr.getPlayerData
 import be4rjp.sclat.data.Match
-import be4rjp.sclat.data.Path
 import be4rjp.sclat.plugin
+import net.azisaba.sclat.core.data.Path
 import net.minecraft.server.v1_14_R1.EnumItemSlot
 import net.minecraft.server.v1_14_R1.PacketPlayOutEntityEquipment
 import org.bukkit.Color
