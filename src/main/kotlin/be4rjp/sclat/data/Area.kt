@@ -3,7 +3,6 @@ package be4rjp.sclat.data
 import be4rjp.sclat.Sclat
 import be4rjp.sclat.api.SclatUtil.sendMessage
 import be4rjp.sclat.manager.PaintMgr
-import be4rjp.sclat.plugin
 import net.azisaba.sclat.core.enums.MessageType
 import net.azisaba.sclat.core.team.Team
 import org.bukkit.Location
@@ -12,6 +11,7 @@ import org.bukkit.Sound
 import org.bukkit.block.Block
 import org.bukkit.entity.EntityType
 import org.bukkit.entity.Shulker
+import org.bukkit.plugin.java.JavaPlugin
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 import org.bukkit.scheduler.BukkitRunnable
@@ -22,6 +22,7 @@ import java.util.function.Consumer
  * @author Be4rJP
  */
 class Area(
+    private val plugin: JavaPlugin,
     private val from: Location,
     private val to: Location,
 ) {

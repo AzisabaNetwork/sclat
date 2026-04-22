@@ -414,7 +414,7 @@ object MatchMgr {
         setTeam(id * 2, team0)
         setTeam(id * 2 + 1, team1)
 
-        val bur = BlockUpdater()
+        val bur = BlockUpdater(plugin)
         if (Sclat.conf!!
                 .config!!
                 .contains("BlockUpdateRate")

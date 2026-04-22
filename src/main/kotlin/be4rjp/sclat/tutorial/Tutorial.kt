@@ -384,7 +384,7 @@ object Tutorial {
                         spongeMap.clear()
                         // ------------------------------------------------------------
                         for (player in plugin.server.onlinePlayers) player.exp = 0.99f
-                        val bur = BlockUpdater()
+                        val bur = BlockUpdater(plugin)
                         if (Sclat.conf?.config!!.contains("BlockUpdateRate")) {
                             bur.setMaxBlockInOneTick(
                                 Sclat.conf?.config!!.getInt(

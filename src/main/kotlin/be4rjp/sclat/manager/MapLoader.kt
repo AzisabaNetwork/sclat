@@ -136,7 +136,7 @@ object MapLoader {
             val from = toLocation(am.from)
             val to = toLocation(am.to)
             if (from != null && to != null) {
-                val area = Area(from, to)
+                val area = Area(plugin, from, to)
                 map.addArea(area)
             }
         }

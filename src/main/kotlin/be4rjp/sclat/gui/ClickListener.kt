@@ -142,7 +142,7 @@ class ClickListener : Listener {
                 match!!.blockUpdater!!.stop()
                 rollBack()
                 player.exp = 0.99f
-                val bur = BlockUpdater()
+                val bur = BlockUpdater(plugin)
                 if (Sclat.conf!!
                         .config!!
                         .contains("BlockUpdateRate")

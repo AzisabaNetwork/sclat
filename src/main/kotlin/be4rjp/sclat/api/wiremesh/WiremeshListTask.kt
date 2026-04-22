@@ -60,7 +60,7 @@ class WiremeshListTask(
                         while (processed < batchSize && blockList.isNotEmpty() && !stopRequested) {
                             val block = blockList.removeAt(0)
                             val bData = blockDataMap[block] ?: continue
-                            val wm = Wiremesh(block, block.type, bData)
+                            val wm = Wiremesh(plugin, block, block.type, bData)
                             try {
                                 wm.startTask()
                             } catch (e: Exception) {
