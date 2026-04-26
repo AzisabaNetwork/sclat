@@ -2,6 +2,7 @@ package be4rjp.sclat.api.packet
 
 import com.comphenix.protocol.PacketType
 import com.comphenix.protocol.ProtocolLibrary
+import com.comphenix.protocol.ProtocolManager
 import com.comphenix.protocol.events.PacketContainer
 import com.comphenix.protocol.reflect.FieldAccessException
 import net.azisaba.sclat.core.DelegatedLogger
@@ -13,7 +14,7 @@ import java.lang.reflect.InvocationTargetException
 object Packets {
     private val logger by DelegatedLogger()
 
-    val protocolManager by lazy { ProtocolLibrary.getProtocolManager() }
+    val protocolManager: ProtocolManager by lazy { ProtocolLibrary.getProtocolManager() }
 
     fun createPacket(packetType: PacketType): PacketContainer = protocolManager.createPacket(packetType)
 
