@@ -40,30 +40,15 @@ class BlockUpdater(
                             if (block.location.chunk.isLoaded) {
                                 try {
                                     // Sclat.setBlockByNMSChunk(block, blocklist.get(block), true);
-
-                                    val list: MutableList<Block> = ArrayList()
-                                    val up = block.getRelative(BlockFace.UP)
-                                    val west = block.getRelative(BlockFace.WEST)
-                                    val east = block.getRelative(BlockFace.EAST)
-                                    val south = block.getRelative(BlockFace.SOUTH)
-                                    val north = block.getRelative(BlockFace.NORTH)
-                                    val down = block.getRelative(BlockFace.DOWN)
-                                    list.add(up)
-                                    list.add(west)
-                                    list.add(east)
-                                    list.add(south)
-                                    list.add(north)
-                                    list.add(down)
-
-                                    check@ for (cb in list) {
-                                        if (cb.type == Material.AIR) {
-                                            // Sclat.sendBlockChangeForAllPlayer(block, blocklist.get(block));
-                                            chunkBlockMap
-                                                .computeIfAbsent(block.chunk) { chunk: Chunk? -> mutableListOf() }
-                                                .add(block)
-                                            continue
+                                    arrayOf(BlockFace.UP, BlockFace.WEST, BlockFace.EAST, BlockFace.SOUTH, BlockFace.NORTH, BlockFace.DOWN)
+                                        .forEach { face ->
+                                            val relativeBlock = block.getRelative(face)
+                                            if (relativeBlock.type == Material.AIR) {
+                                                chunkBlockMap
+                                                    .computeIfAbsent(block.chunk) { chunk: Chunk? -> mutableListOf() }
+                                                    .add(block)
+                                            }
                                         }
-                                    }
                                 } catch (e: Exception) {
                                 }
                             } else {
