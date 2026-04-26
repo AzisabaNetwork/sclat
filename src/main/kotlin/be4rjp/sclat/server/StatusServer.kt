@@ -16,6 +16,7 @@ import java.io.InputStreamReader
 import java.io.PrintWriter
 import java.net.ServerSocket
 import java.net.Socket
+import java.util.UUID
 
 class StatusServer( // private List<String> commands = new ArrayList<>();
     private val port: Int,
@@ -88,7 +89,7 @@ internal class EchoThread(
 
                     if (args[0] == "return" && args.size == 2) {
                         if (args[1]!!.length == 36) {
-                            PlayerReturnManager.addPlayerReturn(args[1])
+                            PlayerReturnManager.addPlayerReturn(UUID.fromString(args[1]))
                         }
                     }
 

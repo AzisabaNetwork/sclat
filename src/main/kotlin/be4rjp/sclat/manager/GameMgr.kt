@@ -102,10 +102,7 @@ class GameMgr : Listener {
         player.isCollidable = false
 
         // player.setDisplayName(player.getName());
-        if (PlayerReturnManager.isReturned(
-                player.uniqueId.toString(),
-            )
-        ) {
+        if (PlayerReturnManager.isReturned(player.uniqueId)) {
             e.joinMessage = ChatColor.GOLD.toString() + player.name + " returned from a match."
         }
 
