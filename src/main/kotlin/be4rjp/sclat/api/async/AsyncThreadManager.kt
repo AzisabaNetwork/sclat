@@ -7,6 +7,7 @@ import java.util.Random
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.CopyOnWriteArrayList
 
+@Deprecated("Use mccoroutine")
 object AsyncThreadManager {
     private val tickThreads: MutableList<AsyncTickThread> = CopyOnWriteArrayList()
 
