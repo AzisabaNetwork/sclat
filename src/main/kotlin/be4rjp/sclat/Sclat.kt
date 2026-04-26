@@ -43,8 +43,6 @@ import be4rjp.sclat.weapon.MainWeapon
 import be4rjp.sclat.weapon.SPWeapon
 import be4rjp.sclat.weapon.SnowballListener
 import be4rjp.sclat.weapon.SubWeapon
-import com.comphenix.protocol.ProtocolLibrary
-import com.comphenix.protocol.ProtocolManager
 import com.google.common.io.ByteStreams
 import fr.mrmicky.fastboard.FastBoard
 import net.azisaba.sclat.core.DelegatedLogger
@@ -93,8 +91,6 @@ class Sclat :
         // ----------------------------APICheck-------------------------------
         if (!onInit(server.pluginManager)) return
         logger.info("API check was completed.")
-
-        protocolManager = ProtocolLibrary.getProtocolManager()
         init()
 
         dadadaCheckerAPI = DADADACheckerAPI(this)
@@ -513,9 +509,6 @@ class Sclat :
         // 重複しない数字
         // ボム等で使用
         private var nonDuplicateNumber = 0
-
-        // for ProtocolLib
-        lateinit var protocolManager: ProtocolManager
 
         // for DADADAChecker
         @JvmField

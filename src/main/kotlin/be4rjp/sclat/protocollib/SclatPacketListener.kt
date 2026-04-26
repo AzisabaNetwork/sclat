@@ -1,13 +1,13 @@
 package be4rjp.sclat.protocollib
 
-import be4rjp.sclat.Sclat
+import be4rjp.sclat.api.packet.Packets
 import be4rjp.sclat.plugin
 import com.comphenix.protocol.PacketType
 
 object SclatPacketListener {
     @JvmStatic
     fun init() {
-        Sclat.protocolManager.apply {
+        Packets.protocolManager.apply {
             addPacketListener(VehiclePacketListener(plugin, PacketType.Play.Client.STEER_VEHICLE))
             addPacketListener(EntityClickListener(plugin, PacketType.Play.Client.USE_ENTITY))
         }
