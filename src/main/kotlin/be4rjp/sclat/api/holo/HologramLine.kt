@@ -11,18 +11,14 @@ import java.util.Optional
 import java.util.UUID
 import java.util.concurrent.ThreadLocalRandom
 
+@Deprecated("Sorry we wont use this class because of entityId generation is unsafe")
 class HologramLine(
     private val location: Location,
     private var text: String,
 ) {
-    val entityId: Int
-    private val uuid: UUID
+    val entityId: Int = ThreadLocalRandom.current().nextInt(100000, 999999)
+    private val uuid: UUID = UUID.randomUUID()
     private var visible = true
-
-    init {
-        this.entityId = ThreadLocalRandom.current().nextInt(100000, 999999)
-        this.uuid = UUID.randomUUID()
-    }
 
     fun setText(text: String) {
         this.text = text

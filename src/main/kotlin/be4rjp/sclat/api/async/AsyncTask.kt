@@ -3,6 +3,7 @@ package be4rjp.sclat.api.async
 import be4rjp.sclat.plugin
 import org.bukkit.scheduler.BukkitRunnable
 
+@Deprecated("Use mccoroutine instead")
 abstract class AsyncTask : Runnable {
     var isCanceled: Boolean = false
         private set

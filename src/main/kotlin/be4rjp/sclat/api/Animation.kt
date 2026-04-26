@@ -1,8 +1,10 @@
 package be4rjp.sclat.api
 
-import be4rjp.sclat.api.team.Team
 import be4rjp.sclat.data.DataMgr
 import be4rjp.sclat.plugin
+import net.azisaba.sclat.core.enums.SoundType
+import net.azisaba.sclat.core.gauge.GaugeAPI
+import net.azisaba.sclat.core.team.SclatTeam
 import org.bukkit.ChatColor
 import org.bukkit.Sound
 import org.bukkit.entity.Player
@@ -21,7 +23,7 @@ object Animation {
         team1point: Int,
         team0color: String?,
         team1color: String?,
-        winteam: Team?,
+        winteam: SclatTeam?,
         hikiwake: Boolean,
     ) {
         val task: BukkitRunnable =
@@ -109,7 +111,7 @@ object Animation {
         team1point: Int,
         team0color: String?,
         team1color: String?,
-        winteam: Team?,
+        winteam: SclatTeam?,
     ) {
         val task: BukkitRunnable =
             object : BukkitRunnable() {
@@ -181,7 +183,7 @@ object Animation {
         team1point: Int,
         team0color: String?,
         team1color: String?,
-        winteam: Team?,
+        winteam: SclatTeam?,
         hikiwake: Boolean,
     ) {
         val task: BukkitRunnable =

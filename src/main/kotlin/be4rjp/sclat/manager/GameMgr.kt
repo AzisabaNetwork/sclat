@@ -1,14 +1,9 @@
 package be4rjp.sclat.manager
 
 import be4rjp.sclat.Sclat
-import be4rjp.sclat.api.MessageType
 import be4rjp.sclat.api.SclatUtil.playGameSound
 import be4rjp.sclat.api.SclatUtil.sendMessage
-import be4rjp.sclat.api.ServerType
-import be4rjp.sclat.api.SoundType
 import be4rjp.sclat.api.player.PlayerData
-import be4rjp.sclat.api.player.PlayerSettings
-import be4rjp.sclat.config.NewConfig
 import be4rjp.sclat.data.DataMgr
 import be4rjp.sclat.data.DataMgr.beaconMap
 import be4rjp.sclat.data.DataMgr.getBeaconFromplayer
@@ -25,7 +20,6 @@ import be4rjp.sclat.data.DataMgr.sprinklerMap
 import be4rjp.sclat.data.PaintData
 import be4rjp.sclat.gui.LootBox
 import be4rjp.sclat.gui.OpenGUI
-import be4rjp.sclat.loginbonus.LoginBonus
 import be4rjp.sclat.packet.PacketHandler
 import be4rjp.sclat.plugin
 import be4rjp.sclat.server.EquipmentClient
@@ -51,6 +45,11 @@ import be4rjp.sclat.weapon.Shooter.shooterRunnable
 import be4rjp.sclat.weapon.Spinner.spinnerRunnable
 import be4rjp.sclat.weapon.Swapper.swapperRunnable
 import fr.mrmicky.fastboard.FastBoard
+import net.azisaba.sclat.core.config.NewConfig
+import net.azisaba.sclat.core.enums.MessageType
+import net.azisaba.sclat.core.enums.ServerType
+import net.azisaba.sclat.core.enums.SoundType
+import net.azisaba.sclat.core.player.PlayerSettings
 import net.md_5.bungee.api.chat.ClickEvent
 import net.md_5.bungee.api.chat.TextComponent
 import org.bukkit.Bukkit
@@ -103,10 +102,7 @@ class GameMgr : Listener {
         player.isCollidable = false
 
         // player.setDisplayName(player.getName());
-        if (PlayerReturnManager.isReturned(
-                player.uniqueId.toString(),
-            )
-        ) {
+        if (PlayerReturnManager.isReturned(player.uniqueId)) {
             e.joinMessage = ChatColor.GOLD.toString() + player.name + " returned from a match."
         }
 
@@ -116,13 +112,13 @@ class GameMgr : Listener {
         val uuid: String = player.uniqueId.toString()
         val settings = PlayerSettings(player)
         data.settings = settings
-        data.weaponClass = (
+        data.weaponClass =
             getWeaponClass(
                 Sclat.conf!!
                     .config!!
                     .getString("DefaultClass"),
             )
-        )
+
         setPlayerData(player, data)
 
         // ((LivingEntity)player).setCollidable(false);
@@ -139,8 +135,12 @@ class GameMgr : Listener {
             // DataMgr.setRankingHolograms(player, rankingHolograms);
             // PlayerStatusMgr.HologramUpdateRunnable(player);
             Sclat.playerHolograms.add(player)
-            if (LoginBonus.tryClaim(player)) {
-                player.sendMessage(
+            player.apply {
+                if (uniqueId in NewConfig.loginBonusRefreshSet) return@apply
+                PlayerStatusMgr.addMoney(player, NewConfig.loginBonusReward.money)
+                PlayerStatusMgr.addTicket(player, NewConfig.loginBonusReward.ticket)
+                NewConfig.loginBonusRefreshSet.plus(uniqueId)
+                sendMessage(
                     "${ChatColor.GOLD}ログインボーナス!${ChatColor.WHITE} お金 ${ChatColor.GREEN}+${NewConfig.loginBonusReward.money}${ChatColor.WHITE} & チケット ${ChatColor.GREEN}+${NewConfig.loginBonusReward.ticket}${ChatColor.WHITE}",
                 )
             }

@@ -8,8 +8,8 @@ import be4rjp.sclat.data.DataMgr.getSprinklerFromplayer
 import be4rjp.sclat.data.DataMgr.setSnowballIsHit
 import be4rjp.sclat.data.DataMgr.snowballNameMap
 import be4rjp.sclat.plugin
-import be4rjp.sclat.sclatLogger
 import be4rjp.sclat.weapon.Gear
+import net.azisaba.sclat.core.DelegatedLogger
 import net.minecraft.server.v1_14_R1.EnumItemSlot
 import net.minecraft.server.v1_14_R1.PacketPlayOutEntityDestroy
 import net.minecraft.server.v1_14_R1.PacketPlayOutEntityEquipment
@@ -33,6 +33,8 @@ import org.bukkit.util.Vector
  * @author Be4rJP
  */
 object Sprinkler {
+    private val logger by DelegatedLogger()
+
     @JvmStatic
     fun sprinklerRunnable(player: Player) {
         val task: BukkitRunnable =
@@ -150,7 +152,7 @@ object Sprinkler {
                     } catch (e: Exception) {
                         cancel()
                         drop!!.remove()
-                        sclatLogger.warn(e.message)
+                        logger.warn(e.message)
                     }
                 }
             }

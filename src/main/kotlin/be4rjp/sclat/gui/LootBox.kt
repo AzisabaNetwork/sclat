@@ -1,7 +1,6 @@
 package be4rjp.sclat.gui
 
 import be4rjp.sclat.Sclat
-import be4rjp.sclat.api.MessageType
 import be4rjp.sclat.api.SclatUtil.sendMessage
 import be4rjp.sclat.data.DataMgr.getPlayerData
 import be4rjp.sclat.data.DataMgr.getWeaponClass
@@ -10,6 +9,7 @@ import be4rjp.sclat.manager.PlayerStatusMgr.addWeapon
 import be4rjp.sclat.manager.PlayerStatusMgr.getTicket
 import be4rjp.sclat.manager.PlayerStatusMgr.haveWeapon
 import be4rjp.sclat.manager.PlayerStatusMgr.subTicket
+import net.azisaba.sclat.core.enums.MessageType
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.Material

@@ -4,17 +4,10 @@ import be4rjp.sclat.Sclat
 import be4rjp.sclat.api.Animation.areaResultAnimation
 import be4rjp.sclat.api.Animation.resultAnimation
 import be4rjp.sclat.api.Animation.tdmResultAnimation
-import be4rjp.sclat.api.MessageType
-import be4rjp.sclat.api.Plugins
 import be4rjp.sclat.api.SclatUtil.playGameSound
 import be4rjp.sclat.api.SclatUtil.restartServer
 import be4rjp.sclat.api.SclatUtil.sendMessage
 import be4rjp.sclat.api.SclatUtil.sendWorldBorderWarningClearPacket
-import be4rjp.sclat.api.ServerType
-import be4rjp.sclat.api.SoundType
-import be4rjp.sclat.api.player.PlayerSettings
-import be4rjp.sclat.api.team.Team
-import be4rjp.sclat.api.utils.ObjectiveUtil
 import be4rjp.sclat.data.BlockUpdater
 import be4rjp.sclat.data.DataMgr
 import be4rjp.sclat.data.DataMgr.armorStandMap
@@ -59,6 +52,13 @@ import be4rjp.sclat.weapon.Spinner.spinnerRunnable
 import be4rjp.sclat.weapon.Swapper.swapperRunnable
 import be4rjp.sclat.weapon.spweapon.SuperArmor.setArmor
 import com.xxmicloxx.NoteBlockAPI.songplayer.RadioSongPlayer
+import net.azisaba.sclat.core.Plugins
+import net.azisaba.sclat.core.enums.MessageType
+import net.azisaba.sclat.core.enums.ServerType
+import net.azisaba.sclat.core.enums.SoundType
+import net.azisaba.sclat.core.player.PlayerSettings
+import net.azisaba.sclat.core.team.SclatTeam
+import net.azisaba.sclat.core.utils.ObjectiveUtil
 import net.md_5.bungee.api.ChatMessageType
 import net.md_5.bungee.api.chat.TextComponent
 import org.bukkit.Bukkit
@@ -121,7 +121,7 @@ object MatchMgr {
                     match.addJoinedPlayerCount()
 
                     data!!.match = match
-                    data.isJoined = (true)
+                    data.isJoined = true
 
                     DataMgr.joinedList.add(player)
 
@@ -165,8 +165,8 @@ object MatchMgr {
                     }
 
                     if (match.joinedPlayerCount == startPlayerCount && !match.isStarted && !match.isStartedCount) {
-                        match.isStarted = (true)
-                        match.isStartedCount = (true)
+                        match.isStarted = true
+                        match.isStartedCount = true
                         val task: BukkitRunnable =
                             object : BukkitRunnable() {
                                 var s: Int = 0
@@ -182,18 +182,18 @@ object MatchMgr {
                                             "§aあと§c" + (startPlayerCount - match.joinedPlayerCount) + "§a人必要です",
                                             MessageType.ALL_PLAYER,
                                         )
-                                        match.isStartedCount = (false)
-                                        match.isStarted = (false)
+                                        match.isStartedCount = false
+                                        match.isStarted = false
                                         // Send match status
                                         if (Sclat.type == ServerType.MATCH) {
-                                            val commands: MutableList<String?> = ArrayList()
-                                            commands.add(
-                                                "cdc " +
-                                                    Sclat.conf!!
-                                                        .servers!!
-                                                        .getString("ServerName"),
-                                            )
-                                            commands.add("stop")
+                                            val commands: MutableList<String> =
+                                                mutableListOf(
+                                                    "cdc " +
+                                                        Sclat.conf!!
+                                                            .servers!!
+                                                            .getString("ServerName"),
+                                                    "stop",
+                                                )
                                             val sc =
                                                 StatusClient(
                                                     Sclat.conf!!
@@ -211,17 +211,15 @@ object MatchMgr {
                                     if (s == 0) {
                                         // Send match status
                                         if (Sclat.type == ServerType.MATCH) {
-                                            val commands: MutableList<String?> = ArrayList()
-                                            commands.add(
-                                                (
+                                            val commands: MutableList<String> =
+                                                mutableListOf(
                                                     "cd " +
                                                         Sclat.conf!!
                                                             .servers!!
                                                             .getString("ServerName") + " " +
-                                                        (System.currentTimeMillis() / 1000 + 30)
-                                                ),
-                                            )
-                                            commands.add("stop")
+                                                        (System.currentTimeMillis() / 1000 + 30),
+                                                    "stop",
+                                                )
                                             val sc =
                                                 StatusClient(
                                                     Sclat.conf!!
@@ -350,17 +348,15 @@ object MatchMgr {
 
                                         // Send match status
                                         if (Sclat.type == ServerType.MATCH) {
-                                            val commands: MutableList<String?> = ArrayList()
-                                            commands.add(
-                                                (
+                                            val commands: MutableList<String> =
+                                                mutableListOf(
                                                     "started " +
                                                         Sclat.conf!!
                                                             .servers!!
                                                             .getString("ServerName") + " " +
-                                                        System.currentTimeMillis() / 1000
-                                                ),
-                                            )
-                                            commands.add("stop")
+                                                        System.currentTimeMillis() / 1000,
+                                                    "stop",
+                                                )
                                             val sc =
                                                 StatusClient(
                                                     Sclat.conf!!
@@ -413,12 +409,12 @@ object MatchMgr {
 
         val id = matchcount
         val match = Match(id)
-        val team0 = Team(id * 2)
-        val team1 = Team(id * 2 + 1)
+        val team0 = SclatTeam(id * 2)
+        val team1 = SclatTeam(id * 2 + 1)
         setTeam(id * 2, team0)
         setTeam(id * 2 + 1, team1)
 
-        val bur = BlockUpdater()
+        val bur = BlockUpdater(plugin)
         if (Sclat.conf!!
                 .config!!
                 .contains("BlockUpdateRate")
@@ -460,8 +456,8 @@ object MatchMgr {
         // lobby待機者用
         val id2 = Int.MAX_VALUE
         val lobbyM = Match(id2)
-        val lobbyT0 = Team(id2)
-        val lobbyT1 = Team(id2 - 1)
+        val lobbyT0 = SclatTeam(id2)
+        val lobbyT1 = SclatTeam(id2 - 1)
         setTeam(id2, lobbyT0)
         setTeam(id2 - 1, lobbyT1)
 
@@ -594,7 +590,7 @@ object MatchMgr {
                         if (s == 0) {
                             p.setDisplayName(getPlayerData(p)!!.team!!.teamColor!!.colorCode + p.name)
 
-                            getPlayerData(p)!!.canFly = (true)
+                            getPlayerData(p)!!.canFly = true
 
                             if (getPlayerData(p)!!.playerNumber == 1) {
                                 PaintMgr.paintGlass(match)
@@ -950,7 +946,7 @@ object MatchMgr {
                         }
 
                         if (s == 281) {
-                            getPlayerData(p)!!.canFly = (false)
+                            getPlayerData(p)!!.canFly = false
 
                             // playerclass
                             if (getPlayerData(p)!!.weaponClass!!.subWeaponName == "ビーコン") {
@@ -969,7 +965,7 @@ object MatchMgr {
                                 swapperRunnable(p)
                                 if (getPlayerData(p)!!.weaponClass!!.mainWeapon!!.slidingShootTick > 1) {
                                     maneuverShootRunnable(p)
-                                    getPlayerData(p)!!.isUsingManeuver = (true)
+                                    getPlayerData(p)!!.isUsingManeuver = true
                                 }
                             }
                             if (getPlayerData(p)!!.weaponClass!!.mainWeapon!!.weaponType == "Shooter") {
@@ -1030,7 +1026,7 @@ object MatchMgr {
 
                             if (getPlayerData(p)!!.weaponClass!!.mainWeapon!!.weaponType == "Camping") {
                                 kasaRunnable(p, true)
-                                getPlayerData(p)!!.mainItemGlow = (true)
+                                getPlayerData(p)!!.mainItemGlow = true
                                 WeaponClassMgr.setWeaponClass(p)
                             }
                             if (getPlayerData(p)!!.weaponClass!!.mainWeapon!!.weaponType == "Hound") {
@@ -1055,7 +1051,7 @@ object MatchMgr {
                             // Shooter.ShooterRunnable(p);
 
                             // SquidMgr.SquidRunnable(p);
-                            getPlayerData(p)!!.isInMatch = (true)
+                            getPlayerData(p)!!.isInMatch = true
                             p.exp = 0.99f
                             if (getPlayerData(p)!!.playerNumber == 1) {
                                 inMatchCounter(p)
@@ -1270,7 +1266,7 @@ object MatchMgr {
                         lines.add("  ")
                         lines.add("§b§l残り時間 » §r" + s / 60 + ":" + min)
 
-                        var gcteam: Team? = null
+                        var gcteam: SclatTeam? = null
                         var isgc = false
                         var entyo = false
 
@@ -1279,13 +1275,13 @@ object MatchMgr {
                                 .config!!
                                 .getString("WorkMode") == "Area"
                         ) {
-                            val list: MutableList<Team?> = ArrayList()
+                            val list: MutableList<SclatTeam?> = ArrayList()
                             for (area in match.mapData!!.areaList) {
                                 list.add(area!!.team)
                             }
 
                             var `is` = true
-                            var t: Team? = null
+                            var t: SclatTeam? = null
                             for ((i, team) in list.withIndex()) {
                                 if (i == 0) {
                                     if (team != null) {
@@ -1361,7 +1357,7 @@ object MatchMgr {
                             )
 
                             if (isgc) {
-                                var ngcteam: Team = match.team0!!
+                                var ngcteam: SclatTeam = match.team0!!
                                 if (match.team0 == gcteam) ngcteam = match.team1!!
                                 if (gcteam!!.gatiCount <= ngcteam.gatiCount) entyo = true
                             }
@@ -1488,7 +1484,7 @@ object MatchMgr {
             object : BukkitRunnable() {
                 val p: Player = player
                 var loc: Location? = null
-                var winteam: Team? = getPlayerData(player)!!.match!!.team0
+                var winteam: SclatTeam? = getPlayerData(player)!!.match!!.team0
                 var i: Int = 0
                 var bestkills: Int = 0
                 var bestpaint: Int = 0
@@ -1543,7 +1539,7 @@ object MatchMgr {
                             beaconMap.clear()
                             sprinklerMap.clear()
                             armorStandMap.clear()
-                            getPlayerData(p)!!.isInMatch = (false)
+                            getPlayerData(p)!!.isInMatch = false
                             if (p.hasPotionEffect(PotionEffectType.SLOW)) p.removePotionEffect(PotionEffectType.SLOW)
                             p.playSound(p.location, Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 3f, 1.3f)
                             loc = p.location
@@ -1561,7 +1557,7 @@ object MatchMgr {
                             p.scoreboard = scoreboard
                         }
                         if (i == 2) {
-                            getPlayerData(p)!!.canFly = (true)
+                            getPlayerData(p)!!.canFly = true
                             p.resetTitle()
                             p.sendTitle(
                                 ChatColor.YELLOW.toString() + "=========================== Finish! ===========================",
@@ -1761,9 +1757,11 @@ object MatchMgr {
 
                         if (i == 80) {
                             getPlayerData(p)
-                            val commands: MutableList<String?> = ArrayList()
-                            commands.add("return " + p.uniqueId)
-                            commands.add("stop")
+                            val commands: MutableList<String> =
+                                mutableListOf(
+                                    "return ${p.uniqueId}",
+                                    "stop",
+                                )
                             val sc =
                                 StatusClient(
                                     Sclat.conf!!
@@ -1782,7 +1780,7 @@ object MatchMgr {
 
                             // int kill = data.killCount;
                             // int paint = data.paintCount;
-                            data!!.canFly = (false)
+                            data!!.canFly = false
 
                             sendMessage("§a----------<< Match result >>----------", MessageType.PLAYER, p)
                             sendMessage("", MessageType.PLAYER, p)
@@ -1915,14 +1913,16 @@ object MatchMgr {
                             PlayerStatusMgr.addKill(p, data.killCount)
 
                             if (Sclat.type == ServerType.MATCH) {
-                                val commands: MutableList<String?> = ArrayList()
-                                commands.add("add money " + pMoney + " " + p.uniqueId)
-                                commands.add("add level " + pLv + " " + p.uniqueId)
-                                commands.add("add ticket " + pTicket + " " + p.uniqueId)
-                                commands.add("add rank " + pRank + " " + p.uniqueId)
-                                commands.add("add kill " + data.killCount + " " + p.uniqueId)
-                                commands.add("add paint " + data.paintCount + " " + p.uniqueId)
-                                commands.add("stop")
+                                val commands: MutableList<String> =
+                                    mutableListOf(
+                                        "add money " + pMoney + " " + p.uniqueId,
+                                        "add level " + pLv + " " + p.uniqueId,
+                                        "add ticket " + pTicket + " " + p.uniqueId,
+                                        "add rank " + pRank + " " + p.uniqueId,
+                                        "add kill " + data.killCount + " " + p.uniqueId,
+                                        "add paint " + data.paintCount + " " + p.uniqueId,
+                                        "stop",
+                                    )
                                 val sc =
                                     StatusClient(
                                         Sclat.conf!!
@@ -2044,23 +2044,21 @@ object MatchMgr {
 
                                 // Send match status
                                 if (Sclat.type == ServerType.MATCH) {
-                                    val commands: MutableList<String?> = ArrayList()
-                                    commands.add(
-                                        "stopped " +
-                                            Sclat.conf!!
-                                                .servers!!
-                                                .getString("ServerName"),
-                                    )
-                                    commands.add(
-                                        "map " +
-                                            Sclat.conf!!
-                                                .servers!!
-                                                .getString("ServerName") + " " +
-                                            getMapRandom(
-                                                if (mapcount == 0) 0 else mapcount - 1,
-                                            ).mapName,
-                                    )
-                                    commands.add("stop")
+                                    val commands: MutableList<String> =
+                                        mutableListOf(
+                                            "stopped " +
+                                                Sclat.conf!!
+                                                    .servers!!
+                                                    .getString("ServerName"),
+                                            "map " +
+                                                Sclat.conf!!
+                                                    .servers!!
+                                                    .getString("ServerName") + " " +
+                                                getMapRandom(
+                                                    if (mapcount == 0) 0 else mapcount - 1,
+                                                ).mapName,
+                                            "stop",
+                                        )
                                     val sc =
                                         StatusClient(
                                             Sclat.conf!!

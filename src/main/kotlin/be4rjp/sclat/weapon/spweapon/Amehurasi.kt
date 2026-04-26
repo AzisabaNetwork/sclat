@@ -3,14 +3,14 @@ package be4rjp.sclat.weapon.spweapon
 import be4rjp.sclat.Sclat
 import be4rjp.sclat.Sclat.Companion.notDuplicateNumber
 import be4rjp.sclat.api.SclatUtil.giveDamage
-import be4rjp.sclat.api.Sphere.getXZCircle
 import be4rjp.sclat.api.raytrace.RayTrace
 import be4rjp.sclat.data.DataMgr.getPlayerData
 import be4rjp.sclat.manager.ArmorStandMgr
 import be4rjp.sclat.manager.SPWeaponMgr
 import be4rjp.sclat.manager.WeaponClassMgr
 import be4rjp.sclat.plugin
-import be4rjp.sclat.sclatLogger
+import net.azisaba.sclat.core.DelegatedLogger
+import net.azisaba.sclat.core.shape.Sphere.getXZCircle
 import org.bukkit.GameMode
 import org.bukkit.Location
 import org.bukkit.Material
@@ -33,6 +33,8 @@ import java.util.Random
  * @author Be4rJP
  */
 object Amehurasi {
+    private val logger by DelegatedLogger()
+
     @JvmStatic
     fun amehurasiDropRunnable(player: Player) {
         val task: BukkitRunnable =
@@ -114,7 +116,7 @@ object Amehurasi {
                     } catch (e: Exception) {
                         drop!!.remove()
                         cancel()
-                        sclatLogger.warn(e.message)
+                        logger.warn(e.message)
                     }
                 }
             }
@@ -246,7 +248,7 @@ object Amehurasi {
                         c++
                     } catch (e: Exception) {
                         cancel()
-                        sclatLogger.warn(e.message)
+                        logger.warn(e.message)
                     }
                 }
             }

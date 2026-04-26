@@ -5,7 +5,6 @@ import be4rjp.sclat.Sclat
 import be4rjp.sclat.Sclat.Companion.notDuplicateNumber
 import be4rjp.sclat.api.SclatUtil.createInkExplosionEffect
 import be4rjp.sclat.api.SclatUtil.giveDamage
-import be4rjp.sclat.api.Sphere.getSphere
 import be4rjp.sclat.data.DataMgr.getPlayerData
 import be4rjp.sclat.data.DataMgr.getSnowballIsHit
 import be4rjp.sclat.data.DataMgr.setSnowballIsHit
@@ -15,7 +14,8 @@ import be4rjp.sclat.manager.SPWeaponMgr
 import be4rjp.sclat.manager.SuperJumpMgr
 import be4rjp.sclat.manager.WeaponClassMgr
 import be4rjp.sclat.plugin
-import be4rjp.sclat.sclatLogger
+import net.azisaba.sclat.core.DelegatedLogger
+import net.azisaba.sclat.core.shape.Sphere.getSphere
 import net.minecraft.server.v1_14_R1.EntityArmorStand
 import net.minecraft.server.v1_14_R1.PacketPlayOutEntityDestroy
 import net.minecraft.server.v1_14_R1.PacketPlayOutSpawnEntityLiving
@@ -45,6 +45,8 @@ import org.bukkit.util.Vector
  * @author Be4rJP
  */
 object JetPack {
+    private val logger by DelegatedLogger()
+
     @JvmStatic
     fun jetPackRunnable(player: Player) {
         val api = BlockStudio.getBlockStudioAPI()
@@ -539,7 +541,7 @@ object JetPack {
                     } catch (e: Exception) {
                         drop!!.remove()
                         cancel()
-                        sclatLogger.warn(e.message)
+                        logger.warn(e.message)
                     }
                 }
             }

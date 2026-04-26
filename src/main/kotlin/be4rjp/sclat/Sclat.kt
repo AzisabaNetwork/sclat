@@ -4,19 +4,12 @@ package be4rjp.sclat
 
 import be4rjp.blockstudio.BlockStudio
 import be4rjp.dadadachecker.DADADACheckerAPI
-import be4rjp.sclat.api.Plugins
-import be4rjp.sclat.api.Plugins.Companion.onInit
 import be4rjp.sclat.api.SclatUtil.sendRestartedServerInfo
-import be4rjp.sclat.api.ServerType
 import be4rjp.sclat.api.async.AsyncPlayerListener
 import be4rjp.sclat.api.async.AsyncThreadManager.setup
 import be4rjp.sclat.api.async.AsyncThreadManager.shutdownAll
-import be4rjp.sclat.api.config.CustomConfig
 import be4rjp.sclat.api.holo.PlayerHolograms
-import be4rjp.sclat.api.utils.TextAnimation
 import be4rjp.sclat.command.SclatCommands
-import be4rjp.sclat.config.Config
-import be4rjp.sclat.config.NewConfig
 import be4rjp.sclat.data.DataMgr
 import be4rjp.sclat.data.DataMgr.armorStandMap
 import be4rjp.sclat.data.DataMgr.blockDataMap
@@ -50,10 +43,18 @@ import be4rjp.sclat.weapon.MainWeapon
 import be4rjp.sclat.weapon.SPWeapon
 import be4rjp.sclat.weapon.SnowballListener
 import be4rjp.sclat.weapon.SubWeapon
-import com.comphenix.protocol.ProtocolLibrary
-import com.comphenix.protocol.ProtocolManager
 import com.google.common.io.ByteStreams
 import fr.mrmicky.fastboard.FastBoard
+import net.azisaba.sclat.core.DelegatedLogger
+import net.azisaba.sclat.core.Plugins
+import net.azisaba.sclat.core.Plugins.Companion.onInit
+import net.azisaba.sclat.core.config.Config
+import net.azisaba.sclat.core.config.CustomConfig
+import net.azisaba.sclat.core.config.NewConfig
+import net.azisaba.sclat.core.enums.ServerType
+import net.azisaba.sclat.core.status.ServerStatus
+import net.azisaba.sclat.core.status.StatusLine
+import net.azisaba.sclat.core.utils.TextAnimation
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.Location
@@ -88,10 +89,8 @@ class Sclat :
         setup(1)
 
         // ----------------------------APICheck-------------------------------
-        if (!onInit()) return
-        sclatLogger.info("API check was completed.")
-
-        protocolManager = ProtocolLibrary.getProtocolManager()
+        if (!onInit(server.pluginManager)) return
+        logger.info("API check was completed.")
         init()
 
         dadadaCheckerAPI = DADADACheckerAPI(this)
@@ -99,7 +98,7 @@ class Sclat :
         // -------------------------------------------------------------------
 
         // --------------------------Load config------------------------------
-        sclatLogger.info("Loading config files...")
+        logger.info("Loading config files...")
         conf = Config()
         conf?.loadConfig()
         NewConfig.load()
@@ -114,7 +113,7 @@ class Sclat :
                 world!!.isAutoSave = false
             }
         } else {
-            sclatLogger.info("Deferred map loading is enabled; maps will be loaded when assigned to matches.")
+            logger.info("Deferred map loading is enabled; maps will be loaded when assigned to matches.")
         }
         if (conf!!.config!!.contains("Tutorial")) tutorial = conf!!.config!!.getBoolean("Tutorial")
         if (conf!!.config!!.contains("Colors")) colors = conf!!.config!!.getStringList("Colors")
@@ -138,7 +137,7 @@ class Sclat :
         // -------------------------------------------------------------------
 
         // ------------------------RegisteringEvents--------------------------
-        sclatLogger.info("Registering Events...")
+        logger.info("Registering Events...")
         val pm = server.pluginManager
         pm.registerEvents(GameMgr(), this)
         pm.registerEvents(SquidListener(), this)
@@ -154,27 +153,27 @@ class Sclat :
         // -------------------------------------------------------------------
 
         // ------------------------RegisteringCommands------------------------
-        sclatLogger.info("Registering Commands...")
+        logger.info("Registering Commands...")
         SclatCommands.init(this)
 
         // -------------------------------------------------------------------
 
         // ------------------------Setup from config--------------------------
-        sclatLogger.info("SetupColor...")
+        logger.info("SetupColor...")
         ColorMgr.setupColor()
-        sclatLogger.info("SetupMainWeapon...")
+        logger.info("SetupMainWeapon...")
         MainWeaponMgr.setupMainWeapon()
-        sclatLogger.info("WeaponClassSetup...")
+        logger.info("WeaponClassSetup...")
         WeaponClassMgr.weaponClassSetup()
-        sclatLogger.info("Setup Map...")
-        sclatLogger.info("")
-        sclatLogger.info("-----------------MAP LIST-----------------")
+        logger.info("Setup Map...")
+        logger.info("")
+        logger.info("-----------------MAP LIST-----------------")
         MapDataMgr.setupMap()
-        sclatLogger.info("------------------------------------------")
-        sclatLogger.info("")
-        sclatLogger.info("MatchSetup...")
+        logger.info("------------------------------------------")
+        logger.info("")
+        logger.info("MatchSetup...")
         MatchMgr.matchSetup()
-        sclatLogger.info("Setup is finished!")
+        logger.info("Setup is finished!")
 
         // -------------------------------------------------------------------
 
@@ -190,11 +189,11 @@ class Sclat :
         }
         buff.append("###")
 
-        sclatLogger.info("##############################################")
-        sclatLogger.info("###                                        ###")
-        sclatLogger.info(buff.toString())
-        sclatLogger.info("###                                        ###")
-        sclatLogger.info("##############################################")
+        logger.info("##############################################")
+        logger.info("###                                        ###")
+        logger.info(buff.toString())
+        logger.info("###                                        ###")
+        logger.info("##############################################")
 
         // -------------------------------------------------------------------
 
@@ -260,7 +259,7 @@ class Sclat :
         if (type == ServerType.LOBBY) {
             ss = StatusServer(conf!!.config!!.getInt("StatusShare.Port"))
             ss!!.start()
-            sclatLogger.info("StatusServer is ready!")
+            logger.info("StatusServer is ready!")
         }
 
         // -------------------------------------------------------------------
@@ -269,13 +268,13 @@ class Sclat :
         if (type == ServerType.MATCH || conf!!.config!!.getString("WorkMode") == "Trial") {
             es = EquipmentServer(conf!!.config!!.getInt("EquipShare.Port"))
             es!!.start()
-            sclatLogger.info("StatusServer is ready!")
+            logger.info("StatusServer is ready!")
         }
 
         // -------------------------------------------------------------------
 
         // --------------------------Return task------------------------------
-        PlayerReturnManager.runRemoveTask()
+        PlayerReturnManager.runRemoveTask(this)
 
         // -------------------------------------------------------------------
 
@@ -322,7 +321,7 @@ class Sclat :
         // -------------------------------------------------------------------
 
         // ---------------------------BlockStudio-----------------------------
-        sclatLogger.info("Loading all object data...")
+        logger.info("Loading all object data...")
         val api = BlockStudio.getBlockStudioAPI()
         api.loadAllObjectData()
 
@@ -447,23 +446,18 @@ class Sclat :
             "§9§lサーバー »",
             *ServerStatusManager.serverList
                 .filter { status -> !status.isMaintenance && status.isOnline }
-                .map { serverStatus ->
-                    " " + serverStatus.displayName + ": §r" +
-                        if (serverStatus.runningMatch) {
-                            val time = System.currentTimeMillis() / 1000 - serverStatus.matchStartTime
-                            val min = String.format("%02d", time % 60)
-                            serverStatus.playerCount.toString() + "§e人が試合中" +
-                                (if (time < 10000) " §r(" + time / 60 + ":" + min + ")" else "")
-                        } else {
-                            if (serverStatus.waitingEndTime != 0L) {
-                                (
-                                    serverStatus.playerCount.toString() + "§a人が待機中" + " §r(§b" +
-                                        ((serverStatus.waitingEndTime - (System.currentTimeMillis() / 1000)).toString() + "§r秒後に開始)")
-                                )
-                            } else {
-                                serverStatus.playerCount.toString() + "§a人が待機中"
-                            }
-                        }
+                .mapNotNull { serverStatus ->
+                    StatusLine.getLine(
+                        ServerStatus(
+                            serverStatus.isOnline,
+                            serverStatus.isMaintenance,
+                            serverStatus.displayName,
+                            serverStatus.matchStartTime,
+                            serverStatus.playerCount,
+                            serverStatus.waitingEndTime,
+                            serverStatus.runningMatch,
+                        ),
+                    )
                 }.toTypedArray(),
             "  ",
             "§a§lNews »",
@@ -474,6 +468,8 @@ class Sclat :
     }
 
     companion object {
+        private val logger by DelegatedLogger()
+
         @JvmField
         var conf: Config? = null
 
@@ -513,9 +509,6 @@ class Sclat :
         // 重複しない数字
         // ボム等で使用
         private var nonDuplicateNumber = 0
-
-        // for ProtocolLib
-        lateinit var protocolManager: ProtocolManager
 
         // for DADADAChecker
         @JvmField

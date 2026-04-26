@@ -7,7 +7,7 @@ import be4rjp.sclat.data.LocMeta
 import be4rjp.sclat.data.MapData
 import be4rjp.sclat.data.PathMeta
 import be4rjp.sclat.data.WiremeshMeta
-import be4rjp.sclat.sclatLogger
+import net.azisaba.sclat.core.DelegatedLogger
 
 /**
  * MapData manager — parse map configuration into metadata only.
@@ -16,6 +16,7 @@ import be4rjp.sclat.sclatLogger
  * startup. Runtime objects remain null until MapLoader loads the map.
  */
 object MapDataMgr {
+    private val logger by DelegatedLogger()
     var allmapcount: Int = 0
 
     @Synchronized
@@ -151,7 +152,7 @@ object MapDataMgr {
             }
 
             // Perform final registration
-            sclatLogger.info(mapname)
+            logger.info(mapname)
             map.worldName = worldName
             allmapcount++
             addMapList(map)

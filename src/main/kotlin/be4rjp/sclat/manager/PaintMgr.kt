@@ -2,8 +2,6 @@ package be4rjp.sclat.manager
 
 import be4rjp.sclat.Sclat
 import be4rjp.sclat.api.SclatUtil
-import be4rjp.sclat.api.ServerType
-import be4rjp.sclat.api.team.Team
 import be4rjp.sclat.data.DataMgr.blockDataMap
 import be4rjp.sclat.data.DataMgr.getPaintDataFromBlock
 import be4rjp.sclat.data.DataMgr.getPlayerData
@@ -16,6 +14,8 @@ import be4rjp.sclat.data.PaintData
 import be4rjp.sclat.data.Sponge
 import be4rjp.sclat.weapon.Gear
 import be4rjp.sclat.weapon.Gear.getGearInfluence
+import net.azisaba.sclat.core.enums.ServerType
+import net.azisaba.sclat.core.team.SclatTeam
 import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.block.Block
@@ -176,7 +176,7 @@ object PaintMgr {
 
     fun paintByTeam(
         block: Block,
-        team: Team,
+        team: SclatTeam,
         match: Match,
     ) {
         val team = team

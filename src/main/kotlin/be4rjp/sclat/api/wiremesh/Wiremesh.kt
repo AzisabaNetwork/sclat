@@ -1,6 +1,5 @@
 package be4rjp.sclat.api.wiremesh
 
-import be4rjp.sclat.plugin
 import net.minecraft.server.v1_14_R1.EntityArmorStand
 import net.minecraft.server.v1_14_R1.EntityFallingBlock
 import net.minecraft.server.v1_14_R1.IBlockData
@@ -16,6 +15,7 @@ import org.bukkit.craftbukkit.v1_14_R1.CraftWorld
 import org.bukkit.craftbukkit.v1_14_R1.block.data.CraftBlockData
 import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer
 import org.bukkit.entity.Player
+import org.bukkit.plugin.java.JavaPlugin
 import org.bukkit.scheduler.BukkitRunnable
 import java.util.Random
 
@@ -24,6 +24,7 @@ import java.util.Random
  * @author Be4rJP
  */
 class Wiremesh(
+    private val plugin: JavaPlugin,
     private val block: Block,
     private val originalType: Material,
     private val blockData: BlockData,

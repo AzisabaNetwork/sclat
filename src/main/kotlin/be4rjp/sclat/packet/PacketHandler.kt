@@ -1,11 +1,11 @@
 package be4rjp.sclat.packet
 
 import be4rjp.sclat.api.player.PlayerData
-import be4rjp.sclat.api.player.PlayerSettings
 import be4rjp.sclat.data.DataMgr.getPlayerData
 import io.netty.channel.ChannelDuplexHandler
 import io.netty.channel.ChannelHandlerContext
 import io.netty.channel.ChannelPromise
+import net.azisaba.sclat.core.player.PlayerSettings
 import net.minecraft.server.v1_14_R1.EntityTypes
 import net.minecraft.server.v1_14_R1.PacketPlayOutAbilities
 import net.minecraft.server.v1_14_R1.PacketPlayOutSpawnEntity
@@ -14,13 +14,8 @@ import org.bukkit.entity.Player
 class PacketHandler(
     private val player: Player?,
 ) : ChannelDuplexHandler() {
-    private val playerData: PlayerData?
-    private val playerSettings: PlayerSettings
-
-    init {
-        this.playerData = getPlayerData(player)
-        this.playerSettings = playerData?.settings!!
-    }
+    private val playerData: PlayerData? = getPlayerData(player)
+    private val playerSettings: PlayerSettings = playerData?.settings!!
 
     @Throws(Exception::class)
     override fun channelRead(

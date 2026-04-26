@@ -14,6 +14,7 @@ import org.bukkit.scheduler.BukkitRunnable
 object ServerStatusManager {
     var inv: Inventory = Bukkit.createInventory(null, 18, "Server List")
 
+    // Todo: migrate ServerStatus class on core module
     @JvmField
     var serverList: MutableList<ServerStatus> = ArrayList()
 

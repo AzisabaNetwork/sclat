@@ -1,7 +1,6 @@
 package be4rjp.sclat.data
 
 import be4rjp.sclat.api.SclatUtil
-import be4rjp.sclat.plugin
 import net.minecraft.server.v1_14_R1.PacketPlayOutMultiBlockChange
 import org.bukkit.Chunk
 import org.bukkit.Material
@@ -9,13 +8,16 @@ import org.bukkit.block.Block
 import org.bukkit.block.BlockFace
 import org.bukkit.craftbukkit.v1_14_R1.CraftChunk
 import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer
+import org.bukkit.plugin.java.JavaPlugin
 import org.bukkit.scheduler.BukkitRunnable
 
 /**
  *
  * @author Be4rJP
  */
-class BlockUpdater {
+class BlockUpdater(
+    private val plugin: JavaPlugin,
+) {
     private val blocklist: MutableMap<Block, Material> = mutableMapOf()
     private val blocks: MutableList<Block> = mutableListOf()
     private val task: BukkitRunnable
@@ -38,30 +40,15 @@ class BlockUpdater {
                             if (block.location.chunk.isLoaded) {
                                 try {
                                     // Sclat.setBlockByNMSChunk(block, blocklist.get(block), true);
-
-                                    val list: MutableList<Block> = ArrayList()
-                                    val up = block.getRelative(BlockFace.UP)
-                                    val west = block.getRelative(BlockFace.WEST)
-                                    val east = block.getRelative(BlockFace.EAST)
-                                    val south = block.getRelative(BlockFace.SOUTH)
-                                    val north = block.getRelative(BlockFace.NORTH)
-                                    val down = block.getRelative(BlockFace.DOWN)
-                                    list.add(up)
-                                    list.add(west)
-                                    list.add(east)
-                                    list.add(south)
-                                    list.add(north)
-                                    list.add(down)
-
-                                    check@ for (cb in list) {
-                                        if (cb.type == Material.AIR) {
-                                            // Sclat.sendBlockChangeForAllPlayer(block, blocklist.get(block));
-                                            chunkBlockMap
-                                                .computeIfAbsent(block.chunk) { chunk: Chunk? -> mutableListOf() }
-                                                .add(block)
-                                            continue
+                                    arrayOf(BlockFace.UP, BlockFace.WEST, BlockFace.EAST, BlockFace.SOUTH, BlockFace.NORTH, BlockFace.DOWN)
+                                        .forEach { face ->
+                                            val relativeBlock = block.getRelative(face)
+                                            if (relativeBlock.type == Material.AIR) {
+                                                chunkBlockMap
+                                                    .computeIfAbsent(block.chunk) { chunk: Chunk? -> mutableListOf() }
+                                                    .add(block)
+                                            }
                                         }
-                                    }
                                 } catch (e: Exception) {
                                 }
                             } else {

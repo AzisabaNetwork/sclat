@@ -3,7 +3,6 @@ package be4rjp.sclat.weapon
 import be4rjp.sclat.Sclat
 import be4rjp.sclat.api.SclatUtil
 import be4rjp.sclat.api.SclatUtil.giveDamage
-import be4rjp.sclat.api.ServerType
 import be4rjp.sclat.data.DataMgr
 import be4rjp.sclat.data.DataMgr.addSnowballHitCount
 import be4rjp.sclat.data.DataMgr.getKasaDataFromArmorStand
@@ -17,6 +16,7 @@ import be4rjp.sclat.manager.ArmorStandMgr
 import be4rjp.sclat.manager.PaintMgr
 import be4rjp.sclat.manager.SPWeaponMgr
 import be4rjp.sclat.plugin
+import net.azisaba.sclat.core.enums.ServerType
 import net.minecraft.server.v1_14_R1.PacketPlayOutEntityDestroy
 import org.bukkit.GameMode
 import org.bukkit.Location

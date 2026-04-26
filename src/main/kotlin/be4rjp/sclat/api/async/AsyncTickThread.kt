@@ -3,6 +3,7 @@ package be4rjp.sclat.api.async
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
+@Deprecated("Use mccoroutine")
 class AsyncTickThread {
     private val executor: ExecutorService
 

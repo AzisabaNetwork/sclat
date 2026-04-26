@@ -7,6 +7,7 @@ import java.util.Random
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.CopyOnWriteArrayList
 
+@Deprecated("Use mccoroutine")
 object AsyncThreadManager {
     private val tickThreads: MutableList<AsyncTickThread> = CopyOnWriteArrayList()
 
@@ -30,14 +31,6 @@ object AsyncThreadManager {
 
     @JvmField
     var onlinePlayers: MutableSet<Player?> = ConcurrentHashMap.newKeySet<Player?>()
-
-    fun toOnline(player: Player?) {
-        onlinePlayers.add(player)
-    }
-
-    fun toOffline(player: Player?) {
-        onlinePlayers.add(player)
-    }
 
     @JvmStatic
     fun sync(runnable: Runnable) {

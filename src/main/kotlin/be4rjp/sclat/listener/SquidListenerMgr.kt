@@ -16,23 +16,24 @@ import org.bukkit.entity.Player
 object SquidListenerMgr {
     fun checkOnInk(player: Player) {
         val data = getPlayerData(player)
-        if (!data!!.isInMatch) return
+        if (!data?.isInMatch!!) return
+
         val loc = player.location
-        val playerblock = player.location.block
+        val playerBlock = player.location.block
         val b1 = loc.add(0.0, -0.5, 0.0).block
-        val b2 = player.location.block.getRelative(BlockFace.NORTH)
-        val b3 = player.location.block.getRelative(BlockFace.EAST)
-        val b4 = player.location.block.getRelative(BlockFace.SOUTH)
-        val b5 = player.location.block.getRelative(BlockFace.WEST)
 
-        val list: MutableList<Block> = ArrayList()
-        list.add(b1)
-        list.add(b2)
-        list.add(b3)
-        list.add(b4)
-        list.add(b5)
+        val list: MutableList<Block> =
+            mutableListOf(
+                b1,
+                *listOf(
+                    BlockFace.NORTH,
+                    BlockFace.EAST,
+                    BlockFace.SOUTH,
+                    BlockFace.WEST,
+                ).map { face -> playerBlock.getRelative(face) }.toTypedArray(),
+            )
 
-        if (playerblock.type == Material.WATER && player.gameMode == GameMode.ADVENTURE) {
+        if (playerBlock.type == Material.WATER && player.gameMode == GameMode.ADVENTURE) {
             DeathMgr.playerDeathRunnable(
                 player,
                 player,
@@ -63,36 +64,25 @@ object SquidListenerMgr {
                 .toString() + "_POWDER",
         )
 
-        for (block in list) {
-            if (block != b1) {
-                if (blockDataMap.containsKey(block)) {
-                    if (blockDataMap[block]!!.team == data.team) {
-                        if (!data.isSquid || block.type == Material.AIR) continue
-                        data.isOnInk = true
+        if (data.isSquid) {
+            list
+                .firstOrNull { b ->
+                    blockDataMap.containsKey(b) &&
+                        blockDataMap[b]?.team == data.team &&
+                        b.type != Material.AIR
+                }.let { b ->
+                    data.isOnInk = b != null
+                    if (b == b1 || b == null) {
+                        if (!data.isUsingJetPack) {
+                            player.allowFlight = false
+                            player.isFlying = false
+                        }
+                    } else {
                         player.allowFlight = true
                         player.isFlying = true
                         return
                     }
                 }
-            } else {
-                if (blockDataMap.containsKey(block)) {
-                    if (blockDataMap[block]!!.team == data.team) {
-                        if (!data.isSquid || block.type == Material.AIR) continue
-                        data.isOnInk = true
-                        if (!data.isUsingJetPack) {
-                            player.allowFlight = false
-                            player.isFlying = false
-                        }
-                        return
-                    }
-                }
-            }
-        }
-
-        data.isOnInk = false
-        if (!data.isUsingJetPack) {
-            player.allowFlight = false
-            player.isFlying = false
         }
     }
 }

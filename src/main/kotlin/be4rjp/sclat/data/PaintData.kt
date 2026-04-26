@@ -1,6 +1,6 @@
 package be4rjp.sclat.data
 
-import be4rjp.sclat.api.team.Team
+import net.azisaba.sclat.core.team.SclatTeam
 import org.bukkit.Material
 import org.bukkit.block.Block
 import org.bukkit.block.BlockState
@@ -20,7 +20,7 @@ class PaintData(
         private set
 
     @JvmField
-    var team: Team? = null
+    var team: SclatTeam? = null
 
     var originalState: BlockState? = null
 

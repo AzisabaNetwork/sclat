@@ -1,37 +1,25 @@
 package be4rjp.sclat.manager
 
 import be4rjp.sclat.api.player.PlayerReturn
-import be4rjp.sclat.plugin
-import org.bukkit.scheduler.BukkitRunnable
+import com.github.shynixn.mccoroutine.bukkit.launch
+import kotlinx.coroutines.time.delay
+import org.bukkit.plugin.java.JavaPlugin
+import java.time.Duration
+import java.util.UUID
 
 object PlayerReturnManager {
-    var list: MutableList<PlayerReturn> = ArrayList()
+    private val playerReturnMap: MutableMap<UUID, PlayerReturn> = mutableMapOf()
 
-    fun isReturned(uuid: String?): Boolean {
-        for (pr in list) {
-            if (pr.uUID == uuid) {
-                list.remove(pr)
-                return true
-            }
+    fun isReturned(uuid: UUID): Boolean = playerReturnMap.remove(uuid)?.flag ?: false
+
+    fun runRemoveTask(plugin: JavaPlugin) {
+        plugin.launch {
+            delay(Duration.ofSeconds(2))
+            playerReturnMap.entries.removeIf { (_, pr) -> pr.flag }
         }
-        return false
     }
 
-    fun runRemoveTask() {
-        val task: BukkitRunnable =
-            object : BukkitRunnable() {
-                override fun run() {
-                    try {
-                        list.removeIf { pr: PlayerReturn? -> !pr!!.flag }
-                    } catch (e: Exception) {
-                    }
-                }
-            }
-        task.runTaskTimer(plugin, 0, 200)
-    }
-
-    fun addPlayerReturn(uuid: String?) {
-        val pr = PlayerReturn(uuid)
-        list.add(pr)
+    fun addPlayerReturn(uuid: UUID) {
+        playerReturnMap[uuid] = PlayerReturn(uuid.toString())
     }
 }

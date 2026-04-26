@@ -1,9 +1,10 @@
 package be4rjp.sclat.api.player
 
-import be4rjp.sclat.api.team.Team
-import be4rjp.sclat.data.MainWeapon
 import be4rjp.sclat.data.Match
 import be4rjp.sclat.data.WeaponClass
+import net.azisaba.sclat.core.data.MainWeapon
+import net.azisaba.sclat.core.player.PlayerSettings
+import net.azisaba.sclat.core.team.SclatTeam
 import net.minecraft.server.v1_14_R1.ItemStack
 import org.bukkit.Location
 import org.bukkit.entity.ArmorStand
@@ -25,7 +26,7 @@ class PlayerData(
     var match: Match? = null
 
     @JvmField
-    var team: Team? = null
+    var team: SclatTeam? = null
 
     @JvmField
     var isInMatch: Boolean = false

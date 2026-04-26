@@ -1,10 +1,8 @@
 package be4rjp.sclat.tutorial
 
 import be4rjp.sclat.Sclat
-import be4rjp.sclat.api.MessageType
 import be4rjp.sclat.api.SclatUtil.playGameSound
 import be4rjp.sclat.api.SclatUtil.sendMessage
-import be4rjp.sclat.api.SoundType
 import be4rjp.sclat.data.BlockUpdater
 import be4rjp.sclat.data.DataMgr.blockDataMap
 import be4rjp.sclat.data.DataMgr.getPlayerData
@@ -17,6 +15,8 @@ import be4rjp.sclat.manager.PathMgr
 import be4rjp.sclat.manager.PlayerStatusMgr
 import be4rjp.sclat.plugin
 import be4rjp.sclat.server.StatusClient
+import net.azisaba.sclat.core.enums.MessageType
+import net.azisaba.sclat.core.enums.SoundType
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.Location
@@ -319,9 +319,11 @@ object Tutorial {
     fun sendPlayerRunnable(player: Player) {
         clearPlayerCount++
 
-        val commands: MutableList<String?> = ArrayList()
-        commands.add("tutorial " + player.uniqueId.toString())
-        commands.add("stop")
+        val commands: MutableList<String> =
+            mutableListOf(
+                "tutorial " + player.uniqueId.toString(),
+                "stop",
+            )
         val sc =
             StatusClient(
                 Sclat.conf?.config!!.getString("StatusShare.Host"),
@@ -382,7 +384,7 @@ object Tutorial {
                         spongeMap.clear()
                         // ------------------------------------------------------------
                         for (player in plugin.server.onlinePlayers) player.exp = 0.99f
-                        val bur = BlockUpdater()
+                        val bur = BlockUpdater(plugin)
                         if (Sclat.conf?.config!!.contains("BlockUpdateRate")) {
                             bur.setMaxBlockInOneTick(
                                 Sclat.conf?.config!!.getInt(

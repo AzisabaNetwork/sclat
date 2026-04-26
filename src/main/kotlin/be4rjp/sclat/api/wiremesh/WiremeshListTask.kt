@@ -2,7 +2,7 @@ package be4rjp.sclat.api.wiremesh
 
 import be4rjp.sclat.data.RegionBlocks
 import be4rjp.sclat.plugin
-import be4rjp.sclat.sclatLogger
+import net.azisaba.sclat.core.DelegatedLogger
 import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.block.Block
@@ -60,7 +60,7 @@ class WiremeshListTask(
                         while (processed < batchSize && blockList.isNotEmpty() && !stopRequested) {
                             val block = blockList.removeAt(0)
                             val bData = blockDataMap[block] ?: continue
-                            val wm = Wiremesh(block, block.type, bData)
+                            val wm = Wiremesh(plugin, block, block.type, bData)
                             try {
                                 wm.startTask()
                             } catch (e: Exception) {
@@ -71,7 +71,7 @@ class WiremeshListTask(
                         }
 
                         if (blockList.isEmpty() || stopRequested) {
-                            sclatLogger.info("WiremeshListTask: finished building wiremesh (count=${wiremeshsList.size})")
+                            logger.info("WiremeshListTask: finished building wiremesh (count=${wiremeshsList.size})")
                             this.cancel()
                             builderTask = null
                         }
@@ -84,7 +84,7 @@ class WiremeshListTask(
             }
 
         builderTask!!.runTaskTimer(plugin, 0L, 1L)
-        sclatLogger.info("WiremeshListTask: started incremental build (total=$totalBlocks)")
+        logger.info("WiremeshListTask: started incremental build (total=$totalBlocks)")
     }
 
     fun stopTask() {
@@ -114,4 +114,8 @@ class WiremeshListTask(
      * candidate blocks to process.
      */
     fun isWorking(): Boolean = (builderTask != null) || blockList.isNotEmpty()
+
+    companion object {
+        private val logger by DelegatedLogger()
+    }
 }

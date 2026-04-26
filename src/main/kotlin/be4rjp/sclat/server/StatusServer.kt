@@ -1,14 +1,14 @@
 package be4rjp.sclat.server
 
-import be4rjp.sclat.api.MessageType
 import be4rjp.sclat.api.SclatUtil
 import be4rjp.sclat.api.SclatUtil.sendMessage
-import be4rjp.sclat.api.SoundType
 import be4rjp.sclat.manager.PlayerReturnManager
 import be4rjp.sclat.manager.PlayerStatusMgr
 import be4rjp.sclat.manager.RankMgr
 import be4rjp.sclat.manager.ServerStatusManager
 import be4rjp.sclat.plugin
+import net.azisaba.sclat.core.enums.MessageType
+import net.azisaba.sclat.core.enums.SoundType
 import org.bukkit.entity.Player
 import java.io.BufferedReader
 import java.io.IOException
@@ -16,6 +16,7 @@ import java.io.InputStreamReader
 import java.io.PrintWriter
 import java.net.ServerSocket
 import java.net.Socket
+import java.util.UUID
 
 class StatusServer( // private List<String> commands = new ArrayList<>();
     private val port: Int,
@@ -88,7 +89,7 @@ internal class EchoThread(
 
                     if (args[0] == "return" && args.size == 2) {
                         if (args[1]!!.length == 36) {
-                            PlayerReturnManager.addPlayerReturn(args[1])
+                            PlayerReturnManager.addPlayerReturn(UUID.fromString(args[1]))
                         }
                     }
 

@@ -4,7 +4,6 @@ import be4rjp.sclat.Sclat
 import be4rjp.sclat.Sclat.Companion.notDuplicateNumber
 import be4rjp.sclat.api.SclatUtil.createInkExplosionEffect
 import be4rjp.sclat.api.SclatUtil.giveDamage
-import be4rjp.sclat.api.Sphere.getSphere
 import be4rjp.sclat.api.raytrace.RayTrace
 import be4rjp.sclat.data.DataMgr
 import be4rjp.sclat.data.DataMgr.getPlayerData
@@ -18,7 +17,8 @@ import be4rjp.sclat.manager.PaintMgr
 import be4rjp.sclat.manager.SPWeaponMgr
 import be4rjp.sclat.manager.WeaponClassMgr
 import be4rjp.sclat.plugin
-import be4rjp.sclat.sclatLogger
+import net.azisaba.sclat.core.DelegatedLogger
+import net.azisaba.sclat.core.shape.Sphere.getSphere
 import net.minecraft.server.v1_14_R1.PacketPlayOutEntityDestroy
 import org.bukkit.ChatColor
 import org.bukkit.Color
@@ -49,6 +49,8 @@ import java.util.Random
  * @author Be4rJP
  */
 object QuadroArms {
+    private val logger by DelegatedLogger()
+
     private val Hash_Quadro_overheat = HashMap<Player?, Int?>()
 
     @JvmStatic
@@ -833,7 +835,7 @@ object QuadroArms {
                     } catch (e: Exception) {
                         cancel()
                         drop!!.remove()
-                        sclatLogger.warn(e.message)
+                        logger.warn(e.message)
                     }
                 }
             }

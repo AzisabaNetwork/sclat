@@ -5,7 +5,6 @@ import be4rjp.sclat.Sclat.Companion.notDuplicateNumber
 import be4rjp.sclat.api.SclatUtil.createInkExplosionEffect
 import be4rjp.sclat.api.SclatUtil.giveDamage
 import be4rjp.sclat.api.SclatUtil.repelBarrier
-import be4rjp.sclat.api.Sphere.getSphere
 import be4rjp.sclat.data.DataMgr.getPlayerData
 import be4rjp.sclat.data.DataMgr.getSnowballIsHit
 import be4rjp.sclat.data.DataMgr.setSnowballIsHit
@@ -13,8 +12,9 @@ import be4rjp.sclat.data.DataMgr.snowballNameMap
 import be4rjp.sclat.manager.ArmorStandMgr
 import be4rjp.sclat.manager.PaintMgr
 import be4rjp.sclat.plugin
-import be4rjp.sclat.sclatLogger
 import be4rjp.sclat.weapon.Gear
+import net.azisaba.sclat.core.DelegatedLogger
+import net.azisaba.sclat.core.shape.Sphere.getSphere
 import net.minecraft.server.v1_14_R1.PacketPlayOutEntityDestroy
 import org.bukkit.ChatColor
 import org.bukkit.GameMode
@@ -35,6 +35,8 @@ import org.bukkit.util.Vector
  * @author Be4rJP
  */
 object KBomb {
+    private val logger by DelegatedLogger()
+
     @JvmStatic
     fun kBomRunnable(player: Player) {
         val task: BukkitRunnable =
@@ -219,7 +221,7 @@ object KBomb {
                     } catch (e: Exception) {
                         cancel()
                         drop!!.remove()
-                        sclatLogger.warn(e.message)
+                        logger.warn(e.message)
                     }
                 }
             }

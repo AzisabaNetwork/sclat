@@ -1,20 +1,21 @@
 package be4rjp.sclat.data
 
 import be4rjp.sclat.Sclat
-import be4rjp.sclat.api.MessageType
 import be4rjp.sclat.api.SclatUtil.sendMessage
-import be4rjp.sclat.api.team.Team
 import be4rjp.sclat.manager.PaintMgr
-import be4rjp.sclat.plugin
+import net.azisaba.sclat.core.enums.MessageType
+import net.azisaba.sclat.core.team.SclatTeam
 import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.Sound
 import org.bukkit.block.Block
 import org.bukkit.entity.EntityType
 import org.bukkit.entity.Shulker
+import org.bukkit.plugin.java.JavaPlugin
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 import org.bukkit.scheduler.BukkitRunnable
+import org.bukkit.scoreboard.Team
 import java.util.function.Consumer
 
 /**
@@ -22,14 +23,15 @@ import java.util.function.Consumer
  * @author Be4rJP
  */
 class Area(
+    private val plugin: JavaPlugin,
     private val from: Location,
     private val to: Location,
 ) {
     private var match: Match? = null
-    var team: Team? = null
+    var team: SclatTeam? = null
         private set
-    private var colorTeam0: org.bukkit.scoreboard.Team? = null
-    private var colorTeam1: org.bukkit.scoreboard.Team? = null
+    private var colorTeam0: Team? = null
+    private var colorTeam1: Team? = null
     private var task: BukkitRunnable? = null
     var shulkerBoxes: MutableList<Shulker> = ArrayList()
         private set
@@ -47,7 +49,7 @@ class Area(
 
         colorTeam1 =
             match!!
-                .team0!!
+                .team1!! // Todo: もともとteam0を使っていたため、不都合が発生しないか確認する
                 .team!!
                 .scoreboard!!
                 .registerNewTeam("ColorTeam1" + Sclat.notDuplicateNumber)

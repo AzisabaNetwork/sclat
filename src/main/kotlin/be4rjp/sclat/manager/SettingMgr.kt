@@ -1,8 +1,8 @@
 package be4rjp.sclat.manager
 
 import be4rjp.sclat.Sclat
-import be4rjp.sclat.api.player.PlayerSettings
 import be4rjp.sclat.data.DataMgr.getPlayerData
+import net.azisaba.sclat.core.player.PlayerSettings
 import org.bukkit.entity.Player
 
 object SettingMgr {

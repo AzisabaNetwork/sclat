@@ -1,12 +1,12 @@
 package be4rjp.sclat.manager
 
 import be4rjp.sclat.Sclat
-import be4rjp.sclat.api.ServerType
 import be4rjp.sclat.data.DataMgr.blockDataMap
 import be4rjp.sclat.data.DataMgr.getPlayerData
 import be4rjp.sclat.plugin
 import be4rjp.sclat.weapon.Gear
 import be4rjp.sclat.weapon.Gear.getGearInfluence
+import net.azisaba.sclat.core.enums.ServerType
 import net.minecraft.server.v1_14_R1.EntitySquid
 import net.minecraft.server.v1_14_R1.EntityTypes
 import net.minecraft.server.v1_14_R1.PacketPlayOutEntityDestroy

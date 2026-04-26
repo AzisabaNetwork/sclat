@@ -2,7 +2,6 @@ package be4rjp.sclat.weapon
 
 import be4rjp.sclat.Sclat
 import be4rjp.sclat.Sclat.Companion.notDuplicateNumber
-import be4rjp.sclat.api.GaugeAPI.toGauge
 import be4rjp.sclat.data.DataMgr
 import be4rjp.sclat.data.DataMgr.getPlayerData
 import be4rjp.sclat.data.DataMgr.getSnowballHitCount
@@ -10,6 +9,7 @@ import be4rjp.sclat.data.DataMgr.mainSnowballNameMap
 import be4rjp.sclat.data.DataMgr.setSnowballHitCount
 import be4rjp.sclat.manager.PaintMgr
 import be4rjp.sclat.plugin
+import net.azisaba.sclat.core.gauge.GaugeAPI.toGauge
 import org.bukkit.ChatColor
 import org.bukkit.GameMode
 import org.bukkit.Material

@@ -12,9 +12,9 @@ import be4rjp.sclat.data.DataMgr.getPlayerData
 import be4rjp.sclat.data.DataMgr.getSplashShieldDataFromArmorStand
 import be4rjp.sclat.data.DataMgr.setKasaDataWithARmorStand
 import be4rjp.sclat.data.DataMgr.setKasaDataWithPlayer
-import be4rjp.sclat.data.KasaData
 import be4rjp.sclat.manager.ArmorStandMgr
 import be4rjp.sclat.plugin
+import net.azisaba.sclat.core.data.KasaData
 import net.minecraft.server.v1_14_R1.EnumItemSlot
 import net.minecraft.server.v1_14_R1.PacketPlayOutEntityEquipment
 import org.bukkit.GameMode

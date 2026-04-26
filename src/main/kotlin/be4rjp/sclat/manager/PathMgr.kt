@@ -5,8 +5,8 @@ import be4rjp.sclat.api.raytrace.RayTrace
 import be4rjp.sclat.data.DataMgr.addPathArmorStandList
 import be4rjp.sclat.data.DataMgr.getPlayerData
 import be4rjp.sclat.data.Match
-import be4rjp.sclat.data.Path
 import be4rjp.sclat.plugin
+import net.azisaba.sclat.core.data.Path
 import net.minecraft.server.v1_14_R1.EnumItemSlot
 import net.minecraft.server.v1_14_R1.PacketPlayOutEntityEquipment
 import org.bukkit.Color
@@ -131,7 +131,7 @@ object PathMgr {
             val effect: BukkitRunnable =
                 object : BukkitRunnable() {
                     val path1: Path = path
-                    val from: Location = path.fromLocation.clone()
+                    val from: Location = path.fromLocation!!.clone()
                     val to: Location = path.toLocation!!.clone()
                     val match: Match = m
 
@@ -177,8 +177,8 @@ object PathMgr {
             val task: BukkitRunnable =
                 object : BukkitRunnable() {
                     val path1: Path = path
-                    val from: Location = path.fromLocation.clone()
-                    val to: Location = path.toLocation.clone()
+                    val from: Location = path.fromLocation!!.clone()
+                    val to: Location = path.toLocation!!.clone()
                     val match: Match = m
                     var c: Int = 0
 

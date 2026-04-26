@@ -1,8 +1,11 @@
 package be4rjp.sclat.data
 
 import be4rjp.sclat.api.player.PlayerData
-import be4rjp.sclat.api.team.Team
 import be4rjp.sclat.api.team.TeamLoc
+import net.azisaba.sclat.core.data.Color
+import net.azisaba.sclat.core.data.KasaData
+import net.azisaba.sclat.core.data.MainWeapon
+import net.azisaba.sclat.core.team.SclatTeam
 import org.bukkit.World
 import org.bukkit.block.Block
 import org.bukkit.entity.ArmorStand
@@ -22,7 +25,7 @@ object DataMgr {
     @JvmStatic
     val uUIDDataMap: MutableMap<String?, PlayerData?> = HashMap()
     private val matchdata: MutableMap<Int?, Match?> = HashMap()
-    private val teamdata: MutableMap<Int?, Team?> = HashMap()
+    private val teamdata: MutableMap<Int?, SclatTeam?> = HashMap()
     private val colordata: MutableMap<String?, Color?> = HashMap()
     private val weaponclassdata: MutableMap<String?, WeaponClass?> = HashMap()
     private val weapondata: MutableMap<String?, MainWeapon?> = HashMap()
@@ -112,7 +115,7 @@ object DataMgr {
     @JvmStatic
     fun getMatchFromId(id: Int): Match? = matchdata[id]
 
-    fun getTeamFromId(id: Int): Team? = teamdata[id]
+    fun getTeamFromId(id: Int): SclatTeam? = teamdata[id]
 
     fun getColor(name: String?): Color? = colordata[name]
 
@@ -199,7 +202,7 @@ object DataMgr {
     @JvmStatic
     fun setTeam(
         id: Int,
-        team: Team?,
+        team: SclatTeam?,
     ) {
         teamdata[id] = team
     }

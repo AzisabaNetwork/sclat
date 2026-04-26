@@ -4,13 +4,13 @@ import be4rjp.sclat.Sclat
 import be4rjp.sclat.api.SclatUtil.createInkExplosionEffect
 import be4rjp.sclat.api.SclatUtil.giveDamage
 import be4rjp.sclat.api.SclatUtil.repelBarrier
-import be4rjp.sclat.api.Sphere.getSphere
-import be4rjp.sclat.api.Sphere.getXZCircle
-import be4rjp.sclat.api.team.Team
 import be4rjp.sclat.manager.ArmorStandMgr
 import be4rjp.sclat.manager.PaintMgr
 import be4rjp.sclat.plugin
 import be4rjp.sclat.weapon.Gear
+import net.azisaba.sclat.core.shape.Sphere.getSphere
+import net.azisaba.sclat.core.shape.Sphere.getXZCircle
+import net.azisaba.sclat.core.team.SclatTeam
 import org.bukkit.Color
 import org.bukkit.GameMode
 import org.bukkit.Location
@@ -25,7 +25,7 @@ import org.bukkit.scheduler.BukkitRunnable
 class TrapData(
     private val location: Location,
     private val player: Player,
-    private val team: Team?,
+    private val team: SclatTeam?,
     number: Int,
 ) {
     private val task: BukkitRunnable
