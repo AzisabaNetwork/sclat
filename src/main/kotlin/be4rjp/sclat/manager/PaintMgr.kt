@@ -15,7 +15,7 @@ import be4rjp.sclat.data.Sponge
 import be4rjp.sclat.weapon.Gear
 import be4rjp.sclat.weapon.Gear.getGearInfluence
 import net.azisaba.sclat.core.enums.ServerType
-import net.azisaba.sclat.core.team.Team
+import net.azisaba.sclat.core.team.SclatTeam
 import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.block.Block
@@ -176,7 +176,7 @@ object PaintMgr {
 
     fun paintByTeam(
         block: Block,
-        team: Team,
+        team: SclatTeam,
         match: Match,
     ) {
         val team = team

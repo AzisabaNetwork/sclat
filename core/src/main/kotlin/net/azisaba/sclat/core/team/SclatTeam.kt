@@ -7,7 +7,7 @@ import org.bukkit.scoreboard.Team
  *
  * @author Be4rJP
  */
-class Team(
+class SclatTeam(
     val iD: Int,
 ) {
     var teamColor: Color? = null

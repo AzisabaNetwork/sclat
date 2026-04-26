@@ -1,6 +1,6 @@
 package be4rjp.sclat.data
 
-import net.azisaba.sclat.core.team.Team
+import net.azisaba.sclat.core.team.SclatTeam
 import org.bukkit.World
 import org.bukkit.entity.Player
 import org.bukkit.scoreboard.Scoreboard
@@ -15,10 +15,10 @@ class Match(
     val world: World? = null
 
     @JvmField
-    var team0: Team? = null
+    var team0: SclatTeam? = null
 
     @JvmField
-    var team1: Team? = null
+    var team1: SclatTeam? = null
     var playerCount: Int = 0
         private set
     var mapData: MapData? = null
@@ -32,7 +32,7 @@ class Match(
         private set
     var isFinished: Boolean = false
     var blockUpdater: BlockUpdater? = null
-    var winTeam: Team? = null
+    var winTeam: SclatTeam? = null
 
     @JvmField
     var isHikiwake: Boolean = false

@@ -1,6 +1,6 @@
 package net.azisaba.sclat.core.data
 
-import net.azisaba.sclat.core.team.Team
+import net.azisaba.sclat.core.team.SclatTeam
 import net.minecraft.server.v1_14_R1.EnumItemSlot
 import net.minecraft.server.v1_14_R1.PacketPlayOutEntityEquipment
 import org.bukkit.Location
@@ -22,13 +22,13 @@ class Path(
     val fromLocation: Location?,
     val toLocation: Location?,
 ) {
-    private var team: Team? = null
+    private var team: SclatTeam? = null
     var armorStand: ArmorStand? = null
     private var setTeamed = false
 
-    fun getTeam(): Team? = this.team
+    fun getTeam(): SclatTeam? = this.team
 
-    fun setTeam(t: Team?) {
+    fun setTeam(t: SclatTeam?) {
         this.team = t
         for (target in plugin.server.onlinePlayers) {
             if (armorStand!!.world !== target.world) continue

@@ -4,7 +4,7 @@ import be4rjp.sclat.Sclat
 import be4rjp.sclat.api.SclatUtil.sendMessage
 import be4rjp.sclat.manager.PaintMgr
 import net.azisaba.sclat.core.enums.MessageType
-import net.azisaba.sclat.core.team.Team
+import net.azisaba.sclat.core.team.SclatTeam
 import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.Sound
@@ -27,7 +27,7 @@ class Area(
     private val to: Location,
 ) {
     private var match: Match? = null
-    var team: Team? = null
+    var team: SclatTeam? = null
         private set
     private var colorTeam0: org.bukkit.scoreboard.Team? = null
     private var colorTeam1: org.bukkit.scoreboard.Team? = null

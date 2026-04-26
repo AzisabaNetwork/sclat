@@ -13,7 +13,7 @@ import net.azisaba.sclat.core.DelegatedLogger
 import net.azisaba.sclat.core.enums.MessageType
 import net.azisaba.sclat.core.enums.SoundType
 import net.azisaba.sclat.core.shape.Sphere.getSphere
-import net.azisaba.sclat.core.team.Team
+import net.azisaba.sclat.core.team.SclatTeam
 import org.bukkit.Bukkit
 import org.bukkit.GameMode
 import org.bukkit.Instrument
@@ -158,7 +158,7 @@ object SclatUtil {
     fun sendMessage(
         message: String?,
         type: MessageType?,
-        team: Team?,
+        team: SclatTeam?,
     ) {
         val sclat = "[§6Sclat§r] "
         val buff = StringBuilder()

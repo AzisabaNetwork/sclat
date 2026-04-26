@@ -57,7 +57,7 @@ import net.azisaba.sclat.core.enums.MessageType
 import net.azisaba.sclat.core.enums.ServerType
 import net.azisaba.sclat.core.enums.SoundType
 import net.azisaba.sclat.core.player.PlayerSettings
-import net.azisaba.sclat.core.team.Team
+import net.azisaba.sclat.core.team.SclatTeam
 import net.azisaba.sclat.core.utils.ObjectiveUtil
 import net.md_5.bungee.api.ChatMessageType
 import net.md_5.bungee.api.chat.TextComponent
@@ -409,8 +409,8 @@ object MatchMgr {
 
         val id = matchcount
         val match = Match(id)
-        val team0 = Team(id * 2)
-        val team1 = Team(id * 2 + 1)
+        val team0 = SclatTeam(id * 2)
+        val team1 = SclatTeam(id * 2 + 1)
         setTeam(id * 2, team0)
         setTeam(id * 2 + 1, team1)
 
@@ -456,8 +456,8 @@ object MatchMgr {
         // lobby待機者用
         val id2 = Int.MAX_VALUE
         val lobbyM = Match(id2)
-        val lobbyT0 = Team(id2)
-        val lobbyT1 = Team(id2 - 1)
+        val lobbyT0 = SclatTeam(id2)
+        val lobbyT1 = SclatTeam(id2 - 1)
         setTeam(id2, lobbyT0)
         setTeam(id2 - 1, lobbyT1)
 
@@ -1266,7 +1266,7 @@ object MatchMgr {
                         lines.add("  ")
                         lines.add("§b§l残り時間 » §r" + s / 60 + ":" + min)
 
-                        var gcteam: Team? = null
+                        var gcteam: SclatTeam? = null
                         var isgc = false
                         var entyo = false
 
@@ -1275,13 +1275,13 @@ object MatchMgr {
                                 .config!!
                                 .getString("WorkMode") == "Area"
                         ) {
-                            val list: MutableList<Team?> = ArrayList()
+                            val list: MutableList<SclatTeam?> = ArrayList()
                             for (area in match.mapData!!.areaList) {
                                 list.add(area!!.team)
                             }
 
                             var `is` = true
-                            var t: Team? = null
+                            var t: SclatTeam? = null
                             for ((i, team) in list.withIndex()) {
                                 if (i == 0) {
                                     if (team != null) {
@@ -1357,7 +1357,7 @@ object MatchMgr {
                             )
 
                             if (isgc) {
-                                var ngcteam: Team = match.team0!!
+                                var ngcteam: SclatTeam = match.team0!!
                                 if (match.team0 == gcteam) ngcteam = match.team1!!
                                 if (gcteam!!.gatiCount <= ngcteam.gatiCount) entyo = true
                             }
@@ -1484,7 +1484,7 @@ object MatchMgr {
             object : BukkitRunnable() {
                 val p: Player = player
                 var loc: Location? = null
-                var winteam: Team? = getPlayerData(player)!!.match!!.team0
+                var winteam: SclatTeam? = getPlayerData(player)!!.match!!.team0
                 var i: Int = 0
                 var bestkills: Int = 0
                 var bestpaint: Int = 0

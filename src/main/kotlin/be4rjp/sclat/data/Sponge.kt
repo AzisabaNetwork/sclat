@@ -3,7 +3,7 @@ package be4rjp.sclat.data
 import be4rjp.sclat.api.SclatUtil.setBlockByNMS
 import be4rjp.sclat.manager.PaintMgr
 import be4rjp.sclat.plugin
-import net.azisaba.sclat.core.team.Team
+import net.azisaba.sclat.core.team.SclatTeam
 import org.bukkit.Material
 import org.bukkit.Sound
 import org.bukkit.block.Block
@@ -17,7 +17,7 @@ class Sponge(
     var block: Block,
 ) {
     @JvmField
-    var team: Team? = null
+    var team: SclatTeam? = null
     var health: Double = 1.0
 
     @JvmField
@@ -27,7 +27,7 @@ class Sponge(
 
     fun giveDamage(
         damage: Double,
-        team: Team?,
+        team: SclatTeam?,
     ) {
         if (!canGiveDamage) return
         canGiveDamage = false
