@@ -370,11 +370,7 @@ class GameMgr : Listener {
                                         if (getPlayerData(p)!!.weaponClass!!.mainWeapon!!.weaponType == "Shooter") {
                                             shooterRunnable(p)
                                             if (getPlayerData(p)!!.weaponClass!!.mainWeapon!!.isManeuver) {
-                                                if (getPlayerData(p)!!.settings!!.doChargeKeep()) {
-                                                    Shooter.maneuverRunnable(p)
-                                                } else {
-                                                    Manuber.maneuverRunnable(p)
-                                                }
+                                                Manuber.maneuverRunnable(p)
                                                 maneuverShootRunnable(p)
                                             }
                                         }
