@@ -581,8 +581,8 @@ class GameMgr : Listener {
         if (!DataMgr.pul.contains(uuid)) DataMgr.pul.add(uuid)
 
         if (Sclat.type == ServerType.LOBBY) {
-            // if(PlayerStatusMgr.getTutorialState(player.getUniqueId().toString()) == 0){
-            if (PlayerStatusMgr.getTutorialState(player.uniqueId.toString()) == 0) {
+            val isFirstJoin = PlayerStatusMgr.getTutorialState(player.uniqueId.toString()) == 0
+            if (isFirstJoin) {
                 e.joinMessage = ChatColor.GREEN.toString() + player.name + " が初めてこのサーバーにログインしました！"
                 PlayerStatusMgr.setTutorialState(player.uniqueId.toString(), 2)
 
@@ -756,19 +756,21 @@ class GameMgr : Listener {
             player.inventory.setItem(2, termsBook)
 
             // 操作説明本終 - チュートリアルサーバーへ転送
-            player.sendTitle("", "チュートリアルサーバーへ転送中...", 0, 20, 0);
-            sendMessage("§bチュートリアルサーバーへ転送中...", MessageType.PLAYER, player);
-            object: BukkitRunnable() {
-                override fun run() {
-                    val tutorialServerList = Sclat.tutorialServers?.getConfig()?.getStringList("server-list")
-                    if(tutorialServerList != null) {
-                        BungeeCordMgr.playerSendServer(player, tutorialServerList.random())
-                        getPlayerData(player)?.setServerName(Sclat.conf?.servers?.getString("Tutorial.DisplayName"))
-                    } else {
-                        sclatLogger.warn("チュートリアルサーバーが設定されていないようです。")
+            if(isFirstJoin) {
+                player.sendTitle("", "チュートリアルサーバーへ転送中...", 0, 20, 0);
+                sendMessage("§bチュートリアルサーバーへ転送中...", MessageType.PLAYER, player);
+                object : BukkitRunnable() {
+                    override fun run() {
+                        val tutorialServerList = Sclat.tutorialServers?.getConfig()?.getStringList("server-list")
+                        if (tutorialServerList != null) {
+                            BungeeCordMgr.playerSendServer(player, tutorialServerList.random())
+                            getPlayerData(player)?.setServerName(Sclat.conf?.servers?.getString("Tutorial.DisplayName"))
+                        } else {
+                            sclatLogger.warn("チュートリアルサーバーが設定されていないようです。")
+                        }
                     }
-                }
-            }.runTaskLater(plugin, 20) // 20tick遅延
+                }.runTaskLater(plugin, 20) // 20tick遅延
+            }
         }
 
         // player.getWorld().spawnEntity(player.getLocation(), EntityType.ARMOR_STAND);
