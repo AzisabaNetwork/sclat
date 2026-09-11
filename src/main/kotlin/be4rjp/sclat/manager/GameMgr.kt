@@ -85,7 +85,6 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.BookMeta
 import org.bukkit.inventory.meta.SkullMeta
 import org.bukkit.scheduler.BukkitRunnable
-import org.bukkit.scheduler.BukkitTask
 import java.util.Random
 import java.util.UUID
 
@@ -756,9 +755,9 @@ class GameMgr : Listener {
             player.inventory.setItem(2, termsBook)
 
             // 操作説明本終 - チュートリアルサーバーへ転送
-            if(isFirstJoin) {
-                player.sendTitle("", "チュートリアルサーバーへ転送中...", 0, 20, 0);
-                sendMessage("§bチュートリアルサーバーへ転送中...", MessageType.PLAYER, player);
+            if (isFirstJoin) {
+                player.sendTitle("", "チュートリアルサーバーへ転送中...", 0, 20, 0)
+                sendMessage("§bチュートリアルサーバーへ転送中...", MessageType.PLAYER, player)
                 object : BukkitRunnable() {
                     override fun run() {
                         val tutorialServerList = Sclat.tutorialServers?.getConfig()?.getStringList("server-list")
