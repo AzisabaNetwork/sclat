@@ -369,11 +369,7 @@ class GameMgr : Listener {
                                         if (getPlayerData(p)!!.weaponClass!!.mainWeapon!!.weaponType == "Shooter") {
                                             shooterRunnable(p)
                                             if (getPlayerData(p)!!.weaponClass!!.mainWeapon!!.isManeuver) {
-                                                if (getPlayerData(p)!!.settings!!.doChargeKeep()) {
-                                                    Shooter.maneuverRunnable(p)
-                                                } else {
-                                                    Manuber.maneuverRunnable(p)
-                                                }
+                                                Manuber.maneuverRunnable(p)
                                                 maneuverShootRunnable(p)
                                             }
                                         }
@@ -753,20 +749,20 @@ class GameMgr : Listener {
             // player.getInventory().clear();
             player.inventory.setItem(2, termsBook)
             // 操作説明本終
-            // player.sendTitle("", "チュートリアルサーバーへ転送中...", 0, 20, 0);
-            // Sclat.sendMessage("§bチュートリアルサーバーへ転送中...", MessageType.PLAYER, player);
-            // BukkitRunnable run = new BukkitRunnable() {
-            // @Override
-            // public void run() {
-            // List<String> list =
-            // Main.tutorialServers.getConfig().getStringList("server-list");
-            // BungeeCordMgr.PlayerSendServer(player, list.get(new
-            // Random().nextInt(list.size())));
-            // DataMgr.getPlayerData(player).setServerName(conf.getServers().getString("Tutorial.DisplayName"));
-            // }
-            // };
-            // run.runTaskLater(Main.getPlugin(), 20);
-            // }
+//             player.sendTitle("", "チュートリアルサーバーへ転送中...", 0, 20, 0);
+//             Sclat.sendMessage("§bチュートリアルサーバーへ転送中...", MessageType.PLAYER, player);
+//             BukkitRunnable run = new BukkitRunnable() {
+//             @Override
+//             public void run() {
+//             List<String> list =
+//             Main.tutorialServers.getConfig().getStringList("server-list");
+//             BungeeCordMgr.PlayerSendServer(player, list.get(new
+//             Random().nextInt(list.size())));
+//             DataMgr.getPlayerData(player).setServerName(conf.getServers().getString("Tutorial.DisplayName"));
+//             }
+//             };
+//             run.runTaskLater(Main.getPlugin(), 20);
+//             }
         }
 
         // player.getWorld().spawnEntity(player.getLocation(), EntityType.ARMOR_STAND);
