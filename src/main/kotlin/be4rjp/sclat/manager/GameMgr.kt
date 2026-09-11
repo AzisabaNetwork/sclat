@@ -28,6 +28,7 @@ import be4rjp.sclat.gui.OpenGUI
 import be4rjp.sclat.loginbonus.LoginBonus
 import be4rjp.sclat.packet.PacketHandler
 import be4rjp.sclat.plugin
+import be4rjp.sclat.sclatLogger
 import be4rjp.sclat.server.EquipmentClient
 import be4rjp.sclat.server.EquipmentServerManager.doCommands
 import be4rjp.sclat.tutorial.Tutorial
@@ -575,8 +576,8 @@ class GameMgr : Listener {
         if (!DataMgr.pul.contains(uuid)) DataMgr.pul.add(uuid)
 
         if (Sclat.type == ServerType.LOBBY) {
-            // if(PlayerStatusMgr.getTutorialState(player.getUniqueId().toString()) == 0){
-            if (PlayerStatusMgr.getTutorialState(player.uniqueId.toString()) == 0) {
+            val isFirstJoin = PlayerStatusMgr.getTutorialState(player.uniqueId.toString()) == 0
+            if (isFirstJoin) {
                 e.joinMessage = ChatColor.GREEN.toString() + player.name + " が初めてこのサーバーにログインしました！"
                 PlayerStatusMgr.setTutorialState(player.uniqueId.toString(), 2)
 
@@ -748,21 +749,23 @@ class GameMgr : Listener {
             // プレイヤーのインベントリをクリアし、利用規約の本をアイテムスロットに追加
             // player.getInventory().clear();
             player.inventory.setItem(2, termsBook)
-            // 操作説明本終
-//             player.sendTitle("", "チュートリアルサーバーへ転送中...", 0, 20, 0);
-//             Sclat.sendMessage("§bチュートリアルサーバーへ転送中...", MessageType.PLAYER, player);
-//             BukkitRunnable run = new BukkitRunnable() {
-//             @Override
-//             public void run() {
-//             List<String> list =
-//             Main.tutorialServers.getConfig().getStringList("server-list");
-//             BungeeCordMgr.PlayerSendServer(player, list.get(new
-//             Random().nextInt(list.size())));
-//             DataMgr.getPlayerData(player).setServerName(conf.getServers().getString("Tutorial.DisplayName"));
-//             }
-//             };
-//             run.runTaskLater(Main.getPlugin(), 20);
-//             }
+
+            // 操作説明本終 - チュートリアルサーバーへ転送
+            if (isFirstJoin) {
+                player.sendTitle("", "チュートリアルサーバーへ転送中...", 0, 20, 0)
+                sendMessage("§bチュートリアルサーバーへ転送中...", MessageType.PLAYER, player)
+                object : BukkitRunnable() {
+                    override fun run() {
+                        val tutorialServerList = Sclat.tutorialServers?.getConfig()?.getStringList("server-list")
+                        if (tutorialServerList != null) {
+                            BungeeCordMgr.playerSendServer(player, tutorialServerList.random())
+                            getPlayerData(player)?.setServerName(Sclat.conf?.servers?.getString("Tutorial.DisplayName"))
+                        } else {
+                            sclatLogger.warn("チュートリアルサーバーが設定されていないようです。")
+                        }
+                    }
+                }.runTaskLater(plugin, 20) // 20tick遅延
+            }
         }
 
         // player.getWorld().spawnEntity(player.getLocation(), EntityType.ARMOR_STAND);
