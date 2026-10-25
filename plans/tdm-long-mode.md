@@ -195,10 +195,15 @@ fun displayName(): String = when (current()) {
 - **~~Q4. ロングの勝敗・レート~~ → 決定**: TDM と同一扱い（`RankMgr` は `WorkMode` を見ていないので変更不要）。
 - **~~Q5. デプロイ側 config~~ → 決定**: リポジトリ外の運用 config は触らない。TDM 専用サーバーにロングを出す場合は運用側で `WorkMode: TDMLong` を設定する（§5-4 で動作確認）。
 
-## 7. コミット分割（案）
+## 7. コミット分割
 
-1. `refactor: WorkMode 判定をヘルパーに集約（挙動不変）`
-2. `feat: 試合時間を config 化し TDMLong で 5 分にする`
-3. `feat: 投票にチームデスマッチ(ロング)を追加（UI・カウンタ・集計）`
-4. `feat: ロング用のテキスト／スコアボード表示`
-5. `docs: plans/tdm-long-mode.md`
+実施済み（`MatchMgr` 内で変更が交錯するため計画の 5 分割から 2 分割に変更）:
+
+1. `feat(data): WorkModeType ヘルパーと TDM(ロング) の投票カウンタを追加` — `data/WorkModeType.kt`（新規）, `data/Match.kt`
+2. `feat: チームデスマッチ(ロング/5分)モードを追加` — `gui/OpenGUI.kt`, `gui/ClickListener.kt`, `manager/MatchMgr.kt`
+
+## 8. 実装結果メモ
+
+- `./gradlew build` / `ktlintCheck` グリーン、`build/libs/Sclat.jar` に `be4rjp/sclat/data/WorkModeType.class` と `plugin.yml` を確認
+- 実行時（ゲーム内）の確認は未実施: ローカルに Paper 1.14.4 + ProtocolLib / NoteBlockAPI / DADADAChecker / BlockStudio と maps.yml・ワールド一式が必要で、このホストでは用意していない
+- `WorkMode` の残存文字列比較は全て `Area` 専用処理（エリア初期化・倍率・結果分岐）で、`TDMLong` は else 側で TDM と同じ経路を通ることを確認済み
