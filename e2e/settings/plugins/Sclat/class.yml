@@ -1,0 +1,8 @@
+# e2e シナリオテスト用の武器クラス定義
+# 実運用の class.yml はもっと多いが、シナリオテストは 1 クラスあれば足りる。
+
+WeaponClass:
+  TestShooterClass:
+    MainWeaponName: TestShooter
+    SubWeaponName: スプラッシュボム
+    SPWeaponName: スーパーショット

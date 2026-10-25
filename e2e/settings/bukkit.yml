@@ -1,0 +1,5 @@
+settings:
+  allow-end: false
+  warn-on-overload: false
+  # ボットは同一ホストから連続接続するためスロットリングを切る
+  connection-throttle: -1

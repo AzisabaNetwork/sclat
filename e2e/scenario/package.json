@@ -1,0 +1,13 @@
+{
+  "name": "sclat-e2e-scenario",
+  "private": true,
+  "type": "module",
+  "description": "Sclat のシナリオテスト(実サーバーで試合を1つ通す)",
+  "scripts": {
+    "prepare": "node prepare.mjs",
+    "match": "node run-match.mjs"
+  },
+  "dependencies": {
+    "mineflayer": "^4.39.0"
+  }
+}

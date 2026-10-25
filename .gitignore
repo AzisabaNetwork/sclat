@@ -72,3 +72,8 @@ gradle-app.setting
 # End of https://www.toptal.com/developers/gitignore/api/gradle
 
 .kotlin/
+
+# e2e scenario test artifacts
+/e2e/.run/
+/e2e/.cache/
+/e2e/scenario/node_modules/

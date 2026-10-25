@@ -1,0 +1,30 @@
+# e2e シナリオテスト用のブキ定義
+# MainWeaponMgr.setupMainWeapon が読むキーはすべて明示しておく
+# (未設定だと getInt/getDouble の既定値 0 になり、射撃が成立しない)。
+
+MainWeapon:
+  TestShooter:
+    WeaponType: Shooter
+    WeaponMaterial: DIAMOND_HOE
+    ShootRandom: 3.0
+    ShootDistance: 24
+    ShootSpeed: 1.0
+    ShootTick: 4
+    PaintRandom: 2
+    MaxPaintDistance: 24
+    NeedInk: 0.9
+    Damage: 3.0
+    MaxCharge: 0
+    RollerShootQuantity: 0
+    UsingWalkSpeed: 0.2
+    RollerWidth: 0
+    RollerTatehuri: false
+    RollerDamage: 0.0
+    RollerNeedInk: 0.0
+    Delay: 0
+    Cooltime: 5
+    BlasterExDamage: 0.0
+    IsBrush: false
+    BrushRandom: 0.0
+    Level: 0
+    Money: 0
