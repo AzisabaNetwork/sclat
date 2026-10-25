@@ -33,6 +33,7 @@ import be4rjp.sclat.data.DataMgr.setTeam
 import be4rjp.sclat.data.DataMgr.spongeMap
 import be4rjp.sclat.data.DataMgr.sprinklerMap
 import be4rjp.sclat.data.Match
+import be4rjp.sclat.data.WorkModeType
 import be4rjp.sclat.gui.OpenGUI
 import be4rjp.sclat.plugin
 import be4rjp.sclat.server.EquipmentServerManager.doCommands
@@ -326,15 +327,24 @@ object MatchMgr {
                                                 .getBoolean("CanVoting")
                                         ) {
                                             if (match.nawabariTCount >= match.tdmTCount &&
-                                                match.nawabariTCount >= match.gatiareaTCount
+                                                match.nawabariTCount >= match.gatiareaTCount &&
+                                                match.nawabariTCount >= match.tdmLongTCount
                                             ) {
                                                 Sclat.conf!!
                                                     .config!!
                                                     .set("WorkMode", "Normal")
-                                            } else if (match.tdmTCount >= match.gatiareaTCount) {
+                                            } else if (match.tdmTCount >= match.gatiareaTCount &&
+                                                match.tdmTCount >= match.tdmLongTCount
+                                            ) {
                                                 Sclat.conf!!
                                                     .config!!
                                                     .set("WorkMode", "TDM")
+                                            } else if (match.tdmLongTCount >= match.gatiareaTCount ||
+                                                match.mapData?.canAreaBattle != true
+                                            ) {
+                                                Sclat.conf!!
+                                                    .config!!
+                                                    .set("WorkMode", "TDMLong")
                                             } else {
                                                 Sclat.conf!!
                                                     .config!!
@@ -632,6 +642,11 @@ object MatchMgr {
                                     sendMessage("§f§l敵よりもキルをしろ！", MessageType.PLAYER, p)
                                 }
 
+                                "TDMLong" -> {
+                                    sendMessage("§6ゲームモード : §b§lチームデスマッチ(ロング)", MessageType.PLAYER, p)
+                                    sendMessage("§f§l5分間、敵よりもキルをしろ！", MessageType.PLAYER, p)
+                                }
+
                                 "Area" -> {
                                     sendMessage("§6ゲームモード : §b§lガチエリア", MessageType.PLAYER, p)
                                     sendMessage("§f§lエリアを確保して守り抜け！", MessageType.PLAYER, p)
@@ -774,31 +789,13 @@ object MatchMgr {
                             p.teleport(introl!!)
                             getPlayerData(p)!!.matchLocation
 
-                            if (Sclat.conf!!
-                                    .config!!
-                                    .getString("WorkMode") == "TDM"
-                            ) {
-                                p.sendTitle(
-                                    "§l" + match.mapData!!.mapName,
-                                    "§7チームデスマッチ",
-                                    10,
-                                    70,
-                                    20,
-                                )
-                            } else if (Sclat.conf!!
-                                    .config!!
-                                    .getString("WorkMode") == "Area"
-                            ) {
-                                p.sendTitle(
-                                    "§l" + match.mapData!!.mapName,
-                                    "§7ガチエリア",
-                                    10,
-                                    70,
-                                    20,
-                                )
-                            } else {
-                                p.sendTitle("§l" + match.mapData!!.mapName, "§7ナワバリバトル", 10, 70, 20)
-                            }
+                            p.sendTitle(
+                                "§l" + match.mapData!!.mapName,
+                                "§7" + WorkModeType.displayName(),
+                                10,
+                                70,
+                                20,
+                            )
 
                             startCount(p)
 
@@ -819,21 +816,13 @@ object MatchMgr {
                             lines.add("§a§lマップ名 » §6" + getPlayerData(p)!!.match!!.mapData!!.mapName)
                             lines.add(" ")
 
-                            if (Sclat.conf!!
-                                    .config!!
-                                    .getString("WorkMode") == "TDM"
-                            ) {
-                                lines.add(ChatColor.YELLOW.toString() + "§lゲームモード » §rチームデスマッチ")
-                            } else if (Sclat.conf!!
-                                    .config!!
-                                    .getString("WorkMode") == "Area"
-                            ) {
-                                lines.add(ChatColor.YELLOW.toString() + "§lゲームモード » §rガチエリア")
-                            } else {
-                                lines.add(ChatColor.YELLOW.toString() + "§lゲームモード » §rナワバリバトル")
-                            }
+                            lines.add(ChatColor.YELLOW.toString() + "§lゲームモード » §r" + WorkModeType.displayName())
                             lines.add("  ")
-                            lines.add("§b§l残り時間 » §r3:00")
+                            val introMatchTime = WorkModeType.matchTimeSeconds()
+                            lines.add(
+                                "§b§l残り時間 » §r" +
+                                    introMatchTime / 60 + ":" + String.format("%02d", introMatchTime % 60),
+                            )
 
                             ObjectiveUtil.setLine(objective, lines)
 
@@ -1233,7 +1222,7 @@ object MatchMgr {
             object : BukkitRunnable() {
                 val sb: Scoreboard = scoreboard
                 var objective: Objective? = sb.registerNewObjective("match", "run", "§6§lSclat§r " + Sclat.VERSION)
-                var s: Int = 180
+                var s: Int = WorkModeType.matchTimeSeconds()
                 val p: Player = player
 
                 var team0nokori: Boolean = false
@@ -1254,19 +1243,7 @@ object MatchMgr {
                         lines.add("§a§lマップ名 » §6" + getPlayerData(p)!!.match!!.mapData!!.mapName)
                         lines.add(" ")
 
-                        if (Sclat.conf!!
-                                .config!!
-                                .getString("WorkMode") == "TDM"
-                        ) {
-                            lines.add(ChatColor.YELLOW.toString() + "§lゲームモード » §6チームデスマッチ")
-                        } else if (Sclat.conf!!
-                                .config!!
-                                .getString("WorkMode") == "Area"
-                        ) {
-                            lines.add(ChatColor.YELLOW.toString() + "§lゲームモード » §6ガチエリア")
-                        } else {
-                            lines.add(ChatColor.YELLOW.toString() + "§lゲームモード » §6ナワバリバトル")
-                        }
+                        lines.add(ChatColor.YELLOW.toString() + "§lゲームモード » §6" + WorkModeType.displayName())
                         lines.add("  ")
                         lines.add("§b§l残り時間 » §r" + s / 60 + ":" + min)
 
@@ -1404,11 +1381,7 @@ object MatchMgr {
 
                         ObjectiveUtil.setLine(objective!!, lines)
 
-                        if (s == 60 &&
-                            Sclat.conf!!
-                                .config!!
-                                .getString("WorkMode") != "Area"
-                        ) {
+                        if (s == 60 && !WorkModeType.isArea()) {
                             for (oplayer in plugin.server.onlinePlayers) {
                                 if (getPlayerData(oplayer)!!.isJoined) {
                                     sendMessage("§6§n残り1分！", MessageType.PLAYER, oplayer)
@@ -1583,10 +1556,7 @@ object MatchMgr {
                             }
                         }
                         if (i == 46 && getPlayerData(p)!!.playerNumber == 1) {
-                            if (Sclat.conf!!
-                                    .config!!
-                                    .getString("WorkMode") == "TDM"
-                            ) {
+                            if (WorkModeType.isTdm()) {
                                 val match = getPlayerData(p)!!.match
                                 val team0c: Int
                                 val team1c: Int

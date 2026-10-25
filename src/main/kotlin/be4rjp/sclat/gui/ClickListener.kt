@@ -217,6 +217,11 @@ class ClickListener : Listener {
                 m2!!.addgatiareaTCount()
             }
 
+            "チームデスマッチ(ロング)" -> {
+                val m3 = getMatchFromId(MatchMgr.matchcount)
+                m3!!.addTdmLongTCount()
+            }
+
             "戻る" -> {
                 if (name != "武器選択" || name != "Shop") OpenGUI.openMenu(player)
             }

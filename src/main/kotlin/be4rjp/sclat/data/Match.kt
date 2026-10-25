@@ -30,6 +30,8 @@ class Match(
         private set
     var gatiareaTCount: Int = 0
         private set
+    var tdmLongTCount: Int = 0
+        private set
     var isFinished: Boolean = false
     var blockUpdater: BlockUpdater? = null
     var winTeam: Team? = null
@@ -68,6 +70,10 @@ class Match(
 
     fun addgatiareaTCount() {
         this.gatiareaTCount++
+    }
+
+    fun addTdmLongTCount() {
+        this.tdmLongTCount++
     }
 
     fun addJoinedPlayerCount() {

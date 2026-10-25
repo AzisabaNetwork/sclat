@@ -287,24 +287,40 @@ object OpenGUI {
             i++
         }
 
+        val match = getMatchFromId(MatchMgr.matchcount)
+        val canArea = match!!.mapData!!.canAreaBattle
+        // ガチエリアが無いマップではガチの枠にTDM(ロング)を置き、ボタンを均等割りで詰める
+        val slots = if (canArea) intArrayOf(1, 3, 5, 7) else intArrayOf(2, 4, 6)
+
         val n = ItemStack(Material.SNOWBALL)
         val nmeta = n.itemMeta
         nmeta!!.setDisplayName("ナワバリバトル")
         n.itemMeta = nmeta
-        inv.setItem(2, n)
+        inv.setItem(slots[0], n)
 
         val t = ItemStack(Material.DIAMOND_SWORD)
         val tmeta = t.itemMeta
         tmeta!!.setDisplayName("チームデスマッチ")
         t.itemMeta = tmeta
-        inv.setItem(4, t)
+        inv.setItem(slots[1], t)
 
         val nu = ItemStack(Material.GLASS)
         val numeta = nu.itemMeta
         numeta!!.setDisplayName("ガチエリア")
         nu.itemMeta = numeta
-        val match = getMatchFromId(MatchMgr.matchcount)
-        if (match!!.mapData!!.canAreaBattle) inv.setItem(6, nu)
+
+        val tl = ItemStack(Material.IRON_SWORD)
+        val tlmeta = tl.itemMeta
+        tlmeta!!.setDisplayName("チームデスマッチ(ロング)")
+        tlmeta.lore = listOf("§7試合時間 5:00")
+        tl.itemMeta = tlmeta
+
+        if (canArea) {
+            inv.setItem(slots[2], nu)
+            inv.setItem(slots[3], tl)
+        } else {
+            inv.setItem(slots[2], tl)
+        }
 
         player.openInventory(inv)
     }
