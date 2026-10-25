@@ -39,12 +39,12 @@ jobs:
         run: |
           set -euo pipefail
           base="https://github.com/koki-develop/ghasec/releases/download/v${GHASEC_VERSION}"
-          curl -sSfL -o ghasec.tar.gz "${base}/ghasec_Linux_x86_64.tar.gz"
+          curl -sSfL -O "${base}/ghasec_Linux_x86_64.tar.gz"
           curl -sSfL -o ghasec_checksums.txt "${base}/ghasec_${GHASEC_VERSION}_checksums.txt"
           grep ' ghasec_Linux_x86_64.tar.gz$' ghasec_checksums.txt > ghasec.sha256
           sha256sum --check ghasec.sha256
           mkdir -p "${HOME}/.local/bin"
-          tar -xzf ghasec.tar.gz -C "${HOME}/.local/bin" ghasec
+          tar -xzf ghasec_Linux_x86_64.tar.gz -C "${HOME}/.local/bin" ghasec
           "${HOME}/.local/bin/ghasec" --version
 
       - name: Scan workflows
