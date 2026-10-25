@@ -36,7 +36,7 @@ env:
 
 jobs:
   spigot:
-    name: Build Spigot ${{ env.MC_VERSION }}
+    name: Build Spigot 1.14.4
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
