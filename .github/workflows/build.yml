@@ -1,5 +1,7 @@
 name: Build
 
+permissions: {}
+
 on:
   push:
     paths:
@@ -21,6 +23,8 @@ jobs:
     name: Build with Java ${{ matrix.java }} for Minecraft ${{ matrix.mc }}
     runs-on: ${{ matrix.os }}
     timeout-minutes: 15
+    permissions:
+      contents: read
 
     strategy:
       fail-fast: false
@@ -35,6 +39,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
       - uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 # v5.7.0
         with:
           distribution: "adopt"
@@ -54,9 +60,11 @@ jobs:
 
       - name: Setup BuildTools
         if: steps.cache.outputs.cache-hit != 'true'
+        env:
+          MC_VERSION: ${{ matrix.mc }}
         run: |
           wget "https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar"
-          java -jar BuildTools.jar --rev ${{ matrix.mc }}
+          java -jar BuildTools.jar --rev "$MC_VERSION"
 
       - name: Build with Gradle
         run: ./gradlew build

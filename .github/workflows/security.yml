@@ -1,0 +1,52 @@
+name: Workflow Security
+
+# GitHub Actions のワークフローを ghasec で静的検査する。
+# https://github.com/koki-develop/ghasec
+# ルール: default-permissions / unpinned-action / script-injection / checkout-persist-credentials など
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/**'
+  pull_request:
+    paths:
+      - '.github/workflows/**'
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  GHASEC_VERSION: '0.18.0'
+
+jobs:
+  ghasec:
+    name: ghasec
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Install ghasec (checksum verified)
+        run: |
+          set -euo pipefail
+          base="https://github.com/koki-develop/ghasec/releases/download/v${GHASEC_VERSION}"
+          curl -sSfL -o ghasec.tar.gz "${base}/ghasec_Linux_x86_64.tar.gz"
+          curl -sSfL -o ghasec_checksums.txt "${base}/ghasec_${GHASEC_VERSION}_checksums.txt"
+          grep ' ghasec_Linux_x86_64.tar.gz$' ghasec_checksums.txt > ghasec.sha256
+          sha256sum --check ghasec.sha256
+          mkdir -p "${HOME}/.local/bin"
+          tar -xzf ghasec.tar.gz -C "${HOME}/.local/bin" ghasec
+          "${HOME}/.local/bin/ghasec" --version
+
+      - name: Scan workflows
+        run: |
+          "${HOME}/.local/bin/ghasec" --format markdown
