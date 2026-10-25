@@ -1,0 +1,60 @@
+# e2e シナリオテスト用の最小 config.yml
+# ServerType: MATCH にすると、参加したプレイヤーは onPlayerJoin の中で
+# 自動的に MatchMgr.playerJoinMatch(player) される(=ボットはGUI操作不要)。
+
+deferredMapLoading: true
+eagerLoadTutorialMaps: false
+
+ServerType: MATCH
+WorkMode: Normal
+DefaultClass: TestShooterClass
+
+# ボット2体で試合が始まるようにする
+StartPlayerCount: 2
+MaxPlayerCount: 8
+
+# 投票・レート・ショップは検証対象外なので切る
+CanVoting: false
+RateMatch: false
+Shop: false
+Tutorial: false
+
+ParticlesRenderDistance: 16
+PlayerWalkSpeed: 0.2
+InkResetPeriod: 100
+
+# 試合時間を短縮(既定180秒 -> 20秒)
+MatchTime:
+  Default: 20
+  TDMLong: 30
+
+# MATCH サーバーは StatusClient / EquipmentServer を起動する。
+# StatusClient の接続先は待ち受けていなくても致命傷にならない(接続失敗ログのみ)。
+StatusShare:
+  Host: 127.0.0.1
+  Port: 25598
+EquipShare:
+  Port: 25600
+
+# フラットワールド(level-type=FLAT)の地面の上に置く
+Lobby:
+  WorldName: world
+  X: 0
+  Y: 4
+  Z: 0
+  Yaw: 0
+
+# NoteBlockAPIMgr.loadSongFiles は nBGM/fBGM セクションを必須で参照し、
+# 空だと randomNormalSong で nextInt(0) が飛んで試合ループが落ちる。
+# BGM/test.nbs は無音の最小 .nbs(スクリプトで生成)。
+nBGM:
+  e2e: test.nbs
+fBGM:
+  e2e: test.nbs
+
+# MatchMgr.finishMatch は Hologram.* を無条件で参照する(ServerType 問わず)
+Hologram:
+  WorldName: world
+  X: 0
+  Y: 10
+  Z: 0

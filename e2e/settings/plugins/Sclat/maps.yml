@@ -1,0 +1,61 @@
+# e2e シナリオテスト用マップ定義
+# 座標は level-type=FLAT のワールド "world"(地面 y=4)を前提にしている。
+
+Maps:
+  Test:
+    WorldName: world
+    Intro:
+      X: 0
+      Y: 6
+      Z: 0
+      Yaw: 0
+      MoveX: 0
+      MoveY: 0
+      MoveZ: 0
+    Team0:
+      X: -8
+      Y: 4
+      Z: 0
+      Yaw: -90
+    Team1:
+      X: 8
+      Y: 4
+      Z: 0
+      Yaw: 90
+    Team0IntroLoc:
+      X: -8
+      Y: 4
+      Z: 0
+      Yaw: -90
+    Team1IntroLoc:
+      X: 8
+      Y: 4
+      Z: 0
+      Yaw: 90
+    ResultLoc:
+      X: 0
+      Y: 8
+      Z: 0
+      Yaw: 0
+    WaitLoc:
+      X: 0
+      Y: 4
+      Z: 0
+    NoBlockLoc:
+      X: 0
+      Y: 4
+      Z: 0
+    VoidY: -10
+    # Area(ガチエリア)モード用。地面ブロックの層(y=3)を範囲にする
+    # ※ このブロックは maps.yml の末尾に置いたままにすること
+    #   (Area 以外のモードでは prepare.mjs がここから下を削除する)
+    Area:
+      Mid:
+        From:
+          X: -1
+          Y: 3
+          Z: -1
+        To:
+          X: 1
+          Y: 3
+          Z: 1

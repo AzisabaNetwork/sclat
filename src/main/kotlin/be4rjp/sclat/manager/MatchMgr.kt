@@ -36,6 +36,7 @@ import be4rjp.sclat.data.Match
 import be4rjp.sclat.data.WorkModeType
 import be4rjp.sclat.gui.OpenGUI
 import be4rjp.sclat.plugin
+import be4rjp.sclat.sclatLogger
 import be4rjp.sclat.server.EquipmentServerManager.doCommands
 import be4rjp.sclat.server.StatusClient
 import be4rjp.sclat.weapon.Brush
@@ -1126,6 +1127,9 @@ object MatchMgr {
                         }
                         s++
                     } catch (e: Exception) {
+                        // 例外を握りつぶすと試合が「開始したまま何も起きない」状態で固まるため、
+                        // ログに残してから止める(原因究明の唯一の手掛かり)。
+                        sclatLogger.error("matchRunnable(player=${p.name}) crashed at s=$s; stopping player loop", e)
                         cancel()
                     }
                 }
@@ -1449,6 +1453,8 @@ object MatchMgr {
                         // String.valueOf(s));
                         s--
                     } catch (e: Exception) {
+                        // スコアボード更新が落ちると試合終了判定(s<=0)が二度と呼ばれず試合が終わらない。
+                        sclatLogger.error("inMatchCounter(player=${p.name}) crashed at s=$s; match will not end", e)
                         cancel()
                     }
                 }
@@ -2080,6 +2086,7 @@ object MatchMgr {
 
                         i++
                     } catch (e: Exception) {
+                        sclatLogger.error("finishMatch(player=${p.name}) crashed at i=$i; result screen may be broken", e)
                         cancel()
                     }
                 }
