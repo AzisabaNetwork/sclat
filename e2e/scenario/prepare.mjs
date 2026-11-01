@@ -122,7 +122,7 @@ for n in z.namelist():
 
 export const WORK_MODES = ['Normal', 'TDM', 'TDMLong', 'Area']
 
-export async function prepare({ freshWorld = true, workMode = 'Normal' } = {}) {
+export async function prepare({ freshWorld = true, workMode = 'Normal', bots = 2 } = {}) {
   if (!WORK_MODES.includes(workMode)) {
     throw new Error(`unknown work mode: ${workMode} (${WORK_MODES.join('|')})`)
   }
@@ -138,11 +138,16 @@ export async function prepare({ freshWorld = true, workMode = 'Normal' } = {}) {
   // 設定テンプレートを毎回上書きコピー(テストの再現性のため)
   await cp(join(repoRoot, 'e2e', 'settings'), serverDir, { recursive: true })
 
-  // WorkMode だけはシナリオごとに差し替える(テンプレートは Normal で固定)
+  // WorkMode と開始人数だけはシナリオごとに差し替える(テンプレートは Normal / 2 人で固定)
   const configPath = join(serverDir, 'plugins', 'Sclat', 'config.yml')
   const config = await readFile(configPath, 'utf8')
-  await writeFile(configPath, config.replace(/^WorkMode:.*$/m, `WorkMode: ${workMode}`))
-  log(`work mode: ${workMode}`)
+  await writeFile(
+    configPath,
+    config
+      .replace(/^WorkMode:.*$/m, `WorkMode: ${workMode}`)
+      .replace(/^StartPlayerCount:.*$/m, `StartPlayerCount: ${bots}`),
+  )
+  log(`work mode: ${workMode} (${bots} bots)`)
 
   // Area 以外のモードでは Area 定義を落とす。
   // Area が定義されているとマップに Area オブジェクトが作られ、未使用のまま
@@ -154,19 +159,20 @@ export async function prepare({ freshWorld = true, workMode = 'Normal' } = {}) {
     if (marker >= 0) await writeFile(mapPath, map.slice(0, marker) + '\n')
   }
 
+  // 1 発のインク消費を最小化する。インクは exp で管理され、ヒト形態では回復しない
+  // (回復はイカ形態のみ)ので、既定の 0.9 では 1 発で撃てなくなり、キルもエリア確保も
+  // 発生しない。ボットに撃ち続けさせるため 0.002(≈500 発) にする。
+  const weaponPath = join(serverDir, 'plugins', 'Sclat', 'mainnweapon.yml')
+  let weapon = (await readFile(weaponPath, 'utf8')).replace(/^( {4}NeedInk:).*$/m, '$1 0.002')
+
   // TDM 系はキルが発生するように調整する。
   // - ダメージ/弾速を上げる(テンプレートのままだと当たっても削れない)
   // - スポーン間隔を詰める(16 ブロック先の相手には当たりにくい)
   if (workMode === 'TDM' || workMode === 'TDMLong') {
-    const weaponPath = join(serverDir, 'plugins', 'Sclat', 'mainnweapon.yml')
-    const weapon = await readFile(weaponPath, 'utf8')
-    await writeFile(
-      weaponPath,
-      weapon
-        .replace(/^ {4}Damage:.*$/m, '    Damage: 20.0')
-        .replace(/^ {4}ShootRandom:.*$/m, '    ShootRandom: 0.5')
-        .replace(/^ {4}ShootSpeed:.*$/m, '    ShootSpeed: 3.0'),
-    )
+    weapon = weapon
+      .replace(/^ {4}Damage:.*$/m, '    Damage: 20.0')
+      .replace(/^ {4}ShootRandom:.*$/m, '    ShootRandom: 0.5')
+      .replace(/^ {4}ShootSpeed:.*$/m, '    ShootSpeed: 3.0')
     const mapPath = join(serverDir, 'plugins', 'Sclat', 'maps.yml')
     const mapYml = await readFile(mapPath, 'utf8')
     await writeFile(
@@ -179,13 +185,22 @@ export async function prepare({ freshWorld = true, workMode = 'Normal' } = {}) {
     log('map/weapon tuned for TDM (spawn 8 blocks apart, Damage 20 / ShootSpeed 3.0)')
   }
 
-  // Area はガチエリアのカウント(gatiCount)が 100 になると Knock Out で終わる。
-  // カウントは 1/秒 なので、KO まで到達させるには試合時間を長めにする必要がある。
+  // Area は着弾点の塗りスフィア(半径 MaxPaintDistance)を 3x3 エリアに収め、
+  // PaintRandom を上げてスフィアが途中で打ち切られないようにする。
+  // 既定(半径 24 / PaintRandom 2)だと塗りが遠くに散らばり、エリアが埋まらない。
   if (workMode === 'Area') {
-    const configPath2 = join(serverDir, 'plugins', 'Sclat', 'config.yml')
-    const cfg2 = await readFile(configPath2, 'utf8')
-    await writeFile(configPath2, cfg2.replace(/^( {2}Default: )\d+$/m, (_m, p) => `${p}120`))
-    log('match time for Area set to 120s (gatiCount reaches 100)')
+    weapon = weapon
+      .replace(/^ {4}MaxPaintDistance:.*$/m, '    MaxPaintDistance: 4')
+      .replace(/^ {4}PaintRandom:.*$/m, '    PaintRandom: 12')
+  }
+  await writeFile(weaponPath, weapon)
+
+  // Area はガチエリアのカウント(gatiCount)が 100 になると Knock Out で終わる。
+  // カウントは 1/秒 なので、確保から 100 秒かかる。KO まで届くよう長めにする。
+  if (workMode === 'Area') {
+    const cfg = await readFile(configPath, 'utf8')
+    await writeFile(configPath, cfg.replace(/^( {2}Default: )\d+$/m, (_m, p) => `${p}150`))
+    log('match time for Area set to 150s (gatiCount reaches 100 with margin)')
   }
 
   const pluginsDir = join(serverDir, 'plugins')

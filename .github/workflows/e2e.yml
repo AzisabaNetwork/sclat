@@ -1,7 +1,7 @@
 name: E2E Scenario
 
 # 実サーバー(Spigot 1.14.4 + 依存プラグイン)で試合を1つ通すシナリオテスト。
-# Normal / TDM / TDMLong / Area を matrix で並列に回す。
+# Normal / TDM / TDMLong / Area の4モード + TDM の2v2 を matrix で並列に回す。
 #
 # 事前に Spigot を1回だけビルドして ~/.m2 をキャッシュし、各シナリオはそれを復元して使う
 # (BuildTools は 1 回 10〜20 分かかるため、matrix の各ジョブで回すと現実的でない)。
@@ -53,7 +53,8 @@ jobs:
           restore-keys: |
             spigot-${{ env.MC_VERSION }}-m2-
 
-      - uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 # v5.7.0
+      # actions/setup-java v5.7.0
+      - uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961
         with:
           distribution: 'adopt'
           java-version: '11'
@@ -61,14 +62,16 @@ jobs:
       - name: Build Spigot with BuildTools
         if: steps.cache.outputs.cache-hit != 'true'
         run: |
-          wget -q "https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar"
+          # BuildTools の URL は長いので 2 行に分ける(workflow の行長制限)
+          H=https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild
+          wget -q "$H/artifact/target/BuildTools.jar"
           # BuildTools は git のユーザー設定を要求するので、グローバル設定は触らず env で渡す
           GIT_AUTHOR_NAME=ci GIT_AUTHOR_EMAIL=ci@example.com \
           GIT_COMMITTER_NAME=ci GIT_COMMITTER_EMAIL=ci@example.com \
           java -jar BuildTools.jar --rev "$MC_VERSION" --nogui
 
   e2e:
-    name: scenario (${{ matrix.mode }})
+    name: scenario (${{ matrix.label || matrix.mode }})
     needs: spigot
     runs-on: ubuntu-latest
     timeout-minutes: 25
@@ -77,13 +80,22 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        mode: [Normal, TDM, TDMLong, Area]
+        include:
+          - mode: Normal
+          - mode: TDM
+          - mode: TDMLong
+          - mode: Area
+          # 2v2(StartPlayerCount 4)。チーム分けはサーバー側でランダム
+          - mode: TDM
+            bots: 4
+            label: TDM-2v2
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
 
-      - uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 # v5.7.0
+      # actions/setup-java v5.7.0
+      - uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961
         with:
           distribution: 'adopt'
           java-version: '11'
@@ -113,13 +125,15 @@ jobs:
       - name: Run scenario
         env:
           WORK_MODE: ${{ matrix.mode }}
-        run: bash e2e/run.sh --work-mode "$WORK_MODE"
+          BOTS: ${{ matrix.bots || 2 }}
+        run: bash e2e/run.sh --work-mode "$WORK_MODE" --bots "$BOTS"
 
       - name: Upload report
         if: always()
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        # actions/upload-artifact v7.0.1
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         with:
-          name: e2e-${{ matrix.mode }}
+          name: e2e-${{ matrix.label || matrix.mode }}
           path: |
             e2e/.run/report.json
             e2e/.run/server.log

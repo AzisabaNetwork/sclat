@@ -66,6 +66,7 @@ tasks {
     // 実サーバー(Spigot 1.14.4 + 依存プラグイン)を起動し、ボット2体で試合を1つ通す。
     //   ./gradlew scenarioTest                 -> Normal
     //   ./gradlew scenarioTest -PworkMode=TDM  -> モード指定
+    //   ./gradlew scenarioTest -Pbots=4        -> 2v2
     // CI では回さない(Spigot の BuildTools と node/pnpm が要る)。詳細は e2e/README.md。
     register<Exec>("scenarioTest") {
         group = "verification"
@@ -74,7 +75,8 @@ tasks {
         workingDir = rootDir
         environment("SCLAT_SKIP_BUILD", "1")
         val modeArgs = (findProperty("workMode") as String?)?.let { listOf("--work-mode", it) } ?: emptyList()
-        commandLine(listOf("bash", "e2e/run.sh") + modeArgs)
+        val botsArgs = (findProperty("bots") as String?)?.let { listOf("--bots", it) } ?: emptyList()
+        commandLine(listOf("bash", "e2e/run.sh") + modeArgs + botsArgs)
     }
 
     shadowJar {

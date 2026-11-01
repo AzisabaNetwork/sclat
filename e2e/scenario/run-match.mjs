@@ -7,7 +7,7 @@
  *   3. 30秒カウントダウン -> イントロ -> 試合 (MatchTime.Default 秒) -> リザルト
  *   4. 各フェーズの到達と、プラグイン由来の例外が無いことを検証して result を出す
  *
- * 使い方: node e2e/scenario/run-match.mjs [--bots 2] [--keep] [--verbose]
+ * 使い方: node e2e/scenario/run-match.mjs [--bots 2] [--work-mode TDM] [--keep] [--verbose]
  */
 import mineflayer from 'mineflayer'
 import net from 'node:net'
@@ -15,8 +15,8 @@ import { spawn } from 'node:child_process'
 import { appendFile, mkdir, writeFile } from 'node:fs/promises'
 import { existsSync, readdirSync } from 'node:fs'
 import { homedir } from 'node:os'
-import { dirname, join } from 'node:path'
-import { prepare, repoRoot, runRoot, serverDir } from './prepare.mjs'
+import { join } from 'node:path'
+import { prepare, runRoot, serverDir } from './prepare.mjs'
 
 const args = process.argv.slice(2)
 const opt = {
@@ -168,6 +168,7 @@ function createBot(name, index) {
     spawned: false,
     matchStarted: false,
     finished: false,
+    go: false,
     died: 0,
     hits: 0,
     minHealth: null,
@@ -180,6 +181,7 @@ function createBot(name, index) {
   const recordTitle = (kind, payload) => {
     const text = typeof payload === 'string' ? payload : JSON.stringify(payload)
     state.titles.push({ at: Date.now() - t0, kind, text })
+    if (/GO!/.test(text)) state.go = true
     for (const p of RESULT_PATTERNS) {
       if (p.test(text)) state.finished = true
     }
@@ -242,9 +244,14 @@ function startPlaying(bot, state, index) {
     if (!bot.entity || idle) return
     try {
       if (isTdm()) {
-        const target = bot.nearestEntity((e) => e.type === 'player' && e.username !== bot.username)
-        if (target) {
-          bot.lookAt(target.position.offset(0, 1.2, 0), true)
+        // 味方も同じルールで狙えてしまうので(チームはクライアントから見えない)、
+        // 他のプレイヤーを順番に狙う。1v1 なら実質「相手を狙う」と同じ。
+        const others = Object.values(bot.entities).filter(
+          (e) => e && e.type === 'player' && e.username !== bot.username,
+        )
+        if (others.length) {
+          state.aimIdx = ((state.aimIdx ?? index) + 1) % others.length
+          bot.lookAt(others[state.aimIdx].position.offset(0, 1.2, 0), true)
         } else {
           bot.look(0, 0, true)
         }
@@ -254,18 +261,33 @@ function startPlaying(bot, state, index) {
         const dz = 0 - bot.entity.position.z
         const yaw = Math.atan2(-dx, dz) // mineflayer: yaw=0 は +z
         bot.look(yaw, 0.9, true)
-        // Area はエリア内(半径1)まで歩いて入る
-        if (opt.workMode === 'Area' && Math.hypot(dx, dz) > 1) {
-          bot.setControlState('forward', true)
-          return
-        }
         if (opt.workMode === 'Area') {
-          // エリア全体(3x3)を塗るため、その場で旋回しながら撃ち続ける
-          state.areaYaw = (state.areaYaw ?? 0) + 0.7
-          bot.look(state.areaYaw, 1.0, true)
+          // マップ中央(0,0)が 3x3 エリアの中心。試合開始時はチームスポーン(±8)に
+          // いるので、短いバースト歩行で中心に寄せる(押しっぱなしだと行き過ぎる)。
+          const pos = bot.entity.position
+          const d = Math.hypot(0.5 - pos.x, 0.5 - pos.z)
+          if (d > 0.6) {
+            bot.lookAt(pos.offset(0.5 - pos.x, 1.0, 0.5 - pos.z), true)
+            bot.setControlState('forward', true)
+            setTimeout(() => {
+              try {
+                bot.setControlState('forward', false)
+              } catch {
+                /* ignore */
+              }
+            }, 150)
+          } else {
+            bot.setControlState('forward', false)
+            // エリア全体(3x3)を塗るため、その場で旋回しながら撃ち続ける
+            state.areaYaw = (state.areaYaw ?? 0) + 0.7
+            // ほぼ真下を撃つ。弾の着弾点(足元から1ブロック以内)の塗りスフィアで 3x3 が埋まる。
+            bot.look(state.areaYaw, 1.35, true)
+          }
         }
       }
-      bot.activateItem()
+      // 「試合が開始されました」はイントロの開始時点。イントロ中(約15秒)に撃つと
+      // インクを空費して本番で撃てなくなるので、GO! の後だけ撃つ。
+      if (state.go) bot.activateItem()
       if (opt.workMode === 'Normal' && state.matchStarted && Math.random() < 0.3) {
         bot.setControlState('forward', true)
         setTimeout(() => bot.setControlState('forward', false), 400)
@@ -288,6 +310,9 @@ function startPlaying(bot, state, index) {
  * 検証
  * ------------------------------------------------------------------ */
 const PLUGIN_FRAME = /\bat (be4rjp\.sclat\.[\w.$]+)\(/
+// Mojang のセッション照会(頭スキンのテクスチャ取得)はオフライン環境では SocketTimeout になる。
+// プラグインのバグではないので「プラグイン由来の例外」に数えない。
+const ENVIRONMENT_HEADER = /com\.mojang\.authlib|\bSocketTimeoutException\b|\bAuthenticationUnavailableException\b/
 
 /**
  * リザルトのタイトル群から勝敗とスコアを取り出す。
@@ -344,6 +369,7 @@ function plainChat(payload) {
 
 function scanLog(lines) {
   const pluginFrames = []
+  const environmentFrames = []
   const fatal = []
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i]
@@ -356,18 +382,20 @@ function scanLog(lines) {
           break
         }
       }
-      pluginFrames.push({ header, frame: line.trim() })
+      const frame = { header, frame: line.trim() }
+      if (ENVIRONMENT_HEADER.test(header)) environmentFrames.push(frame)
+      else pluginFrames.push(frame)
     }
     if (/Error occurred while enabling Sclat|Could not pass event|Sclat v0\.1 \(Is it up to date/.test(line)) fatal.push(line)
   }
-  return { pluginFrames, fatal }
+  return { pluginFrames, environmentFrames, fatal }
 }
 
 /* ------------------------------------------------------------------ *
  * main
  * ------------------------------------------------------------------ */
 async function main() {
-  if (!opt.noPrepare) await prepare({ workMode: opt.workMode })
+  if (!opt.noPrepare) await prepare({ workMode: opt.workMode, bots: opt.bots })
   const statusStub = startStatusShareStub(25598)
   const server = await startServer()
   const report = { ok: false, mode: opt.workMode, phases: {}, bots: [], errors: [], scores: null }
@@ -472,6 +500,20 @@ async function main() {
     if (draws === results.length && shown.length && shown[0][0] !== shown[0][1]) {
       report.errors.push(`引き分けなのに数値が同点でない (${shown[0].join(' / ')})`)
     }
+    // TDM 系は実際にキルが発生していること(0 Kill の引き分けだとダメージ経路が未検証のまま)
+    if (isTdm()) {
+      // 全ボットが同じ試合の合計を表示するので、最大値(=合計キル数)で判定する
+      const kills = results.reduce(
+        (n, r) => Math.max(n, (r.result?.kills?.[0] ?? 0) + (r.result?.kills?.[1] ?? 0)),
+        0,
+      )
+      const deaths = bots.reduce((n, { state }) => n + state.died, 0)
+      if (kills === 0 && deaths === 0) report.errors.push('キルが 1 件も発生していない(射撃→ダメージ経路が通っていない)')
+    }
+    // Area は Knock Out まで到達すること(時間切れ引き分けだとエリア確保〜カウントが未検証のまま)
+    if (opt.workMode === 'Area' && !results.some((r) => /Knock Out/.test(r.result?.text ?? ''))) {
+      report.errors.push('Knock Out に到達していない(エリア確保からカウントが進んでいない)')
+    }
     log(
       `results(${opt.workMode}): ${JSON.stringify(
         results.map((r) => ({ name: r.name, win: r.result?.win, p: r.result?.percents, kills: r.result?.kills })),
@@ -491,8 +533,9 @@ async function main() {
     await sleep(1000)
     await stopServer(server)
 
-    const { pluginFrames, fatal } = scanLog(server.lines)
+    const { pluginFrames, environmentFrames, fatal } = scanLog(server.lines)
     report.pluginExceptions = pluginFrames.slice(0, 10)
+    report.environmentExceptions = environmentFrames.slice(0, 10)
     report.fatalLogLines = fatal
     report.bots = bots.map(({ state }) => ({
       name: state.name,
