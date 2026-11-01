@@ -275,7 +275,7 @@ object OpenGUI {
     }
 
     fun matchTohyoGUI(player: Player) {
-        val inv = Bukkit.createInventory(null, 18, "Chose a Gamemode")
+        val inv = Bukkit.createInventory(null, 18, "Choose a Gamemode")
 
         var i = 0
         while (i <= 17) {
